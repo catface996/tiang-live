@@ -3,6 +3,7 @@ import { Card, Space, Badge, Button, Tooltip, Typography, Divider } from 'antd';
 import { EyeOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import type { PlaneDefinition } from '../../types';
+import { getGradientByLevel } from '../../utils/planeColors';
 import EntityHealthStats from './EntityHealthStats';
 
 const { Text, Paragraph } = Typography;
@@ -40,18 +41,6 @@ const StatsContainer = styled.div`
   align-items: center;
   margin-top: 16px;
 `;
-
-// 根据层级获取渐变色
-const getGradientByLevel = (level: number): string => {
-  const gradients = {
-    1: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', // 基础设施
-    2: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', // 中间件
-    3: 'linear-gradient(135deg, #45b7d1 0%, #96c93d 100%)', // 业务系统
-    4: 'linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%)', // 业务链路
-    5: 'linear-gradient(135deg, #ffd700 0%, #ffb347 100%)', // 业务场景 - 金色渐变
-  };
-  return gradients[level as keyof typeof gradients] || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-};
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -166,8 +155,17 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
         {plane.dependencies && plane.dependencies.length > 0 && (
           <div>
             <Text type="secondary" style={{ fontSize: '12px' }}>
-              依赖: {plane.dependencies.length} 个平面
+              依赖: {plane.dependencies.length} 个平面 
+              {plane.dependencies.length > 1 && <span style={{ color: '#fa8c16' }}> (多重依赖)</span>}
             </Text>
+            <div style={{ marginTop: '4px' }}>
+              {plane.dependencies.map((depId, index) => (
+                <span key={depId} style={{ fontSize: '11px', color: '#8c8c8c' }}>
+                  {depId}
+                  {index < plane.dependencies.length - 1 && ', '}
+                </span>
+              ))}
+            </div>
           </div>
         )}
       </StatsContainer>

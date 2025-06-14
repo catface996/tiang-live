@@ -3,7 +3,7 @@ import { Card, Empty, Spin } from 'antd';
 import styled from 'styled-components';
 import type { PlaneDefinition, PlaneRelationship } from '../../types';
 import PlaneCard from './PlaneCard';
-import DependencyArrow from './DependencyArrow';
+import MultipleDependencyArrows from './MultipleDependencyArrows';
 
 interface PlaneTopologyProps {
   planes: PlaneDefinition[];
@@ -37,17 +37,14 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
   // 按层级排序平面 - 层级数字越大越在顶层显示
   const sortedPlanes = [...planes].sort((a, b) => b.level - a.level);
 
-  // 获取两个平面之间的关系
-  const getRelationshipBetweenPlanes = (sourceId: string, targetId: string): PlaneRelationship | undefined => {
-    return relationships.find(rel => 
-      (rel.sourceId === sourceId && rel.targetId === targetId) ||
-      (rel.sourceId === targetId && rel.targetId === sourceId)
-    );
-  };
-
   // 检查是否有下一个层级的平面（层级数字更小的）
   const hasNextLevel = (currentLevel: number): boolean => {
     return sortedPlanes.some(plane => plane.level === currentLevel - 1);
+  };
+
+  // 获取平面的依赖关系
+  const getPlaneDependencies = (planeId: string): PlaneRelationship[] => {
+    return relationships.filter(rel => rel.targetId === planeId);
   };
 
   if (loading) {
@@ -80,11 +77,6 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
     <Card title="平面拓扑结构">
       <TopologyContainer>
         {sortedPlanes.map((plane, index) => {
-          const nextPlane = sortedPlanes[index + 1]; // 下一个平面（层级数字更小）
-          const relationship = nextPlane ? 
-            getRelationshipBetweenPlanes(plane.id, nextPlane.id) : 
-            undefined;
-
           return (
             <PlaneLevel key={plane.id}>
               <PlaneCard
@@ -92,10 +84,12 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
                 onAction={onPlaneAction}
               />
               
-              {/* 如果有下一个层级（层级数字更小），显示依赖箭头 */}
+              {/* 如果有下一个层级（层级数字更小），显示多重依赖箭头 */}
               {hasNextLevel(plane.level) && (
-                <DependencyArrow 
-                  relationship={relationship}
+                <MultipleDependencyArrows
+                  currentPlane={plane}
+                  allPlanes={sortedPlanes}
+                  relationships={relationships}
                   animated={true}
                 />
               )}

@@ -77,3 +77,4 @@ export const throttle = <T extends (...args: any[]) => any>(
 
 // 导出平面相关工具函数
 export * from './planeUtils';
+export * from './planeColors';

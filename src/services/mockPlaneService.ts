@@ -7,6 +7,7 @@ import type {
   PaginatedResponse,
   EntityHealthStats
 } from '../types';
+import { PLANE_COLORS } from '../utils/planeColors';
 
 // 计算平面状态的工具函数
 const calculatePlaneStatus = (entityHealth: EntityHealthStats): 'ACTIVE' | 'WARNING' | 'ERROR' => {
@@ -64,7 +65,7 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     },
     config: {
       icon: '🏗️',
-      color: '#4facfe',
+      color: PLANE_COLORS[1].primary,
       theme: 'infrastructure',
       maxInstances: 300,
       autoScaling: false,
@@ -101,7 +102,7 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     },
     config: {
       icon: '⚙️',
-      color: '#f093fb',
+      color: PLANE_COLORS[2].primary,
       theme: 'middleware',
       maxInstances: 150,
       autoScaling: true,
@@ -126,10 +127,9 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     id: 'business-system',
     name: 'business-system',
     displayName: '业务系统平面',
-    description: '包含各个业务系统和应用服务，如用户管理系统、订单系统、支付系统等',
+    description: '包含各个业务系统和应用服务，如用户管理系统、订单系统、支付系统等。同时依赖中间件服务和基础设施资源',
     level: 3,
-    parentPlaneId: 'middleware',
-    dependencies: ['middleware'],
+    dependencies: ['middleware', 'infrastructure'], // 业务系统同时依赖中间件和基础设施
     entityHealth: {
       healthy: 206,
       warning: 20,
@@ -138,7 +138,7 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     },
     config: {
       icon: '💼',
-      color: '#45b7d1',
+      color: PLANE_COLORS[3].primary,
       theme: 'business-system',
       maxInstances: 200,
       autoScaling: true,
@@ -163,10 +163,9 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     id: 'business-chain',
     name: 'business-chain',
     displayName: '业务链路平面',
-    description: '管理业务流程中的各个环节和步骤，定义业务流程的执行路径和依赖关系',
+    description: '管理业务流程中的各个环节和步骤，定义业务流程的执行路径和依赖关系。依赖业务系统和中间件平面',
     level: 4,
-    parentPlaneId: 'business-system',
-    dependencies: ['business-system'],
+    dependencies: ['business-system', 'middleware'], // 业务链路依赖业务系统和中间件
     entityHealth: {
       healthy: 144,
       warning: 12,
@@ -175,7 +174,7 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     },
     config: {
       icon: '🔗',
-      color: '#4ecdc4',
+      color: PLANE_COLORS[4].primary,
       theme: 'business-chain',
       maxInstances: 100,
       autoScaling: true,
@@ -200,10 +199,9 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     id: 'business-scenario',
     name: 'business-scenario',
     displayName: '业务场景平面',
-    description: '定义和管理各种业务场景，如用户注册、订单处理、支付流程等核心业务流程',
+    description: '定义和管理各种业务场景，如用户注册、订单处理、支付流程等核心业务流程。依赖业务链路、业务系统和基础设施',
     level: 5,
-    parentPlaneId: 'business-chain',
-    dependencies: ['business-chain'],
+    dependencies: ['business-chain', 'business-system', 'infrastructure'], // 业务场景依赖多个平面
     entityHealth: {
       healthy: 45,
       warning: 0,
@@ -212,7 +210,7 @@ const mockPlaneDefinitions: PlaneDefinition[] = [
     },
     config: {
       icon: '🎯',
-      color: '#ffd700',
+      color: PLANE_COLORS[5].primary,
       theme: 'business-scenario',
       maxInstances: 50,
       autoScaling: true,
@@ -240,35 +238,70 @@ mockPlaneDefinitions.forEach(plane => {
   plane.status = calculatePlaneStatus(plane.entityHealth);
 });
 
-// 模拟平面关系数据
+// 模拟平面关系数据 - 支持复杂的多对多依赖关系
 const mockPlaneRelationships: PlaneRelationship[] = [
+  // 基础依赖关系
   {
     id: 'rel-1',
     sourceId: 'infrastructure',
     targetId: 'middleware',
     type: 'CONTAINS',
-    properties: { strength: 'critical' },
+    properties: { strength: 'critical', description: '基础设施支撑中间件服务' },
   },
+  
+  // 业务系统的多重依赖
   {
     id: 'rel-2',
     sourceId: 'middleware',
     targetId: 'business-system',
     type: 'CONTAINS',
-    properties: { strength: 'strong' },
+    properties: { strength: 'strong', description: '中间件支撑业务系统' },
   },
   {
     id: 'rel-3',
+    sourceId: 'infrastructure',
+    targetId: 'business-system',
+    type: 'CONTAINS',
+    properties: { strength: 'medium', description: '基础设施直接支撑业务系统' },
+  },
+  
+  // 业务链路的多重依赖
+  {
+    id: 'rel-4',
     sourceId: 'business-system',
     targetId: 'business-chain',
     type: 'CONTAINS',
-    properties: { strength: 'strong' },
+    properties: { strength: 'strong', description: '业务系统支撑业务链路' },
   },
   {
-    id: 'rel-4',
+    id: 'rel-5',
+    sourceId: 'middleware',
+    targetId: 'business-chain',
+    type: 'CONTAINS',
+    properties: { strength: 'medium', description: '中间件直接支撑业务链路' },
+  },
+  
+  // 业务场景的复杂依赖
+  {
+    id: 'rel-6',
     sourceId: 'business-chain',
     targetId: 'business-scenario',
     type: 'CONTAINS',
-    properties: { strength: 'medium' },
+    properties: { strength: 'strong', description: '业务链路支撑业务场景' },
+  },
+  {
+    id: 'rel-7',
+    sourceId: 'business-system',
+    targetId: 'business-scenario',
+    type: 'CONTAINS',
+    properties: { strength: 'medium', description: '业务系统直接支撑业务场景' },
+  },
+  {
+    id: 'rel-8',
+    sourceId: 'infrastructure',
+    targetId: 'business-scenario',
+    type: 'CONTAINS',
+    properties: { strength: 'weak', description: '基础设施间接支撑业务场景' },
   },
 ];
 
