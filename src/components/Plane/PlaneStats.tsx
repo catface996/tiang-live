@@ -8,6 +8,7 @@ import {
   CloseCircleOutlined,
   WarningOutlined
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import type { PlaneDefinition, PlaneMetrics } from '../../types';
 
 const { Title } = Typography;
@@ -23,6 +24,8 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
   metrics = [], 
   loading = false 
 }) => {
+  const { t } = useTranslation();
+  
   // 计算统计数据
   const totalPlanes = planes.length;
   const activePlanes = planes.filter(plane => plane.status === 'ACTIVE').length;
@@ -39,49 +42,49 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
 
   const statsData = [
     {
-      title: '平面总数',
+      title: t('planes.stats.totalPlanes'),
       value: totalPlanes,
       icon: <AppstoreOutlined />,
       color: '#1890ff',
     },
     {
-      title: '健康平面',
+      title: t('planes.stats.activePlanes'),
       value: activePlanes,
       icon: <CheckCircleOutlined />,
       color: '#52c41a',
     },
     {
-      title: '告警平面',
+      title: t('planes.stats.warningPlanes'),
       value: warningPlanes,
       icon: <ExclamationCircleOutlined />,
       color: '#faad14',
     },
     {
-      title: '异常平面',
+      title: t('planes.stats.errorPlanes'),
       value: errorPlanes,
       icon: <CloseCircleOutlined />,
       color: '#ff4d4f',
     },
     {
-      title: '实例总数',
+      title: t('planes.stats.totalInstances'),
       value: totalInstances,
       icon: <NodeIndexOutlined />,
       color: '#722ed1',
     },
     {
-      title: '健康实体',
+      title: t('planes.stats.healthyEntities'),
       value: totalHealthyEntities,
       icon: <CheckCircleOutlined />,
       color: '#52c41a',
     },
     {
-      title: '告警实体',
+      title: t('planes.stats.warningEntities'),
       value: totalWarningEntities,
       icon: <ExclamationCircleOutlined />,
       color: '#faad14',
     },
     {
-      title: '异常实体',
+      title: t('planes.stats.errorEntities'),
       value: totalErrorEntities,
       icon: <CloseCircleOutlined />,
       color: '#ff4d4f',

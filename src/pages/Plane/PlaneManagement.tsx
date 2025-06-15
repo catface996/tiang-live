@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Card, Row, Col, Typography, Button, Space, message } from 'antd';
 import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { 
@@ -25,6 +26,7 @@ const PlaneContainer = styled.div`
 const PlaneManagement: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { 
     definitions: planes, 
     topology, 
@@ -34,9 +36,9 @@ const PlaneManagement: React.FC = () => {
   } = useAppSelector(state => state.plane);
 
   useEffect(() => {
-    setPageTitle('平面管理');
+    setPageTitle(t('planes.title'));
     loadPlaneData();
-  }, []);
+  }, [t]);
 
   const loadPlaneData = async () => {
     try {
@@ -87,14 +89,14 @@ const PlaneManagement: React.FC = () => {
 
     switch (action) {
       case 'view':
-        message.info(`查看平面: ${plane?.displayName || planeId}`);
+        message.info(`${t('common.view')}: ${plane?.displayName || planeId}`);
         // TODO: 打开平面详情模态框或跳转到详情页
         break;
       case 'edit':
         navigate(`/planes/edit/${planeId}`);
         break;
       case 'add':
-        message.info(`添加实例到平面: ${plane?.displayName || planeId}`);
+        message.info(`${t('common.add')}: ${plane?.displayName || planeId}`);
         // TODO: 打开添加实例模态框
         break;
       default:
@@ -112,9 +114,9 @@ const PlaneManagement: React.FC = () => {
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <Title level={2}>平面管理</Title>
+            <Title level={2}>{t('planes.title')}</Title>
             <Paragraph>
-              管理系统中的各个平面层级，每个平面代表不同的抽象层次，从业务场景到基础设施形成完整的依赖关系。
+              {t('planes.subtitle')}
             </Paragraph>
           </div>
           <Space>
@@ -123,14 +125,14 @@ const PlaneManagement: React.FC = () => {
               onClick={handleRefresh}
               loading={loading.definitions || loading.topology || loading.metrics}
             >
-              刷新
+              {t('common.refresh')}
             </Button>
             <Button 
               type="primary" 
               icon={<PlusOutlined />} 
               onClick={handleCreatePlane}
             >
-              创建平面
+              {t('common.add')} {t('planes.title')}
             </Button>
           </Space>
         </div>

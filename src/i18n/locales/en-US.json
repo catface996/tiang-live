@@ -1,0 +1,155 @@
+{
+  "common": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "view": "View",
+    "search": "Search",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "noData": "No Data",
+    "success": "Operation Successful",
+    "error": "Operation Failed",
+    "warning": "Warning",
+    "info": "Information",
+    "total": "Total",
+    "page": "Page",
+    "pageSize": "Page Size",
+    "actions": "Actions",
+    "status": "Status",
+    "createTime": "Create Time",
+    "updateTime": "Update Time",
+    "description": "Description",
+    "name": "Name",
+    "type": "Type",
+    "level": "Level"
+  },
+  "layout": {
+    "title": "Universal Planar AI Operations System",
+    "logout": "Logout",
+    "profile": "Profile",
+    "settings": "Settings",
+    "language": "Language"
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "planes": "Plane Management",
+    "entities": "Entity Management",
+    "relationships": "Relationship Graph",
+    "sequences": "Sequence Management",
+    "agents": "AI Agents",
+    "reports": "Report Management",
+    "tasks": "Task Management",
+    "inspectionTasks": "Inspection Tasks",
+    "hookTasks": "Hook Tasks",
+    "collections": "Task Collections",
+    "solutions": "Industry Solutions",
+    "systemSettings": "System Settings",
+    "modelManagement": "Model Management",
+    "promptTemplates": "Prompt Templates",
+    "tagManagement": "Tag Management"
+  },
+  "planes": {
+    "title": "Plane Management",
+    "subtitle": "Manage system planes and their hierarchical dependencies",
+    "stats": {
+      "totalPlanes": "Total Planes",
+      "activePlanes": "Active Planes",
+      "warningPlanes": "Warning Planes",
+      "errorPlanes": "Error Planes",
+      "totalInstances": "Total Instances",
+      "totalEntities": "Total Entities",
+      "healthyEntities": "Healthy Entities",
+      "warningEntities": "Warning Entities",
+      "errorEntities": "Error Entities"
+    },
+    "topology": {
+      "title": "Plane Topology Structure",
+      "subtitle": "Display hierarchical relationships and dependency structures between planes"
+    },
+    "dependency": {
+      "title": "Plane Dependency Complexity Analysis",
+      "subtitle": "Analyze dependency complexity and risk levels of each plane",
+      "columns": {
+        "planeName": "Plane Name",
+        "level": "Level",
+        "dependencyCount": "Dependencies",
+        "dependentCount": "Dependents",
+        "complexityScore": "Complexity Score",
+        "riskLevel": "Risk Level"
+      },
+      "riskLevels": {
+        "low": "Low Risk",
+        "medium": "Medium Risk",
+        "high": "High Risk"
+      }
+    },
+    "operations": {
+      "title": "Operation Instructions",
+      "levelDescription": "Plane Hierarchy & Dependencies",
+      "levelContent": "The system adopts a layered architecture design, from bottom-layer infrastructure to top-layer business scenarios. Each plane has clear responsibilities and dependencies.",
+      "managementDescription": "Plane Management Features",
+      "managementContent": "Supports basic operations like creating, editing, and deleting planes, as well as topology visualization and dependency analysis."
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "WARNING": "Warning",
+      "ERROR": "Error",
+      "INACTIVE": "Inactive"
+    },
+    "levels": {
+      "infrastructure": "Infrastructure Plane",
+      "middleware": "Middleware Plane",
+      "businessSystem": "Business System Plane",
+      "businessChain": "Business Chain Plane",
+      "businessScenario": "Business Scenario Plane"
+    }
+  },
+  "dashboard": {
+    "title": "System Overview",
+    "welcome": "Welcome to AI Operations System",
+    "systemOverview": "System Overview",
+    "recentActivities": "Recent Activities",
+    "performanceMetrics": "Performance Metrics",
+    "quickActions": "Quick Actions"
+  },
+  "entities": {
+    "title": "Entity Management",
+    "subtitle": "Manage various entity objects in the system"
+  },
+  "relationships": {
+    "title": "Relationship Graph",
+    "subtitle": "Visualize relationship networks between entities"
+  },
+  "sequences": {
+    "title": "Sequence Management",
+    "subtitle": "Manage business sequence definitions and execution"
+  },
+  "agents": {
+    "title": "AI Agents",
+    "subtitle": "AI Agent management and monitoring"
+  },
+  "reports": {
+    "title": "Report Management",
+    "subtitle": "Generate and manage various operational reports"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "phone": "Please enter a valid phone number",
+    "url": "Please enter a valid URL",
+    "minLength": "Minimum {{min}} characters required",
+    "maxLength": "Maximum {{max}} characters allowed"
+  },
+  "messages": {
+    "deleteConfirm": "Are you sure you want to delete this record?",
+    "deleteSuccess": "Deleted successfully",
+    "saveSuccess": "Saved successfully",
+    "loadError": "Failed to load data",
+    "networkError": "Network connection error",
+    "permissionDenied": "Permission denied"
+  }
+}

@@ -27,117 +27,122 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import { ASSETS } from '../utils/assetUtils';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
-
-const menuItems = [
-  {
-    key: '/dashboard',
-    icon: <DashboardOutlined />,
-    label: '仪表盘',
-  },
-  {
-    key: '/planes',
-    icon: <AppstoreOutlined />,
-    label: '平面管理',
-  },
-  {
-    key: '/entities',
-    icon: <NodeIndexOutlined />,
-    label: '实体关系',
-  },
-  {
-    key: '/sequences',
-    icon: <ControlOutlined />,
-    label: '时序管理',
-  },
-  {
-    key: '/industry-solutions',
-    icon: <SolutionOutlined />,
-    label: '行业方案',
-  },
-  {
-    key: 'task-management',
-    icon: <ProjectOutlined />,
-    label: '任务管理',
-    children: [
-      {
-        key: '/task-management/task-collections',
-        label: '任务集合',
-      },
-      {
-        key: '/task-management/inspection-tasks',
-        label: '巡检任务',
-      },
-      {
-        key: '/task-management/hook-tasks',
-        label: 'Hook任务',
-      },
-    ],
-  },
-  {
-    key: '/reports',
-    icon: <FileTextOutlined />,
-    label: '报告管理',
-  },
-  {
-    key: '/ai-assistant',
-    icon: <MessageOutlined />,
-    label: 'AI助手',
-  },
-  {
-    key: '/ai-agents',
-    icon: <RobotOutlined />,
-    label: 'AI智能体',
-  },
-  {
-    key: 'system-settings',
-    icon: <SettingOutlined />,
-    label: '系统设置',
-    children: [
-      {
-        key: '/system-settings/model-management',
-        label: '模型管理',
-      },
-      {
-        key: '/system-settings/prompt-templates',
-        label: '提示词',
-      },
-      {
-        key: '/system-settings/tag-management',
-        label: '标签管理',
-      },
-    ],
-  },
-];
-
-const userMenuItems = [
-  {
-    key: 'profile',
-    icon: <UserOutlined />,
-    label: '个人资料',
-  },
-  {
-    key: 'settings',
-    icon: <SettingOutlined />,
-    label: '系统设置',
-  },
-  {
-    type: 'divider' as const,
-  },
-  {
-    key: 'logout',
-    icon: <LogoutOutlined />,
-    label: '退出登录',
-  },
-];
 
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
+
+  // 动态菜单项（使用翻译）
+  const menuItems = [
+    {
+      key: '/dashboard',
+      icon: <DashboardOutlined />,
+      label: t('menu.dashboard'),
+    },
+    {
+      key: '/planes',
+      icon: <AppstoreOutlined />,
+      label: t('menu.planes'),
+    },
+    {
+      key: '/entities',
+      icon: <NodeIndexOutlined />,
+      label: t('menu.entities'),
+    },
+    {
+      key: '/sequences',
+      icon: <ControlOutlined />,
+      label: t('menu.sequences'),
+    },
+    {
+      key: '/industry-solutions',
+      icon: <SolutionOutlined />,
+      label: t('menu.solutions'),
+    },
+    {
+      key: 'task-management',
+      icon: <ProjectOutlined />,
+      label: t('menu.tasks'),
+      children: [
+        {
+          key: '/task-management/task-collections',
+          label: t('menu.collections'),
+        },
+        {
+          key: '/task-management/inspection-tasks',
+          label: t('menu.inspectionTasks'),
+        },
+        {
+          key: '/task-management/hook-tasks',
+          label: t('menu.hookTasks'),
+        },
+      ],
+    },
+    {
+      key: '/reports',
+      icon: <FileTextOutlined />,
+      label: t('menu.reports'),
+    },
+    {
+      key: '/ai-assistant',
+      icon: <MessageOutlined />,
+      label: 'AI助手',
+    },
+    {
+      key: '/ai-agents',
+      icon: <RobotOutlined />,
+      label: t('menu.agents'),
+    },
+    {
+      key: 'system-settings',
+      icon: <SettingOutlined />,
+      label: t('menu.systemSettings'),
+      children: [
+        {
+          key: '/system-settings/model-management',
+          label: t('menu.modelManagement'),
+        },
+        {
+          key: '/system-settings/prompt-templates',
+          label: t('menu.promptTemplates'),
+        },
+        {
+          key: '/system-settings/tag-management',
+          label: t('menu.tagManagement'),
+        },
+      ],
+    },
+  ];
+
+  const userMenuItems = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: t('layout.profile'),
+    },
+    {
+      key: 'settings',
+      icon: <SettingOutlined />,
+      label: t('layout.settings'),
+    },
+    {
+      type: 'divider' as const,
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: t('layout.logout'),
+      danger: true,
+    },
+  ];
 
   const handleMenuClick = ({ key }: { key: string }) => {
     navigate(key);
@@ -146,28 +151,41 @@ const MainLayout: React.FC = () => {
   const handleUserMenuClick = ({ key }: { key: string }) => {
     switch (key) {
       case 'profile':
-        // 处理个人资料
+        console.log('打开个人资料');
         break;
       case 'settings':
-        // 处理系统设置
+        console.log('打开设置');
         break;
       case 'logout':
-        // 处理退出登录
-        break;
-      default:
+        console.log('退出登录');
         break;
     }
   };
 
   return (
-    <Layout style={{ height: '100vh' }}>
-      <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
-        <div style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider 
+        trigger={null} 
+        collapsible 
+        collapsed={collapsed}
+        style={{
+          background: '#001529',
+        }}
+      >
+        {/* Logo区域 */}
+        <div style={{ 
+          height: '64px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: collapsed ? 'center' : 'flex-start',
+          padding: collapsed ? '0' : '0 16px',
+          borderBottom: '1px solid #1f1f1f',
+          transition: 'all 0.2s'
+        }}>
           <div style={{ 
             display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            fontSize: collapsed ? '14px' : '18px', 
+            alignItems: 'center',
+            fontSize: '18px',
             fontWeight: 600, 
             color: '#1890ff',
             gap: '8px',
@@ -184,54 +202,97 @@ const MainLayout: React.FC = () => {
               }} 
             />
             {!collapsed && (
-              <span style={{ whiteSpace: 'nowrap' }}>
-                AI运维系统
-              </span>
+              <Text style={{ 
+                color: '#1890ff', 
+                fontSize: '16px', 
+                fontWeight: 600,
+                whiteSpace: 'nowrap'
+              }}>
+                {t('layout.title')}
+              </Text>
             )}
           </div>
         </div>
+
+        {/* 菜单 */}
         <Menu
+          theme="dark"
           mode="inline"
           selectedKeys={[location.pathname]}
           items={menuItems}
           onClick={handleMenuClick}
+          style={{ 
+            borderRight: 0,
+            background: '#001529'
+          }}
         />
       </Sider>
+
       <Layout>
-        <Header style={{
-          background: '#fff',
-          padding: '0 24px',
-          boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)',
+        {/* 顶部导航栏 */}
+        <Header style={{ 
+          padding: '0 16px', 
+          background: '#001529',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <Space>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-            />
-            <Text strong>通用平面化AI运维系统</Text>
-          </Space>
-          <Dropdown
-            menu={{
-              items: userMenuItems,
-              onClick: handleUserMenuClick,
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: '16px',
+              width: 64,
+              height: 64,
+              color: '#fff'
             }}
-            placement="bottomRight"
-          >
-            <Space style={{ cursor: 'pointer' }}>
-              <Avatar icon={<UserOutlined />} />
-              <Text>管理员</Text>
-            </Space>
-          </Dropdown>
+          />
+
+          <Space size={16}>
+            {/* 语言切换器 */}
+            <LanguageSwitcher />
+            
+            {/* 用户菜单 */}
+            <Dropdown
+              menu={{ 
+                items: userMenuItems,
+                onClick: handleUserMenuClick
+              }}
+              placement="bottomRight"
+              trigger={['click']}
+            >
+              <Button
+                type="text"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: 'auto',
+                  padding: '8px 12px',
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  border: 'none'
+                }}
+              >
+                <Space>
+                  <Avatar 
+                    size="small" 
+                    icon={<UserOutlined />}
+                    style={{ backgroundColor: '#1890ff' }}
+                  />
+                  <Text style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
+                    管理员
+                  </Text>
+                </Space>
+              </Button>
+            </Dropdown>
+          </Space>
         </Header>
-        <Content style={{
-          margin: '24px',
-          padding: '24px',
-          background: '#fff',
-          borderRadius: '8px',
+
+        {/* 主内容区域 */}
+        <Content style={{ 
+          margin: 0,
+          background: '#f0f2f5',
+          minHeight: 'calc(100vh - 64px)',
           overflow: 'auto'
         }}>
           <Outlet />
