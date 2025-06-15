@@ -45,7 +45,8 @@ const { RangePicker } = DatePicker;
 
 const PageContainer = styled.div`
   padding: 24px;
-  background: #f5f5f5;
+  background-color: var(--content-bg);
+  min-height: calc(100vh - 64px);
 `;
 
 const StatsCard = styled(Card)`
@@ -55,13 +56,14 @@ const StatsCard = styled(Card)`
   
   .ant-statistic-title {
     font-size: 14px;
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 8px;
   }
   
   .ant-statistic-content {
     font-size: 24px;
     font-weight: 600;
+    color: var(--text-color);
   }
 `;
 
@@ -323,7 +325,7 @@ const Dashboard: React.FC = () => {
       title: t('tasks.inspection.title'),
       description: t('messages.operationSuccess'),
       time: '2分钟前',
-      icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />
+      icon: <CheckCircleOutlined className="text-success" />
     },
     {
       id: 2,
@@ -331,7 +333,7 @@ const Dashboard: React.FC = () => {
       title: t('dashboard.alertSummary'),
       description: t('common.warning'),
       time: '5分钟前',
-      icon: <AlertOutlined style={{ color: '#faad14' }} />
+      icon: <AlertOutlined className="text-warning" />
     },
     {
       id: 3,
@@ -339,27 +341,27 @@ const Dashboard: React.FC = () => {
       title: t('agents.title'),
       description: t('common.running'),
       time: '10分钟前',
-      icon: <RocketOutlined style={{ color: '#1890ff' }} />
+      icon: <RocketOutlined className="text-primary" />
     }
   ];
 
   return (
     <PageContainer>
       {/* 页面头部 */}
-      <div style={{ marginBottom: 24 }}>
-        <Title level={2}>{t('dashboard.title')}</Title>
-        <Paragraph>{t('dashboard.subtitle')}</Paragraph>
+      <div className="page-header">
+        <Title className="page-title" level={2}>{t('dashboard.title')}</Title>
+        <Paragraph className="page-subtitle">{t('dashboard.subtitle')}</Paragraph>
       </div>
 
       {/* 系统概览统计 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+      <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
               title={t('planes.stats.totalPlanes')}
               value={systemStats.totalPlanes}
               prefix={<AppstoreOutlined />}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: 'var(--primary-color)' }}
             />
           </StatsCard>
         </Col>
@@ -389,7 +391,7 @@ const Dashboard: React.FC = () => {
               title={t('dashboard.activeUsers')}
               value={systemStats.runningTasks}
               prefix={<UserOutlined />}
-              suffix={<ArrowUpOutlined style={{ color: '#52c41a' }} />}
+              suffix={<ArrowUpOutlined className="text-success" />}
               valueStyle={{ color: '#faad14' }}
             />
           </StatsCard>
@@ -397,12 +399,12 @@ const Dashboard: React.FC = () => {
       </Row>
 
       {/* 图表区域 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+      <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} lg={16}>
           <ChartCard title={t('dashboard.performanceMetrics')}>
             <ReactECharts 
               option={getTaskTrendOption()} 
-              style={{ height: '300px' }}
+              className="chart-container"
               opts={{ renderer: 'svg' }}
             />
           </ChartCard>
@@ -411,7 +413,7 @@ const Dashboard: React.FC = () => {
           <ChartCard title={t('dashboard.systemStatus')}>
             <ReactECharts 
               option={getSystemHealthOption()} 
-              style={{ height: '300px' }}
+              className="chart-container"
               opts={{ renderer: 'svg' }}
             />
           </ChartCard>
@@ -419,12 +421,12 @@ const Dashboard: React.FC = () => {
       </Row>
 
       {/* 任务成功率和响应时间统计 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+      <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} lg={12}>
           <ChartCard title={t('dashboard.taskSuccessRate')}>
             <ReactECharts 
               option={getTaskCompletionOption()} 
-              style={{ height: '300px' }}
+              className="chart-container"
               opts={{ renderer: 'svg' }}
             />
           </ChartCard>
@@ -433,7 +435,7 @@ const Dashboard: React.FC = () => {
           <ChartCard title={t('dashboard.averageResponseTime')}>
             <ReactECharts 
               option={getResponseTimeOption()} 
-              style={{ height: '300px' }}
+              className="chart-container"
               opts={{ renderer: 'svg' }}
             />
           </ChartCard>
@@ -455,7 +457,7 @@ const Dashboard: React.FC = () => {
                     description={
                       <Space direction="vertical" size={0}>
                         <Text type="secondary">{item.description}</Text>
-                        <Text type="secondary" style={{ fontSize: '12px' }}>{item.time}</Text>
+                        <Text type="secondary" className="font-size-12">{item.time}</Text>
                       </Space>
                     }
                   />
@@ -466,7 +468,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col xs={24} lg={12}>
           <Card title={t('dashboard.quickActions')}>
-            <Space direction="vertical" style={{ width: '100%' }}>
+            <Space direction="vertical" className="width-100">
               <Button type="primary" block icon={<RocketOutlined />}>
                 {t('common.create')} {t('tasks.inspection.title')}
               </Button>

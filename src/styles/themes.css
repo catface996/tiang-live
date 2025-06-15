@@ -747,6 +747,10 @@
 }
 
 /* 页面特定样式类 */
+.page-header {
+  margin-bottom: 24px;
+}
+
 .page-subtitle {
   margin-top: 8px;
   margin-bottom: 0;
@@ -760,6 +764,35 @@
 
 .text-secondary {
   color: var(--text-secondary) !important;
+}
+
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+.text-success {
+  color: #52c41a !important;
+}
+
+.text-warning {
+  color: #faad14 !important;
+}
+
+.text-error {
+  color: #ff4d4f !important;
+}
+
+/* 深色主题下的颜色调整 */
+.theme-dark .text-success {
+  color: #73d13d !important;
+}
+
+.theme-dark .text-warning {
+  color: #ffc53d !important;
+}
+
+.theme-dark .text-error {
+  color: #ff7875 !important;
 }
 
 .stats-value-primary {
@@ -795,6 +828,11 @@
   color: #b37feb !important;
 }
 
+/* 图表容器样式 */
+.chart-container {
+  height: 300px;
+}
+
 /* 搜索框样式 */
 .search-input {
   width: 300px;
@@ -803,6 +841,10 @@
 @media (max-width: 768px) {
   .search-input {
     width: 100%;
+  }
+  
+  .chart-container {
+    height: 250px;
   }
 }
 
