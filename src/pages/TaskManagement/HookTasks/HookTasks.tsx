@@ -44,7 +44,8 @@ import {
   CodeOutlined,
   GlobalOutlined,
   DatabaseOutlined,
-  HistoryOutlined
+  HistoryOutlined,
+  UnorderedListOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { setPageTitle } from '../../../utils';
@@ -95,6 +96,7 @@ interface HookTask {
     conditions: string[];
     filters: any;
   };
+  taskCollections: string[]; // 改为触发的任务集合列表
   config: {
     url?: string;
     method?: string;
@@ -145,14 +147,15 @@ const HookTasks: React.FC = () => {
   const hookTaskData: HookTask[] = [
     {
       id: '1',
-      name: '告警通知Webhook',
-      description: '当系统出现告警时，自动发送通知到Slack和钉钉',
+      name: '告警通知Hook',
+      description: '当系统出现告警事件时，自动触发告警处理任务集合，执行通知和响应动作',
       type: 'webhook',
       trigger: {
         events: ['alert.created', 'alert.resolved'],
         conditions: ['severity >= high'],
         filters: { services: ['user-service', 'order-service'] }
       },
+      taskCollections: ['告警处理任务集', '通知发送任务集'],
       config: {
         url: 'https://hooks.slack.com/services/xxx',
         method: 'POST',
@@ -178,7 +181,7 @@ const HookTasks: React.FC = () => {
         timestamp: '2024-06-15 14:25:30',
         status: 'success',
         responseTime: 180,
-        response: { ok: true, message: 'Message sent' }
+        response: { ok: true, message: 'Task collections executed successfully' }
       },
       security: {
         authentication: 'bearer_token',
@@ -192,13 +195,14 @@ const HookTasks: React.FC = () => {
     {
       id: '2',
       name: '数据同步Hook',
-      description: '当用户信息更新时，同步数据到数据仓库和缓存系统',
+      description: '当用户信息更新时，触发数据同步任务集合，执行数据仓库和缓存系统的同步',
       type: 'database',
       trigger: {
         events: ['user.updated', 'user.created'],
         conditions: ['user.status == active'],
         filters: { departments: ['engineering', 'product'] }
       },
+      taskCollections: ['数据同步任务集', '缓存更新任务集'],
       config: {
         timeout: 30,
         retryCount: 2,
@@ -228,14 +232,15 @@ const HookTasks: React.FC = () => {
     },
     {
       id: '3',
-      name: '订单状态变更通知',
-      description: '订单状态变更时，发送消息到消息队列，触发下游业务处理',
+      name: '订单状态变更Hook',
+      description: '订单状态变更时，触发订单处理任务集合，执行下游业务处理和通知',
       type: 'message_queue',
       trigger: {
         events: ['order.status_changed'],
         conditions: ['order.status in [paid, shipped, delivered]'],
         filters: { amount: { gte: 100 } }
       },
+      taskCollections: ['订单处理任务集', '业务通知任务集'],
       config: {
         timeout: 15,
         retryCount: 5,
@@ -353,7 +358,7 @@ const HookTasks: React.FC = () => {
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              管理和配置系统Hook任务，支持Webhook、数据库、消息队列等多种Hook类型。
+              管理和配置系统Hook任务，基于事件触发任务集合执行，支持Webhook、数据库、消息队列等多种Hook类型。
             </Paragraph>
           </div>
           <Space>
@@ -460,6 +465,7 @@ const HookTasks: React.FC = () => {
       <Row gutter={16}>
         {hookTaskData.map(hook => {
           const typeConfig = hookTypeMap[hook.type];
+          const totalCollections = hook.taskCollections.length;
           return (
             <Col xs={24} sm={12} lg={8} xl={6} key={hook.id}>
               <HookCard
@@ -516,6 +522,9 @@ const HookTasks: React.FC = () => {
                     </Tag>
                     <Tag icon={<BellOutlined />}>
                       {hook.trigger.events.length}个事件
+                    </Tag>
+                    <Tag icon={<MonitorOutlined />}>
+                      {totalCollections}个任务集合
                     </Tag>
                   </Space>
                 </div>
@@ -648,7 +657,7 @@ const HookTasks: React.FC = () => {
 
           <Alert
             message="提示"
-            description="创建Hook任务后，可以在详情页面中配置具体的触发事件和执行参数。"
+            description="创建Hook任务后，可以在详情页面中配置具体的触发事件和任务集合。"
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -707,7 +716,23 @@ const HookTasks: React.FC = () => {
             </Descriptions>
 
             {/* 详细配置 */}
-            <Tabs defaultActiveKey="trigger">
+            <Tabs defaultActiveKey="collections">
+              <Tabs.TabPane tab="任务集合" key="collections">
+                <Card title="触发的任务集合" size="small" style={{ marginBottom: 16 }}>
+                  {selectedHook.taskCollections.length > 0 ? (
+                    <Space wrap>
+                      {selectedHook.taskCollections.map(collection => (
+                        <Tag key={collection} icon={<UnorderedListOutlined />} color="blue">
+                          {collection}
+                        </Tag>
+                      ))}
+                    </Space>
+                  ) : (
+                    <Text type="secondary">无任务集合</Text>
+                  )}
+                </Card>
+              </Tabs.TabPane>
+              
               <Tabs.TabPane tab="触发配置" key="trigger">
                 <Card title="触发事件" size="small" style={{ marginBottom: 16 }}>
                   <Space wrap>

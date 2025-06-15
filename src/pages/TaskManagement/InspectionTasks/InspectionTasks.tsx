@@ -46,7 +46,8 @@ import {
   SafetyCertificateOutlined,
   NodeIndexOutlined,
   ControlOutlined,
-  HistoryOutlined
+  HistoryOutlined,
+  UnorderedListOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { setPageTitle } from '../../../utils';
@@ -93,10 +94,7 @@ interface InspectionTask {
   name: string;
   description: string;
   type: 'health_check' | 'performance_monitor' | 'security_scan' | 'log_analysis';
-  targets: {
-    entities: string[];
-    sequences: string[];
-  };
+  taskCollections: string[]; // 改为触发的任务集合列表
   schedule: {
     type: 'cron' | 'interval';
     expression: string;
@@ -151,12 +149,9 @@ const InspectionTasks: React.FC = () => {
     {
       id: '1',
       name: '核心服务健康检查',
-      description: '定期检查核心微服务的健康状态，包括响应时间、可用性和资源使用情况',
+      description: '定期触发核心服务监控任务集合，执行健康检查、性能分析等巡检动作',
       type: 'health_check',
-      targets: {
-        entities: ['user-service', 'order-service', 'payment-service'],
-        sequences: ['login-sequence', 'order-sequence']
-      },
+      taskCollections: ['核心服务监控任务', '业务流程巡检任务'],
       schedule: {
         type: 'interval',
         expression: '*/5 * * * *',
@@ -166,7 +161,7 @@ const InspectionTasks: React.FC = () => {
         timeout: 30,
         retryCount: 3,
         alertThreshold: 80,
-        checkpoints: ['响应时间', 'CPU使用率', '内存使用率', '连接数']
+        checkpoints: ['任务集合执行状态', '巡检动作成功率', '响应时间', '错误率']
       },
       status: 'running',
       lastRun: {
@@ -175,9 +170,8 @@ const InspectionTasks: React.FC = () => {
         status: 'success',
         duration: 45,
         result: {
-          'user-service': { status: 'healthy', responseTime: 120 },
-          'order-service': { status: 'healthy', responseTime: 95 },
-          'payment-service': { status: 'healthy', responseTime: 180 }
+          '核心服务监控任务': { status: 'success', duration: 25, actions: 7 },
+          '业务流程巡检任务': { status: 'success', duration: 20, actions: 6 }
         }
       },
       nextRun: '2024-06-15 14:35:00',
@@ -191,7 +185,7 @@ const InspectionTasks: React.FC = () => {
       alerts: {
         enabled: true,
         channels: ['email', 'webhook', 'sms'],
-        conditions: ['响应时间>500ms', 'CPU使用率>80%', '服务不可用']
+        conditions: ['任务集合执行失败', '成功率<80%', '执行超时']
       },
       createdBy: '运维工程师',
       createdAt: '2024-06-01',
@@ -200,12 +194,9 @@ const InspectionTasks: React.FC = () => {
     {
       id: '2',
       name: '数据库性能监控',
-      description: '监控数据库集群的性能指标，包括查询响应时间、连接数、锁等待等',
+      description: '定期触发数据库相关任务集合，监控数据库集群的性能指标和健康状态',
       type: 'performance_monitor',
-      targets: {
-        entities: ['mysql-cluster', 'redis-cluster'],
-        sequences: []
-      },
+      taskCollections: ['数据库监控任务集'],
       schedule: {
         type: 'cron',
         expression: '0 */10 * * * *',
@@ -215,7 +206,7 @@ const InspectionTasks: React.FC = () => {
         timeout: 60,
         retryCount: 2,
         alertThreshold: 70,
-        checkpoints: ['查询响应时间', '连接数', '锁等待', '缓存命中率']
+        checkpoints: ['任务集合状态', '数据库连接', '查询性能', '资源使用率']
       },
       status: 'running',
       lastRun: {
@@ -224,8 +215,7 @@ const InspectionTasks: React.FC = () => {
         status: 'success',
         duration: 75,
         result: {
-          'mysql-cluster': { avgQueryTime: 45, connections: 120, lockWaits: 2 },
-          'redis-cluster': { hitRate: 95.8, connections: 85, memory: 68 }
+          '数据库监控任务集': { status: 'success', duration: 75, actions: 4 }
         }
       },
       nextRun: '2024-06-15 14:30:00',
@@ -239,7 +229,7 @@ const InspectionTasks: React.FC = () => {
       alerts: {
         enabled: true,
         channels: ['email', 'webhook'],
-        conditions: ['查询时间>100ms', '连接数>200', '缓存命中率<90%']
+        conditions: ['数据库任务失败', '性能指标异常', '连接数超限']
       },
       createdBy: '数据库管理员',
       createdAt: '2024-06-05',
@@ -248,12 +238,9 @@ const InspectionTasks: React.FC = () => {
     {
       id: '3',
       name: '安全漏洞扫描',
-      description: '定期扫描系统安全漏洞，检查端口开放情况、SSL证书有效性等',
+      description: '定期触发安全扫描任务集合，执行系统安全检查和漏洞扫描',
       type: 'security_scan',
-      targets: {
-        entities: ['api-gateway', 'web-server'],
-        sequences: []
-      },
+      taskCollections: ['安全扫描任务集'],
       schedule: {
         type: 'cron',
         expression: '0 0 2 * * *',
@@ -263,7 +250,7 @@ const InspectionTasks: React.FC = () => {
         timeout: 300,
         retryCount: 1,
         alertThreshold: 90,
-        checkpoints: ['端口扫描', 'SSL证书检查', '漏洞扫描', '配置检查']
+        checkpoints: ['安全扫描执行', '漏洞检测', '合规检查', '风险评估']
       },
       status: 'paused',
       lastRun: {
@@ -272,8 +259,7 @@ const InspectionTasks: React.FC = () => {
         status: 'success',
         duration: 510,
         result: {
-          'api-gateway': { openPorts: [80, 443], sslValid: true, vulnerabilities: 0 },
-          'web-server': { openPorts: [80, 443, 22], sslValid: true, vulnerabilities: 1 }
+          '安全扫描任务集': { status: 'success', duration: 510, actions: 4 }
         }
       },
       nextRun: '2024-06-16 02:00:00',
@@ -287,7 +273,7 @@ const InspectionTasks: React.FC = () => {
       alerts: {
         enabled: true,
         channels: ['email'],
-        conditions: ['发现高危漏洞', 'SSL证书即将过期', '异常端口开放']
+        conditions: ['发现高危漏洞', '安全扫描失败', '合规检查不通过']
       },
       createdBy: '安全工程师',
       createdAt: '2024-05-20',
@@ -377,7 +363,7 @@ const InspectionTasks: React.FC = () => {
   const renderTaskCards = () => {
     return inspectionTaskData.map(task => {
       const typeConfig = taskTypeMap[task.type];
-      const totalTargets = task.targets.entities.length + task.targets.sequences.length;
+      const totalCollections = task.taskCollections.length;
 
       return (
         <Col xs={24} sm={12} lg={8} xl={6} key={task.id}>
@@ -448,7 +434,7 @@ const InspectionTasks: React.FC = () => {
                   {typeConfig?.name}
                 </Tag>
                 <Tag icon={<MonitorOutlined />}>
-                  {totalTargets}个目标
+                  {totalCollections}个任务集合
                 </Tag>
               </Space>
             </div>
@@ -499,8 +485,8 @@ const InspectionTasks: React.FC = () => {
   };
 
   const runningTasks = inspectionTaskData.filter(task => task.status === 'running').length;
-  const totalTargets = inspectionTaskData.reduce((sum, task) => 
-    sum + task.targets.entities.length + task.targets.sequences.length, 0
+  const totalCollections = inspectionTaskData.reduce((sum, task) => 
+    sum + task.taskCollections.length, 0
   );
   const avgSuccessRate = inspectionTaskData.reduce((sum, task) => 
     sum + task.statistics.successRate, 0
@@ -518,7 +504,7 @@ const InspectionTasks: React.FC = () => {
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              管理和执行系统巡检任务，支持健康检查、性能监控、安全扫描等多种巡检类型。
+              管理和执行系统巡检任务，定期触发任务集合执行，支持健康检查、性能监控、安全扫描等多种巡检类型。
             </Paragraph>
           </div>
           <Space>
@@ -559,8 +545,8 @@ const InspectionTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="监控目标"
-              value={totalTargets}
+              title="任务集合"
+              value={totalCollections}
               suffix="个"
               valueStyle={{ color: '#faad14' }}
               prefix={<MonitorOutlined />}
@@ -714,7 +700,7 @@ const InspectionTasks: React.FC = () => {
 
           <Alert
             message="提示"
-            description="创建巡检任务后，可以在详情页面中配置具体的监控目标和调度规则。"
+            description="创建巡检任务后，可以在详情页面中配置具体的任务集合和调度规则。"
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -773,40 +759,21 @@ const InspectionTasks: React.FC = () => {
             </Descriptions>
 
             {/* 详细配置 */}
-            <Tabs defaultActiveKey="targets">
-              <Tabs.TabPane tab="监控目标" key="targets">
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <Card title="实体目标" size="small">
-                      {selectedTask.targets.entities.length > 0 ? (
-                        <Space wrap>
-                          {selectedTask.targets.entities.map(entity => (
-                            <Tag key={entity} icon={<NodeIndexOutlined />}>
-                              {entity}
-                            </Tag>
-                          ))}
-                        </Space>
-                      ) : (
-                        <Text type="secondary">无实体目标</Text>
-                      )}
-                    </Card>
-                  </Col>
-                  <Col span={12}>
-                    <Card title="时序目标" size="small">
-                      {selectedTask.targets.sequences.length > 0 ? (
-                        <Space wrap>
-                          {selectedTask.targets.sequences.map(sequence => (
-                            <Tag key={sequence} icon={<ControlOutlined />}>
-                              {sequence}
-                            </Tag>
-                          ))}
-                        </Space>
-                      ) : (
-                        <Text type="secondary">无时序目标</Text>
-                      )}
-                    </Card>
-                  </Col>
-                </Row>
+            <Tabs defaultActiveKey="collections">
+              <Tabs.TabPane tab="任务集合" key="collections">
+                <Card title="触发的任务集合" size="small">
+                  {selectedTask.taskCollections.length > 0 ? (
+                    <Space wrap>
+                      {selectedTask.taskCollections.map(collection => (
+                        <Tag key={collection} icon={<UnorderedListOutlined />} color="blue">
+                          {collection}
+                        </Tag>
+                      ))}
+                    </Space>
+                  ) : (
+                    <Text type="secondary">无任务集合</Text>
+                  )}
+                </Card>
               </Tabs.TabPane>
               
               <Tabs.TabPane tab="配置参数" key="config">
