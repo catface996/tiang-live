@@ -254,6 +254,274 @@ const IndustrySolutionManagement: React.FC = () => {
       createdAt: '2024-05-15',
       lastModified: '2024-06-12',
       usageCount: 89
+    },
+    {
+      id: '3',
+      name: '智慧医疗管理平台',
+      industry: 'healthcare',
+      description: '医疗机构数字化管理平台，整合患者管理、诊疗流程、医疗资源调度和医保结算等功能',
+      scenario: '适用于医院、诊所、社区医疗中心等医疗机构',
+      entities: [
+        {
+          id: 'patient',
+          name: '患者',
+          type: '业务实体',
+          description: '就诊患者的基本信息和病历',
+          attributes: ['患者ID', '姓名', '性别', '年龄', '联系方式', '病历号', '医保信息']
+        },
+        {
+          id: 'doctor',
+          name: '医生',
+          type: '业务实体',
+          description: '医院医护人员信息',
+          attributes: ['医生ID', '姓名', '科室', '职称', '专长', '排班信息']
+        },
+        {
+          id: 'appointment',
+          name: '预约',
+          type: '业务实体',
+          description: '患者的就诊预约记录',
+          attributes: ['预约ID', '患者ID', '医生ID', '科室', '预约时间', '预约状态']
+        },
+        {
+          id: 'diagnosis',
+          name: '诊断',
+          type: '业务实体',
+          description: '医生对患者的诊断结果',
+          attributes: ['诊断ID', '患者ID', '医生ID', '诊断结果', '诊断时间', '处方ID']
+        }
+      ],
+      relations: [
+        {
+          id: 'patient-appointment',
+          from: 'patient',
+          to: 'appointment',
+          type: '一对多',
+          description: '一个患者可以有多个预约记录'
+        },
+        {
+          id: 'doctor-appointment',
+          from: 'doctor',
+          to: 'appointment',
+          type: '一对多',
+          description: '一个医生可以有多个预约安排'
+        },
+        {
+          id: 'patient-diagnosis',
+          from: 'patient',
+          to: 'diagnosis',
+          type: '一对多',
+          description: '一个患者可以有多个诊断记录'
+        }
+      ],
+      complexity: 'complex',
+      status: 'active',
+      tags: ['医疗', '患者管理', '预约系统', '电子病历'],
+      createdBy: '医疗信息架构师',
+      createdAt: '2024-05-20',
+      lastModified: '2024-06-10',
+      usageCount: 78
+    },
+    {
+      id: '4',
+      name: '智能物流配送系统',
+      industry: 'logistics',
+      description: '现代化物流配送系统架构，支持订单管理、路线规划、车辆调度和实时追踪等功能',
+      scenario: '适用于快递公司、物流企业、电商配送等场景',
+      entities: [
+        {
+          id: 'package',
+          name: '包裹',
+          type: '业务实体',
+          description: '待配送的包裹信息',
+          attributes: ['包裹ID', '订单ID', '重量', '体积', '物品类型', '优先级']
+        },
+        {
+          id: 'vehicle',
+          name: '车辆',
+          type: '业务实体',
+          description: '配送车辆信息',
+          attributes: ['车辆ID', '车型', '载重', '当前位置', '状态', '司机ID']
+        },
+        {
+          id: 'route',
+          name: '路线',
+          type: '业务实体',
+          description: '配送路线规划',
+          attributes: ['路线ID', '起点', '终点', '途经点', '预计时间', '实际时间', '距离']
+        },
+        {
+          id: 'warehouse',
+          name: '仓库',
+          type: '业务实体',
+          description: '物流仓库信息',
+          attributes: ['仓库ID', '名称', '位置', '容量', '存储类型', '操作时间']
+        }
+      ],
+      relations: [
+        {
+          id: 'package-route',
+          from: 'package',
+          to: 'route',
+          type: '多对一',
+          description: '多个包裹可以共享一条配送路线'
+        },
+        {
+          id: 'vehicle-route',
+          from: 'vehicle',
+          to: 'route',
+          type: '一对多',
+          description: '一个车辆可以执行多条配送路线'
+        },
+        {
+          id: 'warehouse-package',
+          from: 'warehouse',
+          to: 'package',
+          type: '一对多',
+          description: '一个仓库可以存储多个包裹'
+        }
+      ],
+      complexity: 'medium',
+      status: 'active',
+      tags: ['物流', '配送', '路线规划', '实时追踪'],
+      createdBy: '物流系统架构师',
+      createdAt: '2024-05-25',
+      lastModified: '2024-06-08',
+      usageCount: 92
+    },
+    {
+      id: '5',
+      name: '智慧校园管理系统',
+      industry: 'education',
+      description: '现代化校园管理系统，整合学生管理、课程安排、教学资源和校园服务等功能',
+      scenario: '适用于大学、中小学、培训机构等教育组织',
+      entities: [
+        {
+          id: 'student',
+          name: '学生',
+          type: '业务实体',
+          description: '在校学生信息',
+          attributes: ['学生ID', '姓名', '年级', '班级', '联系方式', '入学时间', '学籍状态']
+        },
+        {
+          id: 'teacher',
+          name: '教师',
+          type: '业务实体',
+          description: '教职工信息',
+          attributes: ['教师ID', '姓名', '科目', '职称', '联系方式', '入职时间']
+        },
+        {
+          id: 'course',
+          name: '课程',
+          type: '业务实体',
+          description: '教学课程信息',
+          attributes: ['课程ID', '课程名称', '学分', '课时', '教师ID', '教室', '时间段']
+        },
+        {
+          id: 'classroom',
+          name: '教室',
+          type: '业务实体',
+          description: '教学场所信息',
+          attributes: ['教室ID', '名称', '位置', '容量', '设备配置', '状态']
+        }
+      ],
+      relations: [
+        {
+          id: 'student-course',
+          from: 'student',
+          to: 'course',
+          type: '多对多',
+          description: '学生可以选修多门课程，课程可以有多个学生'
+        },
+        {
+          id: 'teacher-course',
+          from: 'teacher',
+          to: 'course',
+          type: '一对多',
+          description: '一个教师可以教授多门课程'
+        },
+        {
+          id: 'course-classroom',
+          from: 'course',
+          to: 'classroom',
+          type: '多对多',
+          description: '课程可以在不同教室进行，教室可以用于不同课程'
+        }
+      ],
+      complexity: 'medium',
+      status: 'active',
+      tags: ['教育', '学生管理', '课程安排', '教学资源'],
+      createdBy: '教育信息架构师',
+      createdAt: '2024-05-18',
+      lastModified: '2024-06-05',
+      usageCount: 65
+    },
+    {
+      id: '6',
+      name: '智能制造生产管理',
+      industry: 'automotive',
+      description: '智能制造生产管理系统，支持生产计划、设备管理、质量控制和供应链协同等功能',
+      scenario: '适用于汽车制造、电子组装、工业生产等制造业',
+      entities: [
+        {
+          id: 'product',
+          name: '产品',
+          type: '业务实体',
+          description: '生产的产品信息',
+          attributes: ['产品ID', '名称', '型号', '规格', 'BOM清单', '生产周期']
+        },
+        {
+          id: 'equipment',
+          name: '设备',
+          type: '业务实体',
+          description: '生产设备信息',
+          attributes: ['设备ID', '名称', '类型', '状态', '维护周期', '生产能力']
+        },
+        {
+          id: 'workorder',
+          name: '工单',
+          type: '业务实体',
+          description: '生产工单信息',
+          attributes: ['工单ID', '产品ID', '计划数量', '开始时间', '结束时间', '状态']
+        },
+        {
+          id: 'material',
+          name: '物料',
+          type: '业务实体',
+          description: '生产所需物料信息',
+          attributes: ['物料ID', '名称', '规格', '库存量', '供应商', '采购周期']
+        }
+      ],
+      relations: [
+        {
+          id: 'product-workorder',
+          from: 'product',
+          to: 'workorder',
+          type: '一对多',
+          description: '一个产品可以有多个生产工单'
+        },
+        {
+          id: 'equipment-workorder',
+          from: 'equipment',
+          to: 'workorder',
+          type: '多对多',
+          description: '设备可以执行多个工单，工单可能需要多台设备'
+        },
+        {
+          id: 'product-material',
+          from: 'product',
+          to: 'material',
+          type: '多对多',
+          description: '产品由多种物料组成，物料可用于多种产品'
+        }
+      ],
+      complexity: 'complex',
+      status: 'active',
+      tags: ['制造', '生产管理', '设备监控', '质量控制'],
+      createdBy: '制造系统架构师',
+      createdAt: '2024-05-10',
+      lastModified: '2024-06-12',
+      usageCount: 103
     }
   ];
 
@@ -419,7 +687,7 @@ const IndustrySolutionManagement: React.FC = () => {
       </Card>
 
       {/* 方案卡片列表 */}
-      <Row gutter={16}>
+      <Row gutter={[16, 16]}>
         {solutionData.map(solution => {
           const industryConfig = industryMap[solution.industry as keyof typeof industryMap];
           return (

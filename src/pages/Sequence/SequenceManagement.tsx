@@ -504,7 +504,7 @@ sequenceDiagram
       </Card>
 
       {/* 时序卡片列表 */}
-      <Row gutter={16}>
+      <Row gutter={[16, 16]}>
         {renderSequenceCards()}
       </Row>
 

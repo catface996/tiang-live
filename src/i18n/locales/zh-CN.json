@@ -31,6 +31,10 @@
     "create": "创建",
     "update": "更新",
     "tips": "提示",
+    "stopped": "已停止",
+    "error": "错误",
+    "success": "成功",
+    "timeout": "超时",
     "unit": {
       "count": "个",
       "times": "次"
@@ -526,13 +530,79 @@
     "subtitle": "管理系统中的各类任务和执行状态",
     "inspection": {
       "title": "巡检任务",
-      "subtitle": "自动化巡检任务管理和监控",
+      "subtitle": "管理和执行系统巡检任务，定期触发任务集合执行，支持健康检查、性能监控、安全扫描等多种巡检类型。",
       "createTitle": "创建巡检任务",
+      "editTitle": "编辑巡检任务",
+      "refresh": "刷新",
+      "createTask": "创建巡检任务",
       "stats": {
-        "totalTasks": "总任务数",
-        "runningTasks": "运行中",
+        "totalTasks": "巡检任务总数",
+        "runningTasks": "运行中任务",
         "completedToday": "今日完成",
         "failureRate": "失败率"
+      },
+      "search": {
+        "placeholder": "搜索巡检任务名称、描述...",
+        "type": "类型",
+        "status": "状态",
+        "schedule": "调度"
+      },
+      "form": {
+        "name": "任务名称",
+        "namePlaceholder": "请输入巡检任务名称",
+        "nameRequired": "请输入任务名称",
+        "description": "描述",
+        "descriptionPlaceholder": "请输入巡检任务的功能描述",
+        "descriptionRequired": "请输入任务描述",
+        "type": "巡检类型",
+        "schedule": "调度配置",
+        "taskCollections": "任务集合",
+        "enabled": "启用状态"
+      },
+      "types": {
+        "healthCheck": "健康检查",
+        "performanceMonitor": "性能监控",
+        "securityScan": "安全扫描",
+        "logAnalysis": "日志分析"
+      },
+      "status": {
+        "active": "运行中",
+        "paused": "已暂停",
+        "draft": "草稿",
+        "completed": "已完成",
+        "failed": "失败"
+      },
+      "messages": {
+        "startSuccess": "巡检任务启动成功",
+        "pauseSuccess": "巡检任务暂停成功",
+        "deleteSuccess": "巡检任务删除成功",
+        "createSuccess": "巡检任务创建成功",
+        "updateSuccess": "巡检任务更新成功"
+      },
+      "tips": {
+        "createHint": "创建巡检任务后，可以在详情页面中配置具体的任务集合和调度规则。"
+      },
+      "card": {
+        "viewDetails": "查看详情",
+        "edit": "编辑",
+        "start": "启动",
+        "pause": "暂停",
+        "delete": "删除",
+        "taskCollections": "个任务集合",
+        "lastExecution": "最后执行",
+        "nextExecution": "下次执行",
+        "successRate": "成功率",
+        "executionCount": "执行次数",
+        "schedule": "调度",
+        "creator": "创建者"
+      },
+      "modal": {
+        "taskName": "任务名称",
+        "scheduleType": "调度类型",
+        "interval": "执行间隔",
+        "lastExecution": "最后执行",
+        "executionResult": "执行结果",
+        "taskCollections": "任务集合"
       },
       "columns": {
         "taskName": "任务名称",

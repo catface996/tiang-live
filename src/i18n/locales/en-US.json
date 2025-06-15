@@ -31,6 +31,10 @@
     "create": "Create",
     "update": "Update",
     "tips": "Tips",
+    "stopped": "Stopped",
+    "error": "Error",
+    "success": "Success",
+    "timeout": "Timeout",
     "unit": {
       "count": "",
       "times": " times"
@@ -526,13 +530,79 @@
     "subtitle": "Manage various tasks and execution status in the system",
     "inspection": {
       "title": "Inspection Tasks",
-      "subtitle": "Automated inspection task management and monitoring",
+      "subtitle": "Manage and execute system inspection tasks, periodically trigger task collection execution, support health checks, performance monitoring, security scanning and other inspection types.",
       "createTitle": "Create Inspection Task",
+      "editTitle": "Edit Inspection Task",
+      "refresh": "Refresh",
+      "createTask": "Create Inspection Task",
       "stats": {
-        "totalTasks": "Total Tasks",
-        "runningTasks": "Running",
+        "totalTasks": "Total Inspection Tasks",
+        "runningTasks": "Running Tasks",
         "completedToday": "Completed Today",
         "failureRate": "Failure Rate"
+      },
+      "search": {
+        "placeholder": "Search inspection task name, description...",
+        "type": "Type",
+        "status": "Status",
+        "schedule": "Schedule"
+      },
+      "form": {
+        "name": "Task Name",
+        "namePlaceholder": "Enter inspection task name",
+        "nameRequired": "Please enter task name",
+        "description": "Description",
+        "descriptionPlaceholder": "Enter inspection task description",
+        "descriptionRequired": "Please enter task description",
+        "type": "Inspection Type",
+        "schedule": "Schedule Configuration",
+        "taskCollections": "Task Collections",
+        "enabled": "Enabled Status"
+      },
+      "types": {
+        "healthCheck": "Health Check",
+        "performanceMonitor": "Performance Monitor",
+        "securityScan": "Security Scan",
+        "logAnalysis": "Log Analysis"
+      },
+      "status": {
+        "active": "Active",
+        "paused": "Paused",
+        "draft": "Draft",
+        "completed": "Completed",
+        "failed": "Failed"
+      },
+      "messages": {
+        "startSuccess": "Inspection task started successfully",
+        "pauseSuccess": "Inspection task paused successfully",
+        "deleteSuccess": "Inspection task deleted successfully",
+        "createSuccess": "Inspection task created successfully",
+        "updateSuccess": "Inspection task updated successfully"
+      },
+      "tips": {
+        "createHint": "After creating an inspection task, you can configure specific task collections and scheduling rules in the details page."
+      },
+      "card": {
+        "viewDetails": "View Details",
+        "edit": "Edit",
+        "start": "Start",
+        "pause": "Pause",
+        "delete": "Delete",
+        "taskCollections": " task collections",
+        "lastExecution": "Last Execution",
+        "nextExecution": "Next Execution",
+        "successRate": "Success Rate",
+        "executionCount": "Execution Count",
+        "schedule": "Schedule",
+        "creator": "Creator"
+      },
+      "modal": {
+        "taskName": "Task Name",
+        "scheduleType": "Schedule Type",
+        "interval": "Execution Interval",
+        "lastExecution": "Last Execution",
+        "executionResult": "Execution Result",
+        "taskCollections": "Task Collections"
       },
       "columns": {
         "taskName": "Task Name",
