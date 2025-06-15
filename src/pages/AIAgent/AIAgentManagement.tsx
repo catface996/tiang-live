@@ -538,39 +538,51 @@ const AIAgentManagement: React.FC = () => {
       )}
 
       {/* 智能体展示 */}
-      <Tabs defaultActiveKey="cards" style={{ marginBottom: 24 }}>
-        <Tabs.TabPane tab="卡片视图" key="cards">
-          <Row gutter={16}>
-            {renderAgentCards()}
-          </Row>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="列表视图" key="table">
-          <Card>
-            <div style={{ marginBottom: 16 }}>
-              <Input
-                placeholder="搜索智能体名称、类型..."
-                prefix={<SearchOutlined />}
-                allowClear
-                style={{ width: 300 }}
-              />
-            </div>
-            <Table
-              columns={columns}
-              dataSource={agentData}
-              loading={loading}
-              rowKey="id"
-              pagination={{
-                total: agentData.length,
-                pageSize: 10,
-                showSizeChanger: true,
-                showQuickJumper: true,
-                showTotal: (total, range) => 
-                  `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
-              }}
-            />
-          </Card>
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs 
+        defaultActiveKey="cards" 
+        style={{ marginBottom: 24 }}
+        items={[
+          {
+            key: 'cards',
+            label: '卡片视图',
+            children: (
+              <Row gutter={16}>
+                {renderAgentCards()}
+              </Row>
+            )
+          },
+          {
+            key: 'table',
+            label: '列表视图',
+            children: (
+              <Card>
+                <div style={{ marginBottom: 16 }}>
+                  <Input
+                    placeholder="搜索智能体名称、类型..."
+                    prefix={<SearchOutlined />}
+                    allowClear
+                    style={{ width: 300 }}
+                  />
+                </div>
+                <Table
+                  columns={columns}
+                  dataSource={agentData}
+                  loading={loading}
+                  rowKey="id"
+                  pagination={{
+                    total: agentData.length,
+                    pageSize: 10,
+                    showSizeChanger: true,
+                    showQuickJumper: true,
+                    showTotal: (total, range) => 
+                      `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
+                  }}
+                />
+              </Card>
+            )
+          }
+        ]}
+      />
 
       {/* 创建/编辑智能体模态框 */}
       <Modal

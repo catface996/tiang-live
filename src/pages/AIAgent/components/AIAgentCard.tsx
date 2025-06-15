@@ -112,7 +112,7 @@ interface AIAgent {
   status: 'running' | 'stopped' | 'paused';
   description: string;
   avatar?: string;
-  tags: string[];
+  tags?: string[];
   stats: {
     tasksCompleted: number;
     successRate: number;
@@ -295,7 +295,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
       </div>
 
       <div className="agent-tags">
-        {agent.tags.map(tag => (
+        {agent.tags && agent.tags.map(tag => (
           <Tag key={tag} style={{ marginBottom: 4 }}>
             {tag}
           </Tag>
