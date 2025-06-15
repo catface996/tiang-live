@@ -20,7 +20,7 @@ import {
 } from 'antd';
 import {
   DashboardOutlined,
-  TrendingUpOutlined,
+  ArrowUpOutlined,
   AlertOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -398,7 +398,7 @@ const Dashboard: React.FC = () => {
               <Option value="7d">近7天</Option>
               <Option value="30d">近30天</Option>
             </Select>
-            <Button icon={<TrendingUpOutlined />}>
+            <Button icon={<ArrowUpOutlined />}>
               刷新
             </Button>
           </Space>
@@ -632,8 +632,8 @@ const Dashboard: React.FC = () => {
                     description={`使用次数: ${item.usage}`}
                   />
                   <div>
-                    {item.trend === 'up' && <TrendingUpOutlined style={{ color: '#52c41a' }} />}
-                    {item.trend === 'down' && <TrendingUpOutlined style={{ color: '#ff4d4f', transform: 'rotate(180deg)' }} />}
+                    {item.trend === 'up' && <ArrowUpOutlined style={{ color: '#52c41a' }} />}
+                    {item.trend === 'down' && <ArrowUpOutlined style={{ color: '#ff4d4f', transform: 'rotate(180deg)' }} />}
                     {item.trend === 'stable' && <span style={{ color: '#faad14' }}>—</span>}
                   </div>
                 </List.Item>
