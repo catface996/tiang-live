@@ -1,5 +1,5 @@
 import { BaseApiService } from './simpleApi';
-import { mockPlaneService } from './mockPlaneService';
+import { planeStaticDataService } from './staticDataService';
 import type { 
   PlaneDefinition, 
   PlaneInstance, 
@@ -11,8 +11,8 @@ import type {
   QueryParams 
 } from '../types';
 
-// 判断是否使用模拟数据
-const USE_MOCK_DATA = import.meta.env.DEV || import.meta.env.VITE_USE_MOCK_DATA === 'true';
+// 使用静态数据服务替代mock服务
+const USE_STATIC_DATA = true; // 始终使用静态数据
 
 class PlaneService extends BaseApiService {
   constructor() {
@@ -21,21 +21,22 @@ class PlaneService extends BaseApiService {
 
   // 平面定义相关API
   async getPlaneDefinitions(params?: QueryParams): Promise<PaginatedResponse<PlaneDefinition>> {
-    if (USE_MOCK_DATA) {
-      return mockPlaneService.getPlaneDefinitions();
+    if (USE_STATIC_DATA) {
+      return planeStaticDataService.getPlaneDefinitions(params);
     }
     return this.get('/definitions', { params });
   }
 
   async getPlaneDefinition(id: string): Promise<PlaneDefinition> {
-    if (USE_MOCK_DATA) {
-      return mockPlaneService.getPlaneDefinition(id);
+    if (USE_STATIC_DATA) {
+      const response = await planeStaticDataService.getPlaneById(id);
+      return response.data;
     }
     return this.get(`/definitions/${id}`);
   }
 
   async createPlaneDefinition(data: Partial<PlaneDefinition>): Promise<PlaneDefinition> {
-    if (USE_MOCK_DATA) {
+    if (USE_STATIC_DATA) {
       // 模拟创建操作
       const newPlane: PlaneDefinition = {
         id: `plane-${Date.now()}`,
@@ -44,13 +45,21 @@ class PlaneService extends BaseApiService {
         description: data.description || 'New plane description',
         level: data.level || 1,
         dependencies: data.dependencies || [],
+        entityHealth: {
+          healthy: 0,
+          warning: 0,
+          error: 0,
+          total: 0
+        },
         config: data.config || {
           icon: '📋',
           color: '#1890ff',
+          theme: 'default',
           maxInstances: 10,
           autoScaling: false,
-          monitoring: { enabled: true },
+          monitoring: { enabled: true, alertThreshold: 80 },
           security: { accessControl: true, encryption: false },
+          healthThresholds: { warningThreshold: 0.2, errorThreshold: 0.1 }
         },
         status: 'ACTIVE',
         createdAt: new Date().toISOString(),
@@ -63,7 +72,7 @@ class PlaneService extends BaseApiService {
   }
 
   async updatePlaneDefinition(id: string, data: Partial<PlaneDefinition>): Promise<PlaneDefinition> {
-    if (USE_MOCK_DATA) {
+    if (USE_STATIC_DATA) {
       const existingPlane = await this.getPlaneDefinition(id);
       const updatedPlane = {
         ...existingPlane,
@@ -76,177 +85,106 @@ class PlaneService extends BaseApiService {
   }
 
   async deletePlaneDefinition(id: string): Promise<void> {
-    if (USE_MOCK_DATA) {
+    if (USE_STATIC_DATA) {
+      // 模拟删除操作
       return Promise.resolve();
     }
     return this.delete(`/definitions/${id}`);
   }
 
-  // 平面实例相关API
-  async getPlaneInstances(planeId?: string, params?: QueryParams): Promise<PaginatedResponse<PlaneInstance>> {
-    if (USE_MOCK_DATA) {
-      // 返回空的实例列表
-      return Promise.resolve({
-        data: [],
-        total: 0,
-        page: 1,
-        pageSize: 10,
-        hasNext: false,
-        hasPrev: false,
-      });
-    }
-    const url = planeId ? `/definitions/${planeId}/instances` : '/instances';
-    return this.get(url, { params });
-  }
-
-  async getPlaneInstance(id: string): Promise<PlaneInstance> {
-    if (USE_MOCK_DATA) {
-      throw new Error('Mock instance not found');
-    }
-    return this.get(`/instances/${id}`);
-  }
-
-  async createPlaneInstance(planeId: string, data: Partial<PlaneInstance>): Promise<PlaneInstance> {
-    if (USE_MOCK_DATA) {
-      const newInstance: PlaneInstance = {
-        id: `instance-${Date.now()}`,
-        name: data.name || 'new-instance',
-        planeDefinitionId: planeId,
-        metadata: data.metadata || {},
-        properties: data.properties || {},
-        status: 'RUNNING',
-        healthScore: 100,
-        entityCount: 0,
-        relationshipCount: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        ...data,
-      };
-      return Promise.resolve(newInstance);
-    }
-    return this.post(`/definitions/${planeId}/instances`, data);
-  }
-
-  async updatePlaneInstance(id: string, data: Partial<PlaneInstance>): Promise<PlaneInstance> {
-    if (USE_MOCK_DATA) {
-      throw new Error('Mock update not implemented');
-    }
-    return this.put(`/instances/${id}`, data);
-  }
-
-  async deletePlaneInstance(id: string): Promise<void> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve();
-    }
-    return this.delete(`/instances/${id}`);
-  }
-
   // 平面拓扑相关API
   async getPlaneTopology(): Promise<PlaneTopology> {
-    if (USE_MOCK_DATA) {
-      return mockPlaneService.getPlaneTopology();
+    if (USE_STATIC_DATA) {
+      const response = await planeStaticDataService.getPlaneTopology();
+      return response.data;
     }
     return this.get('/topology');
   }
 
-  async validateTopology(topology: PlaneTopology): Promise<{ valid: boolean; errors?: string[] }> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({ valid: true });
-    }
-    return this.post('/topology/validate', topology);
-  }
-
   // 平面指标相关API
-  async getPlaneMetrics(planeId: string, timeRange?: { start: string; end: string }): Promise<PlaneMetrics[]> {
-    if (USE_MOCK_DATA) {
-      const allMetrics = await mockPlaneService.getAllPlanesMetrics();
-      return allMetrics.filter(metric => metric.planeId === planeId);
+  async getPlaneMetrics(planeId?: string, timeRange?: { start: string; end: string }): Promise<PlaneMetrics> {
+    if (USE_STATIC_DATA) {
+      const response = await planeStaticDataService.getPlaneMetrics();
+      return response.data;
     }
-    return this.get(`/definitions/${planeId}/metrics`, { params: timeRange });
+    return this.get('/metrics', { params: { planeId, ...timeRange } });
   }
 
-  async getAllPlanesMetrics(): Promise<PlaneMetrics[]> {
-    if (USE_MOCK_DATA) {
-      return mockPlaneService.getAllPlanesMetrics();
+  async getAllPlanesMetrics(): Promise<PlaneMetrics> {
+    if (USE_STATIC_DATA) {
+      const response = await planeStaticDataService.getPlaneMetrics();
+      return response.data;
     }
     return this.get('/metrics');
   }
 
+  // 平面实例相关API (保持原有的模拟逻辑)
+  async getPlaneInstances(planeDefinitionId: string, params?: QueryParams): Promise<PaginatedResponse<PlaneInstance>> {
+    // 模拟实例数据
+    const mockInstances: PlaneInstance[] = [
+      {
+        id: `instance-${planeDefinitionId}-1`,
+        name: `${planeDefinitionId}-instance-1`,
+        planeDefinitionId,
+        metadata: { region: 'us-east-1', environment: 'production' },
+        properties: { version: '1.0.0', replicas: 3 },
+        status: 'RUNNING',
+        entityHealth: {
+          healthy: 10,
+          warning: 2,
+          error: 0,
+          total: 12
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+    ];
+
+    return Promise.resolve({
+      data: mockInstances,
+      total: mockInstances.length,
+      page: params?.page || 1,
+      pageSize: params?.pageSize || 10,
+    });
+  }
+
+  async createPlaneInstance(data: Partial<PlaneInstance>): Promise<PlaneInstance> {
+    const newInstance: PlaneInstance = {
+      id: `instance-${Date.now()}`,
+      name: data.name || 'new-instance',
+      planeDefinitionId: data.planeDefinitionId || '',
+      metadata: data.metadata || {},
+      properties: data.properties || {},
+      status: 'RUNNING',
+      entityHealth: {
+        healthy: 0,
+        warning: 0,
+        error: 0,
+        total: 0
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      ...data,
+    };
+    return Promise.resolve(newInstance);
+  }
+
   // 平面操作相关API
-  async executePlaneOperation(operation: PlaneOperation): Promise<PlaneOperationResult> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({
-        success: true,
-        operationId: `op-${Date.now()}`,
-        message: `Operation ${operation.type} executed successfully`,
-      });
-    }
-    return this.post('/operations', operation);
-  }
-
-  async getOperationHistory(planeId?: string, params?: QueryParams): Promise<PaginatedResponse<PlaneOperation>> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({
-        data: [],
-        total: 0,
-        page: 1,
-        pageSize: 10,
-        hasNext: false,
-        hasPrev: false,
-      });
-    }
-    const url = planeId ? `/definitions/${planeId}/operations` : '/operations';
-    return this.get(url, { params });
-  }
-
-  // 平面状态管理
-  async startPlaneInstance(instanceId: string): Promise<PlaneOperationResult> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({
-        success: true,
-        operationId: `start-${Date.now()}`,
-        message: 'Instance started successfully',
-      });
-    }
-    return this.post(`/instances/${instanceId}/start`);
-  }
-
-  async stopPlaneInstance(instanceId: string): Promise<PlaneOperationResult> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({
-        success: true,
-        operationId: `stop-${Date.now()}`,
-        message: 'Instance stopped successfully',
-      });
-    }
-    return this.post(`/instances/${instanceId}/stop`);
-  }
-
-  async restartPlaneInstance(instanceId: string): Promise<PlaneOperationResult> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({
-        success: true,
-        operationId: `restart-${Date.now()}`,
-        message: 'Instance restarted successfully',
-      });
-    }
-    return this.post(`/instances/${instanceId}/restart`);
-  }
-
-  // 平面健康检查
-  async checkPlaneHealth(planeId: string): Promise<{ healthy: boolean; issues?: string[] }> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({ healthy: true });
-    }
-    return this.get(`/definitions/${planeId}/health`);
-  }
-
-  async checkAllPlanesHealth(): Promise<Record<string, { healthy: boolean; issues?: string[] }>> {
-    if (USE_MOCK_DATA) {
-      return Promise.resolve({});
-    }
-    return this.get('/health');
+  async executePlaneOperation(planeId: string, operation: PlaneOperation): Promise<PlaneOperationResult> {
+    // 模拟操作结果
+    return Promise.resolve({
+      operationId: `op-${Date.now()}`,
+      planeId,
+      operation: operation.type,
+      status: 'SUCCESS',
+      message: `Operation ${operation.type} completed successfully`,
+      startTime: new Date().toISOString(),
+      endTime: new Date().toISOString(),
+      result: { success: true }
+    });
   }
 }
 
+// 导出单例
 export const planeService = new PlaneService();
+export default planeService;

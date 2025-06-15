@@ -1,0 +1,52 @@
+{
+  "success": true,
+  "data": {
+    "systemOverview": {
+      "totalPlanes": 5,
+      "activePlanes": 3,
+      "warningPlanes": 2,
+      "errorPlanes": 0,
+      "totalEntities": 936,
+      "healthyEntities": 878,
+      "warningEntities": 50,
+      "errorEntities": 8
+    },
+    "recentActivities": [
+      {
+        "id": "activity-1",
+        "type": "plane_created",
+        "title": "创建新平面",
+        "description": "业务场景平面已成功创建",
+        "timestamp": "2024-06-15T06:30:00Z",
+        "user": "系统管理员",
+        "status": "success"
+      },
+      {
+        "id": "activity-2",
+        "type": "health_warning",
+        "title": "健康状态警告",
+        "description": "中间件平面出现18个警告实体",
+        "timestamp": "2024-06-15T06:15:00Z",
+        "user": "监控系统",
+        "status": "warning"
+      },
+      {
+        "id": "activity-3",
+        "type": "report_generated",
+        "title": "报告生成完成",
+        "description": "系统健康度分析报告已生成",
+        "timestamp": "2024-06-15T06:00:00Z",
+        "user": "AI助手",
+        "status": "success"
+      }
+    ],
+    "performanceMetrics": {
+      "cpuUsage": 52.8,
+      "memoryUsage": 60.2,
+      "diskUsage": 38.7,
+      "networkLatency": 19.7,
+      "systemLoad": 1.2,
+      "availability": 99.2
+    }
+  }
+}

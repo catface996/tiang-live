@@ -1,0 +1,139 @@
+{
+  "success": true,
+  "data": {
+    "nodes": [
+      {
+        "id": "infrastructure",
+        "name": "基础设施平面",
+        "level": 1,
+        "status": "ACTIVE",
+        "entityCount": 312,
+        "healthyCount": 312,
+        "warningCount": 0,
+        "errorCount": 0,
+        "color": "#1890ff",
+        "icon": "🏗️"
+      },
+      {
+        "id": "middleware",
+        "name": "中间件平面",
+        "level": 2,
+        "status": "WARNING",
+        "entityCount": 189,
+        "healthyCount": 171,
+        "warningCount": 18,
+        "errorCount": 0,
+        "color": "#52c41a",
+        "icon": "⚙️"
+      },
+      {
+        "id": "business-system",
+        "name": "业务系统平面",
+        "level": 3,
+        "status": "WARNING",
+        "entityCount": 234,
+        "healthyCount": 206,
+        "warningCount": 20,
+        "errorCount": 8,
+        "color": "#faad14",
+        "icon": "💼"
+      },
+      {
+        "id": "business-chain",
+        "name": "业务链路平面",
+        "level": 4,
+        "status": "ACTIVE",
+        "entityCount": 156,
+        "healthyCount": 144,
+        "warningCount": 12,
+        "errorCount": 0,
+        "color": "#722ed1",
+        "icon": "🔗"
+      },
+      {
+        "id": "business-scenario",
+        "name": "业务场景平面",
+        "level": 5,
+        "status": "ACTIVE",
+        "entityCount": 45,
+        "healthyCount": 45,
+        "warningCount": 0,
+        "errorCount": 0,
+        "color": "#eb2f96",
+        "icon": "🎯"
+      }
+    ],
+    "edges": [
+      {
+        "id": "rel-1",
+        "source": "infrastructure",
+        "target": "middleware",
+        "type": "CONTAINS",
+        "strength": "critical",
+        "description": "基础设施支撑中间件服务"
+      },
+      {
+        "id": "rel-2",
+        "source": "middleware",
+        "target": "business-system",
+        "type": "SUPPORTS",
+        "strength": "high",
+        "description": "中间件支撑业务系统"
+      },
+      {
+        "id": "rel-3",
+        "source": "infrastructure",
+        "target": "business-system",
+        "type": "SUPPORTS",
+        "strength": "medium",
+        "description": "基础设施直接支撑业务系统"
+      },
+      {
+        "id": "rel-4",
+        "source": "business-system",
+        "target": "business-chain",
+        "type": "ENABLES",
+        "strength": "high",
+        "description": "业务系统支撑业务链路"
+      },
+      {
+        "id": "rel-5",
+        "source": "middleware",
+        "target": "business-chain",
+        "type": "SUPPORTS",
+        "strength": "medium",
+        "description": "中间件支撑业务链路"
+      },
+      {
+        "id": "rel-6",
+        "source": "business-chain",
+        "target": "business-scenario",
+        "type": "ENABLES",
+        "strength": "critical",
+        "description": "业务链路支撑业务场景"
+      },
+      {
+        "id": "rel-7",
+        "source": "business-system",
+        "target": "business-scenario",
+        "type": "SUPPORTS",
+        "strength": "high",
+        "description": "业务系统支撑业务场景"
+      },
+      {
+        "id": "rel-8",
+        "source": "infrastructure",
+        "target": "business-scenario",
+        "type": "SUPPORTS",
+        "strength": "low",
+        "description": "基础设施间接支撑业务场景"
+      }
+    ],
+    "metadata": {
+      "totalNodes": 5,
+      "totalEdges": 8,
+      "maxLevel": 5,
+      "generatedAt": "2024-06-15T07:00:00Z"
+    }
+  }
+}

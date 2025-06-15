@@ -1,0 +1,189 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "infrastructure",
+      "name": "infrastructure",
+      "displayName": "基础设施平面",
+      "description": "管理底层基础设施资源，包括服务器、网络、存储、容器等物理和虚拟资源",
+      "level": 1,
+      "dependencies": [],
+      "entityHealth": {
+        "healthy": 312,
+        "warning": 0,
+        "error": 0,
+        "total": 312
+      },
+      "config": {
+        "icon": "🏗️",
+        "color": "#1890ff",
+        "theme": "infrastructure",
+        "maxInstances": 300,
+        "autoScaling": false,
+        "monitoring": {
+          "enabled": true,
+          "alertThreshold": 90
+        },
+        "security": {
+          "accessControl": true,
+          "encryption": true
+        },
+        "healthThresholds": {
+          "warningThreshold": 0.2,
+          "errorThreshold": 0.1
+        }
+      },
+      "status": "ACTIVE",
+      "createdAt": "2024-01-19T08:00:00Z",
+      "updatedAt": "2024-06-14T07:10:00Z"
+    },
+    {
+      "id": "middleware",
+      "name": "middleware",
+      "displayName": "中间件平面",
+      "description": "管理各种中间件服务，如消息队列、缓存、数据库、API网关等基础服务组件",
+      "level": 2,
+      "parentPlaneId": "infrastructure",
+      "dependencies": ["infrastructure"],
+      "entityHealth": {
+        "healthy": 171,
+        "warning": 18,
+        "error": 0,
+        "total": 189
+      },
+      "config": {
+        "icon": "⚙️",
+        "color": "#52c41a",
+        "theme": "middleware",
+        "maxInstances": 150,
+        "autoScaling": true,
+        "monitoring": {
+          "enabled": true,
+          "alertThreshold": 85
+        },
+        "security": {
+          "accessControl": true,
+          "encryption": false
+        },
+        "healthThresholds": {
+          "warningThreshold": 0.2,
+          "errorThreshold": 0.1
+        }
+      },
+      "status": "WARNING",
+      "createdAt": "2024-01-18T08:00:00Z",
+      "updatedAt": "2024-06-14T08:20:00Z"
+    },
+    {
+      "id": "business-system",
+      "name": "business-system",
+      "displayName": "业务系统平面",
+      "description": "包含各个业务系统和应用服务，如用户管理系统、订单系统、支付系统等。同时依赖中间件服务和基础设施资源",
+      "level": 3,
+      "dependencies": ["middleware", "infrastructure"],
+      "entityHealth": {
+        "healthy": 206,
+        "warning": 20,
+        "error": 8,
+        "total": 234
+      },
+      "config": {
+        "icon": "💼",
+        "color": "#faad14",
+        "theme": "business-system",
+        "maxInstances": 200,
+        "autoScaling": true,
+        "monitoring": {
+          "enabled": true,
+          "alertThreshold": 70
+        },
+        "security": {
+          "accessControl": true,
+          "encryption": true
+        },
+        "healthThresholds": {
+          "warningThreshold": 0.2,
+          "errorThreshold": 0.1
+        }
+      },
+      "status": "WARNING",
+      "createdAt": "2024-01-17T08:00:00Z",
+      "updatedAt": "2024-06-14T11:45:00Z"
+    },
+    {
+      "id": "business-chain",
+      "name": "business-chain",
+      "displayName": "业务链路平面",
+      "description": "管理业务流程中的各个环节和步骤，定义业务流程的执行路径和依赖关系。依赖业务系统和中间件平面",
+      "level": 4,
+      "dependencies": ["business-system", "middleware"],
+      "entityHealth": {
+        "healthy": 144,
+        "warning": 12,
+        "error": 0,
+        "total": 156
+      },
+      "config": {
+        "icon": "🔗",
+        "color": "#722ed1",
+        "theme": "business-chain",
+        "maxInstances": 100,
+        "autoScaling": true,
+        "monitoring": {
+          "enabled": true,
+          "alertThreshold": 75
+        },
+        "security": {
+          "accessControl": true,
+          "encryption": true
+        },
+        "healthThresholds": {
+          "warningThreshold": 0.2,
+          "errorThreshold": 0.1
+        }
+      },
+      "status": "ACTIVE",
+      "createdAt": "2024-01-16T08:00:00Z",
+      "updatedAt": "2024-06-14T09:15:00Z"
+    },
+    {
+      "id": "business-scenario",
+      "name": "business-scenario",
+      "displayName": "业务场景平面",
+      "description": "定义和管理各种业务场景，如用户注册、订单处理、支付流程等核心业务流程。依赖业务链路、业务系统和基础设施",
+      "level": 5,
+      "dependencies": ["business-chain", "business-system", "infrastructure"],
+      "entityHealth": {
+        "healthy": 45,
+        "warning": 0,
+        "error": 0,
+        "total": 45
+      },
+      "config": {
+        "icon": "🎯",
+        "color": "#eb2f96",
+        "theme": "business-scenario",
+        "maxInstances": 50,
+        "autoScaling": true,
+        "monitoring": {
+          "enabled": true,
+          "alertThreshold": 80
+        },
+        "security": {
+          "accessControl": true,
+          "encryption": true
+        },
+        "healthThresholds": {
+          "warningThreshold": 0.2,
+          "errorThreshold": 0.1
+        }
+      },
+      "status": "ACTIVE",
+      "createdAt": "2024-01-15T08:00:00Z",
+      "updatedAt": "2024-06-14T10:30:00Z"
+    }
+  ],
+  "total": 5,
+  "page": 1,
+  "pageSize": 10
+}
