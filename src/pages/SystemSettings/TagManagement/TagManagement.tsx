@@ -32,7 +32,7 @@ import {
   ControlOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
-import { setPageTitle } from '../../utils';
+import { setPageTitle } from '../../../utils';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
