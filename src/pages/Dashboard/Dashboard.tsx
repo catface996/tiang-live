@@ -213,6 +213,99 @@ const Dashboard: React.FC = () => {
     ]
   });
 
+  // 任务完成率统计数据
+  const getTaskCompletionOption = () => ({
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c}% ({d}%)'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      data: [t('common.success'), t('common.failed'), t('common.pending')]
+    },
+    series: [
+      {
+        name: t('dashboard.completionRate'),
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: '18',
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          { 
+            value: 85, 
+            name: t('common.success'),
+            itemStyle: { color: '#52c41a' }
+          },
+          { 
+            value: 10, 
+            name: t('common.failed'),
+            itemStyle: { color: '#ff4d4f' }
+          },
+          { 
+            value: 5, 
+            name: t('common.pending'),
+            itemStyle: { color: '#faad14' }
+          }
+        ]
+      }
+    ]
+  });
+
+  // 平均响应时间数据
+  const getResponseTimeOption = () => ({
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '10%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: ['API网关', '数据库', '缓存', '消息队列', '文件存储', '外部服务'],
+      axisLabel: {
+        rotate: 45
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: t('dashboard.responseTimeMs')
+    },
+    series: [
+      {
+        name: t('dashboard.avgResponseTime'),
+        type: 'bar',
+        data: [
+          { value: 120, itemStyle: { color: '#52c41a' } },
+          { value: 250, itemStyle: { color: '#1890ff' } },
+          { value: 80, itemStyle: { color: '#52c41a' } },
+          { value: 180, itemStyle: { color: '#1890ff' } },
+          { value: 320, itemStyle: { color: '#faad14' } },
+          { value: 450, itemStyle: { color: '#ff4d4f' } }
+        ],
+        barWidth: '60%'
+      }
+    ]
+  });
+
   // 最近活动数据
   const recentActivities = [
     {
@@ -309,6 +402,28 @@ const Dashboard: React.FC = () => {
           <ChartCard title={t('dashboard.systemStatus')}>
             <ReactECharts 
               option={getSystemHealthOption()} 
+              style={{ height: '300px' }}
+              opts={{ renderer: 'svg' }}
+            />
+          </ChartCard>
+        </Col>
+      </Row>
+
+      {/* 任务完成率和响应时间统计 */}
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={24} lg={12}>
+          <ChartCard title={t('dashboard.taskCompletionRate')}>
+            <ReactECharts 
+              option={getTaskCompletionOption()} 
+              style={{ height: '300px' }}
+              opts={{ renderer: 'svg' }}
+            />
+          </ChartCard>
+        </Col>
+        <Col xs={24} lg={12}>
+          <ChartCard title={t('dashboard.averageResponseTime')}>
+            <ReactECharts 
+              option={getResponseTimeOption()} 
               style={{ height: '300px' }}
               opts={{ renderer: 'svg' }}
             />
