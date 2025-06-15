@@ -46,6 +46,7 @@ import {
   BarChartOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../../utils';
 
 const { Title, Paragraph, Text } = Typography;
@@ -114,6 +115,7 @@ interface AIAgent {
 }
 
 const AIAgentManagement: React.FC = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -232,23 +234,11 @@ const AIAgentManagement: React.FC = () => {
   };
 
   const handleCreateAgent = () => {
-    setEditingAgent(null);
-    form.resetFields();
-    setModalVisible(true);
+    navigate('/ai-agents/create');
   };
 
   const handleEditAgent = (agent: AIAgent) => {
-    setEditingAgent(agent);
-    form.setFieldsValue({
-      name: agent.name,
-      type: agent.type,
-      description: agent.description,
-      maxConcurrency: agent.config.maxConcurrency,
-      timeout: agent.config.timeout,
-      retryCount: agent.config.retryCount,
-      autoRestart: agent.config.autoRestart,
-    });
-    setModalVisible(true);
+    navigate(`/ai-agents/edit/${agent.id}`);
   };
 
   const handleViewAgent = (agent: AIAgent) => {

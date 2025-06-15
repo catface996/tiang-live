@@ -7,7 +7,7 @@ export { default as IndustrySolutionManagement } from './IndustrySolution';
 export { default as TaskCollectionManagement } from './TaskCollection';
 export { default as ReportManagement } from './Report';
 export { default as AIAssistant } from './AIAssistant';
-export { default as AIAgentManagement } from './AIAgent';
+export { default as AIAgentManagement, AIAgentForm } from './AIAgent';
 
 // 任务管理页面
 export { InspectionTasks, HookTasks } from './TaskManagement';

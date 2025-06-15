@@ -18,6 +18,7 @@ import {
   PromptTemplates,
 } from '../pages';
 import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
+import AIAgentForm from '../pages/AIAgent/AIAgentForm';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -37,6 +38,8 @@ const AppRoutes: React.FC = () => {
         <Route path="reports" element={<ReportManagement />} />
         <Route path="ai-assistant" element={<AIAssistant />} />
         <Route path="ai-agents" element={<AIAgentManagement />} />
+        <Route path="ai-agents/create" element={<AIAgentForm />} />
+        <Route path="ai-agents/edit/:id" element={<AIAgentForm />} />
         <Route path="system-settings/model-management" element={<ModelManagement />} />
         <Route path="system-settings/prompt-templates" element={<PromptTemplates />} />
         <Route path="system-settings/tag-management" element={<TagManagement />} />
