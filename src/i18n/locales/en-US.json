@@ -87,11 +87,14 @@
     "performanceMetrics": "Performance Metrics",
     "quickActions": "Quick Actions",
     "systemStatus": "System Status",
-    "taskCompletionRate": "Task Completion Rate Statistics",
+    "taskSuccessRate": "Task Success Rate Statistics",
     "averageResponseTime": "Average Response Time",
     "completionRate": "Completion Rate",
     "avgResponseTime": "Avg Response Time",
     "responseTimeMs": "Response Time (ms)",
+    "apiResponseTime": "API Response Time",
+    "dbResponseTime": "Database Response Time",
+    "cacheResponseTime": "Cache Response Time",
     "resourceUsage": "Resource Usage",
     "alertSummary": "Alert Summary",
     "taskProgress": "Task Progress",
@@ -264,6 +267,72 @@
       "icon": "Icon",
       "color": "Color",
       "theme": "Theme"
+    },
+    "createEdit": {
+      "createTitle": "Create Plane",
+      "editTitle": "Edit Plane",
+      "loadingData": "Loading data...",
+      "planeNotFound": "Plane not found",
+      "loadDataFailed": "Failed to load data",
+      "createSuccess": "Plane created successfully",
+      "updateSuccess": "Plane updated successfully",
+      "createFailed": "Failed to create plane",
+      "updateFailed": "Failed to update plane",
+      "formLabels": {
+        "planeName": "Plane Name",
+        "planeNamePlaceholder": "Enter plane name",
+        "planeNameHelp": "Unique identifier name for the plane, used for internal system reference",
+        "displayName": "Display Name",
+        "displayNamePlaceholder": "Enter display name",
+        "displayNameHelp": "User-friendly name displayed in the interface",
+        "description": "Plane Description",
+        "descriptionPlaceholder": "Enter plane description",
+        "level": "Plane Level",
+        "levelHelp": "Select the level position of the plane in the system architecture",
+        "dependencies": "Dependent Planes",
+        "dependenciesHelp": "Select other planes that this plane depends on",
+        "icon": "Plane Icon",
+        "iconPlaceholder": "Enter icon character",
+        "iconHelp": "Icon character used to identify the plane",
+        "status": "Plane Status",
+        "statusHelp": "Set the current operational status of the plane"
+      },
+      "levelOptions": {
+        "1": "L1 - Infrastructure Plane",
+        "2": "L2 - Middleware Plane",
+        "3": "L3 - Business System Plane",
+        "4": "L4 - Business Chain Plane",
+        "5": "L5 - Business Scenario Plane"
+      },
+      "statusOptions": {
+        "ACTIVE": "Active",
+        "WARNING": "Warning",
+        "ERROR": "Error",
+        "MAINTENANCE": "Maintenance"
+      },
+      "preview": {
+        "title": "Plane Preview",
+        "subtitle": "Preview the display effect of the plane card",
+        "entityHealth": "Entity Health Status",
+        "level": "Level",
+        "totalEntities": "Total Entities",
+        "createdAt": "Created At",
+        "dependencies": "Dependencies",
+        "planesCount": "planes"
+      },
+      "validation": {
+        "planeNameRequired": "Please enter plane name",
+        "displayNameRequired": "Please enter display name",
+        "levelRequired": "Please select plane level",
+        "descriptionRequired": "Please enter plane description",
+        "planeNameExists": "Plane name already exists",
+        "circularDependency": "Circular dependency detected, please reselect"
+      },
+      "buttons": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "reset": "Reset"
+      }
     }
   },
   "entities": {

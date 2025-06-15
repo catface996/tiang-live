@@ -213,7 +213,7 @@ const Dashboard: React.FC = () => {
     ]
   });
 
-  // 任务完成率统计数据
+  // 任务成功率统计数据 (饼图)
   const getTaskCompletionOption = () => ({
     tooltip: {
       trigger: 'item',
@@ -226,7 +226,7 @@ const Dashboard: React.FC = () => {
     },
     series: [
       {
-        name: t('dashboard.completionRate'),
+        name: t('dashboard.taskSuccessRate'),
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
@@ -265,25 +265,26 @@ const Dashboard: React.FC = () => {
     ]
   });
 
-  // 平均响应时间数据
+  // 平均响应时间数据 (曲线图)
   const getResponseTimeOption = () => ({
     tooltip: {
       trigger: 'axis',
-      axisPointer: { type: 'shadow' }
+      axisPointer: { type: 'cross' }
+    },
+    legend: {
+      data: [t('dashboard.apiResponseTime'), t('dashboard.dbResponseTime'), t('dashboard.cacheResponseTime')],
+      top: 10
     },
     grid: {
       left: '3%',
       right: '4%',
       bottom: '3%',
-      top: '10%',
+      top: '15%',
       containLabel: true
     },
     xAxis: {
       type: 'category',
-      data: ['API网关', '数据库', '缓存', '消息队列', '文件存储', '外部服务'],
-      axisLabel: {
-        rotate: 45
-      }
+      data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00']
     },
     yAxis: {
       type: 'value',
@@ -291,17 +292,25 @@ const Dashboard: React.FC = () => {
     },
     series: [
       {
-        name: t('dashboard.avgResponseTime'),
-        type: 'bar',
-        data: [
-          { value: 120, itemStyle: { color: '#52c41a' } },
-          { value: 250, itemStyle: { color: '#1890ff' } },
-          { value: 80, itemStyle: { color: '#52c41a' } },
-          { value: 180, itemStyle: { color: '#1890ff' } },
-          { value: 320, itemStyle: { color: '#faad14' } },
-          { value: 450, itemStyle: { color: '#ff4d4f' } }
-        ],
-        barWidth: '60%'
+        name: t('dashboard.apiResponseTime'),
+        type: 'line',
+        smooth: true,
+        data: [120, 110, 130, 150, 180, 160, 140],
+        itemStyle: { color: '#1890ff' }
+      },
+      {
+        name: t('dashboard.dbResponseTime'),
+        type: 'line',
+        smooth: true,
+        data: [250, 230, 280, 320, 350, 300, 270],
+        itemStyle: { color: '#52c41a' }
+      },
+      {
+        name: t('dashboard.cacheResponseTime'),
+        type: 'line',
+        smooth: true,
+        data: [80, 75, 85, 90, 95, 88, 82],
+        itemStyle: { color: '#faad14' }
       }
     ]
   });
@@ -409,10 +418,10 @@ const Dashboard: React.FC = () => {
         </Col>
       </Row>
 
-      {/* 任务完成率和响应时间统计 */}
+      {/* 任务成功率和响应时间统计 */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} lg={12}>
-          <ChartCard title={t('dashboard.taskCompletionRate')}>
+          <ChartCard title={t('dashboard.taskSuccessRate')}>
             <ReactECharts 
               option={getTaskCompletionOption()} 
               style={{ height: '300px' }}

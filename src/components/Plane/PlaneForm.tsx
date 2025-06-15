@@ -12,6 +12,7 @@ import {
   Tooltip
 } from 'antd';
 import { SaveOutlined, ReloadOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import type { PlaneDefinition } from '../../types';
 import { PLANE_COLORS, getPlaneColorByLevel } from '../../utils/planeColors';
@@ -67,6 +68,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
   loading = false
 }) => {
   const [form] = Form.useForm();
+  const { t } = useTranslation();
   const [previewLevel, setPreviewLevel] = useState<number>(1);
   const [selectedDependencies, setSelectedDependencies] = useState<string[]>([]);
 
@@ -186,21 +188,21 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
       <Card
         title={
           <Space>
-            {mode === 'create' ? '创建平面' : '编辑平面'}
-            <Tooltip title="平面是系统架构的抽象层次，每个层次都有特定的职责和依赖关系">
+            {mode === 'create' ? t('planes.createEdit.createTitle') : t('planes.createEdit.editTitle')}
+            <Tooltip title={t('planes.createEdit.formLabels.levelHelp')}>
               <InfoCircleOutlined style={{ color: '#1890ff' }} />
             </Tooltip>
           </Space>
         }
         extra={
           <Space>
-            <Tooltip title={mode === 'edit' ? '恢复到初始编辑状态' : '清空所有表单内容'}>
+            <Tooltip title={mode === 'edit' ? t('planes.createEdit.buttons.reset') : t('planes.createEdit.buttons.reset')}>
               <Button onClick={handleReset} icon={<ReloadOutlined />}>
-                重置
+                {t('planes.createEdit.buttons.reset')}
               </Button>
             </Tooltip>
             <Button onClick={onCancel}>
-              取消
+              {t('planes.createEdit.buttons.cancel')}
             </Button>
           </Space>
         }
@@ -215,67 +217,63 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
         >
           {/* 基本信息 */}
           <div>
-            <Title level={4}>基本信息</Title>
+            <Title level={4}>{t('planes.form.basicInfo')}</Title>
             
             <Form.Item
               name="name"
-              label="平面名称"
+              label={t('planes.createEdit.formLabels.planeName')}
               rules={[
-                { required: true, message: '请输入平面名称' },
-                { pattern: /^[a-z0-9-]+$/, message: '只能包含小写字母、数字和连字符' }
+                { required: true, message: t('planes.createEdit.validation.planeNameRequired') },
+                { pattern: /^[a-z0-9-]+$/, message: 'Only lowercase letters, numbers and hyphens are allowed' }
               ]}
-              extra="用于系统内部标识，建议使用英文"
+              extra={t('planes.createEdit.formLabels.planeNameHelp')}
             >
-              <Input placeholder="例如: business-system" />
+              <Input placeholder={t('planes.createEdit.formLabels.planeNamePlaceholder')} />
             </Form.Item>
 
             <Form.Item
               name="displayName"
-              label="显示名称"
-              rules={[{ required: true, message: '请输入显示名称' }]}
+              label={t('planes.createEdit.formLabels.displayName')}
+              rules={[{ required: true, message: t('planes.createEdit.validation.displayNameRequired') }]}
+              extra={t('planes.createEdit.formLabels.displayNameHelp')}
             >
-              <Input placeholder="例如: 业务系统平面" />
+              <Input placeholder={t('planes.createEdit.formLabels.displayNamePlaceholder')} />
             </Form.Item>
 
             <Form.Item
               name="description"
-              label="描述"
-              rules={[{ required: true, message: '请输入平面描述' }]}
+              label={t('planes.createEdit.formLabels.description')}
+              rules={[{ required: true, message: t('planes.createEdit.validation.descriptionRequired') }]}
             >
               <TextArea
                 rows={4}
-                placeholder="描述该平面的职责、包含的组件类型等"
+                placeholder={t('planes.createEdit.formLabels.descriptionPlaceholder')}
               />
             </Form.Item>
 
             <Form.Item
               name="level"
-              label="层级"
-              rules={[{ required: true, message: '请选择平面层级' }]}
-              extra="层级决定了平面在架构中的位置，数字越小层级越低"
+              label={t('planes.createEdit.formLabels.level')}
+              rules={[{ required: true, message: t('planes.createEdit.validation.levelRequired') }]}
+              extra={t('planes.createEdit.formLabels.levelHelp')}
             >
               <Select onChange={handleLevelChange}>
-                <Option value={1}>L1</Option>
-                <Option value={2}>L2</Option>
-                <Option value={3}>L3</Option>
-                <Option value={4}>L4</Option>
-                <Option value={5}>L5</Option>
-                <Option value={6}>L6</Option>
-                <Option value={7}>L7</Option>
-                <Option value={8}>L8</Option>
-                <Option value={9}>L9</Option>
-                <Option value={10}>L10</Option>
+                <Option value={1}>{t('planes.createEdit.levelOptions.1')}</Option>
+                <Option value={2}>{t('planes.createEdit.levelOptions.2')}</Option>
+                <Option value={3}>{t('planes.createEdit.levelOptions.3')}</Option>
+                <Option value={4}>{t('planes.createEdit.levelOptions.4')}</Option>
+                <Option value={5}>{t('planes.createEdit.levelOptions.5')}</Option>
               </Select>
             </Form.Item>
 
             <Form.Item
               name="dependencies"
-              label="依赖平面"
-              extra="选择该平面依赖的其他平面，只能依赖层级更低的平面"
+              label={t('planes.createEdit.formLabels.dependencies')}
+              extra={t('planes.createEdit.formLabels.dependenciesHelp')}
             >
               <Select
                 mode="multiple"
-                placeholder="选择依赖的平面"
+                placeholder={t('planes.createEdit.formLabels.dependencies')}
                 onChange={handleDependenciesChange}
                 disabled={previewLevel === 1}
               >
@@ -289,7 +287,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
 
             {previewLevel === 1 && (
               <Alert
-                message="L1层级平面不能依赖其他平面"
+                message={t('planes.createEdit.levelOptions.1') + ' ' + t('planes.createEdit.formLabels.dependenciesHelp')}
                 type="info"
                 showIcon
                 style={{ marginBottom: 16 }}
@@ -299,13 +297,16 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
 
           {/* 预览效果 */}
           <div style={{ marginTop: 32 }}>
-            <Title level={4}>预览效果</Title>
+            <Title level={4}>{t('planes.createEdit.preview.title')}</Title>
+            <Text type="secondary" style={{ display: 'block', marginBottom: 16 }}>
+              {t('planes.createEdit.preview.subtitle')}
+            </Text>
             <PreviewCard
               $level={previewLevel}
               title={
                 <Space>
                   <span>{getPlaneIcon(previewLevel)}</span>
-                  <span>{form.getFieldValue('displayName') || '平面名称'}</span>
+                  <span>{form.getFieldValue('displayName') || t('planes.createEdit.formLabels.displayName')}</span>
                   <Tag color="white" style={{ color: getPlaneColorByLevel(previewLevel).primary }}>
                     L{previewLevel}
                   </Tag>
@@ -314,12 +315,12 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
               size="small"
             >
               <Text type="secondary">
-                {form.getFieldValue('description') || '平面描述...'}
+                {form.getFieldValue('description') || t('planes.createEdit.formLabels.descriptionPlaceholder')}
               </Text>
               
               {selectedDependencies.length > 0 && (
                 <div style={{ marginTop: 12 }}>
-                  <Text strong>依赖平面: </Text>
+                  <Text strong>{t('planes.createEdit.preview.dependencies')}: </Text>
                   {selectedDependencies.map(depId => {
                     const depPlane = existingPlanes.find(p => p.id === depId);
                     return depPlane ? (
@@ -337,7 +338,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
           <div style={{ textAlign: 'center', marginTop: 24 }}>
             <Space size="large">
               <Button onClick={onCancel} size="large">
-                取消
+                {t('planes.createEdit.buttons.cancel')}
               </Button>
               <Button
                 type="primary"
@@ -346,7 +347,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
                 loading={loading}
                 size="large"
               >
-                {mode === 'create' ? '创建平面' : '保存修改'}
+                {mode === 'create' ? t('planes.createEdit.createTitle') : t('planes.createEdit.buttons.save')}
               </Button>
             </Space>
           </div>
