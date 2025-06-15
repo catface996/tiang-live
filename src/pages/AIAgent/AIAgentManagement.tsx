@@ -67,7 +67,9 @@ const StatsCard = styled(Card)`
   .ant-card-body {
     padding: 16px;
   }
-`;
+`.withConfig({
+  shouldForwardProp: (prop) => prop !== 'className',
+});
 
 const AgentCard = styled(Card)`
   height: 100%;
@@ -482,7 +484,7 @@ const AIAgentManagement: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card">
             <Statistic
               title="智能体总数"
               value={agentData.length}
@@ -493,7 +495,7 @@ const AIAgentManagement: React.FC = () => {
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card">
             <Statistic
               title="运行中"
               value={runningAgents}
@@ -504,7 +506,7 @@ const AIAgentManagement: React.FC = () => {
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card">
             <Statistic
               title="总执行任务"
               value={totalTasks}
@@ -515,7 +517,7 @@ const AIAgentManagement: React.FC = () => {
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card">
             <Statistic
               title="平均成功率"
               value={avgSuccessRate.toFixed(1)}
