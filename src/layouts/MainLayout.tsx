@@ -82,11 +82,6 @@ const menuItems = [
     label: '报告管理',
   },
   {
-    key: '/tags',
-    icon: <TagsOutlined />,
-    label: '标签管理',
-  },
-  {
     key: '/ai-assistant',
     icon: <MessageOutlined />,
     label: 'AI助手',
@@ -108,6 +103,10 @@ const menuItems = [
       {
         key: '/system-settings/prompt-templates',
         label: '提示词',
+      },
+      {
+        key: '/system-settings/tag-management',
+        label: '标签管理',
       },
     ],
   },

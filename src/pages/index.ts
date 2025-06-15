@@ -6,7 +6,6 @@ export { default as SequenceManagement } from './Sequence';
 export { default as IndustrySolutionManagement } from './IndustrySolution';
 export { default as TaskCollectionManagement } from './TaskCollection';
 export { default as ReportManagement } from './Report';
-export { default as TagManagement } from './Tag';
 export { default as AIAssistant } from './AIAssistant';
 export { default as AIAgentManagement } from './AIAgent';
 
@@ -14,4 +13,4 @@ export { default as AIAgentManagement } from './AIAgent';
 export { InspectionTasks, HookTasks } from './TaskManagement';
 
 // 系统设置页面
-export { ModelManagement, PromptTemplates } from './SystemSettings';
+export { ModelManagement, PromptTemplates, TagManagement } from './SystemSettings';

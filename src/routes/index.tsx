@@ -35,11 +35,11 @@ const AppRoutes: React.FC = () => {
         <Route path="task-management/inspection-tasks" element={<InspectionTasks />} />
         <Route path="task-management/hook-tasks" element={<HookTasks />} />
         <Route path="reports" element={<ReportManagement />} />
-        <Route path="tags" element={<TagManagement />} />
         <Route path="ai-assistant" element={<AIAssistant />} />
         <Route path="ai-agents" element={<AIAgentManagement />} />
         <Route path="system-settings/model-management" element={<ModelManagement />} />
         <Route path="system-settings/prompt-templates" element={<PromptTemplates />} />
+        <Route path="system-settings/tag-management" element={<TagManagement />} />
       </Route>
     </Routes>
   );
