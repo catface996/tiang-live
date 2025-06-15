@@ -51,7 +51,7 @@
     "completed": "已完成"
   },
   "layout": {
-    "title": "通用平面化AI运维系统",
+    "title": "天工开悟",
     "logout": "退出登录",
     "profile": "个人资料",
     "settings": "系统设置",
@@ -78,8 +78,8 @@
   },
   "dashboard": {
     "title": "系统概览",
-    "subtitle": "AI运维系统整体运行状态和关键指标",
-    "welcome": "欢迎使用AI运维系统",
+    "subtitle": "天工开悟AI运维系统整体运行状态和关键指标",
+    "welcome": "欢迎使用天工开悟",
     "systemOverview": "系统概览",
     "recentActivities": "最近活动",
     "performanceMetrics": "性能指标",
@@ -128,7 +128,7 @@
       "title": "平面依赖复杂度分析",
       "subtitle": "分析各平面的依赖关系复杂度和风险等级",
       "columns": {
-        "planeName": "平面名称",
+        "planeName": "平面",
         "level": "层级",
         "dependencyCount": "依赖数量",
         "dependentCount": "被依赖数量",
@@ -139,6 +139,23 @@
         "low": "低风险",
         "medium": "中等风险", 
         "high": "高风险"
+      },
+      "stats": {
+        "totalComplexity": "总复杂度",
+        "highRiskPlanes": "高风险平面",
+        "mediumRiskPlanes": "中风险平面",
+        "maxDependencies": "最大依赖数"
+      },
+      "tooltips": {
+        "dependencyPlanes": "依赖平面",
+        "dependentPlanes": "被依赖平面",
+        "none": "无"
+      },
+      "riskExplanation": {
+        "title": "风险等级说明",
+        "low": "低风险: 依赖关系简单，复杂度分数 < 10",
+        "medium": "中等风险: 依赖关系适中，复杂度分数 10-20",
+        "high": "高风险: 依赖关系复杂，复杂度分数 > 20"
       }
     },
     "operations": {
@@ -146,7 +163,43 @@
       "levelDescription": "平面层级与依赖说明",
       "levelContent": "系统采用分层架构设计，从底层基础设施到顶层业务场景，每个平面都有明确的职责和依赖关系。",
       "managementDescription": "平面管理功能",
-      "managementContent": "支持平面的创建、编辑、删除等基本操作，以及拓扑结构的可视化展示和依赖关系分析。"
+      "managementContent": "支持平面的创建、编辑、删除等基本操作，以及拓扑结构的可视化展示和依赖关系分析。",
+      "levelDetails": {
+        "l1": "L1 - 基础设施平面",
+        "l1Desc": "底层资源，不依赖其他平面",
+        "l2": "L2 - 中间件平面", 
+        "l2Desc": "依赖基础设施平面",
+        "l3": "L3 - 业务系统平面",
+        "l3Desc": "依赖中间件和基础设施平面",
+        "l4": "L4 - 业务链路平面",
+        "l4Desc": "依赖业务系统和中间件平面",
+        "l5": "L5 - 业务场景平面",
+        "l5Desc": "依赖业务链路、业务系统和基础设施",
+        "multipleDependency": "多重依赖",
+        "complexDependency": "复杂依赖"
+      },
+      "features": {
+        "title": "功能特性",
+        "multipleDependencySupport": "多重依赖支持",
+        "multipleDependencySupportDesc": "支持一个平面依赖多个平面",
+        "complexityAnalysis": "依赖复杂度分析",
+        "complexityAnalysisDesc": "自动分析平面依赖的复杂程度和风险",
+        "visualization": "可视化展示",
+        "visualizationDesc": "直观显示平面间的依赖关系",
+        "realTimeMonitoring": "实时监控",
+        "realTimeMonitoringDesc": "基于实体健康状态的平面状态监控",
+        "riskAssessment": "风险评估",
+        "riskAssessmentDesc": "根据依赖复杂度评估平面风险等级"
+      }
+    },
+    "errors": {
+      "planeDefinitionLoadFailed": "平面定义加载失败",
+      "topologyLoadFailed": "拓扑结构加载失败",
+      "metricsLoadFailed": "指标数据加载失败"
+    },
+    "loading": {
+      "topology": "加载平面拓扑中...",
+      "noPlaneData": "暂无平面数据"
     },
     "status": {
       "ACTIVE": "活跃",

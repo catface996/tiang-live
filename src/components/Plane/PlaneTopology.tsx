@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Empty, Spin } from 'antd';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import type { PlaneDefinition, PlaneRelationship } from '../../types';
 import PlaneCard from './PlaneCard';
@@ -34,6 +35,8 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
   loading = false,
   onPlaneAction,
 }) => {
+  const { t } = useTranslation();
+  
   // 按层级排序平面 - 层级数字越大越在顶层显示
   const sortedPlanes = [...planes].sort((a, b) => b.level - a.level);
 
@@ -49,11 +52,11 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
 
   if (loading) {
     return (
-      <Card title="平面拓扑结构">
+      <Card title={t('planes.topology.title')}>
         <TopologyContainer>
           <div style={{ textAlign: 'center', padding: '100px 0' }}>
             <Spin size="large" />
-            <div style={{ marginTop: 16 }}>加载平面拓扑中...</div>
+            <div style={{ marginTop: 16 }}>{t('planes.loading.topology')}</div>
           </div>
         </TopologyContainer>
       </Card>
@@ -62,10 +65,10 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
 
   if (planes.length === 0) {
     return (
-      <Card title="平面拓扑结构">
+      <Card title={t('planes.topology.title')}>
         <TopologyContainer>
           <Empty 
-            description="暂无平面数据"
+            description={t('planes.loading.noPlaneData')}
             image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
         </TopologyContainer>
@@ -74,7 +77,7 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
   }
 
   return (
-    <Card title="平面拓扑结构">
+    <Card title={t('planes.topology.title')}>
       <TopologyContainer>
         {sortedPlanes.map((plane, index) => {
           return (

@@ -51,7 +51,7 @@
     "completed": "Completed"
   },
   "layout": {
-    "title": "Universal Planar AI Operations System",
+    "title": "Tiang Ops",
     "logout": "Logout",
     "profile": "Profile",
     "settings": "Settings",
@@ -78,8 +78,8 @@
   },
   "dashboard": {
     "title": "System Overview",
-    "subtitle": "Overall operational status and key metrics of AI operations system",
-    "welcome": "Welcome to AI Operations System",
+    "subtitle": "Overall operational status and key metrics of Tiang Ops AI system",
+    "welcome": "Welcome to Tiang Ops",
     "systemOverview": "System Overview",
     "recentActivities": "Recent Activities",
     "performanceMetrics": "Performance Metrics",
@@ -128,7 +128,7 @@
       "title": "Plane Dependency Complexity Analysis",
       "subtitle": "Analyze dependency complexity and risk levels of each plane",
       "columns": {
-        "planeName": "Plane Name",
+        "planeName": "Plane",
         "level": "Level",
         "dependencyCount": "Dependencies",
         "dependentCount": "Dependents",
@@ -139,6 +139,23 @@
         "low": "Low Risk",
         "medium": "Medium Risk",
         "high": "High Risk"
+      },
+      "stats": {
+        "totalComplexity": "Total Complexity",
+        "highRiskPlanes": "High Risk Planes",
+        "mediumRiskPlanes": "Medium Risk Planes",
+        "maxDependencies": "Max Dependencies"
+      },
+      "tooltips": {
+        "dependencyPlanes": "Dependency Planes",
+        "dependentPlanes": "Dependent Planes",
+        "none": "None"
+      },
+      "riskExplanation": {
+        "title": "Risk Level Explanation",
+        "low": "Low Risk: Simple dependencies, complexity score < 10",
+        "medium": "Medium Risk: Moderate dependencies, complexity score 10-20",
+        "high": "High Risk: Complex dependencies, complexity score > 20"
       }
     },
     "operations": {
@@ -146,7 +163,43 @@
       "levelDescription": "Plane Hierarchy & Dependencies",
       "levelContent": "The system adopts a layered architecture design, from bottom-layer infrastructure to top-layer business scenarios. Each plane has clear responsibilities and dependencies.",
       "managementDescription": "Plane Management Features",
-      "managementContent": "Supports basic operations like creating, editing, and deleting planes, as well as topology visualization and dependency analysis."
+      "managementContent": "Supports basic operations like creating, editing, and deleting planes, as well as topology visualization and dependency analysis.",
+      "levelDetails": {
+        "l1": "L1 - Infrastructure Plane",
+        "l1Desc": "Bottom-layer resources, no dependencies on other planes",
+        "l2": "L2 - Middleware Plane",
+        "l2Desc": "Depends on infrastructure plane",
+        "l3": "L3 - Business System Plane",
+        "l3Desc": "Depends on middleware and infrastructure planes",
+        "l4": "L4 - Business Chain Plane",
+        "l4Desc": "Depends on business system and middleware planes",
+        "l5": "L5 - Business Scenario Plane",
+        "l5Desc": "Depends on business chain, business system and infrastructure",
+        "multipleDependency": "Multiple Dependencies",
+        "complexDependency": "Complex Dependencies"
+      },
+      "features": {
+        "title": "Features",
+        "multipleDependencySupport": "Multiple Dependency Support",
+        "multipleDependencySupportDesc": "Support one plane depending on multiple planes",
+        "complexityAnalysis": "Dependency Complexity Analysis",
+        "complexityAnalysisDesc": "Automatically analyze dependency complexity and risk levels",
+        "visualization": "Visualization",
+        "visualizationDesc": "Intuitively display dependencies between planes",
+        "realTimeMonitoring": "Real-time Monitoring",
+        "realTimeMonitoringDesc": "Plane status monitoring based on entity health status",
+        "riskAssessment": "Risk Assessment",
+        "riskAssessmentDesc": "Assess plane risk levels based on dependency complexity"
+      }
+    },
+    "errors": {
+      "planeDefinitionLoadFailed": "Failed to load plane definitions",
+      "topologyLoadFailed": "Failed to load topology structure",
+      "metricsLoadFailed": "Failed to load metrics data"
+    },
+    "loading": {
+      "topology": "Loading plane topology...",
+      "noPlaneData": "No plane data available"
     },
     "status": {
       "ACTIVE": "Active",

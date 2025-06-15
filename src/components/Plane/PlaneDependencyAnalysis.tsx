@@ -6,6 +6,7 @@ import {
   ExclamationCircleOutlined,
   CheckCircleOutlined 
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import type { PlaneDefinition, PlaneRelationship } from '../../types';
 import { getPrimaryColorById, getLightColorById } from '../../utils/planeColors';
@@ -60,6 +61,8 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
   planes,
   relationships
 }) => {
+  const { t } = useTranslation();
+  
   // 分析每个平面的依赖复杂度
   const analyzeComplexity = (): DependencyAnalysisData[] => {
     return planes.map(plane => {
@@ -115,7 +118,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
 
   const columns = [
     {
-      title: '平面',
+      title: t('planes.dependency.columns.planeName'),
       dataIndex: 'planeName',
       key: 'planeName',
       render: (text: string, record: DependencyAnalysisData) => (
@@ -130,7 +133,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       ),
     },
     {
-      title: '依赖数量',
+      title: t('planes.dependency.columns.dependencyCount'),
       dataIndex: 'dependencyCount',
       key: 'dependencyCount',
       render: (count: number, record: DependencyAnalysisData) => {
@@ -140,7 +143,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         }).join(', ');
         
         return (
-          <Tooltip title={`依赖平面: ${dependencyNames || '无'}`}>
+          <Tooltip title={`${t('planes.dependency.tooltips.dependencyPlanes')}: ${dependencyNames || t('planes.dependency.tooltips.none')}`}>
             <Tag color={count > 2 ? 'orange' : count > 0 ? 'blue' : 'default'}>
               {count}
             </Tag>
@@ -149,7 +152,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       },
     },
     {
-      title: '被依赖数量',
+      title: t('planes.dependency.columns.dependentCount'),
       dataIndex: 'dependentCount',
       key: 'dependentCount',
       render: (count: number, record: DependencyAnalysisData) => {
@@ -159,7 +162,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         }).join(', ');
         
         return (
-          <Tooltip title={`被依赖平面: ${dependentNames || '无'}`}>
+          <Tooltip title={`${t('planes.dependency.tooltips.dependentPlanes')}: ${dependentNames || t('planes.dependency.tooltips.none')}`}>
             <Tag color={count > 2 ? 'red' : count > 0 ? 'green' : 'default'}>
               {count}
             </Tag>
@@ -168,7 +171,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       },
     },
     {
-      title: '复杂度分数',
+      title: t('planes.dependency.columns.complexityScore'),
       dataIndex: 'complexityScore',
       key: 'complexityScore',
       render: (score: number) => (
@@ -178,7 +181,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       ),
     },
     {
-      title: '风险等级',
+      title: t('planes.dependency.columns.riskLevel'),
       dataIndex: 'riskLevel',
       key: 'riskLevel',
       render: (riskLevel: string) => (
@@ -186,7 +189,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
           color={getRiskColor(riskLevel)} 
           icon={getRiskIcon(riskLevel)}
         >
-          {riskLevel === 'high' ? '高风险' : riskLevel === 'medium' ? '中风险' : '低风险'}
+          {t(`planes.dependency.riskLevels.${riskLevel}`)}
         </Tag>
       ),
     },
@@ -203,7 +206,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       title={
         <Space>
           <BranchesOutlined />
-          <span>平面依赖复杂度分析</span>
+          <span>{t('planes.dependency.title')}</span>
         </Space>
       }
       style={{ marginTop: 24 }}
@@ -212,19 +215,19 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       <div style={{ marginBottom: 16, padding: '16px', background: '#fafafa', borderRadius: '6px' }}>
         <Space size="large">
           <div>
-            <Text type="secondary">总复杂度: </Text>
+            <Text type="secondary">{t('planes.dependency.stats.totalComplexity')}: </Text>
             <Text strong style={{ fontSize: '16px', color: '#1890ff' }}>{totalComplexity}</Text>
           </div>
           <div>
-            <Text type="secondary">高风险平面: </Text>
+            <Text type="secondary">{t('planes.dependency.stats.highRiskPlanes')}: </Text>
             <Text strong style={{ fontSize: '16px', color: '#ff4d4f' }}>{highRiskCount}</Text>
           </div>
           <div>
-            <Text type="secondary">中风险平面: </Text>
+            <Text type="secondary">{t('planes.dependency.stats.mediumRiskPlanes')}: </Text>
             <Text strong style={{ fontSize: '16px', color: '#faad14' }}>{mediumRiskCount}</Text>
           </div>
           <div>
-            <Text type="secondary">最大依赖数: </Text>
+            <Text type="secondary">{t('planes.dependency.stats.maxDependencies')}: </Text>
             <Text strong style={{ fontSize: '16px', color: '#722ed1' }}>{maxDependencies}</Text>
           </div>
         </Space>
@@ -249,8 +252,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       {/* 风险说明 */}
       <div style={{ marginTop: 16, fontSize: '12px', color: '#8c8c8c' }}>
         <Text type="secondary">
-          * 复杂度分数 = 依赖数量 × 2 + 被依赖数量 | 
-          高风险(≥8分) 中风险(4-7分) 低风险(&lt;4分)
+          * {t('planes.dependency.riskExplanation.title')}: {t('planes.dependency.riskExplanation.low')} | {t('planes.dependency.riskExplanation.medium')} | {t('planes.dependency.riskExplanation.high')}
         </Text>
       </div>
     </Card>

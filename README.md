@@ -1,4 +1,4 @@
-# AI运维系统前端
+# 天工开悟 (Tiang Ops)
 
 基于React + TypeScript + Antd的通用平面化AI运维系统前端应用。
 
@@ -12,6 +12,7 @@
 - **React Router v6** - 路由管理
 - **Styled Components** - CSS-in-JS
 - **Axios** - HTTP客户端
+- **React-i18next** - 国际化支持
 
 ## 项目结构
 

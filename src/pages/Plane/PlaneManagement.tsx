@@ -142,9 +142,9 @@ const PlaneManagement: React.FC = () => {
       {(error.definitions || error.topology || error.metrics) && (
         <Card style={{ marginBottom: 24, borderColor: '#ff4d4f' }}>
           <div style={{ color: '#ff4d4f' }}>
-            {error.definitions && <div>平面定义加载失败: {error.definitions}</div>}
-            {error.topology && <div>拓扑结构加载失败: {error.topology}</div>}
-            {error.metrics && <div>指标数据加载失败: {error.metrics}</div>}
+            {error.definitions && <div>{t('planes.errors.planeDefinitionLoadFailed')}: {error.definitions}</div>}
+            {error.topology && <div>{t('planes.errors.topologyLoadFailed')}: {error.topology}</div>}
+            {error.metrics && <div>{t('planes.errors.metricsLoadFailed')}: {error.metrics}</div>}
           </div>
         </Card>
       )}
@@ -171,26 +171,26 @@ const PlaneManagement: React.FC = () => {
       />
 
       {/* 操作说明 */}
-      <Card title="操作说明" style={{ marginTop: 24 }}>
+      <Card title={t('planes.operations.title')} style={{ marginTop: 24 }}>
         <Row gutter={[16, 16]}>
           <Col xs={24} md={12}>
-            <Title level={4}>平面层级与依赖说明</Title>
+            <Title level={4}>{t('planes.operations.levelDescription')}</Title>
             <ul>
-              <li><strong>L1 - 基础设施平面</strong>: 底层资源，不依赖其他平面</li>
-              <li><strong>L2 - 中间件平面</strong>: 依赖基础设施平面</li>
-              <li><strong>L3 - 业务系统平面</strong>: 依赖中间件和基础设施平面 <span style={{color: '#fa8c16'}}>(多重依赖)</span></li>
-              <li><strong>L4 - 业务链路平面</strong>: 依赖业务系统和中间件平面 <span style={{color: '#fa8c16'}}>(多重依赖)</span></li>
-              <li><strong>L5 - 业务场景平面</strong>: 依赖业务链路、业务系统和基础设施 <span style={{color: '#ff4d4f'}}>(复杂依赖)</span></li>
+              <li><strong>{t('planes.operations.levelDetails.l1')}</strong>: {t('planes.operations.levelDetails.l1Desc')}</li>
+              <li><strong>{t('planes.operations.levelDetails.l2')}</strong>: {t('planes.operations.levelDetails.l2Desc')}</li>
+              <li><strong>{t('planes.operations.levelDetails.l3')}</strong>: {t('planes.operations.levelDetails.l3Desc')} <span style={{color: '#fa8c16'}}>({t('planes.operations.levelDetails.multipleDependency')})</span></li>
+              <li><strong>{t('planes.operations.levelDetails.l4')}</strong>: {t('planes.operations.levelDetails.l4Desc')} <span style={{color: '#fa8c16'}}>({t('planes.operations.levelDetails.multipleDependency')})</span></li>
+              <li><strong>{t('planes.operations.levelDetails.l5')}</strong>: {t('planes.operations.levelDetails.l5Desc')} <span style={{color: '#ff4d4f'}}>({t('planes.operations.levelDetails.complexDependency')})</span></li>
             </ul>
           </Col>
           <Col xs={24} md={12}>
-            <Title level={4}>功能特性</Title>
+            <Title level={4}>{t('planes.operations.features.title')}</Title>
             <ul>
-              <li><strong>多重依赖支持</strong>: 支持一个平面依赖多个平面</li>
-              <li><strong>依赖复杂度分析</strong>: 自动分析平面依赖的复杂程度和风险</li>
-              <li><strong>可视化展示</strong>: 直观显示平面间的依赖关系</li>
-              <li><strong>实时监控</strong>: 基于实体健康状态的平面状态监控</li>
-              <li><strong>风险评估</strong>: 根据依赖复杂度评估平面风险等级</li>
+              <li><strong>{t('planes.operations.features.multipleDependencySupport')}</strong>: {t('planes.operations.features.multipleDependencySupportDesc')}</li>
+              <li><strong>{t('planes.operations.features.complexityAnalysis')}</strong>: {t('planes.operations.features.complexityAnalysisDesc')}</li>
+              <li><strong>{t('planes.operations.features.visualization')}</strong>: {t('planes.operations.features.visualizationDesc')}</li>
+              <li><strong>{t('planes.operations.features.realTimeMonitoring')}</strong>: {t('planes.operations.features.realTimeMonitoringDesc')}</li>
+              <li><strong>{t('planes.operations.features.riskAssessment')}</strong>: {t('planes.operations.features.riskAssessmentDesc')}</li>
             </ul>
           </Col>
         </Row>

@@ -31,7 +31,8 @@ import {
   SafetyCertificateOutlined,
   BugOutlined,
   RocketOutlined,
-  HeartOutlined
+  HeartOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
 import styled from 'styled-components';
