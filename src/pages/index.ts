@@ -9,3 +9,6 @@ export { default as ReportManagement } from './Report';
 export { default as TagManagement } from './Tag';
 export { default as AIAssistant } from './AIAssistant';
 export { default as AIAgentManagement } from './AIAgent';
+
+// 系统设置页面
+export { ModelManagement, PromptTemplates } from './SystemSettings';

@@ -81,6 +81,21 @@ const menuItems = [
     icon: <RobotOutlined />,
     label: 'AI智能体',
   },
+  {
+    key: 'system-settings',
+    icon: <SettingOutlined />,
+    label: '系统设置',
+    children: [
+      {
+        key: '/system-settings/model-management',
+        label: '模型管理',
+      },
+      {
+        key: '/system-settings/prompt-templates',
+        label: '提示词',
+      },
+    ],
+  },
 ];
 
 const userMenuItems = [
