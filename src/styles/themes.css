@@ -159,11 +159,6 @@
   color: var(--text-color) !important;
 }
 
-.collapse-button:hover {
-  color: var(--primary-color) !important;
-  background-color: var(--menu-item-hover-bg) !important;
-}
-
 /* 统计卡片图标颜色 */
 .stats-icon {
   color: var(--icon-color) !important;
@@ -881,24 +876,34 @@
   margin-left: 0 !important;
 }
 
-/* 移除折叠按钮的悬浮效果 */
+/* 移除折叠按钮的悬浮效果 - 高优先级 */
+.ant-layout-header .collapse-button:hover,
+.ant-layout-header .collapse-button:focus,
+.collapse-button.ant-btn:hover,
+.collapse-button.ant-btn:focus,
 .collapse-button:hover,
 .collapse-button:focus {
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
-  color: inherit !important;
+  color: var(--text-color) !important;
 }
 
+.ant-layout-header .collapse-button:active,
+.collapse-button.ant-btn:active,
 .collapse-button:active {
   background-color: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
-  color: inherit !important;
+  color: var(--text-color) !important;
   transform: none !important;
 }
 
-/* 移除图标悬浮时触发的父级样式变化 */
+/* 移除图标悬浮时触发的父级样式变化 - 高优先级 */
+.ant-layout-header .collapse-button .ant-btn-icon:hover,
+.ant-layout-header .collapse-button:hover .ant-btn-icon,
+.collapse-button.ant-btn .ant-btn-icon:hover,
+.collapse-button.ant-btn:hover .ant-btn-icon,
 .collapse-button .ant-btn-icon:hover,
 .collapse-button:hover .ant-btn-icon,
 .collapse-button .anticon:hover,
@@ -908,14 +913,18 @@
 .collapse-button .anticon-menu-unfold:hover,
 .collapse-button:hover .anticon-menu-unfold {
   background-color: transparent !important;
-  color: inherit !important;
+  color: var(--text-color) !important;
 }
 
-/* 确保SVG图标悬浮时不触发样式变化 */
+/* 确保SVG图标悬浮时不触发样式变化 - 高优先级 */
+.ant-layout-header .collapse-button svg:hover,
+.ant-layout-header .collapse-button:hover svg,
+.collapse-button.ant-btn svg:hover,
+.collapse-button.ant-btn:hover svg,
 .collapse-button svg:hover,
 .collapse-button:hover svg {
   background-color: transparent !important;
-  color: inherit !important;
+  color: var(--text-color) !important;
 }
 
 /* Plane Topology 特定样式 */
