@@ -30,6 +30,11 @@
     "level": "Level",
     "create": "Create",
     "update": "Update",
+    "tips": "Tips",
+    "unit": {
+      "count": "",
+      "times": " times"
+    },
     "export": "Export",
     "import": "Import",
     "reset": "Reset",
@@ -335,6 +340,68 @@
       }
     }
   },
+  "solutions": {
+    "title": "Industry Solutions",
+    "subtitle": "Predefined industry business scenarios, entity models and relationship architectures for rapid solution development.",
+    "refresh": "Refresh",
+    "createSolution": "Create Solution",
+    "stats": {
+      "totalSolutions": "Total Solutions",
+      "activeSolutions": "Active Solutions",
+      "businessEntities": "Business Entities",
+      "totalUsage": "Total Usage"
+    },
+    "search": {
+      "placeholder": "Search solution name, description...",
+      "industryType": "Industry Type",
+      "complexity": "Complexity",
+      "status": "Status"
+    },
+    "complexity": {
+      "simple": "Simple",
+      "medium": "Medium",
+      "complex": "Complex"
+    },
+    "status": {
+      "active": "Active",
+      "draft": "Draft",
+      "deprecated": "Deprecated"
+    },
+    "industry": {
+      "ecommerce": "E-commerce",
+      "finance": "Finance & Banking",
+      "healthcare": "Healthcare",
+      "automotive": "Automotive",
+      "education": "Education",
+      "logistics": "Logistics"
+    },
+    "card": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "businessEntities": "Business Entities",
+      "usageCount": "Usage Count",
+      "creator": "Creator",
+      "updateTime": "Update Time"
+    },
+    "modal": {
+      "basicInfo": "Basic Information",
+      "solutionName": "Solution Name",
+      "industryType": "Industry Type",
+      "complexity": "Complexity",
+      "status": "Status",
+      "usageCount": "Usage Count",
+      "entityCount": "Entity Count",
+      "relationCount": "Relation Count",
+      "creator": "Creator",
+      "createTime": "Create Time",
+      "tags": "Tags",
+      "description": "Description",
+      "scenario": "Scenario",
+      "businessEntities": "Business Entities",
+      "entityRelations": "Entity Relations",
+      "attributes": "Attributes"
+    }
+  },
   "entities": {
     "title": "Entity Management",
     "subtitle": "Manage various entity objects and properties in the system",
@@ -497,11 +564,113 @@
       "title": "Task Collections",
       "subtitle": "Task collection management and batch execution",
       "createTitle": "Create Task Collection",
+      "editTitle": "Edit Task Collection",
+      "refresh": "Refresh",
+      "createCollection": "Create Task Collection",
       "stats": {
-        "totalCollections": "Total Collections",
+        "totalCollections": "Total Task Collections",
         "activeCollections": "Active Collections",
         "totalTasks": "Total Tasks",
         "executionRate": "Execution Rate"
+      },
+      "search": {
+        "placeholder": "Search task collection name, description...",
+        "type": "Type",
+        "status": "Status",
+        "priority": "Priority"
+      },
+      "form": {
+        "name": "Task Collection Name",
+        "namePlaceholder": "Enter task collection name",
+        "nameRequired": "Please enter task collection name",
+        "nameMaxLength": "Name cannot exceed 50 characters",
+        "description": "Description",
+        "descriptionPlaceholder": "Enter task collection description",
+        "descriptionRequired": "Please enter task collection description",
+        "descriptionMaxLength": "Description cannot exceed 200 characters",
+        "type": "Collection Type",
+        "priority": "Priority",
+        "schedule": "Execution Schedule",
+        "targets": "Monitoring Targets",
+        "actions": "Inspection Actions"
+      },
+      "actions": {
+        "healthCheck": "Health Check",
+        "faultAnalysis": "Fault Analysis",
+        "performanceAnalysis": "Performance Analysis",
+        "securityScan": "Security Scan"
+      },
+      "actionDescriptions": {
+        "healthCheck": "Check the operational status and health metrics of targets",
+        "faultAnalysis": "Analyze anomalies and potential faults of targets",
+        "performanceAnalysis": "Analyze performance metrics and bottlenecks of targets",
+        "securityScan": "Scan security vulnerabilities and risks of targets"
+      },
+      "duration": {
+        "healthCheck": "1-3 minutes",
+        "faultAnalysis": "3-10 minutes",
+        "performanceAnalysis": "5-15 minutes",
+        "securityScan": "10-30 minutes"
+      },
+      "frequency": {
+        "every5min": "Every 5 minutes",
+        "every30min": "Every 30 minutes",
+        "hourly": "Hourly",
+        "daily": "Daily"
+      },
+      "status": {
+        "active": "Active",
+        "paused": "Paused",
+        "draft": "Draft"
+      },
+      "entities": {
+        "userService": "User Service",
+        "orderService": "Order Service",
+        "paymentService": "Payment Service",
+        "databaseCluster": "Database Cluster",
+        "redisCache": "Redis Cache",
+        "apiGateway": "API Gateway"
+      },
+      "categories": {
+        "microservice": "Microservice",
+        "dataStorage": "Data Storage",
+        "cacheService": "Cache Service",
+        "gatewayService": "Gateway Service"
+      },
+      "messages": {
+        "startSuccess": "Task collection started successfully",
+        "pauseSuccess": "Task collection paused successfully",
+        "deleteSuccess": "Task collection deleted successfully",
+        "createSuccess": "Task collection created successfully",
+        "updateSuccess": "Task collection updated successfully"
+      },
+      "tips": {
+        "createHint": "After creating a task collection, you can add specific monitoring targets and inspection actions in the details page."
+      },
+      "modal": {
+        "taskName": "Task Name",
+        "scheduleFrequency": "Schedule Frequency",
+        "lastExecution": "Last Execution",
+        "monitoringTargets": "Monitoring Targets",
+        "inspectionActions": "Inspection Actions"
+      },
+      "card": {
+        "viewDetails": "View Details",
+        "edit": "Edit",
+        "start": "Start",
+        "pause": "Pause",
+        "delete": "Delete",
+        "targets": "Monitoring Targets",
+        "actions": "Inspection Actions",
+        "entities": " entities",
+        "sequences": " sequences",
+        "lastExecution": "Last Execution",
+        "nextExecution": "Next Execution",
+        "creator": "Creator",
+        "updateTime": "Update Time",
+        "successRate": "Success Rate",
+        "executionCount": "Execution Count",
+        "schedule": "Schedule"
       },
       "columns": {
         "collectionName": "Collection Name",
@@ -510,33 +679,6 @@
         "lastExecution": "Last Execution",
         "progress": "Progress"
       }
-    }
-  },
-  "solutions": {
-    "title": "Industry Solutions",
-    "subtitle": "Pre-configured industry solutions and best practices",
-    "createTitle": "Create Solution",
-    "editTitle": "Edit Solution",
-    "stats": {
-      "totalSolutions": "Total Solutions",
-      "activeSolutions": "Active Solutions",
-      "deployedSolutions": "Deployed",
-      "successRate": "Success Rate"
-    },
-    "columns": {
-      "solutionName": "Solution Name",
-      "industry": "Industry",
-      "version": "Version",
-      "status": "Status",
-      "deployments": "Deployments"
-    },
-    "industries": {
-      "finance": "Finance",
-      "healthcare": "Healthcare",
-      "manufacturing": "Manufacturing",
-      "retail": "Retail",
-      "education": "Education",
-      "government": "Government"
     }
   },
   "systemSettings": {

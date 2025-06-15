@@ -30,6 +30,11 @@
     "level": "层级",
     "create": "创建",
     "update": "更新",
+    "tips": "提示",
+    "unit": {
+      "count": "个",
+      "times": "次"
+    },
     "export": "导出",
     "import": "导入",
     "reset": "重置",
@@ -335,6 +340,68 @@
       }
     }
   },
+  "solutions": {
+    "title": "行业方案",
+    "subtitle": "预定义的行业业务场景、实体模型和关系架构，快速构建行业解决方案。",
+    "refresh": "刷新",
+    "createSolution": "创建方案",
+    "stats": {
+      "totalSolutions": "方案总数",
+      "activeSolutions": "活跃方案",
+      "businessEntities": "业务实体",
+      "totalUsage": "总使用量"
+    },
+    "search": {
+      "placeholder": "搜索方案名称、描述...",
+      "industryType": "行业类型",
+      "complexity": "复杂度",
+      "status": "状态"
+    },
+    "complexity": {
+      "simple": "简单",
+      "medium": "中等",
+      "complex": "复杂"
+    },
+    "status": {
+      "active": "活跃",
+      "draft": "草稿",
+      "deprecated": "已废弃"
+    },
+    "industry": {
+      "ecommerce": "电商零售",
+      "finance": "金融银行",
+      "healthcare": "医疗健康",
+      "automotive": "汽车制造",
+      "education": "教育培训",
+      "logistics": "物流运输"
+    },
+    "card": {
+      "viewDetails": "查看详情",
+      "edit": "编辑",
+      "businessEntities": "业务实体",
+      "usageCount": "使用次数",
+      "creator": "创建者",
+      "updateTime": "更新时间"
+    },
+    "modal": {
+      "basicInfo": "基本信息",
+      "solutionName": "方案名称",
+      "industryType": "行业类型",
+      "complexity": "复杂度",
+      "status": "状态",
+      "usageCount": "使用次数",
+      "entityCount": "业务实体数",
+      "relationCount": "关系数",
+      "creator": "创建者",
+      "createTime": "创建时间",
+      "tags": "标签",
+      "description": "方案描述",
+      "scenario": "适用场景",
+      "businessEntities": "业务实体",
+      "entityRelations": "实体关系",
+      "attributes": "属性"
+    }
+  },
   "entities": {
     "title": "实体管理",
     "subtitle": "管理系统中的各类实体对象和属性",
@@ -497,11 +564,113 @@
       "title": "任务集合",
       "subtitle": "任务集合管理和批量执行",
       "createTitle": "创建任务集合",
+      "editTitle": "编辑任务集合",
+      "refresh": "刷新",
+      "createCollection": "创建任务集合",
       "stats": {
-        "totalCollections": "总集合数",
+        "totalCollections": "任务集合总数",
         "activeCollections": "活跃集合",
         "totalTasks": "包含任务",
         "executionRate": "执行率"
+      },
+      "search": {
+        "placeholder": "搜索任务集合名称、描述...",
+        "type": "类型",
+        "status": "状态",
+        "priority": "优先级"
+      },
+      "form": {
+        "name": "任务集合名称",
+        "namePlaceholder": "请输入任务集合名称",
+        "nameRequired": "请输入任务集合名称",
+        "nameMaxLength": "名称不能超过50个字符",
+        "description": "描述",
+        "descriptionPlaceholder": "请输入任务集合的功能描述",
+        "descriptionRequired": "请输入任务集合描述",
+        "descriptionMaxLength": "描述不能超过200个字符",
+        "type": "集合类型",
+        "priority": "优先级",
+        "schedule": "执行计划",
+        "targets": "监控目标",
+        "actions": "巡检动作"
+      },
+      "actions": {
+        "healthCheck": "健康检查",
+        "faultAnalysis": "故障分析",
+        "performanceAnalysis": "性能分析",
+        "securityScan": "安全扫描"
+      },
+      "actionDescriptions": {
+        "healthCheck": "检查目标的运行状态和健康指标",
+        "faultAnalysis": "分析目标的异常情况和潜在故障",
+        "performanceAnalysis": "分析目标的性能指标和瓶颈",
+        "securityScan": "扫描目标的安全漏洞和风险"
+      },
+      "duration": {
+        "healthCheck": "1-3分钟",
+        "faultAnalysis": "3-10分钟",
+        "performanceAnalysis": "5-15分钟",
+        "securityScan": "10-30分钟"
+      },
+      "frequency": {
+        "every5min": "每5分钟",
+        "every30min": "每30分钟",
+        "hourly": "每小时",
+        "daily": "每天"
+      },
+      "status": {
+        "active": "运行中",
+        "paused": "已暂停",
+        "draft": "草稿"
+      },
+      "entities": {
+        "userService": "用户服务",
+        "orderService": "订单服务",
+        "paymentService": "支付服务",
+        "databaseCluster": "数据库集群",
+        "redisCache": "Redis缓存",
+        "apiGateway": "API网关"
+      },
+      "categories": {
+        "microservice": "微服务",
+        "dataStorage": "数据存储",
+        "cacheService": "缓存服务",
+        "gatewayService": "网关服务"
+      },
+      "messages": {
+        "startSuccess": "任务集合启动成功",
+        "pauseSuccess": "任务集合暂停成功",
+        "deleteSuccess": "任务集合删除成功",
+        "createSuccess": "任务集合创建成功",
+        "updateSuccess": "任务集合更新成功"
+      },
+      "tips": {
+        "createHint": "创建任务集合后，可以在详情页面中添加具体的监控目标和巡检动作。"
+      },
+      "modal": {
+        "taskName": "任务名称",
+        "scheduleFrequency": "调度频率",
+        "lastExecution": "上次执行",
+        "monitoringTargets": "监控目标",
+        "inspectionActions": "巡检动作"
+      },
+      "card": {
+        "viewDetails": "查看详情",
+        "edit": "编辑",
+        "start": "启动",
+        "pause": "暂停",
+        "delete": "删除",
+        "targets": "监控目标",
+        "actions": "巡检动作",
+        "entities": "个实体",
+        "sequences": "个时序",
+        "lastExecution": "最后执行",
+        "nextExecution": "下次执行",
+        "creator": "创建者",
+        "updateTime": "更新时间",
+        "successRate": "成功率",
+        "executionCount": "执行次数",
+        "schedule": "调度"
       },
       "columns": {
         "collectionName": "集合名称",
@@ -510,33 +679,6 @@
         "lastExecution": "最后执行",
         "progress": "进度"
       }
-    }
-  },
-  "solutions": {
-    "title": "行业解决方案",
-    "subtitle": "预配置的行业解决方案和最佳实践",
-    "createTitle": "创建解决方案",
-    "editTitle": "编辑解决方案",
-    "stats": {
-      "totalSolutions": "总方案数",
-      "activeSolutions": "活跃方案",
-      "deployedSolutions": "已部署",
-      "successRate": "成功率"
-    },
-    "columns": {
-      "solutionName": "方案名称",
-      "industry": "行业",
-      "version": "版本",
-      "status": "状态",
-      "deployments": "部署次数"
-    },
-    "industries": {
-      "finance": "金融",
-      "healthcare": "医疗",
-      "manufacturing": "制造业",
-      "retail": "零售",
-      "education": "教育",
-      "government": "政府"
     }
   },
   "systemSettings": {
