@@ -283,7 +283,9 @@ const Dashboard: React.FC = () => {
       trigger: 'axis',
       formatter: function(params: any) {
         const data = params[0];
-        return `${data.name}<br/>平均响应时间: ${data.value}ms<br/>状态: ${getResponseStatus(data.value)}`;
+        const timeLabels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'];
+        const time = timeLabels[data.dataIndex];
+        return `${time}<br/>平均响应时间: ${data.value}ms<br/>状态: ${getResponseStatus(data.value)}`;
       }
     },
     grid: {
@@ -309,17 +311,9 @@ const Dashboard: React.FC = () => {
     series: [
       {
         name: '响应时间',
-        type: 'area',
+        type: 'line', // 修改为 line 类型
         smooth: true,
-        data: [
-          { value: 156, name: '00:00' }, // 深夜，负载最低
-          { value: 142, name: '04:00' }, // 凌晨，系统最空闲
-          { value: 189, name: '08:00' }, // 早高峰开始
-          { value: 267, name: '12:00' }, // 午间高峰
-          { value: 324, name: '16:00' }, // 下午业务高峰
-          { value: 298, name: '20:00' }, // 晚间活跃时段
-          { value: 201, name: '24:00' }  // 夜间逐渐回落
-        ],
+        data: [156, 142, 189, 267, 324, 298, 201], // 简化为数值数组
         itemStyle: { color: '#1890ff' },
         areaStyle: {
           color: {
@@ -337,13 +331,13 @@ const Dashboard: React.FC = () => {
               yAxis: 250,
               name: '警告线',
               lineStyle: { color: '#faad14', type: 'dashed' },
-              label: { formatter: '警告: 250ms' }
+              label: { formatter: '警告: 250ms', position: 'end' }
             },
             {
               yAxis: 350,
               name: '危险线', 
               lineStyle: { color: '#ff4d4f', type: 'dashed' },
-              label: { formatter: '危险: 350ms' }
+              label: { formatter: '危险: 350ms', position: 'end' }
             }
           ]
         }
