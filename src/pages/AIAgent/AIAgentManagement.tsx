@@ -67,9 +67,7 @@ const StatsCard = styled(Card)`
   .ant-card-body {
     padding: 16px;
   }
-`.withConfig({
-  shouldForwardProp: (prop) => prop !== 'className',
-});
+`;
 
 const AgentCard = styled(Card)`
   height: 100%;
@@ -287,11 +285,11 @@ const AIAgentManagement: React.FC = () => {
         <Space>
           <Avatar 
             icon={<RobotOutlined />} 
-            style={{ backgroundColor: '#1890ff' }}
+            className="agent-avatar"
           />
           <div>
-            <div style={{ fontWeight: 500 }}>{text}</div>
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <div className="font-weight-medium">{text}</div>
+            <Text type="secondary" className="font-size-12">
               {record.version}
             </Text>
           </div>
@@ -322,8 +320,8 @@ const AIAgentManagement: React.FC = () => {
       key: 'resources',
       render: (_, record: AIAgent) => (
         <div>
-          <div style={{ marginBottom: 4 }}>
-            <Text style={{ fontSize: 12 }}>CPU: {record.cpu}%</Text>
+          <div className="margin-bottom-8">
+            <Text className="font-size-12">CPU: {record.cpu}%</Text>
             <Progress 
               percent={record.cpu} 
               size="small" 
@@ -332,7 +330,7 @@ const AIAgentManagement: React.FC = () => {
             />
           </div>
           <div>
-            <Text style={{ fontSize: 12 }}>内存: {record.memory}MB</Text>
+            <Text className="font-size-12">内存: {record.memory}MB</Text>
           </div>
         </div>
       ),
@@ -344,7 +342,7 @@ const AIAgentManagement: React.FC = () => {
         <div>
           <div>执行: {record.tasks}</div>
           <div>
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <Text type="secondary" className="font-size-12">
               成功率: {record.successRate}%
             </Text>
           </div>
@@ -358,8 +356,8 @@ const AIAgentManagement: React.FC = () => {
       render: (time: string) => (
         <Tooltip title={time}>
           <Space>
-            <ClockCircleOutlined style={{ color: '#666' }} />
-            <Text style={{ fontSize: 12 }}>
+            <ClockCircleOutlined className="text-secondary" />
+            <Text className="font-size-12">
               {new Date(time).toLocaleString('zh-CN')}
             </Text>
           </Space>
@@ -458,15 +456,15 @@ const AIAgentManagement: React.FC = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div className="flex-between">
           <div>
-            <Title className="page-title" level={2} style={{ margin: 0 }}>
+            <Title className="page-title margin-0" level={2}>
               <Space>
                 <RobotOutlined />
                 {t('agents.title')}
               </Space>
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph className="page-subtitle">
               {t('agents.subtitle')}
             </Paragraph>
           </div>
@@ -482,14 +480,14 @@ const AIAgentManagement: React.FC = () => {
       </PageHeader>
 
       {/* 统计信息 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
+      <Row gutter={16} className="margin-bottom-24">
         <Col xs={24} sm={12} md={6}>
           <StatsCard className="stats-card">
             <Statistic
               title="智能体总数"
               value={agentData.length}
               suffix="个"
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: 'var(--primary-color)' }}
               prefix={<RobotOutlined />}
             />
           </StatsCard>
@@ -537,14 +535,14 @@ const AIAgentManagement: React.FC = () => {
           type="warning"
           showIcon
           closable
-          style={{ marginBottom: 24 }}
+          className="margin-bottom-24"
         />
       )}
 
       {/* 智能体展示 */}
       <Tabs 
         defaultActiveKey="cards" 
-        style={{ marginBottom: 24 }}
+        className="margin-bottom-24"
         items={[
           {
             key: 'cards',
@@ -560,12 +558,12 @@ const AIAgentManagement: React.FC = () => {
             label: '列表视图',
             children: (
               <Card>
-                <div style={{ marginBottom: 16 }}>
+                <div className="margin-bottom-16">
                   <Input
                     placeholder="搜索智能体名称、类型..."
                     prefix={<SearchOutlined />}
                     allowClear
-                    style={{ width: 300 }}
+                    className="search-input"
                   />
                 </div>
                 <Table
@@ -765,7 +763,7 @@ const AIAgentManagement: React.FC = () => {
               </Descriptions.Item>
             </Descriptions>
 
-            <div style={{ marginTop: 24 }}>
+            <div className="margin-top-24">
               <Title level={4}>配置信息</Title>
               <Descriptions bordered column={2}>
                 <Descriptions.Item label="最大并发">
@@ -783,7 +781,7 @@ const AIAgentManagement: React.FC = () => {
               </Descriptions>
             </div>
 
-            <div style={{ marginTop: 24 }}>
+            <div className="margin-top-24">
               <Title level={4}>运行日志</Title>
               <Timeline>
                 <Timeline.Item color="green">
