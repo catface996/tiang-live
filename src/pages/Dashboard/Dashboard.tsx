@@ -206,7 +206,11 @@ const Dashboard: React.FC = () => {
     },
     tooltip: {
       trigger: 'axis',
-      axisPointer: { type: 'shadow' }
+      axisPointer: { type: 'shadow' },
+      formatter: function(params: any) {
+        const data = params[0];
+        return `${data.name}<br/>成功率: ${data.value}%<br/>执行次数: ${getTaskExecutionCount(data.name)}次`;
+      }
     },
     grid: {
       left: '3%',
@@ -217,43 +221,69 @@ const Dashboard: React.FC = () => {
     },
     xAxis: {
       type: 'category',
-      data: ['健康检查', '性能监控', '安全扫描', '数据同步', '告警通知', '日志分析']
+      data: ['健康检查', '性能监控', '安全扫描', '数据同步', '告警通知', '日志分析'],
+      axisLabel: {
+        interval: 0,
+        rotate: 45
+      }
     },
     yAxis: {
       type: 'value',
       name: '成功率 (%)',
-      max: 100
+      max: 100,
+      min: 85
     },
     series: [
       {
         name: '成功率',
         type: 'bar',
         data: [
-          { value: 98.5, itemStyle: { color: '#52c41a' } },
-          { value: 96.2, itemStyle: { color: '#52c41a' } },
-          { value: 94.8, itemStyle: { color: '#faad14' } },
-          { value: 97.3, itemStyle: { color: '#52c41a' } },
-          { value: 99.1, itemStyle: { color: '#52c41a' } },
-          { value: 92.7, itemStyle: { color: '#faad14' } }
+          { value: 98.7, itemStyle: { color: '#52c41a' } }, // 健康检查 - 最稳定
+          { value: 96.4, itemStyle: { color: '#52c41a' } }, // 性能监控 - 较稳定
+          { value: 89.2, itemStyle: { color: '#faad14' } }, // 安全扫描 - 复杂度高，成功率相对较低
+          { value: 97.8, itemStyle: { color: '#52c41a' } }, // 数据同步 - 业务关键，优化较好
+          { value: 99.3, itemStyle: { color: '#52c41a' } }, // 告警通知 - 简单可靠
+          { value: 91.5, itemStyle: { color: '#faad14' } }  // 日志分析 - 依赖外部系统，偶有问题
         ],
         markLine: {
-          data: [{ type: 'average', name: '平均值' }]
+          data: [
+            { 
+              type: 'average', 
+              name: '平均值',
+              lineStyle: { color: '#1890ff', type: 'dashed' },
+              label: { formatter: '平均: {c}%' }
+            }
+          ]
         }
       }
     ]
   });
 
+  // 获取任务执行次数（用于tooltip显示）
+  const getTaskExecutionCount = (taskName: string) => {
+    const executionData: { [key: string]: number } = {
+      '健康检查': 15847,
+      '性能监控': 8934,
+      '安全扫描': 1456,
+      '数据同步': 12678,
+      '告警通知': 3421,
+      '日志分析': 5689
+    };
+    return executionData[taskName] || 0;
+  };
+
   // 响应时间趋势图
   const getResponseTimeOption = () => ({
     title: {
-      text: '系统响应时间趋势',
+      text: '平均响应时间趋势',
       left: 0,
       textStyle: { fontSize: 16, fontWeight: 'normal' }
     },
     tooltip: {
       trigger: 'axis',
       formatter: function(params: any) {
-        return `${params[0].name}<br/>响应时间: ${params[0].value}ms`;
+        const data = params[0];
+        return `${data.name}<br/>平均响应时间: ${data.value}ms<br/>状态: ${getResponseStatus(data.value)}`;
       }
     },
     grid: {
@@ -265,18 +295,31 @@ const Dashboard: React.FC = () => {
     },
     xAxis: {
       type: 'category',
-      data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00']
+      data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+      axisLabel: {
+        formatter: '{value}'
+      }
     },
     yAxis: {
       type: 'value',
-      name: '响应时间 (ms)'
+      name: '响应时间 (ms)',
+      min: 100,
+      max: 400
     },
     series: [
       {
         name: '响应时间',
         type: 'area',
         smooth: true,
-        data: [180, 165, 220, 280, 320, 290, 245],
+        data: [
+          { value: 156, name: '00:00' }, // 深夜，负载最低
+          { value: 142, name: '04:00' }, // 凌晨，系统最空闲
+          { value: 189, name: '08:00' }, // 早高峰开始
+          { value: 267, name: '12:00' }, // 午间高峰
+          { value: 324, name: '16:00' }, // 下午业务高峰
+          { value: 298, name: '20:00' }, // 晚间活跃时段
+          { value: 201, name: '24:00' }  // 夜间逐渐回落
+        ],
         itemStyle: { color: '#1890ff' },
         areaStyle: {
           color: {
@@ -287,10 +330,34 @@ const Dashboard: React.FC = () => {
               { offset: 1, color: 'rgba(24, 144, 255, 0.1)' }
             ]
           }
+        },
+        markLine: {
+          data: [
+            {
+              yAxis: 250,
+              name: '警告线',
+              lineStyle: { color: '#faad14', type: 'dashed' },
+              label: { formatter: '警告: 250ms' }
+            },
+            {
+              yAxis: 350,
+              name: '危险线', 
+              lineStyle: { color: '#ff4d4f', type: 'dashed' },
+              label: { formatter: '危险: 350ms' }
+            }
+          ]
         }
       }
     ]
   });
+
+  // 获取响应时间状态
+  const getResponseStatus = (responseTime: number) => {
+    if (responseTime < 200) return '优秀';
+    if (responseTime < 250) return '良好';
+    if (responseTime < 350) return '警告';
+    return '危险';
+  };
 
   // 资源使用率仪表盘
   const getResourceGaugeOption = (title: string, value: number, color: string) => ({
