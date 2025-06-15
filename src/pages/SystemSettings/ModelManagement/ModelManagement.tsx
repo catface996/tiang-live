@@ -41,7 +41,7 @@ import {
   SafetyCertificateOutlined,
   MonitorOutlined,
   RobotOutlined,
-  BrainOutlined,
+  ExperimentOutlined,
   DatabaseOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -261,14 +261,14 @@ const ModelManagement: React.FC = () => {
   ];
 
   const providerMap = {
-    'OpenAI': { color: 'green', icon: <BrainOutlined /> },
+    'OpenAI': { color: 'green', icon: <ExperimentOutlined /> },
     'Anthropic': { color: 'blue', icon: <RobotOutlined /> },
     'Google': { color: 'red', icon: <CloudOutlined /> },
     'Azure': { color: 'cyan', icon: <DatabaseOutlined /> },
   };
 
   const modelTypeMap = {
-    llm: { name: '大语言模型', color: 'blue', icon: <BrainOutlined /> },
+    llm: { name: '大语言模型', color: 'blue', icon: <ExperimentOutlined /> },
     embedding: { name: '嵌入模型', color: 'green', icon: <ApiOutlined /> },
     image: { name: '图像模型', color: 'orange', icon: <MonitorOutlined /> },
     audio: { name: '音频模型', color: 'purple', icon: <ThunderboltOutlined /> },
@@ -484,7 +484,7 @@ const ModelManagement: React.FC = () => {
               value={modelData.length}
               suffix="个"
               valueStyle={{ color: '#1890ff' }}
-              prefix={<BrainOutlined />}
+              prefix={<ExperimentOutlined />}
             />
           </StatsCard>
         </Col>

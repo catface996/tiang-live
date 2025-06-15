@@ -42,7 +42,8 @@ import {
   ExclamationCircleOutlined,
   RobotOutlined,
   ThunderboltOutlined,
-  SafetyCertificateOutlined
+  SafetyCertificateOutlined,
+  ExperimentOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { setPageTitle } from '../../../utils';
@@ -534,7 +535,7 @@ API接口：{api_details}
               title="平均评分"
               value={avgRating.toFixed(1)}
               valueStyle={{ color: '#722ed1' }}
-              prefix={<RobotOutlined />}
+              prefix={<ExperimentOutlined />}
             />
           </StatsCard>
         </Col>
