@@ -25,7 +25,7 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   UserOutlined,
-  ServerOutlined,
+  DatabaseOutlined,
   ApiOutlined,
   ThunderboltOutlined,
   SafetyCertificateOutlined,
@@ -414,7 +414,7 @@ const Dashboard: React.FC = () => {
               value={systemStats.totalPlanes}
               suffix="个"
               valueStyle={{ color: '#1890ff' }}
-              prefix={<ServerOutlined />}
+              prefix={<DatabaseOutlined />}
             />
             <div style={{ marginTop: 8 }}>
               <Text type="secondary" style={{ fontSize: 12 }}>
