@@ -20,6 +20,7 @@ import {
   MessageOutlined,
   SolutionOutlined,
   UnorderedListOutlined,
+  ProjectOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -57,9 +58,23 @@ const menuItems = [
     label: '行业方案',
   },
   {
-    key: '/task-collections',
-    icon: <UnorderedListOutlined />,
-    label: '任务集合',
+    key: 'task-management',
+    icon: <ProjectOutlined />,
+    label: '任务管理',
+    children: [
+      {
+        key: '/task-management/task-collections',
+        label: '任务集合',
+      },
+      {
+        key: '/task-management/inspection-tasks',
+        label: '巡检任务',
+      },
+      {
+        key: '/task-management/hook-tasks',
+        label: 'Hook任务',
+      },
+    ],
   },
   {
     key: '/reports',

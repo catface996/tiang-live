@@ -10,5 +10,8 @@ export { default as TagManagement } from './Tag';
 export { default as AIAssistant } from './AIAssistant';
 export { default as AIAgentManagement } from './AIAgent';
 
+// 任务管理页面
+export { InspectionTasks, HookTasks } from './TaskManagement';
+
 // 系统设置页面
 export { ModelManagement, PromptTemplates } from './SystemSettings';

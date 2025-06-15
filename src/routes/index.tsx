@@ -12,6 +12,8 @@ import {
   TagManagement,
   AIAssistant,
   AIAgentManagement,
+  InspectionTasks,
+  HookTasks,
   ModelManagement,
   PromptTemplates,
 } from '../pages';
@@ -29,7 +31,9 @@ const AppRoutes: React.FC = () => {
         <Route path="entities" element={<EntityManagement />} />
         <Route path="sequences" element={<SequenceManagement />} />
         <Route path="industry-solutions" element={<IndustrySolutionManagement />} />
-        <Route path="task-collections" element={<TaskCollectionManagement />} />
+        <Route path="task-management/task-collections" element={<TaskCollectionManagement />} />
+        <Route path="task-management/inspection-tasks" element={<InspectionTasks />} />
+        <Route path="task-management/hook-tasks" element={<HookTasks />} />
         <Route path="reports" element={<ReportManagement />} />
         <Route path="tags" element={<TagManagement />} />
         <Route path="ai-assistant" element={<AIAssistant />} />
