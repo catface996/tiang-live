@@ -36,7 +36,7 @@ const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
   loading = false 
 }) => {
   const sequenceDiagramRef = useRef<HTMLDivElement>(null);
-  const [isRendering, setIsRendering] = React.useState(true);
+  const [isRendering, setIsRendering] = React.useState(false);
 
   useEffect(() => {
     // 初始化Mermaid配置，专门针对时序图优化
@@ -67,8 +67,21 @@ const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
 
   useEffect(() => {
     const renderSequenceDiagram = async () => {
-      if (!sequenceDiagramRef.current || !chart) return;
+      // 如果没有图表内容，直接返回不渲染
+      if (!chart || !chart.trim()) {
+        console.log('时序图: 没有图表内容');
+        setIsRendering(false);
+        return;
+      }
 
+      // 如果DOM元素还没准备好，等待下一次渲染
+      if (!sequenceDiagramRef.current) {
+        console.log('时序图: DOM元素未准备好');
+        setIsRendering(false);
+        return;
+      }
+
+      console.log('时序图: 开始渲染', chart.substring(0, 50) + '...');
       setIsRendering(true);
       
       try {
@@ -79,25 +92,40 @@ const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
         const id = `sequence-diagram-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         
         // 渲染时序图
+        console.log('时序图: 调用mermaid.render');
         const { svg } = await mermaid.render(id, chart);
+        console.log('时序图: 渲染成功');
         
         // 插入SVG
-        sequenceDiagramRef.current.innerHTML = svg;
+        if (sequenceDiagramRef.current) {
+          sequenceDiagramRef.current.innerHTML = svg;
+        }
         
         setIsRendering(false);
       } catch (error) {
         console.error('时序图渲染错误:', error);
-        sequenceDiagramRef.current.innerHTML = `
-          <div style="text-align: center; color: #ff4d4f; padding: 20px;">
-            <p>时序图渲染失败</p>
-            <p style="font-size: 12px; color: #999;">请检查时序图语法</p>
-          </div>
-        `;
+        if (sequenceDiagramRef.current) {
+          sequenceDiagramRef.current.innerHTML = `
+            <div style="text-align: center; color: #ff4d4f; padding: 20px;">
+              <p>时序图渲染失败</p>
+              <p style="font-size: 12px; color: #999;">请检查时序图语法</p>
+              <details style="margin-top: 10px; text-align: left;">
+                <summary style="cursor: pointer;">错误详情</summary>
+                <pre style="font-size: 10px; color: #666; margin-top: 5px;">${error}</pre>
+              </details>
+            </div>
+          `;
+        }
         setIsRendering(false);
       }
     };
 
-    renderSequenceDiagram();
+    // 添加延迟确保DOM已经准备好
+    const timer = setTimeout(() => {
+      renderSequenceDiagram();
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [chart]);
 
   if (loading || isRendering) {
