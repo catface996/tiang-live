@@ -192,6 +192,38 @@
         "riskAssessmentDesc": "根据依赖复杂度评估平面风险等级"
       }
     },
+    "card": {
+      "status": {
+        "ACTIVE": "健康",
+        "WARNING": "告警", 
+        "ERROR": "异常",
+        "MAINTENANCE": "维护中",
+        "UNKNOWN": "未知"
+      },
+      "tooltips": {
+        "viewDetails": "查看详情",
+        "editConfig": "编辑配置",
+        "addInstance": "添加实例"
+      },
+      "labels": {
+        "entityHealthStatus": "实体健康状态",
+        "level": "层级",
+        "totalEntities": "实体总数",
+        "createdAt": "创建时间",
+        "dependencies": "依赖",
+        "planesCount": "个平面",
+        "multipleDependency": "多重依赖"
+      },
+      "entityStats": {
+        "noEntities": "暂无实体",
+        "healthy": "健康",
+        "warning": "告警",
+        "error": "异常",
+        "healthyTooltip": "健康实体数量",
+        "warningTooltip": "告警实体数量", 
+        "errorTooltip": "异常实体数量"
+      }
+    },
     "errors": {
       "planeDefinitionLoadFailed": "平面定义加载失败",
       "topologyLoadFailed": "拓扑结构加载失败",

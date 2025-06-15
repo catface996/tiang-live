@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Space, Badge, Button, Tooltip, Typography, Divider } from 'antd';
 import { EyeOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import type { PlaneDefinition } from '../../types';
 import { getGradientByLevel } from '../../utils/planeColors';
@@ -57,22 +58,13 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const getStatusText = (status: string) => {
-  switch (status) {
-    case 'ACTIVE':
-      return '健康';
-    case 'WARNING':
-      return '告警';
-    case 'ERROR':
-      return '异常';
-    case 'MAINTENANCE':
-      return '维护中';
-    default:
-      return '未知';
-  }
+const getStatusText = (status: string, t: any) => {
+  return t(`planes.card.status.${status}`) || t('planes.card.status.UNKNOWN');
 };
 
 const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => {
+  const { t } = useTranslation();
+  
   const handleAction = (action: 'view' | 'edit' | 'add') => {
     onAction(action, plane.id);
   };
@@ -87,13 +79,13 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
           <span>{plane.displayName || plane.name}</span>
           <Badge 
             color={getStatusColor(plane.status)} 
-            text={getStatusText(plane.status)}
+            text={getStatusText(plane.status, t)}
           />
         </Space>
       }
       extra={
         <Space>
-          <Tooltip title="查看详情">
+          <Tooltip title={t('planes.card.tooltips.viewDetails')}>
             <Button 
               type="text" 
               icon={<EyeOutlined />} 
@@ -101,7 +93,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               style={{ color: 'white' }}
             />
           </Tooltip>
-          <Tooltip title="编辑配置">
+          <Tooltip title={t('planes.card.tooltips.editConfig')}>
             <Button 
               type="text" 
               icon={<EditOutlined />} 
@@ -109,7 +101,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               style={{ color: 'white' }}
             />
           </Tooltip>
-          <Tooltip title="添加实例">
+          <Tooltip title={t('planes.card.tooltips.addInstance')}>
             <Button 
               type="text" 
               icon={<PlusOutlined />} 
@@ -126,7 +118,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
 
       {/* 实体健康状态统计 */}
       <div style={{ marginBottom: 16 }}>
-        <Text strong style={{ marginBottom: 8, display: 'block' }}>实体健康状态:</Text>
+        <Text strong style={{ marginBottom: 8, display: 'block' }}>{t('planes.card.labels.entityHealthStatus')}:</Text>
         <EntityHealthStats 
           entityHealth={plane.entityHealth} 
           showProgress={true}
@@ -139,15 +131,15 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
       <StatsContainer>
         <Space size="large">
           <div>
-            <Text strong>层级: </Text>
+            <Text strong>{t('planes.card.labels.level')}: </Text>
             <Text>L{plane.level}</Text>
           </div>
           <div>
-            <Text strong>实体总数: </Text>
+            <Text strong>{t('planes.card.labels.totalEntities')}: </Text>
             <Text>{plane.entityHealth.total}</Text>
           </div>
           <div>
-            <Text strong>创建时间: </Text>
+            <Text strong>{t('planes.card.labels.createdAt')}: </Text>
             <Text>{new Date(plane.createdAt).toLocaleDateString()}</Text>
           </div>
         </Space>
@@ -155,8 +147,8 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
         {plane.dependencies && plane.dependencies.length > 0 && (
           <div>
             <Text type="secondary" style={{ fontSize: '12px' }}>
-              依赖: {plane.dependencies.length} 个平面 
-              {plane.dependencies.length > 1 && <span style={{ color: '#fa8c16' }}> (多重依赖)</span>}
+              {t('planes.card.labels.dependencies')}: {plane.dependencies.length} {t('planes.card.labels.planesCount')}
+              {plane.dependencies.length > 1 && <span style={{ color: '#fa8c16' }}> ({t('planes.card.labels.multipleDependency')})</span>}
             </Text>
             <div style={{ marginTop: '4px' }}>
               {plane.dependencies.map((depId, index) => (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Space, Tag, Tooltip, Progress } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import type { EntityHealthStats } from '../../types';
 
@@ -34,12 +35,13 @@ const EntityHealthStatsComponent: React.FC<EntityHealthStatsProps> = ({
   showProgress = false,
   size = 'default'
 }) => {
+  const { t } = useTranslation();
   const { healthy, warning, error, total } = entityHealth;
 
   if (total === 0) {
     return (
       <StatsContainer $size={size}>
-        <Tag color="default">暂无实体</Tag>
+        <Tag color="default">{t('planes.card.entityStats.noEntities')}</Tag>
       </StatsContainer>
     );
   }
@@ -51,21 +53,21 @@ const EntityHealthStatsComponent: React.FC<EntityHealthStatsProps> = ({
   return (
     <div>
       <StatsContainer $size={size}>
-        <Tooltip title={`健康实体: ${healthy}个 (${healthyPercent.toFixed(1)}%)`}>
+        <Tooltip title={`${t('planes.card.entityStats.healthyTooltip')}: ${healthy} (${healthyPercent.toFixed(1)}%)`}>
           <StatItem $size={size}>
             <CheckCircleOutlined style={{ color: '#52c41a' }} />
             <span style={{ color: '#52c41a', fontWeight: 500 }}>{healthy}</span>
           </StatItem>
         </Tooltip>
 
-        <Tooltip title={`告警实体: ${warning}个 (${warningPercent.toFixed(1)}%)`}>
+        <Tooltip title={`${t('planes.card.entityStats.warningTooltip')}: ${warning} (${warningPercent.toFixed(1)}%)`}>
           <StatItem $size={size}>
             <ExclamationCircleOutlined style={{ color: '#faad14' }} />
             <span style={{ color: '#faad14', fontWeight: 500 }}>{warning}</span>
           </StatItem>
         </Tooltip>
 
-        <Tooltip title={`异常实体: ${error}个 (${errorPercent.toFixed(1)}%)`}>
+        <Tooltip title={`${t('planes.card.entityStats.errorTooltip')}: ${error} (${errorPercent.toFixed(1)}%)`}>
           <StatItem $size={size}>
             <CloseCircleOutlined style={{ color: '#ff4d4f' }} />
             <span style={{ color: '#ff4d4f', fontWeight: 500 }}>{error}</span>
@@ -98,9 +100,9 @@ const EntityHealthStatsComponent: React.FC<EntityHealthStatsProps> = ({
             color: '#8c8c8c',
             marginTop: '4px'
           }}>
-            <span>异常 {errorPercent.toFixed(1)}%</span>
-            <span>告警 {warningPercent.toFixed(1)}%</span>
-            <span>健康 {healthyPercent.toFixed(1)}%</span>
+            <span>{t('planes.card.entityStats.error')} {errorPercent.toFixed(1)}%</span>
+            <span>{t('planes.card.entityStats.warning')} {warningPercent.toFixed(1)}%</span>
+            <span>{t('planes.card.entityStats.healthy')} {healthyPercent.toFixed(1)}%</span>
           </div>
         </ProgressContainer>
       )}

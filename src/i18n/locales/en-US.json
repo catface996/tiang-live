@@ -192,6 +192,38 @@
         "riskAssessmentDesc": "Assess plane risk levels based on dependency complexity"
       }
     },
+    "card": {
+      "status": {
+        "ACTIVE": "Healthy",
+        "WARNING": "Warning", 
+        "ERROR": "Error",
+        "MAINTENANCE": "Maintenance",
+        "UNKNOWN": "Unknown"
+      },
+      "tooltips": {
+        "viewDetails": "View Details",
+        "editConfig": "Edit Configuration",
+        "addInstance": "Add Instance"
+      },
+      "labels": {
+        "entityHealthStatus": "Entity Health Status",
+        "level": "Level",
+        "totalEntities": "Total Entities",
+        "createdAt": "Created At",
+        "dependencies": "Dependencies",
+        "planesCount": "planes",
+        "multipleDependency": "Multiple Dependencies"
+      },
+      "entityStats": {
+        "noEntities": "No Entities",
+        "healthy": "Healthy",
+        "warning": "Warning",
+        "error": "Error",
+        "healthyTooltip": "Number of healthy entities",
+        "warningTooltip": "Number of warning entities", 
+        "errorTooltip": "Number of error entities"
+      }
+    },
     "errors": {
       "planeDefinitionLoadFailed": "Failed to load plane definitions",
       "topologyLoadFailed": "Failed to load topology structure",
