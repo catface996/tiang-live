@@ -6,6 +6,7 @@ import {
   PlaneManagement,
   EntityManagement,
   SequenceManagement,
+  IndustrySolutionManagement,
   ReportManagement,
   TagManagement,
   AIAssistant,
@@ -24,6 +25,7 @@ const AppRoutes: React.FC = () => {
         <Route path="planes/edit/:id" element={<PlaneCreateEdit />} />
         <Route path="entities" element={<EntityManagement />} />
         <Route path="sequences" element={<SequenceManagement />} />
+        <Route path="industry-solutions" element={<IndustrySolutionManagement />} />
         <Route path="reports" element={<ReportManagement />} />
         <Route path="tags" element={<TagManagement />} />
         <Route path="ai-assistant" element={<AIAssistant />} />

@@ -18,6 +18,7 @@ import {
   FileTextOutlined,
   TagsOutlined,
   MessageOutlined,
+  SolutionOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -48,6 +49,11 @@ const menuItems = [
     key: '/sequences',
     icon: <ControlOutlined />,
     label: '时序管理',
+  },
+  {
+    key: '/industry-solutions',
+    icon: <SolutionOutlined />,
+    label: '行业方案',
   },
   {
     key: '/reports',
