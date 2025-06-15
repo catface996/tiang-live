@@ -129,6 +129,7 @@ const AIAssistant: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -141,11 +142,16 @@ const AIAssistant: React.FC = () => {
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
+    // 初始加载时不自动滚动
+    setShouldAutoScroll(false);
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // 只有在需要自动滚动时才滚动
+    if (shouldAutoScroll) {
+      scrollToBottom();
+    }
+  }, [messages, shouldAutoScroll]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -175,6 +181,8 @@ const AIAssistant: React.FC = () => {
     setInputValue('');
     setLoading(true);
     setIsTyping(true);
+    // 发送消息后启用自动滚动
+    setShouldAutoScroll(true);
 
     // 模拟AI回复
     setTimeout(() => {
@@ -189,6 +197,8 @@ const AIAssistant: React.FC = () => {
       setMessages(prev => [...prev, aiMessage]);
       setLoading(false);
       setIsTyping(false);
+      // AI回复后也保持自动滚动
+      setShouldAutoScroll(true);
     }, 1500 + Math.random() * 1000);
   };
 
@@ -349,6 +359,8 @@ const AIAssistant: React.FC = () => {
       isUser: false,
       timestamp: new Date(),
     }]);
+    // 清空对话时不自动滚动
+    setShouldAutoScroll(false);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
