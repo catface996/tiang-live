@@ -135,8 +135,8 @@ const MainLayout: React.FC = () => {
               src="/sz-logo.png" 
               alt="Logo" 
               style={{ 
-                width: collapsed ? '24px' : '32px', 
-                height: collapsed ? '24px' : '32px',
+                width: '32px', 
+                height: '32px',
                 objectFit: 'contain',
                 transition: 'all 0.2s'
               }} 
