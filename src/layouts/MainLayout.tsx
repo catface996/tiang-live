@@ -19,6 +19,7 @@ import {
   TagsOutlined,
   MessageOutlined,
   SolutionOutlined,
+  UnorderedListOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -54,6 +55,11 @@ const menuItems = [
     key: '/industry-solutions',
     icon: <SolutionOutlined />,
     label: '行业方案',
+  },
+  {
+    key: '/task-collections',
+    icon: <UnorderedListOutlined />,
+    label: '任务集合',
   },
   {
     key: '/reports',
