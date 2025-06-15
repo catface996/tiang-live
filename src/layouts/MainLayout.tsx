@@ -15,6 +15,8 @@ import {
   NodeIndexOutlined,
   ControlOutlined,
   RobotOutlined,
+  FileTextOutlined,
+  TagsOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -45,6 +47,16 @@ const menuItems = [
     key: '/sequences',
     icon: <ControlOutlined />,
     label: '时序管理',
+  },
+  {
+    key: '/reports',
+    icon: <FileTextOutlined />,
+    label: '报告管理',
+  },
+  {
+    key: '/tags',
+    icon: <TagsOutlined />,
+    label: '标签管理',
   },
   {
     key: '/ai-agents',
