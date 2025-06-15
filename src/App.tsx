@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
@@ -13,6 +13,7 @@ import GlobalStyles from './styles/GlobalStyles';
 import ErrorBoundary from './components/ErrorBoundary';
 import { useAppSelector } from './store';
 import './i18n'; // 初始化i18n
+import './styles/themes.css'; // 导入主题CSS
 
 // Antd语言配置映射
 const antdLocaleMap = {
@@ -28,6 +29,11 @@ const AppContent: React.FC = () => {
   // 获取当前主题
   const { currentTheme } = useAppSelector((state) => state.theme);
   const themeConfig = themes[currentTheme];
+
+  // 应用主题类到body
+  useEffect(() => {
+    document.body.className = `theme-${currentTheme}`;
+  }, [currentTheme]);
 
   // 根据环境设置basename
   const basename = import.meta.env.PROD ? '/tiang-live' : '';

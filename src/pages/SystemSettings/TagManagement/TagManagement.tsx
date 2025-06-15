@@ -33,6 +33,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
 
 const { Title, Paragraph } = Typography;
@@ -65,6 +66,10 @@ const TagCard = styled(Card)`
 
 const TagManagement: React.FC = () => {
   const { t } = useTranslation();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const isDarkMode = currentTheme === 'dark';
+  const iconColor = isDarkMode ? '#ffffff' : '#1890ff';
+  
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingTag, setEditingTag] = useState<any>(null);
@@ -307,7 +312,7 @@ const TagManagement: React.FC = () => {
           <div>
             <Title level={2} style={{ margin: 0 }}>
               <Space>
-                <TagsOutlined style={{ color: '#1890ff' }} />
+                <TagsOutlined style={{ color: iconColor }} />
                 {t('systemSettings.tags.title')}
               </Space>
             </Title>

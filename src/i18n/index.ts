@@ -31,13 +31,16 @@ i18n
     
     // 语言检测配置
     detection: {
-      // 检测顺序：localStorage -> navigator -> fallback
-      order: ['localStorage', 'navigator'],
+      // 检测顺序：localStorage -> fallback (移除navigator自动检测)
+      order: ['localStorage'],
       // 缓存用户选择的语言
       caches: ['localStorage'],
       // localStorage中的key名
       lookupLocalStorage: 'i18nextLng',
     },
+    
+    // 强制设置默认语言为中文
+    lng: 'zh-CN',
     
     // 调试模式（开发环境开启）
     debug: import.meta.env.DEV,

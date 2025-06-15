@@ -11,18 +11,18 @@ const LanguageButton = styled(Button)`
   align-items: center;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-color);
   padding: 4px 8px;
   height: auto;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--menu-item-hover-bg);
+    color: var(--primary-color);
   }
   
   &:focus {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--menu-item-hover-bg);
+    color: var(--primary-color);
   }
   
   .anticon {

@@ -458,9 +458,9 @@ const AIAgentManagement: React.FC = () => {
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <Title level={2} style={{ margin: 0 }}>
+            <Title className="page-title" level={2} style={{ margin: 0 }}>
               <Space>
-                <RobotOutlined style={{ color: '#1890ff' }} />
+                <RobotOutlined />
                 {t('agents.title')}
               </Space>
             </Title>

@@ -46,6 +46,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
 
 const { Title, Paragraph, Text } = Typography;
@@ -120,6 +121,10 @@ interface PromptTemplate {
 
 const PromptTemplates: React.FC = () => {
   const { t } = useTranslation();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const isDarkMode = currentTheme === 'dark';
+  const iconColor = isDarkMode ? '#ffffff' : '#1890ff';
+  
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -476,7 +481,7 @@ API接口：{api_details}
           <div>
             <Title level={2} style={{ margin: 0 }}>
               <Space>
-                <FileTextOutlined style={{ color: '#1890ff' }} />
+                <FileTextOutlined style={{ color: iconColor }} />
                 {t('systemSettings.prompts.title')}
               </Space>
             </Title>

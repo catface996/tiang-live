@@ -129,13 +129,15 @@ export const antdLightTheme = {
 // Antd深色主题配置
 export const antdDarkTheme = {
   token: {
-    colorPrimary: '#177ddc',
+    colorPrimary: '#ffffff', // 主色调改为白色
     colorSuccess: '#49aa19',
     colorWarning: '#d89614',
     colorError: '#d32029',
     colorInfo: '#13a8a8',
     borderRadius: 6,
     wireframe: false,
+    colorText: '#ffffff', // 文本颜色为白色
+    colorTextHeading: '#ffffff', // 标题文本颜色为白色
   },
   components: {
     Layout: {
@@ -145,14 +147,31 @@ export const antdDarkTheme = {
     },
     Menu: {
       itemBg: 'transparent',
-      itemSelectedBg: '#111d2c',
+      itemSelectedBg: '#1f1f1f',
       itemHoverBg: '#1f1f1f',
+      itemColor: '#ffffff', // 菜单项文字颜色为白色
+      itemSelectedColor: '#ffffff', // 选中菜单项文字颜色为白色
+      itemHoverColor: '#ffffff', // 悬停菜单项文字颜色为白色
+      iconSize: 16,
     },
     Button: {
       borderRadius: 6,
+      colorText: '#ffffff', // 按钮文字颜色为白色
+      colorPrimary: '#ffffff', // 主要按钮颜色为白色
+      colorPrimaryHover: '#f0f0f0', // 主要按钮悬停颜色
+      colorPrimaryActive: '#d9d9d9', // 主要按钮激活颜色
     },
     Card: {
       borderRadius: 8,
+      colorText: '#ffffff', // 卡片文字颜色为白色
+      colorTextHeading: '#ffffff', // 卡片标题颜色为白色
+    },
+    Typography: {
+      colorText: '#ffffff', // Typography文字颜色为白色
+      colorTextHeading: '#ffffff', // Typography标题颜色为白色
+    },
+    Breadcrumb: {
+      colorText: '#ffffff', // 面包屑文字颜色为白色
     },
   },
 };

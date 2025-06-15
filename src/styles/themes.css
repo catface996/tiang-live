@@ -1,0 +1,198 @@
+/* 主题CSS变量定义 */
+
+/* 浅色主题 */
+.theme-light {
+  --primary-color: #1890ff;
+  --text-color: rgba(0, 0, 0, 0.85);
+  --text-secondary: rgba(0, 0, 0, 0.65);
+  --background-color: #ffffff;
+  --background-secondary: #fafafa;
+  --border-color: #f0f0f0;
+  --header-bg: #ffffff;
+  --sider-bg: #ffffff;
+  --content-bg: #f0f2f5;
+  --icon-color: #1890ff;
+  --menu-item-color: rgba(0, 0, 0, 0.85);
+  --menu-item-selected-color: #1890ff;
+  --menu-item-hover-bg: #f5f5f5;
+  --menu-item-selected-bg: #e6f7ff;
+}
+
+/* 深色主题 */
+.theme-dark {
+  --primary-color: #ffffff;
+  --text-color: rgba(255, 255, 255, 0.85);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --background-color: #000000;
+  --background-secondary: #1f1f1f;
+  --border-color: #303030;
+  --header-bg: #000000;
+  --sider-bg: #000000;
+  --content-bg: #000000;
+  --icon-color: #ffffff;
+  --menu-item-color: #ffffff;
+  --menu-item-selected-color: #ffffff;
+  --menu-item-hover-bg: #1f1f1f;
+  --menu-item-selected-bg: #1f1f1f;
+}
+
+/* 应用主题样式 */
+.app-layout {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+.app-header {
+  background-color: var(--header-bg) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.app-sider {
+  background-color: var(--sider-bg) !important;
+}
+
+.app-content {
+  background-color: var(--content-bg) !important;
+}
+
+/* 页面标题样式 */
+.page-title {
+  color: var(--text-color) !important;
+}
+
+.page-title .anticon {
+  color: var(--icon-color) !important;
+}
+
+/* 工具栏按钮样式 */
+.toolbar-button {
+  color: var(--text-color) !important;
+}
+
+.toolbar-button:hover {
+  color: var(--primary-color) !important;
+  background-color: var(--menu-item-hover-bg) !important;
+}
+
+/* 用户信息样式 */
+.user-info {
+  color: var(--text-color) !important;
+}
+
+.user-avatar {
+  background-color: var(--primary-color) !important;
+}
+
+/* 菜单样式覆盖 */
+.app-menu.ant-menu-light {
+  background-color: var(--sider-bg) !important;
+  border-right: none !important;
+}
+
+.app-menu.ant-menu-dark {
+  background-color: var(--sider-bg) !important;
+}
+
+.app-menu .ant-menu-item {
+  color: var(--menu-item-color) !important;
+}
+
+.app-menu .ant-menu-item:hover {
+  background-color: var(--menu-item-hover-bg) !important;
+  color: var(--menu-item-selected-color) !important;
+}
+
+.app-menu .ant-menu-item-selected {
+  background-color: var(--menu-item-selected-bg) !important;
+  color: var(--menu-item-selected-color) !important;
+}
+
+.app-menu .ant-menu-item-selected::after {
+  border-right-color: var(--primary-color) !important;
+}
+
+/* Logo和标题样式 */
+.app-logo {
+  color: var(--text-color) !important;
+}
+
+.app-title {
+  color: var(--text-color) !important;
+}
+
+/* 折叠按钮样式 */
+.collapse-button {
+  color: var(--text-color) !important;
+}
+
+.collapse-button:hover {
+  color: var(--primary-color) !important;
+  background-color: var(--menu-item-hover-bg) !important;
+}
+
+/* 统计卡片图标颜色 */
+.stats-icon {
+  color: var(--icon-color) !important;
+}
+
+/* 页面内容区域 */
+.page-container {
+  color: var(--text-color);
+}
+
+.page-container .ant-typography {
+  color: var(--text-color) !important;
+}
+
+.page-container .ant-typography-title {
+  color: var(--text-color) !important;
+}
+
+/* 语言切换器样式 */
+.language-switcher {
+  color: var(--text-color) !important;
+}
+
+.language-switcher:hover {
+  color: var(--primary-color) !important;
+  background-color: var(--menu-item-hover-bg) !important;
+}
+
+/* 下拉菜单样式 */
+.ant-dropdown-menu {
+  background-color: var(--background-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.ant-dropdown-menu-item {
+  color: var(--text-color) !important;
+}
+
+.ant-dropdown-menu-item:hover {
+  background-color: var(--menu-item-hover-bg) !important;
+  color: var(--primary-color) !important;
+}
+
+.ant-dropdown-menu-item-selected {
+  background-color: var(--menu-item-selected-bg) !important;
+  color: var(--primary-color) !important;
+}
+
+/* 确保深色主题下的文本可见性 */
+.theme-dark .ant-typography,
+.theme-dark .ant-typography-title,
+.theme-dark .ant-typography-paragraph {
+  color: var(--text-color) !important;
+}
+
+.theme-dark .ant-card-head-title {
+  color: var(--text-color) !important;
+}
+
+.theme-dark .ant-statistic-title {
+  color: var(--text-secondary) !important;
+}
+
+.theme-dark .ant-statistic-content {
+  color: var(--text-color) !important;
+}

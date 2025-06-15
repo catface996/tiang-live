@@ -456,9 +456,9 @@ const ModelManagement: React.FC = () => {
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <Title level={2} style={{ margin: 0 }}>
+            <Title className="page-title" level={2} style={{ margin: 0 }}>
               <Space>
-                <SettingOutlined style={{ color: '#1890ff' }} />
+                <SettingOutlined />
                 {t('systemSettings.models.title')}
               </Space>
             </Title>

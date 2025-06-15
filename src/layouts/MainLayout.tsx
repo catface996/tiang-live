@@ -166,32 +166,23 @@ const MainLayout: React.FC = () => {
     }
   };
 
-  // 根据主题设置颜色
-  const siderBgColor = isDarkMode ? '#000000' : '#ffffff';
-  const headerBgColor = isDarkMode ? '#000000' : '#ffffff';
-  const contentBgColor = isDarkMode ? '#000000' : '#f0f2f5';
-  const borderColor = isDarkMode ? '#303030' : '#f0f0f0';
-  const textColor = isDarkMode ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)';
-  const primaryColor = isDarkMode ? '#177ddc' : '#1890ff';
+  // 移除颜色变量，改用CSS类
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout className="app-layout" style={{ minHeight: '100vh' }}>
       <Sider 
         trigger={null} 
         collapsible 
         collapsed={collapsed}
-        style={{
-          background: siderBgColor,
-        }}
+        className="app-sider"
       >
         {/* Logo区域 */}
-        <div style={{ 
+        <div className="app-logo" style={{ 
           height: '64px', 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: collapsed ? 'center' : 'flex-start',
           padding: collapsed ? '0' : '0 16px',
-          borderBottom: `1px solid ${borderColor}`,
           transition: 'all 0.2s'
         }}>
           <div style={{ 
@@ -199,7 +190,6 @@ const MainLayout: React.FC = () => {
             alignItems: 'center',
             fontSize: '18px',
             fontWeight: 600, 
-            color: primaryColor,
             gap: '8px',
             transition: 'all 0.2s'
           }}>
@@ -214,8 +204,7 @@ const MainLayout: React.FC = () => {
               }} 
             />
             {!collapsed && (
-              <Text style={{ 
-                color: isDarkMode ? '#ffffff' : '#000000', 
+              <Text className="app-title" style={{ 
                 fontSize: '16px', 
                 fontWeight: 600,
                 whiteSpace: 'nowrap'
@@ -228,45 +217,41 @@ const MainLayout: React.FC = () => {
 
         {/* 菜单 */}
         <Menu
+          className="app-menu"
           theme={isDarkMode ? "dark" : "light"}
           mode="inline"
           selectedKeys={[location.pathname]}
           items={menuItems}
           onClick={handleMenuClick}
-          style={{ 
-            borderRight: 0,
-            background: siderBgColor
-          }}
         />
       </Sider>
 
       <Layout>
         {/* 顶部导航栏 */}
-        <Header style={{ 
-          padding: '0 16px', 
-          background: headerBgColor,
+        <Header className="app-header" style={{ 
+          padding: '0 16px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
           <Button
+            className="collapse-button"
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             style={{
               fontSize: '16px',
               width: 64,
-              height: 64,
-              color: textColor
+              height: 64
             }}
           />
 
           <Space size={16}>
             {/* 主题切换 */}
-            <ThemeToggle style={{ color: textColor }} />
+            <ThemeToggle className="toolbar-button" />
             
             {/* 语言切换器 */}
-            <LanguageSwitcher />
+            <LanguageSwitcher className="language-switcher" />
             
             {/* 用户菜单 */}
             <Dropdown
@@ -278,23 +263,23 @@ const MainLayout: React.FC = () => {
               trigger={['click']}
             >
               <Button
+                className="toolbar-button user-info"
                 type="text"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   height: 'auto',
                   padding: '8px 12px',
-                  color: textColor,
                   border: 'none'
                 }}
               >
                 <Space>
                   <Avatar 
+                    className="user-avatar"
                     size="small" 
                     icon={<UserOutlined />}
-                    style={{ backgroundColor: primaryColor }}
                   />
-                  <Text style={{ color: textColor }}>
+                  <Text className="user-info">
                     管理员
                   </Text>
                 </Space>
@@ -304,9 +289,8 @@ const MainLayout: React.FC = () => {
         </Header>
 
         {/* 主内容区域 */}
-        <Content style={{ 
+        <Content className="app-content" style={{ 
           margin: 0,
-          background: contentBgColor,
           minHeight: 'calc(100vh - 64px)',
           overflow: 'auto'
         }}>
