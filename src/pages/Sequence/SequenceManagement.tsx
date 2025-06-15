@@ -33,7 +33,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
-import MermaidDiagram from '../../components/MermaidDiagram';
+import SequenceDiagram from '../../components/SequenceDiagram';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -560,7 +560,7 @@ sequenceDiagram
             </Descriptions>
 
             {/* 时序图 */}
-            <MermaidDiagram 
+            <SequenceDiagram 
               chart={selectedSequence.mermaidChart}
               title="时序图"
             />

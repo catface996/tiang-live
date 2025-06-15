@@ -3,7 +3,7 @@ import mermaid from 'mermaid';
 import { Card, Spin } from 'antd';
 import styled from 'styled-components';
 
-const DiagramContainer = styled.div`
+const SequenceDiagramContainer = styled.div`
   .mermaid {
     display: flex;
     justify-content: center;
@@ -24,22 +24,22 @@ const LoadingContainer = styled.div`
   min-height: 200px;
 `;
 
-interface MermaidDiagramProps {
+interface SequenceDiagramProps {
   chart: string;
   title?: string;
   loading?: boolean;
 }
 
-const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ 
+const SequenceDiagram: React.FC<SequenceDiagramProps> = ({ 
   chart, 
   title,
   loading = false 
 }) => {
-  const mermaidRef = useRef<HTMLDivElement>(null);
+  const sequenceDiagramRef = useRef<HTMLDivElement>(null);
   const [isRendering, setIsRendering] = React.useState(true);
 
   useEffect(() => {
-    // 初始化Mermaid配置
+    // 初始化Mermaid配置，专门针对时序图优化
     mermaid.initialize({
       startOnLoad: false,
       theme: 'default',
@@ -66,28 +66,28 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({
   }, []);
 
   useEffect(() => {
-    const renderDiagram = async () => {
-      if (!mermaidRef.current || !chart) return;
+    const renderSequenceDiagram = async () => {
+      if (!sequenceDiagramRef.current || !chart) return;
 
       setIsRendering(true);
       
       try {
         // 清空之前的内容
-        mermaidRef.current.innerHTML = '';
+        sequenceDiagramRef.current.innerHTML = '';
         
         // 生成唯一ID
-        const id = `mermaid-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const id = `sequence-diagram-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         
-        // 渲染图表
+        // 渲染时序图
         const { svg } = await mermaid.render(id, chart);
         
         // 插入SVG
-        mermaidRef.current.innerHTML = svg;
+        sequenceDiagramRef.current.innerHTML = svg;
         
         setIsRendering(false);
       } catch (error) {
-        console.error('Mermaid渲染错误:', error);
-        mermaidRef.current.innerHTML = `
+        console.error('时序图渲染错误:', error);
+        sequenceDiagramRef.current.innerHTML = `
           <div style="text-align: center; color: #ff4d4f; padding: 20px;">
             <p>时序图渲染失败</p>
             <p style="font-size: 12px; color: #999;">请检查时序图语法</p>
@@ -97,7 +97,7 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({
       }
     };
 
-    renderDiagram();
+    renderSequenceDiagram();
   }, [chart]);
 
   if (loading || isRendering) {
@@ -112,11 +112,11 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({
 
   return (
     <Card title={title}>
-      <DiagramContainer>
-        <div ref={mermaidRef} className="mermaid" />
-      </DiagramContainer>
+      <SequenceDiagramContainer>
+        <div ref={sequenceDiagramRef} className="mermaid" />
+      </SequenceDiagramContainer>
     </Card>
   );
 };
 
-export default MermaidDiagram;
+export default SequenceDiagram;
