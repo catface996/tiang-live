@@ -5,7 +5,6 @@ import {
   Dashboard,
   PlaneManagement,
   EntityManagement,
-  RelationshipGraph,
   SequenceManagement,
   AIAgentManagement,
 } from '../pages';
@@ -21,7 +20,6 @@ const AppRoutes: React.FC = () => {
         <Route path="planes/create" element={<PlaneCreateEdit />} />
         <Route path="planes/edit/:id" element={<PlaneCreateEdit />} />
         <Route path="entities" element={<EntityManagement />} />
-        <Route path="relationships" element={<RelationshipGraph />} />
         <Route path="sequences" element={<SequenceManagement />} />
         <Route path="ai-agents" element={<AIAgentManagement />} />
       </Route>

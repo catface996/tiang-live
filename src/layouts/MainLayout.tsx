@@ -13,7 +13,6 @@ import {
   DashboardOutlined,
   AppstoreOutlined,
   NodeIndexOutlined,
-  ShareAltOutlined,
   ControlOutlined,
   RobotOutlined,
   MenuFoldOutlined,
@@ -40,12 +39,7 @@ const menuItems = [
   {
     key: '/entities',
     icon: <NodeIndexOutlined />,
-    label: '实体管理',
-  },
-  {
-    key: '/relationships',
-    icon: <ShareAltOutlined />,
-    label: '关系图谱',
+    label: '实体关系',
   },
   {
     key: '/sequences',
