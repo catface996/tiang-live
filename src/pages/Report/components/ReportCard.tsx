@@ -23,6 +23,7 @@ import {
   ClockCircleOutlined,
   CloudDownloadOutlined
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 const { Text, Paragraph } = Typography;
@@ -134,21 +135,23 @@ const ReportCard: React.FC<ReportCardProps> = ({
   onDownload,
   onDelete
 }) => {
+  const { t } = useTranslation();
+  
   const getStatusConfig = (status: string) => {
     const statusMap = {
-      published: { color: 'green', text: '已发布', icon: '🟢' },
-      draft: { color: 'orange', text: '草稿', icon: '🟡' },
-      archived: { color: 'gray', text: '已归档', icon: '⚪' },
+      published: { color: 'green', text: t('reports.status.published'), icon: '🟢' },
+      draft: { color: 'orange', text: t('reports.status.draft'), icon: '🟡' },
+      archived: { color: 'gray', text: t('reports.status.archived'), icon: '⚪' },
     };
     return statusMap[status as keyof typeof statusMap] || { color: 'default', text: status, icon: '⚫' };
   };
 
   const getTypeConfig = (type: string) => {
     const typeMap = {
-      '健康度分析': { color: 'blue', icon: '📊' },
-      '依赖分析': { color: 'purple', icon: '🔗' },
-      '关系分析': { color: 'cyan', icon: '🕸️' },
-      '性能分析': { color: 'gold', icon: '⚡' },
+      [t('reports.types.health')]: { color: 'blue', icon: '📊' },
+      [t('reports.types.dependency')]: { color: 'purple', icon: '🔗' },
+      [t('reports.types.relationship')]: { color: 'cyan', icon: '🕸️' },
+      [t('reports.types.performance')]: { color: 'gold', icon: '⚡' },
     };
     return typeMap[type as keyof typeof typeMap] || { color: 'default', icon: '📄' };
   };
@@ -160,19 +163,19 @@ const ReportCard: React.FC<ReportCardProps> = ({
     {
       key: 'view',
       icon: <EyeOutlined />,
-      label: '查看详情',
+      label: t('common.view'),
       onClick: () => onView(report)
     },
     {
       key: 'edit',
       icon: <EditOutlined />,
-      label: '编辑报告',
+      label: t('common.edit'),
       onClick: () => onEdit(report)
     },
     {
       key: 'download',
       icon: <DownloadOutlined />,
-      label: '下载报告',
+      label: t('common.download'),
       onClick: () => onDownload(report)
     },
     {
@@ -181,7 +184,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
     {
       key: 'delete',
       icon: <DeleteOutlined />,
-      label: '删除报告',
+      label: t('common.delete'),
       danger: true,
       onClick: () => onDelete(report)
     }
@@ -220,21 +223,21 @@ const ReportCard: React.FC<ReportCardProps> = ({
       hoverable
       onClick={() => onView(report)}
       actions={[
-        <Tooltip title="查看详情" key="view">
+        <Tooltip title={t('common.view')} key="view">
           <Button 
             type="text" 
             icon={<EyeOutlined />} 
             onClick={(e) => handleAction('view', e)}
           />
         </Tooltip>,
-        <Tooltip title="编辑报告" key="edit">
+        <Tooltip title={t('common.edit')} key="edit">
           <Button 
             type="text" 
             icon={<EditOutlined />} 
             onClick={(e) => handleAction('edit', e)}
           />
         </Tooltip>,
-        <Tooltip title="下载报告" key="download">
+        <Tooltip title={t('common.download')} key="download">
           <Button 
             type="text" 
             icon={<DownloadOutlined />} 
@@ -287,26 +290,26 @@ const ReportCard: React.FC<ReportCardProps> = ({
 
       <div className="report-description">
         <Paragraph ellipsis={{ rows: 2 }} style={{ margin: 0, fontSize: 13, color: '#666' }}>
-          {report.description || `这是一份关于${report.type}的详细报告，包含了系统的各项指标分析和建议。报告内容丰富，数据准确，为决策提供有力支持。`}
+          {report.description || t('reports.card.defaultDescription', { type: report.type })}
         </Paragraph>
       </div>
 
       <div className="report-stats">
         <Space split={<span style={{ color: '#d9d9d9' }}>|</span>} size="large">
           <Statistic 
-            title="文件大小" 
+            title={t('reports.card.fileSize')} 
             value={report.size} 
             valueStyle={{ fontSize: 14 }}
           />
           <Statistic 
-            title="下载次数" 
+            title={t('reports.card.downloads')} 
             value={report.downloads} 
             valueStyle={{ fontSize: 14 }}
             prefix={<CloudDownloadOutlined />}
           />
         </Space>
         <div style={{ marginTop: 8 }}>
-          <Text type="secondary" style={{ fontSize: 12 }}>存储使用率</Text>
+          <Text type="secondary" style={{ fontSize: 12 }}>{t('reports.card.storageUsage')}</Text>
           <Progress 
             percent={getSizeProgress(report.size)} 
             size="small" 
@@ -325,11 +328,11 @@ const ReportCard: React.FC<ReportCardProps> = ({
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontSize: 12, color: '#999', marginBottom: 2 }}>
             <CalendarOutlined style={{ marginRight: 4 }} />
-            创建: {report.createdAt.split(' ')[0]}
+            {t('reports.card.created')}: {report.createdAt.split(' ')[0]}
           </div>
           <div style={{ fontSize: 12, color: '#999' }}>
             <ClockCircleOutlined style={{ marginRight: 4 }} />
-            更新: {report.lastModified.split(' ')[0]}
+            {t('reports.card.updated')}: {report.lastModified.split(' ')[0]}
           </div>
         </div>
       </div>

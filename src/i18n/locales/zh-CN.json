@@ -7,8 +7,17 @@
     "edit": "编辑",
     "add": "添加",
     "view": "查看",
+    "edit": "编辑",
+    "delete": "删除",
+    "download": "下载",
     "search": "搜索",
     "refresh": "刷新",
+    "filter": "筛选",
+    "cardView": "卡片视图",
+    "listView": "列表视图",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "inDevelopment": "开发中",
     "loading": "加载中...",
     "noData": "暂无数据",
     "success": "操作成功",
@@ -509,16 +518,38 @@
   },
   "reports": {
     "title": "报告管理",
-    "subtitle": "生成和管理各类运维报告",
+    "subtitle": "统一管理系统生成的各类分析报告，支持报告创建、编辑、发布和分享",
     "createTitle": "创建报告",
     "editTitle": "编辑报告",
     "generateReport": "生成报告",
     "scheduleReport": "定时报告",
+    "batchExport": "批量导出",
     "stats": {
-      "totalReports": "总报告数",
+      "totalReports": "报告总数",
+      "published": "已发布",
+      "draft": "草稿",
+      "totalDownloads": "总下载量",
       "scheduledReports": "定时报告",
       "generatedToday": "今日生成",
       "averageSize": "平均大小"
+    },
+    "search": {
+      "placeholder": "搜索报告名称、创建者...",
+      "type": "报告类型"
+    },
+    "status": {
+      "published": "已发布",
+      "draft": "草稿",
+      "archived": "已归档"
+    },
+    "types": {
+      "health": "健康度分析",
+      "dependency": "依赖分析", 
+      "relationship": "关系分析",
+      "performance": "性能分析",
+      "system": "系统报告",
+      "security": "安全报告",
+      "business": "业务报告"
     },
     "columns": {
       "reportName": "报告名称",
@@ -527,11 +558,13 @@
       "generatedTime": "生成时间",
       "fileSize": "文件大小"
     },
-    "types": {
-      "system": "系统报告",
-      "performance": "性能报告",
-      "security": "安全报告",
-      "business": "业务报告"
+    "card": {
+      "defaultDescription": "这是一份关于{{type}}的详细报告，包含了系统的各项指标分析和建议。报告内容丰富，数据准确，为决策提供有力支持。",
+      "fileSize": "文件大小",
+      "downloads": "下载次数",
+      "storageUsage": "存储使用率",
+      "created": "创建",
+      "updated": "更新"
     }
   },
   "tasks": {
