@@ -898,6 +898,26 @@
   transform: none !important;
 }
 
+/* 移除图标悬浮时触发的父级样式变化 */
+.collapse-button .ant-btn-icon:hover,
+.collapse-button:hover .ant-btn-icon,
+.collapse-button .anticon:hover,
+.collapse-button:hover .anticon,
+.collapse-button .anticon-menu-fold:hover,
+.collapse-button:hover .anticon-menu-fold,
+.collapse-button .anticon-menu-unfold:hover,
+.collapse-button:hover .anticon-menu-unfold {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* 确保SVG图标悬浮时不触发样式变化 */
+.collapse-button svg:hover,
+.collapse-button:hover svg {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
 /* Plane Topology 特定样式 */
 .loading-container {
   text-align: center;
