@@ -41,7 +41,6 @@ import {
   ClockCircleOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  BrainOutlined,
   ApiOutlined,
   MonitorOutlined,
   BarChartOutlined
