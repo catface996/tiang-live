@@ -1,0 +1,128 @@
+{
+  "success": true,
+  "data": {
+    "overview": {
+      "totalPlanes": 5,
+      "activePlanes": 3,
+      "warningPlanes": 2,
+      "errorPlanes": 0,
+      "totalEntities": 936,
+      "healthyEntities": 878,
+      "warningEntities": 50,
+      "errorEntities": 8
+    },
+    "planeMetrics": [
+      {
+        "planeId": "infrastructure",
+        "planeName": "基础设施平面",
+        "status": "ACTIVE",
+        "entityHealth": {
+          "healthy": 312,
+          "warning": 0,
+          "error": 0,
+          "total": 312
+        },
+        "performance": {
+          "cpuUsage": 45.2,
+          "memoryUsage": 62.8,
+          "diskUsage": 38.5,
+          "networkLatency": 12.3
+        },
+        "availability": 99.95,
+        "lastUpdated": "2024-06-15T07:00:00Z"
+      },
+      {
+        "planeId": "middleware",
+        "planeName": "中间件平面",
+        "status": "WARNING",
+        "entityHealth": {
+          "healthy": 171,
+          "warning": 18,
+          "error": 0,
+          "total": 189
+        },
+        "performance": {
+          "cpuUsage": 72.1,
+          "memoryUsage": 81.4,
+          "diskUsage": 55.7,
+          "networkLatency": 28.6
+        },
+        "availability": 98.7,
+        "lastUpdated": "2024-06-15T07:00:00Z"
+      },
+      {
+        "planeId": "business-system",
+        "planeName": "业务系统平面",
+        "status": "WARNING",
+        "entityHealth": {
+          "healthy": 206,
+          "warning": 20,
+          "error": 8,
+          "total": 234
+        },
+        "performance": {
+          "cpuUsage": 68.9,
+          "memoryUsage": 75.3,
+          "diskUsage": 42.1,
+          "networkLatency": 35.2
+        },
+        "availability": 97.8,
+        "lastUpdated": "2024-06-15T07:00:00Z"
+      },
+      {
+        "planeId": "business-chain",
+        "planeName": "业务链路平面",
+        "status": "ACTIVE",
+        "entityHealth": {
+          "healthy": 144,
+          "warning": 12,
+          "error": 0,
+          "total": 156
+        },
+        "performance": {
+          "cpuUsage": 52.3,
+          "memoryUsage": 58.9,
+          "diskUsage": 31.4,
+          "networkLatency": 18.7
+        },
+        "availability": 99.2,
+        "lastUpdated": "2024-06-15T07:00:00Z"
+      },
+      {
+        "planeId": "business-scenario",
+        "planeName": "业务场景平面",
+        "status": "ACTIVE",
+        "entityHealth": {
+          "healthy": 45,
+          "warning": 0,
+          "error": 0,
+          "total": 45
+        },
+        "performance": {
+          "cpuUsage": 38.7,
+          "memoryUsage": 44.2,
+          "diskUsage": 25.8,
+          "networkLatency": 15.1
+        },
+        "availability": 99.8,
+        "lastUpdated": "2024-06-15T07:00:00Z"
+      }
+    ],
+    "trends": {
+      "healthTrend": [
+        { "date": "2024-06-10", "healthy": 850, "warning": 65, "error": 21 },
+        { "date": "2024-06-11", "healthy": 862, "warning": 58, "error": 16 },
+        { "date": "2024-06-12", "healthy": 871, "warning": 53, "error": 12 },
+        { "date": "2024-06-13", "healthy": 875, "warning": 52, "error": 9 },
+        { "date": "2024-06-14", "healthy": 878, "warning": 50, "error": 8 }
+      ],
+      "performanceTrend": [
+        { "date": "2024-06-10", "avgCpu": 58.2, "avgMemory": 65.4, "avgLatency": 22.1 },
+        { "date": "2024-06-11", "avgCpu": 56.8, "avgMemory": 64.1, "avgLatency": 21.5 },
+        { "date": "2024-06-12", "avgCpu": 55.4, "avgMemory": 62.8, "avgLatency": 20.9 },
+        { "date": "2024-06-13", "avgCpu": 54.1, "avgMemory": 61.5, "avgLatency": 20.3 },
+        { "date": "2024-06-14", "avgCpu": 52.8, "avgMemory": 60.2, "avgLatency": 19.7 }
+      ]
+    }
+  }
+}
