@@ -33,12 +33,21 @@
     "tips": "Tips",
     "stopped": "Stopped",
     "error": "Error",
+    "status": "Status",
+    "description": "Description",
+    "createdAt": "Created At",
+    "avgResponseTime": "Avg Response Time",
+    "timeout": "Timeout",
+    "retryCount": "Retry Count",
+    "retryCountRequired": "Please set retry count",
+    "retryCountPlaceholder": "Retry count",
     "success": "Success",
     "timeout": "Timeout",
     "unit": {
       "count": "",
       "times": " times",
-      "events": " events"
+      "events": " events",
+      "seconds": " seconds"
     },
     "export": "Export",
     "import": "Import",
@@ -640,6 +649,8 @@
         "descriptionPlaceholder": "Enter Hook task description",
         "descriptionRequired": "Please enter task description",
         "type": "Hook Type",
+        "typePlaceholder": "Please select Hook type",
+        "typeRequired": "Please select Hook type",
         "triggerEvent": "Trigger Event",
         "taskCollections": "Task Collections",
         "enabled": "Enabled Status"
@@ -683,9 +694,14 @@
         "hookName": "Hook Name",
         "hookType": "Hook Type",
         "triggerEvent": "Trigger Event",
+        "triggerConfig": "Trigger Configuration",
+        "triggerConditions": "Trigger Conditions",
+        "executionConfig": "Execution Configuration",
         "lastTriggered": "Last Triggered",
         "triggerResult": "Trigger Result",
-        "taskCollections": "Task Collections"
+        "taskCollections": "Task Collections",
+        "triggeredCollections": "Triggered Collections",
+        "noCollections": "No Collections"
       },
       "columns": {
         "hookName": "Hook Name",

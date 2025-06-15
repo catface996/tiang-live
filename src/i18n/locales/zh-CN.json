@@ -33,12 +33,20 @@
     "tips": "提示",
     "stopped": "已停止",
     "error": "错误",
+    "status": "状态",
+    "description": "描述",
+    "createdAt": "创建时间",
+    "avgResponseTime": "平均响应时间",
+    "retryCount": "重试次数",
+    "retryCountRequired": "请设置重试次数",
+    "retryCountPlaceholder": "重试次数",
     "success": "成功",
     "timeout": "超时",
     "unit": {
       "count": "个",
       "times": "次",
-      "events": "个事件"
+      "events": "个事件",
+      "seconds": "秒"
     },
     "export": "导出",
     "import": "导入",
@@ -640,6 +648,8 @@
         "descriptionPlaceholder": "请输入Hook任务的功能描述",
         "descriptionRequired": "请输入任务描述",
         "type": "Hook类型",
+        "typePlaceholder": "请选择Hook类型",
+        "typeRequired": "请选择Hook类型",
         "triggerEvent": "触发事件",
         "taskCollections": "任务集合",
         "enabled": "启用状态"
@@ -683,9 +693,14 @@
         "hookName": "Hook名称",
         "hookType": "Hook类型",
         "triggerEvent": "触发事件",
+        "triggerConfig": "触发配置",
+        "triggerConditions": "触发条件",
+        "executionConfig": "执行配置",
         "lastTriggered": "最后触发",
         "triggerResult": "触发结果",
-        "taskCollections": "任务集合"
+        "taskCollections": "任务集合",
+        "triggeredCollections": "触发的任务集合",
+        "noCollections": "无任务集合"
       },
       "columns": {
         "hookName": "钩子名称",

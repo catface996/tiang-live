@@ -435,7 +435,7 @@ const HookTasks: React.FC = () => {
             </Col>
             <Col>
               <Select
-                placeholder="Hook类型"
+                placeholder={t('tasks.hooks.search.type')}
                 style={{ width: 120 }}
                 allowClear
               >
@@ -451,7 +451,7 @@ const HookTasks: React.FC = () => {
             </Col>
             <Col>
               <Select
-                placeholder="状态"
+                placeholder={t('tasks.hooks.search.status')}
                 style={{ width: 100 }}
                 allowClear
               >
@@ -568,8 +568,8 @@ const HookTasks: React.FC = () => {
                 </div>
 
                 <div style={{ fontSize: 12, color: '#666' }}>
-                  <div>触发事件: {hook.trigger.events.join(', ')}</div>
-                  <div>上次执行: {hook.lastExecution.timestamp}</div>
+                  <div>{t('tasks.hooks.card.triggerEvent')}: {hook.trigger.events.join(', ')}</div>
+                  <div>{t('tasks.hooks.card.lastTriggered')}: {hook.lastExecution.timestamp}</div>
                 </div>
               </HookCard>
             </Col>
@@ -616,15 +616,15 @@ const HookTasks: React.FC = () => {
 
           <Form.Item
             name="type"
-            label="Hook类型"
-            rules={[{ required: true, message: '请选择Hook类型' }]}
+            label={t('tasks.hooks.form.type')}
+            rules={[{ required: true, message: t('tasks.hooks.form.typeRequired') }]}
           >
-            <Select placeholder="请选择Hook类型">
-              <Option value="webhook">Webhook</Option>
-              <Option value="database">数据库</Option>
-              <Option value="message_queue">消息队列</Option>
-              <Option value="api_call">API调用</Option>
-              <Option value="script">脚本执行</Option>
+            <Select placeholder={t('tasks.hooks.form.typePlaceholder')}>
+              <Option value="webhook">{t('tasks.hooks.types.webhook')}</Option>
+              <Option value="database">{t('tasks.hooks.types.database')}</Option>
+              <Option value="message_queue">{t('tasks.hooks.types.messageQueue')}</Option>
+              <Option value="api_call">API</Option>
+              <Option value="script">Script</Option>
             </Select>
           </Form.Item>
 
@@ -641,10 +641,10 @@ const HookTasks: React.FC = () => {
             <Col span={8}>
               <Form.Item
                 name="retryCount"
-                label="重试次数"
-                rules={[{ required: true, message: '请设置重试次数' }]}
+                label={t('common.retryCount')}
+                rules={[{ required: true, message: t('common.retryCountRequired') }]}
               >
-                <Input type="number" placeholder="重试次数" />
+                <Input type="number" placeholder={t('common.retryCountPlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -681,10 +681,10 @@ const HookTasks: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label="Hook名称" span={2}>
+              <Descriptions.Item label={t('tasks.hooks.modal.hookName')} span={2}>
                 {selectedHook.name}
               </Descriptions.Item>
-              <Descriptions.Item label="Hook类型">
+              <Descriptions.Item label={t('tasks.hooks.modal.hookType')}>
                 <Tag 
                   color={hookTypeMap[selectedHook.type]?.color}
                   icon={hookTypeMap[selectedHook.type]?.icon}
@@ -692,36 +692,36 @@ const HookTasks: React.FC = () => {
                   {hookTypeMap[selectedHook.type]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="状态">
+              <Descriptions.Item label={t('common.status')}>
                 {getStatusTag(selectedHook.status)}
               </Descriptions.Item>
-              <Descriptions.Item label="成功率">
+              <Descriptions.Item label={t('tasks.hooks.card.successRate')}>
                 {selectedHook.statistics.successRate}%
               </Descriptions.Item>
-              <Descriptions.Item label="触发次数">
-                {selectedHook.statistics.totalTriggers}次
+              <Descriptions.Item label={t('tasks.hooks.card.triggerCount')}>
+                {selectedHook.statistics.totalTriggers}{t('common.unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label="平均响应时间">
+              <Descriptions.Item label={t('common.avgResponseTime')}>
                 {selectedHook.statistics.avgResponseTime}ms
               </Descriptions.Item>
-              <Descriptions.Item label="上次执行">
+              <Descriptions.Item label={t('tasks.hooks.card.lastTriggered')}>
                 {selectedHook.lastExecution.timestamp}
               </Descriptions.Item>
-              <Descriptions.Item label="创建者">
+              <Descriptions.Item label={t('tasks.hooks.card.creator')}>
                 {selectedHook.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label="创建时间">
+              <Descriptions.Item label={t('common.createdAt')}>
                 {selectedHook.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label="描述" span={2}>
+              <Descriptions.Item label={t('common.description')} span={2}>
                 {selectedHook.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细配置 */}
             <Tabs defaultActiveKey="collections">
-              <Tabs.TabPane tab="任务集合" key="collections">
-                <Card title="触发的任务集合" size="small" style={{ marginBottom: 16 }}>
+              <Tabs.TabPane tab={t('tasks.hooks.modal.taskCollections')} key="collections">
+                <Card title={t('tasks.hooks.modal.triggeredCollections')} size="small" style={{ marginBottom: 16 }}>
                   {selectedHook.taskCollections.length > 0 ? (
                     <Space wrap>
                       {selectedHook.taskCollections.map(collection => (
@@ -731,20 +731,20 @@ const HookTasks: React.FC = () => {
                       ))}
                     </Space>
                   ) : (
-                    <Text type="secondary">无任务集合</Text>
+                    <Text type="secondary">{t('tasks.hooks.modal.noCollections')}</Text>
                   )}
                 </Card>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab="触发配置" key="trigger">
-                <Card title="触发事件" size="small" style={{ marginBottom: 16 }}>
+              <Tabs.TabPane tab={t('tasks.hooks.modal.triggerConfig')} key="trigger">
+                <Card title={t('tasks.hooks.modal.triggerEvent')} size="small" style={{ marginBottom: 16 }}>
                   <Space wrap>
                     {selectedHook.trigger.events.map(event => (
                       <Tag key={event} color="blue">{event}</Tag>
                     ))}
                   </Space>
                 </Card>
-                <Card title="触发条件" size="small">
+                <Card title={t('tasks.hooks.modal.triggerConditions')} size="small">
                   <Space wrap>
                     {selectedHook.trigger.conditions.map(condition => (
                       <Tag key={condition} color="green">{condition}</Tag>
@@ -753,13 +753,13 @@ const HookTasks: React.FC = () => {
                 </Card>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab="执行配置" key="config">
+              <Tabs.TabPane tab={t('tasks.hooks.modal.executionConfig')} key="config">
                 <Descriptions column={2} size="small">
-                  <Descriptions.Item label="超时时间">
-                    {selectedHook.config.timeout}秒
+                  <Descriptions.Item label={t('common.timeout')}>
+                    {selectedHook.config.timeout}{t('common.unit.seconds')}
                   </Descriptions.Item>
-                  <Descriptions.Item label="重试次数">
-                    {selectedHook.config.retryCount}次
+                  <Descriptions.Item label={t('common.retryCount')}>
+                    {selectedHook.config.retryCount}{t('common.unit.times')}
                   </Descriptions.Item>
                   <Descriptions.Item label="重试延迟">
                     {selectedHook.config.retryDelay}秒
