@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import planeReducer from './slices/simplePlaneSlice';
+import themeReducer from './slices/themeSlice';
 
 // 导入其他slice（将来会添加）
 // import entityReducer from './slices/entitySlice';
@@ -11,6 +12,7 @@ import planeReducer from './slices/simplePlaneSlice';
 export const store = configureStore({
   reducer: {
     plane: planeReducer,
+    theme: themeReducer,
     // entity: entityReducer,
     // relationship: relationshipReducer,
     // sequence: sequenceReducer,

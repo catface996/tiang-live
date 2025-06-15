@@ -160,12 +160,12 @@ const AIAssistant: React.FC = () => {
   };
 
   const suggestions = [
-    '如何创建一个新的平面？',
-    '实体关系图谱有什么作用？',
-    '系统健康度如何监控？',
-    '平面依赖关系如何配置？',
-    '标签管理的最佳实践是什么？',
-    '如何生成系统分析报告？',
+    t('aiAssistant.suggestions.createPlane'),
+    t('aiAssistant.suggestions.entityRelation'),
+    t('aiAssistant.suggestions.healthMonitor'),
+    t('aiAssistant.suggestions.planeDependency'),
+    t('aiAssistant.suggestions.tagManagement'),
+    t('aiAssistant.suggestions.systemReport'),
   ];
 
   const handleSendMessage = async (content?: string) => {
@@ -207,157 +207,54 @@ const AIAssistant: React.FC = () => {
   const generateAIResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
     
-    if (lowerMessage.includes('平面') && lowerMessage.includes('创建')) {
-      return `创建平面的步骤如下：
-
-1. 点击"平面管理"菜单进入平面管理页面
-2. 点击"创建平面"按钮
-3. 填写基本信息：
-   - 平面名称：使用英文和连字符，如 "business-system"
-   - 显示名称：用户友好的中文名称
-   - 描述：详细说明平面的职责和包含的组件
-   - 层级：选择L1-L10中合适的层级
-   - 依赖关系：选择该平面依赖的其他平面（只能依赖更低层级）
-
-4. 预览效果确认无误后点击"保存"
-
-注意：L1层级的平面不能依赖其他平面，层级越高的平面可以依赖层级更低的平面。`;
+    // 检查中文关键词
+    const isChineseKeyword = (keywords: string[]) => 
+      keywords.some(keyword => lowerMessage.includes(keyword));
+    
+    // 检查英文关键词  
+    const isEnglishKeyword = (keywords: string[]) =>
+      keywords.some(keyword => lowerMessage.includes(keyword));
+    
+    if (isChineseKeyword(['平面', '创建']) || isEnglishKeyword(['plane', 'create'])) {
+      return t('aiAssistant.responses.createPlane');
     }
     
-    if (lowerMessage.includes('实体') && lowerMessage.includes('关系')) {
-      return `实体关系图谱的主要作用包括：
-
-🔍 **关系可视化**
-- 以图形化方式展示实体间的复杂关系网络
-- 支持力导向布局、层次布局、环形布局等多种展示方式
-- 直观了解系统中各实体的连接情况
-
-📊 **路径分析**
-- 分析实体间的关系路径，找到最短路径
-- 进行影响分析，了解某个实体变化对其他实体的影响
-- 发现隐藏的关联关系
-
-🎯 **交互操作**
-- 支持节点拖拽、缩放平移
-- 点击节点查看详细信息
-- 筛选和搜索特定的实体关系
-
-这对于理解系统架构、故障排查、影响评估都非常有帮助。`;
+    if (isChineseKeyword(['实体', '关系']) || isEnglishKeyword(['entity', 'relation'])) {
+      return t('aiAssistant.responses.entityRelation');
     }
     
-    if (lowerMessage.includes('健康度') || lowerMessage.includes('监控')) {
-      return `系统健康度监控包括以下几个方面：
-
-📈 **实时监控指标**
-- CPU、内存、磁盘使用率
-- 网络连接状态和延迟
-- 服务响应时间和可用性
-- 错误率和异常统计
-
-⚠️ **告警机制**
-- 设置告警阈值，超过阈值自动告警
-- 支持邮件、短信、钉钉等多种告警方式
-- 告警升级机制，确保重要问题及时处理
-
-📊 **健康度评分**
-- 基于多维度指标计算综合健康度分数
-- 异常实体占比超过阈值时平面状态变为异常
-- 提供健康度趋势分析和历史对比
-
-🔧 **自动化处理**
-- 支持自动重启、自动扩容等自愈机制
-- 预设处理脚本，快速响应常见问题`;
+    if (isChineseKeyword(['健康度', '监控']) || isEnglishKeyword(['health', 'monitor'])) {
+      return t('aiAssistant.responses.healthMonitor');
     }
     
-    if (lowerMessage.includes('依赖') && lowerMessage.includes('配置')) {
-      return `平面依赖关系配置的要点：
-
-🏗️ **层级规则**
-- 只能依赖层级更低的平面（L3可以依赖L1、L2）
-- L1层级平面不能依赖任何其他平面
-- 避免循环依赖，确保依赖关系是有向无环图
-
-⚙️ **配置步骤**
-1. 在创建或编辑平面时，选择"依赖平面"字段
-2. 系统会自动过滤出可选的依赖平面（层级更低的）
-3. 可以选择多个依赖平面
-4. 预览区域会实时显示依赖关系
-
-📊 **依赖分析**
-- 系统会自动分析依赖关系的复杂度
-- 提供依赖关系图谱可视化
-- 支持依赖影响分析和变更评估
-
-建议遵循单一职责原则，避免过度复杂的依赖关系。`;
+    if (isChineseKeyword(['依赖', '配置']) || isEnglishKeyword(['dependency', 'config'])) {
+      return t('aiAssistant.responses.dependency');
     }
     
-    if (lowerMessage.includes('标签') && lowerMessage.includes('管理')) {
-      return `标签管理的最佳实践：
-
-🏷️ **标签分类体系**
-- 环境标签：生产、测试、开发
-- 业务标签：核心业务、辅助业务
-- 特性标签：高可用、高性能、安全
-- 架构标签：微服务、单体、分布式
-- 组件标签：数据库、缓存、消息队列
-
-🎨 **标签设计原则**
-- 名称简洁明了，避免歧义
-- 颜色区分不同类型，便于识别
-- 描述清晰，说明标签的用途和适用场景
-- 保持标签体系的一致性和完整性
-
-📊 **使用建议**
-- 为每个资源打上合适的标签
-- 定期清理不再使用的标签
-- 建立标签使用规范和审核机制
-- 利用标签进行资源分组和权限控制
-
-这样可以提高资源管理效率，便于运维和监控。`;
+    if (isChineseKeyword(['标签', '管理']) || isEnglishKeyword(['tag', 'management'])) {
+      return t('aiAssistant.responses.tagManagement');
     }
     
-    if (lowerMessage.includes('报告') && lowerMessage.includes('生成')) {
-      return `系统分析报告生成功能：
-
-📋 **报告类型**
-- 健康度分析报告：系统整体健康状况
-- 依赖分析报告：平面间依赖关系分析
-- 关系分析报告：实体关系图谱分析
-- 性能分析报告：系统性能指标统计
-
-🔧 **生成步骤**
-1. 进入"报告管理"页面
-2. 点击"创建报告"按钮
-3. 选择报告类型和时间范围
-4. 配置报告参数和筛选条件
-5. 系统自动生成报告并支持下载
-
-📊 **报告内容**
-- 数据统计图表和趋势分析
-- 问题识别和改进建议
-- 详细的数据明细和说明
-- 支持PDF、Excel等多种格式导出
-
-报告可以帮助你更好地了解系统状况，制定优化策略。`;
+    if (isChineseKeyword(['报告', '生成']) || isEnglishKeyword(['report', 'generate'])) {
+      return t('aiAssistant.responses.reportGeneration');
     }
-
+    
+    if (isChineseKeyword(['时序', '管理']) || isEnglishKeyword(['sequence', 'management'])) {
+      return t('aiAssistant.responses.sequenceManagement');
+    }
+    
+    if (isChineseKeyword(['智能体', 'agent']) || isEnglishKeyword(['agent', 'ai'])) {
+      return t('aiAssistant.responses.aiAgent');
+    }
+    
     // 默认回复
-    const defaultResponses = [
-      '这是一个很好的问题！基于我对AI运维系统的了解，我建议你可以从以下几个方面来考虑这个问题...',
-      '根据系统的设计理念，我认为最佳的做法是...',
-      '这个功能确实很重要。在实际使用中，你可以通过以下方式来实现...',
-      '让我为你详细解释一下这个概念。在AI运维系统中...',
-      '这是一个常见的运维场景。通常我们会采用以下策略来处理...',
-    ];
-    
-    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)] + 
-           '\n\n如果你需要更具体的帮助，请告诉我更多的细节信息，我会为你提供更精准的建议。';
+    return t('aiAssistant.responses.default');
   };
 
   const handleClearChat = () => {
     setMessages([{
       id: '1',
-      content: '对话已清空。有什么新的问题我可以帮助你吗？',
+      content: t('aiAssistant.chatCleared'),
       isUser: false,
       timestamp: new Date(),
     }]);
@@ -385,7 +282,7 @@ const AIAssistant: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <MessageOutlined style={{ color: '#1890ff' }} />
-                AI助手
+                {t('aiAssistant.title')}
                 <Badge 
                   count="Beta" 
                   style={{ 
@@ -396,25 +293,25 @@ const AIAssistant: React.FC = () => {
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              智能运维助手，为你提供专业的系统管理建议和问题解答
+              {t('aiAssistant.subtitle')}
             </Paragraph>
           </Col>
           <Col>
             <Space>
-              <Tooltip title="清空对话">
+              <Tooltip title={t('aiAssistant.clear')}>
                 <Button 
                   icon={<DeleteOutlined />} 
                   onClick={handleClearChat}
                 >
-                  清空
+                  {t('aiAssistant.clear')}
                 </Button>
               </Tooltip>
-              <Tooltip title="刷新页面">
+              <Tooltip title={t('common.refresh')}>
                 <Button 
                   icon={<ReloadOutlined />}
                   onClick={() => window.location.reload()}
                 >
-                  刷新
+                  {t('common.refresh')}
                 </Button>
               </Tooltip>
             </Space>
@@ -430,7 +327,7 @@ const AIAssistant: React.FC = () => {
               <div style={{ marginBottom: 12 }}>
                 <Space>
                   <BulbOutlined style={{ color: '#faad14' }} />
-                  <Text strong>建议问题：</Text>
+                  <Text strong>{t('aiAssistant.suggestions')}：</Text>
                 </Space>
               </div>
               <div>
@@ -501,7 +398,7 @@ const AIAssistant: React.FC = () => {
                   <MessageBubble isUser={false}>
                     <Space>
                       <Spin size="small" />
-                      <Text type="secondary">AI助手正在思考...</Text>
+                      <Text type="secondary">{t('aiAssistant.thinking')}</Text>
                     </Space>
                   </MessageBubble>
                 </MessageContent>
@@ -516,7 +413,7 @@ const AIAssistant: React.FC = () => {
             <TextArea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="输入你的问题，按 Ctrl+Enter 发送..."
+              placeholder={t('aiAssistant.chatPlaceholder')}
               autoSize={{ minRows: 1, maxRows: 4 }}
               onPressEnter={(e) => {
                 if (e.ctrlKey) {
@@ -533,7 +430,7 @@ const AIAssistant: React.FC = () => {
               disabled={!inputValue.trim()}
               style={{ height: 'auto', minHeight: 32 }}
             >
-              发送
+              {t('aiAssistant.send')}
             </Button>
           </InputContainer>
           
@@ -541,7 +438,7 @@ const AIAssistant: React.FC = () => {
             <Text type="secondary" style={{ fontSize: 12 }}>
               <Space>
                 <ThunderboltOutlined />
-                按 Ctrl+Enter 快速发送消息
+                {t('aiAssistant.sendShortcut')}
               </Space>
             </Text>
           </div>

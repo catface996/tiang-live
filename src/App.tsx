@@ -7,10 +7,11 @@ import enUS from 'antd/locale/en_US';
 import { ThemeProvider } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { store } from './store';
-import { theme } from './styles/theme';
+import { themes } from './styles/theme';
 import AppRoutes from './routes';
 import GlobalStyles from './styles/GlobalStyles';
 import ErrorBoundary from './components/ErrorBoundary';
+import { useAppSelector } from './store';
 import './i18n'; // 初始化i18n
 
 // Antd语言配置映射
@@ -23,6 +24,10 @@ const AppContent: React.FC = () => {
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language as keyof typeof antdLocaleMap;
   const antdLocale = antdLocaleMap[currentLanguage] || zhCN;
+  
+  // 获取当前主题
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const themeConfig = themes[currentTheme];
 
   // 根据环境设置basename
   const basename = import.meta.env.PROD ? '/tiang-live' : '';
@@ -32,34 +37,33 @@ const AppContent: React.FC = () => {
     prod: import.meta.env.PROD,
     basename,
     language: currentLanguage,
+    theme: currentTheme,
     url: window.location.href
   });
 
   return (
     <ErrorBoundary>
-      <Provider store={store}>
-        <ConfigProvider 
-          locale={antdLocale}
-          theme={{
-            token: {
-              colorPrimary: '#1890ff',
-            },
-          }}
-        >
-          <ThemeProvider theme={theme}>
-            <GlobalStyles />
-            <Router basename={basename}>
-              <AppRoutes />
-            </Router>
-          </ThemeProvider>
-        </ConfigProvider>
-      </Provider>
+      <ConfigProvider 
+        locale={antdLocale}
+        theme={themeConfig.antd}
+      >
+        <ThemeProvider theme={themeConfig.styled}>
+          <GlobalStyles />
+          <Router basename={basename}>
+            <AppRoutes />
+          </Router>
+        </ThemeProvider>
+      </ConfigProvider>
     </ErrorBoundary>
   );
 };
 
 const App: React.FC = () => {
-  return <AppContent />;
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
+  );
 };
 
 export default App;

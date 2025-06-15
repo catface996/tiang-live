@@ -30,6 +30,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ASSETS } from '../utils/assetUtils';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import ThemeToggle from '../components/ThemeToggle';
+import { useAppSelector } from '../store';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -39,6 +41,8 @@ const MainLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const isDarkMode = currentTheme === 'dark';
 
   // 动态菜单项（使用翻译）
   const menuItems = [
@@ -94,7 +98,7 @@ const MainLayout: React.FC = () => {
     {
       key: '/ai-assistant',
       icon: <MessageOutlined />,
-      label: 'AI助手',
+      label: t('menu.aiAssistant'),
     },
     {
       key: '/ai-agents',
@@ -162,6 +166,14 @@ const MainLayout: React.FC = () => {
     }
   };
 
+  // 根据主题设置颜色
+  const siderBgColor = isDarkMode ? '#000000' : '#ffffff';
+  const headerBgColor = isDarkMode ? '#000000' : '#ffffff';
+  const contentBgColor = isDarkMode ? '#000000' : '#f0f2f5';
+  const borderColor = isDarkMode ? '#303030' : '#f0f0f0';
+  const textColor = isDarkMode ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)';
+  const primaryColor = isDarkMode ? '#177ddc' : '#1890ff';
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider 
@@ -169,7 +181,7 @@ const MainLayout: React.FC = () => {
         collapsible 
         collapsed={collapsed}
         style={{
-          background: '#001529',
+          background: siderBgColor,
         }}
       >
         {/* Logo区域 */}
@@ -179,7 +191,7 @@ const MainLayout: React.FC = () => {
           alignItems: 'center', 
           justifyContent: collapsed ? 'center' : 'flex-start',
           padding: collapsed ? '0' : '0 16px',
-          borderBottom: '1px solid #1f1f1f',
+          borderBottom: `1px solid ${borderColor}`,
           transition: 'all 0.2s'
         }}>
           <div style={{ 
@@ -187,7 +199,7 @@ const MainLayout: React.FC = () => {
             alignItems: 'center',
             fontSize: '18px',
             fontWeight: 600, 
-            color: '#1890ff',
+            color: primaryColor,
             gap: '8px',
             transition: 'all 0.2s'
           }}>
@@ -203,7 +215,7 @@ const MainLayout: React.FC = () => {
             />
             {!collapsed && (
               <Text style={{ 
-                color: '#1890ff', 
+                color: isDarkMode ? '#ffffff' : '#000000', 
                 fontSize: '16px', 
                 fontWeight: 600,
                 whiteSpace: 'nowrap'
@@ -216,14 +228,14 @@ const MainLayout: React.FC = () => {
 
         {/* 菜单 */}
         <Menu
-          theme="dark"
+          theme={isDarkMode ? "dark" : "light"}
           mode="inline"
           selectedKeys={[location.pathname]}
           items={menuItems}
           onClick={handleMenuClick}
           style={{ 
             borderRight: 0,
-            background: '#001529'
+            background: siderBgColor
           }}
         />
       </Sider>
@@ -232,7 +244,7 @@ const MainLayout: React.FC = () => {
         {/* 顶部导航栏 */}
         <Header style={{ 
           padding: '0 16px', 
-          background: '#001529',
+          background: headerBgColor,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -245,11 +257,14 @@ const MainLayout: React.FC = () => {
               fontSize: '16px',
               width: 64,
               height: 64,
-              color: '#fff'
+              color: textColor
             }}
           />
 
           <Space size={16}>
+            {/* 主题切换 */}
+            <ThemeToggle style={{ color: textColor }} />
+            
             {/* 语言切换器 */}
             <LanguageSwitcher />
             
@@ -269,7 +284,7 @@ const MainLayout: React.FC = () => {
                   alignItems: 'center',
                   height: 'auto',
                   padding: '8px 12px',
-                  color: 'rgba(255, 255, 255, 0.85)',
+                  color: textColor,
                   border: 'none'
                 }}
               >
@@ -277,9 +292,9 @@ const MainLayout: React.FC = () => {
                   <Avatar 
                     size="small" 
                     icon={<UserOutlined />}
-                    style={{ backgroundColor: '#1890ff' }}
+                    style={{ backgroundColor: primaryColor }}
                   />
-                  <Text style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
+                  <Text style={{ color: textColor }}>
                     管理员
                   </Text>
                 </Space>
@@ -291,7 +306,7 @@ const MainLayout: React.FC = () => {
         {/* 主内容区域 */}
         <Content style={{ 
           margin: 0,
-          background: '#f0f2f5',
+          background: contentBgColor,
           minHeight: 'calc(100vh - 64px)',
           overflow: 'auto'
         }}>

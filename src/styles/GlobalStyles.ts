@@ -14,8 +14,9 @@ const GlobalStyles = createGlobalStyle`
       'Segoe UI Emoji', 'Segoe UI Symbol';
     font-size: 14px;
     line-height: 1.5715;
-    color: #262626;
-    background-color: #fafafa;
+    color: ${({ theme }) => theme.colors.text.primary};
+    background-color: ${({ theme }) => theme.colors.background.layout};
+    transition: background-color 0.3s, color 0.3s;
   }
 
   #root {
@@ -29,16 +30,16 @@ const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: #fafafa;
+    background: ${({ theme }) => theme.colors.background.secondary};
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #d9d9d9;
+    background: ${({ theme }) => theme.colors.border.base};
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #bfbfbf;
+    background: ${({ theme }) => theme.colors.border.dark};
   }
 
   /* 清除默认样式 */
@@ -51,6 +52,7 @@ const GlobalStyles = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
     font-weight: 600;
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   p {
@@ -58,12 +60,12 @@ const GlobalStyles = createGlobalStyle`
   }
 
   a {
-    color: #1890ff;
+    color: ${({ theme }) => theme.colors.primary};
     text-decoration: none;
     transition: color 0.3s;
 
     &:hover {
-      color: #1890ff;
+      color: ${({ theme }) => theme.colors.primary};
       opacity: 0.8;
     }
   }
