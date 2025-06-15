@@ -106,18 +106,13 @@ const Dashboard: React.FC = () => {
 
   // 任务执行趋势数据
   const getTaskTrendOption = () => ({
-    title: {
-      text: '任务执行趋势',
-      left: 0,
-      textStyle: { fontSize: 16, fontWeight: 'normal' }
-    },
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'cross' }
     },
     legend: {
       data: ['任务集合', '巡检任务', 'Hook任务'],
-      top: 30
+      top: 10
     },
     grid: {
       left: '3%',
@@ -161,11 +156,6 @@ const Dashboard: React.FC = () => {
 
   // 系统健康状态饼图
   const getHealthStatusOption = () => ({
-    title: {
-      text: '系统健康状态',
-      left: 0,
-      textStyle: { fontSize: 16, fontWeight: 'normal' }
-    },
     tooltip: {
       trigger: 'item',
       formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -199,11 +189,6 @@ const Dashboard: React.FC = () => {
 
   // 任务成功率柱状图
   const getSuccessRateOption = () => ({
-    title: {
-      text: '任务成功率统计',
-      left: 0,
-      textStyle: { fontSize: 16, fontWeight: 'normal' }
-    },
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'shadow' },
@@ -216,7 +201,7 @@ const Dashboard: React.FC = () => {
       left: '3%',
       right: '4%',
       bottom: '3%',
-      top: '15%',
+      top: '10%',
       containLabel: true
     },
     xAxis: {
@@ -274,11 +259,6 @@ const Dashboard: React.FC = () => {
 
   // 响应时间趋势图
   const getResponseTimeOption = () => ({
-    title: {
-      text: '平均响应时间趋势',
-      left: 0,
-      textStyle: { fontSize: 16, fontWeight: 'normal' }
-    },
     tooltip: {
       trigger: 'axis',
       formatter: function(params: any) {
@@ -292,7 +272,7 @@ const Dashboard: React.FC = () => {
       left: '3%',
       right: '4%',
       bottom: '3%',
-      top: '15%',
+      top: '10%',
       containLabel: true
     },
     xAxis: {
@@ -354,16 +334,10 @@ const Dashboard: React.FC = () => {
   };
 
   // 资源使用率仪表盘
-  const getResourceGaugeOption = (title: string, value: number, color: string) => ({
-    title: {
-      text: title,
-      left: 'center',
-      top: '10%',
-      textStyle: { fontSize: 14, fontWeight: 'normal' }
-    },
+  const getResourceGaugeOption = (value: number, color: string) => ({
     series: [
       {
-        name: title,
+        name: '使用率',
         type: 'gauge',
         center: ['50%', '60%'],
         radius: '80%',
@@ -395,7 +369,7 @@ const Dashboard: React.FC = () => {
           fontSize: 20,
           offsetCenter: [0, '70%']
         },
-        data: [{ value: value, name: title }]
+        data: [{ value: value }]
       }
     ]
   });
@@ -598,27 +572,27 @@ const Dashboard: React.FC = () => {
       {/* 资源使用率仪表盘 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={8}>
-          <ChartCard>
+          <ChartCard title="CPU使用率">
             <ReactECharts 
-              option={getResourceGaugeOption('CPU使用率', 68, '#1890ff')} 
+              option={getResourceGaugeOption(68, '#1890ff')} 
               style={{ height: '200px' }}
               opts={{ renderer: 'svg' }}
             />
           </ChartCard>
         </Col>
         <Col xs={24} sm={8}>
-          <ChartCard>
+          <ChartCard title="内存使用率">
             <ReactECharts 
-              option={getResourceGaugeOption('内存使用率', 72, '#52c41a')} 
+              option={getResourceGaugeOption(72, '#52c41a')} 
               style={{ height: '200px' }}
               opts={{ renderer: 'svg' }}
             />
           </ChartCard>
         </Col>
         <Col xs={24} sm={8}>
-          <ChartCard>
+          <ChartCard title="磁盘使用率">
             <ReactECharts 
-              option={getResourceGaugeOption('磁盘使用率', 45, '#faad14')} 
+              option={getResourceGaugeOption(45, '#faad14')} 
               style={{ height: '200px' }}
               opts={{ renderer: 'svg' }}
             />
