@@ -14,15 +14,17 @@ interface PlaneTopologyProps {
 }
 
 const TopologyContainer = styled.div`
-  background: #fafafa;
-  border-radius: 8px;
-  padding: 32px;
-  margin: 24px 0;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0;
   min-height: 400px;
+  transition: all 0.3s ease;
 `;
 
 const PlaneLevel = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   
   &:last-child {
     margin-bottom: 0;
@@ -54,9 +56,9 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
     return (
       <Card title={t('planes.topology.title')}>
         <TopologyContainer>
-          <div style={{ textAlign: 'center', padding: '100px 0' }}>
+          <div className="loading-container">
             <Spin size="large" />
-            <div style={{ marginTop: 16 }}>{t('planes.loading.topology')}</div>
+            <div className="loading-text">{t('planes.loading.topology')}</div>
           </div>
         </TopologyContainer>
       </Card>

@@ -848,6 +848,75 @@
   }
 }
 
+/* Plane Topology 特定样式 */
+.loading-container {
+  text-align: center;
+  padding: 80px 0;
+  color: var(--text-color);
+}
+
+.loading-text {
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Plane Card 样式 */
+.plane-icon {
+  font-size: 18px;
+}
+
+.plane-action-btn {
+  color: white !important;
+}
+
+.plane-action-btn:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.plane-description {
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.entity-health-section {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  margin-bottom: 8px;
+  display: block;
+  color: var(--text-color);
+}
+
+.plane-divider {
+  margin: 16px 0;
+  border-color: var(--border-color);
+}
+
+.dependency-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.multiple-dependency-warning {
+  color: #fa8c16;
+}
+
+.theme-dark .multiple-dependency-warning {
+  color: #ffc53d;
+}
+
+.dependency-list {
+  margin-top: 4px;
+}
+
+.dependency-item {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
 /* 确保深色主题下的文本可见性 */
 .theme-dark .ant-typography,
 .theme-dark .ant-typography-title,

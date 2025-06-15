@@ -17,12 +17,14 @@ interface PlaneCardProps {
 
 const StyledPlaneCard = styled(Card)<{ $level: number }>`
   margin-bottom: 16px;
-  border: 2px solid #e8e8e8;
+  border: 2px solid var(--border-color);
+  background-color: var(--card-bg);
   transition: all 0.3s ease;
   
   &:hover {
-    border-color: #1890ff;
-    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+    border-color: var(--primary-color);
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-2px);
   }
   
   .ant-card-head {
@@ -33,6 +35,10 @@ const StyledPlaneCard = styled(Card)<{ $level: number }>`
       color: white;
       font-weight: 600;
     }
+  }
+  
+  .ant-card-body {
+    color: var(--text-color);
   }
 `;
 
@@ -75,7 +81,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
       className={className}
       title={
         <Space>
-          <span style={{ fontSize: '18px' }}>{plane.config.icon || '📋'}</span>
+          <span className="plane-icon">{plane.config.icon || '📋'}</span>
           <span>{plane.displayName || plane.name}</span>
           <Badge 
             color={getStatusColor(plane.status)} 
@@ -90,7 +96,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               type="text" 
               icon={<EyeOutlined />} 
               onClick={() => handleAction('view')}
-              style={{ color: 'white' }}
+              className="plane-action-btn"
             />
           </Tooltip>
           <Tooltip title={t('planes.card.tooltips.editConfig')}>
@@ -98,7 +104,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               type="text" 
               icon={<EditOutlined />} 
               onClick={() => handleAction('edit')}
-              style={{ color: 'white' }}
+              className="plane-action-btn"
             />
           </Tooltip>
           <Tooltip title={t('planes.card.tooltips.addInstance')}>
@@ -106,19 +112,19 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               type="text" 
               icon={<PlusOutlined />} 
               onClick={() => handleAction('add')}
-              style={{ color: 'white' }}
+              className="plane-action-btn"
             />
           </Tooltip>
         </Space>
       }
     >
-      <Paragraph style={{ marginBottom: 16 }}>
+      <Paragraph className="plane-description">
         {plane.description}
       </Paragraph>
 
       {/* 实体健康状态统计 */}
-      <div style={{ marginBottom: 16 }}>
-        <Text strong style={{ marginBottom: 8, display: 'block' }}>{t('planes.card.labels.entityHealthStatus')}:</Text>
+      <div className="entity-health-section">
+        <Text strong className="section-title">{t('planes.card.labels.entityHealthStatus')}:</Text>
         <EntityHealthStats 
           entityHealth={plane.entityHealth} 
           showProgress={true}
@@ -126,7 +132,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
         />
       </div>
 
-      <Divider style={{ margin: '16px 0' }} />
+      <Divider className="plane-divider" />
       
       <StatsContainer>
         <Space size="large">
@@ -146,13 +152,13 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
         
         {plane.dependencies && plane.dependencies.length > 0 && (
           <div>
-            <Text type="secondary" style={{ fontSize: '12px' }}>
+            <Text type="secondary" className="dependency-text">
               {t('planes.card.labels.dependencies')}: {plane.dependencies.length} {t('planes.card.labels.planesCount')}
-              {plane.dependencies.length > 1 && <span style={{ color: '#fa8c16' }}> ({t('planes.card.labels.multipleDependency')})</span>}
+              {plane.dependencies.length > 1 && <span className="multiple-dependency-warning"> ({t('planes.card.labels.multipleDependency')})</span>}
             </Text>
-            <div style={{ marginTop: '4px' }}>
+            <div className="dependency-list">
               {plane.dependencies.map((depId, index) => (
-                <span key={depId} style={{ fontSize: '11px', color: '#8c8c8c' }}>
+                <span key={depId} className="dependency-item">
                   {depId}
                   {index < plane.dependencies.length - 1 && ', '}
                 </span>
