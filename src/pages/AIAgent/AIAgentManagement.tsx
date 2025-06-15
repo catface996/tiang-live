@@ -48,6 +48,7 @@ import {
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../../utils';
+import { AIAgentCard } from './components';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -423,97 +424,26 @@ const AIAgentManagement: React.FC = () => {
   ];
 
   const renderAgentCards = () => {
-    return agentData.map(agent => {
-      const typeConfig = agentTypeMap[agent.type as keyof typeof agentTypeMap];
-      return (
-        <Col xs={24} sm={12} lg={8} xl={6} key={agent.id}>
-          <AgentCard
-            title={
-              <Space>
-                <Avatar 
-                  icon={<RobotOutlined />} 
-                  size="small"
-                  style={{ backgroundColor: '#1890ff' }}
-                />
-                <span>{agent.name}</span>
-                {getStatusTag(agent.status)}
-              </Space>
+    return agentData.map(agent => (
+      <Col xs={24} sm={12} lg={8} xl={6} key={agent.id}>
+        <AIAgentCard
+          agent={{
+            ...agent,
+            stats: {
+              tasksCompleted: agent.tasks,
+              successRate: agent.successRate,
+              avgResponseTime: Math.floor(Math.random() * 200) + 100,
+              uptime: '2天3小时'
             }
-            extra={
-              <Space>
-                {agent.status === 'running' ? (
-                  <Button 
-                    type="link" 
-                    icon={<PauseCircleOutlined />} 
-                    size="small"
-                    onClick={() => handleStopAgent(agent.id)}
-                  />
-                ) : (
-                  <Button 
-                    type="link" 
-                    icon={<PlayCircleOutlined />} 
-                    size="small"
-                    onClick={() => handleStartAgent(agent.id)}
-                  />
-                )}
-                <Button 
-                  type="link" 
-                  icon={<SettingOutlined />} 
-                  size="small"
-                  onClick={() => handleEditAgent(agent)}
-                />
-              </Space>
-            }
-          >
-            <div style={{ marginBottom: 12 }}>
-              <Tag color={typeConfig?.color} icon={typeConfig?.icon}>
-                {typeConfig?.name}
-              </Tag>
-              <Tag>{agent.version}</Tag>
-            </div>
-            
-            <Paragraph 
-              ellipsis={{ rows: 2 }} 
-              style={{ marginBottom: 16, minHeight: 40 }}
-            >
-              {agent.description}
-            </Paragraph>
-
-            <div style={{ marginBottom: 12 }}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Statistic
-                    title="CPU使用率"
-                    value={agent.cpu}
-                    suffix="%"
-                    valueStyle={{ 
-                      fontSize: 14,
-                      color: agent.cpu > 80 ? '#f5222d' : '#52c41a'
-                    }}
-                  />
-                </Col>
-                <Col span={12}>
-                  <Statistic
-                    title="执行任务"
-                    value={agent.tasks}
-                    valueStyle={{ fontSize: 14 }}
-                  />
-                </Col>
-              </Row>
-            </div>
-
-            <div>
-              <Text strong>成功率: </Text>
-              <Progress 
-                percent={agent.successRate} 
-                size="small"
-                strokeColor={agent.successRate > 95 ? '#52c41a' : '#faad14'}
-              />
-            </div>
-          </AgentCard>
-        </Col>
-      );
-    });
+          }}
+          onEdit={handleEditAgent}
+          onDelete={handleDeleteAgent}
+          onStart={handleStartAgent}
+          onStop={handleStopAgent}
+          onView={handleViewAgent}
+        />
+      </Col>
+    ));
   };
 
   const runningAgents = agentData.filter(agent => agent.status === 'running').length;
