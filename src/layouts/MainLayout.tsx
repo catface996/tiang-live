@@ -228,22 +228,12 @@ const MainLayout: React.FC = () => {
 
       <Layout>
         {/* 顶部导航栏 */}
-        <Header className="app-header" style={{ 
-          padding: '0 16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
+        <Header className="app-header">
           <Button
             className="collapse-button"
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64
-            }}
           />
 
           <Space size={16}>

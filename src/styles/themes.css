@@ -860,6 +860,44 @@
   }
 }
 
+/* 导航栏样式 */
+.app-header {
+  padding: 0 16px 0 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.collapse-button {
+  font-size: 16px !important;
+  width: 64px !important;
+  height: 64px !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  justify-content: flex-start !important;
+}
+
+.collapse-button .ant-btn-icon {
+  margin-left: 0 !important;
+}
+
+/* 移除折叠按钮的悬浮效果 */
+.collapse-button:hover,
+.collapse-button:focus {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+.collapse-button:active {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  transform: none !important;
+}
+
 /* Plane Topology 特定样式 */
 .loading-container {
   text-align: center;
