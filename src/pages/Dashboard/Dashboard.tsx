@@ -361,7 +361,7 @@ const Dashboard: React.FC = () => {
               title={t('planes.stats.totalPlanes')}
               value={systemStats.totalPlanes}
               prefix={<AppstoreOutlined />}
-              valueStyle={{ color: 'var(--primary-color)' }}
+              valueStyle={{ color: '#1890ff' }}
             />
           </StatsCard>
         </Col>

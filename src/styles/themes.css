@@ -782,50 +782,62 @@
   color: #ff4d4f !important;
 }
 
-/* 深色主题下的颜色调整 */
+/* 深色主题下的颜色调整 - 保持彩色元素不变 */
 .theme-dark .text-success {
-  color: #73d13d !important;
+  color: #52c41a !important; /* 保持原绿色 */
 }
 
 .theme-dark .text-warning {
-  color: #ffc53d !important;
+  color: #faad14 !important; /* 保持原橙色 */
 }
 
 .theme-dark .text-error {
-  color: #ff7875 !important;
+  color: #ff4d4f !important; /* 保持原红色 */
+}
+
+.theme-dark .text-primary {
+  color: #1890ff !important; /* 保持原蓝色 */
 }
 
 .stats-value-primary {
-  color: var(--primary-color) !important;
+  color: #1890ff !important; /* 保持原蓝色 */
 }
 
 .stats-value-success {
-  color: #52c41a !important;
+  color: #52c41a !important; /* 保持原绿色 */
 }
 
 .stats-value-warning {
-  color: #faad14 !important;
+  color: #faad14 !important; /* 保持原橙色 */
 }
 
 .stats-value-purple {
-  color: #722ed1 !important;
+  color: #722ed1 !important; /* 保持原紫色 */
 }
 
-/* 深色主题下的统计数值颜色调整 */
+.stats-value-error {
+  color: #ff4d4f !important; /* 保持原红色 */
+}
+
+/* 深色主题下也保持这些颜色不变 */
 .theme-dark .stats-value-primary {
-  color: #ffffff !important;
+  color: #1890ff !important;
 }
 
 .theme-dark .stats-value-success {
-  color: #73d13d !important;
+  color: #52c41a !important;
 }
 
 .theme-dark .stats-value-warning {
-  color: #ffc53d !important;
+  color: #faad14 !important;
 }
 
 .theme-dark .stats-value-purple {
-  color: #b37feb !important;
+  color: #722ed1 !important;
+}
+
+.theme-dark .stats-value-error {
+  color: #ff4d4f !important;
 }
 
 /* 图表容器样式 */
@@ -851,7 +863,7 @@
 /* Plane Topology 特定样式 */
 .loading-container {
   text-align: center;
-  padding: 80px 0;
+  padding: 60px 24px;
   color: var(--text-color);
 }
 
@@ -901,11 +913,11 @@
 }
 
 .multiple-dependency-warning {
-  color: #fa8c16;
+  color: #fa8c16 !important; /* 保持原橙色 */
 }
 
 .theme-dark .multiple-dependency-warning {
-  color: #ffc53d;
+  color: #fa8c16 !important; /* 深色模式下也保持原橙色 */
 }
 
 .dependency-list {
@@ -915,6 +927,43 @@
 .dependency-item {
   font-size: 11px;
   color: var(--text-secondary);
+}
+
+/* 确保Antd组件的彩色图标在深色主题下保持原色 */
+.theme-dark .ant-statistic-content-prefix {
+  color: inherit !important; /* 让图标保持组件设置的颜色 */
+}
+
+.theme-dark .ant-statistic-content-value {
+  color: inherit !important; /* 让数值保持组件设置的颜色 */
+}
+
+/* 进度条颜色保持不变 */
+.theme-dark .ant-progress-bg {
+  background-color: #1890ff !important; /* 保持蓝色 */
+}
+
+.theme-dark .ant-progress-success-bg {
+  background-color: #52c41a !important; /* 保持绿色 */
+}
+
+/* 标签颜色保持原有设计 */
+.theme-dark .ant-tag-success {
+  background-color: #f6ffed !important;
+  border-color: #b7eb8f !important;
+  color: #52c41a !important;
+}
+
+.theme-dark .ant-tag-warning {
+  background-color: #fffbe6 !important;
+  border-color: #ffe58f !important;
+  color: #faad14 !important;
+}
+
+.theme-dark .ant-tag-error {
+  background-color: #fff2f0 !important;
+  border-color: #ffccc7 !important;
+  color: #ff4d4f !important;
 }
 
 /* 确保深色主题下的文本可见性 */

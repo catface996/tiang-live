@@ -17,7 +17,7 @@ const TopologyContainer = styled.div`
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 24px;
+  padding: 0;
   margin: 16px 0;
   min-height: 400px;
   transition: all 0.3s ease;
@@ -25,9 +25,14 @@ const TopologyContainer = styled.div`
 
 const PlaneLevel = styled.div`
   margin-bottom: 24px;
+  padding: 16px;
   
   &:last-child {
     margin-bottom: 0;
+  }
+  
+  &:first-child {
+    padding-top: 24px;
   }
 `;
 
