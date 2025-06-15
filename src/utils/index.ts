@@ -3,7 +3,7 @@
  * @param title 页面标题
  * @param suffix 标题后缀，默认为应用名称
  */
-export const setPageTitle = (title?: string, suffix?: string) => {
+export const setPageTitle = (title: string, suffix?: string) => {
   const appTitle = import.meta.env.VITE_APP_TITLE || '通用平面化AI运维系统';
   const finalSuffix = suffix || appTitle;
   

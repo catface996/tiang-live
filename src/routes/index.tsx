@@ -9,6 +9,7 @@ import {
   SequenceManagement,
   AIAgentManagement,
 } from '../pages';
+import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -17,6 +18,8 @@ const AppRoutes: React.FC = () => {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="planes" element={<PlaneManagement />} />
+        <Route path="planes/create" element={<PlaneCreateEdit />} />
+        <Route path="planes/edit/:id" element={<PlaneCreateEdit />} />
         <Route path="entities" element={<EntityManagement />} />
         <Route path="relationships" element={<RelationshipGraph />} />
         <Route path="sequences" element={<SequenceManagement />} />

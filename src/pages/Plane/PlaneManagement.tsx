@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Card, Row, Col, Typography, Button, Space, message } from 'antd';
 import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { 
@@ -22,6 +23,7 @@ const PlaneContainer = styled.div`
 `;
 
 const PlaneManagement: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { 
     definitions: planes, 
@@ -89,8 +91,7 @@ const PlaneManagement: React.FC = () => {
         // TODO: 打开平面详情模态框或跳转到详情页
         break;
       case 'edit':
-        message.info(`编辑平面: ${plane?.displayName || planeId}`);
-        // TODO: 打开平面编辑模态框
+        navigate(`/planes/edit/${planeId}`);
         break;
       case 'add':
         message.info(`添加实例到平面: ${plane?.displayName || planeId}`);
@@ -102,8 +103,7 @@ const PlaneManagement: React.FC = () => {
   };
 
   const handleCreatePlane = () => {
-    message.info('创建新平面');
-    // TODO: 打开创建平面模态框
+    navigate('/planes/create');
   };
 
   return (

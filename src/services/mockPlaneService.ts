@@ -411,13 +411,8 @@ const mockPlaneMetrics: PlaneMetrics[] = [
 
 // 模拟服务类
 export class MockPlaneService {
-  // 模拟网络延迟
-  private delay(ms: number = 500): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 
   async getPlaneDefinitions(): Promise<PaginatedResponse<PlaneDefinition>> {
-    await this.delay();
     return {
       data: mockPlaneDefinitions,
       total: mockPlaneDefinitions.length,
@@ -429,7 +424,6 @@ export class MockPlaneService {
   }
 
   async getPlaneTopology(): Promise<PlaneTopology> {
-    await this.delay();
     return {
       planes: mockPlaneDefinitions,
       relationships: mockPlaneRelationships,
@@ -437,17 +431,147 @@ export class MockPlaneService {
   }
 
   async getAllPlanesMetrics(): Promise<PlaneMetrics[]> {
-    await this.delay();
     return mockPlaneMetrics;
   }
 
   async getPlaneDefinition(id: string): Promise<PlaneDefinition> {
-    await this.delay();
     const plane = mockPlaneDefinitions.find(p => p.id === id);
     if (!plane) {
       throw new Error(`Plane with id ${id} not found`);
     }
     return plane;
+  }
+
+  async createPlaneDefinition(data: Partial<PlaneDefinition>): Promise<PlaneDefinition> {
+    // 获取平面图标的辅助函数
+    const getPlaneIcon = (level: number): string => {
+      const icons = {
+        1: '🏗️',
+        2: '⚙️', 
+        3: '💼',
+        4: '🔗',
+        5: '🎯',
+        6: '🌟',
+        7: '🚀',
+        8: '💎',
+        9: '🎨',
+        10: '👑',
+      };
+      return icons[level as keyof typeof icons] || '📋';
+    };
+
+    const newPlane: PlaneDefinition = {
+      id: data.name || `plane-${Date.now()}`,
+      name: data.name || 'new-plane',
+      displayName: data.displayName || 'New Plane',
+      description: data.description || 'New plane description',
+      level: data.level || 1,
+      dependencies: data.dependencies || [],
+      entityHealth: {
+        healthy: 0,
+        warning: 0,
+        error: 0,
+        total: 0
+      },
+      config: {
+        icon: getPlaneIcon(data.level || 1),
+        color: PLANE_COLORS[data.level || 1]?.primary || '#1890ff',
+        theme: data.name || 'new-plane',
+        maxInstances: 100, // 固定默认值
+        autoScaling: false, // 固定默认值
+        monitoring: {
+          enabled: data.config?.monitoring?.enabled ?? true,
+          alertThreshold: data.config?.monitoring?.alertThreshold || 80,
+        },
+        security: {
+          accessControl: true, // 固定默认值
+          encryption: false, // 固定默认值
+        },
+        healthThresholds: {
+          warningThreshold: data.config?.healthThresholds?.warningThreshold || 0.2,
+          errorThreshold: data.config?.healthThresholds?.errorThreshold || 0.1,
+        },
+      },
+      status: calculatePlaneStatus({
+        healthy: 0,
+        warning: 0,
+        error: 0,
+        total: 0
+      }),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    // 模拟添加到数据中
+    mockPlaneDefinitions.push(newPlane);
+    
+    return newPlane;
+  }
+
+  async updatePlaneDefinition(id: string, data: Partial<PlaneDefinition>): Promise<PlaneDefinition> {
+    const index = mockPlaneDefinitions.findIndex(p => p.id === id);
+    if (index === -1) {
+      throw new Error(`Plane with id ${id} not found`);
+    }
+
+    const getPlaneIcon = (level: number): string => {
+      const icons = {
+        1: '🏗️',
+        2: '⚙️',
+        3: '💼', 
+        4: '🔗',
+        5: '🎯',
+        6: '🌟',
+        7: '🚀',
+        8: '💎',
+        9: '🎨',
+        10: '👑',
+      };
+      return icons[level as keyof typeof icons] || '📋';
+    };
+
+    const existingPlane = mockPlaneDefinitions[index];
+    const updatedPlane: PlaneDefinition = {
+      ...existingPlane,
+      ...data,
+      id: existingPlane.id, // 保持ID不变
+      updatedAt: new Date().toISOString(),
+    };
+
+    // 更新配置中的颜色和图标
+    if (data.level && data.level !== existingPlane.level) {
+      updatedPlane.config = {
+        ...updatedPlane.config,
+        color: PLANE_COLORS[data.level]?.primary || '#1890ff',
+        icon: getPlaneIcon(data.level),
+      };
+    }
+
+    // 保持某些字段的默认值
+    if (updatedPlane.config) {
+      updatedPlane.config = {
+        ...updatedPlane.config,
+        maxInstances: updatedPlane.config.maxInstances || 100,
+        autoScaling: updatedPlane.config.autoScaling ?? false,
+        security: {
+          accessControl: updatedPlane.config.security?.accessControl ?? true,
+          encryption: updatedPlane.config.security?.encryption ?? false,
+        },
+      };
+    }
+
+    mockPlaneDefinitions[index] = updatedPlane;
+    
+    return updatedPlane;
+  }
+
+  async deletePlaneDefinition(id: string): Promise<void> {
+    const index = mockPlaneDefinitions.findIndex(p => p.id === id);
+    if (index === -1) {
+      throw new Error(`Plane with id ${id} not found`);
+    }
+
+    mockPlaneDefinitions.splice(index, 1);
   }
 }
 
