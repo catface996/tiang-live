@@ -8,6 +8,7 @@ import {
   SequenceManagement,
   ReportManagement,
   TagManagement,
+  AIAssistant,
   AIAgentManagement,
 } from '../pages';
 import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
@@ -25,6 +26,7 @@ const AppRoutes: React.FC = () => {
         <Route path="sequences" element={<SequenceManagement />} />
         <Route path="reports" element={<ReportManagement />} />
         <Route path="tags" element={<TagManagement />} />
+        <Route path="ai-assistant" element={<AIAssistant />} />
         <Route path="ai-agents" element={<AIAgentManagement />} />
       </Route>
     </Routes>

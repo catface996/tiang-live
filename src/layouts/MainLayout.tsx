@@ -17,6 +17,7 @@ import {
   RobotOutlined,
   FileTextOutlined,
   TagsOutlined,
+  MessageOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -57,6 +58,11 @@ const menuItems = [
     key: '/tags',
     icon: <TagsOutlined />,
     label: '标签管理',
+  },
+  {
+    key: '/ai-assistant',
+    icon: <MessageOutlined />,
+    label: 'AI助手',
   },
   {
     key: '/ai-agents',

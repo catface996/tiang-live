@@ -5,4 +5,5 @@ export { default as EntityManagement } from './Entity';
 export { default as SequenceManagement } from './Sequence';
 export { default as ReportManagement } from './Report';
 export { default as TagManagement } from './Tag';
+export { default as AIAssistant } from './AIAssistant';
 export { default as AIAgentManagement } from './AIAgent';
