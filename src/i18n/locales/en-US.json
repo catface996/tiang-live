@@ -37,7 +37,8 @@
     "timeout": "Timeout",
     "unit": {
       "count": "",
-      "times": " times"
+      "times": " times",
+      "events": " events"
     },
     "export": "Export",
     "import": "Import",
@@ -614,13 +615,77 @@
     },
     "hooks": {
       "title": "Hook Tasks",
-      "subtitle": "Event-driven hook task management",
+      "subtitle": "Manage and configure system Hook tasks, trigger task collection execution based on events, support Webhook, database, message queue and other Hook types.",
       "createTitle": "Create Hook Task",
+      "editTitle": "Edit Hook Task",
+      "refresh": "Refresh",
+      "createHook": "Create Hook Task",
       "stats": {
-        "totalHooks": "Total Hooks",
+        "totalHooks": "Total Hook Tasks",
         "activeHooks": "Active Hooks",
         "triggeredToday": "Triggered Today",
         "successRate": "Success Rate"
+      },
+      "search": {
+        "placeholder": "Search Hook task name, description...",
+        "type": "Type",
+        "status": "Status",
+        "event": "Event"
+      },
+      "form": {
+        "name": "Hook Name",
+        "namePlaceholder": "Enter Hook task name",
+        "nameRequired": "Please enter Hook name",
+        "description": "Description",
+        "descriptionPlaceholder": "Enter Hook task description",
+        "descriptionRequired": "Please enter task description",
+        "type": "Hook Type",
+        "triggerEvent": "Trigger Event",
+        "taskCollections": "Task Collections",
+        "enabled": "Enabled Status"
+      },
+      "types": {
+        "webhook": "Webhook",
+        "database": "Database",
+        "messageQueue": "Message Queue",
+        "fileSystem": "File System"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "error": "Error",
+        "pending": "Pending"
+      },
+      "messages": {
+        "enableSuccess": "Hook task enabled successfully",
+        "disableSuccess": "Hook task disabled successfully",
+        "deleteSuccess": "Hook task deleted successfully",
+        "createSuccess": "Hook task created successfully",
+        "updateSuccess": "Hook task updated successfully"
+      },
+      "tips": {
+        "createHint": "After creating a Hook task, you can configure specific trigger events and task collections in the details page."
+      },
+      "card": {
+        "viewDetails": "View Details",
+        "edit": "Edit",
+        "enable": "Enable",
+        "disable": "Disable",
+        "delete": "Delete",
+        "taskCollections": " task collections",
+        "lastTriggered": "Last Triggered",
+        "triggerCount": "Trigger Count",
+        "successRate": "Success Rate",
+        "triggerEvent": "Trigger Event",
+        "creator": "Creator"
+      },
+      "modal": {
+        "hookName": "Hook Name",
+        "hookType": "Hook Type",
+        "triggerEvent": "Trigger Event",
+        "lastTriggered": "Last Triggered",
+        "triggerResult": "Trigger Result",
+        "taskCollections": "Task Collections"
       },
       "columns": {
         "hookName": "Hook Name",

@@ -37,7 +37,8 @@
     "timeout": "超时",
     "unit": {
       "count": "个",
-      "times": "次"
+      "times": "次",
+      "events": "个事件"
     },
     "export": "导出",
     "import": "导入",
@@ -614,13 +615,77 @@
     },
     "hooks": {
       "title": "钩子任务",
-      "subtitle": "事件驱动的钩子任务管理",
+      "subtitle": "管理和配置系统Hook任务，基于事件触发任务集合执行，支持Webhook、数据库、消息队列等多种Hook类型。",
       "createTitle": "创建钩子任务",
+      "editTitle": "编辑钩子任务",
+      "refresh": "刷新",
+      "createHook": "创建Hook任务",
       "stats": {
-        "totalHooks": "总钩子数",
+        "totalHooks": "Hook任务总数",
         "activeHooks": "活跃钩子",
         "triggeredToday": "今日触发",
         "successRate": "成功率"
+      },
+      "search": {
+        "placeholder": "搜索Hook任务名称、描述...",
+        "type": "类型",
+        "status": "状态",
+        "event": "事件"
+      },
+      "form": {
+        "name": "Hook名称",
+        "namePlaceholder": "请输入Hook任务名称",
+        "nameRequired": "请输入Hook名称",
+        "description": "描述",
+        "descriptionPlaceholder": "请输入Hook任务的功能描述",
+        "descriptionRequired": "请输入任务描述",
+        "type": "Hook类型",
+        "triggerEvent": "触发事件",
+        "taskCollections": "任务集合",
+        "enabled": "启用状态"
+      },
+      "types": {
+        "webhook": "Webhook",
+        "database": "数据库",
+        "messageQueue": "消息队列",
+        "fileSystem": "文件系统"
+      },
+      "status": {
+        "active": "活跃",
+        "inactive": "停用",
+        "error": "错误",
+        "pending": "等待中"
+      },
+      "messages": {
+        "enableSuccess": "Hook任务已启用",
+        "disableSuccess": "Hook任务已停用",
+        "deleteSuccess": "Hook任务删除成功",
+        "createSuccess": "Hook任务创建成功",
+        "updateSuccess": "Hook任务更新成功"
+      },
+      "tips": {
+        "createHint": "创建Hook任务后，可以在详情页面中配置具体的触发事件和任务集合。"
+      },
+      "card": {
+        "viewDetails": "查看详情",
+        "edit": "编辑",
+        "enable": "启用",
+        "disable": "停用",
+        "delete": "删除",
+        "taskCollections": "个任务集合",
+        "lastTriggered": "最后触发",
+        "triggerCount": "触发次数",
+        "successRate": "成功率",
+        "triggerEvent": "触发事件",
+        "creator": "创建者"
+      },
+      "modal": {
+        "hookName": "Hook名称",
+        "hookType": "Hook类型",
+        "triggerEvent": "触发事件",
+        "lastTriggered": "最后触发",
+        "triggerResult": "触发结果",
+        "taskCollections": "任务集合"
       },
       "columns": {
         "hookName": "钩子名称",
