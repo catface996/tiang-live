@@ -9,6 +9,7 @@ import type {
   PlaneMetrics,
   PaginatedResponse 
 } from '../types';
+import { getBasePath } from '../utils/assetUtils';
 
 // 基础请求函数
 const fetchJsonData = async <T>(url: string): Promise<T> => {
@@ -23,11 +24,6 @@ const fetchJsonData = async <T>(url: string): Promise<T> => {
     console.error(`Failed to fetch data from ${url}:`, error);
     throw error;
   }
-};
-
-// 获取基础路径（支持开发和生产环境）
-const getBasePath = () => {
-  return import.meta.env.PROD ? '/tiang-live' : '';
 };
 
 /**

@@ -27,6 +27,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
+import { ASSETS } from '../utils/assetUtils';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -173,7 +174,7 @@ const MainLayout: React.FC = () => {
             transition: 'all 0.2s'
           }}>
             <img 
-              src="/sz-logo.png" 
+              src={ASSETS.LOGO} 
               alt="Logo" 
               style={{ 
                 width: '32px', 
