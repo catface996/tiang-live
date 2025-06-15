@@ -25,7 +25,30 @@
     "description": "描述",
     "name": "名称",
     "type": "类型",
-    "level": "层级"
+    "level": "层级",
+    "create": "创建",
+    "update": "更新",
+    "export": "导出",
+    "import": "导入",
+    "reset": "重置",
+    "submit": "提交",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "finish": "完成",
+    "close": "关闭",
+    "open": "打开",
+    "enable": "启用",
+    "disable": "禁用",
+    "active": "活跃",
+    "inactive": "非活跃",
+    "online": "在线",
+    "offline": "离线",
+    "running": "运行中",
+    "stopped": "已停止",
+    "pending": "等待中",
+    "failed": "失败",
+    "completed": "已完成"
   },
   "layout": {
     "title": "通用平面化AI运维系统",
@@ -50,11 +73,42 @@
     "systemSettings": "系统设置",
     "modelManagement": "模型管理",
     "promptTemplates": "提示词模板",
-    "tagManagement": "标签管理"
+    "tagManagement": "标签管理",
+    "aiAssistant": "AI助手"
+  },
+  "dashboard": {
+    "title": "系统概览",
+    "subtitle": "AI运维系统整体运行状态和关键指标",
+    "welcome": "欢迎使用AI运维系统",
+    "systemOverview": "系统概览",
+    "recentActivities": "最近活动",
+    "performanceMetrics": "性能指标",
+    "quickActions": "快捷操作",
+    "systemStatus": "系统状态",
+    "resourceUsage": "资源使用情况",
+    "alertSummary": "告警汇总",
+    "taskProgress": "任务进度",
+    "healthScore": "健康评分",
+    "uptime": "运行时间",
+    "totalRequests": "总请求数",
+    "responseTime": "响应时间",
+    "errorRate": "错误率",
+    "activeUsers": "活跃用户",
+    "dataVolume": "数据量",
+    "cpuUsage": "CPU使用率",
+    "memoryUsage": "内存使用率",
+    "diskUsage": "磁盘使用率",
+    "networkTraffic": "网络流量",
+    "executionCount": "执行次数",
+    "systemHealthScore": "系统健康评分"
   },
   "planes": {
     "title": "平面管理",
     "subtitle": "管理系统中的各个平面层级和依赖关系",
+    "createTitle": "创建平面",
+    "editTitle": "编辑平面",
+    "createSubtitle": "创建新的平面定义",
+    "editSubtitle": "修改平面配置和属性",
     "stats": {
       "totalPlanes": "总平面数",
       "activePlanes": "活跃平面",
@@ -106,35 +160,316 @@
       "businessSystem": "业务系统平面",
       "businessChain": "业务链路平面",
       "businessScenario": "业务场景平面"
+    },
+    "form": {
+      "basicInfo": "基本信息",
+      "planeName": "平面名称",
+      "planeId": "平面标识",
+      "displayName": "显示名称",
+      "planeLevel": "平面层级",
+      "dependencies": "依赖关系",
+      "configuration": "配置信息",
+      "icon": "图标",
+      "color": "颜色",
+      "theme": "主题"
     }
-  },
-  "dashboard": {
-    "title": "系统概览",
-    "welcome": "欢迎使用AI运维系统",
-    "systemOverview": "系统概览",
-    "recentActivities": "最近活动",
-    "performanceMetrics": "性能指标",
-    "quickActions": "快捷操作"
   },
   "entities": {
     "title": "实体管理",
-    "subtitle": "管理系统中的各类实体对象"
+    "subtitle": "管理系统中的各类实体对象和属性",
+    "createTitle": "创建实体",
+    "editTitle": "编辑实体",
+    "stats": {
+      "totalEntities": "总实体数",
+      "activeEntities": "活跃实体",
+      "entityTypes": "实体类型",
+      "relationships": "关系数量"
+    },
+    "columns": {
+      "entityName": "实体名称",
+      "entityType": "实体类型",
+      "plane": "所属平面",
+      "status": "状态",
+      "lastUpdate": "最后更新"
+    },
+    "form": {
+      "entityName": "实体名称",
+      "entityType": "实体类型",
+      "belongsToPlane": "所属平面",
+      "properties": "属性配置",
+      "tags": "标签"
+    }
   },
   "relationships": {
     "title": "关系图谱", 
-    "subtitle": "可视化展示实体间的关系网络"
+    "subtitle": "可视化展示实体间的关系网络和依赖结构",
+    "graphView": "图谱视图",
+    "listView": "列表视图",
+    "filterByType": "按类型筛选",
+    "filterByPlane": "按平面筛选",
+    "relationshipTypes": {
+      "dependsOn": "依赖于",
+      "contains": "包含",
+      "references": "引用",
+      "communicates": "通信"
+    }
   },
   "sequences": {
     "title": "时序管理",
-    "subtitle": "管理业务时序定义和执行"
+    "subtitle": "管理业务时序定义和执行流程",
+    "createTitle": "创建时序",
+    "editTitle": "编辑时序",
+    "stats": {
+      "totalSequences": "总时序数",
+      "activeSequences": "活跃时序",
+      "executionCount": "执行次数",
+      "successRate": "成功率"
+    },
+    "columns": {
+      "sequenceName": "时序名称",
+      "triggerType": "触发类型",
+      "status": "状态",
+      "lastExecution": "最后执行",
+      "successRate": "成功率"
+    }
   },
   "agents": {
     "title": "AI智能体",
-    "subtitle": "AI Agent管理和监控"
+    "subtitle": "AI Agent管理和监控中心",
+    "createTitle": "创建智能体",
+    "editTitle": "编辑智能体",
+    "stats": {
+      "totalAgents": "总智能体数",
+      "activeAgents": "活跃智能体",
+      "totalTasks": "总任务数",
+      "successRate": "成功率"
+    },
+    "columns": {
+      "agentName": "智能体名称",
+      "agentType": "类型",
+      "status": "状态",
+      "tasksCompleted": "完成任务",
+      "lastActive": "最后活跃"
+    },
+    "form": {
+      "agentName": "智能体名称",
+      "agentType": "智能体类型",
+      "model": "使用模型",
+      "prompt": "提示词模板",
+      "capabilities": "能力配置",
+      "parameters": "参数设置"
+    },
+    "types": {
+      "monitoring": "监控智能体",
+      "analysis": "分析智能体",
+      "automation": "自动化智能体",
+      "assistant": "助手智能体"
+    }
   },
   "reports": {
     "title": "报告管理",
-    "subtitle": "生成和管理各类运维报告"
+    "subtitle": "生成和管理各类运维报告",
+    "createTitle": "创建报告",
+    "editTitle": "编辑报告",
+    "generateReport": "生成报告",
+    "scheduleReport": "定时报告",
+    "stats": {
+      "totalReports": "总报告数",
+      "scheduledReports": "定时报告",
+      "generatedToday": "今日生成",
+      "averageSize": "平均大小"
+    },
+    "columns": {
+      "reportName": "报告名称",
+      "reportType": "报告类型",
+      "status": "状态",
+      "generatedTime": "生成时间",
+      "fileSize": "文件大小"
+    },
+    "types": {
+      "system": "系统报告",
+      "performance": "性能报告",
+      "security": "安全报告",
+      "business": "业务报告"
+    }
+  },
+  "tasks": {
+    "title": "任务管理",
+    "subtitle": "管理系统中的各类任务和执行状态",
+    "inspection": {
+      "title": "巡检任务",
+      "subtitle": "自动化巡检任务管理和监控",
+      "createTitle": "创建巡检任务",
+      "stats": {
+        "totalTasks": "总任务数",
+        "runningTasks": "运行中",
+        "completedToday": "今日完成",
+        "failureRate": "失败率"
+      },
+      "columns": {
+        "taskName": "任务名称",
+        "targetSystem": "目标系统",
+        "schedule": "执行计划",
+        "lastRun": "最后执行",
+        "status": "状态"
+      }
+    },
+    "hooks": {
+      "title": "钩子任务",
+      "subtitle": "事件驱动的钩子任务管理",
+      "createTitle": "创建钩子任务",
+      "stats": {
+        "totalHooks": "总钩子数",
+        "activeHooks": "活跃钩子",
+        "triggeredToday": "今日触发",
+        "successRate": "成功率"
+      },
+      "columns": {
+        "hookName": "钩子名称",
+        "triggerEvent": "触发事件",
+        "status": "状态",
+        "lastTriggered": "最后触发",
+        "executionCount": "执行次数"
+      }
+    },
+    "collections": {
+      "title": "任务集合",
+      "subtitle": "任务集合管理和批量执行",
+      "createTitle": "创建任务集合",
+      "stats": {
+        "totalCollections": "总集合数",
+        "activeCollections": "活跃集合",
+        "totalTasks": "包含任务",
+        "executionRate": "执行率"
+      },
+      "columns": {
+        "collectionName": "集合名称",
+        "taskCount": "任务数量",
+        "status": "状态",
+        "lastExecution": "最后执行",
+        "progress": "进度"
+      }
+    }
+  },
+  "solutions": {
+    "title": "行业解决方案",
+    "subtitle": "预配置的行业解决方案和最佳实践",
+    "createTitle": "创建解决方案",
+    "editTitle": "编辑解决方案",
+    "stats": {
+      "totalSolutions": "总方案数",
+      "activeSolutions": "活跃方案",
+      "deployedSolutions": "已部署",
+      "successRate": "成功率"
+    },
+    "columns": {
+      "solutionName": "方案名称",
+      "industry": "行业",
+      "version": "版本",
+      "status": "状态",
+      "deployments": "部署次数"
+    },
+    "industries": {
+      "finance": "金融",
+      "healthcare": "医疗",
+      "manufacturing": "制造业",
+      "retail": "零售",
+      "education": "教育",
+      "government": "政府"
+    }
+  },
+  "systemSettings": {
+    "title": "系统设置",
+    "subtitle": "系统配置和管理功能",
+    "models": {
+      "title": "模型管理",
+      "subtitle": "AI模型配置和版本管理",
+      "createTitle": "添加模型",
+      "editTitle": "编辑模型",
+      "stats": {
+        "totalModels": "总模型数",
+        "activeModels": "活跃模型",
+        "totalCalls": "总调用次数",
+        "averageLatency": "平均延迟"
+      },
+      "columns": {
+        "modelName": "模型名称",
+        "provider": "提供商",
+        "version": "版本",
+        "status": "状态",
+        "callCount": "调用次数"
+      },
+      "form": {
+        "modelName": "模型名称",
+        "provider": "提供商",
+        "apiKey": "API密钥",
+        "endpoint": "接口地址",
+        "parameters": "参数配置"
+      }
+    },
+    "prompts": {
+      "title": "提示词模板",
+      "subtitle": "AI提示词模板管理和优化",
+      "createTitle": "创建模板",
+      "editTitle": "编辑模板",
+      "stats": {
+        "totalTemplates": "总模板数",
+        "activeTemplates": "活跃模板",
+        "usageCount": "使用次数",
+        "averageRating": "平均评分"
+      },
+      "columns": {
+        "templateName": "模板名称",
+        "category": "分类",
+        "language": "语言",
+        "usageCount": "使用次数",
+        "rating": "评分"
+      },
+      "form": {
+        "templateName": "模板名称",
+        "category": "分类",
+        "content": "模板内容",
+        "variables": "变量定义",
+        "examples": "使用示例"
+      }
+    },
+    "tags": {
+      "title": "标签管理",
+      "subtitle": "系统标签分类和管理",
+      "createTitle": "创建标签",
+      "editTitle": "编辑标签",
+      "stats": {
+        "totalTags": "总标签数",
+        "activeTags": "活跃标签",
+        "taggedItems": "已标记项",
+        "categories": "分类数"
+      },
+      "columns": {
+        "tagName": "标签名称",
+        "category": "分类",
+        "color": "颜色",
+        "usageCount": "使用次数",
+        "description": "描述"
+      },
+      "form": {
+        "tagName": "标签名称",
+        "category": "分类",
+        "color": "颜色",
+        "icon": "图标",
+        "description": "描述"
+      }
+    }
+  },
+  "aiAssistant": {
+    "title": "AI助手",
+    "subtitle": "智能对话助手和问题解答",
+    "chatPlaceholder": "请输入您的问题...",
+    "send": "发送",
+    "clear": "清空对话",
+    "suggestions": "建议问题",
+    "thinking": "思考中...",
+    "error": "抱歉，出现了错误",
+    "retry": "重试"
   },
   "validation": {
     "required": "此字段为必填项",
@@ -142,14 +477,42 @@
     "phone": "请输入有效的手机号码",
     "url": "请输入有效的URL地址",
     "minLength": "最少输入{{min}}个字符",
-    "maxLength": "最多输入{{max}}个字符"
+    "maxLength": "最多输入{{max}}个字符",
+    "pattern": "格式不正确",
+    "number": "请输入有效数字",
+    "integer": "请输入整数",
+    "positive": "请输入正数",
+    "range": "请输入{{min}}到{{max}}之间的值"
   },
   "messages": {
     "deleteConfirm": "确定要删除这条记录吗？",
     "deleteSuccess": "删除成功",
     "saveSuccess": "保存成功",
+    "updateSuccess": "更新成功",
+    "createSuccess": "创建成功",
     "loadError": "数据加载失败",
     "networkError": "网络连接异常",
-    "permissionDenied": "权限不足"
+    "permissionDenied": "权限不足",
+    "operationSuccess": "操作成功",
+    "operationFailed": "操作失败",
+    "confirmAction": "确认执行此操作？",
+    "unsavedChanges": "有未保存的更改，确定要离开吗？"
+  },
+  "filters": {
+    "all": "全部",
+    "active": "活跃",
+    "inactive": "非活跃",
+    "today": "今天",
+    "thisWeek": "本周",
+    "thisMonth": "本月",
+    "lastWeek": "上周",
+    "lastMonth": "上月",
+    "custom": "自定义"
+  },
+  "pagination": {
+    "total": "共 {{total}} 条",
+    "pageSize": "每页 {{size}} 条",
+    "goto": "跳至",
+    "page": "页"
   }
 }

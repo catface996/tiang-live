@@ -1,22 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Card } from 'antd';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { setPageTitle } from '../../utils';
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
 const PageHeader = styled.div`
   margin-bottom: 24px;
 `;
 
 const EntityManagement: React.FC = () => {
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    setPageTitle(t('entities.title'));
+  }, [t]);
+
   return (
-    <div>
+    <div style={{ padding: '24px' }}>
       <PageHeader>
-        <Title level={2}>实体管理</Title>
+        <Title level={2}>{t('entities.title')}</Title>
+        <Paragraph>{t('entities.subtitle')}</Paragraph>
       </PageHeader>
       
       <Card>
-        <p>实体管理功能正在开发中...</p>
+        <p>{t('common.loading')}</p>
       </Card>
     </div>
   );

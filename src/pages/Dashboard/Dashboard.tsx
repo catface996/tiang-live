@@ -35,6 +35,7 @@ import {
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 
 const { Title, Paragraph, Text } = Typography;
@@ -85,10 +86,11 @@ const AlertCard = styled(Card)`
 const Dashboard: React.FC = () => {
   const [timeRange, setTimeRange] = useState<string>('7d');
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    setPageTitle('仪表盘');
-  }, []);
+    setPageTitle(t('dashboard.title'));
+  }, [t]);
 
   // 系统概览统计数据
   const systemStats = {
@@ -111,7 +113,7 @@ const Dashboard: React.FC = () => {
       axisPointer: { type: 'cross' }
     },
     legend: {
-      data: ['任务集合', '巡检任务', 'Hook任务'],
+      data: [t('tasks.collections.title'), t('tasks.inspection.title'), t('tasks.hooks.title')],
       top: 10
     },
     grid: {
@@ -127,25 +129,25 @@ const Dashboard: React.FC = () => {
     },
     yAxis: {
       type: 'value',
-      name: '执行次数'
+      name: t('dashboard.executionCount')
     },
     series: [
       {
-        name: '任务集合',
+        name: t('tasks.collections.title'),
         type: 'line',
         smooth: true,
         data: [120, 132, 101, 134, 90, 230, 210],
         itemStyle: { color: '#1890ff' }
       },
       {
-        name: '巡检任务',
+        name: t('tasks.inspection.title'),
         type: 'line',
         smooth: true,
         data: [220, 182, 191, 234, 290, 330, 310],
         itemStyle: { color: '#52c41a' }
       },
       {
-        name: 'Hook任务',
+        name: t('tasks.hooks.title'),
         type: 'line',
         smooth: true,
         data: [150, 232, 201, 154, 190, 330, 410],
@@ -154,382 +156,147 @@ const Dashboard: React.FC = () => {
     ]
   });
 
-  // 系统健康状态饼图
-  const getHealthStatusOption = () => ({
+  // 系统健康状态数据
+  const getSystemHealthOption = () => ({
     tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'right',
-      top: 'middle'
+      formatter: '{a} <br/>{b} : {c}%'
     },
     series: [
       {
-        name: '健康状态',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        center: ['40%', '50%'],
-        data: [
-          { value: 142, name: '健康', itemStyle: { color: '#52c41a' } },
-          { value: 12, name: '警告', itemStyle: { color: '#faad14' } },
-          { value: 2, name: '异常', itemStyle: { color: '#ff4d4f' } }
-        ],
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }
-    ]
-  });
-
-  // 任务成功率柱状图
-  const getSuccessRateOption = () => ({
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
-      formatter: function(params: any) {
-        const data = params[0];
-        return `${data.name}<br/>成功率: ${data.value}%<br/>执行次数: ${getTaskExecutionCount(data.name)}次`;
-      }
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      top: '10%',
-      containLabel: true
-    },
-    xAxis: {
-      type: 'category',
-      data: ['健康检查', '性能监控', '安全扫描', '数据同步', '告警通知', '日志分析'],
-      axisLabel: {
-        interval: 0,
-        rotate: 45
-      }
-    },
-    yAxis: {
-      type: 'value',
-      name: '成功率 (%)',
-      max: 100,
-      min: 85
-    },
-    series: [
-      {
-        name: '成功率',
-        type: 'bar',
-        data: [
-          { value: 98.7, itemStyle: { color: '#52c41a' } }, // 健康检查 - 最稳定
-          { value: 96.4, itemStyle: { color: '#52c41a' } }, // 性能监控 - 较稳定
-          { value: 89.2, itemStyle: { color: '#faad14' } }, // 安全扫描 - 复杂度高，成功率相对较低
-          { value: 97.8, itemStyle: { color: '#52c41a' } }, // 数据同步 - 业务关键，优化较好
-          { value: 99.3, itemStyle: { color: '#52c41a' } }, // 告警通知 - 简单可靠
-          { value: 91.5, itemStyle: { color: '#faad14' } }  // 日志分析 - 依赖外部系统，偶有问题
-        ],
-        markLine: {
-          data: [
-            { 
-              type: 'average', 
-              name: '平均值',
-              lineStyle: { color: '#1890ff', type: 'dashed' },
-              label: { formatter: '平均: {c}%' }
-            }
-          ]
-        }
-      }
-    ]
-  });
-
-  // 获取任务执行次数（用于tooltip显示）
-  const getTaskExecutionCount = (taskName: string) => {
-    const executionData: { [key: string]: number } = {
-      '健康检查': 15847,
-      '性能监控': 8934,
-      '安全扫描': 1456,
-      '数据同步': 12678,
-      '告警通知': 3421,
-      '日志分析': 5689
-    };
-    return executionData[taskName] || 0;
-  };
-
-  // 响应时间趋势图
-  const getResponseTimeOption = () => ({
-    tooltip: {
-      trigger: 'axis',
-      formatter: function(params: any) {
-        const data = params[0];
-        const timeLabels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'];
-        const time = timeLabels[data.dataIndex];
-        return `${time}<br/>平均响应时间: ${data.value}ms<br/>状态: ${getResponseStatus(data.value)}`;
-      }
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      top: '10%',
-      containLabel: true
-    },
-    xAxis: {
-      type: 'category',
-      data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
-      axisLabel: {
-        formatter: '{value}'
-      }
-    },
-    yAxis: {
-      type: 'value',
-      name: '响应时间 (ms)',
-      min: 100,
-      max: 400
-    },
-    series: [
-      {
-        name: '响应时间',
-        type: 'line', // 修改为 line 类型
-        smooth: true,
-        data: [156, 142, 189, 267, 324, 298, 201], // 简化为数值数组
-        itemStyle: { color: '#1890ff' },
-        areaStyle: {
-          color: {
-            type: 'linear',
-            x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [
-              { offset: 0, color: 'rgba(24, 144, 255, 0.3)' },
-              { offset: 1, color: 'rgba(24, 144, 255, 0.1)' }
+        name: t('dashboard.systemHealthScore'),
+        type: 'gauge',
+        detail: {
+          formatter: '{value}%',
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: '#1890ff'
+        },
+        data: [{ value: systemStats.systemHealth, name: t('dashboard.healthScore') }],
+        axisLine: {
+          lineStyle: {
+            width: 20,
+            color: [
+              [0.7, '#ff4d4f'],
+              [0.9, '#faad14'],
+              [1, '#52c41a']
             ]
           }
         },
-        markLine: {
-          data: [
-            {
-              yAxis: 250,
-              name: '警告线',
-              lineStyle: { color: '#faad14', type: 'dashed' },
-              label: { formatter: '警告: 250ms', position: 'end' }
-            },
-            {
-              yAxis: 350,
-              name: '危险线', 
-              lineStyle: { color: '#ff4d4f', type: 'dashed' },
-              label: { formatter: '危险: 350ms', position: 'end' }
-            }
-          ]
+        pointer: {
+          itemStyle: {
+            color: '#1890ff'
+          }
+        },
+        axisTick: {
+          distance: -20,
+          length: 8,
+          lineStyle: {
+            color: '#fff',
+            width: 2
+          }
+        },
+        splitLine: {
+          distance: -20,
+          length: 20,
+          lineStyle: {
+            color: '#fff',
+            width: 4
+          }
+        },
+        axisLabel: {
+          color: 'auto',
+          distance: 40,
+          fontSize: 12
         }
       }
     ]
   });
 
-  // 获取响应时间状态
-  const getResponseStatus = (responseTime: number) => {
-    if (responseTime < 200) return '优秀';
-    if (responseTime < 250) return '良好';
-    if (responseTime < 350) return '警告';
-    return '危险';
-  };
-
-  // 资源使用率仪表盘
-  const getResourceGaugeOption = (value: number, color: string) => ({
-    series: [
-      {
-        name: '使用率',
-        type: 'gauge',
-        center: ['50%', '60%'],
-        radius: '80%',
-        min: 0,
-        max: 100,
-        splitNumber: 10,
-        axisLine: {
-          lineStyle: {
-            color: [[0.3, '#67e0e3'], [0.7, '#37a2da'], [1, '#fd666d']],
-            width: 8
-          }
-        },
-        pointer: {
-          itemStyle: { color: color }
-        },
-        axisTick: { show: false },
-        splitLine: {
-          length: 15,
-          lineStyle: { width: 2, color: '#999' }
-        },
-        axisLabel: {
-          color: '#999',
-          fontSize: 12
-        },
-        detail: {
-          valueAnimation: true,
-          formatter: '{value}%',
-          color: color,
-          fontSize: 20,
-          offsetCenter: [0, '70%']
-        },
-        data: [{ value: value }]
-      }
-    ]
-  });
-
-  // 最近告警数据
-  const recentAlerts = [
+  // 最近活动数据
+  const recentActivities = [
     {
-      id: '1',
-      type: 'error',
-      title: '支付服务响应超时',
-      description: '支付服务平均响应时间超过500ms',
-      time: '2024-06-15 14:30:00',
-      status: 'active'
+      id: 1,
+      type: 'success',
+      title: t('tasks.inspection.title'),
+      description: t('messages.operationSuccess'),
+      time: '2分钟前',
+      icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />
     },
     {
-      id: '2',
+      id: 2,
       type: 'warning',
-      title: '数据库连接数过高',
-      description: 'MySQL连接数达到180，接近上限',
-      time: '2024-06-15 14:15:00',
-      status: 'active'
+      title: t('dashboard.alertSummary'),
+      description: t('common.warning'),
+      time: '5分钟前',
+      icon: <AlertOutlined style={{ color: '#faad14' }} />
     },
     {
-      id: '3',
+      id: 3,
       type: 'info',
-      title: '安全扫描完成',
-      description: '发现1个中等风险漏洞',
-      time: '2024-06-15 02:00:00',
-      status: 'resolved'
+      title: t('agents.title'),
+      description: t('common.running'),
+      time: '10分钟前',
+      icon: <RocketOutlined style={{ color: '#1890ff' }} />
     }
-  ];
-
-  // 热门实体排行
-  const topEntities = [
-    { name: '用户服务', usage: 1247, trend: 'up' },
-    { name: '订单服务', usage: 1156, trend: 'up' },
-    { name: '支付服务', usage: 987, trend: 'down' },
-    { name: 'API网关', usage: 856, trend: 'up' },
-    { name: '数据库集群', usage: 734, trend: 'stable' }
   ];
 
   return (
     <PageContainer>
-      {/* 页面标题和控制栏 */}
+      {/* 页面头部 */}
       <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <Title level={2} style={{ margin: 0 }}>
-              <Space>
-                <DashboardOutlined style={{ color: '#1890ff' }} />
-                运维仪表盘
-              </Space>
-            </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16, color: '#666' }}>
-              系统运行状态总览，实时监控各项关键指标
-            </Paragraph>
-          </div>
-          <Space>
-            <Select value={timeRange} onChange={setTimeRange} style={{ width: 120 }}>
-              <Option value="1d">近1天</Option>
-              <Option value="7d">近7天</Option>
-              <Option value="30d">近30天</Option>
-            </Select>
-            <Button icon={<ArrowUpOutlined />}>
-              刷新
-            </Button>
-          </Space>
-        </div>
+        <Title level={2}>{t('dashboard.title')}</Title>
+        <Paragraph>{t('dashboard.subtitle')}</Paragraph>
       </div>
 
-      {/* 核心指标统计 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
+      {/* 系统概览统计 */}
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="平面总数"
+              title={t('planes.stats.totalPlanes')}
               value={systemStats.totalPlanes}
-              suffix="个"
+              prefix={<AppstoreOutlined />}
               valueStyle={{ color: '#1890ff' }}
-              prefix={<DatabaseOutlined />}
             />
-            <div style={{ marginTop: 8 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                较昨日 +2
-              </Text>
-            </div>
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="实体总数"
+              title={t('entities.stats.totalEntities')}
               value={systemStats.totalEntities}
-              suffix="个"
+              prefix={<DatabaseOutlined />}
               valueStyle={{ color: '#52c41a' }}
-              prefix={<ApiOutlined />}
             />
-            <div style={{ marginTop: 8 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                较昨日 +8
-              </Text>
-            </div>
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="运行任务"
-              value={systemStats.runningTasks}
-              suffix={`/${systemStats.totalTaskCollections}`}
-              valueStyle={{ color: '#faad14' }}
+              title={t('sequences.stats.totalSequences')}
+              value={systemStats.totalSequences}
               prefix={<ThunderboltOutlined />}
+              valueStyle={{ color: '#722ed1' }}
             />
-            <div style={{ marginTop: 8 }}>
-              <Progress 
-                percent={(systemStats.runningTasks / systemStats.totalTaskCollections) * 100} 
-                size="small" 
-                showInfo={false}
-              />
-            </div>
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="系统健康度"
-              value={systemStats.systemHealth}
-              suffix="%"
-              valueStyle={{ color: '#722ed1' }}
-              prefix={<HeartOutlined />}
+              title={t('dashboard.activeUsers')}
+              value={systemStats.runningTasks}
+              prefix={<UserOutlined />}
+              suffix={<ArrowUpOutlined style={{ color: '#52c41a' }} />}
+              valueStyle={{ color: '#faad14' }}
             />
-            <div style={{ marginTop: 8 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                优秀
-              </Text>
-            </div>
           </StatsCard>
         </Col>
       </Row>
 
-      {/* 告警信息 */}
-      {systemStats.activeAlerts > 0 && (
-        <Alert
-          message={`当前有 ${systemStats.activeAlerts} 个活跃告警`}
-          description="请及时处理系统告警，确保服务稳定运行"
-          type="warning"
-          showIcon
-          style={{ marginBottom: 24 }}
-          action={
-            <Button size="small" type="primary">
-              查看详情
-            </Button>
-          }
-        />
-      )}
-
       {/* 图表区域 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col xs={24} lg={12}>
-          <ChartCard title="任务执行趋势">
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={24} lg={16}>
+          <ChartCard title={t('dashboard.performanceMetrics')}>
             <ReactECharts 
               option={getTaskTrendOption()} 
               style={{ height: '300px' }}
@@ -537,31 +304,10 @@ const Dashboard: React.FC = () => {
             />
           </ChartCard>
         </Col>
-        <Col xs={24} lg={12}>
-          <ChartCard title="系统健康状态">
-            <ReactECharts 
-              option={getHealthStatusOption()} 
-              style={{ height: '300px' }}
-              opts={{ renderer: 'svg' }}
-            />
-          </ChartCard>
-        </Col>
-      </Row>
-
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col xs={24} lg={16}>
-          <ChartCard title="任务成功率统计">
-            <ReactECharts 
-              option={getSuccessRateOption()} 
-              style={{ height: '300px' }}
-              opts={{ renderer: 'svg' }}
-            />
-          </ChartCard>
-        </Col>
         <Col xs={24} lg={8}>
-          <ChartCard title="平均响应时间">
+          <ChartCard title={t('dashboard.systemStatus')}>
             <ReactECharts 
-              option={getResponseTimeOption()} 
+              option={getSystemHealthOption()} 
               style={{ height: '300px' }}
               opts={{ renderer: 'svg' }}
             />
@@ -569,112 +315,47 @@ const Dashboard: React.FC = () => {
         </Col>
       </Row>
 
-      {/* 资源使用率仪表盘 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={8}>
-          <ChartCard title="CPU使用率">
-            <ReactECharts 
-              option={getResourceGaugeOption(68, '#1890ff')} 
-              style={{ height: '200px' }}
-              opts={{ renderer: 'svg' }}
-            />
-          </ChartCard>
-        </Col>
-        <Col xs={24} sm={8}>
-          <ChartCard title="内存使用率">
-            <ReactECharts 
-              option={getResourceGaugeOption(72, '#52c41a')} 
-              style={{ height: '200px' }}
-              opts={{ renderer: 'svg' }}
-            />
-          </ChartCard>
-        </Col>
-        <Col xs={24} sm={8}>
-          <ChartCard title="磁盘使用率">
-            <ReactECharts 
-              option={getResourceGaugeOption(45, '#faad14')} 
-              style={{ height: '200px' }}
-              opts={{ renderer: 'svg' }}
-            />
-          </ChartCard>
-        </Col>
-      </Row>
-
-      {/* 详细信息区域 */}
-      <Row gutter={16}>
+      {/* 最近活动和快捷操作 */}
+      <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
-          <AlertCard title="最近告警">
+          <Card title={t('dashboard.recentActivities')}>
             <List
               itemLayout="horizontal"
-              dataSource={recentAlerts}
+              dataSource={recentActivities}
               renderItem={item => (
-                <List.Item
-                  actions={[
-                    <Tag color={item.status === 'active' ? 'red' : 'green'}>
-                      {item.status === 'active' ? '活跃' : '已解决'}
-                    </Tag>
-                  ]}
-                >
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar 
-                        icon={
-                          item.type === 'error' ? <BugOutlined /> :
-                          item.type === 'warning' ? <AlertOutlined /> :
-                          <CheckCircleOutlined />
-                        }
-                        style={{
-                          backgroundColor: 
-                            item.type === 'error' ? '#ff4d4f' :
-                            item.type === 'warning' ? '#faad14' :
-                            '#52c41a'
-                        }}
-                      />
-                    }
-                    title={item.title}
-                    description={
-                      <div>
-                        <div>{item.description}</div>
-                        <Text type="secondary" style={{ fontSize: 12 }}>
-                          {item.time}
-                        </Text>
-                      </div>
-                    }
-                  />
-                </List.Item>
-              )}
-            />
-          </AlertCard>
-        </Col>
-        <Col xs={24} lg={12}>
-          <AlertCard title="热门实体排行">
-            <List
-              itemLayout="horizontal"
-              dataSource={topEntities}
-              renderItem={(item, index) => (
                 <List.Item>
                   <List.Item.Meta
-                    avatar={
-                      <Badge 
-                        count={index + 1} 
-                        style={{ 
-                          backgroundColor: index < 3 ? '#faad14' : '#d9d9d9',
-                          color: index < 3 ? '#fff' : '#666'
-                        }}
-                      />
+                    avatar={<Avatar icon={item.icon} />}
+                    title={item.title}
+                    description={
+                      <Space direction="vertical" size={0}>
+                        <Text type="secondary">{item.description}</Text>
+                        <Text type="secondary" style={{ fontSize: '12px' }}>{item.time}</Text>
+                      </Space>
                     }
-                    title={item.name}
-                    description={`使用次数: ${item.usage}`}
                   />
-                  <div>
-                    {item.trend === 'up' && <ArrowUpOutlined style={{ color: '#52c41a' }} />}
-                    {item.trend === 'down' && <ArrowUpOutlined style={{ color: '#ff4d4f', transform: 'rotate(180deg)' }} />}
-                    {item.trend === 'stable' && <span style={{ color: '#faad14' }}>—</span>}
-                  </div>
                 </List.Item>
               )}
             />
-          </AlertCard>
+          </Card>
+        </Col>
+        <Col xs={24} lg={12}>
+          <Card title={t('dashboard.quickActions')}>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <Button type="primary" block icon={<RocketOutlined />}>
+                {t('common.create')} {t('tasks.inspection.title')}
+              </Button>
+              <Button block icon={<DatabaseOutlined />}>
+                {t('common.view')} {t('entities.title')}
+              </Button>
+              <Button block icon={<AlertOutlined />}>
+                {t('dashboard.alertSummary')}
+              </Button>
+              <Button block icon={<SafetyCertificateOutlined />}>
+                {t('systemSettings.title')}
+              </Button>
+            </Space>
+          </Card>
         </Col>
       </Row>
     </PageContainer>

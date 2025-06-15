@@ -32,6 +32,7 @@ import {
   MobileOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import SequenceDiagram from '../../components/SequenceDiagram';
 
@@ -89,9 +90,10 @@ const SequenceManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedSequence, setSelectedSequence] = useState<SequenceData | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    setPageTitle('时序管理');
+    setPageTitle(t('sequences.title'));
   }, []);
 
   // 时序样例数据

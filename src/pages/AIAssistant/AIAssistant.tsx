@@ -28,6 +28,7 @@ import {
   ClockCircleOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 
 const { Title, Paragraph, Text } = Typography;
@@ -131,13 +132,14 @@ const AIAssistant: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    setPageTitle('AI助手');
+    setPageTitle(t('aiAssistant.title'));
     // 初始欢迎消息
     const welcomeMessage: Message = {
       id: '1',
-      content: '你好！我是AI运维助手，可以帮助你解答关于系统运维、平面管理、实体关系等方面的问题。有什么我可以帮助你的吗？',
+      content: t('dashboard.welcome'),
       isUser: false,
       timestamp: new Date(),
     };

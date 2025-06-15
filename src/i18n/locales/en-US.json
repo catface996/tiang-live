@@ -25,7 +25,30 @@
     "description": "Description",
     "name": "Name",
     "type": "Type",
-    "level": "Level"
+    "level": "Level",
+    "create": "Create",
+    "update": "Update",
+    "export": "Export",
+    "import": "Import",
+    "reset": "Reset",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "finish": "Finish",
+    "close": "Close",
+    "open": "Open",
+    "enable": "Enable",
+    "disable": "Disable",
+    "active": "Active",
+    "inactive": "Inactive",
+    "online": "Online",
+    "offline": "Offline",
+    "running": "Running",
+    "stopped": "Stopped",
+    "pending": "Pending",
+    "failed": "Failed",
+    "completed": "Completed"
   },
   "layout": {
     "title": "Universal Planar AI Operations System",
@@ -50,11 +73,42 @@
     "systemSettings": "System Settings",
     "modelManagement": "Model Management",
     "promptTemplates": "Prompt Templates",
-    "tagManagement": "Tag Management"
+    "tagManagement": "Tag Management",
+    "aiAssistant": "AI Assistant"
+  },
+  "dashboard": {
+    "title": "System Overview",
+    "subtitle": "Overall operational status and key metrics of AI operations system",
+    "welcome": "Welcome to AI Operations System",
+    "systemOverview": "System Overview",
+    "recentActivities": "Recent Activities",
+    "performanceMetrics": "Performance Metrics",
+    "quickActions": "Quick Actions",
+    "systemStatus": "System Status",
+    "resourceUsage": "Resource Usage",
+    "alertSummary": "Alert Summary",
+    "taskProgress": "Task Progress",
+    "healthScore": "Health Score",
+    "uptime": "Uptime",
+    "totalRequests": "Total Requests",
+    "responseTime": "Response Time",
+    "errorRate": "Error Rate",
+    "activeUsers": "Active Users",
+    "dataVolume": "Data Volume",
+    "cpuUsage": "CPU Usage",
+    "memoryUsage": "Memory Usage",
+    "diskUsage": "Disk Usage",
+    "networkTraffic": "Network Traffic",
+    "executionCount": "Execution Count",
+    "systemHealthScore": "System Health Score"
   },
   "planes": {
     "title": "Plane Management",
     "subtitle": "Manage system planes and their hierarchical dependencies",
+    "createTitle": "Create Plane",
+    "editTitle": "Edit Plane",
+    "createSubtitle": "Create new plane definition",
+    "editSubtitle": "Modify plane configuration and properties",
     "stats": {
       "totalPlanes": "Total Planes",
       "activePlanes": "Active Planes",
@@ -106,35 +160,316 @@
       "businessSystem": "Business System Plane",
       "businessChain": "Business Chain Plane",
       "businessScenario": "Business Scenario Plane"
+    },
+    "form": {
+      "basicInfo": "Basic Information",
+      "planeName": "Plane Name",
+      "planeId": "Plane ID",
+      "displayName": "Display Name",
+      "planeLevel": "Plane Level",
+      "dependencies": "Dependencies",
+      "configuration": "Configuration",
+      "icon": "Icon",
+      "color": "Color",
+      "theme": "Theme"
     }
-  },
-  "dashboard": {
-    "title": "System Overview",
-    "welcome": "Welcome to AI Operations System",
-    "systemOverview": "System Overview",
-    "recentActivities": "Recent Activities",
-    "performanceMetrics": "Performance Metrics",
-    "quickActions": "Quick Actions"
   },
   "entities": {
     "title": "Entity Management",
-    "subtitle": "Manage various entity objects in the system"
+    "subtitle": "Manage various entity objects and properties in the system",
+    "createTitle": "Create Entity",
+    "editTitle": "Edit Entity",
+    "stats": {
+      "totalEntities": "Total Entities",
+      "activeEntities": "Active Entities",
+      "entityTypes": "Entity Types",
+      "relationships": "Relationships"
+    },
+    "columns": {
+      "entityName": "Entity Name",
+      "entityType": "Entity Type",
+      "plane": "Plane",
+      "status": "Status",
+      "lastUpdate": "Last Update"
+    },
+    "form": {
+      "entityName": "Entity Name",
+      "entityType": "Entity Type",
+      "belongsToPlane": "Belongs to Plane",
+      "properties": "Properties",
+      "tags": "Tags"
+    }
   },
   "relationships": {
     "title": "Relationship Graph",
-    "subtitle": "Visualize relationship networks between entities"
+    "subtitle": "Visualize relationship networks and dependency structures between entities",
+    "graphView": "Graph View",
+    "listView": "List View",
+    "filterByType": "Filter by Type",
+    "filterByPlane": "Filter by Plane",
+    "relationshipTypes": {
+      "dependsOn": "Depends On",
+      "contains": "Contains",
+      "references": "References",
+      "communicates": "Communicates"
+    }
   },
   "sequences": {
     "title": "Sequence Management",
-    "subtitle": "Manage business sequence definitions and execution"
+    "subtitle": "Manage business sequence definitions and execution processes",
+    "createTitle": "Create Sequence",
+    "editTitle": "Edit Sequence",
+    "stats": {
+      "totalSequences": "Total Sequences",
+      "activeSequences": "Active Sequences",
+      "executionCount": "Execution Count",
+      "successRate": "Success Rate"
+    },
+    "columns": {
+      "sequenceName": "Sequence Name",
+      "triggerType": "Trigger Type",
+      "status": "Status",
+      "lastExecution": "Last Execution",
+      "successRate": "Success Rate"
+    }
   },
   "agents": {
     "title": "AI Agents",
-    "subtitle": "AI Agent management and monitoring"
+    "subtitle": "AI Agent management and monitoring center",
+    "createTitle": "Create Agent",
+    "editTitle": "Edit Agent",
+    "stats": {
+      "totalAgents": "Total Agents",
+      "activeAgents": "Active Agents",
+      "totalTasks": "Total Tasks",
+      "successRate": "Success Rate"
+    },
+    "columns": {
+      "agentName": "Agent Name",
+      "agentType": "Type",
+      "status": "Status",
+      "tasksCompleted": "Tasks Completed",
+      "lastActive": "Last Active"
+    },
+    "form": {
+      "agentName": "Agent Name",
+      "agentType": "Agent Type",
+      "model": "Model",
+      "prompt": "Prompt Template",
+      "capabilities": "Capabilities",
+      "parameters": "Parameters"
+    },
+    "types": {
+      "monitoring": "Monitoring Agent",
+      "analysis": "Analysis Agent",
+      "automation": "Automation Agent",
+      "assistant": "Assistant Agent"
+    }
   },
   "reports": {
     "title": "Report Management",
-    "subtitle": "Generate and manage various operational reports"
+    "subtitle": "Generate and manage various operational reports",
+    "createTitle": "Create Report",
+    "editTitle": "Edit Report",
+    "generateReport": "Generate Report",
+    "scheduleReport": "Schedule Report",
+    "stats": {
+      "totalReports": "Total Reports",
+      "scheduledReports": "Scheduled Reports",
+      "generatedToday": "Generated Today",
+      "averageSize": "Average Size"
+    },
+    "columns": {
+      "reportName": "Report Name",
+      "reportType": "Report Type",
+      "status": "Status",
+      "generatedTime": "Generated Time",
+      "fileSize": "File Size"
+    },
+    "types": {
+      "system": "System Report",
+      "performance": "Performance Report",
+      "security": "Security Report",
+      "business": "Business Report"
+    }
+  },
+  "tasks": {
+    "title": "Task Management",
+    "subtitle": "Manage various tasks and execution status in the system",
+    "inspection": {
+      "title": "Inspection Tasks",
+      "subtitle": "Automated inspection task management and monitoring",
+      "createTitle": "Create Inspection Task",
+      "stats": {
+        "totalTasks": "Total Tasks",
+        "runningTasks": "Running",
+        "completedToday": "Completed Today",
+        "failureRate": "Failure Rate"
+      },
+      "columns": {
+        "taskName": "Task Name",
+        "targetSystem": "Target System",
+        "schedule": "Schedule",
+        "lastRun": "Last Run",
+        "status": "Status"
+      }
+    },
+    "hooks": {
+      "title": "Hook Tasks",
+      "subtitle": "Event-driven hook task management",
+      "createTitle": "Create Hook Task",
+      "stats": {
+        "totalHooks": "Total Hooks",
+        "activeHooks": "Active Hooks",
+        "triggeredToday": "Triggered Today",
+        "successRate": "Success Rate"
+      },
+      "columns": {
+        "hookName": "Hook Name",
+        "triggerEvent": "Trigger Event",
+        "status": "Status",
+        "lastTriggered": "Last Triggered",
+        "executionCount": "Execution Count"
+      }
+    },
+    "collections": {
+      "title": "Task Collections",
+      "subtitle": "Task collection management and batch execution",
+      "createTitle": "Create Task Collection",
+      "stats": {
+        "totalCollections": "Total Collections",
+        "activeCollections": "Active Collections",
+        "totalTasks": "Total Tasks",
+        "executionRate": "Execution Rate"
+      },
+      "columns": {
+        "collectionName": "Collection Name",
+        "taskCount": "Task Count",
+        "status": "Status",
+        "lastExecution": "Last Execution",
+        "progress": "Progress"
+      }
+    }
+  },
+  "solutions": {
+    "title": "Industry Solutions",
+    "subtitle": "Pre-configured industry solutions and best practices",
+    "createTitle": "Create Solution",
+    "editTitle": "Edit Solution",
+    "stats": {
+      "totalSolutions": "Total Solutions",
+      "activeSolutions": "Active Solutions",
+      "deployedSolutions": "Deployed",
+      "successRate": "Success Rate"
+    },
+    "columns": {
+      "solutionName": "Solution Name",
+      "industry": "Industry",
+      "version": "Version",
+      "status": "Status",
+      "deployments": "Deployments"
+    },
+    "industries": {
+      "finance": "Finance",
+      "healthcare": "Healthcare",
+      "manufacturing": "Manufacturing",
+      "retail": "Retail",
+      "education": "Education",
+      "government": "Government"
+    }
+  },
+  "systemSettings": {
+    "title": "System Settings",
+    "subtitle": "System configuration and management functions",
+    "models": {
+      "title": "Model Management",
+      "subtitle": "AI model configuration and version management",
+      "createTitle": "Add Model",
+      "editTitle": "Edit Model",
+      "stats": {
+        "totalModels": "Total Models",
+        "activeModels": "Active Models",
+        "totalCalls": "Total Calls",
+        "averageLatency": "Average Latency"
+      },
+      "columns": {
+        "modelName": "Model Name",
+        "provider": "Provider",
+        "version": "Version",
+        "status": "Status",
+        "callCount": "Call Count"
+      },
+      "form": {
+        "modelName": "Model Name",
+        "provider": "Provider",
+        "apiKey": "API Key",
+        "endpoint": "Endpoint",
+        "parameters": "Parameters"
+      }
+    },
+    "prompts": {
+      "title": "Prompt Templates",
+      "subtitle": "AI prompt template management and optimization",
+      "createTitle": "Create Template",
+      "editTitle": "Edit Template",
+      "stats": {
+        "totalTemplates": "Total Templates",
+        "activeTemplates": "Active Templates",
+        "usageCount": "Usage Count",
+        "averageRating": "Average Rating"
+      },
+      "columns": {
+        "templateName": "Template Name",
+        "category": "Category",
+        "language": "Language",
+        "usageCount": "Usage Count",
+        "rating": "Rating"
+      },
+      "form": {
+        "templateName": "Template Name",
+        "category": "Category",
+        "content": "Template Content",
+        "variables": "Variables",
+        "examples": "Examples"
+      }
+    },
+    "tags": {
+      "title": "Tag Management",
+      "subtitle": "System tag classification and management",
+      "createTitle": "Create Tag",
+      "editTitle": "Edit Tag",
+      "stats": {
+        "totalTags": "Total Tags",
+        "activeTags": "Active Tags",
+        "taggedItems": "Tagged Items",
+        "categories": "Categories"
+      },
+      "columns": {
+        "tagName": "Tag Name",
+        "category": "Category",
+        "color": "Color",
+        "usageCount": "Usage Count",
+        "description": "Description"
+      },
+      "form": {
+        "tagName": "Tag Name",
+        "category": "Category",
+        "color": "Color",
+        "icon": "Icon",
+        "description": "Description"
+      }
+    }
+  },
+  "aiAssistant": {
+    "title": "AI Assistant",
+    "subtitle": "Intelligent conversation assistant and Q&A",
+    "chatPlaceholder": "Please enter your question...",
+    "send": "Send",
+    "clear": "Clear Chat",
+    "suggestions": "Suggested Questions",
+    "thinking": "Thinking...",
+    "error": "Sorry, an error occurred",
+    "retry": "Retry"
   },
   "validation": {
     "required": "This field is required",
@@ -142,14 +477,42 @@
     "phone": "Please enter a valid phone number",
     "url": "Please enter a valid URL",
     "minLength": "Minimum {{min}} characters required",
-    "maxLength": "Maximum {{max}} characters allowed"
+    "maxLength": "Maximum {{max}} characters allowed",
+    "pattern": "Invalid format",
+    "number": "Please enter a valid number",
+    "integer": "Please enter an integer",
+    "positive": "Please enter a positive number",
+    "range": "Please enter a value between {{min}} and {{max}}"
   },
   "messages": {
     "deleteConfirm": "Are you sure you want to delete this record?",
     "deleteSuccess": "Deleted successfully",
     "saveSuccess": "Saved successfully",
+    "updateSuccess": "Updated successfully",
+    "createSuccess": "Created successfully",
     "loadError": "Failed to load data",
     "networkError": "Network connection error",
-    "permissionDenied": "Permission denied"
+    "permissionDenied": "Permission denied",
+    "operationSuccess": "Operation successful",
+    "operationFailed": "Operation failed",
+    "confirmAction": "Confirm this action?",
+    "unsavedChanges": "You have unsaved changes. Are you sure you want to leave?"
+  },
+  "filters": {
+    "all": "All",
+    "active": "Active",
+    "inactive": "Inactive",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "lastWeek": "Last Week",
+    "lastMonth": "Last Month",
+    "custom": "Custom"
+  },
+  "pagination": {
+    "total": "Total {{total}} items",
+    "pageSize": "{{size}} items per page",
+    "goto": "Go to",
+    "page": "Page"
   }
 }
