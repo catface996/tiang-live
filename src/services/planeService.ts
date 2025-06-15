@@ -102,18 +102,20 @@ class PlaneService extends BaseApiService {
   }
 
   // 平面指标相关API
-  async getPlaneMetrics(planeId?: string, timeRange?: { start: string; end: string }): Promise<PlaneMetrics> {
+  async getPlaneMetrics(planeId?: string, timeRange?: { start: string; end: string }): Promise<PlaneMetrics[]> {
     if (USE_STATIC_DATA) {
       const response = await planeStaticDataService.getPlaneMetrics();
-      return response.data;
+      // 将单个PlaneMetrics对象转换为数组格式，以匹配组件期望
+      return response.data.planeMetrics || [];
     }
     return this.get('/metrics', { params: { planeId, ...timeRange } });
   }
 
-  async getAllPlanesMetrics(): Promise<PlaneMetrics> {
+  async getAllPlanesMetrics(): Promise<PlaneMetrics[]> {
     if (USE_STATIC_DATA) {
       const response = await planeStaticDataService.getPlaneMetrics();
-      return response.data;
+      // 直接返回planeMetrics数组
+      return response.data.planeMetrics || [];
     }
     return this.get('/metrics');
   }
