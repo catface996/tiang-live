@@ -679,11 +679,6 @@ const IndustrySolutionManagement: React.FC = () => {
           }
         ]}
         onRefresh={() => window.location.reload()}
-        extraActions={
-          <Button type="primary" icon={<PlusOutlined />}>
-            {t('solutions.actions.create')}
-          </Button>
-        }
       />
 
       {/* 方案卡片列表 */}

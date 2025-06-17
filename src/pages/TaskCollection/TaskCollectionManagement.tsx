@@ -126,7 +126,6 @@ const TaskCollectionManagement: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState<TaskCollection | null>(null);
   const [selectedTask, setSelectedTask] = useState<TaskCollection | null>(null);
-  const [createModalVisible, setCreateModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterFrequency, setFilterFrequency] = useState('all');
@@ -609,11 +608,6 @@ const TaskCollectionManagement: React.FC = () => {
           }
         ]}
         onRefresh={() => window.location.reload()}
-        extraActions={
-          <Button type="primary" icon={<PlusOutlined />} onClick={() => setCreateModalVisible(true)}>
-            {t('tasks.collections.actions.create')}
-          </Button>
-        }
       />
 
       {/* 任务集合卡片列表 */}

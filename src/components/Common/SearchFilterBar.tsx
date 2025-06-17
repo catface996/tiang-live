@@ -66,12 +66,22 @@ const FilterBar = styled.div`
     }
     
     .ant-input-search-button {
-      background: var(--primary-color);
-      border-color: var(--primary-color);
+      background: transparent !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-color) !important;
       
       &:hover {
-        background: var(--primary-color-hover);
-        border-color: var(--primary-color-hover);
+        background: var(--button-hover-bg) !important;
+        border-color: var(--primary-color) !important;
+        color: var(--primary-color) !important;
+      }
+      
+      .anticon {
+        color: var(--text-color) !important;
+      }
+      
+      &:hover .anticon {
+        color: var(--primary-color) !important;
       }
     }
   }

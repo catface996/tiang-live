@@ -493,11 +493,6 @@ sequenceDiagram
           }
         ]}
         onRefresh={() => window.location.reload()}
-        extraActions={
-          <Button type="primary" icon={<PlusOutlined />}>
-            创建时序
-          </Button>
-        }
       />
 
       {/* 时序卡片列表 */}
