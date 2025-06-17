@@ -50,6 +50,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../../utils';
+import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -138,6 +139,9 @@ const HookTasks: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingHook, setEditingHook] = useState<HookTask | null>(null);
   const [selectedHook, setSelectedHook] = useState<HookTask | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
   const { t } = useTranslation();
 
@@ -423,46 +427,41 @@ const HookTasks: React.FC = () => {
       </Row>
 
       {/* 筛选栏 */}
-      <Card style={{ marginBottom: 24 }}>
-        <FilterBar>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder={t('tasks.hooks.search.placeholder')}
-                prefix={<ApiOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder={t('tasks.hooks.search.type')}
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(hookTypeMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {config.name}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder={t('tasks.hooks.search.status')}
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="active">活跃</Option>
-                <Option value="inactive">停用</Option>
-                <Option value="error">错误</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FilterBar>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder={t('tasks.hooks.search.placeholder')}
+        filters={[
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: t('tasks.hooks.search.type'),
+            width: 120,
+            options: [
+              { value: 'all', label: '所有类型' },
+              ...Object.entries(hookTypeMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: t('tasks.hooks.search.status'),
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'active', label: '活跃' },
+              { value: 'inactive', label: '停用' },
+              { value: 'error', label: '错误' }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+      />
 
       {/* Hook任务卡片列表 */}
       <Row gutter={16}>

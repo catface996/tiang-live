@@ -52,6 +52,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../../utils';
+import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -139,6 +140,9 @@ const InspectionTasks: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState<InspectionTask | null>(null);
   const [selectedTask, setSelectedTask] = useState<InspectionTask | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
   const { t } = useTranslation();
 
@@ -569,47 +573,42 @@ const InspectionTasks: React.FC = () => {
       </Row>
 
       {/* 筛选栏 */}
-      <Card style={{ marginBottom: 24 }}>
-        <FilterBar>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder={t('tasks.inspection.search.placeholder')}
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder="任务类型"
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(taskTypeMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {config.name}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder="状态"
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="running">运行中</Option>
-                <Option value="paused">已暂停</Option>
-                <Option value="stopped">已停止</Option>
-                <Option value="error">错误</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FilterBar>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder={t('tasks.inspection.search.placeholder')}
+        filters={[
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: '任务类型',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有类型' },
+              ...Object.entries(taskTypeMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: '状态',
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'running', label: '运行中' },
+              { value: 'paused', label: '已暂停' },
+              { value: 'stopped', label: '已停止' },
+              { value: 'error', label: '错误' }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+      />
 
       {/* 巡检任务卡片列表 */}
       <Row gutter={16}>
