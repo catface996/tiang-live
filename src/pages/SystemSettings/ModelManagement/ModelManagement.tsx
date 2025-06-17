@@ -47,6 +47,7 @@ import {
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../../utils';
+import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -124,6 +125,10 @@ const ModelManagement: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingModel, setEditingModel] = useState<ModelConfig | null>(null);
   const [selectedModel, setSelectedModel] = useState<ModelConfig | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterProvider, setFilterProvider] = useState('all');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -524,62 +529,55 @@ const ModelManagement: React.FC = () => {
       </Row>
 
       {/* 筛选栏 */}
-      <Card style={{ marginBottom: 24 }}>
-        <FilterBar>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder="搜索模型名称、提供商..."
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder="提供商"
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(providerMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {key}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder="模型类型"
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(modelTypeMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {config.name}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder="状态"
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="active">活跃</Option>
-                <Option value="inactive">停用</Option>
-                <Option value="testing">测试中</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FilterBar>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder="搜索模型名称、提供商..."
+        filters={[
+          {
+            key: 'provider',
+            value: filterProvider,
+            onChange: setFilterProvider,
+            placeholder: '提供商',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有提供商' },
+              ...Object.entries(providerMap).map(([key, config]) => ({
+                value: key,
+                label: key
+              }))
+            ]
+          },
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: '模型类型',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有类型' },
+              ...Object.entries(modelTypeMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: '状态',
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'active', label: '活跃' },
+              { value: 'inactive', label: '停用' },
+              { value: 'testing', label: '测试中' }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+      />
 
       {/* 模型卡片列表 */}
       <Row gutter={16}>

@@ -48,6 +48,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
+import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -130,6 +131,10 @@ const PromptTemplates: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState<PromptTemplate | null>(null);
   const [selectedPrompt, setSelectedPrompt] = useState<PromptTemplate | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [filterDifficulty, setFilterDifficulty] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -548,57 +553,54 @@ API接口：{api_details}
       </Row>
 
       {/* 筛选栏 */}
-      <Card style={{ marginBottom: 24 }}>
-        <FilterBar>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder="搜索提示词名称、描述、标签..."
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder="分类"
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(categoryMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {key}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder="难度"
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="beginner">初级</Option>
-                <Option value="intermediate">中级</Option>
-                <Option value="advanced">高级</Option>
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder="状态"
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="public">公开</Option>
-                <Option value="private">私有</Option>
-                <Option value="favorite">收藏</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FilterBar>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder="搜索提示词名称、描述、标签..."
+        filters={[
+          {
+            key: 'category',
+            value: filterCategory,
+            onChange: setFilterCategory,
+            placeholder: '分类',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有分类' },
+              ...Object.entries(categoryMap).map(([key, config]) => ({
+                value: key,
+                label: key
+              }))
+            ]
+          },
+          {
+            key: 'difficulty',
+            value: filterDifficulty,
+            onChange: setFilterDifficulty,
+            placeholder: '难度',
+            width: 100,
+            options: [
+              { value: 'all', label: '所有难度' },
+              { value: 'beginner', label: '初级' },
+              { value: 'intermediate', label: '中级' },
+              { value: 'advanced', label: '高级' }
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: '状态',
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'public', label: '公开' },
+              { value: 'private', label: '私有' },
+              { value: 'favorite', label: '收藏' }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+      />
 
       {/* 提示词卡片列表 */}
       <Row gutter={16}>
