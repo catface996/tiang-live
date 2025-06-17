@@ -35,6 +35,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
+import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -58,9 +59,33 @@ const TagCard = styled(Card)`
   transition: all 0.3s ease;
   cursor: pointer;
   
+  .ant-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const TagCardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+`;
+
+const TagCardContent = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: -4px; /* 负边距抵消子元素的边距 */
+  
+  .ant-tag {
+    margin: 4px !important; /* 所有方向统一4px边距，总间距为8px */
   }
 `;
 
@@ -73,6 +98,8 @@ const TagManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingTag, setEditingTag] = useState<any>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -278,27 +305,27 @@ const TagManagement: React.FC = () => {
       return (
         <Col xs={24} md={12} lg={8} key={category}>
           <TagCard>
-            <div style={{ marginBottom: 16 }}>
+            <TagCardHeader>
               <Space>
                 {config?.icon}
                 <Title level={4} style={{ margin: 0 }}>
                   {config?.name || category}
                 </Title>
-                <Badge count={tags.length} style={{ backgroundColor: config?.color }} />
               </Space>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <Badge count={tags.length} style={{ backgroundColor: config?.color }} />
+            </TagCardHeader>
+            <TagCardContent>
               {tags.map(tag => (
                 <Tag 
                   key={tag.key} 
                   color={tag.color}
-                  style={{ marginBottom: 4, cursor: 'pointer' }}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => handleEditTag(tag)}
                 >
                   {tag.name} ({tag.usageCount})
                 </Tag>
               ))}
-            </div>
+            </TagCardContent>
           </TagCard>
         </Col>
       );
@@ -332,7 +359,7 @@ const TagManagement: React.FC = () => {
       </PageHeader>
 
       {/* 统计信息 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
@@ -381,40 +408,36 @@ const TagManagement: React.FC = () => {
 
       {/* 分类展示 */}
       <Card title="标签分类" style={{ marginBottom: 24 }}>
-        <Row gutter={16}>
+        <Row gutter={[16, 16]}>
           {renderTagsByCategory()}
         </Row>
       </Card>
 
       {/* 标签列表 */}
       <Card title="标签列表">
-        <div style={{ marginBottom: 16 }}>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder="搜索标签名称、描述..."
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder="选择分类"
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(categoryMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {config.name}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-          </Row>
-        </div>
+        <SearchFilterBar
+          searchValue={searchText}
+          onSearchChange={setSearchText}
+          searchPlaceholder="搜索标签名称、描述..."
+          filters={[
+            {
+              key: 'category',
+              value: filterCategory,
+              onChange: setFilterCategory,
+              placeholder: '选择分类',
+              width: 120,
+              options: [
+                { value: 'all', label: '所有分类' },
+                ...Object.entries(categoryMap).map(([key, config]) => ({
+                  value: key,
+                  label: config.name
+                }))
+              ]
+            }
+          ]}
+          onRefresh={() => window.location.reload()}
+          style={{ marginBottom: 16 }}
+        />
 
         <Table
           columns={columns}
