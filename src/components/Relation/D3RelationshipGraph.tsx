@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Card, Spin, Alert, Space, Tag, Tooltip, Button } from 'antd';
+import { Card, Spin, Alert, Space, Tag, Button } from 'antd';
 import { FullscreenOutlined, ReloadOutlined, ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -11,6 +11,7 @@ interface Node extends d3.SimulationNodeDatum {
   name: string;
   type: string;
   level: number;
+  plane: string;
   description: string;
   status: string;
   [key: string]: any;
@@ -23,7 +24,21 @@ interface Link extends d3.SimulationLinkDatum<Node> {
   strength: number;
 }
 
+interface Plane {
+  id: string;
+  name: string;
+  level: number;
+  color: string;
+  borderColor: string;
+  description: string;
+  bounds: {
+    minLevel: number;
+    maxLevel: number;
+  };
+}
+
 interface GraphData {
+  planes: Plane[];
   nodes: Node[];
   links: Link[];
   metadata: any;
@@ -123,6 +138,26 @@ const D3RelationshipGraph: React.FC = () => {
     return sizes[level as keyof typeof sizes] || 12;
   };
 
+  // 计算平面边界框
+  const calculatePlaneBounds = (plane: Plane, nodes: Node[], width: number, height: number) => {
+    const planeNodes = nodes.filter(node => node.plane === plane.id);
+    if (planeNodes.length === 0) return null;
+
+    // 根据平面层级计算大致位置
+    const levelHeight = height / 4; // 4个平面
+    const planeIndex = plane.level - 1;
+    const baseY = planeIndex * levelHeight + 50;
+    
+    return {
+      x: 50,
+      y: baseY,
+      width: width - 100,
+      height: levelHeight - 20,
+      rx: 12,
+      ry: 12
+    };
+  };
+
   // 初始化图表
   const initializeGraph = () => {
     if (!svgRef.current || !containerRef.current || !graphData) return;
@@ -150,7 +185,53 @@ const D3RelationshipGraph: React.FC = () => {
     // 创建主容器组
     const g = svg.append('g');
 
-    // 创建力导向布局
+    // 绘制平面矩形框
+    const planeRects = g.append('g')
+      .attr('class', 'planes')
+      .selectAll('g')
+      .data(graphData.planes)
+      .enter().append('g')
+      .attr('class', 'plane');
+
+    planeRects.each(function(plane) {
+      const bounds = calculatePlaneBounds(plane, graphData.nodes, width, height);
+      if (!bounds) return;
+
+      const planeGroup = d3.select(this);
+      
+      // 绘制平面背景矩形
+      planeGroup.append('rect')
+        .attr('x', bounds.x)
+        .attr('y', bounds.y)
+        .attr('width', bounds.width)
+        .attr('height', bounds.height)
+        .attr('rx', bounds.rx)
+        .attr('ry', bounds.ry)
+        .attr('fill', plane.color)
+        .attr('stroke', plane.borderColor)
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '5,5')
+        .attr('opacity', 0.3);
+
+      // 添加平面标题
+      planeGroup.append('text')
+        .attr('x', bounds.x + 20)
+        .attr('y', bounds.y + 25)
+        .attr('font-size', '16px')
+        .attr('font-weight', 'bold')
+        .attr('fill', plane.borderColor)
+        .text(plane.name);
+
+      // 添加平面描述
+      planeGroup.append('text')
+        .attr('x', bounds.x + 20)
+        .attr('y', bounds.y + 45)
+        .attr('font-size', '12px')
+        .attr('fill', 'var(--text-secondary)')
+        .text(plane.description);
+    });
+
+    // 创建力导向布局，考虑平面约束
     const simulation = d3.forceSimulation<Node>(graphData.nodes)
       .force('link', d3.forceLink<Node, Link>(graphData.links)
         .id(d => d.id)
@@ -158,15 +239,35 @@ const D3RelationshipGraph: React.FC = () => {
           const sourceLevel = (d.source as Node).level;
           const targetLevel = (d.target as Node).level;
           const levelDiff = Math.abs(sourceLevel - targetLevel);
-          return levelDiff === 1 ? 100 : 150; // 相邻层级距离更近
+          return levelDiff === 1 ? 80 : 120; // 相邻层级距离更近
         })
         .strength(d => d.strength)
       )
-      .force('charge', d3.forceManyBody().strength(-300))
+      .force('charge', d3.forceManyBody().strength(-200))
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide().radius(d => getNodeSize(d.level) + 5))
-      .force('x', d3.forceX(width / 2).strength(0.1))
-      .force('y', d3.forceY(height / 2).strength(0.1));
+      .force('collision', d3.forceCollide().radius(d => getNodeSize(d.level) + 8))
+      // 添加平面约束力
+      .force('plane', () => {
+        graphData.nodes.forEach(node => {
+          const plane = graphData.planes.find(p => p.id === node.plane);
+          if (!plane) return;
+          
+          const bounds = calculatePlaneBounds(plane, graphData.nodes, width, height);
+          if (!bounds) return;
+
+          // 将节点约束在平面范围内
+          const padding = 30;
+          const minX = bounds.x + padding;
+          const maxX = bounds.x + bounds.width - padding;
+          const minY = bounds.y + padding + 50; // 留出标题空间
+          const maxY = bounds.y + bounds.height - padding;
+
+          if (node.x! < minX) node.x = minX;
+          if (node.x! > maxX) node.x = maxX;
+          if (node.y! < minY) node.y = minY;
+          if (node.y! > maxY) node.y = maxY;
+        });
+      });
 
     // 创建箭头标记
     const defs = g.append('defs');
@@ -406,6 +507,27 @@ const D3RelationshipGraph: React.FC = () => {
           <div style={{ marginBottom: 12, fontWeight: 'bold', fontSize: '14px' }}>
             图例
           </div>
+          
+          {/* 平面图例 */}
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>平面:</div>
+            {graphData?.planes.map((plane: Plane) => (
+              <div key={plane.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                <div
+                  style={{
+                    width: 16,
+                    height: 12,
+                    backgroundColor: plane.color,
+                    border: `1px solid ${plane.borderColor}`,
+                    borderRadius: 2,
+                    marginRight: 6
+                  }}
+                />
+                <span style={{ fontSize: '11px' }}>{plane.name}</span>
+              </div>
+            ))}
+          </div>
+
           <div style={{ marginBottom: 8 }}>
             <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>节点类型:</div>
             {graphData?.metadata.levels.map((level: any) => (
@@ -447,6 +569,7 @@ const D3RelationshipGraph: React.FC = () => {
             <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{tooltip.content.name}</div>
             <div style={{ marginBottom: 2 }}>类型: {tooltip.content.type}</div>
             <div style={{ marginBottom: 2 }}>层级: {tooltip.content.level}</div>
+            <div style={{ marginBottom: 2 }}>平面: {tooltip.content.plane}</div>
             <div style={{ marginBottom: 2 }}>状态: 
               <Tag color={tooltip.content.status === 'active' || tooltip.content.status === 'running' ? 'green' : 'red'} size="small" style={{ marginLeft: 4 }}>
                 {tooltip.content.status}
@@ -473,6 +596,7 @@ const D3RelationshipGraph: React.FC = () => {
               <div>ID: {selectedNode.id}</div>
               <div>类型: {selectedNode.type}</div>
               <div>层级: {selectedNode.level}</div>
+              <div>平面: {selectedNode.plane}</div>
               <div>状态: <Tag color={selectedNode.status === 'active' || selectedNode.status === 'running' ? 'green' : 'red'}>{selectedNode.status}</Tag></div>
             </div>
             <div>
