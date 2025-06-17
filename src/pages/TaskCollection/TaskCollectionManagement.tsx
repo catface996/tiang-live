@@ -49,6 +49,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
+import SearchFilterBar from '../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -125,6 +126,10 @@ const TaskCollectionManagement: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState<TaskCollection | null>(null);
   const [selectedTask, setSelectedTask] = useState<TaskCollection | null>(null);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterFrequency, setFilterFrequency] = useState('all');
   const [form] = Form.useForm();
   const { t } = useTranslation();
 
@@ -570,42 +575,46 @@ const TaskCollectionManagement: React.FC = () => {
       </Row>
 
       {/* 筛选栏 */}
-      <Card style={{ marginBottom: 24 }}>
-        <FilterBar>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder={t('tasks.collections.search.placeholder')}
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder="状态"
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="active">运行中</Option>
-                <Option value="paused">已暂停</Option>
-                <Option value="draft">草稿</Option>
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder="调度频率"
-                style={{ width: 120 }}
-                allowClear
-              >
-                <Option value="5min">每5分钟</Option>
-                <Option value="15min">每15分钟</Option>
-                <Option value="1hour">每小时</Option>
-                <Option value="1day">每天</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FilterBar>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder={t('tasks.collections.search.placeholder')}
+        filters={[
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: '状态',
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'active', label: '运行中' },
+              { value: 'paused', label: '已暂停' },
+              { value: 'draft', label: '草稿' }
+            ]
+          },
+          {
+            key: 'frequency',
+            value: filterFrequency,
+            onChange: setFilterFrequency,
+            placeholder: '调度频率',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有频率' },
+              { value: '5min', label: '每5分钟' },
+              { value: '15min', label: '每15分钟' },
+              { value: '1hour', label: '每小时' },
+              { value: '1day', label: '每天' }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+        extraActions={
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setCreateModalVisible(true)}>
+            {t('tasks.collections.actions.create')}
+          </Button>
+        }
+      />
 
       {/* 任务集合卡片列表 */}
       <Row gutter={16}>
