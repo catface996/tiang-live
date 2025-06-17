@@ -74,7 +74,8 @@ const EntityGrid = styled.div`
 `;
 
 const EntityManagement: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState('entities');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -117,9 +118,9 @@ const EntityManagement: React.FC = () => {
   const getFilteredEntities = () => {
     let filtered = entities;
 
-    // 按标签页过滤
-    if (activeTab !== 'all') {
-      filtered = filtered.filter(entity => entity.type === activeTab);
+    // 按分类过滤
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(entity => entity.type === selectedCategory);
     }
 
     // 按搜索文本过滤
@@ -213,6 +214,78 @@ const EntityManagement: React.FC = () => {
             </StatsCard>
           </Col>
         </Row>
+
+        {/* 分类标签 */}
+        <div style={{ marginBottom: 16 }}>
+          <Space wrap>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'all'}
+              onChange={() => setSelectedCategory('all')}
+            >
+              全部 ({stats.total})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'report'}
+              onChange={() => setSelectedCategory('report')}
+            >
+              📊 报表 ({typeStats.report || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'business_link'}
+              onChange={() => setSelectedCategory('business_link')}
+            >
+              🔗 业务链路 ({typeStats.business_link || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'business_system'}
+              onChange={() => setSelectedCategory('business_system')}
+            >
+              🏢 业务系统 ({typeStats.business_system || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'api'}
+              onChange={() => setSelectedCategory('api')}
+            >
+              🔌 接口 ({typeStats.api || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'database'}
+              onChange={() => setSelectedCategory('database')}
+            >
+              💾 数据库 ({typeStats.database || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'table'}
+              onChange={() => setSelectedCategory('table')}
+            >
+              📋 数据表 ({typeStats.table || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'middleware'}
+              onChange={() => setSelectedCategory('middleware')}
+            >
+              ☁️ 中间件 ({typeStats.middleware || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'microservice'}
+              onChange={() => setSelectedCategory('microservice')}
+            >
+              🔧 微服务 ({typeStats.microservice || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'scheduled_job'}
+              onChange={() => setSelectedCategory('scheduled_job')}
+            >
+              ⏰ 定时任务 ({typeStats.scheduled_job || 0})
+            </Tag.CheckableTag>
+            <Tag.CheckableTag
+              checked={selectedCategory === 'configuration'}
+              onChange={() => setSelectedCategory('configuration')}
+            >
+              ⚙️ 配置 ({typeStats.configuration || 0})
+            </Tag.CheckableTag>
+          </Space>
+        </div>
 
         {/* 过滤条件 */}
         <FilterBar>
@@ -389,6 +462,93 @@ const EntityManagement: React.FC = () => {
     );
   };
 
+  const renderRelationshipGraph = () => (
+    <TabContent>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+        <div>
+          <Title level={3} style={{ margin: 0 }}>关系图谱</Title>
+          <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
+            基于D3.js的交互式关系图谱，展示从业务场景到基础设施的完整技术架构关系。
+          </Paragraph>
+        </div>
+        <Space>
+          <Button icon={<ExportOutlined />}>
+            导出图谱
+          </Button>
+          <Button icon={<SettingOutlined />}>
+            图谱设置
+          </Button>
+          <Button icon={<ReloadOutlined />}>
+            刷新图谱
+          </Button>
+        </Space>
+      </div>
+
+      {/* 统计信息 */}
+      <Row gutter={16} style={{ marginBottom: 24 }}>
+        <Col xs={24} sm={12} md={6}>
+          <StatsCard>
+            <Statistic
+              title="关系总数"
+              value={25}
+              suffix="条"
+              valueStyle={{ color: '#1890ff' }}
+            />
+          </StatsCard>
+        </Col>
+        <Col xs={24} sm={12} md={6}>
+          <StatsCard>
+            <Statistic
+              title="关系类型"
+              value={5}
+              suffix="种"
+              valueStyle={{ color: '#52c41a' }}
+            />
+          </StatsCard>
+        </Col>
+        <Col xs={24} sm={12} md={6}>
+          <StatsCard>
+            <Statistic
+              title="图谱节点"
+              value={21}
+              suffix="个"
+              valueStyle={{ color: '#faad14' }}
+            />
+          </StatsCard>
+        </Col>
+        <Col xs={24} sm={12} md={6}>
+          <StatsCard>
+            <Statistic
+              title="支付系统"
+              value={5}
+              suffix="个"
+              valueStyle={{ color: '#722ed1' }}
+            />
+          </StatsCard>
+        </Col>
+      </Row>
+
+      <Card 
+        title="关系图谱功能" 
+        style={{ textAlign: 'center', padding: '60px 0' }}
+      >
+        <Space direction="vertical" size="large">
+          <ShareAltOutlined style={{ fontSize: '48px', color: '#1890ff' }} />
+          <div>
+            <Title level={4}>关系图谱</Title>
+            <Paragraph>
+              关系图谱功能位于"实体关系"页面的"关系图谱"标签页中。<br/>
+              请访问左侧菜单的"实体关系"页面查看完整的D3.js交互式关系图谱。
+            </Paragraph>
+          </div>
+          <Button type="primary" size="large">
+            前往关系图谱
+          </Button>
+        </Space>
+      </Card>
+    </TabContent>
+  );
+
   const typeStats = getEntityTypeStats();
 
   return (
@@ -425,11 +585,11 @@ const EntityManagement: React.FC = () => {
             tab={
               <Space>
                 <NodeIndexOutlined />
-                全部实体
+                实体管理
                 <Badge count={getEntityStats().total} showZero />
               </Space>
             } 
-            key="all"
+            key="entities"
           >
             {renderEntityManagement()}
           </Tabs.TabPane>
@@ -437,79 +597,13 @@ const EntityManagement: React.FC = () => {
           <Tabs.TabPane 
             tab={
               <Space>
-                <FileTextOutlined />
-                报表
-                <Badge count={typeStats.report || 0} showZero />
+                <ShareAltOutlined />
+                关系图谱
               </Space>
             } 
-            key="report"
+            key="relationships"
           >
-            {renderEntityManagement()}
-          </Tabs.TabPane>
-          
-          <Tabs.TabPane 
-            tab={
-              <Space>
-                <LinkOutlined />
-                业务链路
-                <Badge count={typeStats.business_link || 0} showZero />
-              </Space>
-            } 
-            key="business_link"
-          >
-            {renderEntityManagement()}
-          </Tabs.TabPane>
-          
-          <Tabs.TabPane 
-            tab={
-              <Space>
-                <AppstoreOutlined />
-                业务系统
-                <Badge count={typeStats.business_system || 0} showZero />
-              </Space>
-            } 
-            key="business_system"
-          >
-            {renderEntityManagement()}
-          </Tabs.TabPane>
-          
-          <Tabs.TabPane 
-            tab={
-              <Space>
-                <ApiOutlined />
-                接口
-                <Badge count={typeStats.api || 0} showZero />
-              </Space>
-            } 
-            key="api"
-          >
-            {renderEntityManagement()}
-          </Tabs.TabPane>
-          
-          <Tabs.TabPane 
-            tab={
-              <Space>
-                <DatabaseOutlined />
-                数据库
-                <Badge count={typeStats.database || 0} showZero />
-              </Space>
-            } 
-            key="database"
-          >
-            {renderEntityManagement()}
-          </Tabs.TabPane>
-          
-          <Tabs.TabPane 
-            tab={
-              <Space>
-                <TableOutlined />
-                数据表
-                <Badge count={typeStats.table || 0} showZero />
-              </Space>
-            } 
-            key="table"
-          >
-            {renderEntityManagement()}
+            {renderRelationshipGraph()}
           </Tabs.TabPane>
         </Tabs>
       </Card>
