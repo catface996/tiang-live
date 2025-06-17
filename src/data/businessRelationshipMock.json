@@ -1,0 +1,621 @@
+{
+  "nodes": [
+    {
+      "id": "business_scenario_1",
+      "name": "电商下单场景",
+      "type": "business_scenario",
+      "level": 1,
+      "description": "用户在电商平台完成商品购买的完整流程",
+      "status": "active",
+      "metrics": {
+        "dailyVolume": 50000,
+        "successRate": 99.2
+      }
+    },
+    {
+      "id": "business_scenario_2", 
+      "name": "支付结算场景",
+      "type": "business_scenario",
+      "level": 1,
+      "description": "处理用户支付和商户结算的业务场景",
+      "status": "active",
+      "metrics": {
+        "dailyVolume": 45000,
+        "successRate": 99.8
+      }
+    },
+    {
+      "id": "business_scenario_3",
+      "name": "物流配送场景", 
+      "type": "business_scenario",
+      "level": 1,
+      "description": "从仓库到用户的商品配送全流程",
+      "status": "active",
+      "metrics": {
+        "dailyVolume": 30000,
+        "successRate": 98.5
+      }
+    },
+    {
+      "id": "business_link_1",
+      "name": "用户下单链路",
+      "type": "business_link", 
+      "level": 2,
+      "description": "从商品选择到订单确认的业务链路",
+      "status": "active",
+      "avgResponseTime": "200ms"
+    },
+    {
+      "id": "business_link_2",
+      "name": "库存检查链路",
+      "type": "business_link",
+      "level": 2, 
+      "description": "实时库存查询和预占业务链路",
+      "status": "active",
+      "avgResponseTime": "150ms"
+    },
+    {
+      "id": "business_link_3",
+      "name": "支付处理链路",
+      "type": "business_link",
+      "level": 2,
+      "description": "支付验证、扣款、确认的业务链路", 
+      "status": "active",
+      "avgResponseTime": "500ms"
+    },
+    {
+      "id": "business_link_4",
+      "name": "订单履约链路",
+      "type": "business_link",
+      "level": 2,
+      "description": "订单生产、拣货、打包、发货链路",
+      "status": "active", 
+      "avgResponseTime": "2h"
+    },
+    {
+      "id": "business_link_5",
+      "name": "资金结算链路",
+      "type": "business_link",
+      "level": 2,
+      "description": "商户资金结算和清分业务链路",
+      "status": "active",
+      "avgResponseTime": "1d"
+    },
+    {
+      "id": "system_1",
+      "name": "用户中心系统",
+      "type": "business_system",
+      "level": 3,
+      "description": "管理用户信息、认证、权限的核心系统",
+      "status": "running",
+      "version": "v2.1.0",
+      "instances": 6
+    },
+    {
+      "id": "system_2", 
+      "name": "商品管理系统",
+      "type": "business_system",
+      "level": 3,
+      "description": "商品信息、价格、促销管理系统",
+      "status": "running",
+      "version": "v1.8.2",
+      "instances": 4
+    },
+    {
+      "id": "system_3",
+      "name": "订单管理系统", 
+      "type": "business_system",
+      "level": 3,
+      "description": "订单生命周期管理的核心系统",
+      "status": "running",
+      "version": "v3.0.1",
+      "instances": 8
+    },
+    {
+      "id": "system_4",
+      "name": "库存管理系统",
+      "type": "business_system", 
+      "level": 3,
+      "description": "实时库存管理和预占系统",
+      "status": "running",
+      "version": "v2.5.0",
+      "instances": 5
+    },
+    {
+      "id": "system_5",
+      "name": "支付网关系统",
+      "type": "business_system",
+      "level": 3,
+      "description": "统一支付接入和路由系统",
+      "status": "running", 
+      "version": "v1.9.3",
+      "instances": 10
+    },
+    {
+      "id": "system_6",
+      "name": "物流管理系统",
+      "type": "business_system",
+      "level": 3,
+      "description": "物流订单和配送管理系统",
+      "status": "running",
+      "version": "v2.2.1", 
+      "instances": 3
+    },
+    {
+      "id": "system_7",
+      "name": "财务结算系统",
+      "type": "business_system",
+      "level": 3,
+      "description": "资金清分和商户结算系统",
+      "status": "running",
+      "version": "v1.6.0",
+      "instances": 4
+    },
+    {
+      "id": "middleware_1",
+      "name": "API网关",
+      "type": "middleware",
+      "level": 4,
+      "description": "统一API接入、路由、限流、认证网关",
+      "status": "running",
+      "technology": "Kong",
+      "instances": 6
+    },
+    {
+      "id": "middleware_2",
+      "name": "消息队列",
+      "type": "middleware", 
+      "level": 4,
+      "description": "异步消息处理和事件驱动架构支撑",
+      "status": "running",
+      "technology": "RocketMQ",
+      "instances": 9
+    },
+    {
+      "id": "middleware_3",
+      "name": "分布式缓存",
+      "type": "middleware",
+      "level": 4,
+      "description": "高性能分布式缓存服务",
+      "status": "running",
+      "technology": "Redis Cluster", 
+      "instances": 12
+    },
+    {
+      "id": "middleware_4",
+      "name": "配置中心",
+      "type": "middleware",
+      "level": 4,
+      "description": "统一配置管理和动态配置下发",
+      "status": "running",
+      "technology": "Nacos",
+      "instances": 3
+    },
+    {
+      "id": "middleware_5",
+      "name": "服务注册中心",
+      "type": "middleware",
+      "level": 4, 
+      "description": "微服务注册发现和健康检查",
+      "status": "running",
+      "technology": "Eureka",
+      "instances": 3
+    },
+    {
+      "id": "middleware_6",
+      "name": "分布式事务",
+      "type": "middleware",
+      "level": 4,
+      "description": "跨服务分布式事务一致性保障",
+      "status": "running",
+      "technology": "Seata",
+      "instances": 4
+    },
+    {
+      "id": "infrastructure_1",
+      "name": "Kubernetes集群",
+      "type": "infrastructure",
+      "level": 5,
+      "description": "容器编排和微服务运行平台",
+      "status": "running",
+      "nodes": 24,
+      "region": "华东-1"
+    },
+    {
+      "id": "infrastructure_2",
+      "name": "MySQL主从集群", 
+      "type": "infrastructure",
+      "level": 5,
+      "description": "关系型数据库主从集群",
+      "status": "running",
+      "nodes": 6,
+      "region": "华东-1"
+    },
+    {
+      "id": "infrastructure_3",
+      "name": "MongoDB分片集群",
+      "type": "infrastructure",
+      "level": 5,
+      "description": "文档型数据库分片集群",
+      "status": "running", 
+      "nodes": 9,
+      "region": "华东-1"
+    },
+    {
+      "id": "infrastructure_4",
+      "name": "Elasticsearch集群",
+      "type": "infrastructure",
+      "level": 5,
+      "description": "搜索引擎和日志分析集群",
+      "status": "running",
+      "nodes": 6,
+      "region": "华东-1"
+    },
+    {
+      "id": "infrastructure_5",
+      "name": "负载均衡器",
+      "type": "infrastructure",
+      "level": 5,
+      "description": "七层负载均衡和流量分发",
+      "status": "running",
+      "nodes": 4,
+      "region": "华东-1"
+    },
+    {
+      "id": "infrastructure_6",
+      "name": "对象存储",
+      "type": "infrastructure",
+      "level": 5,
+      "description": "海量文件和图片存储服务",
+      "status": "running", 
+      "capacity": "100TB",
+      "region": "华东-1"
+    }
+  ],
+  "links": [
+    {
+      "source": "business_scenario_1",
+      "target": "business_link_1",
+      "type": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "business_scenario_1", 
+      "target": "business_link_2",
+      "type": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "business_scenario_2",
+      "target": "business_link_3",
+      "type": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "business_scenario_2",
+      "target": "business_link_5", 
+      "type": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "business_scenario_3",
+      "target": "business_link_4",
+      "type": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "business_link_1",
+      "target": "system_1",
+      "type": "depends_on",
+      "strength": 0.9
+    },
+    {
+      "source": "business_link_1",
+      "target": "system_2",
+      "type": "depends_on", 
+      "strength": 0.8
+    },
+    {
+      "source": "business_link_1",
+      "target": "system_3",
+      "type": "depends_on",
+      "strength": 1.0
+    },
+    {
+      "source": "business_link_2",
+      "target": "system_4",
+      "type": "depends_on",
+      "strength": 1.0
+    },
+    {
+      "source": "business_link_3",
+      "target": "system_5",
+      "type": "depends_on",
+      "strength": 1.0
+    },
+    {
+      "source": "business_link_4",
+      "target": "system_6",
+      "type": "depends_on",
+      "strength": 1.0
+    },
+    {
+      "source": "business_link_5",
+      "target": "system_7", 
+      "type": "depends_on",
+      "strength": 1.0
+    },
+    {
+      "source": "system_1",
+      "target": "middleware_1",
+      "type": "uses",
+      "strength": 0.8
+    },
+    {
+      "source": "system_1",
+      "target": "middleware_3",
+      "type": "uses",
+      "strength": 0.7
+    },
+    {
+      "source": "system_2",
+      "target": "middleware_1",
+      "type": "uses",
+      "strength": 0.8
+    },
+    {
+      "source": "system_2",
+      "target": "middleware_3",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "system_3",
+      "target": "middleware_1",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "system_3",
+      "target": "middleware_2",
+      "type": "uses",
+      "strength": 1.0
+    },
+    {
+      "source": "system_3",
+      "target": "middleware_6",
+      "type": "uses",
+      "strength": 0.8
+    },
+    {
+      "source": "system_4",
+      "target": "middleware_2",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "system_4",
+      "target": "middleware_3",
+      "type": "uses",
+      "strength": 1.0
+    },
+    {
+      "source": "system_5",
+      "target": "middleware_1",
+      "type": "uses",
+      "strength": 1.0
+    },
+    {
+      "source": "system_5",
+      "target": "middleware_6",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "system_6",
+      "target": "middleware_2",
+      "type": "uses",
+      "strength": 0.8
+    },
+    {
+      "source": "system_7",
+      "target": "middleware_2",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "system_7",
+      "target": "middleware_6",
+      "type": "uses",
+      "strength": 1.0
+    },
+    {
+      "source": "middleware_1",
+      "target": "infrastructure_1",
+      "type": "runs_on",
+      "strength": 1.0
+    },
+    {
+      "source": "middleware_1",
+      "target": "infrastructure_5",
+      "type": "runs_on",
+      "strength": 0.8
+    },
+    {
+      "source": "middleware_2",
+      "target": "infrastructure_1",
+      "type": "runs_on",
+      "strength": 1.0
+    },
+    {
+      "source": "middleware_3",
+      "target": "infrastructure_1",
+      "type": "runs_on",
+      "strength": 1.0
+    },
+    {
+      "source": "middleware_4",
+      "target": "infrastructure_1",
+      "type": "runs_on",
+      "strength": 1.0
+    },
+    {
+      "source": "middleware_5",
+      "target": "infrastructure_1",
+      "type": "runs_on",
+      "strength": 1.0
+    },
+    {
+      "source": "middleware_6",
+      "target": "infrastructure_1",
+      "type": "runs_on",
+      "strength": 1.0
+    },
+    {
+      "source": "system_1",
+      "target": "infrastructure_2",
+      "type": "stores_in",
+      "strength": 0.9
+    },
+    {
+      "source": "system_2",
+      "target": "infrastructure_2",
+      "type": "stores_in",
+      "strength": 0.8
+    },
+    {
+      "source": "system_2",
+      "target": "infrastructure_6",
+      "type": "stores_in",
+      "strength": 0.7
+    },
+    {
+      "source": "system_3",
+      "target": "infrastructure_2",
+      "type": "stores_in",
+      "strength": 1.0
+    },
+    {
+      "source": "system_4",
+      "target": "infrastructure_2",
+      "type": "stores_in",
+      "strength": 0.9
+    },
+    {
+      "source": "system_5",
+      "target": "infrastructure_3",
+      "type": "stores_in",
+      "strength": 0.8
+    },
+    {
+      "source": "system_6",
+      "target": "infrastructure_3",
+      "type": "stores_in",
+      "strength": 0.7
+    },
+    {
+      "source": "system_7",
+      "target": "infrastructure_2",
+      "type": "stores_in",
+      "strength": 1.0
+    },
+    {
+      "source": "middleware_2",
+      "target": "infrastructure_4",
+      "type": "logs_to",
+      "strength": 0.6
+    },
+    {
+      "source": "system_1",
+      "target": "infrastructure_4",
+      "type": "logs_to",
+      "strength": 0.5
+    },
+    {
+      "source": "system_3",
+      "target": "infrastructure_4",
+      "type": "logs_to",
+      "strength": 0.7
+    },
+    {
+      "source": "system_5",
+      "target": "infrastructure_4",
+      "type": "logs_to",
+      "strength": 0.8
+    }
+  ],
+  "metadata": {
+    "title": "电商平台业务关系图谱",
+    "description": "从业务场景到基础设施的完整技术架构关系图",
+    "levels": [
+      {
+        "level": 1,
+        "name": "业务场景层",
+        "description": "核心业务场景和用户旅程",
+        "color": "#1890ff"
+      },
+      {
+        "level": 2,
+        "name": "业务链路层", 
+        "description": "业务场景的具体执行链路",
+        "color": "#52c41a"
+      },
+      {
+        "level": 3,
+        "name": "业务系统层",
+        "description": "支撑业务链路的应用系统",
+        "color": "#faad14"
+      },
+      {
+        "level": 4,
+        "name": "中间件层",
+        "description": "系统间通信和基础服务中间件",
+        "color": "#722ed1"
+      },
+      {
+        "level": 5,
+        "name": "基础设施层",
+        "description": "底层计算、存储、网络基础设施",
+        "color": "#f5222d"
+      }
+    ],
+    "relationTypes": [
+      {
+        "type": "contains",
+        "description": "包含关系",
+        "color": "#1890ff",
+        "strokeWidth": 3
+      },
+      {
+        "type": "depends_on",
+        "description": "依赖关系",
+        "color": "#52c41a",
+        "strokeWidth": 2
+      },
+      {
+        "type": "uses",
+        "description": "使用关系",
+        "color": "#faad14",
+        "strokeWidth": 2
+      },
+      {
+        "type": "runs_on",
+        "description": "运行关系",
+        "color": "#722ed1",
+        "strokeWidth": 2
+      },
+      {
+        "type": "stores_in",
+        "description": "存储关系",
+        "color": "#f5222d",
+        "strokeWidth": 1
+      },
+      {
+        "type": "logs_to",
+        "description": "日志关系",
+        "color": "#8c8c8c",
+        "strokeWidth": 1
+      }
+    ]
+  }
+}

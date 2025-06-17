@@ -23,6 +23,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
+import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
 
 const { Title, Paragraph } = Typography;
 
@@ -203,7 +204,7 @@ const EntityRelationship: React.FC = () => {
         <div>
           <Title level={3} style={{ margin: 0 }}>关系图谱</Title>
           <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
-            可视化展示实体间的关系网络，支持图形化的关系分析和探索。
+            基于D3.js的交互式关系图谱，展示从业务场景到基础设施的完整技术架构关系。
           </Paragraph>
         </div>
         <Space>
@@ -225,7 +226,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="关系总数"
-              value={0}
+              value={67}
               suffix="条"
               valueStyle={{ color: '#1890ff' }}
             />
@@ -235,7 +236,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="关系类型"
-              value={0}
+              value={6}
               suffix="种"
               valueStyle={{ color: '#52c41a' }}
             />
@@ -245,7 +246,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="图谱节点"
-              value={0}
+              value={30}
               suffix="个"
               valueStyle={{ color: '#faad14' }}
             />
@@ -255,7 +256,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="连接强度"
-              value={0}
+              value={85}
               suffix="%"
               valueStyle={{ color: '#722ed1' }}
             />
@@ -263,24 +264,29 @@ const EntityRelationship: React.FC = () => {
         </Col>
       </Row>
 
+      {/* D3.js 关系图谱 */}
+      <D3RelationshipGraph />
+
       {/* 功能介绍 */}
-      <Row gutter={16}>
+      <Row gutter={16} style={{ marginTop: 24 }}>
         <Col xs={24} md={12} lg={8}>
           <FeatureCard
             title={
               <Space>
                 <ShareAltOutlined style={{ color: '#1890ff' }} />
-                关系可视化
+                多层级架构
               </Space>
             }
           >
             <Paragraph>
-              以图形化方式展示实体间的复杂关系网络，支持多种布局算法。
+              展示从业务场景、业务链路、业务系统、中间件到基础设施的5层架构关系。
             </Paragraph>
             <div>
-              <Tag color="blue">力导向布局</Tag>
-              <Tag color="blue">层次布局</Tag>
-              <Tag color="blue">环形布局</Tag>
+              <Tag color="blue">业务场景</Tag>
+              <Tag color="green">业务链路</Tag>
+              <Tag color="orange">业务系统</Tag>
+              <Tag color="purple">中间件</Tag>
+              <Tag color="red">基础设施</Tag>
             </div>
           </FeatureCard>
         </Col>
@@ -289,17 +295,18 @@ const EntityRelationship: React.FC = () => {
             title={
               <Space>
                 <SearchOutlined style={{ color: '#52c41a' }} />
-                路径分析
+                交互式探索
               </Space>
             }
           >
             <Paragraph>
-              分析实体间的关系路径，发现隐藏的关联关系和影响链路。
+              支持节点拖拽、缩放平移、悬浮高亮和点击查看详情等丰富交互功能。
             </Paragraph>
             <div>
-              <Tag color="green">最短路径</Tag>
-              <Tag color="green">影响分析</Tag>
-              <Tag color="green">关联发现</Tag>
+              <Tag color="green">节点拖拽</Tag>
+              <Tag color="green">缩放平移</Tag>
+              <Tag color="green">悬浮高亮</Tag>
+              <Tag color="green">详情查看</Tag>
             </div>
           </FeatureCard>
         </Col>
@@ -308,17 +315,18 @@ const EntityRelationship: React.FC = () => {
             title={
               <Space>
                 <SettingOutlined style={{ color: '#faad14' }} />
-                交互操作
+                关系类型
               </Space>
             }
           >
             <Paragraph>
-              丰富的交互功能，支持节点拖拽、缩放、筛选和详情查看。
+              支持包含、依赖、使用、运行、存储、日志等6种关系类型的可视化展示。
             </Paragraph>
             <div>
-              <Tag color="orange">节点拖拽</Tag>
-              <Tag color="orange">缩放平移</Tag>
-              <Tag color="orange">详情查看</Tag>
+              <Tag color="orange">包含关系</Tag>
+              <Tag color="orange">依赖关系</Tag>
+              <Tag color="orange">使用关系</Tag>
+              <Tag color="orange">运行关系</Tag>
             </div>
           </FeatureCard>
         </Col>
