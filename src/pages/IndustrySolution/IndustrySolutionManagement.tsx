@@ -40,6 +40,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
+import SearchFilterBar from '../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -67,13 +68,6 @@ const SolutionCard = styled(Card)`
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-`;
-
-const FilterBar = styled.div`
-  background: #fafafa;
-  padding: 16px;
-  border-radius: 6px;
-  margin-bottom: 16px;
 `;
 
 interface BusinessEntity {
@@ -113,6 +107,10 @@ const IndustrySolutionManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedSolution, setSelectedSolution] = useState<IndustrySolution | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterIndustry, setFilterIndustry] = useState('all');
+  const [filterComplexity, setFilterComplexity] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -634,57 +632,59 @@ const IndustrySolutionManagement: React.FC = () => {
       </Row>
 
       {/* 筛选栏 */}
-      <Card style={{ marginBottom: 24 }}>
-        <FilterBar>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder={t('solutions.search.placeholder')}
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder={t('solutions.search.industryType')}
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(industryMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {config.name}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder={t('solutions.search.complexity')}
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="simple">{t('solutions.complexity.simple')}</Option>
-                <Option value="medium">{t('solutions.complexity.medium')}</Option>
-                <Option value="complex">{t('solutions.complexity.complex')}</Option>
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder={t('solutions.search.status')}
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="active">{t('solutions.status.active')}</Option>
-                <Option value="draft">{t('solutions.status.draft')}</Option>
-                <Option value="deprecated">{t('solutions.status.deprecated')}</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FilterBar>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder={t('solutions.search.placeholder')}
+        filters={[
+          {
+            key: 'industry',
+            value: filterIndustry,
+            onChange: setFilterIndustry,
+            placeholder: t('solutions.search.industryType'),
+            width: 120,
+            options: [
+              { value: 'all', label: '所有行业' },
+              ...Object.entries(industryMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          },
+          {
+            key: 'complexity',
+            value: filterComplexity,
+            onChange: setFilterComplexity,
+            placeholder: t('solutions.search.complexity'),
+            width: 100,
+            options: [
+              { value: 'all', label: '所有复杂度' },
+              { value: 'simple', label: t('solutions.complexity.simple') },
+              { value: 'medium', label: t('solutions.complexity.medium') },
+              { value: 'complex', label: t('solutions.complexity.complex') }
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: t('solutions.search.status'),
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'active', label: t('solutions.status.active') },
+              { value: 'draft', label: t('solutions.status.draft') },
+              { value: 'deprecated', label: t('solutions.status.deprecated') }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+        extraActions={
+          <Button type="primary" icon={<PlusOutlined />}>
+            {t('solutions.actions.create')}
+          </Button>
+        }
+      />
 
       {/* 方案卡片列表 */}
       <Row gutter={[16, 16]}>

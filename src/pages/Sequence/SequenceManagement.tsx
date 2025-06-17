@@ -34,6 +34,7 @@ import {
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
+import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import SequenceDiagram from '../../components/SequenceDiagram';
 
 const { Title, Paragraph, Text } = Typography;
@@ -64,13 +65,6 @@ const SequenceCard = styled(Card)`
   }
 `;
 
-const FilterBar = styled.div`
-  background: #fafafa;
-  padding: 16px;
-  border-radius: 6px;
-  margin-bottom: 16px;
-`;
-
 interface SequenceData {
   id: string;
   name: string;
@@ -90,6 +84,9 @@ const SequenceManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedSequence, setSelectedSequence] = useState<SequenceData | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -462,46 +459,46 @@ sequenceDiagram
       </Row>
 
       {/* 筛选栏 */}
-      <Card style={{ marginBottom: 24 }}>
-        <FilterBar>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder="搜索时序名称、描述..."
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder="时序类型"
-                style={{ width: 120 }}
-                allowClear
-              >
-                {Object.entries(sequenceTypeMap).map(([key, config]) => (
-                  <Option key={key} value={key}>
-                    <Space>
-                      {config.icon}
-                      {config.name}
-                    </Space>
-                  </Option>
-                ))}
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder="状态"
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="active">活跃</Option>
-                <Option value="inactive">停用</Option>
-                <Option value="draft">草稿</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FilterBar>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder="搜索时序名称、描述..."
+        filters={[
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: '时序类型',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有类型' },
+              ...Object.entries(sequenceTypeMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: '状态',
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'active', label: '活跃' },
+              { value: 'inactive', label: '停用' },
+              { value: 'draft', label: '草稿' }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+        extraActions={
+          <Button type="primary" icon={<PlusOutlined />}>
+            创建时序
+          </Button>
+        }
+      />
 
       {/* 时序卡片列表 */}
       <Row gutter={[16, 16]}>
