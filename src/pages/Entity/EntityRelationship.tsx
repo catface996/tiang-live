@@ -226,7 +226,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="关系总数"
-              value={67}
+              value={28}
               suffix="条"
               valueStyle={{ color: '#1890ff' }}
             />
@@ -236,7 +236,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="关系类型"
-              value={6}
+              value={5}
               suffix="种"
               valueStyle={{ color: '#52c41a' }}
             />
@@ -246,7 +246,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="图谱节点"
-              value={30}
+              value={19}
               suffix="个"
               valueStyle={{ color: '#faad14' }}
             />
@@ -255,9 +255,9 @@ const EntityRelationship: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="连接强度"
-              value={85}
-              suffix="%"
+              title="平面层级"
+              value={5}
+              suffix="层"
               valueStyle={{ color: '#722ed1' }}
             />
           </StatsCard>

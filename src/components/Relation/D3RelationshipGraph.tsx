@@ -143,8 +143,8 @@ const D3RelationshipGraph: React.FC = () => {
     const planeNodes = nodes.filter(node => node.plane === plane.id);
     if (planeNodes.length === 0) return null;
 
-    // 根据平面层级计算大致位置
-    const levelHeight = height / 4; // 4个平面
+    // 根据平面层级计算大致位置 - 现在有5个平面
+    const levelHeight = height / 5; // 5个平面
     const planeIndex = plane.level - 1;
     const baseY = planeIndex * levelHeight + 50;
     
