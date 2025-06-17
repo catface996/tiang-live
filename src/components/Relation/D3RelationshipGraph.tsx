@@ -643,6 +643,28 @@ const D3RelationshipGraph: React.FC = () => {
                 <strong>实例信息:</strong>
                 <div>实例数: {selectedNode.instances}</div>
                 {selectedNode.version && <div>版本: {selectedNode.version}</div>}
+                {selectedNode.technology && <div>技术栈: {selectedNode.technology}</div>}
+              </div>
+            )}
+            {selectedNode.nodes && (
+              <div>
+                <strong>集群信息:</strong>
+                <div>节点数: {selectedNode.nodes}</div>
+                {selectedNode.config && <div>配置: {selectedNode.config}</div>}
+                {selectedNode.technology && <div>技术: {selectedNode.technology}</div>}
+                {selectedNode.region && <div>区域: {selectedNode.region}</div>}
+              </div>
+            )}
+            {selectedNode.databases && (
+              <div>
+                <strong>数据库:</strong>
+                <div style={{ marginTop: 4 }}>
+                  {selectedNode.databases.map((db: string, index: number) => (
+                    <Tag key={index} color="blue" style={{ marginBottom: 4 }}>
+                      {db}
+                    </Tag>
+                  ))}
+                </div>
               </div>
             )}
             {selectedNode.metrics && (

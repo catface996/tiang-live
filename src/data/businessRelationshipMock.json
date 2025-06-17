@@ -6,11 +6,7 @@
       "level": 1,
       "color": "#e6f7ff",
       "borderColor": "#1890ff",
-      "description": "核心业务场景和用户旅程",
-      "bounds": {
-        "minLevel": 1,
-        "maxLevel": 1
-      }
+      "description": "核心业务场景和用户旅程"
     },
     {
       "id": "business_link_plane",
@@ -18,11 +14,7 @@
       "level": 2,
       "color": "#f6ffed",
       "borderColor": "#52c41a",
-      "description": "业务场景的具体执行链路",
-      "bounds": {
-        "minLevel": 2,
-        "maxLevel": 2
-      }
+      "description": "业务场景的具体执行链路"
     },
     {
       "id": "application_plane", 
@@ -30,11 +22,7 @@
       "level": 3,
       "color": "#fff7e6",
       "borderColor": "#faad14",
-      "description": "业务系统和应用服务层",
-      "bounds": {
-        "minLevel": 3,
-        "maxLevel": 3
-      }
+      "description": "业务系统和应用服务层"
     },
     {
       "id": "middleware_plane",
@@ -42,11 +30,7 @@
       "level": 4,
       "color": "#f9f0ff",
       "borderColor": "#722ed1",
-      "description": "中间件和基础服务层",
-      "bounds": {
-        "minLevel": 4,
-        "maxLevel": 4
-      }
+      "description": "中间件和基础服务层"
     },
     {
       "id": "infrastructure_plane",
@@ -54,11 +38,7 @@
       "level": 5,
       "color": "#fff2f0",
       "borderColor": "#f5222d",
-      "description": "基础设施和资源层",
-      "bounds": {
-        "minLevel": 5,
-        "maxLevel": 5
-      }
+      "description": "基础设施和资源层"
     }
   ],
   "nodes": [
@@ -69,11 +49,7 @@
       "level": 1,
       "plane": "business_scenario_plane",
       "description": "用户在电商平台完成商品购买的完整流程",
-      "status": "active",
-      "metrics": {
-        "dailyVolume": 50000,
-        "successRate": 99.2
-      }
+      "status": "active"
     },
     {
       "id": "business_scenario_2", 
@@ -82,24 +58,7 @@
       "level": 1,
       "plane": "business_scenario_plane",
       "description": "处理用户支付和商户结算的业务场景",
-      "status": "active",
-      "metrics": {
-        "dailyVolume": 45000,
-        "successRate": 99.8
-      }
-    },
-    {
-      "id": "business_scenario_3",
-      "name": "物流配送场景", 
-      "type": "business_scenario",
-      "level": 1,
-      "plane": "business_scenario_plane",
-      "description": "从仓库到用户的商品配送全流程",
-      "status": "active",
-      "metrics": {
-        "dailyVolume": 30000,
-        "successRate": 98.5
-      }
+      "status": "active"
     },
     {
       "id": "business_link_1",
@@ -108,38 +67,16 @@
       "level": 2,
       "plane": "business_link_plane",
       "description": "从商品选择到订单确认的业务链路",
-      "status": "active",
-      "avgResponseTime": "200ms"
+      "status": "active"
     },
     {
       "id": "business_link_2",
-      "name": "库存检查链路",
-      "type": "business_link",
-      "level": 2,
-      "plane": "business_link_plane",
-      "description": "实时库存查询和预占业务链路",
-      "status": "active",
-      "avgResponseTime": "150ms"
-    },
-    {
-      "id": "business_link_3",
       "name": "支付处理链路",
       "type": "business_link",
       "level": 2,
       "plane": "business_link_plane",
       "description": "支付验证、扣款、确认的业务链路", 
-      "status": "active",
-      "avgResponseTime": "500ms"
-    },
-    {
-      "id": "business_link_4",
-      "name": "订单履约链路",
-      "type": "business_link",
-      "level": 2,
-      "plane": "business_link_plane",
-      "description": "订单生产、拣货、打包、发货链路",
-      "status": "active", 
-      "avgResponseTime": "2h"
+      "status": "active"
     },
     {
       "id": "system_1",
@@ -176,17 +113,6 @@
     },
     {
       "id": "system_4",
-      "name": "库存管理系统",
-      "type": "business_system", 
-      "level": 3,
-      "plane": "application_plane",
-      "description": "实时库存管理和预占系统",
-      "status": "running",
-      "version": "v2.5.0",
-      "instances": 5
-    },
-    {
-      "id": "system_5",
       "name": "支付网关系统",
       "type": "business_system",
       "level": 3,
@@ -195,17 +121,6 @@
       "status": "running", 
       "version": "v1.9.3",
       "instances": 10
-    },
-    {
-      "id": "system_6",
-      "name": "物流管理系统",
-      "type": "business_system",
-      "level": 3,
-      "plane": "application_plane",
-      "description": "物流订单和配送管理系统",
-      "status": "running",
-      "version": "v2.2.1", 
-      "instances": 3
     },
     {
       "id": "middleware_1",
@@ -230,17 +145,6 @@
       "instances": 9
     },
     {
-      "id": "middleware_3",
-      "name": "分布式缓存",
-      "type": "middleware",
-      "level": 4,
-      "plane": "middleware_plane",
-      "description": "高性能分布式缓存服务",
-      "status": "running",
-      "technology": "Redis Cluster", 
-      "instances": 12
-    },
-    {
       "id": "infrastructure_1",
       "name": "Kubernetes集群",
       "type": "infrastructure",
@@ -252,25 +156,58 @@
       "region": "华东-1"
     },
     {
-      "id": "infrastructure_2",
-      "name": "MySQL主从集群", 
+      "id": "db_cluster_user",
+      "name": "用户数据库集群",
       "type": "infrastructure",
       "level": 5,
       "plane": "infrastructure_plane",
-      "description": "关系型数据库主从集群",
+      "description": "用户中心专用MySQL主从集群",
       "status": "running",
-      "nodes": 6,
-      "region": "华东-1"
+      "technology": "MySQL 8.0",
+      "nodes": 5,
+      "config": "1主4从",
+      "region": "华东-1",
+      "databases": ["user_center", "user_profile", "user_auth"]
     },
     {
-      "id": "infrastructure_3",
-      "name": "Redis集群",
+      "id": "db_cluster_business",
+      "name": "业务数据库集群",
       "type": "infrastructure",
       "level": 5,
       "plane": "infrastructure_plane",
-      "description": "分布式缓存集群",
+      "description": "订单商品业务MySQL集群",
       "status": "running",
+      "technology": "MySQL 8.0",
+      "nodes": 8,
+      "config": "2主6从",
+      "region": "华东-1",
+      "databases": ["order_center", "product_catalog"]
+    },
+    {
+      "id": "db_cluster_payment",
+      "name": "支付数据库集群",
+      "type": "infrastructure",
+      "level": 5,
+      "plane": "infrastructure_plane",
+      "description": "支付交易专用高可用MySQL集群",
+      "status": "running",
+      "technology": "MySQL 8.0",
       "nodes": 6,
+      "config": "2主4从",
+      "region": "华东-1",
+      "databases": ["payment_core", "transaction_log"]
+    },
+    {
+      "id": "redis_cluster_cache",
+      "name": "缓存Redis集群",
+      "type": "infrastructure",
+      "level": 5,
+      "plane": "infrastructure_plane",
+      "description": "分布式缓存Redis集群",
+      "status": "running",
+      "technology": "Redis 7.0",
+      "nodes": 9,
+      "config": "3主6从",
       "region": "华东-1"
     }
   ],
@@ -282,20 +219,8 @@
       "strength": 1.0
     },
     {
-      "source": "business_scenario_1",
-      "target": "business_link_2",
-      "type": "contains",
-      "strength": 1.0
-    },
-    {
       "source": "business_scenario_2",
-      "target": "business_link_3",
-      "type": "contains",
-      "strength": 1.0
-    },
-    {
-      "source": "business_scenario_3",
-      "target": "business_link_4",
+      "target": "business_link_2",
       "type": "contains",
       "strength": 1.0
     },
@@ -324,46 +249,16 @@
       "strength": 1.0
     },
     {
-      "source": "business_link_3",
-      "target": "system_5",
-      "type": "depends_on",
-      "strength": 1.0
-    },
-    {
-      "source": "business_link_4",
-      "target": "system_6",
-      "type": "depends_on",
-      "strength": 1.0
-    },
-    {
       "source": "system_1",
       "target": "middleware_1",
       "type": "uses",
       "strength": 0.8
     },
     {
-      "source": "system_1",
-      "target": "middleware_3",
-      "type": "uses",
-      "strength": 0.7
-    },
-    {
       "source": "system_2",
       "target": "middleware_1",
       "type": "uses",
       "strength": 0.8
-    },
-    {
-      "source": "system_2",
-      "target": "middleware_3",
-      "type": "uses",
-      "strength": 0.9
-    },
-    {
-      "source": "system_3",
-      "target": "middleware_1",
-      "type": "uses",
-      "strength": 0.9
     },
     {
       "source": "system_3",
@@ -373,27 +268,9 @@
     },
     {
       "source": "system_4",
-      "target": "middleware_2",
-      "type": "uses",
-      "strength": 0.9
-    },
-    {
-      "source": "system_4",
-      "target": "middleware_3",
-      "type": "uses",
-      "strength": 1.0
-    },
-    {
-      "source": "system_5",
       "target": "middleware_1",
       "type": "uses",
       "strength": 1.0
-    },
-    {
-      "source": "system_6",
-      "target": "middleware_2",
-      "type": "uses",
-      "strength": 0.8
     },
     {
       "source": "middleware_1",
@@ -408,46 +285,40 @@
       "strength": 1.0
     },
     {
-      "source": "middleware_3",
-      "target": "infrastructure_3",
-      "type": "runs_on",
+      "source": "system_1",
+      "target": "db_cluster_user",
+      "type": "stores_in",
       "strength": 1.0
     },
     {
-      "source": "system_1",
-      "target": "infrastructure_2",
-      "type": "stores_in",
-      "strength": 0.9
-    },
-    {
       "source": "system_2",
-      "target": "infrastructure_2",
+      "target": "db_cluster_business",
       "type": "stores_in",
-      "strength": 0.8
+      "strength": 1.0
     },
     {
       "source": "system_3",
-      "target": "infrastructure_2",
+      "target": "db_cluster_business",
       "type": "stores_in",
       "strength": 1.0
     },
     {
       "source": "system_4",
-      "target": "infrastructure_2",
+      "target": "db_cluster_payment",
       "type": "stores_in",
-      "strength": 0.9
+      "strength": 1.0
     },
     {
-      "source": "system_5",
-      "target": "infrastructure_2",
-      "type": "stores_in",
-      "strength": 0.8
-    },
-    {
-      "source": "system_6",
-      "target": "infrastructure_2",
+      "source": "system_1",
+      "target": "redis_cluster_cache",
       "type": "stores_in",
       "strength": 0.7
+    },
+    {
+      "source": "system_2",
+      "target": "redis_cluster_cache",
+      "type": "stores_in",
+      "strength": 0.8
     }
   ],
   "metadata": {
