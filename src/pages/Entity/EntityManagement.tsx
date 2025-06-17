@@ -35,6 +35,7 @@ import {
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
+import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
 import entitiesData from '../../data/entitiesMock.json';
 
 const { Title, Paragraph } = Typography;
@@ -528,24 +529,8 @@ const EntityManagement: React.FC = () => {
         </Col>
       </Row>
 
-      <Card 
-        title="关系图谱功能" 
-        style={{ textAlign: 'center', padding: '60px 0' }}
-      >
-        <Space direction="vertical" size="large">
-          <ShareAltOutlined style={{ fontSize: '48px', color: '#1890ff' }} />
-          <div>
-            <Title level={4}>关系图谱</Title>
-            <Paragraph>
-              关系图谱功能位于"实体关系"页面的"关系图谱"标签页中。<br/>
-              请访问左侧菜单的"实体关系"页面查看完整的D3.js交互式关系图谱。
-            </Paragraph>
-          </div>
-          <Button type="primary" size="large">
-            前往关系图谱
-          </Button>
-        </Space>
-      </Card>
+      {/* D3.js 关系图谱 */}
+      <D3RelationshipGraph />
     </TabContent>
   );
 
