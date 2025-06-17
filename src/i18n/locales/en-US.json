@@ -99,7 +99,7 @@
     "inspectionTasks": "Inspection Tasks",
     "hookTasks": "Hook Tasks",
     "collections": "Task Collections",
-    "solutions": "Industry Solutions",
+    "solutions": "Industry Models",
     "systemSettings": "System Settings",
     "modelManagement": "Model Management",
     "promptTemplates": "Prompt Templates",
@@ -364,8 +364,8 @@
     }
   },
   "solutions": {
-    "title": "Industry Solutions",
-    "subtitle": "Predefined industry business scenarios, entity models and relationship architectures for rapid solution development.",
+    "title": "Industry Models",
+    "subtitle": "Predefined industry business scenarios, entity models and relationship architectures for rapid model development.",
     "refresh": "Refresh",
     "createSolution": "Create Solution",
     "stats": {

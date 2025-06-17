@@ -98,7 +98,7 @@
     "inspectionTasks": "巡检任务",
     "hookTasks": "钩子任务",
     "collections": "任务集合",
-    "solutions": "行业解决方案",
+    "solutions": "行业模型",
     "systemSettings": "系统设置",
     "modelManagement": "模型管理",
     "promptTemplates": "提示词模板",
@@ -363,8 +363,8 @@
     }
   },
   "solutions": {
-    "title": "行业方案",
-    "subtitle": "预定义的行业业务场景、实体模型和关系架构，快速构建行业解决方案。",
+    "title": "行业模型",
+    "subtitle": "预定义的行业业务场景、实体模型和关系架构，快速构建行业模型方案。",
     "refresh": "刷新",
     "createSolution": "创建方案",
     "stats": {
