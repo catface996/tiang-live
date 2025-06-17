@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Card, Spin, Alert, Space, Tag, Button } from 'antd';
-import { FullscreenOutlined, ReloadOutlined, ZoomInOutlined, ZoomOutOutlined } from '@ant-design/icons';
+import { FullscreenOutlined, ReloadOutlined, ZoomInOutlined, ZoomOutOutlined, UndoOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import businessRelationshipData from '../../data/businessRelationshipMock.json';
@@ -319,8 +319,28 @@ const D3RelationshipGraph: React.FC = () => {
         })
         .on('end', (event, d) => {
           if (!event.active) simulation.alphaTarget(0);
-          d.fx = null;
-          d.fy = null;
+          // 保持节点固定在拖拽结束的位置，不设置为null
+          // d.fx = null;
+          // d.fy = null;
+          
+          // 确保节点在平面约束范围内
+          const plane = graphData.planes.find(p => p.id === d.plane);
+          if (plane) {
+            const bounds = calculatePlaneBounds(plane, graphData.nodes, width, height);
+            if (bounds) {
+              const padding = 30;
+              const minX = bounds.x + padding;
+              const maxX = bounds.x + bounds.width - padding;
+              const minY = bounds.y + padding + 50; // 留出标题空间
+              const maxY = bounds.y + bounds.height - padding;
+
+              // 约束节点位置在平面范围内
+              if (d.fx! < minX) d.fx = minX;
+              if (d.fx! > maxX) d.fx = maxX;
+              if (d.fy! < minY) d.fy = minY;
+              if (d.fy! > maxY) d.fy = maxY;
+            }
+          }
         })
       );
 
@@ -406,10 +426,20 @@ const D3RelationshipGraph: React.FC = () => {
       svg.transition().call(zoom.transform, d3.zoomIdentity);
     };
 
+    const resetNodePositions = () => {
+      // 重置所有节点的固定位置，恢复自动布局
+      graphData.nodes.forEach(node => {
+        node.fx = null;
+        node.fy = null;
+      });
+      simulation.alpha(1).restart();
+    };
+
     // 将控制函数绑定到组件实例
     (svgRef.current as any).zoomIn = zoomIn;
     (svgRef.current as any).zoomOut = zoomOut;
     (svgRef.current as any).resetZoom = resetZoom;
+    (svgRef.current as any).resetNodePositions = resetNodePositions;
   };
 
   // 加载数据
@@ -459,6 +489,10 @@ const D3RelationshipGraph: React.FC = () => {
     (svgRef.current as any)?.resetZoom?.();
   };
 
+  const handleResetNodePositions = () => {
+    (svgRef.current as any)?.resetNodePositions?.();
+  };
+
   const handleRefresh = () => {
     initializeGraph();
   };
@@ -495,10 +529,11 @@ const D3RelationshipGraph: React.FC = () => {
         {/* 控制面板 */}
         <ControlPanel>
           <Space direction="vertical" size="small">
-            <Button size="small" icon={<ZoomInOutlined />} onClick={handleZoomIn} />
-            <Button size="small" icon={<ZoomOutOutlined />} onClick={handleZoomOut} />
-            <Button size="small" icon={<FullscreenOutlined />} onClick={handleResetZoom} />
-            <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} />
+            <Button size="small" icon={<ZoomInOutlined />} onClick={handleZoomIn} title="放大" />
+            <Button size="small" icon={<ZoomOutOutlined />} onClick={handleZoomOut} title="缩小" />
+            <Button size="small" icon={<FullscreenOutlined />} onClick={handleResetZoom} title="重置视图" />
+            <Button size="small" icon={<UndoOutlined />} onClick={handleResetNodePositions} title="重置节点位置" />
+            <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} title="刷新图谱" />
           </Space>
         </ControlPanel>
 
