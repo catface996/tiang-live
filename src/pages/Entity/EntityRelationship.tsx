@@ -226,7 +226,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="关系总数"
-              value={18}
+              value={25}
               suffix="条"
               valueStyle={{ color: '#1890ff' }}
             />
@@ -246,7 +246,7 @@ const EntityRelationship: React.FC = () => {
           <StatsCard>
             <Statistic
               title="图谱节点"
-              value={15}
+              value={21}
               suffix="个"
               valueStyle={{ color: '#faad14' }}
             />
@@ -255,8 +255,8 @@ const EntityRelationship: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="数据库集群"
-              value={4}
+              title="支付系统"
+              value={5}
               suffix="个"
               valueStyle={{ color: '#722ed1' }}
             />
@@ -300,13 +300,14 @@ const EntityRelationship: React.FC = () => {
             }
           >
             <Paragraph>
-              支持节点拖拽、缩放平移、悬浮高亮和点击查看详情等丰富交互功能。
+              展示完整的支付结算生态系统，包含支付网关、钱包、风控、清结算等核心系统。
             </Paragraph>
             <div>
-              <Tag color="green">节点拖拽</Tag>
-              <Tag color="green">缩放平移</Tag>
-              <Tag color="green">悬浮高亮</Tag>
-              <Tag color="green">详情查看</Tag>
+              <Tag color="blue">支付网关</Tag>
+              <Tag color="green">钱包系统</Tag>
+              <Tag color="orange">风控系统</Tag>
+              <Tag color="purple">清结算</Tag>
+              <Tag color="red">账务系统</Tag>
             </div>
           </FeatureCard>
         </Col>

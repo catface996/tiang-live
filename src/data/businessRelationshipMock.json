@@ -57,7 +57,7 @@
       "type": "business_scenario",
       "level": 1,
       "plane": "business_scenario_plane",
-      "description": "处理用户支付和商户结算的业务场景",
+      "description": "处理用户支付和商户结算的完整业务场景",
       "status": "active"
     },
     {
@@ -76,6 +76,24 @@
       "level": 2,
       "plane": "business_link_plane",
       "description": "支付验证、扣款、确认的业务链路", 
+      "status": "active"
+    },
+    {
+      "id": "business_link_3",
+      "name": "风控审核链路",
+      "type": "business_link",
+      "level": 2,
+      "plane": "business_link_plane",
+      "description": "交易风险识别和安全审核链路", 
+      "status": "active"
+    },
+    {
+      "id": "business_link_4",
+      "name": "资金结算链路",
+      "type": "business_link",
+      "level": 2,
+      "plane": "business_link_plane",
+      "description": "商户资金结算和清分业务链路", 
       "status": "active"
     },
     {
@@ -123,6 +141,50 @@
       "instances": 10
     },
     {
+      "id": "system_5",
+      "name": "钱包系统",
+      "type": "business_system",
+      "level": 3,
+      "plane": "application_plane",
+      "description": "用户钱包余额和虚拟账户管理系统",
+      "status": "running", 
+      "version": "v2.3.1",
+      "instances": 8
+    },
+    {
+      "id": "system_6",
+      "name": "风控系统",
+      "type": "business_system",
+      "level": 3,
+      "plane": "application_plane",
+      "description": "交易风险识别和反欺诈系统",
+      "status": "running", 
+      "version": "v1.7.2",
+      "instances": 6
+    },
+    {
+      "id": "system_7",
+      "name": "清结算系统",
+      "type": "business_system",
+      "level": 3,
+      "plane": "application_plane",
+      "description": "资金清分和商户结算系统",
+      "status": "running", 
+      "version": "v2.0.5",
+      "instances": 4
+    },
+    {
+      "id": "system_8",
+      "name": "账务系统",
+      "type": "business_system",
+      "level": 3,
+      "plane": "application_plane",
+      "description": "资金流水和账务记录系统",
+      "status": "running", 
+      "version": "v1.5.8",
+      "instances": 6
+    },
+    {
       "id": "middleware_1",
       "name": "API网关",
       "type": "middleware",
@@ -145,6 +207,17 @@
       "instances": 9
     },
     {
+      "id": "middleware_3",
+      "name": "规则引擎",
+      "type": "middleware", 
+      "level": 4,
+      "plane": "middleware_plane",
+      "description": "风控规则和业务规则执行引擎",
+      "status": "running",
+      "technology": "Drools",
+      "instances": 4
+    },
+    {
       "id": "infrastructure_1",
       "name": "Kubernetes集群",
       "type": "infrastructure",
@@ -156,34 +229,6 @@
       "region": "华东-1"
     },
     {
-      "id": "db_cluster_user",
-      "name": "用户数据库集群",
-      "type": "infrastructure",
-      "level": 5,
-      "plane": "infrastructure_plane",
-      "description": "用户中心专用MySQL主从集群",
-      "status": "running",
-      "technology": "MySQL 8.0",
-      "nodes": 5,
-      "config": "1主4从",
-      "region": "华东-1",
-      "databases": ["user_center", "user_profile", "user_auth"]
-    },
-    {
-      "id": "db_cluster_business",
-      "name": "业务数据库集群",
-      "type": "infrastructure",
-      "level": 5,
-      "plane": "infrastructure_plane",
-      "description": "订单商品业务MySQL集群",
-      "status": "running",
-      "technology": "MySQL 8.0",
-      "nodes": 8,
-      "config": "2主6从",
-      "region": "华东-1",
-      "databases": ["order_center", "product_catalog"]
-    },
-    {
       "id": "db_cluster_payment",
       "name": "支付数据库集群",
       "type": "infrastructure",
@@ -192,23 +237,38 @@
       "description": "支付交易专用高可用MySQL集群",
       "status": "running",
       "technology": "MySQL 8.0",
-      "nodes": 6,
-      "config": "2主4从",
+      "nodes": 10,
+      "config": "2主8从",
       "region": "华东-1",
-      "databases": ["payment_core", "transaction_log"]
+      "databases": ["payment_core", "wallet_account", "transaction_log"]
     },
     {
-      "id": "redis_cluster_cache",
-      "name": "缓存Redis集群",
+      "id": "db_cluster_risk",
+      "name": "风控数据库集群",
       "type": "infrastructure",
       "level": 5,
       "plane": "infrastructure_plane",
-      "description": "分布式缓存Redis集群",
+      "description": "风控数据和规则存储MySQL集群",
       "status": "running",
-      "technology": "Redis 7.0",
-      "nodes": 9,
-      "config": "3主6从",
-      "region": "华东-1"
+      "technology": "MySQL 8.0",
+      "nodes": 6,
+      "config": "1主5从",
+      "region": "华东-1",
+      "databases": ["risk_control", "fraud_detection", "rule_engine"]
+    },
+    {
+      "id": "db_cluster_settlement",
+      "name": "清结算数据库集群",
+      "type": "infrastructure",
+      "level": 5,
+      "plane": "infrastructure_plane",
+      "description": "资金清算和结算数据MySQL集群",
+      "status": "running",
+      "technology": "MySQL 8.0",
+      "nodes": 8,
+      "config": "2主6从",
+      "region": "华东-1",
+      "databases": ["settlement_core", "accounting_ledger", "merchant_account"]
     }
   ],
   "links": [
@@ -221,6 +281,18 @@
     {
       "source": "business_scenario_2",
       "target": "business_link_2",
+      "type": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "business_scenario_2",
+      "target": "business_link_3",
+      "type": "contains",
+      "strength": 1.0
+    },
+    {
+      "source": "business_scenario_2",
+      "target": "business_link_4",
       "type": "contains",
       "strength": 1.0
     },
@@ -249,28 +321,58 @@
       "strength": 1.0
     },
     {
-      "source": "system_1",
-      "target": "middleware_1",
-      "type": "uses",
-      "strength": 0.8
+      "source": "business_link_2",
+      "target": "system_5",
+      "type": "depends_on",
+      "strength": 0.9
     },
     {
-      "source": "system_2",
-      "target": "middleware_1",
-      "type": "uses",
-      "strength": 0.8
-    },
-    {
-      "source": "system_3",
-      "target": "middleware_2",
-      "type": "uses",
+      "source": "business_link_3",
+      "target": "system_6",
+      "type": "depends_on",
       "strength": 1.0
+    },
+    {
+      "source": "business_link_4",
+      "target": "system_7",
+      "type": "depends_on",
+      "strength": 1.0
+    },
+    {
+      "source": "business_link_4",
+      "target": "system_8",
+      "type": "depends_on",
+      "strength": 0.9
     },
     {
       "source": "system_4",
       "target": "middleware_1",
       "type": "uses",
       "strength": 1.0
+    },
+    {
+      "source": "system_5",
+      "target": "middleware_1",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "system_6",
+      "target": "middleware_3",
+      "type": "uses",
+      "strength": 1.0
+    },
+    {
+      "source": "system_7",
+      "target": "middleware_2",
+      "type": "uses",
+      "strength": 0.9
+    },
+    {
+      "source": "system_8",
+      "target": "middleware_2",
+      "type": "uses",
+      "strength": 0.8
     },
     {
       "source": "middleware_1",
@@ -285,21 +387,9 @@
       "strength": 1.0
     },
     {
-      "source": "system_1",
-      "target": "db_cluster_user",
-      "type": "stores_in",
-      "strength": 1.0
-    },
-    {
-      "source": "system_2",
-      "target": "db_cluster_business",
-      "type": "stores_in",
-      "strength": 1.0
-    },
-    {
-      "source": "system_3",
-      "target": "db_cluster_business",
-      "type": "stores_in",
+      "source": "middleware_3",
+      "target": "infrastructure_1",
+      "type": "runs_on",
       "strength": 1.0
     },
     {
@@ -309,16 +399,28 @@
       "strength": 1.0
     },
     {
-      "source": "system_1",
-      "target": "redis_cluster_cache",
+      "source": "system_5",
+      "target": "db_cluster_payment",
       "type": "stores_in",
-      "strength": 0.7
+      "strength": 1.0
     },
     {
-      "source": "system_2",
-      "target": "redis_cluster_cache",
+      "source": "system_6",
+      "target": "db_cluster_risk",
       "type": "stores_in",
-      "strength": 0.8
+      "strength": 1.0
+    },
+    {
+      "source": "system_7",
+      "target": "db_cluster_settlement",
+      "type": "stores_in",
+      "strength": 1.0
+    },
+    {
+      "source": "system_8",
+      "target": "db_cluster_settlement",
+      "type": "stores_in",
+      "strength": 1.0
     }
   ],
   "metadata": {
