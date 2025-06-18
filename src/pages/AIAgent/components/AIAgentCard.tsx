@@ -41,6 +41,15 @@ const CustomAvatar = styled(Avatar)<{ $bgColor: string }>`
   &.ant-avatar {
     background-color: ${props => props.$bgColor} !important;
   }
+  
+  /* 确保图标始终为白色，在彩色背景上清晰可见 */
+  .anticon {
+    color: #ffffff !important;
+  }
+  
+  svg {
+    color: #ffffff !important;
+  }
 `;
 
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
@@ -392,7 +401,9 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
           <div className="agent-type">
             <Tag 
               color={typeConfig.color} 
-              icon={typeConfig.icon}
+              icon={React.cloneElement(typeConfig.icon, { 
+                style: { color: typeConfig.color } 
+              })}
               style={typeConfig.bgColor ? { 
                 backgroundColor: typeConfig.bgColor,
                 border: `1px solid ${typeConfig.color}`,
@@ -403,10 +414,15 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
             </Tag>
             <Tag 
               color={statusConfig.color} 
-              icon={statusConfig.icon}
+              icon={React.cloneElement(statusConfig.icon, { 
+                style: { color: statusConfig.color } 
+              })}
               style={statusConfig.bgColor ? { 
                 backgroundColor: statusConfig.bgColor,
                 border: `1px solid ${statusConfig.color}`,
+                color: statusConfig.color
+              } : {}}
+            >
                 color: statusConfig.color
               } : {}}
             >
