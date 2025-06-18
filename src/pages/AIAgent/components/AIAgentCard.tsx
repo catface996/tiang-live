@@ -423,9 +423,6 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
                 color: statusConfig.color
               } : {}}
             >
-                color: statusConfig.color
-              } : {}}
-            >
               <span className={`status-indicator ${agent.status}`}></span>
               {statusConfig.text}
             </Tag>
