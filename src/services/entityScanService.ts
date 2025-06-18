@@ -1,4 +1,4 @@
-import { apiClient } from './apiClient';
+import { apiClient } from './api';
 
 // 数据源接口
 export interface DataSource {
