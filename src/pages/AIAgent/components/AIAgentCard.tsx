@@ -201,25 +201,29 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
       name: '监控', 
       color: isDark ? '#1890ff' : 'blue', 
       icon: <MonitorOutlined />,
-      bgColor: isDark ? 'rgba(24, 144, 255, 0.1)' : undefined
+      bgColor: isDark ? 'rgba(24, 144, 255, 0.1)' : undefined,
+      avatarColor: isDark ? '#1890ff' : '#4096ff'
     },
     analysis: { 
       name: '分析', 
       color: isDark ? '#52c41a' : 'green', 
       icon: <BarChartOutlined />,
-      bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+      bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined,
+      avatarColor: isDark ? '#52c41a' : '#73d13d'
     },
     deployment: { 
       name: '部署', 
       color: isDark ? '#722ed1' : 'purple', 
       icon: <ApiOutlined />,
-      bgColor: isDark ? 'rgba(114, 46, 209, 0.1)' : undefined
+      bgColor: isDark ? 'rgba(114, 46, 209, 0.1)' : undefined,
+      avatarColor: isDark ? '#722ed1' : '#9254de'
     },
     optimization: { 
       name: '优化', 
       color: isDark ? '#fa8c16' : 'orange', 
       icon: <ThunderboltOutlined />,
-      bgColor: isDark ? 'rgba(250, 140, 22, 0.1)' : undefined
+      bgColor: isDark ? 'rgba(250, 140, 22, 0.1)' : undefined,
+      avatarColor: isDark ? '#fa8c16' : '#ffa940'
     },
   };
 
@@ -334,9 +338,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
             size={48} 
             icon={<RobotOutlined />} 
             style={{ 
-              backgroundColor: typeConfig.color === 'blue' || typeConfig.color === '#1890ff' ? '#1890ff' : 
-                              typeConfig.color === 'green' || typeConfig.color === '#52c41a' ? '#52c41a' :
-                              typeConfig.color === 'purple' || typeConfig.color === '#722ed1' ? '#722ed1' : '#fa8c16'
+              backgroundColor: typeConfig.avatarColor
             }}
           />
         </div>
