@@ -128,7 +128,7 @@ const StyledAlert = styled(Alert)<{ $isDark: boolean }>`
 interface AIAgent {
   id: string;
   name: string;
-  type: string;
+  type: 'monitor' | 'analysis' | 'deployment' | 'optimization';
   status: 'running' | 'stopped' | 'paused';
   description: string;
   version: string;

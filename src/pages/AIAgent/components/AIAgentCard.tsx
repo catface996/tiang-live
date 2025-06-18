@@ -254,6 +254,11 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
   const statusConfig = getStatusConfig(agent.status);
   const typeConfig = agentTypeMap[agent.type];
 
+  // 添加安全检查，确保 typeConfig 存在
+  if (!typeConfig) {
+    console.error('Unknown agent type:', agent.type);
+  }
+
   const handleAction = (action: string, event: React.MouseEvent) => {
     event.stopPropagation();
     switch (action) {
@@ -338,7 +343,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
             size={48} 
             icon={<RobotOutlined />} 
             style={{ 
-              backgroundColor: typeConfig.avatarColor
+              backgroundColor: typeConfig?.avatarColor || (isDark ? '#1890ff' : '#4096ff')
             }}
           />
         </div>
