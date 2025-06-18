@@ -40,6 +40,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
+import { entityScanService } from '../../../services/entityScanService';
 
 const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
@@ -135,54 +136,21 @@ const EntityScan: React.FC = () => {
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
 
-  // 模拟数据源
+  // 加载数据源
   useEffect(() => {
-    const mockDataSources: DataSource[] = [
-      {
-        id: 'mysql-prod',
-        name: '生产环境MySQL',
-        type: 'database',
-        description: '生产环境主数据库，包含用户、订单、商品等核心业务数据',
-        config: {
-          host: 'prod-mysql.example.com',
-          port: 3306,
-          database: 'business_db',
-          username: 'scan_user'
-        },
-        status: 'connected',
-        lastScan: '2024-06-17 14:30:00',
-        entityCount: 156
-      },
-      {
-        id: 'api-crm',
-        name: 'CRM系统API',
-        type: 'api',
-        description: 'CRM系统REST API，包含客户、联系人、销售机会等数据',
-        config: {
-          baseUrl: 'https://crm.example.com/api/v1',
-          apiKey: '***hidden***',
-          endpoints: ['/customers', '/contacts', '/opportunities']
-        },
-        status: 'connected',
-        lastScan: '2024-06-16 09:15:00',
-        entityCount: 89
-      },
-      {
-        id: 'cloud-oss',
-        name: '阿里云OSS',
-        type: 'cloud',
-        description: '对象存储服务，包含文档、图片、视频等文件资源',
-        config: {
-          endpoint: 'oss-cn-hangzhou.aliyuncs.com',
-          bucket: 'business-files',
-          accessKeyId: '***hidden***'
-        },
-        status: 'disconnected',
-        entityCount: 0
-      }
-    ];
-    setDataSources(mockDataSources);
+    loadDataSources();
   }, []);
+
+  const loadDataSources = async () => {
+    try {
+      const sources = await entityScanService.getDataSources();
+      setDataSources(sources);
+    } catch (error) {
+      console.error('Failed to load data sources:', error);
+      // 如果服务调用失败，使用本地模拟数据
+      setDataSources([]);
+    }
+  };
 
   // 数据源类型图标
   const getDataSourceIcon = (type: string, subType?: string) => {
@@ -327,12 +295,12 @@ const EntityScan: React.FC = () => {
 
   // 生成模拟结果
   const generateMockResults = () => {
-    const selectedDataSource = dataSources.find(ds => ds.id === selectedDataSource);
+    const currentDataSource = dataSources.find(ds => ds.id === selectedDataSource);
     let mockResults: ScanResult[] = [];
 
-    if (selectedDataSource?.type === 'monitoring') {
+    if (currentDataSource?.type === 'monitoring') {
       // 监控系统相关实体
-      switch (selectedDataSource.subType) {
+      switch (currentDataSource.subType) {
         case 'prometheus':
           mockResults = [
             {
@@ -461,7 +429,7 @@ const EntityScan: React.FC = () => {
             }
           ];
       }
-    } else if (selectedDataSource?.type === 'metrics') {
+    } else if (currentDataSource?.type === 'metrics') {
       // 指标数据库相关实体
       mockResults = [
         {
