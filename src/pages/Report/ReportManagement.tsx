@@ -8,13 +8,10 @@ import {
   Col, 
   Statistic,
   Badge,
-  Table,
   Tag,
-  Dropdown,
   Input,
   DatePicker,
   Select,
-  Tabs,
   message,
   theme
 } from 'antd';
@@ -27,14 +24,7 @@ import {
   ExportOutlined,
   DownloadOutlined,
   EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  MoreOutlined,
-  CalendarOutlined,
-  UserOutlined,
-  ClockCircleOutlined,
-  AppstoreOutlined,
-  BarsOutlined
+  EditOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -169,73 +159,8 @@ const MainCard = styled(Card)<{ $isDark: boolean }>`
   }
 `;
 
-const StyledTable = styled(Table)<{ $isDark: boolean }>`
-  .ant-table {
-    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
-  }
-  
-  .ant-table-thead > tr > th {
-    background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
-    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
-    border-bottom: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-  }
-  
-  .ant-table-tbody > tr > td {
-    border-bottom: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
-  }
-  
-  .ant-table-tbody > tr:hover > td {
-    background: ${props => props.$isDark ? '#262626' : '#f5f5f5'};
-  }
-  
-  .ant-pagination {
-    .ant-pagination-item {
-      background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-      border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
-      
-      a {
-        color: ${props => props.$isDark ? '#ffffff' : '#000000'};
-      }
-      
-      &:hover {
-        border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
-        
-        a {
-          color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
-        }
-      }
-      
-      &.ant-pagination-item-active {
-        background: ${props => props.$isDark ? '#177ddc' : '#1890ff'};
-        border-color: ${props => props.$isDark ? '#177ddc' : '#1890ff'};
-        
-        a {
-          color: #ffffff;
-        }
-      }
-    }
-    
-    .ant-pagination-prev,
-    .ant-pagination-next {
-      .ant-pagination-item-link {
-        background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-        border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
-        color: ${props => props.$isDark ? '#ffffff' : '#000000'};
-        
-        &:hover {
-          border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
-          color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
-        }
-      }
-    }
-  }
-`;
-
 const ReportManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [viewMode, setViewMode] = useState<'list' | 'cards'>('cards');
   const { t } = useTranslation();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
@@ -437,128 +362,6 @@ const ReportManagement: React.FC = () => {
     </Row>
   );
 
-  const actionMenuItems = [
-    {
-      key: 'view',
-      icon: <EyeOutlined />,
-      label: '查看详情',
-    },
-    {
-      key: 'edit',
-      icon: <EditOutlined />,
-      label: '编辑报告',
-    },
-    {
-      key: 'download',
-      icon: <DownloadOutlined />,
-      label: '下载报告',
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: 'delete',
-      icon: <DeleteOutlined />,
-      label: '删除报告',
-      danger: true,
-    },
-  ];
-
-  const columns = [
-    {
-      title: '报告名称',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text: string, record: any) => (
-        <Space>
-          <FileTextOutlined style={{ color: isDark ? '#1890ff' : '#1890ff' }} />
-          <span style={{ 
-            fontWeight: 500,
-            color: isDark ? '#ffffff' : '#262626'
-          }}>
-            {text}
-          </span>
-        </Space>
-      ),
-    },
-    {
-      title: '类型',
-      dataIndex: 'type',
-      key: 'type',
-      render: (type: string) => getTypeTag(type),
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => getStatusTag(status),
-    },
-    {
-      title: '创建者',
-      dataIndex: 'author',
-      key: 'author',
-      render: (author: string) => (
-        <Space>
-          <UserOutlined style={{ color: isDark ? '#8c8c8c' : '#666' }} />
-          <span style={{ color: isDark ? '#ffffff' : '#262626' }}>
-            {author}
-          </span>
-        </Space>
-      ),
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (time: string) => (
-        <Space>
-          <CalendarOutlined style={{ color: isDark ? '#8c8c8c' : '#666' }} />
-          <span style={{ color: isDark ? '#ffffff' : '#262626' }}>
-            {time}
-          </span>
-        </Space>
-      ),
-    },
-    {
-      title: '文件大小',
-      dataIndex: 'size',
-      key: 'size',
-    },
-    {
-      title: '下载次数',
-      dataIndex: 'downloads',
-      key: 'downloads',
-      render: (downloads: number) => (
-        <Badge count={downloads} style={{ backgroundColor: '#52c41a' }} />
-      ),
-    },
-    {
-      title: '操作',
-      key: 'action',
-      render: (_, record: any) => (
-        <Space>
-          <Button 
-            type="link" 
-            icon={<EyeOutlined />} 
-            size="small"
-          >
-            查看
-          </Button>
-          <Dropdown 
-            menu={{ items: actionMenuItems }}
-            trigger={['click']}
-          >
-            <Button 
-              type="link" 
-              icon={<MoreOutlined />} 
-              size="small"
-            />
-          </Dropdown>
-        </Space>
-      ),
-    },
-  ];
-
   return (
     <PageContainer $isDark={isDark}>
       <PageHeader $isDark={isDark}>
@@ -713,56 +516,11 @@ const ReportManagement: React.FC = () => {
                 {t('common.filter')}
               </Button>
             </Col>
-            <Col>
-              <Button.Group>
-                <Button 
-                  type={viewMode === 'cards' ? 'primary' : 'default'}
-                  icon={<AppstoreOutlined />}
-                  onClick={() => setViewMode('cards')}
-                  style={viewMode !== 'cards' ? {
-                    color: isDark ? '#ffffff' : undefined,
-                    borderColor: isDark ? '#434343' : undefined,
-                    backgroundColor: isDark ? 'transparent' : undefined
-                  } : {}}
-                >
-                  {t('common.cardView')}
-                </Button>
-                <Button 
-                  type={viewMode === 'list' ? 'primary' : 'default'}
-                  icon={<BarsOutlined />}
-                  onClick={() => setViewMode('list')}
-                  style={viewMode !== 'list' ? {
-                    color: isDark ? '#ffffff' : undefined,
-                    borderColor: isDark ? '#434343' : undefined,
-                    backgroundColor: isDark ? 'transparent' : undefined
-                  } : {}}
-                >
-                  {t('common.listView')}
-                </Button>
-              </Button.Group>
-            </Col>
           </Row>
         </FilterBar>
 
-        {/* 视图内容 */}
-        {viewMode === 'cards' ? (
-          renderCardView()
-        ) : (
-          <StyledTable
-            $isDark={isDark}
-            columns={columns}
-            dataSource={reportData}
-            loading={loading}
-            pagination={{
-              total: reportData.length,
-              pageSize: 10,
-              showSizeChanger: true,
-              showQuickJumper: true,
-              showTotal: (total, range) => 
-                `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
-            }}
-          />
-        )}
+        {/* 卡片视图 */}
+        {renderCardView()}
       </MainCard>
     </PageContainer>
   );
