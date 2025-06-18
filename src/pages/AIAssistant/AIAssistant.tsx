@@ -13,7 +13,8 @@ import {
   Tooltip,
   Row,
   Col,
-  Badge
+  Badge,
+  theme
 } from 'antd';
 import { 
   MessageOutlined,
@@ -30,15 +31,18 @@ import {
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
+import { useAppSelector } from '../../store';
 
 const { Title, Paragraph, Text } = Typography;
 const { TextArea } = Input;
 
-const PageContainer = styled.div`
+const PageContainer = styled.div<{ $isDark: boolean }>`
   padding: 24px;
   height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
+  background: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
+  transition: all 0.3s ease;
 `;
 
 const ChatContainer = styled.div`
@@ -48,13 +52,55 @@ const ChatContainer = styled.div`
   min-height: 0;
 `;
 
-const MessagesContainer = styled.div`
+const StyledCard = styled(Card)<{ $isDark: boolean }>`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  border-radius: 8px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+  };
+  transition: all 0.3s ease;
+  
+  .ant-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+  }
+`;
+
+const MessagesContainer = styled.div<{ $isDark: boolean }>`
   flex: 1;
   overflow-y: auto;
   padding: 16px;
-  background: #fafafa;
+  background: ${props => props.$isDark ? '#0a0a0a' : '#fafafa'};
+  border: ${props => props.$isDark ? '1px solid #262626' : '1px solid #f0f0f0'};
   border-radius: 8px;
   margin-bottom: 16px;
+  transition: all 0.3s ease;
+  
+  /* 自定义滚动条 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: ${props => props.$isDark ? '#1f1f1f' : '#f1f1f1'};
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: ${props => props.$isDark ? '#434343' : '#c1c1c1'};
+    border-radius: 3px;
+    
+    &:hover {
+      background: ${props => props.$isDark ? '#595959' : '#a8a8a8'};
+    }
+  }
 `;
 
 const MessageItem = styled.div<{ isUser: boolean }>`
@@ -71,13 +117,30 @@ const MessageContent = styled.div<{ isUser: boolean }>`
   gap: 8px;
 `;
 
-const MessageBubble = styled.div<{ isUser: boolean }>`
+const MessageBubble = styled.div<{ isUser: boolean; $isDark: boolean }>`
   padding: 12px 16px;
   border-radius: 12px;
-  background: ${props => props.isUser ? '#1890ff' : '#ffffff'};
-  color: ${props => props.isUser ? '#ffffff' : '#000000'};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: ${props => {
+    if (props.isUser) {
+      return props.$isDark ? '#177ddc' : '#1890ff';
+    } else {
+      return props.$isDark ? '#262626' : '#ffffff';
+    }
+  }};
+  color: ${props => {
+    if (props.isUser) {
+      return '#ffffff';
+    } else {
+      return props.$isDark ? '#ffffff' : '#000000';
+    }
+  }};
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.1)'
+  };
+  border: ${props => props.$isDark && !props.isUser ? '1px solid #434343' : 'none'};
   position: relative;
+  transition: all 0.3s ease;
   
   &::before {
     content: '';
@@ -88,33 +151,81 @@ const MessageBubble = styled.div<{ isUser: boolean }>`
     border: 6px solid transparent;
     ${props => props.isUser ? `
       right: -12px;
-      border-left-color: #1890ff;
+      border-left-color: ${props.$isDark ? '#177ddc' : '#1890ff'};
     ` : `
       left: -12px;
-      border-right-color: #ffffff;
+      border-right-color: ${props.$isDark ? '#262626' : '#ffffff'};
+      ${props.$isDark ? 'filter: drop-shadow(1px 0 0 #434343);' : ''}
     `}
   }
 `;
 
-const InputContainer = styled.div`
+const InputContainer = styled.div<{ $isDark: boolean }>`
   display: flex;
   gap: 8px;
   align-items: flex-end;
+  
+  .ant-input {
+    background: ${props => props.$isDark ? '#000000' : '#ffffff'};
+    border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
+    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+    
+    &:hover {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+    }
+    
+    &:focus {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+      box-shadow: ${props => props.$isDark 
+        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+      };
+    }
+    
+    &::placeholder {
+      color: ${props => props.$isDark ? '#8c8c8c' : '#bfbfbf'};
+    }
+  }
 `;
 
-const SuggestionContainer = styled.div`
+const SuggestionContainer = styled.div<{ $isDark: boolean }>`
   margin-bottom: 16px;
+  padding: 16px;
+  background: ${props => props.$isDark ? '#1f1f1f' : '#f8f9fa'};
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #e8e8e8'};
+  border-radius: 8px;
+  transition: all 0.3s ease;
 `;
 
-const SuggestionTag = styled(Tag)`
+const SuggestionTag = styled(Tag)<{ $isDark: boolean }>`
   margin-bottom: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  background: ${props => props.$isDark ? 'rgba(24, 144, 255, 0.1)' : undefined};
+  border-color: ${props => props.$isDark ? '#177ddc' : undefined};
+  color: ${props => props.$isDark ? '#177ddc' : undefined};
   
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: ${props => props.$isDark 
+      ? '0 2px 8px rgba(23, 125, 220, 0.3)' 
+      : '0 2px 8px rgba(0, 0, 0, 0.1)'
+    };
+    background: ${props => props.$isDark ? 'rgba(24, 144, 255, 0.2)' : undefined};
   }
+`;
+
+const PageHeader = styled.div<{ $isDark: boolean }>`
+  margin-bottom: 24px;
+  padding: 24px;
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  border-radius: 8px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+  };
+  transition: all 0.3s ease;
 `;
 
 interface Message {
@@ -133,6 +244,9 @@ const AIAssistant: React.FC = () => {
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { token } = theme.useToken();
+  const isDark = currentTheme === 'dark';
 
   useEffect(() => {
     setPageTitle(t('aiAssistant.title'));
@@ -274,14 +388,17 @@ const AIAssistant: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer $isDark={isDark}>
       {/* 页面头部 */}
-      <div style={{ marginBottom: 24 }}>
+      <PageHeader $isDark={isDark}>
         <Row justify="space-between" align="middle">
           <Col>
-            <Title level={2} style={{ margin: 0 }}>
+            <Title level={2} style={{ 
+              margin: 0,
+              color: isDark ? '#ffffff' : '#262626'
+            }}>
               <Space>
-                <MessageOutlined style={{ color: '#1890ff' }} />
+                <MessageOutlined style={{ color: isDark ? '#177ddc' : '#1890ff' }} />
                 {t('aiAssistant.title')}
                 <Badge 
                   count="Beta" 
@@ -292,7 +409,12 @@ const AIAssistant: React.FC = () => {
                 />
               </Space>
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph style={{ 
+              marginTop: 8, 
+              marginBottom: 0, 
+              fontSize: 16,
+              color: isDark ? '#8c8c8c' : '#666666'
+            }}>
               {t('aiAssistant.subtitle')}
             </Paragraph>
           </Col>
@@ -302,6 +424,11 @@ const AIAssistant: React.FC = () => {
                 <Button 
                   icon={<DeleteOutlined />} 
                   onClick={handleClearChat}
+                  style={{
+                    color: isDark ? '#ffffff' : undefined,
+                    borderColor: isDark ? '#434343' : undefined,
+                    backgroundColor: isDark ? 'transparent' : undefined
+                  }}
                 >
                   {t('aiAssistant.clear')}
                 </Button>
@@ -310,6 +437,11 @@ const AIAssistant: React.FC = () => {
                 <Button 
                   icon={<ReloadOutlined />}
                   onClick={() => window.location.reload()}
+                  style={{
+                    color: isDark ? '#ffffff' : undefined,
+                    borderColor: isDark ? '#434343' : undefined,
+                    backgroundColor: isDark ? 'transparent' : undefined
+                  }}
                 >
                   {t('common.refresh')}
                 </Button>
@@ -317,17 +449,19 @@ const AIAssistant: React.FC = () => {
             </Space>
           </Col>
         </Row>
-      </div>
+      </PageHeader>
 
       <ChatContainer>
-        <Card style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <StyledCard $isDark={isDark}>
           {/* 建议问题 */}
           {messages.length <= 1 && (
-            <SuggestionContainer>
+            <SuggestionContainer $isDark={isDark}>
               <div style={{ marginBottom: 12 }}>
                 <Space>
                   <BulbOutlined style={{ color: '#faad14' }} />
-                  <Text strong>{t('aiAssistant.suggestions')}：</Text>
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                    {t('aiAssistant.suggestions')}：
+                  </Text>
                 </Space>
               </div>
               <div>
@@ -336,21 +470,28 @@ const AIAssistant: React.FC = () => {
                     key={index}
                     icon={<QuestionCircleOutlined />}
                     color="blue"
+                    $isDark={isDark}
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
                   </SuggestionTag>
                 ))}
               </div>
-              <Divider />
+              <Divider style={{ 
+                borderColor: isDark ? '#303030' : '#f0f0f0' 
+              }} />
             </SuggestionContainer>
           )}
 
           {/* 消息列表 */}
-          <MessagesContainer>
+          <MessagesContainer $isDark={isDark}>
             {messages.length === 0 ? (
               <Empty 
-                description="还没有对话记录，开始你的第一个问题吧！"
+                description={
+                  <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}>
+                    还没有对话记录，开始你的第一个问题吧！
+                  </span>
+                }
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
               />
             ) : (
@@ -360,19 +501,21 @@ const AIAssistant: React.FC = () => {
                     <Avatar 
                       icon={message.isUser ? <UserOutlined /> : <RobotOutlined />}
                       style={{ 
-                        backgroundColor: message.isUser ? '#1890ff' : '#52c41a',
+                        backgroundColor: message.isUser 
+                          ? (isDark ? '#177ddc' : '#1890ff')
+                          : '#52c41a',
                         flexShrink: 0
                       }}
                     />
                     <div>
-                      <MessageBubble isUser={message.isUser}>
+                      <MessageBubble isUser={message.isUser} $isDark={isDark}>
                         <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
                           {message.content}
                         </div>
                       </MessageBubble>
                       <div style={{ 
                         fontSize: 12, 
-                        color: '#999', 
+                        color: isDark ? '#8c8c8c' : '#999', 
                         marginTop: 4,
                         textAlign: message.isUser ? 'right' : 'left'
                       }}>
@@ -395,10 +538,14 @@ const AIAssistant: React.FC = () => {
                     icon={<RobotOutlined />}
                     style={{ backgroundColor: '#52c41a' }}
                   />
-                  <MessageBubble isUser={false}>
+                  <MessageBubble isUser={false} $isDark={isDark}>
                     <Space>
                       <Spin size="small" />
-                      <Text type="secondary">{t('aiAssistant.thinking')}</Text>
+                      <Text type="secondary" style={{ 
+                        color: isDark ? '#8c8c8c' : '#666666' 
+                      }}>
+                        {t('aiAssistant.thinking')}
+                      </Text>
                     </Space>
                   </MessageBubble>
                 </MessageContent>
@@ -409,7 +556,7 @@ const AIAssistant: React.FC = () => {
           </MessagesContainer>
 
           {/* 输入区域 */}
-          <InputContainer>
+          <InputContainer $isDark={isDark}>
             <TextArea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -435,14 +582,17 @@ const AIAssistant: React.FC = () => {
           </InputContainer>
           
           <div style={{ marginTop: 8, textAlign: 'center' }}>
-            <Text type="secondary" style={{ fontSize: 12 }}>
+            <Text type="secondary" style={{ 
+              fontSize: 12,
+              color: isDark ? '#8c8c8c' : '#666666'
+            }}>
               <Space>
                 <ThunderboltOutlined />
                 {t('aiAssistant.sendShortcut')}
               </Space>
             </Text>
           </div>
-        </Card>
+        </StyledCard>
       </ChatContainer>
     </PageContainer>
   );
