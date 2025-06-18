@@ -1,6 +1,3 @@
-// 主题类型定义
-export type ThemeType = 'light' | 'dark';
-
 // 浅色主题
 export const lightTheme = {
   colors: {
@@ -187,7 +184,16 @@ export const theme = {
 };
 
 // 导出主题映射
-export const themes = {
+export const themes: {
+  light: {
+    styled: typeof lightTheme;
+    antd: typeof antdLightTheme;
+  };
+  dark: {
+    styled: typeof darkTheme;
+    antd: typeof antdDarkTheme;
+  };
+} = {
   light: {
     styled: lightTheme,
     antd: antdLightTheme,

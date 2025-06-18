@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { ThemeType } from '../../styles/theme';
+
+// 直接定义主题类型，避免循环导入
+type ThemeType = 'light' | 'dark';
 
 interface ThemeState {
   currentTheme: ThemeType;
@@ -32,3 +34,6 @@ export const { toggleTheme, setTheme } = themeSlice.actions;
 
 // 导出reducer
 export default themeSlice.reducer;
+
+// 导出类型
+export type { ThemeType };

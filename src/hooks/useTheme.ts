@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAppSelector } from '../store';
-import { themes, ThemeType } from '../styles/theme';
+import { themes } from '../styles/theme';
+import type { ThemeType } from '../store/slices/themeSlice';
 
 /**
  * 主题钩子，用于获取当前主题配置
