@@ -31,7 +31,15 @@ import {
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
 
-const { Text, Paragraph } = Typography;
+const CustomAvatar = styled(Avatar)<{ $bgColor: string }>`
+  background-color: ${props => props.$bgColor} !important;
+  transition: background-color 0.3s ease;
+  
+  /* 强制覆盖所有可能的全局样式 */
+  &.ant-avatar {
+    background-color: ${props => props.$bgColor} !important;
+  }
+`;
 
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
   height: 100%;
@@ -89,6 +97,19 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   
   .agent-avatar {
     margin-right: 12px;
+    
+    .ant-avatar {
+      background-color: unset !important;
+    }
+    
+    .custom-avatar {
+      background-color: unset !important;
+    }
+    
+    /* 强制覆盖全局样式 */
+    .ant-avatar.custom-avatar {
+      background-color: unset !important;
+    }
   }
   
   .agent-info {
@@ -358,13 +379,10 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
     >
       <div className="agent-header">
         <div className="agent-avatar">
-          <Avatar 
+          <CustomAvatar 
             size={48} 
             icon={<RobotOutlined />} 
-            style={{ 
-              backgroundColor: avatarBgColor,
-              transition: 'background-color 0.3s ease'
-            }}
+            $bgColor={avatarBgColor}
           />
         </div>
         <div className="agent-info">
