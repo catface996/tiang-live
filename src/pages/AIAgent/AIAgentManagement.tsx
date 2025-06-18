@@ -8,7 +8,6 @@ import {
   Col, 
   Statistic,
   Badge,
-  Table,
   Tag,
   Avatar,
   Progress,
@@ -18,24 +17,22 @@ import {
   Select,
   Switch,
   Slider,
-  Tabs,
   Tooltip,
   Popconfirm,
   message,
   Descriptions,
   Timeline,
-  Alert
+  Alert,
+  theme
 } from 'antd';
 import { 
   RobotOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
   EditOutlined,
   DeleteOutlined,
   PlayCircleOutlined,
   PauseCircleOutlined,
-  SettingOutlined,
   EyeOutlined,
   ThunderboltOutlined,
   ClockCircleOutlined,
@@ -50,32 +47,52 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import { AIAgentCard } from './components';
+import { useAppSelector } from '../../store';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const PageContainer = styled.div`
+const PageContainer = styled.div<{ $isDark: boolean }>`
   padding: 24px;
+  min-height: 100vh;
+  background: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
+  transition: all 0.3s ease;
 `;
 
-const PageHeader = styled.div`
+const PageHeader = styled.div<{ $isDark: boolean }>`
   margin-bottom: 24px;
+  padding: 24px;
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  border-radius: 8px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+  };
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  transition: all 0.3s ease;
 `;
 
-const StatsCard = styled(Card)`
+const StatsCard = styled(Card)<{ $isDark: boolean }>`
+  border-radius: 8px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+  };
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  transition: all 0.3s ease;
+  
   .ant-card-body {
     padding: 16px;
   }
-`;
-
-const AgentCard = styled(Card)`
-  height: 100%;
-  transition: all 0.3s ease;
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  .ant-statistic-title {
+    color: ${props => props.$isDark ? '#ffffff' : '#666666'};
+  }
+  
+  .ant-statistic-content {
+    color: ${props => props.$isDark ? '#ffffff' : '#262626'};
   }
 `;
 
@@ -93,6 +110,19 @@ const StatusDot = styled.div<{ status: string }>`
   }};
   display: inline-block;
   margin-right: 8px;
+`;
+
+const StyledAlert = styled(Alert)<{ $isDark: boolean }>`
+  background: ${props => props.$isDark ? '#2a1f00' : '#fffbe6'};
+  border: ${props => props.$isDark ? '1px solid #594214' : '1px solid #ffe58f'};
+  
+  .ant-alert-message {
+    color: ${props => props.$isDark ? '#faad14' : '#d48806'};
+  }
+  
+  .ant-alert-description {
+    color: ${props => props.$isDark ? '#d4b106' : '#d48806'};
+  }
 `;
 
 interface AIAgent {
@@ -125,6 +155,9 @@ const AIAgentManagement: React.FC = () => {
   const [editingAgent, setEditingAgent] = useState<AIAgent | null>(null);
   const [selectedAgent, setSelectedAgent] = useState<AIAgent | null>(null);
   const [form] = Form.useForm();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { token } = theme.useToken();
+  const isDark = currentTheme === 'dark';
 
   useEffect(() => {
     setPageTitle(t('agents.title'));
@@ -223,13 +256,32 @@ const AIAgentManagement: React.FC = () => {
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      running: { color: 'green', text: '运行中' },
-      stopped: { color: 'red', text: '已停止' },
-      paused: { color: 'orange', text: '已暂停' },
+      running: { 
+        color: isDark ? '#52c41a' : 'green', 
+        text: '运行中',
+        bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+      },
+      stopped: { 
+        color: isDark ? '#f5222d' : 'red', 
+        text: '已停止',
+        bgColor: isDark ? 'rgba(245, 34, 45, 0.1)' : undefined
+      },
+      paused: { 
+        color: isDark ? '#faad14' : 'orange', 
+        text: '已暂停',
+        bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
+      },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return (
-      <Tag color={config.color}>
+      <Tag 
+        color={config.color}
+        style={config.bgColor ? { 
+          backgroundColor: config.bgColor,
+          border: `1px solid ${config.color}`,
+          color: config.color
+        } : {}}
+      >
         <StatusDot status={status} />
         {config.text}
       </Tag>
@@ -276,155 +328,6 @@ const AIAgentManagement: React.FC = () => {
     }
   };
 
-  const columns = [
-    {
-      title: '智能体名称',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text: string, record: AIAgent) => (
-        <Space>
-          <Avatar 
-            icon={<RobotOutlined />} 
-            className="agent-avatar"
-          />
-          <div>
-            <div className="font-weight-medium">{text}</div>
-            <Text type="secondary" className="font-size-12">
-              {record.version}
-            </Text>
-          </div>
-        </Space>
-      ),
-    },
-    {
-      title: '类型',
-      dataIndex: 'type',
-      key: 'type',
-      render: (type: string) => {
-        const config = agentTypeMap[type as keyof typeof agentTypeMap];
-        return (
-          <Tag color={config?.color} icon={config?.icon}>
-            {config?.name}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => getStatusTag(status),
-    },
-    {
-      title: '资源使用',
-      key: 'resources',
-      render: (_, record: AIAgent) => (
-        <div>
-          <div className="margin-bottom-8">
-            <Text className="font-size-12">CPU: {record.cpu}%</Text>
-            <Progress 
-              percent={record.cpu} 
-              size="small" 
-              showInfo={false}
-              strokeColor={record.cpu > 80 ? '#f5222d' : '#52c41a'}
-            />
-          </div>
-          <div>
-            <Text className="font-size-12">内存: {record.memory}MB</Text>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: '任务统计',
-      key: 'tasks',
-      render: (_, record: AIAgent) => (
-        <div>
-          <div>执行: {record.tasks}</div>
-          <div>
-            <Text type="secondary" className="font-size-12">
-              成功率: {record.successRate}%
-            </Text>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: '最后活跃',
-      dataIndex: 'lastActive',
-      key: 'lastActive',
-      render: (time: string) => (
-        <Tooltip title={time}>
-          <Space>
-            <ClockCircleOutlined className="text-secondary" />
-            <Text className="font-size-12">
-              {new Date(time).toLocaleString('zh-CN')}
-            </Text>
-          </Space>
-        </Tooltip>
-      ),
-    },
-    {
-      title: '操作',
-      key: 'action',
-      render: (_, record: AIAgent) => (
-        <Space>
-          <Tooltip title="查看详情">
-            <Button 
-              type="link" 
-              icon={<EyeOutlined />} 
-              size="small"
-              onClick={() => handleViewAgent(record)}
-            />
-          </Tooltip>
-          <Tooltip title="编辑配置">
-            <Button 
-              type="link" 
-              icon={<EditOutlined />} 
-              size="small"
-              onClick={() => handleEditAgent(record)}
-            />
-          </Tooltip>
-          {record.status === 'running' ? (
-            <Tooltip title="停止">
-              <Button 
-                type="link" 
-                icon={<PauseCircleOutlined />} 
-                size="small"
-                onClick={() => handleStopAgent(record.id)}
-              />
-            </Tooltip>
-          ) : (
-            <Tooltip title="启动">
-              <Button 
-                type="link" 
-                icon={<PlayCircleOutlined />} 
-                size="small"
-                onClick={() => handleStartAgent(record.id)}
-              />
-            </Tooltip>
-          )}
-          <Popconfirm
-            title="确定要删除这个智能体吗？"
-            description="删除后将无法恢复，请谨慎操作。"
-            onConfirm={() => handleDeleteAgent(record.id)}
-            okText="确定"
-            cancelText="取消"
-          >
-            <Tooltip title="删除">
-              <Button 
-                type="link" 
-                icon={<DeleteOutlined />} 
-                size="small"
-                danger
-              />
-            </Tooltip>
-          </Popconfirm>
-        </Space>
-      ),
-    },
-  ];
-
   const renderAgentCards = () => {
     return agentData.map(agent => (
       <Col xs={24} sm={12} lg={8} xl={6} key={agent.id}>
@@ -454,22 +357,37 @@ const AIAgentManagement: React.FC = () => {
   const totalCpu = agentData.reduce((sum, agent) => sum + agent.cpu, 0);
 
   return (
-    <PageContainer>
-      <PageHeader>
-        <div className="flex-between">
+    <PageContainer $isDark={isDark}>
+      <PageHeader $isDark={isDark}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <Title className="page-title margin-0" level={2}>
+            <Title level={2} style={{ 
+              margin: 0,
+              color: isDark ? '#ffffff' : '#262626'
+            }}>
               <Space>
-                <RobotOutlined />
+                <RobotOutlined style={{ color: isDark ? '#177ddc' : '#1890ff' }} />
                 {t('agents.title')}
               </Space>
             </Title>
-            <Paragraph className="page-subtitle">
+            <Paragraph style={{ 
+              marginTop: 8, 
+              marginBottom: 0, 
+              fontSize: 16,
+              color: isDark ? '#8c8c8c' : '#666666'
+            }}>
               {t('agents.subtitle')}
             </Paragraph>
           </div>
           <Space>
-            <Button icon={<ReloadOutlined />}>
+            <Button 
+              icon={<ReloadOutlined />}
+              style={{
+                color: isDark ? '#ffffff' : undefined,
+                borderColor: isDark ? '#434343' : undefined,
+                backgroundColor: isDark ? 'transparent' : undefined
+              }}
+            >
               {t('common.refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
@@ -480,47 +398,47 @@ const AIAgentManagement: React.FC = () => {
       </PageHeader>
 
       {/* 统计信息 */}
-      <Row gutter={16} className="margin-bottom-24">
+      <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="stats-card">
+          <StatsCard $isDark={isDark}>
             <Statistic
               title="智能体总数"
               value={agentData.length}
               suffix="个"
-              valueStyle={{ color: 'var(--primary-color)' }}
+              valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               prefix={<RobotOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="stats-card">
+          <StatsCard $isDark={isDark}>
             <Statistic
               title="运行中"
               value={runningAgents}
               suffix="个"
-              valueStyle={{ color: '#52c41a' }}
+              valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="stats-card">
+          <StatsCard $isDark={isDark}>
             <Statistic
               title="总执行任务"
               value={totalTasks}
               suffix="次"
-              valueStyle={{ color: '#faad14' }}
+              valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               prefix={<ThunderboltOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="stats-card">
+          <StatsCard $isDark={isDark}>
             <Statistic
               title="平均成功率"
               value={avgSuccessRate.toFixed(1)}
               suffix="%"
-              valueStyle={{ color: '#722ed1' }}
+              valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
               prefix={<CheckCircleOutlined />}
             />
           </StatsCard>
@@ -529,62 +447,21 @@ const AIAgentManagement: React.FC = () => {
 
       {/* 系统状态提醒 */}
       {totalCpu > 60 && (
-        <Alert
+        <StyledAlert
+          $isDark={isDark}
           message="系统资源使用率较高"
           description={`当前CPU总使用率为 ${totalCpu.toFixed(1)}%，建议关注系统性能状况。`}
           type="warning"
           showIcon
           closable
-          className="margin-bottom-24"
+          style={{ marginBottom: 24 }}
         />
       )}
 
-      {/* 智能体展示 */}
-      <Tabs 
-        defaultActiveKey="cards" 
-        className="margin-bottom-24"
-        items={[
-          {
-            key: 'cards',
-            label: '卡片视图',
-            children: (
-              <Row gutter={16}>
-                {renderAgentCards()}
-              </Row>
-            )
-          },
-          {
-            key: 'table',
-            label: '列表视图',
-            children: (
-              <Card>
-                <div className="margin-bottom-16">
-                  <Input
-                    placeholder="搜索智能体名称、类型..."
-                    prefix={<SearchOutlined />}
-                    allowClear
-                    className="search-input"
-                  />
-                </div>
-                <Table
-                  columns={columns}
-                  dataSource={agentData}
-                  loading={loading}
-                  rowKey="id"
-                  pagination={{
-                    total: agentData.length,
-                    pageSize: 10,
-                    showSizeChanger: true,
-                    showQuickJumper: true,
-                    showTotal: (total, range) => 
-                      `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
-                  }}
-                />
-              </Card>
-            )
-          }
-        ]}
-      />
+      {/* 智能体卡片展示 */}
+      <Row gutter={16}>
+        {renderAgentCards()}
+      </Row>
 
       {/* 创建/编辑智能体模态框 */}
       <Modal
@@ -722,15 +599,32 @@ const AIAgentManagement: React.FC = () => {
 
       {/* 智能体详情模态框 */}
       <Modal
-        title="智能体详情"
+        title={<span style={{ color: isDark ? '#ffffff' : '#262626' }}>智能体详情</span>}
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={null}
         width={800}
+        styles={{
+          content: {
+            backgroundColor: isDark ? '#141414' : '#ffffff',
+            color: isDark ? '#ffffff' : '#000000'
+          }
+        }}
       >
         {selectedAgent && (
           <div>
-            <Descriptions bordered column={2}>
+            <Descriptions 
+              bordered 
+              column={2}
+              labelStyle={{ 
+                backgroundColor: isDark ? '#1f1f1f' : '#fafafa',
+                color: isDark ? '#ffffff' : '#262626'
+              }}
+              contentStyle={{
+                backgroundColor: isDark ? '#141414' : '#ffffff',
+                color: isDark ? '#ffffff' : '#262626'
+              }}
+            >
               <Descriptions.Item label="名称">
                 {selectedAgent.name}
               </Descriptions.Item>
@@ -763,9 +657,22 @@ const AIAgentManagement: React.FC = () => {
               </Descriptions.Item>
             </Descriptions>
 
-            <div className="margin-top-24">
-              <Title level={4}>配置信息</Title>
-              <Descriptions bordered column={2}>
+            <div style={{ marginTop: 24 }}>
+              <Title level={4} style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                配置信息
+              </Title>
+              <Descriptions 
+                bordered 
+                column={2}
+                labelStyle={{ 
+                  backgroundColor: isDark ? '#1f1f1f' : '#fafafa',
+                  color: isDark ? '#ffffff' : '#262626'
+                }}
+                contentStyle={{
+                  backgroundColor: isDark ? '#141414' : '#ffffff',
+                  color: isDark ? '#ffffff' : '#262626'
+                }}
+              >
                 <Descriptions.Item label="最大并发">
                   {selectedAgent.config.maxConcurrency}
                 </Descriptions.Item>
@@ -781,23 +688,30 @@ const AIAgentManagement: React.FC = () => {
               </Descriptions>
             </div>
 
-            <div className="margin-top-24">
-              <Title level={4}>运行日志</Title>
+            <div style={{ marginTop: 24 }}>
+              <Title level={4} style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                运行日志
+              </Title>
               <Timeline>
                 <Timeline.Item color="green">
-                  <Text strong>14:30:25</Text> - 智能体启动成功
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:30:25</Text>
+                  <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 智能体启动成功</span>
                 </Timeline.Item>
                 <Timeline.Item color="blue">
-                  <Text strong>14:28:10</Text> - 执行监控任务 #1247
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:28:10</Text>
+                  <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 执行监控任务 #1247</span>
                 </Timeline.Item>
                 <Timeline.Item color="blue">
-                  <Text strong>14:25:30</Text> - 检测到系统异常，发送告警
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:25:30</Text>
+                  <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 检测到系统异常，发送告警</span>
                 </Timeline.Item>
                 <Timeline.Item color="orange">
-                  <Text strong>14:20:15</Text> - 任务执行超时，开始重试
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:20:15</Text>
+                  <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 任务执行超时，开始重试</span>
                 </Timeline.Item>
                 <Timeline.Item>
-                  <Text strong>14:15:00</Text> - 智能体配置更新
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:15:00</Text>
+                  <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 智能体配置更新</span>
                 </Timeline.Item>
               </Timeline>
             </div>

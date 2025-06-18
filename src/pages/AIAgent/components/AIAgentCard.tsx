@@ -10,7 +10,8 @@ import {
   Popconfirm, 
   Typography,
   Statistic,
-  Badge
+  Badge,
+  theme
 } from 'antd';
 import { 
   EditOutlined,
@@ -28,12 +29,56 @@ import {
   BarChartOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useAppSelector } from '../../../store';
 
 const { Text, Paragraph } = Typography;
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card)<{ $isDark: boolean }>`
+  height: 100%;
+  transition: all 0.3s ease;
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  border-radius: 8px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${props => props.$isDark 
+      ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
+      : '0 4px 12px rgba(0, 0, 0, 0.1)'
+    };
+    border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+  }
+  
   .ant-card-body {
     padding: 20px;
+    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  }
+  
+  .ant-card-actions {
+    background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
+    border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    
+    li {
+      border-right: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+      
+      &:last-child {
+        border-right: none;
+      }
+    }
+    
+    .ant-btn {
+      color: ${props => props.$isDark ? '#ffffff' : '#595959'};
+      
+      &:hover {
+        color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+        background: ${props => props.$isDark ? 'rgba(23, 125, 220, 0.1)' : 'rgba(64, 169, 255, 0.1)'};
+      }
+      
+      &.ant-btn-dangerous:hover {
+        color: #ff4d4f;
+        background: ${props => props.$isDark ? 'rgba(255, 77, 79, 0.1)' : 'rgba(255, 77, 79, 0.1)'};
+      }
+    }
   }
   
   .agent-header {
@@ -54,7 +99,7 @@ const StyledCard = styled(Card)`
     font-size: 16px;
     font-weight: 600;
     margin: 0;
-    color: #262626;
+    color: ${props => props.$isDark ? '#ffffff' : '#262626'};
   }
   
   .agent-type {
@@ -64,13 +109,14 @@ const StyledCard = styled(Card)`
   .agent-stats {
     margin: 16px 0;
     padding: 12px;
-    background: #fafafa;
+    background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
+    border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
     border-radius: 6px;
   }
   
   .agent-description {
     margin: 12px 0;
-    color: #666;
+    color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
     font-size: 13px;
   }
   
@@ -81,7 +127,7 @@ const StyledCard = styled(Card)`
   .agent-actions {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #f0f0f0;
+    border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   }
   
   .status-indicator {
@@ -146,18 +192,57 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
   onStop,
   onView
 }) => {
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { token } = theme.useToken();
+  const isDark = currentTheme === 'dark';
+  
   const agentTypeMap = {
-    monitor: { name: '监控', color: 'blue', icon: <MonitorOutlined /> },
-    analysis: { name: '分析', color: 'green', icon: <BarChartOutlined /> },
-    deployment: { name: '部署', color: 'purple', icon: <ApiOutlined /> },
-    optimization: { name: '优化', color: 'orange', icon: <ThunderboltOutlined /> },
+    monitor: { 
+      name: '监控', 
+      color: isDark ? '#1890ff' : 'blue', 
+      icon: <MonitorOutlined />,
+      bgColor: isDark ? 'rgba(24, 144, 255, 0.1)' : undefined
+    },
+    analysis: { 
+      name: '分析', 
+      color: isDark ? '#52c41a' : 'green', 
+      icon: <BarChartOutlined />,
+      bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+    },
+    deployment: { 
+      name: '部署', 
+      color: isDark ? '#722ed1' : 'purple', 
+      icon: <ApiOutlined />,
+      bgColor: isDark ? 'rgba(114, 46, 209, 0.1)' : undefined
+    },
+    optimization: { 
+      name: '优化', 
+      color: isDark ? '#fa8c16' : 'orange', 
+      icon: <ThunderboltOutlined />,
+      bgColor: isDark ? 'rgba(250, 140, 22, 0.1)' : undefined
+    },
   };
 
   const getStatusConfig = (status: string) => {
     const statusMap = {
-      running: { color: 'green', text: '运行中', icon: <CheckCircleOutlined /> },
-      stopped: { color: 'red', text: '已停止', icon: <ExclamationCircleOutlined /> },
-      paused: { color: 'orange', text: '已暂停', icon: <ClockCircleOutlined /> },
+      running: { 
+        color: isDark ? '#52c41a' : 'green', 
+        text: '运行中', 
+        icon: <CheckCircleOutlined />,
+        bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+      },
+      stopped: { 
+        color: isDark ? '#ff4d4f' : 'red', 
+        text: '已停止', 
+        icon: <ExclamationCircleOutlined />,
+        bgColor: isDark ? 'rgba(255, 77, 79, 0.1)' : undefined
+      },
+      paused: { 
+        color: isDark ? '#faad14' : 'orange', 
+        text: '已暂停', 
+        icon: <ClockCircleOutlined />,
+        bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
+      },
     };
     return statusMap[status as keyof typeof statusMap];
   };
@@ -188,6 +273,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
 
   return (
     <StyledCard
+      $isDark={isDark}
       hoverable
       onClick={() => onView(agent)}
       actions={[
@@ -248,19 +334,35 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
             size={48} 
             icon={<RobotOutlined />} 
             style={{ 
-              backgroundColor: typeConfig.color === 'blue' ? '#1890ff' : 
-                              typeConfig.color === 'green' ? '#52c41a' :
-                              typeConfig.color === 'purple' ? '#722ed1' : '#fa8c16'
+              backgroundColor: typeConfig.color === 'blue' || typeConfig.color === '#1890ff' ? '#1890ff' : 
+                              typeConfig.color === 'green' || typeConfig.color === '#52c41a' ? '#52c41a' :
+                              typeConfig.color === 'purple' || typeConfig.color === '#722ed1' ? '#722ed1' : '#fa8c16'
             }}
           />
         </div>
         <div className="agent-info">
           <div className="agent-name">{agent.name}</div>
           <div className="agent-type">
-            <Tag color={typeConfig.color} icon={typeConfig.icon}>
+            <Tag 
+              color={typeConfig.color} 
+              icon={typeConfig.icon}
+              style={typeConfig.bgColor ? { 
+                backgroundColor: typeConfig.bgColor,
+                border: `1px solid ${typeConfig.color}`,
+                color: typeConfig.color
+              } : {}}
+            >
               {typeConfig.name}
             </Tag>
-            <Tag color={statusConfig.color} icon={statusConfig.icon}>
+            <Tag 
+              color={statusConfig.color} 
+              icon={statusConfig.icon}
+              style={statusConfig.bgColor ? { 
+                backgroundColor: statusConfig.bgColor,
+                border: `1px solid ${statusConfig.color}`,
+                color: statusConfig.color
+              } : {}}
+            >
               <span className={`status-indicator ${agent.status}`}></span>
               {statusConfig.text}
             </Tag>
@@ -273,23 +375,32 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
       </Paragraph>
 
       <div className="agent-stats">
-        <Space split={<span style={{ color: '#d9d9d9' }}>|</span>} size="large">
+        <Space split={<span style={{ color: isDark ? '#434343' : '#d9d9d9' }}>|</span>} size="large">
           <Statistic 
-            title="完成任务" 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>完成任务</span>} 
             value={agent.stats.tasksCompleted} 
-            valueStyle={{ fontSize: 14 }}
+            valueStyle={{ 
+              fontSize: 14,
+              color: isDark ? '#ffffff' : '#262626'
+            }}
           />
           <Statistic 
-            title="成功率" 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>成功率</span>} 
             value={agent.stats.successRate} 
             suffix="%" 
-            valueStyle={{ fontSize: 14 }}
+            valueStyle={{ 
+              fontSize: 14,
+              color: isDark ? '#ffffff' : '#262626'
+            }}
           />
           <Statistic 
-            title="响应时间" 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>响应时间</span>} 
             value={agent.stats.avgResponseTime} 
             suffix="ms" 
-            valueStyle={{ fontSize: 14 }}
+            valueStyle={{ 
+              fontSize: 14,
+              color: isDark ? '#ffffff' : '#262626'
+            }}
           />
         </Space>
       </div>
@@ -302,11 +413,17 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
         ))}
       </div>
 
-      <div style={{ display: 'flex', justify: 'space-between', alignItems: 'center', marginTop: 12 }}>
-        <Text type="secondary" style={{ fontSize: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
+        <Text type="secondary" style={{ 
+          fontSize: 12,
+          color: isDark ? '#8c8c8c' : '#999'
+        }}>
           最后活跃: {agent.lastActive}
         </Text>
-        <Text type="secondary" style={{ fontSize: 12 }}>
+        <Text type="secondary" style={{ 
+          fontSize: 12,
+          color: isDark ? '#8c8c8c' : '#999'
+        }}>
           运行时间: {agent.stats.uptime}
         </Text>
       </div>
