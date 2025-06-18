@@ -30,7 +30,12 @@ import {
   SettingOutlined,
   PlayCircleOutlined,
   PauseCircleOutlined,
-  ReloadOutlined
+  ReloadOutlined,
+  LineChartOutlined,
+  BarChartOutlined,
+  MonitorOutlined,
+  DashboardOutlined,
+  FileTextOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -180,7 +185,7 @@ const EntityScan: React.FC = () => {
   }, []);
 
   // 数据源类型图标
-  const getDataSourceIcon = (type: string) => {
+  const getDataSourceIcon = (type: string, subType?: string) => {
     switch (type) {
       case 'database':
         return <DatabaseOutlined />;
@@ -188,6 +193,30 @@ const EntityScan: React.FC = () => {
         return <ApiOutlined />;
       case 'cloud':
         return <CloudServerOutlined />;
+      case 'monitoring':
+        switch (subType) {
+          case 'prometheus':
+            return <LineChartOutlined style={{ color: '#e6522c' }} />;
+          case 'grafana':
+            return <DashboardOutlined style={{ color: '#f46800' }} />;
+          case 'elasticsearch':
+            return <FileTextOutlined style={{ color: '#005571' }} />;
+          case 'jaeger':
+            return <BarChartOutlined style={{ color: '#60d0e4' }} />;
+          case 'zabbix':
+            return <MonitorOutlined style={{ color: '#d40000' }} />;
+          case 'datadog':
+            return <LineChartOutlined style={{ color: '#632ca6' }} />;
+          default:
+            return <MonitorOutlined />;
+        }
+      case 'metrics':
+        switch (subType) {
+          case 'influxdb':
+            return <BarChartOutlined style={{ color: '#22adf6' }} />;
+          default:
+            return <BarChartOutlined />;
+        }
       default:
         return <DatabaseOutlined />;
     }
@@ -298,50 +327,222 @@ const EntityScan: React.FC = () => {
 
   // 生成模拟结果
   const generateMockResults = () => {
-    const mockResults: ScanResult[] = [
-      {
-        id: 'entity-1',
-        name: '用户实体',
-        type: 'User',
-        source: 'users表',
-        confidence: 0.95,
-        attributes: {
-          id: 'bigint',
-          username: 'varchar(50)',
-          email: 'varchar(100)',
-          created_at: 'timestamp'
-        },
-        selected: true
-      },
-      {
-        id: 'entity-2',
-        name: '订单实体',
-        type: 'Order',
-        source: 'orders表',
-        confidence: 0.92,
-        attributes: {
-          id: 'bigint',
-          user_id: 'bigint',
-          total_amount: 'decimal(10,2)',
-          status: 'varchar(20)'
-        },
-        selected: true
-      },
-      {
-        id: 'entity-3',
-        name: '商品实体',
-        type: 'Product',
-        source: 'products表',
-        confidence: 0.88,
-        attributes: {
-          id: 'bigint',
-          name: 'varchar(200)',
-          price: 'decimal(8,2)',
-          category_id: 'int'
-        },
-        selected: false
+    const selectedDataSource = dataSources.find(ds => ds.id === selectedDataSource);
+    let mockResults: ScanResult[] = [];
+
+    if (selectedDataSource?.type === 'monitoring') {
+      // 监控系统相关实体
+      switch (selectedDataSource.subType) {
+        case 'prometheus':
+          mockResults = [
+            {
+              id: 'metric-1',
+              name: 'HTTP请求指标',
+              type: 'HttpRequestMetric',
+              source: 'http_requests_total',
+              confidence: 0.95,
+              attributes: {
+                method: 'string',
+                status_code: 'string',
+                endpoint: 'string',
+                value: 'counter'
+              },
+              selected: true
+            },
+            {
+              id: 'metric-2',
+              name: 'CPU使用率指标',
+              type: 'CpuUsageMetric',
+              source: 'cpu_usage_percent',
+              confidence: 0.92,
+              attributes: {
+                instance: 'string',
+                cpu: 'string',
+                mode: 'string',
+                value: 'gauge'
+              },
+              selected: true
+            },
+            {
+              id: 'metric-3',
+              name: '内存使用指标',
+              type: 'MemoryMetric',
+              source: 'memory_usage_bytes',
+              confidence: 0.90,
+              attributes: {
+                instance: 'string',
+                type: 'string',
+                value: 'gauge'
+              },
+              selected: false
+            }
+          ];
+          break;
+        case 'grafana':
+          mockResults = [
+            {
+              id: 'dashboard-1',
+              name: '系统监控仪表板',
+              type: 'Dashboard',
+              source: 'System Monitoring',
+              confidence: 0.98,
+              attributes: {
+                id: 'number',
+                title: 'string',
+                tags: 'array',
+                panels: 'array'
+              },
+              selected: true
+            },
+            {
+              id: 'datasource-1',
+              name: 'Prometheus数据源',
+              type: 'DataSource',
+              source: 'prometheus-prod',
+              confidence: 0.95,
+              attributes: {
+                name: 'string',
+                type: 'string',
+                url: 'string',
+                access: 'string'
+              },
+              selected: true
+            }
+          ];
+          break;
+        case 'elasticsearch':
+          mockResults = [
+            {
+              id: 'log-1',
+              name: '应用日志实体',
+              type: 'ApplicationLog',
+              source: 'app-logs-*',
+              confidence: 0.88,
+              attributes: {
+                timestamp: 'date',
+                level: 'string',
+                message: 'text',
+                service: 'string'
+              },
+              selected: true
+            },
+            {
+              id: 'log-2',
+              name: '访问日志实体',
+              type: 'AccessLog',
+              source: 'access-logs-*',
+              confidence: 0.85,
+              attributes: {
+                timestamp: 'date',
+                ip: 'ip',
+                method: 'string',
+                url: 'string',
+                status: 'integer'
+              },
+              selected: false
+            }
+          ];
+          break;
+        default:
+          mockResults = [
+            {
+              id: 'monitor-1',
+              name: '监控指标实体',
+              type: 'MonitoringMetric',
+              source: '监控系统',
+              confidence: 0.85,
+              attributes: {
+                name: 'string',
+                value: 'number',
+                timestamp: 'date',
+                labels: 'object'
+              },
+              selected: true
+            }
+          ];
       }
-    ];
+    } else if (selectedDataSource?.type === 'metrics') {
+      // 指标数据库相关实体
+      mockResults = [
+        {
+          id: 'timeseries-1',
+          name: '时序数据点',
+          type: 'TimeSeriesPoint',
+          source: 'measurements',
+          confidence: 0.93,
+          attributes: {
+            time: 'timestamp',
+            measurement: 'string',
+            field_key: 'string',
+            field_value: 'float',
+            tags: 'object'
+          },
+          selected: true
+        },
+        {
+          id: 'measurement-1',
+          name: '测量指标',
+          type: 'Measurement',
+          source: 'cpu_usage',
+          confidence: 0.90,
+          attributes: {
+            host: 'string',
+            region: 'string',
+            usage_idle: 'float',
+            usage_system: 'float',
+            usage_user: 'float'
+          },
+          selected: true
+        }
+      ];
+    } else {
+      // 默认数据库实体
+      mockResults = [
+        {
+          id: 'entity-1',
+          name: '用户实体',
+          type: 'User',
+          source: 'users表',
+          confidence: 0.95,
+          attributes: {
+            id: 'bigint',
+            username: 'varchar(50)',
+            email: 'varchar(100)',
+            created_at: 'timestamp'
+          },
+          selected: true
+        },
+        {
+          id: 'entity-2',
+          name: '订单实体',
+          type: 'Order',
+          source: 'orders表',
+          confidence: 0.92,
+          attributes: {
+            id: 'bigint',
+            user_id: 'bigint',
+            total_amount: 'decimal(10,2)',
+            status: 'varchar(20)'
+          },
+          selected: true
+        },
+        {
+          id: 'entity-3',
+          name: '商品实体',
+          type: 'Product',
+          source: 'products表',
+          confidence: 0.88,
+          attributes: {
+            id: 'bigint',
+            name: 'varchar(200)',
+            price: 'decimal(8,2)',
+            category_id: 'int'
+          },
+          selected: false
+        }
+      ];
+    }
+
     setScanResults(mockResults);
   };
 
@@ -353,7 +554,7 @@ const EntityScan: React.FC = () => {
       key: 'name',
       render: (text: string, record: DataSource) => (
         <Space>
-          {getDataSourceIcon(record.type)}
+          {getDataSourceIcon(record.type, record.subType)}
           <div>
             <div style={{ fontWeight: 'bold' }}>{text}</div>
             <Text type="secondary" style={{ fontSize: '12px' }}>
@@ -367,14 +568,39 @@ const EntityScan: React.FC = () => {
       title: '类型',
       dataIndex: 'type',
       key: 'type',
-      render: (type: string) => {
+      render: (type: string, record: DataSource) => {
         const typeMap = {
           database: '数据库',
           api: 'API接口',
           cloud: '云服务',
+          monitoring: '监控系统',
+          metrics: '指标数据',
           file: '文件'
         };
-        return typeMap[type as keyof typeof typeMap] || type;
+        
+        const subTypeMap = {
+          prometheus: 'Prometheus',
+          grafana: 'Grafana',
+          elasticsearch: 'Elasticsearch',
+          jaeger: 'Jaeger',
+          zabbix: 'Zabbix',
+          datadog: 'Datadog',
+          influxdb: 'InfluxDB'
+        };
+        
+        const mainType = typeMap[type as keyof typeof typeMap] || type;
+        const subTypeText = record.subType ? subTypeMap[record.subType as keyof typeof subTypeMap] : '';
+        
+        return (
+          <div>
+            <div>{mainType}</div>
+            {subTypeText && (
+              <Text type="secondary" style={{ fontSize: '12px' }}>
+                {subTypeText}
+              </Text>
+            )}
+          </div>
+        );
       },
     },
     {
@@ -525,8 +751,13 @@ const EntityScan: React.FC = () => {
                     .map(ds => (
                       <Option key={ds.id} value={ds.id}>
                         <Space>
-                          {getDataSourceIcon(ds.type)}
-                          {ds.name}
+                          {getDataSourceIcon(ds.type, ds.subType)}
+                          <span>{ds.name}</span>
+                          {ds.subType && (
+                            <Text type="secondary" style={{ fontSize: '12px' }}>
+                              ({ds.subType})
+                            </Text>
+                          )}
                         </Space>
                       </Option>
                     ))}

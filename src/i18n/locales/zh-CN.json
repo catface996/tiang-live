@@ -959,7 +959,24 @@
         "lastScan": "最后扫描",
         "connected": "已连接",
         "disconnected": "未连接",
-        "error": "连接错误"
+        "error": "连接错误",
+        "types": {
+          "database": "数据库",
+          "api": "API接口",
+          "cloud": "云服务",
+          "monitoring": "监控系统",
+          "metrics": "指标数据",
+          "file": "文件"
+        },
+        "subTypes": {
+          "prometheus": "Prometheus",
+          "grafana": "Grafana",
+          "elasticsearch": "Elasticsearch",
+          "jaeger": "Jaeger",
+          "zabbix": "Zabbix",
+          "datadog": "Datadog",
+          "influxdb": "InfluxDB"
+        }
       },
       "scanConfig": {
         "title": "扫描配置",

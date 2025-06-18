@@ -4,12 +4,13 @@ import { apiClient } from './apiClient';
 export interface DataSource {
   id: string;
   name: string;
-  type: 'database' | 'api' | 'file' | 'cloud';
+  type: 'database' | 'api' | 'file' | 'cloud' | 'monitoring' | 'metrics';
   description: string;
   config: Record<string, any>;
   status: 'connected' | 'disconnected' | 'error';
   lastScan?: string;
   entityCount?: number;
+  subType?: string; // 用于区分具体的监控系统类型
 }
 
 // 扫描任务接口
@@ -236,6 +237,126 @@ class EntityScanService {
         },
         status: 'disconnected',
         entityCount: 0
+      },
+      {
+        id: 'prometheus-prod',
+        name: '生产环境Prometheus',
+        type: 'monitoring',
+        subType: 'prometheus',
+        description: 'Prometheus监控系统，包含应用指标、系统指标、业务指标等时序数据',
+        config: {
+          url: 'http://prometheus.example.com:9090',
+          basicAuth: {
+            username: 'admin',
+            password: '***hidden***'
+          },
+          timeout: 30000,
+          maxSamples: 50000
+        },
+        status: 'connected',
+        lastScan: '2024-06-17 16:45:00',
+        entityCount: 234
+      },
+      {
+        id: 'grafana-prod',
+        name: '生产环境Grafana',
+        type: 'monitoring',
+        subType: 'grafana',
+        description: 'Grafana可视化平台，包含仪表板、数据源、告警规则等配置信息',
+        config: {
+          url: 'http://grafana.example.com:3000',
+          apiKey: '***hidden***',
+          orgId: 1,
+          includeDashboards: true,
+          includeDataSources: true,
+          includeAlerts: true
+        },
+        status: 'connected',
+        lastScan: '2024-06-17 15:20:00',
+        entityCount: 67
+      },
+      {
+        id: 'influxdb-metrics',
+        name: 'InfluxDB时序数据库',
+        type: 'metrics',
+        subType: 'influxdb',
+        description: 'InfluxDB时序数据库，存储应用性能指标和业务监控数据',
+        config: {
+          url: 'http://influxdb.example.com:8086',
+          database: 'metrics',
+          username: 'metrics_user',
+          password: '***hidden***',
+          retention: '30d'
+        },
+        status: 'connected',
+        lastScan: '2024-06-17 12:15:00',
+        entityCount: 145
+      },
+      {
+        id: 'elasticsearch-logs',
+        name: 'Elasticsearch日志系统',
+        type: 'monitoring',
+        subType: 'elasticsearch',
+        description: 'Elasticsearch集群，存储应用日志、访问日志、错误日志等结构化数据',
+        config: {
+          hosts: ['http://es1.example.com:9200', 'http://es2.example.com:9200'],
+          username: 'elastic',
+          password: '***hidden***',
+          indices: ['app-logs-*', 'access-logs-*', 'error-logs-*'],
+          version: '8.x'
+        },
+        status: 'connected',
+        lastScan: '2024-06-17 11:30:00',
+        entityCount: 89
+      },
+      {
+        id: 'jaeger-tracing',
+        name: 'Jaeger链路追踪',
+        type: 'monitoring',
+        subType: 'jaeger',
+        description: 'Jaeger分布式链路追踪系统，包含服务调用链、性能指标等数据',
+        config: {
+          queryUrl: 'http://jaeger.example.com:16686',
+          collectorUrl: 'http://jaeger.example.com:14268',
+          services: ['user-service', 'order-service', 'payment-service'],
+          lookback: '24h'
+        },
+        status: 'connected',
+        lastScan: '2024-06-17 10:45:00',
+        entityCount: 56
+      },
+      {
+        id: 'zabbix-monitor',
+        name: 'Zabbix监控系统',
+        type: 'monitoring',
+        subType: 'zabbix',
+        description: 'Zabbix企业级监控系统，包含主机、应用、网络设备等监控数据',
+        config: {
+          url: 'http://zabbix.example.com/zabbix',
+          username: 'admin',
+          password: '***hidden***',
+          apiVersion: '6.0',
+          hostGroups: ['Linux servers', 'Web servers', 'Database servers']
+        },
+        status: 'disconnected',
+        entityCount: 0
+      },
+      {
+        id: 'datadog-apm',
+        name: 'Datadog APM',
+        type: 'monitoring',
+        subType: 'datadog',
+        description: 'Datadog应用性能监控，包含应用指标、日志、链路追踪等数据',
+        config: {
+          apiKey: '***hidden***',
+          appKey: '***hidden***',
+          site: 'datadoghq.com',
+          services: ['web-app', 'api-gateway', 'background-jobs'],
+          env: 'production'
+        },
+        status: 'connected',
+        lastScan: '2024-06-17 09:30:00',
+        entityCount: 78
       }
     ];
   }
