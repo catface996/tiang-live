@@ -16,6 +16,7 @@ import {
   HookTasks,
   ModelManagement,
   PromptTemplates,
+  EntityScan,
 } from '../pages';
 import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
 import AIAgentForm from '../pages/AIAgent/AIAgentForm';
@@ -43,6 +44,7 @@ const AppRoutes: React.FC = () => {
         <Route path="system-settings/model-management" element={<ModelManagement />} />
         <Route path="system-settings/prompt-templates" element={<PromptTemplates />} />
         <Route path="system-settings/tag-management" element={<TagManagement />} />
+        <Route path="system-settings/entity-scan" element={<EntityScan />} />
       </Route>
     </Routes>
   );

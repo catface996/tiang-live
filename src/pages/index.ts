@@ -13,4 +13,4 @@ export { AIAgentManagement, AIAgentForm } from './AIAgent';
 export { InspectionTasks, HookTasks } from './TaskManagement';
 
 // 系统设置页面
-export { ModelManagement, PromptTemplates, TagManagement } from './SystemSettings';
+export { ModelManagement, PromptTemplates, TagManagement, EntityScan } from './SystemSettings';

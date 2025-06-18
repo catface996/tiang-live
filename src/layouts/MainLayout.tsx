@@ -122,6 +122,10 @@ const MainLayout: React.FC = () => {
           key: '/system-settings/tag-management',
           label: t('menu.tagManagement'),
         },
+        {
+          key: '/system-settings/entity-scan',
+          label: t('menu.entityScan'),
+        },
       ],
     },
   ];
