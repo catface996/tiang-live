@@ -9,7 +9,8 @@ import {
   Dropdown, 
   Typography,
   Statistic,
-  Progress
+  Progress,
+  theme
 } from 'antd';
 import { 
   FileTextOutlined,
@@ -25,20 +26,51 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { useAppSelector } from '../../../store';
 
 const { Text, Paragraph } = Typography;
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card)<{ $isDark: boolean }>`
   height: 100%;
   transition: all 0.3s ease;
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  border-radius: 8px;
   
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: ${props => props.$isDark 
+      ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
+      : '0 4px 12px rgba(0, 0, 0, 0.15)'
+    };
     transform: translateY(-2px);
+    border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
   }
   
   .ant-card-body {
     padding: 20px;
+    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  }
+  
+  .ant-card-actions {
+    background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
+    border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    
+    li {
+      border-right: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+      
+      &:last-child {
+        border-right: none;
+      }
+    }
+    
+    .ant-btn {
+      color: ${props => props.$isDark ? '#ffffff' : '#595959'};
+      
+      &:hover {
+        color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+        background: ${props => props.$isDark ? 'rgba(23, 125, 220, 0.1)' : 'rgba(64, 169, 255, 0.1)'};
+      }
+    }
   }
   
   .report-header {
@@ -61,7 +93,7 @@ const StyledCard = styled(Card)`
     font-size: 16px;
     font-weight: 600;
     margin: 0 0 8px 0;
-    color: #262626;
+    color: ${props => props.$isDark ? '#ffffff' : '#262626'};
     line-height: 1.4;
   }
   
@@ -74,15 +106,16 @@ const StyledCard = styled(Card)`
   
   .report-description {
     margin: 12px 0;
-    color: #666;
+    color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
     font-size: 13px;
   }
   
   .report-stats {
     margin: 16px 0;
     padding: 12px;
-    background: #fafafa;
+    background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
     border-radius: 6px;
+    border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   }
   
   .report-footer {
@@ -91,13 +124,13 @@ const StyledCard = styled(Card)`
     align-items: center;
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #f0f0f0;
+    border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   }
   
   .report-author {
     display: flex;
     align-items: center;
-    color: #666;
+    color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
     font-size: 12px;
   }
   
@@ -136,24 +169,67 @@ const ReportCard: React.FC<ReportCardProps> = ({
   onDelete
 }) => {
   const { t } = useTranslation();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { token } = theme.useToken();
+  const isDark = currentTheme === 'dark';
   
   const getStatusConfig = (status: string) => {
     const statusMap = {
-      published: { color: 'green', text: t('reports.status.published'), icon: '🟢' },
-      draft: { color: 'orange', text: t('reports.status.draft'), icon: '🟡' },
-      archived: { color: 'gray', text: t('reports.status.archived'), icon: '⚪' },
+      published: { 
+        color: isDark ? '#52c41a' : 'green', 
+        text: t('reports.status.published'), 
+        icon: '🟢',
+        bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+      },
+      draft: { 
+        color: isDark ? '#faad14' : 'orange', 
+        text: t('reports.status.draft'), 
+        icon: '🟡',
+        bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
+      },
+      archived: { 
+        color: isDark ? '#8c8c8c' : 'gray', 
+        text: t('reports.status.archived'), 
+        icon: '⚪',
+        bgColor: isDark ? 'rgba(140, 140, 140, 0.1)' : undefined
+      },
     };
-    return statusMap[status as keyof typeof statusMap] || { color: 'default', text: status, icon: '⚫' };
+    return statusMap[status as keyof typeof statusMap] || { 
+      color: 'default', 
+      text: status, 
+      icon: '⚫',
+      bgColor: undefined
+    };
   };
 
   const getTypeConfig = (type: string) => {
     const typeMap = {
-      [t('reports.types.health')]: { color: 'blue', icon: '📊' },
-      [t('reports.types.dependency')]: { color: 'purple', icon: '🔗' },
-      [t('reports.types.relationship')]: { color: 'cyan', icon: '🕸️' },
-      [t('reports.types.performance')]: { color: 'gold', icon: '⚡' },
+      [t('reports.types.health')]: { 
+        color: isDark ? '#1890ff' : 'blue', 
+        icon: '📊',
+        bgColor: isDark ? 'rgba(24, 144, 255, 0.1)' : undefined
+      },
+      [t('reports.types.dependency')]: { 
+        color: isDark ? '#722ed1' : 'purple', 
+        icon: '🔗',
+        bgColor: isDark ? 'rgba(114, 46, 209, 0.1)' : undefined
+      },
+      [t('reports.types.relationship')]: { 
+        color: isDark ? '#13c2c2' : 'cyan', 
+        icon: '🕸️',
+        bgColor: isDark ? 'rgba(19, 194, 194, 0.1)' : undefined
+      },
+      [t('reports.types.performance')]: { 
+        color: isDark ? '#faad14' : 'gold', 
+        icon: '⚡',
+        bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
+      },
     };
-    return typeMap[type as keyof typeof typeMap] || { color: 'default', icon: '📄' };
+    return typeMap[type as keyof typeof typeMap] || { 
+      color: 'default', 
+      icon: '📄',
+      bgColor: undefined
+    };
   };
 
   const statusConfig = getStatusConfig(report.status);
@@ -220,6 +296,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
 
   return (
     <StyledCard
+      $isDark={isDark}
       hoverable
       onClick={() => onView(report)}
       actions={[
@@ -268,20 +345,36 @@ const ReportCard: React.FC<ReportCardProps> = ({
             size={48} 
             icon={<FileTextOutlined />} 
             style={{ 
-              backgroundColor: typeConfig.color === 'blue' ? '#1890ff' : 
-                              typeConfig.color === 'purple' ? '#722ed1' :
-                              typeConfig.color === 'cyan' ? '#13c2c2' : 
-                              typeConfig.color === 'gold' ? '#faad14' : '#1890ff'
+              backgroundColor: typeConfig.color === 'blue' || typeConfig.color === '#1890ff' ? '#1890ff' : 
+                              typeConfig.color === 'purple' || typeConfig.color === '#722ed1' ? '#722ed1' :
+                              typeConfig.color === 'cyan' || typeConfig.color === '#13c2c2' ? '#13c2c2' : 
+                              typeConfig.color === 'gold' || typeConfig.color === '#faad14' ? '#faad14' : '#1890ff'
             }}
           />
         </div>
         <div className="report-info">
           <div className="report-title">{report.name}</div>
           <div className="report-meta">
-            <Tag color={typeConfig.color} icon={<span>{typeConfig.icon}</span>}>
+            <Tag 
+              color={typeConfig.color} 
+              icon={<span>{typeConfig.icon}</span>}
+              style={typeConfig.bgColor ? { 
+                backgroundColor: typeConfig.bgColor,
+                border: `1px solid ${typeConfig.color}`,
+                color: typeConfig.color
+              } : {}}
+            >
               {report.type}
             </Tag>
-            <Tag color={statusConfig.color} icon={<span>{statusConfig.icon}</span>}>
+            <Tag 
+              color={statusConfig.color} 
+              icon={<span>{statusConfig.icon}</span>}
+              style={statusConfig.bgColor ? { 
+                backgroundColor: statusConfig.bgColor,
+                border: `1px solid ${statusConfig.color}`,
+                color: statusConfig.color
+              } : {}}
+            >
               {statusConfig.text}
             </Tag>
           </div>
@@ -289,33 +382,52 @@ const ReportCard: React.FC<ReportCardProps> = ({
       </div>
 
       <div className="report-description">
-        <Paragraph ellipsis={{ rows: 2 }} style={{ margin: 0, fontSize: 13, color: '#666' }}>
+        <Paragraph 
+          ellipsis={{ rows: 2 }} 
+          style={{ 
+            margin: 0, 
+            fontSize: 13, 
+            color: isDark ? '#8c8c8c' : '#666'
+          }}
+        >
           {report.description || t('reports.card.defaultDescription', { type: report.type })}
         </Paragraph>
       </div>
 
       <div className="report-stats">
-        <Space split={<span style={{ color: '#d9d9d9' }}>|</span>} size="large">
+        <Space split={<span style={{ color: isDark ? '#434343' : '#d9d9d9' }}>|</span>} size="large">
           <Statistic 
-            title={t('reports.card.fileSize')} 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>{t('reports.card.fileSize')}</span>} 
             value={report.size} 
-            valueStyle={{ fontSize: 14 }}
+            valueStyle={{ 
+              fontSize: 14,
+              color: isDark ? '#ffffff' : '#262626'
+            }}
           />
           <Statistic 
-            title={t('reports.card.downloads')} 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>{t('reports.card.downloads')}</span>} 
             value={report.downloads} 
-            valueStyle={{ fontSize: 14 }}
-            prefix={<CloudDownloadOutlined />}
+            valueStyle={{ 
+              fontSize: 14,
+              color: isDark ? '#ffffff' : '#262626'
+            }}
+            prefix={<CloudDownloadOutlined style={{ color: isDark ? '#1890ff' : '#1890ff' }} />}
           />
         </Space>
         <div style={{ marginTop: 8 }}>
-          <Text type="secondary" style={{ fontSize: 12 }}>{t('reports.card.storageUsage')}</Text>
+          <Text type="secondary" style={{ 
+            fontSize: 12,
+            color: isDark ? '#8c8c8c' : '#666'
+          }}>
+            {t('reports.card.storageUsage')}
+          </Text>
           <Progress 
             percent={getSizeProgress(report.size)} 
             size="small" 
             strokeColor={getSizeProgress(report.size) > 80 ? '#ff4d4f' : '#52c41a'}
             showInfo={false}
             style={{ marginTop: 4 }}
+            trailColor={isDark ? '#262626' : '#f5f5f5'}
           />
         </div>
       </div>
@@ -326,11 +438,18 @@ const ReportCard: React.FC<ReportCardProps> = ({
           <span>{report.author}</span>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 12, color: '#999', marginBottom: 2 }}>
+          <div style={{ 
+            fontSize: 12, 
+            color: isDark ? '#8c8c8c' : '#999', 
+            marginBottom: 2 
+          }}>
             <CalendarOutlined style={{ marginRight: 4 }} />
             {t('reports.card.created')}: {report.createdAt.split(' ')[0]}
           </div>
-          <div style={{ fontSize: 12, color: '#999' }}>
+          <div style={{ 
+            fontSize: 12, 
+            color: isDark ? '#8c8c8c' : '#999' 
+          }}>
             <ClockCircleOutlined style={{ marginRight: 4 }} />
             {t('reports.card.updated')}: {report.lastModified.split(' ')[0]}
           </div>

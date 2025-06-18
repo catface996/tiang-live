@@ -15,7 +15,8 @@ import {
   DatePicker,
   Select,
   Tabs,
-  message
+  message,
+  theme
 } from 'antd';
 import { 
   FileTextOutlined, 
@@ -39,36 +40,206 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import { ReportCard } from './components';
+import { useAppSelector } from '../../store';
 
 const { Title, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-const PageContainer = styled.div`
+const PageContainer = styled.div<{ $isDark: boolean }>`
   padding: 24px;
+  min-height: 100vh;
+  background: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
+  transition: all 0.3s ease;
 `;
 
-const PageHeader = styled.div`
+const PageHeader = styled.div<{ $isDark: boolean }>`
   margin-bottom: 24px;
+  padding: 24px;
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  border-radius: 8px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+  };
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  transition: all 0.3s ease;
 `;
 
-const StatsCard = styled(Card)`
+const StatsCard = styled(Card)<{ $isDark: boolean }>`
+  border-radius: 8px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+  };
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  transition: all 0.3s ease;
+  
   .ant-card-body {
     padding: 16px;
   }
+  
+  .ant-statistic-title {
+    color: ${props => props.$isDark ? '#ffffff' : '#666666'};
+  }
+  
+  .ant-statistic-content {
+    color: ${props => props.$isDark ? '#ffffff' : '#262626'};
+  }
 `;
 
-const FilterBar = styled.div`
-  background: #fafafa;
+const FilterBar = styled.div<{ $isDark: boolean }>`
+  background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
   padding: 16px;
   border-radius: 6px;
   margin-bottom: 16px;
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  transition: all 0.3s ease;
+  
+  .ant-input {
+    background: ${props => props.$isDark ? '#000000' : '#ffffff'};
+    border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
+    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+    
+    &:hover {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+    }
+    
+    &:focus {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+      box-shadow: ${props => props.$isDark 
+        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+      };
+    }
+  }
+  
+  .ant-select {
+    .ant-select-selector {
+      background: ${props => props.$isDark ? '#000000' : '#ffffff'};
+      border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
+      color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+    }
+    
+    &:hover .ant-select-selector {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+    }
+    
+    &.ant-select-focused .ant-select-selector {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+      box-shadow: ${props => props.$isDark 
+        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+      };
+    }
+  }
+  
+  .ant-picker {
+    background: ${props => props.$isDark ? '#000000' : '#ffffff'};
+    border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
+    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+    
+    &:hover {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+    }
+    
+    &.ant-picker-focused {
+      border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+      box-shadow: ${props => props.$isDark 
+        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+      };
+    }
+  }
+`;
+
+const MainCard = styled(Card)<{ $isDark: boolean }>`
+  border-radius: 8px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+  };
+  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  transition: all 0.3s ease;
+  
+  .ant-card-body {
+    padding: 24px;
+  }
+`;
+
+const StyledTable = styled(Table)<{ $isDark: boolean }>`
+  .ant-table {
+    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+  }
+  
+  .ant-table-thead > tr > th {
+    background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
+    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+    border-bottom: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  }
+  
+  .ant-table-tbody > tr > td {
+    border-bottom: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+  }
+  
+  .ant-table-tbody > tr:hover > td {
+    background: ${props => props.$isDark ? '#262626' : '#f5f5f5'};
+  }
+  
+  .ant-pagination {
+    .ant-pagination-item {
+      background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+      border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
+      
+      a {
+        color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+      }
+      
+      &:hover {
+        border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+        
+        a {
+          color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+        }
+      }
+      
+      &.ant-pagination-item-active {
+        background: ${props => props.$isDark ? '#177ddc' : '#1890ff'};
+        border-color: ${props => props.$isDark ? '#177ddc' : '#1890ff'};
+        
+        a {
+          color: #ffffff;
+        }
+      }
+    }
+    
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      .ant-pagination-item-link {
+        background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+        border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
+        color: ${props => props.$isDark ? '#ffffff' : '#000000'};
+        
+        &:hover {
+          border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+          color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+        }
+      }
+    }
+  }
 `;
 
 const ReportManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'cards'>('cards');
   const { t } = useTranslation();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { token } = theme.useToken();
+  const isDark = currentTheme === 'dark';
 
   useEffect(() => {
     setPageTitle(t('report.title'));
@@ -152,25 +323,84 @@ const ReportManagement: React.FC = () => {
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      published: { color: 'green', text: '已发布' },
-      draft: { color: 'orange', text: '草稿' },
-      archived: { color: 'gray', text: '已归档' },
+      published: { 
+        color: isDark ? '#52c41a' : 'green', 
+        text: '已发布',
+        bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+      },
+      draft: { 
+        color: isDark ? '#faad14' : 'orange', 
+        text: '草稿',
+        bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
+      },
+      archived: { 
+        color: isDark ? '#8c8c8c' : 'gray', 
+        text: '已归档',
+        bgColor: isDark ? 'rgba(140, 140, 140, 0.1)' : undefined
+      },
     };
-    const config = statusMap[status as keyof typeof statusMap] || { color: 'default', text: status };
-    return <Tag color={config.color}>{config.text}</Tag>;
+    const config = statusMap[status as keyof typeof statusMap] || { 
+      color: 'default', 
+      text: status,
+      bgColor: undefined
+    };
+    return (
+      <Tag 
+        color={config.color}
+        style={config.bgColor ? { 
+          backgroundColor: config.bgColor,
+          border: `1px solid ${config.color}`,
+          color: config.color
+        } : {}}
+      >
+        {config.text}
+      </Tag>
+    );
   };
 
   const getTypeTag = (type: string) => {
     const typeMap = {
-      '健康度分析': { color: 'blue' },
-      '依赖分析': { color: 'purple' },
-      '关系分析': { color: 'cyan' },
-      '性能分析': { color: 'gold' },
-      '安全分析': { color: 'red' },
-      '行为分析': { color: 'green' },
+      '健康度分析': { 
+        color: isDark ? '#1890ff' : 'blue',
+        bgColor: isDark ? 'rgba(24, 144, 255, 0.1)' : undefined
+      },
+      '依赖分析': { 
+        color: isDark ? '#722ed1' : 'purple',
+        bgColor: isDark ? 'rgba(114, 46, 209, 0.1)' : undefined
+      },
+      '关系分析': { 
+        color: isDark ? '#13c2c2' : 'cyan',
+        bgColor: isDark ? 'rgba(19, 194, 194, 0.1)' : undefined
+      },
+      '性能分析': { 
+        color: isDark ? '#faad14' : 'gold',
+        bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
+      },
+      '安全分析': { 
+        color: isDark ? '#ff4d4f' : 'red',
+        bgColor: isDark ? 'rgba(255, 77, 79, 0.1)' : undefined
+      },
+      '行为分析': { 
+        color: isDark ? '#52c41a' : 'green',
+        bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+      },
     };
-    const config = typeMap[type as keyof typeof typeMap] || { color: 'default' };
-    return <Tag color={config.color}>{type}</Tag>;
+    const config = typeMap[type as keyof typeof typeMap] || { 
+      color: 'default',
+      bgColor: undefined
+    };
+    return (
+      <Tag 
+        color={config.color}
+        style={config.bgColor ? { 
+          backgroundColor: config.bgColor,
+          border: `1px solid ${config.color}`,
+          color: config.color
+        } : {}}
+      >
+        {type}
+      </Tag>
+    );
   };
 
   // 处理报告操作
@@ -241,8 +471,13 @@ const ReportManagement: React.FC = () => {
       key: 'name',
       render: (text: string, record: any) => (
         <Space>
-          <FileTextOutlined style={{ color: '#1890ff' }} />
-          <span style={{ fontWeight: 500 }}>{text}</span>
+          <FileTextOutlined style={{ color: isDark ? '#1890ff' : '#1890ff' }} />
+          <span style={{ 
+            fontWeight: 500,
+            color: isDark ? '#ffffff' : '#262626'
+          }}>
+            {text}
+          </span>
         </Space>
       ),
     },
@@ -264,8 +499,10 @@ const ReportManagement: React.FC = () => {
       key: 'author',
       render: (author: string) => (
         <Space>
-          <UserOutlined style={{ color: '#666' }} />
-          {author}
+          <UserOutlined style={{ color: isDark ? '#8c8c8c' : '#666' }} />
+          <span style={{ color: isDark ? '#ffffff' : '#262626' }}>
+            {author}
+          </span>
         </Space>
       ),
     },
@@ -275,8 +512,10 @@ const ReportManagement: React.FC = () => {
       key: 'createdAt',
       render: (time: string) => (
         <Space>
-          <CalendarOutlined style={{ color: '#666' }} />
-          {time}
+          <CalendarOutlined style={{ color: isDark ? '#8c8c8c' : '#666' }} />
+          <span style={{ color: isDark ? '#ffffff' : '#262626' }}>
+            {time}
+          </span>
         </Space>
       ),
     },
@@ -321,11 +560,14 @@ const ReportManagement: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
-      <PageHeader>
+    <PageContainer $isDark={isDark}>
+      <PageHeader $isDark={isDark}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <Title level={2} style={{ margin: 0 }}>
+            <Title level={2} style={{ 
+              margin: 0,
+              color: isDark ? '#ffffff' : '#262626'
+            }}>
               {t('reports.title')}
               <Badge 
                 count={t('common.inDevelopment')} 
@@ -336,15 +578,34 @@ const ReportManagement: React.FC = () => {
                 }} 
               />
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph style={{ 
+              marginTop: 8, 
+              marginBottom: 0, 
+              fontSize: 16,
+              color: isDark ? '#8c8c8c' : '#666666'
+            }}>
               {t('reports.subtitle')}
             </Paragraph>
           </div>
           <Space>
-            <Button icon={<ExportOutlined />}>
+            <Button 
+              icon={<ExportOutlined />}
+              style={{
+                color: isDark ? '#ffffff' : undefined,
+                borderColor: isDark ? '#434343' : undefined,
+                backgroundColor: isDark ? 'transparent' : undefined
+              }}
+            >
               {t('reports.batchExport')}
             </Button>
-            <Button icon={<ReloadOutlined />}>
+            <Button 
+              icon={<ReloadOutlined />}
+              style={{
+                color: isDark ? '#ffffff' : undefined,
+                borderColor: isDark ? '#434343' : undefined,
+                backgroundColor: isDark ? 'transparent' : undefined
+              }}
+            >
               {t('common.refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />}>
@@ -357,45 +618,45 @@ const ReportManagement: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard $isDark={isDark}>
             <Statistic
               title={t('reports.stats.totalReports')}
               value={reportData.length}
               suffix={t('common.unit.count')}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               prefix={<FileTextOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard $isDark={isDark}>
             <Statistic
               title={t('reports.stats.published')}
               value={reportData.filter(r => r.status === 'published').length}
               suffix={t('common.unit.count')}
-              valueStyle={{ color: '#52c41a' }}
+              valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               prefix={<EyeOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard $isDark={isDark}>
             <Statistic
               title={t('reports.stats.draft')}
               value={reportData.filter(r => r.status === 'draft').length}
               suffix={t('common.unit.count')}
-              valueStyle={{ color: '#faad14' }}
+              valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               prefix={<EditOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard $isDark={isDark}>
             <Statistic
               title={t('reports.stats.totalDownloads')}
               value={reportData.reduce((sum, r) => sum + r.downloads, 0)}
               suffix={t('common.unit.times')}
-              valueStyle={{ color: '#722ed1' }}
+              valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
               prefix={<DownloadOutlined />}
             />
           </StatsCard>
@@ -403,9 +664,9 @@ const ReportManagement: React.FC = () => {
       </Row>
 
       {/* 报告列表 */}
-      <Card>
+      <MainCard $isDark={isDark}>
         {/* 筛选栏 */}
-        <FilterBar>
+        <FilterBar $isDark={isDark}>
           <Row gutter={16} align="middle">
             <Col flex="auto">
               <Input
@@ -441,7 +702,14 @@ const ReportManagement: React.FC = () => {
               <RangePicker placeholder={[t('common.startDate'), t('common.endDate')]} />
             </Col>
             <Col>
-              <Button icon={<FilterOutlined />}>
+              <Button 
+                icon={<FilterOutlined />}
+                style={{
+                  color: isDark ? '#ffffff' : undefined,
+                  borderColor: isDark ? '#434343' : undefined,
+                  backgroundColor: isDark ? 'transparent' : undefined
+                }}
+              >
                 {t('common.filter')}
               </Button>
             </Col>
@@ -451,6 +719,11 @@ const ReportManagement: React.FC = () => {
                   type={viewMode === 'cards' ? 'primary' : 'default'}
                   icon={<AppstoreOutlined />}
                   onClick={() => setViewMode('cards')}
+                  style={viewMode !== 'cards' ? {
+                    color: isDark ? '#ffffff' : undefined,
+                    borderColor: isDark ? '#434343' : undefined,
+                    backgroundColor: isDark ? 'transparent' : undefined
+                  } : {}}
                 >
                   {t('common.cardView')}
                 </Button>
@@ -458,6 +731,11 @@ const ReportManagement: React.FC = () => {
                   type={viewMode === 'list' ? 'primary' : 'default'}
                   icon={<BarsOutlined />}
                   onClick={() => setViewMode('list')}
+                  style={viewMode !== 'list' ? {
+                    color: isDark ? '#ffffff' : undefined,
+                    borderColor: isDark ? '#434343' : undefined,
+                    backgroundColor: isDark ? 'transparent' : undefined
+                  } : {}}
                 >
                   {t('common.listView')}
                 </Button>
@@ -470,7 +748,8 @@ const ReportManagement: React.FC = () => {
         {viewMode === 'cards' ? (
           renderCardView()
         ) : (
-          <Table
+          <StyledTable
+            $isDark={isDark}
             columns={columns}
             dataSource={reportData}
             loading={loading}
@@ -484,7 +763,7 @@ const ReportManagement: React.FC = () => {
             }}
           />
         )}
-      </Card>
+      </MainCard>
     </PageContainer>
   );
 };
