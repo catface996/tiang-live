@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { 
   Card, 
   Space, 
@@ -196,7 +196,8 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
   
-  const agentTypeMap = {
+  // 使用 useMemo 来确保配置对象的稳定性
+  const agentTypeMap = useMemo(() => ({
     monitor: { 
       name: '监控', 
       color: isDark ? '#1890ff' : 'blue', 
@@ -225,7 +226,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
       bgColor: isDark ? 'rgba(250, 140, 22, 0.1)' : undefined,
       avatarColor: isDark ? '#fa8c16' : '#ffa940'
     },
-  };
+  }), [isDark]);
 
   const getStatusConfig = (status: string) => {
     const statusMap = {
@@ -251,8 +252,26 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
     return statusMap[status as keyof typeof statusMap];
   };
 
+  // 获取头像背景色的辅助函数
+  const getAvatarBackgroundColor = (agentType: string, isDark: boolean) => {
+    const colorMap = {
+      monitor: isDark ? '#1890ff' : '#4096ff',
+      analysis: isDark ? '#52c41a' : '#73d13d',
+      deployment: isDark ? '#722ed1' : '#9254de',
+      optimization: isDark ? '#fa8c16' : '#ffa940'
+    };
+    return colorMap[agentType as keyof typeof colorMap] || (isDark ? '#1890ff' : '#4096ff');
+  };
+
   const statusConfig = getStatusConfig(agent.status);
   const typeConfig = agentTypeMap[agent.type];
+  const avatarBgColor = getAvatarBackgroundColor(agent.type, isDark);
+
+  // 添加调试信息
+  console.log('Agent type:', agent.type);
+  console.log('isDark:', isDark);
+  console.log('typeConfig:', typeConfig);
+  console.log('avatarBgColor:', avatarBgColor);
 
   // 添加安全检查，确保 typeConfig 存在
   if (!typeConfig) {
@@ -343,7 +362,8 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
             size={48} 
             icon={<RobotOutlined />} 
             style={{ 
-              backgroundColor: typeConfig?.avatarColor || (isDark ? '#1890ff' : '#4096ff')
+              backgroundColor: avatarBgColor,
+              transition: 'background-color 0.3s ease'
             }}
           />
         </div>
