@@ -31,6 +31,8 @@ import {
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
 
+const { Text, Paragraph } = Typography;
+
 const CustomAvatar = styled(Avatar)<{ $bgColor: string }>`
   background-color: ${props => props.$bgColor} !important;
   transition: background-color 0.3s ease;
