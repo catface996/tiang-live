@@ -131,8 +131,27 @@ const DataSourceMeta = styled.div`
 `;
 
 const DataSourceActions = styled.div`
-  display: flex;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-top: 8px;
+  
+  .ant-btn {
+    font-size: 12px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 4px;
+  }
+  
+  .scan-btn {
+    grid-column: 1 / -1;
+    margin-bottom: 6px;
+  }
+  
+  .delete-btn {
+    grid-column: 3;
+    justify-self: end;
+  }
 `;
 
 const MetaItem = styled.div`
@@ -668,7 +687,7 @@ const EntityScan: React.FC = () => {
       const typeConfig = typeMap[dataSource.type as keyof typeof typeMap];
       
       return (
-        <Col xs={24} sm={12} lg={8} xl={6} key={dataSource.id}>
+        <Col xs={24} sm={12} lg={8} key={dataSource.id}>
           <DataSourceCard $isDark={isDark}>
             <DataSourceHeader>
               <DataSourceInfo>
@@ -713,6 +732,19 @@ const EntityScan: React.FC = () => {
 
             <DataSourceActions>
               <Button 
+                type="primary" 
+                size="small" 
+                icon={<ScanOutlined />}
+                onClick={() => handleStartScanForDataSource(dataSource)}
+                disabled={dataSource.status !== 'connected'}
+                loading={isScanning && selectedDataSource === dataSource.id}
+                className="scan-btn"
+                block
+              >
+                {isScanning && selectedDataSource === dataSource.id ? '扫描中...' : '开始扫描'}
+              </Button>
+              
+              <Button 
                 type="text" 
                 size="small" 
                 icon={<EyeOutlined />}
@@ -737,12 +769,14 @@ const EntityScan: React.FC = () => {
               >
                 测试
               </Button>
+              
               <Button 
                 type="text" 
                 size="small" 
                 danger
                 icon={<DeleteOutlined />}
                 onClick={() => handleDeleteDataSource(dataSource)}
+                className="delete-btn"
               >
                 删除
               </Button>
@@ -822,6 +856,105 @@ const EntityScan: React.FC = () => {
         ds.id === dataSource.id ? { ...ds, status: 'error' } : ds
       ));
       message.error('连接测试失败！');
+    }
+  };
+
+  // 针对单个数据源开始扫描
+  const handleStartScanForDataSource = async (dataSource: DataSource) => {
+    if (dataSource.status !== 'connected') {
+      message.warning('请先确保数据源连接正常！');
+      return;
+    }
+
+    try {
+      setIsScanning(true);
+      setSelectedDataSource(dataSource.id);
+      
+      message.loading('正在启动扫描任务...', 1);
+      
+      // 模拟扫描过程
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // 创建扫描任务
+      const newTask: ScanTask = {
+        id: `task_${Date.now()}`,
+        dataSourceId: dataSource.id,
+        dataSourceName: dataSource.name,
+        status: 'running',
+        progress: 0,
+        startTime: new Date().toLocaleString(),
+        endTime: '',
+        entityCount: 0,
+        errorCount: 0,
+        config: {
+          includeViews: true,
+          includeProcedures: false,
+          includeIndexes: true,
+          generateRelations: true,
+          maxDepth: 3
+        }
+      };
+
+      setScanTasks(prev => [newTask, ...prev]);
+      setCurrentTask(newTask);
+
+      // 模拟扫描进度
+      const progressInterval = setInterval(() => {
+        setScanTasks(prev => prev.map(task => {
+          if (task.id === newTask.id && task.status === 'running') {
+            const newProgress = Math.min(task.progress + Math.random() * 20, 100);
+            if (newProgress >= 100) {
+              clearInterval(progressInterval);
+              return {
+                ...task,
+                status: 'completed',
+                progress: 100,
+                endTime: new Date().toLocaleString(),
+                entityCount: Math.floor(Math.random() * 50) + 10,
+                errorCount: Math.floor(Math.random() * 3)
+              };
+            }
+            return { ...task, progress: newProgress };
+          }
+          return task;
+        }));
+      }, 500);
+
+      // 3秒后完成扫描
+      setTimeout(() => {
+        clearInterval(progressInterval);
+        setScanTasks(prev => prev.map(task => 
+          task.id === newTask.id ? {
+            ...task,
+            status: 'completed',
+            progress: 100,
+            endTime: new Date().toLocaleString(),
+            entityCount: Math.floor(Math.random() * 50) + 10,
+            errorCount: Math.floor(Math.random() * 3)
+          } : task
+        ));
+        
+        // 生成扫描结果
+        generateMockScanResults();
+        
+        // 更新数据源扫描次数
+        setDataSources(prev => prev.map(ds => 
+          ds.id === dataSource.id ? {
+            ...ds,
+            scanCount: (ds.scanCount || 0) + 1,
+            lastConnected: new Date().toLocaleString()
+          } : ds
+        ));
+
+        setIsScanning(false);
+        setSelectedDataSource('');
+        message.success(`数据源 "${dataSource.name}" 扫描完成！`);
+      }, 3000);
+
+    } catch (error) {
+      setIsScanning(false);
+      setSelectedDataSource('');
+      message.error('扫描启动失败！');
     }
   };
 
@@ -1069,81 +1202,6 @@ const EntityScan: React.FC = () => {
         )}
       </ScanCard>
 
-      {/* 扫描配置 */}
-      <ScanCard $isDark={isDark} title="扫描配置">
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleStartScan}
-        >
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item
-                label="选择数据源"
-                name="dataSource"
-                rules={[{ required: true, message: '请选择数据源' }]}
-              >
-                <Select
-                  placeholder="请选择要扫描的数据源"
-                  value={selectedDataSource}
-                  onChange={setSelectedDataSource}
-                >
-                  {dataSources
-                    .filter(ds => ds.status === 'connected')
-                    .map(ds => (
-                      <Option key={ds.id} value={ds.id}>
-                        <Space>
-                          {getDataSourceIcon(ds.type, ds.subType)}
-                          <span>{ds.name}</span>
-                          {ds.subType && (
-                            <Text type="secondary" style={{ fontSize: '12px' }}>
-                              ({ds.subType})
-                            </Text>
-                          )}
-                        </Space>
-                      </Option>
-                    ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label="任务名称"
-                name="taskName"
-              >
-                <Input placeholder="输入扫描任务名称（可选）" />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label=" ">
-                <Space>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    icon={<PlayCircleOutlined />}
-                    loading={isScanning}
-                    disabled={!selectedDataSource}
-                  >
-                    开始扫描
-                  </Button>
-                  <Button
-                    icon={<PauseCircleOutlined />}
-                    disabled={!isScanning}
-                  >
-                    暂停
-                  </Button>
-                  <Button
-                    icon={<ReloadOutlined />}
-                    onClick={() => window.location.reload()}
-                  >
-                    重置
-                  </Button>
-                </Space>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </ScanCard>
 
       {/* 扫描进度 */}
       {currentTask && (
