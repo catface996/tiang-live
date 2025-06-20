@@ -138,13 +138,13 @@ const D3RelationshipGraph: React.FC = () => {
     return sizes[level as keyof typeof sizes] || 12;
   };
 
-  // 计算平面边界框
+  // Calculate plane bounding boxes
   const calculatePlaneBounds = (plane: Plane, nodes: Node[], width: number, height: number) => {
     const planeNodes = nodes.filter(node => node.plane === plane.id);
     if (planeNodes.length === 0) return null;
 
-    // 根据平面层级计算大致位置 - 现在有5个平面
-    const levelHeight = height / 5; // 5个平面
+    // Calculate approximate position based on plane level - now 5 planes
+    const levelHeight = height / 5; // 5 planes
     const planeIndex = plane.level - 1;
     const baseY = planeIndex * levelHeight + 50;
     
@@ -522,30 +522,30 @@ const D3RelationshipGraph: React.FC = () => {
   }
 
   return (
-    <Card title="业务关系图谱" style={{ marginBottom: 24 }}>
+    <Card title={t('relationships.businessRelationshipGraph')} style={{ marginBottom: 24 }}>
       <GraphContainer ref={containerRef}>
         <svg ref={svgRef}></svg>
         
         {/* 控制面板 */}
         <ControlPanel>
           <Space direction="vertical" size="small">
-            <Button size="small" icon={<ZoomInOutlined />} onClick={handleZoomIn} title="放大" />
-            <Button size="small" icon={<ZoomOutOutlined />} onClick={handleZoomOut} title="缩小" />
-            <Button size="small" icon={<FullscreenOutlined />} onClick={handleResetZoom} title="重置视图" />
-            <Button size="small" icon={<UndoOutlined />} onClick={handleResetNodePositions} title="重置节点位置" />
-            <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} title="刷新图谱" />
+            <Button size="small" icon={<ZoomInOutlined />} onClick={handleZoomIn} title={t('relationships.zoomIn')} />
+            <Button size="small" icon={<ZoomOutOutlined />} onClick={handleZoomOut} title={t('relationships.zoomOut')} />
+            <Button size="small" icon={<FullscreenOutlined />} onClick={handleResetZoom} title={t('relationships.resetView')} />
+            <Button size="small" icon={<UndoOutlined />} onClick={handleResetNodePositions} title={t('relationships.resetNodePositions')} />
+            <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} title={t('relationships.refreshGraph')} />
           </Space>
         </ControlPanel>
 
-        {/* 图例 */}
+        {/* Legend */}
         <LegendContainer>
           <div style={{ marginBottom: 12, fontWeight: 'bold', fontSize: '14px' }}>
-            图例
+            {t('relationships.legend')}
           </div>
           
-          {/* 平面图例 */}
+          {/* Plane Legend */}
           <div style={{ marginBottom: 12 }}>
-            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>平面:</div>
+            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships.planes')}:</div>
             {graphData?.planes.map((plane: Plane) => (
               <div key={plane.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -564,7 +564,7 @@ const D3RelationshipGraph: React.FC = () => {
           </div>
 
           <div style={{ marginBottom: 8 }}>
-            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>节点类型:</div>
+            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships.nodeTypes')}:</div>
             {graphData?.metadata.levels.map((level: any) => (
               <div key={level.level} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -581,7 +581,7 @@ const D3RelationshipGraph: React.FC = () => {
             ))}
           </div>
           <div>
-            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>关系类型:</div>
+            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships.relationTypes')}:</div>
             {graphData?.metadata.relationTypes.map((relType: any) => (
               <div key={relType.type} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -602,10 +602,10 @@ const D3RelationshipGraph: React.FC = () => {
         {tooltip && (
           <TooltipContainer style={{ left: tooltip.x, top: tooltip.y }}>
             <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{tooltip.content.name}</div>
-            <div style={{ marginBottom: 2 }}>类型: {tooltip.content.type}</div>
-            <div style={{ marginBottom: 2 }}>层级: {tooltip.content.level}</div>
-            <div style={{ marginBottom: 2 }}>平面: {tooltip.content.plane}</div>
-            <div style={{ marginBottom: 2 }}>状态: 
+            <div style={{ marginBottom: 2 }}>{t('relationships.type')}: {tooltip.content.type}</div>
+            <div style={{ marginBottom: 2 }}>{t('relationships.level')}: {tooltip.content.level}</div>
+            <div style={{ marginBottom: 2 }}>{t('relationships.plane')}: {tooltip.content.plane}</div>
+            <div style={{ marginBottom: 2 }}>{t('relationships.status')}: 
               <Tag color={tooltip.content.status === 'active' || tooltip.content.status === 'running' ? 'green' : 'red'} size="small" style={{ marginLeft: 4 }}>
                 {tooltip.content.status}
               </Tag>
@@ -617,25 +617,25 @@ const D3RelationshipGraph: React.FC = () => {
         )}
       </GraphContainer>
 
-      {/* 选中节点详情 */}
+      {/* Selected Node Details */}
       {selectedNode && (
         <Card 
-          title={`节点详情: ${selectedNode.name}`} 
+          title={`${t('relationships.nodeDetails')}: ${selectedNode.name}`} 
           size="small" 
           style={{ marginTop: 16 }}
-          extra={<Button size="small" onClick={() => setSelectedNode(null)}>关闭</Button>}
+          extra={<Button size="small" onClick={() => setSelectedNode(null)}>{t('common.close')}</Button>}
         >
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             <div>
-              <strong>基本信息:</strong>
+              <strong>{t('relationships.basicInfo')}:</strong>
               <div>ID: {selectedNode.id}</div>
-              <div>类型: {selectedNode.type}</div>
-              <div>层级: {selectedNode.level}</div>
-              <div>平面: {selectedNode.plane}</div>
-              <div>状态: <Tag color={selectedNode.status === 'active' || selectedNode.status === 'running' ? 'green' : 'red'}>{selectedNode.status}</Tag></div>
+              <div>{t('relationships.type')}: {selectedNode.type}</div>
+              <div>{t('relationships.level')}: {selectedNode.level}</div>
+              <div>{t('relationships.plane')}: {selectedNode.plane}</div>
+              <div>{t('relationships.status')}: <Tag color={selectedNode.status === 'active' || selectedNode.status === 'running' ? 'green' : 'red'}>{selectedNode.status}</Tag></div>
             </div>
             <div>
-              <strong>描述:</strong>
+              <strong>{t('common.description')}:</strong>
               <div>{selectedNode.description}</div>
             </div>
             {selectedNode.instances && (
@@ -648,16 +648,16 @@ const D3RelationshipGraph: React.FC = () => {
             )}
             {selectedNode.nodes && (
               <div>
-                <strong>集群信息:</strong>
-                <div>节点数: {selectedNode.nodes}</div>
-                {selectedNode.config && <div>配置: {selectedNode.config}</div>}
-                {selectedNode.technology && <div>技术: {selectedNode.technology}</div>}
-                {selectedNode.region && <div>区域: {selectedNode.region}</div>}
+                <strong>{t('relationships.clusterInfo')}:</strong>
+                <div>{t('relationships.nodeCount')}: {selectedNode.nodes}</div>
+                {selectedNode.config && <div>{t('relationships.config')}: {selectedNode.config}</div>}
+                {selectedNode.technology && <div>{t('relationships.technology')}: {selectedNode.technology}</div>}
+                {selectedNode.region && <div>{t('relationships.region')}: {selectedNode.region}</div>}
               </div>
             )}
             {selectedNode.databases && (
               <div>
-                <strong>数据库:</strong>
+                <strong>{t('relationships.databases')}:</strong>
                 <div style={{ marginTop: 4 }}>
                   {selectedNode.databases.map((db: string, index: number) => (
                     <Tag key={index} color="blue" style={{ marginBottom: 4 }}>
