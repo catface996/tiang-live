@@ -317,28 +317,6 @@ sequenceDiagram
                 {getStatusTag(sequence.status)}
               </Space>
             }
-            extra={
-              <Space>
-                <Tooltip title={t('sequences.viewSequenceDiagram')}>
-                  <Button 
-                    type="link" 
-                    icon={<EyeOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewSequence(sequence);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title={t('common.edit')}>
-                  <Button 
-                    type="link" 
-                    icon={<EditOutlined />} 
-                    size="small"
-                  />
-                </Tooltip>
-              </Space>
-            }
             onClick={() => handleViewSequence(sequence)}
           >
             <div style={{ marginBottom: 12 }}>
@@ -371,9 +349,45 @@ sequenceDiagram
               </Row>
             </div>
 
-            <div style={{ fontSize: 12, color: '#666' }}>
+            <div style={{ fontSize: 12, color: '#666', marginBottom: 16 }}>
               <div>{t('sequences.createdBy')}: {sequence.createdBy}</div>
               <div>{t('sequences.lastModified')}: {sequence.lastModified}</div>
+            </div>
+
+            {/* Action Buttons at Bottom */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              paddingTop: 12,
+              borderTop: '1px solid #f0f0f0'
+            }}>
+              <div style={{ fontSize: 12, color: '#999' }}>
+                {t('sequences.participants')}: {sequence.participants.length}
+              </div>
+              <Space>
+                <Tooltip title={t('sequences.viewSequenceDiagram')}>
+                  <Button 
+                    type="text" 
+                    icon={<EyeOutlined />} 
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewSequence(sequence);
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title={t('common.edit')}>
+                  <Button 
+                    type="text" 
+                    icon={<EditOutlined />} 
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  />
+                </Tooltip>
+              </Space>
             </div>
           </SequenceCard>
         </Col>
