@@ -1087,5 +1087,12 @@
     "pageSize": "{{size}} items per page",
     "goto": "Go to",
     "page": "Page"
+  },
+  "theme": {
+    "toggle": "Toggle Theme",
+    "switchToLight": "Switch to Light Theme",
+    "switchToDark": "Switch to Dark Theme",
+    "light": "Light Theme",
+    "dark": "Dark Theme"
   }
 }

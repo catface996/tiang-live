@@ -4,6 +4,7 @@ import { GlobalOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { languageConfig, type SupportedLanguage } from '../../i18n';
+import { languageStorage } from '../../utils/storage';
 import type { MenuProps } from 'antd';
 
 const LanguageButton = styled(Button)`
@@ -55,6 +56,8 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className }) => {
 
   const handleLanguageChange = (language: SupportedLanguage) => {
     i18n.changeLanguage(language);
+    // Save language preference to localStorage using storage utility
+    languageStorage.set(language as any);
   };
 
   const menuItems: MenuProps['items'] = Object.entries(languageConfig).map(([code, config]) => ({

@@ -1,16 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-
-// 直接定义主题类型，避免循环导入
-type ThemeType = 'light' | 'dark';
+import { themeStorage, type ThemeType } from '../../utils/storage';
 
 interface ThemeState {
   currentTheme: ThemeType;
 }
 
-// 初始状态
+// 初始状态 - 从localStorage读取用户之前的选择
 const initialState: ThemeState = {
-  currentTheme: 'light', // 默认使用浅色主题
+  currentTheme: themeStorage.get(),
 };
 
 // 创建主题切换的slice
@@ -20,11 +18,16 @@ const themeSlice = createSlice({
   reducers: {
     // 切换主题
     toggleTheme: (state) => {
-      state.currentTheme = state.currentTheme === 'light' ? 'dark' : 'light';
+      const newTheme = state.currentTheme === 'light' ? 'dark' : 'light';
+      state.currentTheme = newTheme;
+      // 保存到localStorage
+      themeStorage.set(newTheme);
     },
     // 设置特定主题
     setTheme: (state, action: PayloadAction<ThemeType>) => {
       state.currentTheme = action.payload;
+      // 保存到localStorage
+      themeStorage.set(action.payload);
     },
   },
 });

@@ -1150,5 +1150,12 @@
     "pageSize": "每页 {{size}} 条",
     "goto": "跳至",
     "page": "页"
+  },
+  "theme": {
+    "toggle": "切换主题",
+    "switchToLight": "切换到浅色主题",
+    "switchToDark": "切换到深色主题",
+    "light": "浅色主题",
+    "dark": "深色主题"
   }
 }

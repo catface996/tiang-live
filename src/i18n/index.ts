@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { languageStorage } from '../utils/storage';
 
 // 导入语言资源
 import zhCN from './locales/zh-CN.json';
@@ -31,16 +32,16 @@ i18n
     
     // 语言检测配置
     detection: {
-      // 检测顺序：localStorage -> fallback (移除navigator自动检测)
+      // 检测顺序：localStorage -> fallback
       order: ['localStorage'],
       // 缓存用户选择的语言
       caches: ['localStorage'],
       // localStorage中的key名
-      lookupLocalStorage: 'i18nextLng',
+      lookupLocalStorage: 'preferred-language',
     },
     
-    // 强制设置默认语言为中文
-    lng: 'zh-CN',
+    // 设置初始语言为用户之前选择的语言
+    lng: languageStorage.get(),
     
     // 调试模式（开发环境开启）
     debug: import.meta.env.DEV,
