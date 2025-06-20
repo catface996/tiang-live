@@ -1,0 +1,121 @@
+{
+  "sequences": [
+    {
+      "id": "1",
+      "name": "用户登录认证流程",
+      "description": "用户通过前端登录，后端验证身份并返回token的完整时序流程",
+      "type": "authentication",
+      "status": "active",
+      "participants": ["用户", "前端应用", "认证服务", "数据库"],
+      "steps": 8,
+      "duration": "2-5秒",
+      "createdBy": "系统架构师",
+      "createdAt": "2024-06-10",
+      "lastModified": "2024-06-14",
+      "mermaidChart": "sequenceDiagram\n    participant U as 用户\n    participant F as 前端应用\n    participant A as 认证服务\n    participant D as 数据库\n    \n    U->>F: 输入用户名密码\n    F->>A: 发送登录请求\n    A->>D: 查询用户信息\n    D-->>A: 返回用户数据\n    A->>A: 验证密码\n    alt 验证成功\n        A->>A: 生成JWT Token\n        A-->>F: 返回Token和用户信息\n        F-->>U: 登录成功，跳转首页\n    else 验证失败\n        A-->>F: 返回错误信息\n        F-->>U: 显示登录失败\n    end"
+    },
+    {
+      "id": "2",
+      "name": "订单处理业务流程",
+      "description": "从用户下单到订单完成的完整业务时序，包含库存检查、支付处理等环节",
+      "type": "business",
+      "status": "active",
+      "participants": ["用户", "订单服务", "库存服务", "支付服务", "通知服务"],
+      "steps": 12,
+      "duration": "10-30秒",
+      "createdBy": "业务分析师",
+      "createdAt": "2024-06-08",
+      "lastModified": "2024-06-13",
+      "mermaidChart": "sequenceDiagram\n    participant U as 用户\n    participant O as 订单服务\n    participant I as 库存服务\n    participant P as 支付服务\n    participant N as 通知服务\n    \n    U->>O: 提交订单\n    O->>I: 检查库存\n    alt 库存充足\n        I-->>O: 库存确认\n        O->>O: 创建订单\n        O->>P: 发起支付\n        P-->>O: 支付成功\n        O->>I: 扣减库存\n        O->>N: 发送订单确认\n        N-->>U: 短信/邮件通知\n        O-->>U: 订单创建成功\n    else 库存不足\n        I-->>O: 库存不足\n        O-->>U: 商品库存不足\n    end"
+    },
+    {
+      "id": "3",
+      "name": "微服务健康检查",
+      "description": "监控系统对各微服务进行健康检查的时序流程，包含服务发现和状态上报",
+      "type": "monitoring",
+      "status": "active",
+      "participants": ["监控中心", "服务注册中心", "用户服务", "订单服务", "支付服务"],
+      "steps": 10,
+      "duration": "5-15秒",
+      "createdBy": "运维工程师",
+      "createdAt": "2024-06-05",
+      "lastModified": "2024-06-12",
+      "mermaidChart": "sequenceDiagram\n    participant M as 监控中心\n    participant R as 服务注册中心\n    participant U as 用户服务\n    participant O as 订单服务\n    participant P as 支付服务\n    \n    M->>R: 获取服务列表\n    R-->>M: 返回服务实例\n    \n    par 并行健康检查\n        M->>U: 健康检查请求\n        U-->>M: 返回健康状态\n    and\n        M->>O: 健康检查请求\n        O-->>M: 返回健康状态\n    and\n        M->>P: 健康检查请求\n        P-->>M: 返回健康状态\n    end\n    \n    M->>M: 汇总健康状态\n    M->>R: 更新服务状态"
+    },
+    {
+      "id": "4",
+      "name": "数据同步流程",
+      "description": "主数据库与从数据库之间的数据同步时序，确保数据一致性",
+      "type": "data",
+      "status": "draft",
+      "participants": ["应用服务", "主数据库", "从数据库", "同步服务"],
+      "steps": 6,
+      "duration": "1-3秒",
+      "createdBy": "数据库管理员",
+      "createdAt": "2024-06-12",
+      "lastModified": "2024-06-14",
+      "mermaidChart": "sequenceDiagram\n    participant A as 应用服务\n    participant M as 主数据库\n    participant S as 同步服务\n    participant R as 从数据库\n    \n    A->>M: 写入数据\n    M-->>A: 写入确认\n    M->>S: 触发同步事件\n    S->>M: 读取变更日志\n    M-->>S: 返回变更数据\n    S->>R: 同步数据到从库\n    R-->>S: 同步确认\n    S->>S: 记录同步状态"
+    },
+    {
+      "id": "5",
+      "name": "API网关请求路由",
+      "description": "API网关接收请求并路由到相应微服务的时序流程，包含认证和限流",
+      "type": "gateway",
+      "status": "inactive",
+      "participants": ["客户端", "API网关", "认证服务", "用户服务", "限流服务"],
+      "steps": 15,
+      "duration": "100-500毫秒",
+      "createdBy": "架构师",
+      "createdAt": "2024-06-01",
+      "lastModified": "2024-06-11",
+      "mermaidChart": "sequenceDiagram\n    participant C as 客户端\n    participant G as API网关\n    participant A as 认证服务\n    participant L as 限流服务\n    participant U as 用户服务\n    \n    C->>G: 发送API请求\n    G->>A: 验证Token\n    A-->>G: 认证结果\n    \n    alt 认证成功\n        G->>L: 检查限流\n        alt 未超限\n            L-->>G: 通过限流检查\n            G->>U: 转发请求到目标服务\n            U-->>G: 返回响应\n            G-->>C: 返回最终响应\n        else 超出限流\n            L-->>G: 限流拒绝\n            G-->>C: 返回限流错误\n        end\n    else 认证失败\n        G-->>C: 返回认证错误\n    end"
+    },
+    {
+      "id": "6",
+      "name": "消息队列处理流程",
+      "description": "异步消息队列的生产、消费和处理时序流程",
+      "type": "business",
+      "status": "active",
+      "participants": ["生产者", "消息队列", "消费者", "业务处理器", "数据库"],
+      "steps": 8,
+      "duration": "50-200毫秒",
+      "createdBy": "系统架构师",
+      "createdAt": "2024-06-15",
+      "lastModified": "2024-06-18",
+      "mermaidChart": "sequenceDiagram\n    participant P as 生产者\n    participant Q as 消息队列\n    participant C as 消费者\n    participant H as 业务处理器\n    participant D as 数据库\n    \n    P->>Q: 发送消息\n    Q-->>P: 确认接收\n    Q->>C: 推送消息\n    C->>H: 处理业务逻辑\n    H->>D: 持久化数据\n    D-->>H: 确认保存\n    H-->>C: 处理完成\n    C->>Q: 确认消费"
+    },
+    {
+      "id": "7",
+      "name": "文件上传处理流程",
+      "description": "用户文件上传到云存储的完整时序流程，包含验证、上传、回调等步骤",
+      "type": "business",
+      "status": "active",
+      "participants": ["客户端", "上传服务", "文件验证器", "云存储", "回调服务"],
+      "steps": 10,
+      "duration": "2-10秒",
+      "createdBy": "前端工程师",
+      "createdAt": "2024-06-20",
+      "lastModified": "2024-06-20",
+      "mermaidChart": "sequenceDiagram\n    participant C as 客户端\n    participant U as 上传服务\n    participant V as 文件验证器\n    participant S as 云存储\n    participant CB as 回调服务\n    \n    C->>U: 上传文件请求\n    U->>V: 验证文件格式\n    V-->>U: 验证通过\n    U->>S: 上传到云存储\n    S-->>U: 返回存储地址\n    U->>CB: 触发上传回调\n    CB->>CB: 处理后续业务\n    CB-->>U: 回调完成\n    U-->>C: 返回上传结果"
+    },
+    {
+      "id": "8",
+      "name": "缓存更新策略",
+      "description": "分布式缓存的更新和失效策略时序流程",
+      "type": "data",
+      "status": "active",
+      "participants": ["应用服务", "本地缓存", "Redis集群", "数据库", "缓存管理器"],
+      "steps": 7,
+      "duration": "10-50毫秒",
+      "createdBy": "后端工程师",
+      "createdAt": "2024-06-18",
+      "lastModified": "2024-06-19",
+      "mermaidChart": "sequenceDiagram\n    participant A as 应用服务\n    participant L as 本地缓存\n    participant R as Redis集群\n    participant D as 数据库\n    participant M as 缓存管理器\n    \n    A->>L: 查询本地缓存\n    alt 本地缓存命中\n        L-->>A: 返回缓存数据\n    else 本地缓存未命中\n        A->>R: 查询Redis\n        alt Redis命中\n            R-->>A: 返回缓存数据\n            A->>L: 更新本地缓存\n        else Redis未命中\n            A->>D: 查询数据库\n            D-->>A: 返回数据\n            A->>R: 更新Redis\n            A->>L: 更新本地缓存\n        end\n    end"
+    }
+  ],
+  "metadata": {
+    "total": 8,
+    "lastUpdated": "2024-06-20T16:00:00Z",
+    "version": "1.0.0"
+  }
+}

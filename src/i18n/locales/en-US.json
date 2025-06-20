@@ -556,33 +556,6 @@
       "inactive": "Inactive",
       "draft": "Draft"
     },
-    "examples": {
-      "userLogin": {
-        "name": "User Login Authentication Flow",
-        "description": "Complete sequence flow for user login through frontend, backend identity verification and token return",
-        "createdBy": "System Architect"
-      },
-      "orderProcess": {
-        "name": "Order Processing Business Flow",
-        "description": "Complete business sequence from user order to completion, including inventory check and payment processing",
-        "createdBy": "Business Analyst"
-      },
-      "healthCheck": {
-        "name": "Microservice Health Check",
-        "description": "Monitoring system health check sequence flow for microservices, including service discovery and status reporting",
-        "createdBy": "DevOps Engineer"
-      },
-      "dataSync": {
-        "name": "Data Synchronization Flow",
-        "description": "Data synchronization sequence between master and slave databases to ensure data consistency",
-        "createdBy": "Database Administrator"
-      },
-      "apiGateway": {
-        "name": "API Gateway Request Routing",
-        "description": "API gateway request routing sequence flow to microservices, including authentication and rate limiting",
-        "createdBy": "Architect"
-      }
-    },
     "stats": {
       "totalSequences": "Total Sequences",
       "activeSequences": "Active Sequences",
