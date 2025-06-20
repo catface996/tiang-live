@@ -17,7 +17,8 @@ import {
   message,
   Divider,
   Tooltip,
-  Switch
+  Switch,
+  Badge
 } from 'antd';
 import {
   ScanOutlined,
@@ -35,12 +36,16 @@ import {
   BarChartOutlined,
   MonitorOutlined,
   DashboardOutlined,
-  FileTextOutlined
+  FileTextOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  EyeOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
 import { entityScanService } from '../../../services/entityScanService';
+import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 
 const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
@@ -62,6 +67,89 @@ const ScanCard = styled(Card)<{ $isDark: boolean }>`
   .ant-card-head {
     border-bottom: 1px solid ${props => props.$isDark ? '#303030' : '#f0f0f0'};
   }
+`;
+
+const DataSourceCard = styled(Card)<{ $isDark: boolean }>`
+  height: 100%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 8px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${props => props.$isDark 
+      ? '0 4px 16px rgba(255, 255, 255, 0.12)' 
+      : '0 4px 16px rgba(0, 0, 0, 0.12)'
+    };
+  }
+  
+  .ant-card-body {
+    padding: 20px;
+  }
+`;
+
+const DataSourceHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+`;
+
+const DataSourceInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const DataSourceIcon = styled.div<{ type: string; $isDark: boolean }>`
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  background: ${props => {
+    switch (props.type) {
+      case 'mysql': return 'linear-gradient(135deg, #4479A1, #336791)';
+      case 'postgresql': return 'linear-gradient(135deg, #336791, #2E5984)';
+      case 'mongodb': return 'linear-gradient(135deg, #47A248, #3E8E41)';
+      case 'redis': return 'linear-gradient(135deg, #DC382D, #B92C20)';
+      case 'elasticsearch': return 'linear-gradient(135deg, #005571, #004A5C)';
+      case 'api': return 'linear-gradient(135deg, #1890ff, #096dd9)';
+      case 'file': return 'linear-gradient(135deg, #722ed1, #531dab)';
+      default: return 'linear-gradient(135deg, #8c8c8c, #595959)';
+    }
+  }};
+`;
+
+const DataSourceMeta = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const DataSourceActions = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const MetaItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 12px;
+  color: ${props => props.theme.$isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)'};
+`;
+
+const MetaLabel = styled.span`
+  font-weight: 500;
+`;
+
+const MetaValue = styled.span`
+  color: ${props => props.theme.$isDark ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)'};
 `;
 
 const StatusTag = styled(Tag)<{ status: string }>`
@@ -135,6 +223,11 @@ const EntityScan: React.FC = () => {
   const [currentTask, setCurrentTask] = useState<ScanTask | null>(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
+  
+  // 搜索和筛选状态
+  const [searchText, setSearchText] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
 
   // 加载数据源
   useEffect(() => {
@@ -514,6 +607,238 @@ const EntityScan: React.FC = () => {
     setScanResults(mockResults);
   };
 
+  // 获取数据源类型映射
+  const getDataSourceTypeMap = () => ({
+    database: { name: '数据库', color: '#1890ff' },
+    api: { name: 'API接口', color: '#52c41a' },
+    cloud: { name: '云服务', color: '#722ed1' },
+    monitoring: { name: '监控系统', color: '#fa8c16' },
+    metrics: { name: '指标数据', color: '#13c2c2' },
+    file: { name: '文件', color: '#eb2f96' }
+  });
+
+  const getDataSourceSubTypeMap = () => ({
+    mysql: 'MySQL',
+    postgresql: 'PostgreSQL', 
+    mongodb: 'MongoDB',
+    redis: 'Redis',
+    elasticsearch: 'Elasticsearch',
+    prometheus: 'Prometheus',
+    grafana: 'Grafana',
+    jaeger: 'Jaeger',
+    zabbix: 'Zabbix',
+    datadog: 'Datadog',
+    influxdb: 'InfluxDB'
+  });
+
+  // 获取状态配置
+  const getStatusConfig = (status: string) => {
+    const statusMap = {
+      connected: { text: '已连接', color: 'success', icon: <CheckCircleOutlined /> },
+      disconnected: { text: '未连接', color: 'error', icon: <ExclamationCircleOutlined /> },
+      connecting: { text: '连接中', color: 'processing', icon: <ReloadOutlined spin /> },
+      error: { text: '连接错误', color: 'error', icon: <ExclamationCircleOutlined /> }
+    };
+    return statusMap[status as keyof typeof statusMap] || statusMap.disconnected;
+  };
+
+  // 过滤数据源
+  const getFilteredDataSources = () => {
+    return dataSources.filter(ds => {
+      const matchesSearch = !searchText || 
+        ds.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        ds.description.toLowerCase().includes(searchText.toLowerCase()) ||
+        ds.host.toLowerCase().includes(searchText.toLowerCase());
+      
+      const matchesType = filterType === 'all' || ds.type === filterType;
+      const matchesStatus = filterStatus === 'all' || ds.status === filterStatus;
+      
+      return matchesSearch && matchesType && matchesStatus;
+    });
+  };
+
+  // 渲染数据源卡片
+  const renderDataSourceCards = () => {
+    const filteredDataSources = getFilteredDataSources();
+    const typeMap = getDataSourceTypeMap();
+    const subTypeMap = getDataSourceSubTypeMap();
+
+    return filteredDataSources.map(dataSource => {
+      const statusConfig = getStatusConfig(dataSource.status);
+      const typeConfig = typeMap[dataSource.type as keyof typeof typeMap];
+      
+      return (
+        <Col xs={24} sm={12} lg={8} xl={6} key={dataSource.id}>
+          <DataSourceCard $isDark={isDark}>
+            <DataSourceHeader>
+              <DataSourceInfo>
+                <DataSourceIcon type={dataSource.subType || dataSource.type} $isDark={isDark}>
+                  {getDataSourceIcon(dataSource.type, dataSource.subType)}
+                </DataSourceIcon>
+                <div>
+                  <Title level={5} style={{ margin: 0, fontSize: '16px' }}>
+                    {dataSource.name}
+                  </Title>
+                  <Text type="secondary" style={{ fontSize: '12px' }}>
+                    {subTypeMap[dataSource.subType as keyof typeof subTypeMap] || typeConfig?.name}
+                  </Text>
+                </div>
+              </DataSourceInfo>
+              <Badge 
+                status={statusConfig.color as any} 
+                text={statusConfig.text}
+              />
+            </DataSourceHeader>
+
+            <DataSourceMeta>
+              <MetaItem>
+                <MetaLabel>主机地址:</MetaLabel>
+                <MetaValue>{dataSource.host}:{dataSource.port}</MetaValue>
+              </MetaItem>
+              <MetaItem>
+                <MetaLabel>数据库:</MetaLabel>
+                <MetaValue>{dataSource.database || '-'}</MetaValue>
+              </MetaItem>
+              <MetaItem>
+                <MetaLabel>最后连接:</MetaLabel>
+                <MetaValue>{dataSource.lastConnected || '从未连接'}</MetaValue>
+              </MetaItem>
+              <MetaItem>
+                <MetaLabel>扫描次数:</MetaLabel>
+                <MetaValue>{dataSource.scanCount || 0} 次</MetaValue>
+              </MetaItem>
+            </DataSourceMeta>
+
+            <Divider style={{ margin: '12px 0' }} />
+
+            <DataSourceActions>
+              <Button 
+                type="text" 
+                size="small" 
+                icon={<EyeOutlined />}
+                onClick={() => handleViewDataSource(dataSource)}
+              >
+                查看
+              </Button>
+              <Button 
+                type="text" 
+                size="small" 
+                icon={<EditOutlined />}
+                onClick={() => handleEditDataSource(dataSource)}
+              >
+                编辑
+              </Button>
+              <Button 
+                type="text" 
+                size="small" 
+                icon={<ReloadOutlined />}
+                onClick={() => handleTestConnection(dataSource)}
+                loading={dataSource.status === 'connecting'}
+              >
+                测试
+              </Button>
+              <Button 
+                type="text" 
+                size="small" 
+                danger
+                icon={<DeleteOutlined />}
+                onClick={() => handleDeleteDataSource(dataSource)}
+              >
+                删除
+              </Button>
+            </DataSourceActions>
+          </DataSourceCard>
+        </Col>
+      );
+    });
+  };
+
+  // 数据源操作处理函数
+  const handleViewDataSource = (dataSource: DataSource) => {
+    Modal.info({
+      title: `数据源详情 - ${dataSource.name}`,
+      width: 600,
+      content: (
+        <div style={{ marginTop: 16 }}>
+          <Row gutter={[16, 8]}>
+            <Col span={8}><strong>名称:</strong></Col>
+            <Col span={16}>{dataSource.name}</Col>
+            <Col span={8}><strong>类型:</strong></Col>
+            <Col span={16}>{dataSource.type}</Col>
+            <Col span={8}><strong>子类型:</strong></Col>
+            <Col span={16}>{dataSource.subType}</Col>
+            <Col span={8}><strong>主机:</strong></Col>
+            <Col span={16}>{dataSource.host}:{dataSource.port}</Col>
+            <Col span={8}><strong>数据库:</strong></Col>
+            <Col span={16}>{dataSource.database || '-'}</Col>
+            <Col span={8}><strong>用户名:</strong></Col>
+            <Col span={16}>{dataSource.username}</Col>
+            <Col span={8}><strong>状态:</strong></Col>
+            <Col span={16}>
+              <Badge 
+                status={getStatusConfig(dataSource.status).color as any} 
+                text={getStatusConfig(dataSource.status).text}
+              />
+            </Col>
+            <Col span={8}><strong>描述:</strong></Col>
+            <Col span={16}>{dataSource.description}</Col>
+          </Row>
+        </div>
+      )
+    });
+  };
+
+  const handleEditDataSource = (dataSource: DataSource) => {
+    message.info('编辑数据源功能开发中...');
+  };
+
+  const handleTestConnection = async (dataSource: DataSource) => {
+    try {
+      // 更新状态为连接中
+      setDataSources(prev => prev.map(ds => 
+        ds.id === dataSource.id ? { ...ds, status: 'connecting' } : ds
+      ));
+
+      // 模拟测试连接
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // 随机成功或失败
+      const isSuccess = Math.random() > 0.3;
+      const newStatus = isSuccess ? 'connected' : 'error';
+      
+      setDataSources(prev => prev.map(ds => 
+        ds.id === dataSource.id ? { 
+          ...ds, 
+          status: newStatus,
+          lastConnected: isSuccess ? new Date().toLocaleString() : ds.lastConnected
+        } : ds
+      ));
+
+      message[isSuccess ? 'success' : 'error'](
+        isSuccess ? '连接测试成功！' : '连接测试失败，请检查配置。'
+      );
+    } catch (error) {
+      setDataSources(prev => prev.map(ds => 
+        ds.id === dataSource.id ? { ...ds, status: 'error' } : ds
+      ));
+      message.error('连接测试失败！');
+    }
+  };
+
+  const handleDeleteDataSource = (dataSource: DataSource) => {
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除数据源 "${dataSource.name}" 吗？此操作不可恢复。`,
+      okText: '删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk: () => {
+        setDataSources(prev => prev.filter(ds => ds.id !== dataSource.id));
+        message.success('数据源删除成功！');
+      }
+    });
+  };
+
   // 数据源表格列
   const dataSourceColumns = [
     {
@@ -686,13 +1011,62 @@ const EntityScan: React.FC = () => {
 
       {/* 数据源管理 */}
       <ScanCard $isDark={isDark} title="数据源管理">
-        <Table
-          dataSource={dataSources}
-          columns={dataSourceColumns}
-          rowKey="id"
-          pagination={false}
-          size="small"
+        <SearchFilterBar
+          searchValue={searchText}
+          onSearchChange={setSearchText}
+          searchPlaceholder="搜索数据源名称、描述、主机地址..."
+          filters={[
+            {
+              key: 'type',
+              value: filterType,
+              onChange: setFilterType,
+              placeholder: '数据源类型',
+              width: 120,
+              options: [
+                { value: 'all', label: '所有类型' },
+                { value: 'database', label: '数据库' },
+                { value: 'api', label: 'API接口' },
+                { value: 'cloud', label: '云服务' },
+                { value: 'monitoring', label: '监控系统' },
+                { value: 'metrics', label: '指标数据' },
+                { value: 'file', label: '文件' }
+              ]
+            },
+            {
+              key: 'status',
+              value: filterStatus,
+              onChange: setFilterStatus,
+              placeholder: '连接状态',
+              width: 100,
+              options: [
+                { value: 'all', label: '所有状态' },
+                { value: 'connected', label: '已连接' },
+                { value: 'disconnected', label: '未连接' },
+                { value: 'connecting', label: '连接中' },
+                { value: 'error', label: '连接错误' }
+              ]
+            }
+          ]}
+          onRefresh={() => loadDataSources()}
+          style={{ marginBottom: 16 }}
         />
+        
+        <Row gutter={[16, 16]}>
+          {renderDataSourceCards()}
+        </Row>
+        
+        {getFilteredDataSources().length === 0 && (
+          <div style={{ textAlign: 'center', padding: '40px 0', color: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)' }}>
+            <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
+            <div>暂无数据源</div>
+            <div style={{ fontSize: '12px', marginTop: '8px' }}>
+              {searchText || filterType !== 'all' || filterStatus !== 'all' 
+                ? '没有找到符合条件的数据源' 
+                : '请先配置数据源以开始实体扫描'
+              }
+            </div>
+          </div>
+        )}
       </ScanCard>
 
       {/* 扫描配置 */}
