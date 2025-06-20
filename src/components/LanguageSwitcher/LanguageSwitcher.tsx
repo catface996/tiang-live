@@ -36,11 +36,6 @@ const LanguageText = styled.span`
   font-weight: 400;
 `;
 
-const FlagIcon = styled.span`
-  font-size: 16px;
-  margin-right: 6px;
-`;
-
 const LanguageItem = styled.div`
   display: flex;
   align-items: center;
@@ -66,7 +61,6 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className }) => {
     key: code,
     label: (
       <LanguageItem>
-        <FlagIcon>{config.flag}</FlagIcon>
         <span>{config.nativeName}</span>
       </LanguageItem>
     ),
@@ -83,7 +77,6 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className }) => {
       <LanguageButton>
         <Space size={4}>
           <GlobalOutlined />
-          <FlagIcon>{currentLangConfig.flag}</FlagIcon>
           <LanguageText>{currentLangConfig.nativeName}</LanguageText>
         </Space>
       </LanguageButton>
