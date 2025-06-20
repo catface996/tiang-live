@@ -18,7 +18,8 @@ import {
   Divider,
   Tooltip,
   Switch,
-  Badge
+  Badge,
+  Statistic
 } from 'antd';
 import {
   ScanOutlined,
@@ -39,7 +40,8 @@ import {
   FileTextOutlined,
   EditOutlined,
   DeleteOutlined,
-  EyeOutlined
+  EyeOutlined,
+  PlusOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -54,6 +56,96 @@ const { TextArea } = Input;
 // 样式化组件
 const ScanContainer = styled.div`
   padding: 24px;
+`;
+
+const PageHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+`;
+
+const PageHeaderContent = styled.div`
+  flex: 1;
+`;
+
+const PageHeaderActions = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+const StatsCard = styled(Card)<{ $isDark: boolean }>`
+  margin-bottom: 24px;
+  border-radius: 8px;
+  background: ${props => props.$isDark 
+    ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
+    : 'linear-gradient(145deg, #ffffff, #fafafa)'
+  };
+  border: 1px solid ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.08)' 
+    : 'rgba(0, 0, 0, 0.06)'
+  };
+  
+  .ant-card-body {
+    padding: 20px;
+  }
+`;
+
+const StatItem = styled.div<{ $isDark: boolean }>`
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+  background: ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.03)' 
+    : 'rgba(0, 0, 0, 0.02)'
+  };
+  border: 1px solid ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.05)' 
+    : 'rgba(0, 0, 0, 0.04)'
+  };
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: ${props => props.$isDark 
+      ? 'rgba(255, 255, 255, 0.05)' 
+      : 'rgba(0, 0, 0, 0.04)'
+    };
+    transform: translateY(-2px);
+  }
+`;
+
+const StatValue = styled.div<{ color?: string }>`
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: ${props => props.color || '#1890ff'};
+`;
+
+const StatLabel = styled.div<{ $isDark: boolean }>`
+  font-size: 14px;
+  color: ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.65)' 
+    : 'rgba(0, 0, 0, 0.65)'
+  };
+  font-weight: 500;
+`;
+
+const SearchCard = styled(Card)<{ $isDark: boolean }>`
+  margin-bottom: 24px;
+  border-radius: 8px;
+  background: ${props => props.$isDark 
+    ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
+    : 'linear-gradient(145deg, #ffffff, #fafafa)'
+  };
+  border: 1px solid ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.08)' 
+    : 'rgba(0, 0, 0, 0.06)'
+  };
+  
+  .ant-card-body {
+    padding: 16px 20px;
+  }
 `;
 
 const ScanCard = styled(Card)<{ $isDark: boolean }>`
@@ -74,17 +166,38 @@ const DataSourceCard = styled(Card)<{ $isDark: boolean }>`
   transition: all 0.3s ease;
   cursor: pointer;
   border-radius: 8px;
+  background: ${props => props.$isDark 
+    ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
+    : 'linear-gradient(145deg, #ffffff, #fafafa)'
+  };
+  border: 1px solid ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.08)' 
+    : 'rgba(0, 0, 0, 0.06)'
+  };
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.02)'
+  };
   
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    background: ${props => props.$isDark 
+      ? 'linear-gradient(145deg, #1f1f1f, #1a1a1a)' 
+      : 'linear-gradient(145deg, #ffffff, #f8f9fa)'
+    };
+    border-color: ${props => props.$isDark 
+      ? 'rgba(255, 255, 255, 0.15)' 
+      : 'rgba(24, 144, 255, 0.3)'
+    };
     box-shadow: ${props => props.$isDark 
-      ? '0 4px 16px rgba(255, 255, 255, 0.12)' 
-      : '0 4px 16px rgba(0, 0, 0, 0.12)'
+      ? '0 6px 20px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(255, 255, 255, 0.08)' 
+      : '0 6px 20px rgba(24, 144, 255, 0.15), 0 3px 6px rgba(0, 0, 0, 0.08)'
     };
   }
   
   .ant-card-body {
     padding: 20px;
+    background: transparent;
   }
 `;
 
@@ -110,6 +223,7 @@ const DataSourceIcon = styled.div<{ type: string; $isDark: boolean }>`
   justify-content: center;
   font-size: 18px;
   color: white;
+  position: relative;
   background: ${props => {
     switch (props.type) {
       case 'mysql': return 'linear-gradient(135deg, #4479A1, #336791)';
@@ -122,6 +236,22 @@ const DataSourceIcon = styled.div<{ type: string; $isDark: boolean }>`
       default: return 'linear-gradient(135deg, #8c8c8c, #595959)';
     }
   }};
+  box-shadow: ${props => props.$isDark 
+    ? '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+  };
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    pointer-events: none;
+  }
 `;
 
 const DataSourceMeta = styled.div`
@@ -131,44 +261,70 @@ const DataSourceMeta = styled.div`
 `;
 
 const DataSourceActions = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px;
-  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   
-  .ant-btn {
-    font-size: 12px;
-    height: 28px;
-    padding: 0 8px;
-    border-radius: 4px;
+  .scan-btn-row {
+    display: flex;
+    width: 100%;
   }
   
-  .scan-btn {
-    grid-column: 1 / -1;
-    margin-bottom: 6px;
-  }
-  
-  .delete-btn {
-    grid-column: 3;
-    justify-self: end;
+  .action-btn-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 4px;
+    
+    .ant-btn {
+      flex: 1;
+      font-size: 12px;
+      height: 26px;
+      padding: 0 6px;
+      border-radius: 4px;
+    }
   }
 `;
 
-const MetaItem = styled.div`
+const MetaItem = styled.div<{ $isDark: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: 6px 12px;
+  margin: 2px 0;
+  border-radius: 4px;
   font-size: 12px;
-  color: ${props => props.theme.$isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)'};
+  background: ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.03)' 
+    : 'rgba(0, 0, 0, 0.02)'
+  };
+  border: 1px solid ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.05)' 
+    : 'rgba(0, 0, 0, 0.04)'
+  };
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: ${props => props.$isDark 
+      ? 'rgba(255, 255, 255, 0.05)' 
+      : 'rgba(0, 0, 0, 0.04)'
+    };
+  }
 `;
 
-const MetaLabel = styled.span`
+const MetaLabel = styled.span<{ $isDark: boolean }>`
   font-weight: 500;
+  color: ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.65)' 
+    : 'rgba(0, 0, 0, 0.65)'
+  };
 `;
 
-const MetaValue = styled.span`
-  color: ${props => props.theme.$isDark ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)'};
+const MetaValue = styled.span<{ $isDark: boolean }>`
+  color: ${props => props.$isDark 
+    ? 'rgba(255, 255, 255, 0.85)' 
+    : 'rgba(0, 0, 0, 0.85)'
+  };
+  font-weight: 500;
 `;
 
 const StatusTag = styled(Tag)<{ status: string }>`
@@ -247,6 +403,25 @@ const EntityScan: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+
+  // 统计数据
+  const getStatistics = () => {
+    const totalDataSources = dataSources.length;
+    const connectedDataSources = dataSources.filter(ds => ds.status === 'connected').length;
+    const totalEntities = scanResults.length;
+    const selectedEntities = scanResults.filter(r => r.selected).length;
+    const completedScans = scanTasks.filter(task => task.status === 'completed').length;
+    const runningScans = scanTasks.filter(task => task.status === 'running').length;
+
+    return {
+      totalDataSources,
+      connectedDataSources,
+      totalEntities,
+      selectedEntities,
+      completedScans,
+      runningScans
+    };
+  };
 
   // 加载数据源
   useEffect(() => {
@@ -710,76 +885,77 @@ const EntityScan: React.FC = () => {
             </DataSourceHeader>
 
             <DataSourceMeta>
-              <MetaItem>
-                <MetaLabel>主机地址:</MetaLabel>
-                <MetaValue>{dataSource.host}:{dataSource.port}</MetaValue>
+              <MetaItem $isDark={isDark}>
+                <MetaLabel $isDark={isDark}>主机地址:</MetaLabel>
+                <MetaValue $isDark={isDark}>{dataSource.host}:{dataSource.port}</MetaValue>
               </MetaItem>
-              <MetaItem>
-                <MetaLabel>数据库:</MetaLabel>
-                <MetaValue>{dataSource.database || '-'}</MetaValue>
+              <MetaItem $isDark={isDark}>
+                <MetaLabel $isDark={isDark}>数据库:</MetaLabel>
+                <MetaValue $isDark={isDark}>{dataSource.database || '-'}</MetaValue>
               </MetaItem>
-              <MetaItem>
-                <MetaLabel>最后连接:</MetaLabel>
-                <MetaValue>{dataSource.lastConnected || '从未连接'}</MetaValue>
+              <MetaItem $isDark={isDark}>
+                <MetaLabel $isDark={isDark}>最后连接:</MetaLabel>
+                <MetaValue $isDark={isDark}>{dataSource.lastConnected || '从未连接'}</MetaValue>
               </MetaItem>
-              <MetaItem>
-                <MetaLabel>扫描次数:</MetaLabel>
-                <MetaValue>{dataSource.scanCount || 0} 次</MetaValue>
+              <MetaItem $isDark={isDark}>
+                <MetaLabel $isDark={isDark}>扫描次数:</MetaLabel>
+                <MetaValue $isDark={isDark}>{dataSource.scanCount || 0} 次</MetaValue>
               </MetaItem>
             </DataSourceMeta>
 
             <Divider style={{ margin: '12px 0' }} />
 
             <DataSourceActions>
-              <Button 
-                type="primary" 
-                size="small" 
-                icon={<ScanOutlined />}
-                onClick={() => handleStartScanForDataSource(dataSource)}
-                disabled={dataSource.status !== 'connected'}
-                loading={isScanning && selectedDataSource === dataSource.id}
-                className="scan-btn"
-                block
-              >
-                {isScanning && selectedDataSource === dataSource.id ? '扫描中...' : '开始扫描'}
-              </Button>
+              <div className="scan-btn-row">
+                <Button 
+                  type="primary" 
+                  size="small" 
+                  icon={<ScanOutlined />}
+                  onClick={() => handleStartScanForDataSource(dataSource)}
+                  disabled={dataSource.status !== 'connected'}
+                  loading={isScanning && selectedDataSource === dataSource.id}
+                  block
+                >
+                  {isScanning && selectedDataSource === dataSource.id ? '扫描中...' : '开始扫描'}
+                </Button>
+              </div>
               
-              <Button 
-                type="text" 
-                size="small" 
-                icon={<EyeOutlined />}
-                onClick={() => handleViewDataSource(dataSource)}
-              >
-                查看
-              </Button>
-              <Button 
-                type="text" 
-                size="small" 
-                icon={<EditOutlined />}
-                onClick={() => handleEditDataSource(dataSource)}
-              >
-                编辑
-              </Button>
-              <Button 
-                type="text" 
-                size="small" 
-                icon={<ReloadOutlined />}
-                onClick={() => handleTestConnection(dataSource)}
-                loading={dataSource.status === 'connecting'}
-              >
-                测试
-              </Button>
-              
-              <Button 
-                type="text" 
-                size="small" 
-                danger
-                icon={<DeleteOutlined />}
-                onClick={() => handleDeleteDataSource(dataSource)}
-                className="delete-btn"
-              >
-                删除
-              </Button>
+              <div className="action-btn-row">
+                <Button 
+                  type="text" 
+                  size="small" 
+                  icon={<EyeOutlined />}
+                  onClick={() => handleViewDataSource(dataSource)}
+                >
+                  查看
+                </Button>
+                <Button 
+                  type="text" 
+                  size="small" 
+                  icon={<EditOutlined />}
+                  onClick={() => handleEditDataSource(dataSource)}
+                >
+                  编辑
+                </Button>
+                <Button 
+                  type="text" 
+                  size="small" 
+                  icon={<ReloadOutlined />}
+                  onClick={() => handleTestConnection(dataSource)}
+                  loading={dataSource.status === 'connecting'}
+                >
+                  测试
+                </Button>
+                <Button 
+                  type="text" 
+                  size="small" 
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={() => handleDeleteDataSource(dataSource)}
+                >
+                  删除
+                </Button>
+              </div>
             </DataSourceActions>
           </DataSourceCard>
         </Col>
@@ -972,6 +1148,44 @@ const EntityScan: React.FC = () => {
     });
   };
 
+  // 刷新数据源列表
+  const handleRefreshDataSources = async () => {
+    try {
+      message.loading('正在刷新数据源列表...', 1);
+      await loadDataSources();
+      message.success('数据源列表刷新成功！');
+    } catch (error) {
+      message.error('刷新失败，请重试！');
+    }
+  };
+
+  // 创建数据源
+  const handleCreateDataSource = () => {
+    Modal.info({
+      title: '创建数据源',
+      width: 800,
+      content: (
+        <div style={{ marginTop: 16 }}>
+          <Alert
+            message="数据源配置功能"
+            description="此功能正在开发中，将支持配置MySQL、PostgreSQL、MongoDB、Redis、Elasticsearch等多种数据源类型。"
+            type="info"
+            showIcon
+            style={{ marginBottom: 16 }}
+          />
+          <div style={{ padding: '20px 0', textAlign: 'center', color: '#8c8c8c' }}>
+            <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
+            <div>数据源配置向导即将上线</div>
+            <div style={{ fontSize: '12px', marginTop: '8px' }}>
+              支持可视化配置连接参数、测试连接、批量导入等功能
+            </div>
+          </div>
+        </div>
+      ),
+      okText: '知道了'
+    });
+  };
+
   // 数据源表格列
   const dataSourceColumns = [
     {
@@ -1133,17 +1347,77 @@ const EntityScan: React.FC = () => {
   return (
     <ScanContainer>
       {/* 页面头部 */}
-      <div style={{ marginBottom: 24 }}>
-        <Title level={2}>
-          <ScanOutlined /> {t('systemSettings.entityScan.title', '实体扫描')}
-        </Title>
-        <Paragraph>
-          {t('systemSettings.entityScan.description', '从外部数据源扫描和生成实体定义，支持数据库、API、云服务等多种数据源类型。')}
-        </Paragraph>
-      </div>
+      <PageHeader>
+        <PageHeaderContent>
+          <Title level={2} style={{ margin: 0 }}>
+            <ScanOutlined /> {t('systemSettings.entityScan.title', '实体扫描')}
+          </Title>
+          <Paragraph style={{ margin: '8px 0 0 0', color: isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)' }}>
+            {t('systemSettings.entityScan.description', '从外部数据源扫描和生成实体定义，支持数据库、API、云服务等多种数据源类型。')}
+          </Paragraph>
+        </PageHeaderContent>
+        <PageHeaderActions>
+          <Button
+            icon={<ReloadOutlined />}
+            onClick={handleRefreshDataSources}
+            title="刷新数据源列表"
+          >
+            刷新
+          </Button>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={handleCreateDataSource}
+          >
+            创建数据源
+          </Button>
+        </PageHeaderActions>
+      </PageHeader>
 
-      {/* 数据源管理 */}
-      <ScanCard $isDark={isDark} title="数据源管理">
+      {/* 统计数据 */}
+      <StatsCard $isDark={isDark} title="扫描统计">
+        <Row gutter={[16, 16]}>
+          <Col xs={12} sm={8} lg={4}>
+            <StatItem $isDark={isDark}>
+              <StatValue color="#1890ff">{getStatistics().totalDataSources}</StatValue>
+              <StatLabel $isDark={isDark}>数据源总数</StatLabel>
+            </StatItem>
+          </Col>
+          <Col xs={12} sm={8} lg={4}>
+            <StatItem $isDark={isDark}>
+              <StatValue color="#52c41a">{getStatistics().connectedDataSources}</StatValue>
+              <StatLabel $isDark={isDark}>已连接</StatLabel>
+            </StatItem>
+          </Col>
+          <Col xs={12} sm={8} lg={4}>
+            <StatItem $isDark={isDark}>
+              <StatValue color="#722ed1">{getStatistics().totalEntities}</StatValue>
+              <StatLabel $isDark={isDark}>扫描实体</StatLabel>
+            </StatItem>
+          </Col>
+          <Col xs={12} sm={8} lg={4}>
+            <StatItem $isDark={isDark}>
+              <StatValue color="#fa8c16">{getStatistics().selectedEntities}</StatValue>
+              <StatLabel $isDark={isDark}>已选择</StatLabel>
+            </StatItem>
+          </Col>
+          <Col xs={12} sm={8} lg={4}>
+            <StatItem $isDark={isDark}>
+              <StatValue color="#13c2c2">{getStatistics().completedScans}</StatValue>
+              <StatLabel $isDark={isDark}>完成扫描</StatLabel>
+            </StatItem>
+          </Col>
+          <Col xs={12} sm={8} lg={4}>
+            <StatItem $isDark={isDark}>
+              <StatValue color="#eb2f96">{getStatistics().runningScans}</StatValue>
+              <StatLabel $isDark={isDark}>进行中</StatLabel>
+            </StatItem>
+          </Col>
+        </Row>
+      </StatsCard>
+
+      {/* 搜索筛选 */}
+      <SearchCard $isDark={isDark}>
         <SearchFilterBar
           searchValue={searchText}
           onSearchChange={setSearchText}
@@ -1181,9 +1455,11 @@ const EntityScan: React.FC = () => {
             }
           ]}
           onRefresh={() => loadDataSources()}
-          style={{ marginBottom: 16 }}
         />
-        
+      </SearchCard>
+
+      {/* 数据源管理 */}
+      <ScanCard $isDark={isDark} title="数据源管理">
         <Row gutter={[16, 16]}>
           {renderDataSourceCards()}
         </Row>
