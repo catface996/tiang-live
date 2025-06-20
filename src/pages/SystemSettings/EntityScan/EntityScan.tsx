@@ -131,23 +131,6 @@ const StatLabel = styled.div<{ $isDark: boolean }>`
   font-weight: 500;
 `;
 
-const SearchCard = styled(Card)<{ $isDark: boolean }>`
-  margin-bottom: 24px;
-  border-radius: 8px;
-  background: ${props => props.$isDark 
-    ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
-    : 'linear-gradient(145deg, #ffffff, #fafafa)'
-  };
-  border: 1px solid ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.08)' 
-    : 'rgba(0, 0, 0, 0.06)'
-  };
-  
-  .ant-card-body {
-    padding: 16px 20px;
-  }
-`;
-
 const ScanCard = styled(Card)<{ $isDark: boolean }>`
   margin-bottom: 24px;
   border-radius: 8px;
@@ -1417,46 +1400,45 @@ const EntityScan: React.FC = () => {
       </StatsCard>
 
       {/* 搜索筛选 */}
-      <SearchCard $isDark={isDark}>
-        <SearchFilterBar
-          searchValue={searchText}
-          onSearchChange={setSearchText}
-          searchPlaceholder="搜索数据源名称、描述、主机地址..."
-          filters={[
-            {
-              key: 'type',
-              value: filterType,
-              onChange: setFilterType,
-              placeholder: '数据源类型',
-              width: 120,
-              options: [
-                { value: 'all', label: '所有类型' },
-                { value: 'database', label: '数据库' },
-                { value: 'api', label: 'API接口' },
-                { value: 'cloud', label: '云服务' },
-                { value: 'monitoring', label: '监控系统' },
-                { value: 'metrics', label: '指标数据' },
-                { value: 'file', label: '文件' }
-              ]
-            },
-            {
-              key: 'status',
-              value: filterStatus,
-              onChange: setFilterStatus,
-              placeholder: '连接状态',
-              width: 100,
-              options: [
-                { value: 'all', label: '所有状态' },
-                { value: 'connected', label: '已连接' },
-                { value: 'disconnected', label: '未连接' },
-                { value: 'connecting', label: '连接中' },
-                { value: 'error', label: '连接错误' }
-              ]
-            }
-          ]}
-          onRefresh={() => loadDataSources()}
-        />
-      </SearchCard>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder="搜索数据源名称、描述、主机地址..."
+        filters={[
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: '数据源类型',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有类型' },
+              { value: 'database', label: '数据库' },
+              { value: 'api', label: 'API接口' },
+              { value: 'cloud', label: '云服务' },
+              { value: 'monitoring', label: '监控系统' },
+              { value: 'metrics', label: '指标数据' },
+              { value: 'file', label: '文件' }
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: '连接状态',
+            width: 100,
+            options: [
+              { value: 'all', label: '所有状态' },
+              { value: 'connected', label: '已连接' },
+              { value: 'disconnected', label: '未连接' },
+              { value: 'connecting', label: '连接中' },
+              { value: 'error', label: '连接错误' }
+            ]
+          }
+        ]}
+        onRefresh={() => loadDataSources()}
+        style={{ marginBottom: 24 }}
+      />
 
       {/* 数据源管理 */}
       <ScanCard $isDark={isDark} title="数据源管理">
