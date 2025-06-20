@@ -49,6 +49,45 @@ const ScanDetailContainer = styled.div`
   padding: 24px;
 `;
 
+const BreadcrumbContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  
+  .ant-breadcrumb {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    
+    .ant-breadcrumb-link {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+    
+    .ant-breadcrumb-separator {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      margin: 0 8px;
+    }
+    
+    ol {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      
+      li {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+      }
+    }
+  }
+`;
+
 const PageHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -646,18 +685,30 @@ const ScanDetail: React.FC = () => {
   return (
     <ScanDetailContainer>
       {/* 面包屑导航 */}
-      <Breadcrumb style={{ marginBottom: 16 }}>
-        <Breadcrumb.Item>
-          <Button 
-            type="text" 
-            icon={<ArrowLeftOutlined />}
-            onClick={() => navigate('/system-settings/entity-scan')}
-          >
-            实体扫描
-          </Button>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>{dataSource.name}</Breadcrumb.Item>
-      </Breadcrumb>
+      <BreadcrumbContainer>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <Button 
+              type="text" 
+              icon={<ArrowLeftOutlined />}
+              onClick={() => navigate('/system-settings/entity-scan')}
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                padding: '4px 8px',
+                height: 'auto'
+              }}
+            >
+              实体扫描
+            </Button>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+              {dataSource.name}
+            </span>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      </BreadcrumbContainer>
 
       {/* 页面头部 */}
       <PageHeader>
