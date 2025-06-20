@@ -583,27 +583,27 @@ const TaskCollectionManagement: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: '状态',
+            placeholder: t('tasks.collections.filter.status'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
-              { value: 'active', label: '运行中' },
-              { value: 'paused', label: '已暂停' },
-              { value: 'draft', label: '草稿' }
+              { value: 'all', label: t('tasks.collections.filter.allStatus') },
+              { value: 'active', label: t('tasks.collections.status.active') },
+              { value: 'paused', label: t('tasks.collections.status.paused') },
+              { value: 'draft', label: t('tasks.collections.status.draft') }
             ]
           },
           {
             key: 'frequency',
             value: filterFrequency,
             onChange: setFilterFrequency,
-            placeholder: '调度频率',
+            placeholder: t('tasks.collections.filter.frequency'),
             width: 120,
             options: [
-              { value: 'all', label: '所有频率' },
-              { value: '5min', label: '每5分钟' },
-              { value: '15min', label: '每15分钟' },
-              { value: '1hour', label: '每小时' },
-              { value: '1day', label: '每天' }
+              { value: 'all', label: t('tasks.collections.filter.allFrequency') },
+              { value: '5min', label: t('tasks.collections.frequency.every5min') },
+              { value: '15min', label: t('tasks.collections.frequency.every15min') },
+              { value: '1hour', label: t('tasks.collections.frequency.everyHour') },
+              { value: '1day', label: t('tasks.collections.frequency.everyDay') }
             ]
           }
         ]}
@@ -657,15 +657,15 @@ const TaskCollectionManagement: React.FC = () => {
 
           <Form.Item
             name="schedule"
-            label="调度频率"
-            rules={[{ required: true, message: '请选择调度频率' }]}
+            label={t('tasks.collections.form.schedule')}
+            rules={[{ required: true, message: t('tasks.collections.form.scheduleRequired') }]}
           >
-            <Select placeholder="请选择调度频率">
-              <Option value="每5分钟">每5分钟</Option>
-              <Option value="每15分钟">每15分钟</Option>
-              <Option value="每30分钟">每30分钟</Option>
-              <Option value="每小时">每小时</Option>
-              <Option value="每天">每天</Option>
+            <Select placeholder={t('tasks.collections.form.schedulePlaceholder')}>
+              <Option value="每5分钟">{t('tasks.collections.frequency.every5min')}</Option>
+              <Option value="每15分钟">{t('tasks.collections.frequency.every15min')}</Option>
+              <Option value="每30分钟">{t('tasks.collections.frequency.every30min')}</Option>
+              <Option value="每小时">{t('tasks.collections.frequency.everyHour')}</Option>
+              <Option value="每天">{t('tasks.collections.frequency.everyDay')}</Option>
             </Select>
           </Form.Item>
 
@@ -808,8 +808,8 @@ const TaskCollectionManagement: React.FC = () => {
                             {action.description}
                           </Paragraph>
                           <div style={{ fontSize: 11, color: '#666' }}>
-                            <div>执行时长: {action.duration}</div>
-                            <div>建议频率: {action.frequency}</div>
+                            <div>{t('tasks.collections.detail.duration')}: {action.duration}</div>
+                            <div>{t('tasks.collections.detail.suggestedFrequency')}: {action.frequency}</div>
                           </div>
                         </Card>
                       </Col>

@@ -865,9 +865,17 @@
         "descriptionMaxLength": "Description cannot exceed 200 characters",
         "type": "Collection Type",
         "priority": "Priority",
-        "schedule": "Execution Schedule",
+        "schedule": "Schedule Frequency",
+        "scheduleRequired": "Please select schedule frequency",
+        "schedulePlaceholder": "Please select schedule frequency",
         "targets": "Monitoring Targets",
         "actions": "Inspection Actions"
+      },
+      "filter": {
+        "status": "Status",
+        "frequency": "Schedule Frequency",
+        "allStatus": "All Status",
+        "allFrequency": "All Frequency"
       },
       "actions": {
         "healthCheck": "Health Check",
@@ -889,14 +897,19 @@
       },
       "frequency": {
         "every5min": "Every 5 minutes",
+        "every15min": "Every 15 minutes",
         "every30min": "Every 30 minutes",
-        "hourly": "Hourly",
-        "daily": "Daily"
+        "everyHour": "Every hour",
+        "everyDay": "Every day"
       },
       "status": {
         "active": "Active",
         "paused": "Paused",
         "draft": "Draft"
+      },
+      "detail": {
+        "duration": "Duration",
+        "suggestedFrequency": "Suggested Frequency"
       },
       "entities": {
         "userService": "User Service",
