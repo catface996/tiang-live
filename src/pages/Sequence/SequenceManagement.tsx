@@ -93,7 +93,7 @@ const SequenceManagement: React.FC = () => {
     setPageTitle(t('sequences.title'));
   }, []);
 
-  // 时序样例数据
+  // Sequence sample data
   const sequenceData: SequenceData[] = [
     {
       id: '1',
@@ -313,7 +313,7 @@ sequenceDiagram
             }
             extra={
               <Space>
-                <Tooltip title="查看时序图">
+                <Tooltip title={t('sequences.viewSequenceDiagram')}>
                   <Button 
                     type="link" 
                     icon={<EyeOutlined />} 
@@ -324,7 +324,7 @@ sequenceDiagram
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="编辑">
+                <Tooltip title={t('common.edit')}>
                   <Button 
                     type="link" 
                     icon={<EditOutlined />} 
@@ -371,8 +371,8 @@ sequenceDiagram
             </div>
 
             <div style={{ fontSize: 12, color: '#666' }}>
-              <div>创建者: {sequence.createdBy}</div>
-              <div>更新时间: {sequence.lastModified}</div>
+              <div>{t('sequences.createdBy')}: {sequence.createdBy}</div>
+              <div>{t('sequences.lastModified')}: {sequence.lastModified}</div>
             </div>
           </SequenceCard>
         </Col>
@@ -392,19 +392,19 @@ sequenceDiagram
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <ControlOutlined style={{ color: '#1890ff' }} />
-                时序管理
+                {t('sequences.title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              管理和可视化系统中的业务时序流程，支持时序图设计和流程分析。
+              {t('sequences.description')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              刷新
+              {t('common.refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />}>
-              创建时序
+              {t('sequences.createSequence')}
             </Button>
           </Space>
         </div>
@@ -415,9 +415,9 @@ sequenceDiagram
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="时序总数"
+              title={t('sequences.stats.totalSequences')}
               value={sequenceData.length}
-              suffix="个"
+              suffix={t('common.unit')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<ControlOutlined />}
             />
@@ -426,9 +426,9 @@ sequenceDiagram
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="活跃时序"
+              title={t('sequences.stats.activeSequences')}
               value={activeSequences}
-              suffix="个"
+              suffix={t('common.unit')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
@@ -458,20 +458,20 @@ sequenceDiagram
         </Col>
       </Row>
 
-      {/* 筛选栏 */}
+      {/* Filter Bar */}
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder="搜索时序名称、描述..."
+        searchPlaceholder={t('sequences.searchPlaceholder')}
         filters={[
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: '时序类型',
+            placeholder: t('sequences.typeFilter'),
             width: 120,
             options: [
-              { value: 'all', label: '所有类型' },
+              { value: 'all', label: t('sequences.allTypes') },
               ...Object.entries(sequenceTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -482,25 +482,25 @@ sequenceDiagram
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: '状态',
+            placeholder: t('common.status'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
-              { value: 'active', label: '活跃' },
-              { value: 'inactive', label: '停用' },
-              { value: 'draft', label: '草稿' }
+              { value: 'all', label: t('sequences.allStatuses') },
+              { value: 'active', label: t('sequences.statuses.active') },
+              { value: 'inactive', label: t('sequences.statuses.inactive') },
+              { value: 'draft', label: t('sequences.statuses.draft') }
             ]
           }
         ]}
         onRefresh={() => window.location.reload()}
       />
 
-      {/* 时序卡片列表 */}
+      {/* Sequence Cards List */}
       <Row gutter={[16, 16]}>
         {renderSequenceCards()}
       </Row>
 
-      {/* 时序详情模态框 */}
+      {/* Sequence Details Modal */}
       <Modal
         title={selectedSequence?.name}
         open={detailModalVisible}
@@ -511,12 +511,12 @@ sequenceDiagram
       >
         {selectedSequence && (
           <div>
-            {/* 基本信息 */}
+            {/* Basic Information */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label="时序名称" span={2}>
+              <Descriptions.Item label={t('sequences.sequenceName')} span={2}>
                 {selectedSequence.name}
               </Descriptions.Item>
-              <Descriptions.Item label="类型">
+              <Descriptions.Item label={t('common.type')}>
                 <Tag 
                   color={sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.color}
                   icon={sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.icon}
@@ -524,16 +524,16 @@ sequenceDiagram
                   {sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="状态">
+              <Descriptions.Item label={t('common.status')}>
                 {getStatusTag(selectedSequence.status)}
               </Descriptions.Item>
-              <Descriptions.Item label="步骤数">
-                {selectedSequence.steps}步
+              <Descriptions.Item label={t('sequences.stepCount')}>
+                {selectedSequence.steps}{t('sequences.steps')}
               </Descriptions.Item>
-              <Descriptions.Item label="执行时长">
+              <Descriptions.Item label={t('sequences.executionDuration')}>
                 {selectedSequence.duration}
               </Descriptions.Item>
-              <Descriptions.Item label="参与者" span={2}>
+              <Descriptions.Item label={t('sequences.participants')} span={2}>
                 <Space wrap>
                   {selectedSequence.participants.map((participant, index) => (
                     <Tag key={index} icon={<UserOutlined />}>
@@ -542,21 +542,21 @@ sequenceDiagram
                   ))}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="创建者">
+              <Descriptions.Item label={t('sequences.createdBy')}>
                 {selectedSequence.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label="创建时间">
+              <Descriptions.Item label={t('sequences.createdAt')}>
                 {selectedSequence.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label="描述" span={2}>
+              <Descriptions.Item label={t('common.description')} span={2}>
                 {selectedSequence.description}
               </Descriptions.Item>
             </Descriptions>
 
-            {/* 时序图 */}
+            {/* Sequence Diagram */}
             <SequenceDiagram 
               chart={selectedSequence.mermaidChart}
-              title="时序图"
+              title={t('sequences.sequenceDiagram')}
             />
           </div>
         )}
