@@ -413,32 +413,33 @@ const TagManagement: React.FC = () => {
         </Row>
       </Card>
 
+      {/* 搜索筛选 */}
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder="搜索标签名称、描述..."
+        filters={[
+          {
+            key: 'category',
+            value: filterCategory,
+            onChange: setFilterCategory,
+            placeholder: '选择分类',
+            width: 120,
+            options: [
+              { value: 'all', label: '所有分类' },
+              ...Object.entries(categoryMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+        style={{ marginBottom: 24 }}
+      />
+
       {/* 标签列表 */}
       <Card title="标签列表">
-        <SearchFilterBar
-          searchValue={searchText}
-          onSearchChange={setSearchText}
-          searchPlaceholder="搜索标签名称、描述..."
-          filters={[
-            {
-              key: 'category',
-              value: filterCategory,
-              onChange: setFilterCategory,
-              placeholder: '选择分类',
-              width: 120,
-              options: [
-                { value: 'all', label: '所有分类' },
-                ...Object.entries(categoryMap).map(([key, config]) => ({
-                  value: key,
-                  label: config.name
-                }))
-              ]
-            }
-          ]}
-          onRefresh={() => window.location.reload()}
-          style={{ marginBottom: 16 }}
-        />
-
         <Table
           columns={columns}
           dataSource={tagData}
