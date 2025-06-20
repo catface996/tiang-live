@@ -265,7 +265,8 @@
     "errors": {
       "planeDefinitionLoadFailed": "平面定义加载失败",
       "topologyLoadFailed": "拓扑结构加载失败",
-      "metricsLoadFailed": "指标数据加载失败"
+      "metricsLoadFailed": "指标数据加载失败",
+      "loadDataFailed": "加载平面数据失败"
     },
     "loading": {
       "topology": "加载平面拓扑中...",

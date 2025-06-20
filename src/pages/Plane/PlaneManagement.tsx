@@ -52,7 +52,7 @@ const PlaneManagement: React.FC = () => {
         const definitionsResponse = await planeService.getPlaneDefinitions();
         dispatch(setDefinitions(definitionsResponse.data));
       } catch (error: any) {
-        dispatch(setError({ type: 'definitions', error: error.message || '加载平面定义失败' }));
+        dispatch(setError({ type: 'definitions', error: error.message || t('planes.errors.planeDefinitionLoadFailed') }));
       }
 
       // 加载拓扑结构
@@ -60,7 +60,7 @@ const PlaneManagement: React.FC = () => {
         const topologyResponse = await planeService.getPlaneTopology();
         dispatch(setTopology(topologyResponse));
       } catch (error: any) {
-        dispatch(setError({ type: 'topology', error: error.message || '加载拓扑结构失败' }));
+        dispatch(setError({ type: 'topology', error: error.message || t('planes.errors.topologyLoadFailed') }));
       }
 
       // 加载指标数据
@@ -68,11 +68,11 @@ const PlaneManagement: React.FC = () => {
         const metricsResponse = await planeService.getAllPlanesMetrics();
         dispatch(setMetrics(metricsResponse));
       } catch (error: any) {
-        dispatch(setError({ type: 'metrics', error: error.message || '加载指标数据失败' }));
+        dispatch(setError({ type: 'metrics', error: error.message || t('planes.errors.metricsLoadFailed') }));
       }
 
     } catch (error) {
-      message.error('加载平面数据失败');
+      message.error(t('planes.errors.loadDataFailed'));
       console.error('Failed to load plane data:', error);
     }
   };
