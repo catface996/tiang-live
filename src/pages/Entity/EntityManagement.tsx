@@ -126,7 +126,7 @@ const EntityManagement: React.FC = () => {
       filtered = filtered.filter(entity => entity.type === selectedCategory);
     }
 
-    // 按搜索文本过滤
+    // Filter by search text
     if (searchText) {
       filtered = filtered.filter(entity => 
         entity.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -135,7 +135,7 @@ const EntityManagement: React.FC = () => {
       );
     }
 
-    // 按类型过滤
+    // Filter by type
     if (filterType !== 'all') {
       filtered = filtered.filter(entity => entity.type === filterType);
     }
@@ -231,55 +231,55 @@ const EntityManagement: React.FC = () => {
               checked={selectedCategory === 'report'}
               onChange={() => setSelectedCategory('report')}
             >
-              📊 报表 ({typeStats.report || 0})
+              📊 {t('entities.types.report')} ({typeStats.report || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'business_link'}
               onChange={() => setSelectedCategory('business_link')}
             >
-              🔗 业务链路 ({typeStats.business_link || 0})
+              🔗 {t('entities.types.businessLink')} ({typeStats.business_link || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'business_system'}
               onChange={() => setSelectedCategory('business_system')}
             >
-              🏢 业务系统 ({typeStats.business_system || 0})
+              🏢 {t('entities.types.businessSystem')} ({typeStats.business_system || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'api'}
               onChange={() => setSelectedCategory('api')}
             >
-              🔌 接口 ({typeStats.api || 0})
+              🔌 {t('entities.types.api')} ({typeStats.api || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'database'}
               onChange={() => setSelectedCategory('database')}
             >
-              💾 数据库 ({typeStats.database || 0})
+              💾 {t('entities.types.database')} ({typeStats.database || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'table'}
               onChange={() => setSelectedCategory('table')}
             >
-              📋 数据表 ({typeStats.table || 0})
+              📋 {t('entities.types.table')} ({typeStats.table || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'middleware'}
               onChange={() => setSelectedCategory('middleware')}
             >
-              ☁️ 中间件 ({typeStats.middleware || 0})
+              ☁️ {t('entities.types.middleware')} ({typeStats.middleware || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'microservice'}
               onChange={() => setSelectedCategory('microservice')}
             >
-              🔧 微服务 ({typeStats.microservice || 0})
+              🔧 {t('entities.types.microservice')} ({typeStats.microservice || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'scheduled_job'}
               onChange={() => setSelectedCategory('scheduled_job')}
             >
-              ⏰ 定时任务 ({typeStats.scheduled_job || 0})
+              ⏰ {t('entities.types.scheduledJob')} ({typeStats.scheduled_job || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'configuration'}
@@ -318,8 +318,8 @@ const EntityManagement: React.FC = () => {
                 <Option value="table">{t('entities.types.table')}</Option>
                 <Option value="middleware">{t('entities.types.middleware')}</Option>
                 <Option value="microservice">{t('entities.types.microservice')}</Option>
-                <Option value="scheduled_job">定时任务</Option>
-                <Option value="configuration">配置</Option>
+                <Option value="scheduled_job">{t('entities.types.scheduledJob')}</Option>
+                <Option value="configuration">{t('entities.types.configuration')}</Option>
               </Select>
             </Col>
             <Col>
@@ -339,7 +339,7 @@ const EntityManagement: React.FC = () => {
           </Row>
         </FilterBar>
 
-        {/* 实体卡片网格 */}
+        {/* Entity Cards Grid */}
         {filteredEntities.length > 0 ? (
           <EntityGrid>
             {filteredEntities.map((entity) => (
@@ -408,17 +408,17 @@ const EntityManagement: React.FC = () => {
           )}
           
           {selectedEntity.path && (
-            <Descriptions.Item label="接口路径">
+            <Descriptions.Item label={t('entities.apiPath')}>
               <code>{selectedEntity.path}</code>
             </Descriptions.Item>
           )}
           
           {selectedEntity.database && (
-            <Descriptions.Item label="所属数据库">{selectedEntity.database}</Descriptions.Item>
+            <Descriptions.Item label={t('entities.belongsToDatabase')}>{selectedEntity.database}</Descriptions.Item>
           )}
           
           {selectedEntity.tableName && (
-            <Descriptions.Item label="表名">
+            <Descriptions.Item label={t('entities.tableName')}>
               <code>{selectedEntity.tableName}</code>
             </Descriptions.Item>
           )}
@@ -522,16 +522,16 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="支付系统"
+              title={t('entities.stats.connectedSystems')}
               value={5}
-              suffix="个"
+              suffix={t('common.unit')}
               valueStyle={{ color: '#722ed1' }}
             />
           </StatsCard>
         </Col>
       </Row>
 
-      {/* D3.js 关系图谱 */}
+      {/* D3.js Relationship Graph */}
       <D3RelationshipGraph />
     </TabContent>
   );

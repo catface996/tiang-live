@@ -459,7 +459,8 @@
       "relationships": "Relationships",
       "totalRelations": "Total Relations",
       "relationTypes": "Relation Types",
-      "graphNodes": "Graph Nodes"
+      "graphNodes": "Graph Nodes",
+      "connectedSystems": "Connected Systems"
     },
     "types": {
       "report": "Report",
@@ -469,8 +470,13 @@
       "database": "Database",
       "table": "Table",
       "middleware": "Middleware",
-      "microservice": "Microservice"
+      "microservice": "Microservice",
+      "scheduledJob": "Scheduled Job",
+      "configuration": "Configuration"
     },
+    "apiPath": "API Path",
+    "belongsToDatabase": "Belongs to Database",
+    "tableName": "Table Name",
     "columns": {
       "entityName": "Entity Name",
       "entityType": "Entity Type",

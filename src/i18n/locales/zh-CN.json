@@ -460,7 +460,8 @@
       "relationships": "关系数量",
       "totalRelations": "关系总数",
       "relationTypes": "关系类型",
-      "graphNodes": "图谱节点"
+      "graphNodes": "图谱节点",
+      "connectedSystems": "关联系统"
     },
     "types": {
       "report": "报表",
@@ -470,8 +471,13 @@
       "database": "数据库",
       "table": "数据表",
       "middleware": "中间件",
-      "microservice": "微服务"
+      "microservice": "微服务",
+      "scheduledJob": "定时任务",
+      "configuration": "配置"
     },
+    "apiPath": "接口路径",
+    "belongsToDatabase": "所属数据库",
+    "tableName": "表名",
     "columns": {
       "entityName": "实体名称",
       "entityType": "实体类型",
