@@ -181,7 +181,7 @@ const EntityManagement: React.FC = () => {
               <Statistic
                 title={t('entities.stats.totalEntities')}
                 value={stats.total}
-                suffix={t('common.unit')}
+                suffix={t('common.unit.count')}
                 valueStyle={{ color: '#1890ff' }}
               />
             </StatsCard>
@@ -191,7 +191,7 @@ const EntityManagement: React.FC = () => {
               <Statistic
                 title={t('entities.stats.activeEntities')}
                 value={stats.active}
-                suffix={t('common.unit')}
+                suffix={t('common.unit.count')}
                 valueStyle={{ color: '#52c41a' }}
               />
             </StatsCard>
@@ -201,7 +201,7 @@ const EntityManagement: React.FC = () => {
               <Statistic
                 title={t('entities.stats.warningEntities')}
                 value={stats.warning}
-                suffix={t('common.unit')}
+                suffix={t('common.unit.count')}
                 valueStyle={{ color: '#faad14' }}
               />
             </StatsCard>
@@ -211,7 +211,7 @@ const EntityManagement: React.FC = () => {
               <Statistic
                 title={t('entities.stats.errorEntities')}
                 value={stats.inactive}
-                suffix={t('common.unit')}
+                suffix={t('common.unit.count')}
                 valueStyle={{ color: '#f5222d' }}
               />
             </StatsCard>
@@ -514,7 +514,7 @@ const EntityManagement: React.FC = () => {
             <Statistic
               title={t('entities.stats.graphNodes')}
               value={21}
-              suffix={t('common.unit')}
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#faad14' }}
             />
           </StatsCard>
@@ -524,7 +524,7 @@ const EntityManagement: React.FC = () => {
             <Statistic
               title={t('entities.stats.connectedSystems')}
               value={5}
-              suffix={t('common.unit')}
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#722ed1' }}
             />
           </StatsCard>

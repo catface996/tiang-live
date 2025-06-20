@@ -252,7 +252,7 @@ const SequenceManagement: React.FC = () => {
             <Statistic
               title={t('sequences.stats.totalSequences')}
               value={sequenceData.length}
-              suffix={t('common.unit')}
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<ControlOutlined />}
             />
@@ -263,7 +263,7 @@ const SequenceManagement: React.FC = () => {
             <Statistic
               title={t('sequences.stats.activeSequences')}
               value={activeSequences}
-              suffix={t('common.unit')}
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
