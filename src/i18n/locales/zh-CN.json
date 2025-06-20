@@ -537,16 +537,51 @@
     "stepCount": "步骤数",
     "steps": "步",
     "executionDuration": "执行时长",
+    "executionUnit": "次",
     "participants": "参与者",
     "createdBy": "创建者",
     "createdAt": "创建时间",
     "lastModified": "更新时间",
     "sequenceDiagram": "时序图",
     "viewSequenceDiagram": "查看时序图",
+    "types": {
+      "authentication": "认证",
+      "business": "业务",
+      "monitoring": "监控",
+      "data": "数据",
+      "gateway": "网关"
+    },
     "statuses": {
       "active": "活跃",
       "inactive": "停用",
       "draft": "草稿"
+    },
+    "examples": {
+      "userLogin": {
+        "name": "用户登录认证流程",
+        "description": "用户通过前端登录，后端验证身份并返回token的完整时序流程",
+        "createdBy": "系统架构师"
+      },
+      "orderProcess": {
+        "name": "订单处理业务流程",
+        "description": "从用户下单到订单完成的完整业务时序，包含库存检查、支付处理等环节",
+        "createdBy": "业务分析师"
+      },
+      "healthCheck": {
+        "name": "微服务健康检查",
+        "description": "监控系统对各微服务进行健康检查的时序流程，包含服务发现和状态上报",
+        "createdBy": "运维工程师"
+      },
+      "dataSync": {
+        "name": "数据同步流程",
+        "description": "主数据库与从数据库之间的数据同步时序，确保数据一致性",
+        "createdBy": "数据库管理员"
+      },
+      "apiGateway": {
+        "name": "API网关请求路由",
+        "description": "API网关接收请求并路由到相应微服务的时序流程，包含认证和限流",
+        "createdBy": "架构师"
+      }
     },
     "stats": {
       "totalSequences": "总时序数",

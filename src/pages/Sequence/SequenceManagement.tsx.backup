@@ -56,20 +56,12 @@ const StatsCard = styled(Card)`
 
 const SequenceCard = styled(Card)`
   height: 100%;
-  cursor: pointer;
   transition: all 0.3s ease;
+  cursor: pointer;
   
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
-  }
-  
-  .ant-card-head {
-    border-bottom: 1px solid #f0f0f0;
-  }
-  
-  .ant-card-body {
-    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -78,7 +70,7 @@ interface SequenceData {
   name: string;
   description: string;
   type: string;
-  status: string;
+  status: 'active' | 'inactive' | 'draft';
   participants: string[];
   steps: number;
   duration: string;
@@ -89,8 +81,9 @@ interface SequenceData {
 }
 
 const SequenceManagement: React.FC = () => {
-  const [selectedSequence, setSelectedSequence] = useState<SequenceData | null>(null);
+  const [loading, setLoading] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [selectedSequence, setSelectedSequence] = useState<SequenceData | null>(null);
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -206,99 +199,158 @@ sequenceDiagram
     M->>M: Aggregate status
     M->>R: Update status
       `
+    }
+  ];
+
+  const sequenceData = getSequenceData();
+    participant O as 订单服务
+    participant I as 库存服务
+    participant P as 支付服务
+    participant N as 通知服务
+    
+    U->>O: 提交订单
+    O->>I: 检查库存
+    alt 库存充足
+        I-->>O: 库存确认
+        O->>O: 创建订单
+        O->>P: 发起支付
+        P-->>O: 支付成功
+        O->>I: 扣减库存
+        O->>N: 发送订单确认
+        N-->>U: 短信/邮件通知
+        O-->>U: 订单创建成功
+    else 库存不足
+        I-->>O: 库存不足
+        O-->>U: 商品库存不足
+    end
+      `
+    },
+    {
+      id: '3',
+      name: '微服务健康检查',
+      description: '监控系统对各微服务进行健康检查的时序流程，包含服务发现和状态上报',
+      type: 'monitoring',
+      status: 'active',
+      participants: ['监控中心', '服务注册中心', '用户服务', '订单服务', '支付服务'],
+      steps: 10,
+      duration: '5-10秒',
+      createdBy: '运维工程师',
+      createdAt: '2024-06-05',
+      lastModified: '2024-06-12',
+      mermaidChart: `
+sequenceDiagram
+    participant M as 监控中心
+    participant R as 服务注册中心
+    participant U as 用户服务
+    participant O as 订单服务
+    participant P as 支付服务
+    
+    M->>R: 获取服务列表
+    R-->>M: 返回服务实例
+    
+    par 并行健康检查
+        M->>U: 健康检查请求
+        U-->>M: 返回健康状态
+    and
+        M->>O: 健康检查请求
+        O-->>M: 返回健康状态
+    and
+        M->>P: 健康检查请求
+        P-->>M: 返回健康状态
+    end
+    
+    M->>M: 汇总健康状态
+    M->>R: 更新服务状态
+      `
     },
     {
       id: '4',
-      name: t('sequences.examples.dataSync.name'),
-      description: t('sequences.examples.dataSync.description'),
+      name: '数据同步流程',
+      description: '主数据库与从数据库之间的数据同步时序，确保数据一致性',
       type: 'data',
       status: 'draft',
-      participants: ['App Service', 'Master DB', 'Slave DB', 'Sync Service'],
+      participants: ['应用服务', '主数据库', '从数据库', '同步服务'],
       steps: 6,
-      duration: '1-3s',
-      createdBy: t('sequences.examples.dataSync.createdBy'),
+      duration: '1-3秒',
+      createdBy: '数据库管理员',
       createdAt: '2024-06-12',
       lastModified: '2024-06-14',
       mermaidChart: `
 sequenceDiagram
-    participant A as App Service
-    participant M as Master DB
-    participant S as Sync Service
-    participant R as Slave DB
+    participant A as 应用服务
+    participant M as 主数据库
+    participant S as 同步服务
+    participant R as 从数据库
     
-    A->>M: Write data
-    M-->>A: Write confirmation
-    M->>S: Trigger sync event
-    S->>M: Read change log
-    M-->>S: Return change data
-    S->>R: Sync data to slave
-    R-->>S: Sync confirmation
-    S->>S: Record sync status
+    A->>M: 写入数据
+    M-->>A: 写入确认
+    M->>S: 触发同步事件
+    S->>M: 读取变更日志
+    M-->>S: 返回变更数据
+    S->>R: 同步数据到从库
+    R-->>S: 同步确认
+    S->>S: 记录同步状态
       `
     },
     {
       id: '5',
-      name: t('sequences.examples.apiGateway.name'),
-      description: t('sequences.examples.apiGateway.description'),
+      name: 'API网关请求路由',
+      description: 'API网关接收请求并路由到相应微服务的时序流程，包含认证和限流',
       type: 'gateway',
-      status: 'inactive',
-      participants: ['Client', 'API Gateway', 'Auth Service', 'User Service', 'Rate Limiter'],
-      steps: 15,
-      duration: '100-500ms',
-      createdBy: t('sequences.examples.apiGateway.createdBy'),
+      status: 'active',
+      participants: ['客户端', 'API网关', '认证服务', '用户服务', '限流服务'],
+      steps: 9,
+      duration: '100-500毫秒',
+      createdBy: '架构师',
       createdAt: '2024-06-01',
-      lastModified: '2024-06-11',
+      lastModified: '2024-06-10',
       mermaidChart: `
 sequenceDiagram
-    participant C as Client
-    participant G as API Gateway
-    participant A as Auth Service
-    participant L as Rate Limiter
-    participant U as User Service
+    participant C as 客户端
+    participant G as API网关
+    participant A as 认证服务
+    participant L as 限流服务
+    participant U as 用户服务
     
-    C->>G: Send API request
-    G->>A: Verify token
-    A-->>G: Auth result
+    C->>G: API请求
+    G->>A: 验证Token
+    A-->>G: 认证结果
     
-    alt Auth success
-        G->>L: Check rate limit
-        alt Within limit
-            L-->>G: Pass rate check
-            G->>U: Forward to target service
-            U-->>G: Return response
-            G-->>C: Return final response
-        else Rate exceeded
-            L-->>G: Rate limit reject
-            G-->>C: Return rate limit error
+    alt 认证成功
+        G->>L: 检查限流
+        alt 未超限
+            L-->>G: 通过限流
+            G->>U: 转发请求
+            U-->>G: 返回响应
+            G-->>C: 返回结果
+        else 超出限流
+            L-->>G: 限流拒绝
+            G-->>C: 返回限流错误
         end
-    else Auth failed
-        G-->>C: Return auth error
+    else 认证失败
+        G-->>C: 返回认证错误
     end
       `
     }
   ];
 
-  const sequenceData = getSequenceData();
-
   const sequenceTypeMap = {
-    authentication: { name: t('sequences.types.authentication'), color: 'blue', icon: <UserOutlined /> },
-    business: { name: t('sequences.types.business'), color: 'green', icon: <ApiOutlined /> },
-    monitoring: { name: t('sequences.types.monitoring'), color: 'orange', icon: <ClockCircleOutlined /> },
-    data: { name: t('sequences.types.data'), color: 'purple', icon: <DatabaseOutlined /> },
-    gateway: { name: t('sequences.types.gateway'), color: 'cyan', icon: <CloudOutlined /> },
+    authentication: { name: '认证', color: 'blue', icon: <UserOutlined /> },
+    business: { name: '业务', color: 'green', icon: <ApiOutlined /> },
+    monitoring: { name: '监控', color: 'orange', icon: <ClockCircleOutlined /> },
+    data: { name: '数据', color: 'purple', icon: <DatabaseOutlined /> },
+    gateway: { name: '网关', color: 'cyan', icon: <CloudOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      active: { color: 'green', text: t('sequences.statuses.active') },
-      inactive: { color: 'red', text: t('sequences.statuses.inactive') },
-      draft: { color: 'orange', text: t('sequences.statuses.draft') },
+      active: { color: 'green', text: '活跃' },
+      inactive: { color: 'red', text: '停用' },
+      draft: { color: 'orange', text: '草稿' },
     };
     const config = statusMap[status as keyof typeof statusMap];
-    return config ? <Tag color={config.color}>{config.text}</Tag> : <Tag>{status}</Tag>;
+    return <Tag color={config.color}>{config.text}</Tag>;
   };
-
-  const activeSequences = sequenceData.filter(seq => seq.status === 'active').length;
 
   const handleViewSequence = (sequence: SequenceData) => {
     setSelectedSequence(sequence);
@@ -313,6 +365,7 @@ sequenceDiagram
           <SequenceCard
             title={
               <Space>
+                {typeConfig?.icon}
                 <span>{sequence.name}</span>
                 {getStatusTag(sequence.status)}
               </Space>
@@ -345,27 +398,32 @@ sequenceDiagram
               <Tag color={typeConfig?.color} icon={typeConfig?.icon}>
                 {typeConfig?.name}
               </Tag>
+              <Tag icon={<UserOutlined />}>
+                {sequence.participants.length}个参与者
+              </Tag>
             </div>
             
-            <div style={{ marginBottom: 12, fontSize: 13, color: '#666' }}>
+            <Paragraph 
+              ellipsis={{ rows: 2 }} 
+              style={{ marginBottom: 16, minHeight: 40 }}
+            >
               {sequence.description}
-            </div>
-            
+            </Paragraph>
+
             <div style={{ marginBottom: 12 }}>
               <Row gutter={16}>
                 <Col span={12}>
                   <Statistic
-                    title={t('sequences.stepCount')}
+                    title="步骤数"
                     value={sequence.steps}
-                    suffix={t('sequences.steps')}
-                    valueStyle={{ fontSize: 16 }}
+                    valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title={t('sequences.executionDuration')}
+                    title="执行时长"
                     value={sequence.duration}
-                    valueStyle={{ fontSize: 16 }}
+                    valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
               </Row>
@@ -380,6 +438,10 @@ sequenceDiagram
       );
     });
   };
+
+  const activeSequences = sequenceData.filter(seq => seq.status === 'active').length;
+  const totalSteps = sequenceData.reduce((sum, seq) => sum + seq.steps, 0);
+  const totalParticipants = sequenceData.reduce((sum, seq) => sum + seq.participants.length, 0);
 
   return (
     <PageContainer>
@@ -407,7 +469,7 @@ sequenceDiagram
         </div>
       </PageHeader>
 
-      {/* Statistics Cards */}
+      {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
@@ -434,10 +496,10 @@ sequenceDiagram
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('sequences.stats.executionCount')}
-              value={1247}
-              suffix={t('sequences.executionUnit')}
-              valueStyle={{ color: '#722ed1' }}
+              title="总步骤数"
+              value={totalSteps}
+              suffix="步"
+              valueStyle={{ color: '#faad14' }}
               prefix={<ClockCircleOutlined />}
             />
           </StatsCard>
@@ -445,11 +507,11 @@ sequenceDiagram
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('sequences.stats.successRate')}
-              value={98.5}
-              suffix="%"
-              valueStyle={{ color: '#52c41a' }}
-              prefix={<Badge status="success" />}
+              title="参与者总数"
+              value={totalParticipants}
+              suffix="个"
+              valueStyle={{ color: '#722ed1' }}
+              prefix={<UserOutlined />}
             />
           </StatsCard>
         </Col>
