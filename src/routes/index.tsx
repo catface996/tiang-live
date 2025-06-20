@@ -20,6 +20,7 @@ import {
 } from '../pages';
 import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
 import AIAgentForm from '../pages/AIAgent/AIAgentForm';
+import ScanDetail from '../pages/SystemSettings/EntityScan/ScanDetail';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -45,6 +46,7 @@ const AppRoutes: React.FC = () => {
         <Route path="system-settings/prompt-templates" element={<PromptTemplates />} />
         <Route path="system-settings/tag-management" element={<TagManagement />} />
         <Route path="system-settings/entity-scan" element={<EntityScan />} />
+        <Route path="system-settings/entity-scan/:dataSourceId" element={<ScanDetail />} />
       </Route>
     </Routes>
   );

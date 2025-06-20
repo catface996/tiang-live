@@ -44,6 +44,7 @@ import {
   PlusOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
 import { entityScanService } from '../../../services/entityScanService';
@@ -369,6 +370,7 @@ interface ScanResult {
 
 const EntityScan: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const isDark = currentTheme === 'dark';
 
@@ -1018,103 +1020,15 @@ const EntityScan: React.FC = () => {
     }
   };
 
-  // 针对单个数据源开始扫描
-  const handleStartScanForDataSource = async (dataSource: DataSource) => {
+  // 针对单个数据源开始扫描 - 跳转到扫描详情页
+  const handleStartScanForDataSource = (dataSource: DataSource) => {
     if (dataSource.status !== 'connected') {
       message.warning('请先确保数据源连接正常！');
       return;
     }
 
-    try {
-      setIsScanning(true);
-      setSelectedDataSource(dataSource.id);
-      
-      message.loading('正在启动扫描任务...', 1);
-      
-      // 模拟扫描过程
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // 创建扫描任务
-      const newTask: ScanTask = {
-        id: `task_${Date.now()}`,
-        dataSourceId: dataSource.id,
-        dataSourceName: dataSource.name,
-        status: 'running',
-        progress: 0,
-        startTime: new Date().toLocaleString(),
-        endTime: '',
-        entityCount: 0,
-        errorCount: 0,
-        config: {
-          includeViews: true,
-          includeProcedures: false,
-          includeIndexes: true,
-          generateRelations: true,
-          maxDepth: 3
-        }
-      };
-
-      setScanTasks(prev => [newTask, ...prev]);
-      setCurrentTask(newTask);
-
-      // 模拟扫描进度
-      const progressInterval = setInterval(() => {
-        setScanTasks(prev => prev.map(task => {
-          if (task.id === newTask.id && task.status === 'running') {
-            const newProgress = Math.min(task.progress + Math.random() * 20, 100);
-            if (newProgress >= 100) {
-              clearInterval(progressInterval);
-              return {
-                ...task,
-                status: 'completed',
-                progress: 100,
-                endTime: new Date().toLocaleString(),
-                entityCount: Math.floor(Math.random() * 50) + 10,
-                errorCount: Math.floor(Math.random() * 3)
-              };
-            }
-            return { ...task, progress: newProgress };
-          }
-          return task;
-        }));
-      }, 500);
-
-      // 3秒后完成扫描
-      setTimeout(() => {
-        clearInterval(progressInterval);
-        setScanTasks(prev => prev.map(task => 
-          task.id === newTask.id ? {
-            ...task,
-            status: 'completed',
-            progress: 100,
-            endTime: new Date().toLocaleString(),
-            entityCount: Math.floor(Math.random() * 50) + 10,
-            errorCount: Math.floor(Math.random() * 3)
-          } : task
-        ));
-        
-        // 生成扫描结果
-        generateMockScanResults();
-        
-        // 更新数据源扫描次数
-        setDataSources(prev => prev.map(ds => 
-          ds.id === dataSource.id ? {
-            ...ds,
-            scanCount: (ds.scanCount || 0) + 1,
-            lastConnected: new Date().toLocaleString()
-          } : ds
-        ));
-
-        setIsScanning(false);
-        setSelectedDataSource('');
-        message.success(`数据源 "${dataSource.name}" 扫描完成！`);
-      }, 3000);
-
-    } catch (error) {
-      setIsScanning(false);
-      setSelectedDataSource('');
-      message.error('扫描启动失败！');
-    }
+    // 跳转到扫描详情页面
+    navigate(`/system-settings/entity-scan/${dataSource.id}`);
   };
 
   const handleDeleteDataSource = (dataSource: DataSource) => {
