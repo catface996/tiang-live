@@ -33,6 +33,7 @@ import {
   TableOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
@@ -75,6 +76,7 @@ const EntityGrid = styled.div`
 `;
 
 const EntityManagement: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('entities');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchText, setSearchText] = useState('');
@@ -85,9 +87,9 @@ const EntityManagement: React.FC = () => {
   const [entities, setEntities] = useState<any[]>([]);
 
   useEffect(() => {
-    setPageTitle('实体管理');
+    setPageTitle(t('entities.title'));
     setEntities(entitiesData.entities);
-  }, []);
+  }, [t]);
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
@@ -154,20 +156,20 @@ const EntityManagement: React.FC = () => {
       <TabContent>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
-            <Title level={3} style={{ margin: 0 }}>实体管理</Title>
+            <Title level={3} style={{ margin: 0 }}>{t('entities.title')}</Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
-              管理系统中的各种实体对象，包括报表、业务链路、系统、接口、数据库等。
+              {t('entities.subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ExportOutlined />}>
-              导出
+              {t('common.export')}
             </Button>
             <Button icon={<ReloadOutlined />}>
-              刷新
+              {t('common.refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />}>
-              创建实体
+              {t('entities.createEntity')}
             </Button>
           </Space>
         </div>
@@ -177,9 +179,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title="实体总数"
+                title={t('entities.stats.totalEntities')}
                 value={stats.total}
-                suffix="个"
+                suffix={t('common.unit')}
                 valueStyle={{ color: '#1890ff' }}
               />
             </StatsCard>
@@ -187,9 +189,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title="活跃实体"
+                title={t('entities.stats.activeEntities')}
                 value={stats.active}
-                suffix="个"
+                suffix={t('common.unit')}
                 valueStyle={{ color: '#52c41a' }}
               />
             </StatsCard>
@@ -197,9 +199,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title="告警实体"
+                title={t('entities.stats.warningEntities')}
                 value={stats.warning}
-                suffix="个"
+                suffix={t('common.unit')}
                 valueStyle={{ color: '#faad14' }}
               />
             </StatsCard>
@@ -207,9 +209,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title="异常实体"
+                title={t('entities.stats.errorEntities')}
                 value={stats.inactive}
-                suffix="个"
+                suffix={t('common.unit')}
                 valueStyle={{ color: '#f5222d' }}
               />
             </StatsCard>
@@ -293,7 +295,7 @@ const EntityManagement: React.FC = () => {
           <Row gutter={16} align="middle">
             <Col flex="auto">
               <Search
-                placeholder="搜索实体名称、描述或标签"
+                placeholder={t('entities.searchPlaceholder')}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 style={{ width: '100%' }}
@@ -305,17 +307,17 @@ const EntityManagement: React.FC = () => {
                 value={filterType}
                 onChange={setFilterType}
                 style={{ width: 120 }}
-                placeholder="类型"
+                placeholder={t('entities.typeFilter')}
               >
-                <Option value="all">所有类型</Option>
-                <Option value="report">报表</Option>
-                <Option value="business_link">业务链路</Option>
-                <Option value="business_system">业务系统</Option>
-                <Option value="api">接口</Option>
-                <Option value="database">数据库</Option>
-                <Option value="table">数据表</Option>
-                <Option value="middleware">中间件</Option>
-                <Option value="microservice">微服务</Option>
+                <Option value="all">{t('entities.allTypes')}</Option>
+                <Option value="report">{t('entities.types.report')}</Option>
+                <Option value="business_link">{t('entities.types.businessLink')}</Option>
+                <Option value="business_system">{t('entities.types.businessSystem')}</Option>
+                <Option value="api">{t('entities.types.api')}</Option>
+                <Option value="database">{t('entities.types.database')}</Option>
+                <Option value="table">{t('entities.types.table')}</Option>
+                <Option value="middleware">{t('entities.types.middleware')}</Option>
+                <Option value="microservice">{t('entities.types.microservice')}</Option>
                 <Option value="scheduled_job">定时任务</Option>
                 <Option value="configuration">配置</Option>
               </Select>
@@ -350,7 +352,7 @@ const EntityManagement: React.FC = () => {
           </EntityGrid>
         ) : (
           <Empty 
-            description="没有找到匹配的实体"
+            description={t('entities.noEntitiesFound')}
             style={{ margin: '60px 0' }}
           />
         )}
@@ -363,19 +365,19 @@ const EntityManagement: React.FC = () => {
 
     return (
       <Drawer
-        title={`实体详情: ${selectedEntity.name}`}
+        title={`${t('entities.entityDetail')}: ${selectedEntity.name}`}
         placement="right"
         width={600}
         onClose={() => setDrawerVisible(false)}
         open={drawerVisible}
       >
         <Descriptions column={1} bordered size="small">
-          <Descriptions.Item label="实体ID">{selectedEntity.id}</Descriptions.Item>
-          <Descriptions.Item label="实体名称">{selectedEntity.name}</Descriptions.Item>
-          <Descriptions.Item label="实体类型">
+          <Descriptions.Item label={t('entities.entityId')}>{selectedEntity.id}</Descriptions.Item>
+          <Descriptions.Item label={t('entities.entityName')}>{selectedEntity.name}</Descriptions.Item>
+          <Descriptions.Item label={t('entities.entityType')}>
             <Tag color="blue">{selectedEntity.type}</Tag>
           </Descriptions.Item>
-          <Descriptions.Item label="分类">{selectedEntity.category}</Descriptions.Item>
+          <Descriptions.Item label={t('entities.category')}>{selectedEntity.category}</Descriptions.Item>
           <Descriptions.Item label="状态">
             <Badge 
               status={selectedEntity.status === 'active' || selectedEntity.status === 'running' ? 'success' : 'error'} 
@@ -467,20 +469,20 @@ const EntityManagement: React.FC = () => {
     <TabContent>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ margin: 0 }}>关系图谱</Title>
+          <Title level={3} style={{ margin: 0 }}>{t('entities.relationshipGraph')}</Title>
           <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
-            基于D3.js的交互式关系图谱，展示从业务场景到基础设施的完整技术架构关系。
+            {t('entities.relationshipGraphDesc')}
           </Paragraph>
         </div>
         <Space>
           <Button icon={<ExportOutlined />}>
-            导出图谱
+            {t('entities.exportGraph')}
           </Button>
           <Button icon={<SettingOutlined />}>
-            图谱设置
+            {t('entities.graphSettings')}
           </Button>
           <Button icon={<ReloadOutlined />}>
-            刷新图谱
+            {t('entities.refreshGraph')}
           </Button>
         </Space>
       </div>
@@ -490,9 +492,9 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="关系总数"
+              title={t('entities.stats.totalRelations')}
               value={25}
-              suffix="条"
+              suffix={t('common.unitRelation')}
               valueStyle={{ color: '#1890ff' }}
             />
           </StatsCard>
@@ -500,9 +502,9 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="关系类型"
+              title={t('entities.stats.relationTypes')}
               value={5}
-              suffix="种"
+              suffix={t('common.unitType')}
               valueStyle={{ color: '#52c41a' }}
             />
           </StatsCard>
@@ -510,9 +512,9 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="图谱节点"
+              title={t('entities.stats.graphNodes')}
               value={21}
-              suffix="个"
+              suffix={t('common.unit')}
               valueStyle={{ color: '#faad14' }}
             />
           </StatsCard>
@@ -542,7 +544,7 @@ const EntityManagement: React.FC = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <Title level={2} style={{ margin: 0 }}>
-              实体管理
+              {t('entities.title')}
               <Badge 
                 count="NEW" 
                 style={{ 
@@ -553,7 +555,7 @@ const EntityManagement: React.FC = () => {
               />
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              统一管理系统中的各种实体对象，包括报表、业务链路、系统、接口、数据库等，提供完整的实体生命周期管理。
+              {t('entities.description')}
             </Paragraph>
           </div>
         </div>
@@ -570,7 +572,7 @@ const EntityManagement: React.FC = () => {
             tab={
               <Space>
                 <NodeIndexOutlined />
-                实体管理
+                {t('entities.title')}
                 <Badge count={getEntityStats().total} showZero />
               </Space>
             } 
@@ -583,7 +585,7 @@ const EntityManagement: React.FC = () => {
             tab={
               <Space>
                 <ShareAltOutlined />
-                关系图谱
+                {t('entities.relationshipGraph')}
               </Space>
             } 
             key="relationships"
