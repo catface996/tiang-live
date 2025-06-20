@@ -52,12 +52,6 @@
     "retryCountPlaceholder": "Retry count",
     "success": "Success",
     "timeout": "Timeout",
-    "unit": {
-      "count": "",
-      "times": " times",
-      "events": " events",
-      "seconds": " seconds"
-    },
     "export": "Export",
     "import": "Import",
     "reset": "Reset",
