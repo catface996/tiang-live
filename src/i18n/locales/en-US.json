@@ -62,7 +62,10 @@
     "finish": "Finish",
     "close": "Close",
     "open": "Open",
-    "unit": "",
+    "unit": {
+      "count": "",
+      "times": " times"
+    },
     "unitType": " types",
     "unitRelation": " relations",
     "enable": "Enable",
