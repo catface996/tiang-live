@@ -1,0 +1,386 @@
+{
+  "solutions": [
+    {
+      "id": "1",
+      "name": "电商平台业务架构",
+      "industry": "ecommerce",
+      "complexity": "high",
+      "status": "active",
+      "description": "完整的电商平台业务架构方案，包含用户管理、商品管理、订单处理、支付结算等核心业务模块",
+      "scenario": "适用于B2C电商平台、B2B交易平台、跨境电商等各类电商业务场景",
+      "entities": [
+        {
+          "name": "用户",
+          "type": "Actor",
+          "description": "平台注册用户，包含个人用户和企业用户"
+        },
+        {
+          "name": "商品",
+          "type": "Entity",
+          "description": "平台销售的商品信息"
+        },
+        {
+          "name": "订单",
+          "type": "Entity",
+          "description": "用户购买商品产生的订单"
+        },
+        {
+          "name": "支付",
+          "type": "Service",
+          "description": "订单支付处理服务"
+        },
+        {
+          "name": "物流",
+          "type": "Service",
+          "description": "商品配送物流服务"
+        }
+      ],
+      "relations": [
+        {
+          "from": "用户",
+          "to": "商品",
+          "type": "浏览"
+        },
+        {
+          "from": "用户",
+          "to": "订单",
+          "type": "创建"
+        },
+        {
+          "from": "订单",
+          "to": "支付",
+          "type": "触发"
+        },
+        {
+          "from": "订单",
+          "to": "物流",
+          "type": "关联"
+        }
+      ],
+      "tags": ["电商", "平台", "订单管理", "支付系统"],
+      "createdBy": "电商架构师",
+      "createdAt": "2024-06-15",
+      "lastModified": "2024-06-18"
+    },
+    {
+      "id": "2",
+      "name": "银行核心业务系统",
+      "industry": "finance",
+      "complexity": "high",
+      "status": "active",
+      "description": "银行核心业务系统架构，涵盖账户管理、交易处理、风险控制、合规监管等金融业务",
+      "scenario": "适用于商业银行、信用社、金融科技公司等金融机构",
+      "entities": [
+        {
+          "name": "客户",
+          "type": "Actor",
+          "description": "银行服务的个人或企业客户"
+        },
+        {
+          "name": "账户",
+          "type": "Entity",
+          "description": "客户在银行开设的各类账户"
+        },
+        {
+          "name": "交易",
+          "type": "Entity",
+          "description": "客户进行的各类金融交易"
+        },
+        {
+          "name": "风控系统",
+          "type": "Service",
+          "description": "实时风险监控和控制系统"
+        },
+        {
+          "name": "合规系统",
+          "type": "Service",
+          "description": "监管合规和反洗钱系统"
+        }
+      ],
+      "relations": [
+        {
+          "from": "客户",
+          "to": "账户",
+          "type": "拥有"
+        },
+        {
+          "from": "客户",
+          "to": "交易",
+          "type": "发起"
+        },
+        {
+          "from": "交易",
+          "to": "风控系统",
+          "type": "监控"
+        },
+        {
+          "from": "交易",
+          "to": "合规系统",
+          "type": "审查"
+        }
+      ],
+      "tags": ["银行", "金融", "风控", "合规"],
+      "createdBy": "金融架构师",
+      "createdAt": "2024-06-12",
+      "lastModified": "2024-06-16"
+    },
+    {
+      "id": "3",
+      "name": "智慧医疗管理平台",
+      "industry": "healthcare",
+      "complexity": "medium",
+      "status": "active",
+      "description": "医疗机构数字化管理平台，整合患者管理、诊疗流程、医疗资源调度和医保结算等功能",
+      "scenario": "适用于医院、诊所、社区医疗中心等医疗机构",
+      "entities": [
+        {
+          "name": "患者",
+          "type": "Actor",
+          "description": "接受医疗服务的病人"
+        },
+        {
+          "name": "医生",
+          "type": "Actor",
+          "description": "提供医疗服务的医护人员"
+        },
+        {
+          "name": "病历",
+          "type": "Entity",
+          "description": "患者的电子病历信息"
+        },
+        {
+          "name": "预约系统",
+          "type": "Service",
+          "description": "患者预约挂号系统"
+        },
+        {
+          "name": "医保系统",
+          "type": "Service",
+          "description": "医疗保险结算系统"
+        }
+      ],
+      "relations": [
+        {
+          "from": "患者",
+          "to": "预约系统",
+          "type": "使用"
+        },
+        {
+          "from": "医生",
+          "to": "病历",
+          "type": "创建"
+        },
+        {
+          "from": "患者",
+          "to": "医保系统",
+          "type": "结算"
+        }
+      ],
+      "tags": ["医疗", "患者管理", "预约系统", "电子病历"],
+      "createdBy": "医疗信息架构师",
+      "createdAt": "2024-06-10",
+      "lastModified": "2024-06-14"
+    },
+    {
+      "id": "4",
+      "name": "智能物流配送系统",
+      "industry": "logistics",
+      "complexity": "medium",
+      "status": "active",
+      "description": "现代化物流配送系统架构，支持订单管理、路线规划、车辆调度和实时追踪等功能",
+      "scenario": "适用于快递公司、物流企业、电商配送等场景",
+      "entities": [
+        {
+          "name": "发货方",
+          "type": "Actor",
+          "description": "发送货物的商家或个人"
+        },
+        {
+          "name": "收货方",
+          "type": "Actor",
+          "description": "接收货物的客户"
+        },
+        {
+          "name": "货物",
+          "type": "Entity",
+          "description": "需要配送的物品"
+        },
+        {
+          "name": "仓库",
+          "type": "Entity",
+          "description": "物流仓库信息"
+        },
+        {
+          "name": "配送员",
+          "type": "Actor",
+          "description": "负责最后一公里配送的人员"
+        },
+        {
+          "name": "路线规划",
+          "type": "Service",
+          "description": "智能路线规划和优化服务"
+        }
+      ],
+      "relations": [
+        {
+          "from": "发货方",
+          "to": "货物",
+          "type": "发送"
+        },
+        {
+          "from": "货物",
+          "to": "仓库",
+          "type": "存储"
+        },
+        {
+          "from": "配送员",
+          "to": "货物",
+          "type": "配送"
+        },
+        {
+          "from": "货物",
+          "to": "收货方",
+          "type": "送达"
+        }
+      ],
+      "tags": ["物流", "配送", "路线规划", "实时追踪"],
+      "createdBy": "物流系统架构师",
+      "createdAt": "2024-06-08",
+      "lastModified": "2024-06-12"
+    },
+    {
+      "id": "5",
+      "name": "在线教育管理系统",
+      "industry": "education",
+      "complexity": "medium",
+      "status": "draft",
+      "description": "综合性在线教育平台，支持课程管理、学员管理、教学互动和学习评估等功能",
+      "scenario": "适用于大学、中小学、培训机构等教育组织",
+      "entities": [
+        {
+          "name": "学生",
+          "type": "Actor",
+          "description": "参与学习的学员"
+        },
+        {
+          "name": "教师",
+          "type": "Actor",
+          "description": "提供教学服务的老师"
+        },
+        {
+          "name": "课程",
+          "type": "Entity",
+          "description": "教学课程内容"
+        },
+        {
+          "name": "作业",
+          "type": "Entity",
+          "description": "课程相关的作业和练习"
+        },
+        {
+          "name": "考试系统",
+          "type": "Service",
+          "description": "在线考试和评估系统"
+        }
+      ],
+      "relations": [
+        {
+          "from": "学生",
+          "to": "课程",
+          "type": "学习"
+        },
+        {
+          "from": "教师",
+          "to": "课程",
+          "type": "教授"
+        },
+        {
+          "from": "学生",
+          "to": "作业",
+          "type": "完成"
+        },
+        {
+          "from": "学生",
+          "to": "考试系统",
+          "type": "参与"
+        }
+      ],
+      "tags": ["教育", "学生管理", "课程安排", "教学资源"],
+      "createdBy": "教育信息架构师",
+      "createdAt": "2024-06-05",
+      "lastModified": "2024-06-09"
+    },
+    {
+      "id": "6",
+      "name": "智能制造生产管理",
+      "industry": "manufacturing",
+      "complexity": "high",
+      "status": "active",
+      "description": "智能制造生产管理系统，支持生产计划、设备管理、质量控制和供应链协同等功能",
+      "scenario": "适用于汽车制造、电子组装、工业生产等制造业",
+      "entities": [
+        {
+          "name": "生产线",
+          "type": "Entity",
+          "description": "工厂的生产线设备"
+        },
+        {
+          "name": "产品",
+          "type": "Entity",
+          "description": "生产制造的产品"
+        },
+        {
+          "name": "原材料",
+          "type": "Entity",
+          "description": "生产所需的原材料"
+        },
+        {
+          "name": "质检员",
+          "type": "Actor",
+          "description": "负责质量检查的人员"
+        },
+        {
+          "name": "设备监控",
+          "type": "Service",
+          "description": "生产设备实时监控系统"
+        },
+        {
+          "name": "质量控制",
+          "type": "Service",
+          "description": "产品质量控制系统"
+        }
+      ],
+      "relations": [
+        {
+          "from": "原材料",
+          "to": "生产线",
+          "type": "投入"
+        },
+        {
+          "from": "生产线",
+          "to": "产品",
+          "type": "生产"
+        },
+        {
+          "from": "质检员",
+          "to": "产品",
+          "type": "检查"
+        },
+        {
+          "from": "设备监控",
+          "to": "生产线",
+          "type": "监控"
+        }
+      ],
+      "tags": ["制造", "生产管理", "设备监控", "质量控制"],
+      "createdBy": "制造系统架构师",
+      "createdAt": "2024-06-01",
+      "lastModified": "2024-06-05"
+    }
+  ],
+  "metadata": {
+    "total": 6,
+    "lastUpdated": "2024-06-20T16:00:00Z",
+    "version": "1.0.0"
+  }
+}

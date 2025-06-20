@@ -378,6 +378,7 @@
       "complexity": "复杂度",
       "status": "状态"
     },
+    "allIndustries": "所有行业",
     "complexity": {
       "simple": "简单",
       "medium": "中等",
@@ -417,6 +418,7 @@
       "createTime": "创建时间",
       "tags": "标签",
       "description": "方案描述",
+      "solutionDescription": "方案描述",
       "scenario": "适用场景",
       "businessEntities": "业务实体",
       "entityRelations": "实体关系",

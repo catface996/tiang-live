@@ -378,6 +378,7 @@
       "complexity": "Complexity",
       "status": "Status"
     },
+    "allIndustries": "All Industries",
     "complexity": {
       "simple": "Simple",
       "medium": "Medium",
@@ -417,6 +418,7 @@
       "createTime": "Create Time",
       "tags": "Tags",
       "description": "Description",
+      "solutionDescription": "Solution Description",
       "scenario": "Scenario",
       "businessEntities": "Business Entities",
       "entityRelations": "Entity Relations",

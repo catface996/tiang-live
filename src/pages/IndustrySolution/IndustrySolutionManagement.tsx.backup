@@ -41,6 +41,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
+import industrySolutionDataJson from '../../data/industrySolutionData.json';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -117,8 +118,8 @@ const IndustrySolutionManagement: React.FC = () => {
     setPageTitle(t('solutions.title'));
   }, [t]);
 
-  // 行业方案数据
-  const solutionData: IndustrySolution[] = [
+  // Load solution data from JSON file
+  const solutionData: IndustrySolution[] = industrySolutionDataJson.solutions;
     {
       id: '1',
       name: '电商平台业务架构',
@@ -644,7 +645,7 @@ const IndustrySolutionManagement: React.FC = () => {
             placeholder: t('solutions.search.industryType'),
             width: 120,
             options: [
-              { value: 'all', label: t('solutions.allIndustries') },
+              { value: 'all', label: '所有行业' },
               ...Object.entries(industryMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -788,10 +789,10 @@ const IndustrySolutionManagement: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('solutions.modal.solutionName')} span={2}>
+              <Descriptions.Item label="方案名称" span={2}>
                 {selectedSolution.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.industryType')}>
+              <Descriptions.Item label="行业类型">
                 <Tag 
                   color={industryMap[selectedSolution.industry as keyof typeof industryMap]?.color}
                   icon={industryMap[selectedSolution.industry as keyof typeof industryMap]?.icon}
@@ -827,7 +828,7 @@ const IndustrySolutionManagement: React.FC = () => {
                   ))}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.description')} span={2}>
+              <Descriptions.Item label="方案描述" span={2}>
                 {selectedSolution.description}
               </Descriptions.Item>
               <Descriptions.Item label="适用场景" span={2}>
