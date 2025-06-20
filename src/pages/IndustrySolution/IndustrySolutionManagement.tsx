@@ -799,28 +799,28 @@ const IndustrySolutionManagement: React.FC = () => {
                   {industryMap[selectedSolution.industry as keyof typeof industryMap]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="复杂度">
+              <Descriptions.Item label={t('solutions.modal.complexity')}>
                 {getComplexityTag(selectedSolution.complexity)}
               </Descriptions.Item>
-              <Descriptions.Item label="状态">
+              <Descriptions.Item label={t('solutions.modal.status')}>
                 {getStatusTag(selectedSolution.status)}
               </Descriptions.Item>
-              <Descriptions.Item label="使用次数">
-                {selectedSolution.usageCount}次
+              <Descriptions.Item label={t('solutions.modal.usageCount')}>
+                {selectedSolution.usageCount}{t('common.unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label="业务实体数">
-                {selectedSolution.entities.length}个
+              <Descriptions.Item label={t('solutions.modal.entityCount')}>
+                {selectedSolution.entities.length}{t('common.unit.count')}
               </Descriptions.Item>
-              <Descriptions.Item label="关系数">
-                {selectedSolution.relations.length}个
+              <Descriptions.Item label={t('solutions.modal.relationCount')}>
+                {selectedSolution.relations.length}{t('common.unit.count')}
               </Descriptions.Item>
-              <Descriptions.Item label="创建者">
+              <Descriptions.Item label={t('solutions.modal.creator')}>
                 {selectedSolution.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label="创建时间">
+              <Descriptions.Item label={t('solutions.modal.createTime')}>
                 {selectedSolution.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label="标签" span={2}>
+              <Descriptions.Item label={t('solutions.modal.tags')} span={2}>
                 <Space wrap>
                   {selectedSolution.tags.map(tag => (
                     <Tag key={tag}>{tag}</Tag>
@@ -830,14 +830,14 @@ const IndustrySolutionManagement: React.FC = () => {
               <Descriptions.Item label={t('solutions.modal.description')} span={2}>
                 {selectedSolution.description}
               </Descriptions.Item>
-              <Descriptions.Item label="适用场景" span={2}>
+              <Descriptions.Item label={t('solutions.modal.scenario')} span={2}>
                 {selectedSolution.scenario}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细内容标签页 */}
             <Tabs defaultActiveKey="entities">
-              <Tabs.TabPane tab="业务实体" key="entities">
+              <Tabs.TabPane tab={t('solutions.modal.businessEntities')} key="entities">
                 <Row gutter={16}>
                   {selectedSolution.entities.map(entity => (
                     <Col xs={24} sm={12} lg={8} key={entity.id}>
@@ -858,7 +858,7 @@ const IndustrySolutionManagement: React.FC = () => {
                           {entity.description}
                         </Paragraph>
                         <div>
-                          <Text strong style={{ fontSize: 12 }}>属性:</Text>
+                          <Text strong style={{ fontSize: 12 }}>{t('solutions.modal.attributes')}:</Text>
                           <div style={{ marginTop: 4 }}>
                             {entity.attributes.map(attr => (
                               <Tag key={attr} size="small" style={{ marginBottom: 4 }}>
@@ -873,7 +873,7 @@ const IndustrySolutionManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab="实体关系" key="relations">
+              <Tabs.TabPane tab={t('solutions.modal.entityRelations')} key="relations">
                 <Row gutter={16}>
                   {selectedSolution.relations.map(relation => (
                     <Col xs={24} sm={12} lg={8} key={relation.id}>
