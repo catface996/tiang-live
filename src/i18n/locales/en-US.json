@@ -792,7 +792,9 @@
         "placeholder": "Search Hook task name, description...",
         "type": "Type",
         "status": "Status",
-        "event": "Event"
+        "event": "Event",
+        "allTypes": "All Types",
+        "allStatuses": "All Statuses"
       },
       "form": {
         "name": "Hook Name",
@@ -818,7 +820,9 @@
         "webhook": "Webhook",
         "database": "Database",
         "messageQueue": "Message Queue",
-        "fileSystem": "File System"
+        "fileSystem": "File System",
+        "apiCall": "API Call",
+        "script": "Script"
       },
       "status": {
         "active": "Active",

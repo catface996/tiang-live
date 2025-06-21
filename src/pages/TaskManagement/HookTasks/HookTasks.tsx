@@ -293,8 +293,8 @@ const HookTasks: React.FC = () => {
     webhook: { name: t('tasks.hooks.types.webhook'), color: 'blue', icon: <LinkOutlined /> },
     database: { name: t('tasks.hooks.types.database'), color: 'green', icon: <DatabaseOutlined /> },
     message_queue: { name: t('tasks.hooks.types.messageQueue'), color: 'orange', icon: <BellOutlined /> },
-    api_call: { name: 'API', color: 'purple', icon: <ApiOutlined /> },
-    script: { name: 'Script', color: 'cyan', icon: <CodeOutlined /> },
+    api_call: { name: t('tasks.hooks.types.apiCall'), color: 'purple', icon: <ApiOutlined /> },
+    script: { name: t('tasks.hooks.types.script'), color: 'cyan', icon: <CodeOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
@@ -452,7 +452,7 @@ const HookTasks: React.FC = () => {
             placeholder: t('tasks.hooks.search.type'),
             width: 120,
             options: [
-              { value: 'all', label: '所有类型' },
+              { value: 'all', label: t('tasks.hooks.search.allTypes') },
               ...Object.entries(hookTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -466,10 +466,10 @@ const HookTasks: React.FC = () => {
             placeholder: t('tasks.hooks.search.status'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
-              { value: 'active', label: '活跃' },
-              { value: 'inactive', label: '停用' },
-              { value: 'error', label: '错误' }
+              { value: 'all', label: t('tasks.hooks.search.allStatuses') },
+              { value: 'active', label: t('tasks.hooks.status.active') },
+              { value: 'inactive', label: t('tasks.hooks.status.inactive') },
+              { value: 'error', label: t('tasks.hooks.status.error') }
             ]
           }
         ]}

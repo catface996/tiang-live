@@ -792,7 +792,9 @@
         "placeholder": "搜索Hook任务名称、描述...",
         "type": "类型",
         "status": "状态",
-        "event": "事件"
+        "event": "事件",
+        "allTypes": "所有类型",
+        "allStatuses": "所有状态"
       },
       "form": {
         "name": "Hook名称",
@@ -818,7 +820,9 @@
         "webhook": "Webhook",
         "database": "数据库",
         "messageQueue": "消息队列",
-        "fileSystem": "文件系统"
+        "fileSystem": "文件系统",
+        "apiCall": "API调用",
+        "script": "脚本执行"
       },
       "status": {
         "active": "活跃",
