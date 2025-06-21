@@ -1,0 +1,564 @@
+{
+  "taskCollections": [
+    {
+      "id": "1",
+      "name": "核心服务监控任务",
+      "description": "对核心微服务进行全面的健康检查和性能监控，确保系统稳定运行",
+      "targets": [
+        {
+          "id": "target_1",
+          "name": "用户服务",
+          "type": "entity",
+          "category": "微服务",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_2",
+          "name": "订单服务",
+          "type": "entity",
+          "category": "微服务",
+          "actions": ["health_check", "fault_analysis", "performance_analysis"]
+        },
+        {
+          "id": "target_3",
+          "name": "支付服务",
+          "type": "entity",
+          "category": "微服务",
+          "actions": ["health_check", "security_scan"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每5分钟",
+      "lastRun": "2024-06-21 16:30:00",
+      "nextRun": "2024-06-21 16:35:00",
+      "successRate": 98.5,
+      "totalRuns": 2847,
+      "createdBy": "运维工程师",
+      "createdAt": "2024-06-01",
+      "lastModified": "2024-06-20"
+    },
+    {
+      "id": "2",
+      "name": "业务流程巡检任务",
+      "description": "对关键业务时序进行健康检查和故障分析，保障业务流程正常运转",
+      "targets": [
+        {
+          "id": "target_4",
+          "name": "用户登录流程",
+          "type": "sequence",
+          "category": "认证时序",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_5",
+          "name": "订单处理流程",
+          "type": "sequence",
+          "category": "业务时序",
+          "actions": ["health_check", "fault_analysis"]
+        },
+        {
+          "id": "target_6",
+          "name": "支付处理流程",
+          "type": "sequence",
+          "category": "支付时序",
+          "actions": ["health_check", "security_scan", "performance_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每15分钟",
+      "lastRun": "2024-06-21 16:15:00",
+      "nextRun": "2024-06-21 16:30:00",
+      "successRate": 96.8,
+      "totalRuns": 1456,
+      "createdBy": "业务分析师",
+      "createdAt": "2024-06-05",
+      "lastModified": "2024-06-19"
+    },
+    {
+      "id": "3",
+      "name": "安全扫描任务集",
+      "description": "定期对系统进行安全扫描和漏洞检测，确保系统安全性",
+      "targets": [
+        {
+          "id": "target_7",
+          "name": "API网关",
+          "type": "entity",
+          "category": "网关服务",
+          "actions": ["security_scan", "health_check"]
+        },
+        {
+          "id": "target_8",
+          "name": "数据库集群",
+          "type": "entity",
+          "category": "数据存储",
+          "actions": ["security_scan", "performance_analysis"]
+        }
+      ],
+      "status": "paused",
+      "schedule": "每天",
+      "lastRun": "2024-06-20 02:00:00",
+      "nextRun": "2024-06-22 02:00:00",
+      "successRate": 94.2,
+      "totalRuns": 45,
+      "createdBy": "安全工程师",
+      "createdAt": "2024-05-20",
+      "lastModified": "2024-06-18"
+    },
+    {
+      "id": "4",
+      "name": "数据库性能监控",
+      "description": "监控数据库集群的性能指标，及时发现性能瓶颈和异常",
+      "targets": [
+        {
+          "id": "target_9",
+          "name": "MySQL主库",
+          "type": "entity",
+          "category": "数据库",
+          "actions": ["health_check", "performance_analysis", "fault_analysis"]
+        },
+        {
+          "id": "target_10",
+          "name": "MySQL从库",
+          "type": "entity",
+          "category": "数据库",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_11",
+          "name": "Redis缓存",
+          "type": "entity",
+          "category": "缓存",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_12",
+          "name": "MongoDB集群",
+          "type": "entity",
+          "category": "文档数据库",
+          "actions": ["health_check", "performance_analysis", "security_scan"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每10分钟",
+      "lastRun": "2024-06-21 16:20:00",
+      "nextRun": "2024-06-21 16:30:00",
+      "successRate": 97.3,
+      "totalRuns": 1823,
+      "createdBy": "数据库管理员",
+      "createdAt": "2024-06-03",
+      "lastModified": "2024-06-21"
+    },
+    {
+      "id": "5",
+      "name": "容器化服务监控",
+      "description": "监控Kubernetes集群中的容器化服务，确保容器健康运行",
+      "targets": [
+        {
+          "id": "target_13",
+          "name": "Nginx Ingress",
+          "type": "entity",
+          "category": "负载均衡",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_14",
+          "name": "商品服务Pod",
+          "type": "entity",
+          "category": "容器服务",
+          "actions": ["health_check", "fault_analysis", "performance_analysis"]
+        },
+        {
+          "id": "target_15",
+          "name": "库存服务Pod",
+          "type": "entity",
+          "category": "容器服务",
+          "actions": ["health_check", "performance_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每3分钟",
+      "lastRun": "2024-06-21 16:33:00",
+      "nextRun": "2024-06-21 16:36:00",
+      "successRate": 99.1,
+      "totalRuns": 4521,
+      "createdBy": "DevOps工程师",
+      "createdAt": "2024-06-08",
+      "lastModified": "2024-06-21"
+    },
+    {
+      "id": "6",
+      "name": "消息队列健康检查",
+      "description": "监控消息队列系统的健康状态和消息处理性能",
+      "targets": [
+        {
+          "id": "target_16",
+          "name": "RabbitMQ集群",
+          "type": "entity",
+          "category": "消息队列",
+          "actions": ["health_check", "performance_analysis", "fault_analysis"]
+        },
+        {
+          "id": "target_17",
+          "name": "Kafka集群",
+          "type": "entity",
+          "category": "流处理",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_18",
+          "name": "消息处理流程",
+          "type": "sequence",
+          "category": "消息时序",
+          "actions": ["health_check", "fault_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每8分钟",
+      "lastRun": "2024-06-21 16:24:00",
+      "nextRun": "2024-06-21 16:32:00",
+      "successRate": 95.7,
+      "totalRuns": 892,
+      "createdBy": "中间件工程师",
+      "createdAt": "2024-06-10",
+      "lastModified": "2024-06-20"
+    },
+    {
+      "id": "7",
+      "name": "前端应用监控",
+      "description": "监控前端应用的可用性和用户体验指标",
+      "targets": [
+        {
+          "id": "target_19",
+          "name": "Web应用",
+          "type": "entity",
+          "category": "前端应用",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_20",
+          "name": "移动端应用",
+          "type": "entity",
+          "category": "移动应用",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_21",
+          "name": "CDN节点",
+          "type": "entity",
+          "category": "内容分发",
+          "actions": ["health_check", "performance_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每2分钟",
+      "lastRun": "2024-06-21 16:34:00",
+      "nextRun": "2024-06-21 16:36:00",
+      "successRate": 98.9,
+      "totalRuns": 6234,
+      "createdBy": "前端工程师",
+      "createdAt": "2024-06-12",
+      "lastModified": "2024-06-21"
+    },
+    {
+      "id": "8",
+      "name": "第三方服务集成监控",
+      "description": "监控与第三方服务的集成状态和接口可用性",
+      "targets": [
+        {
+          "id": "target_22",
+          "name": "支付宝接口",
+          "type": "entity",
+          "category": "第三方API",
+          "actions": ["health_check", "performance_analysis", "security_scan"]
+        },
+        {
+          "id": "target_23",
+          "name": "微信支付接口",
+          "type": "entity",
+          "category": "第三方API",
+          "actions": ["health_check", "performance_analysis", "security_scan"]
+        },
+        {
+          "id": "target_24",
+          "name": "短信服务接口",
+          "type": "entity",
+          "category": "第三方API",
+          "actions": ["health_check", "fault_analysis"]
+        },
+        {
+          "id": "target_25",
+          "name": "第三方支付流程",
+          "type": "sequence",
+          "category": "支付时序",
+          "actions": ["health_check", "performance_analysis", "fault_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每6分钟",
+      "lastRun": "2024-06-21 16:30:00",
+      "nextRun": "2024-06-21 16:36:00",
+      "successRate": 93.4,
+      "totalRuns": 1567,
+      "createdBy": "集成工程师",
+      "createdAt": "2024-06-15",
+      "lastModified": "2024-06-21"
+    },
+    {
+      "id": "9",
+      "name": "日志系统监控",
+      "description": "监控日志收集和分析系统的运行状态",
+      "targets": [
+        {
+          "id": "target_26",
+          "name": "ELK集群",
+          "type": "entity",
+          "category": "日志系统",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_27",
+          "name": "Fluentd收集器",
+          "type": "entity",
+          "category": "日志收集",
+          "actions": ["health_check", "fault_analysis"]
+        },
+        {
+          "id": "target_28",
+          "name": "日志分析流程",
+          "type": "sequence",
+          "category": "分析时序",
+          "actions": ["health_check", "performance_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每12分钟",
+      "lastRun": "2024-06-21 16:24:00",
+      "nextRun": "2024-06-21 16:36:00",
+      "successRate": 96.2,
+      "totalRuns": 743,
+      "createdBy": "运维工程师",
+      "createdAt": "2024-06-07",
+      "lastModified": "2024-06-19"
+    },
+    {
+      "id": "10",
+      "name": "备份系统检查",
+      "description": "定期检查数据备份系统的完整性和可恢复性",
+      "targets": [
+        {
+          "id": "target_29",
+          "name": "数据库备份",
+          "type": "entity",
+          "category": "备份系统",
+          "actions": ["health_check", "fault_analysis"]
+        },
+        {
+          "id": "target_30",
+          "name": "文件备份",
+          "type": "entity",
+          "category": "备份系统",
+          "actions": ["health_check", "security_scan"]
+        },
+        {
+          "id": "target_31",
+          "name": "备份恢复流程",
+          "type": "sequence",
+          "category": "恢复时序",
+          "actions": ["health_check", "fault_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每天",
+      "lastRun": "2024-06-21 03:00:00",
+      "nextRun": "2024-06-22 03:00:00",
+      "successRate": 99.5,
+      "totalRuns": 156,
+      "createdBy": "备份管理员",
+      "createdAt": "2024-05-25",
+      "lastModified": "2024-06-20"
+    },
+    {
+      "id": "11",
+      "name": "网络设备监控",
+      "description": "监控网络设备的连通性和性能指标",
+      "targets": [
+        {
+          "id": "target_32",
+          "name": "核心交换机",
+          "type": "entity",
+          "category": "网络设备",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_33",
+          "name": "防火墙",
+          "type": "entity",
+          "category": "安全设备",
+          "actions": ["health_check", "security_scan", "performance_analysis"]
+        },
+        {
+          "id": "target_34",
+          "name": "负载均衡器",
+          "type": "entity",
+          "category": "负载均衡",
+          "actions": ["health_check", "performance_analysis", "fault_analysis"]
+        }
+      ],
+      "status": "active",
+      "schedule": "每4分钟",
+      "lastRun": "2024-06-21 16:32:00",
+      "nextRun": "2024-06-21 16:36:00",
+      "successRate": 97.8,
+      "totalRuns": 2156,
+      "createdBy": "网络工程师",
+      "createdAt": "2024-06-02",
+      "lastModified": "2024-06-21"
+    },
+    {
+      "id": "12",
+      "name": "AI模型服务监控",
+      "description": "监控AI模型推理服务的可用性和响应性能",
+      "targets": [
+        {
+          "id": "target_35",
+          "name": "推荐算法服务",
+          "type": "entity",
+          "category": "AI服务",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_36",
+          "name": "图像识别服务",
+          "type": "entity",
+          "category": "AI服务",
+          "actions": ["health_check", "performance_analysis", "fault_analysis"]
+        },
+        {
+          "id": "target_37",
+          "name": "自然语言处理服务",
+          "type": "entity",
+          "category": "AI服务",
+          "actions": ["health_check", "performance_analysis"]
+        },
+        {
+          "id": "target_38",
+          "name": "AI推理流程",
+          "type": "sequence",
+          "category": "AI时序",
+          "actions": ["health_check", "performance_analysis", "fault_analysis"]
+        }
+      ],
+      "status": "draft",
+      "schedule": "每7分钟",
+      "lastRun": "2024-06-20 15:45:00",
+      "nextRun": "2024-06-22 09:00:00",
+      "successRate": 92.1,
+      "totalRuns": 234,
+      "createdBy": "AI工程师",
+      "createdAt": "2024-06-18",
+      "lastModified": "2024-06-21"
+    }
+  ],
+  "actionTypes": {
+    "health_check": {
+      "name": "健康检查",
+      "color": "green",
+      "description": "检查服务或组件的基本健康状态"
+    },
+    "fault_analysis": {
+      "name": "故障分析",
+      "color": "red",
+      "description": "分析和诊断系统故障"
+    },
+    "performance_analysis": {
+      "name": "性能分析",
+      "color": "blue",
+      "description": "分析系统性能指标和瓶颈"
+    },
+    "security_scan": {
+      "name": "安全扫描",
+      "color": "orange",
+      "description": "扫描安全漏洞和风险"
+    }
+  },
+  "targetCategories": {
+    "微服务": {
+      "name": "微服务",
+      "description": "微服务架构中的服务组件"
+    },
+    "数据库": {
+      "name": "数据库",
+      "description": "各类数据库系统"
+    },
+    "缓存": {
+      "name": "缓存",
+      "description": "缓存系统和服务"
+    },
+    "消息队列": {
+      "name": "消息队列",
+      "description": "消息队列和流处理系统"
+    },
+    "网络设备": {
+      "name": "网络设备",
+      "description": "网络基础设施设备"
+    },
+    "安全设备": {
+      "name": "安全设备",
+      "description": "安全防护设备"
+    },
+    "负载均衡": {
+      "name": "负载均衡",
+      "description": "负载均衡器和代理"
+    },
+    "容器服务": {
+      "name": "容器服务",
+      "description": "容器化部署的服务"
+    },
+    "前端应用": {
+      "name": "前端应用",
+      "description": "前端Web应用"
+    },
+    "移动应用": {
+      "name": "移动应用",
+      "description": "移动端应用"
+    },
+    "第三方API": {
+      "name": "第三方API",
+      "description": "外部第三方接口"
+    },
+    "AI服务": {
+      "name": "AI服务",
+      "description": "人工智能相关服务"
+    },
+    "备份系统": {
+      "name": "备份系统",
+      "description": "数据备份和恢复系统"
+    },
+    "日志系统": {
+      "name": "日志系统",
+      "description": "日志收集和分析系统"
+    }
+  },
+  "scheduleOptions": [
+    "每分钟",
+    "每2分钟",
+    "每3分钟",
+    "每4分钟",
+    "每5分钟",
+    "每6分钟",
+    "每7分钟",
+    "每8分钟",
+    "每10分钟",
+    "每12分钟",
+    "每15分钟",
+    "每30分钟",
+    "每小时",
+    "每2小时",
+    "每4小时",
+    "每6小时",
+    "每12小时",
+    "每天",
+    "每周",
+    "每月"
+  ]
+}

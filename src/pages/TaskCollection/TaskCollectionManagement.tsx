@@ -50,6 +50,8 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
+// 导入mock数据
+import taskCollectionMockData from '../../data/taskCollectionData.json';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -362,113 +364,8 @@ const TaskCollectionManagement: React.FC = () => {
     { id: 'health_check_flow', name: '健康检查流程', category: '监控时序' }
   ];
 
-  // 任务集合数据
-  const taskCollectionData: TaskCollection[] = [
-    {
-      id: '1',
-      name: '核心服务监控任务',
-      description: '对核心微服务进行全面的健康检查和性能监控',
-      targets: [
-        {
-          id: 'target_1',
-          name: '用户服务',
-          type: 'entity',
-          category: '微服务',
-          actions: ['health_check', 'performance_analysis']
-        },
-        {
-          id: 'target_2',
-          name: '订单服务',
-          type: 'entity',
-          category: '微服务',
-          actions: ['health_check', 'fault_analysis', 'performance_analysis']
-        },
-        {
-          id: 'target_3',
-          name: '支付服务',
-          type: 'entity',
-          category: '微服务',
-          actions: ['health_check', 'security_scan']
-        }
-      ],
-      status: 'active',
-      schedule: '每5分钟',
-      lastRun: '2024-06-15 14:30:00',
-      nextRun: '2024-06-15 14:35:00',
-      successRate: 98.5,
-      totalRuns: 2847,
-      createdBy: '运维工程师',
-      createdAt: '2024-06-01',
-      lastModified: '2024-06-14'
-    },
-    {
-      id: '2',
-      name: '业务流程巡检任务',
-      description: '对关键业务时序进行健康检查和故障分析',
-      targets: [
-        {
-          id: 'target_4',
-          name: '用户登录流程',
-          type: 'sequence',
-          category: '认证时序',
-          actions: ['health_check', 'performance_analysis']
-        },
-        {
-          id: 'target_5',
-          name: '订单处理流程',
-          type: 'sequence',
-          category: '业务时序',
-          actions: ['health_check', 'fault_analysis']
-        },
-        {
-          id: 'target_6',
-          name: '支付处理流程',
-          type: 'sequence',
-          category: '支付时序',
-          actions: ['health_check', 'security_scan', 'performance_analysis']
-        }
-      ],
-      status: 'active',
-      schedule: '每15分钟',
-      lastRun: '2024-06-15 14:15:00',
-      nextRun: '2024-06-15 14:30:00',
-      successRate: 96.8,
-      totalRuns: 1456,
-      createdBy: '业务分析师',
-      createdAt: '2024-06-05',
-      lastModified: '2024-06-13'
-    },
-    {
-      id: '3',
-      name: '安全扫描任务集',
-      description: '定期对系统进行安全扫描和漏洞检测',
-      targets: [
-        {
-          id: 'target_7',
-          name: 'API网关',
-          type: 'entity',
-          category: '网关服务',
-          actions: ['security_scan', 'health_check']
-        },
-        {
-          id: 'target_8',
-          name: '数据库集群',
-          type: 'entity',
-          category: '数据存储',
-          actions: ['security_scan', 'performance_analysis']
-        }
-      ],
-      status: 'paused',
-      schedule: '每天',
-      lastRun: '2024-06-14 02:00:00',
-      nextRun: '2024-06-16 02:00:00',
-      successRate: 94.2,
-      totalRuns: 45,
-      createdBy: '安全工程师',
-      createdAt: '2024-05-20',
-      lastModified: '2024-06-10'
-    }
-  ];
+  // 从JSON文件获取任务集合数据
+  const taskCollectionData: TaskCollection[] = taskCollectionMockData.taskCollections;
 
   const actionTypeMap = {
     health_check: { name: '健康检查', color: 'green', icon: <HeartOutlined /> },
