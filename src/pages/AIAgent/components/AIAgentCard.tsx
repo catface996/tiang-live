@@ -59,39 +59,24 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   border-radius: 8px !important;
+  overflow: hidden; /* 确保内容不会超出圆角 */
   
-  /* 确保所有角都是圆角 */
-  .ant-card-head {
-    border-radius: 8px 8px 0 0 !important;
+  /* 强制卡片本身的圆角 */
+  &,
+  &.ant-card {
+    border-radius: 8px !important;
   }
   
-  .ant-card-body {
-    border-radius: 0 0 8px 8px !important;
-  }
-  
-  /* 当没有actions时，body的底部也要圆角 */
-  &:not(.ant-card-actions) .ant-card-body {
-    border-radius: 0 0 8px 8px !important;
-  }
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: ${props => props.$isDark 
-      ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
-      : '0 4px 12px rgba(0, 0, 0, 0.1)'
-    };
-    border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
-  }
-  
+  /* 卡片主体样式 */
   .ant-card-body {
     padding: 20px;
     background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   }
   
+  /* actions区域样式 */
   .ant-card-actions {
     background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
     border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-    border-radius: 0 0 8px 8px !important;
     
     li {
       border-right: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
@@ -103,6 +88,17 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
     
     .ant-btn {
       color: ${props => props.$isDark ? '#ffffff' : '#595959'};
+    }
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${props => props.$isDark 
+      ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
+      : '0 4px 12px rgba(0, 0, 0, 0.1)'
+    };
+    border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+  }
       
       &:hover {
         color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
