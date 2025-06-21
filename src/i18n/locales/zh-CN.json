@@ -1491,6 +1491,8 @@
       "versionPlaceholder": "请输入模型版本",
       "endpointPlaceholder": "请输入API端点地址",
       "keyPlaceholder": "请输入API密钥",
+      "maxTokensPlaceholder": "请输入最大Token数",
+      "temperaturePlaceholder": "请设置温度参数",
       "descriptionPlaceholder": "请输入模型的功能描述和使用场景",
       "nameRequired": "请输入模型名称",
       "providerRequired": "请选择提供商",
@@ -1498,7 +1500,33 @@
       "versionRequired": "请输入模型版本",
       "endpointRequired": "请输入API端点",
       "keyRequired": "请输入API密钥",
+      "maxTokensRequired": "请输入最大Token数",
+      "temperatureRequired": "请设置温度参数",
       "descriptionRequired": "请输入模型描述"
+    },
+    "capabilities": {
+      "textGeneration": "文本生成",
+      "codeGeneration": "代码生成",
+      "qaDialog": "问答对话",
+      "textAnalysis": "文本分析",
+      "translation": "翻译",
+      "codeAnalysis": "代码分析",
+      "logicalReasoning": "逻辑推理",
+      "mathCalculation": "数学计算",
+      "documentAnalysis": "文档分析",
+      "textEmbedding": "文本嵌入",
+      "semanticSearch": "语义搜索",
+      "similarityCalculation": "相似度计算",
+      "clusterAnalysis": "聚类分析",
+      "multimodalUnderstanding": "多模态理解",
+      "creativeWriting": "创意写作"
+    },
+    "mockData": {
+      "systemAdmin": "系统管理员",
+      "gpt4Description": "最新的GPT-4 Turbo模型，支持128K上下文长度，适用于复杂推理和长文本处理",
+      "claudeDescription": "Claude-3 Sonnet模型，在推理、数学和编程方面表现优异，适合复杂任务处理",
+      "embeddingDescription": "OpenAI的文本嵌入模型，用于文本相似度计算和语义搜索",
+      "geminiDescription": "Google的Gemini Pro模型，支持多模态输入，在创意写作方面表现出色"
     },
     "detail": {
       "title": "模型详情",

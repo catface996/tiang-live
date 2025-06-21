@@ -1390,6 +1390,8 @@
       "versionPlaceholder": "Enter model version",
       "endpointPlaceholder": "Enter API endpoint URL",
       "keyPlaceholder": "Enter API key",
+      "maxTokensPlaceholder": "Enter max tokens",
+      "temperaturePlaceholder": "Set temperature parameter",
       "descriptionPlaceholder": "Enter model description and use cases",
       "nameRequired": "Please enter model name",
       "providerRequired": "Please select provider",
@@ -1397,7 +1399,33 @@
       "versionRequired": "Please enter model version",
       "endpointRequired": "Please enter API endpoint",
       "keyRequired": "Please enter API key",
+      "maxTokensRequired": "Please enter max tokens",
+      "temperatureRequired": "Please set temperature parameter",
       "descriptionRequired": "Please enter model description"
+    },
+    "capabilities": {
+      "textGeneration": "Text Generation",
+      "codeGeneration": "Code Generation",
+      "qaDialog": "Q&A Dialog",
+      "textAnalysis": "Text Analysis",
+      "translation": "Translation",
+      "codeAnalysis": "Code Analysis",
+      "logicalReasoning": "Logical Reasoning",
+      "mathCalculation": "Math Calculation",
+      "documentAnalysis": "Document Analysis",
+      "textEmbedding": "Text Embedding",
+      "semanticSearch": "Semantic Search",
+      "similarityCalculation": "Similarity Calculation",
+      "clusterAnalysis": "Cluster Analysis",
+      "multimodalUnderstanding": "Multimodal Understanding",
+      "creativeWriting": "Creative Writing"
+    },
+    "mockData": {
+      "systemAdmin": "System Administrator",
+      "gpt4Description": "Latest GPT-4 Turbo model with 128K context length, suitable for complex reasoning and long text processing",
+      "claudeDescription": "Claude-3 Sonnet model, excellent in reasoning, mathematics and programming, suitable for complex task processing",
+      "embeddingDescription": "OpenAI's text embedding model for text similarity calculation and semantic search",
+      "geminiDescription": "Google's Gemini Pro model with multimodal input support, excellent in creative writing"
     },
     "detail": {
       "title": "Model Details",
