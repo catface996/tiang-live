@@ -24,6 +24,7 @@ import {
   SettingOutlined,
   ThunderboltOutlined
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 const { Title, Text, Paragraph } = Typography;
@@ -148,6 +149,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   onSubmit,
   loading = false
 }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [activeTab, setActiveTab] = useState('basic');
   const [selectedPromptType, setSelectedPromptType] = useState<'template' | 'custom'>('template');
@@ -177,35 +179,35 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   const promptTemplates = [
     {
       id: 'customer-service-template',
-      name: '客服助手模板',
-      description: '专业的客服对话模板，包含问候、问题解答、转接等场景',
-      content: '你是{{company_name}}的专业客服助手。工作时间：{{service_hours}}。请友好、准确地回答用户问题，如无法解决请及时转接人工客服。',
+      name: t('aiAgent.form.promptTemplates.customerService.name'),
+      description: t('aiAgent.form.promptTemplates.customerService.description'),
+      content: t('aiAgent.form.promptTemplates.customerService.content'),
       variables: ['company_name', 'service_hours'],
-      category: '对话'
+      category: t('aiAgent.form.promptTemplates.categories.dialogue')
     },
     {
       id: 'data-analysis-template',
-      name: '数据分析模板',
-      description: '数据分析和报告生成模板，支持多种数据格式',
-      content: '你是一个专业的数据分析师。请分析提供的数据，生成清晰的分析报告，包含关键指标、趋势分析和建议。',
+      name: t('aiAgent.form.promptTemplates.dataAnalysis.name'),
+      description: t('aiAgent.form.promptTemplates.dataAnalysis.description'),
+      content: t('aiAgent.form.promptTemplates.dataAnalysis.content'),
       variables: [],
-      category: '分析'
+      category: t('aiAgent.form.promptTemplates.categories.analysis')
     },
     {
       id: 'code-review-template',
-      name: '代码审查模板',
-      description: '代码质量审查和建议模板',
-      content: '你是一个资深的代码审查专家。请仔细审查代码，关注代码质量、安全性、性能和最佳实践，提供具体的改进建议。',
+      name: t('aiAgent.form.promptTemplates.codeReview.name'),
+      description: t('aiAgent.form.promptTemplates.codeReview.description'),
+      content: t('aiAgent.form.promptTemplates.codeReview.content'),
       variables: [],
-      category: '开发'
+      category: t('aiAgent.form.promptTemplates.categories.development')
     },
     {
       id: 'monitoring-template',
-      name: '系统监控模板',
-      description: '系统监控和告警处理模板',
-      content: '你是一个系统监控专家。请分析系统指标和告警信息，判断问题严重程度，提供处理建议和预防措施。',
+      name: t('aiAgent.form.promptTemplates.monitoring.name'),
+      description: t('aiAgent.form.promptTemplates.monitoring.description'),
+      content: t('aiAgent.form.promptTemplates.monitoring.content'),
       variables: [],
-      category: '运维'
+      category: t('aiAgent.form.promptTemplates.categories.operations')
     }
   ];
 
@@ -216,7 +218,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       provider: 'OpenAI',
       name: 'GPT-4',
       version: 'gpt-4-0613',
-      description: '最先进的大语言模型，适合复杂任务',
+      description: t('aiAgent.form.models.gpt4.description'),
       status: 'available',
       pricing: '$0.03/1K tokens'
     },
@@ -225,7 +227,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       provider: 'OpenAI',
       name: 'GPT-3.5 Turbo',
       version: 'gpt-3.5-turbo-0613',
-      description: '高性价比的对话模型，响应速度快',
+      description: t('aiAgent.form.models.gpt35.description'),
       status: 'available',
       pricing: '$0.002/1K tokens'
     },
@@ -234,18 +236,18 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       provider: 'Anthropic',
       name: 'Claude 3',
       version: 'claude-3-opus-20240229',
-      description: '强大的推理能力，适合分析任务',
+      description: t('aiAgent.form.models.claude3.description'),
       status: 'available',
       pricing: '$0.015/1K tokens'
     },
     {
       id: 'local-llama2',
-      provider: '本地部署',
+      provider: t('aiAgent.form.models.localDeployment'),
       name: 'Llama 2',
       version: 'llama2-7b-chat',
-      description: '开源模型，本地部署，数据安全',
+      description: t('aiAgent.form.models.llama2.description'),
       status: 'available',
-      pricing: '免费'
+      pricing: t('aiAgent.form.models.free')
     }
   ];
 
@@ -253,36 +255,36 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   const mcpServers = [
     {
       id: 'database-mcp',
-      name: '数据库连接器',
-      description: '连接和查询各种数据库',
+      name: t('aiAgent.form.mcpServers.database.name'),
+      description: t('aiAgent.form.mcpServers.database.description'),
       status: 'running',
       capabilities: ['mysql', 'postgresql', 'mongodb']
     },
     {
       id: 'email-mcp',
-      name: '邮件服务',
-      description: '发送和接收邮件',
+      name: t('aiAgent.form.mcpServers.email.name'),
+      description: t('aiAgent.form.mcpServers.email.description'),
       status: 'running',
       capabilities: ['smtp', 'imap', 'templates']
     },
     {
       id: 'file-mcp',
-      name: '文件操作',
-      description: '文件读写和管理',
+      name: t('aiAgent.form.mcpServers.file.name'),
+      description: t('aiAgent.form.mcpServers.file.description'),
       status: 'running',
       capabilities: ['read', 'write', 'search']
     },
     {
       id: 'api-mcp',
-      name: 'API调用器',
-      description: '调用外部API服务',
+      name: t('aiAgent.form.mcpServers.api.name'),
+      description: t('aiAgent.form.mcpServers.api.description'),
       status: 'running',
       capabilities: ['http', 'rest', 'graphql']
     },
     {
       id: 'scheduler-mcp',
-      name: '任务调度器',
-      description: '定时任务和调度管理',
+      name: t('aiAgent.form.mcpServers.scheduler.name'),
+      description: t('aiAgent.form.mcpServers.scheduler.description'),
       status: 'stopped',
       capabilities: ['cron', 'interval', 'webhook']
     }
@@ -341,13 +343,13 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
         onChange={(e) => setSelectedPromptType(e.target.value)}
         style={{ marginBottom: 16 }}
       >
-        <Radio value="template">使用提示词模板</Radio>
-        <Radio value="custom">自定义提示词</Radio>
+        <Radio value="template">{t('aiAgent.form.prompts.useTemplate')}</Radio>
+        <Radio value="custom">{t('aiAgent.form.prompts.customPrompt')}</Radio>
       </Radio.Group>
 
       {selectedPromptType === 'template' ? (
         <div>
-          <Text strong>选择提示词模板：</Text>
+          <Text strong>{t('aiAgent.form.prompts.selectTemplate')}：</Text>
           <div style={{ marginTop: 12 }}>
             {promptTemplates.map(template => (
               <div
@@ -366,12 +368,12 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                 </div>
                 {selectedPromptTemplate === template.id && template.variables.length > 0 && (
                   <div className="prompt-variables">
-                    <Text strong>模板变量：</Text>
+                    <Text strong>{t('aiAgent.form.prompts.templateVariables')}：</Text>
                     {template.variables.map(variable => (
                       <div key={variable} style={{ marginTop: 8 }}>
                         <Text>{variable}:</Text>
                         <Input
-                          placeholder={`请输入${variable}的值`}
+                          placeholder={t('aiAgent.form.prompts.enterVariableValue', { variable })}
                           value={promptVariables[variable] || ''}
                           onChange={(e) => handleVariableChange(variable, e.target.value)}
                           style={{ marginTop: 4 }}
@@ -386,17 +388,17 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
         </div>
       ) : (
         <div>
-          <Text strong>自定义提示词：</Text>
+          <Text strong>{t('aiAgent.form.prompts.customPrompt')}：</Text>
           <TextArea
             rows={8}
-            placeholder="请输入自定义的系统提示词..."
+            placeholder={t('aiAgent.form.prompts.customPromptPlaceholder')}
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             style={{ marginTop: 8 }}
           />
           <Alert
-            message="提示"
-            description="自定义提示词将作为AI智能体的系统指令，请确保内容准确、清晰。"
+            message={t('aiAgent.form.prompts.tip')}
+            description={t('aiAgent.form.prompts.customPromptTip')}
             type="info"
             showIcon
             style={{ marginTop: 12 }}
@@ -408,7 +410,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
 
   const renderModelSelector = () => (
     <ModelSelector>
-      <Text strong>选择AI模型：</Text>
+      <Text strong>{t('aiAgent.form.models.selectModel')}：</Text>
       <div style={{ marginTop: 12 }}>
         {availableModels.map(model => (
           <div
@@ -420,11 +422,11 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                 <Text strong>{model.provider} - {model.name}</Text>
                 <Tag color={model.status === 'available' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                  {model.status === 'available' ? '可用' : '不可用'}
+                  {model.status === 'available' ? t('aiAgent.form.models.available') : t('aiAgent.form.models.unavailable')}
                 </Tag>
               </div>
               <Text type="secondary" style={{ fontSize: 12 }}>
-                版本: {model.version} | 定价: {model.pricing}
+                {t('aiAgent.form.models.version')}: {model.version} | {t('aiAgent.form.models.pricing')}: {model.pricing}
               </Text>
               <Paragraph style={{ margin: '4px 0 0 0', fontSize: 12, color: '#666' }}>
                 {model.description}
@@ -438,9 +440,9 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
 
   const renderMcpServerSelector = () => (
     <div>
-      <Text strong>选择MCP Server：</Text>
+      <Text strong>{t('aiAgent.form.mcpServers.selectServers')}：</Text>
       <Paragraph type="secondary" style={{ marginTop: 4 }}>
-        MCP Server提供额外的工具和能力，如数据库访问、文件操作等。
+        {t('aiAgent.form.mcpServers.description')}
       </Paragraph>
       <div style={{ marginTop: 12 }}>
         {mcpServers.map(server => (
@@ -466,7 +468,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                     <Text strong>{server.name}</Text>
                   </Checkbox>
                   <Tag color={server.status === 'running' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                    {server.status === 'running' ? '运行中' : '已停止'}
+                    {server.status === 'running' ? t('aiAgent.form.mcpServers.running') : t('aiAgent.form.mcpServers.stopped')}
                   </Tag>
                 </div>
                 <Text type="secondary" style={{ fontSize: 12 }}>
@@ -490,63 +492,63 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   const tabItems = [
     {
       key: 'basic',
-      label: '基本信息',
+      label: t('aiAgent.form.tabs.basic'),
       icon: <SettingOutlined />,
       children: (
         <Row gutter={24}>
           <Col span={24}>
             <Form.Item
               name="name"
-              label="智能体名称"
-              rules={[{ required: true, message: '请输入智能体名称' }]}
+              label={t('aiAgent.form.fields.name')}
+              rules={[{ required: true, message: t('aiAgent.form.validation.nameRequired') }]}
             >
-              <Input placeholder="请输入智能体名称" />
+              <Input placeholder={t('aiAgent.form.placeholders.name')} />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
               name="description"
-              label="描述"
-              rules={[{ required: true, message: '请输入描述' }]}
+              label={t('aiAgent.form.fields.description')}
+              rules={[{ required: true, message: t('aiAgent.form.validation.descriptionRequired') }]}
             >
-              <TextArea rows={3} placeholder="请输入智能体的功能描述" />
+              <TextArea rows={3} placeholder={t('aiAgent.form.placeholders.description')} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               name="type"
-              label="智能体类型"
-              rules={[{ required: true, message: '请选择智能体类型' }]}
+              label={t('aiAgent.form.fields.type')}
+              rules={[{ required: true, message: t('aiAgent.form.validation.typeRequired') }]}
             >
-              <Select placeholder="请选择类型">
-                <Option value="chat">对话助手</Option>
-                <Option value="task">任务执行</Option>
-                <Option value="analysis">数据分析</Option>
-                <Option value="monitoring">系统监控</Option>
+              <Select placeholder={t('aiAgent.form.placeholders.type')}>
+                <Option value="chat">{t('aiAgent.form.types.chat')}</Option>
+                <Option value="task">{t('aiAgent.form.types.task')}</Option>
+                <Option value="analysis">{t('aiAgent.form.types.analysis')}</Option>
+                <Option value="monitoring">{t('aiAgent.form.types.monitoring')}</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               name="status"
-              label="状态"
-              rules={[{ required: true, message: '请选择状态' }]}
+              label={t('aiAgent.form.fields.status')}
+              rules={[{ required: true, message: t('aiAgent.form.validation.statusRequired') }]}
             >
-              <Select placeholder="请选择状态">
-                <Option value="active">激活</Option>
-                <Option value="inactive">未激活</Option>
-                <Option value="training">训练中</Option>
+              <Select placeholder={t('aiAgent.form.placeholders.status')}>
+                <Option value="active">{t('aiAgent.form.status.active')}</Option>
+                <Option value="inactive">{t('aiAgent.form.status.inactive')}</Option>
+                <Option value="training">{t('aiAgent.form.status.training')}</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
               name="tags"
-              label="标签"
+              label={t('aiAgent.form.fields.tags')}
             >
               <Select
                 mode="tags"
-                placeholder="请输入标签，按回车添加"
+                placeholder={t('aiAgent.form.placeholders.tags')}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -556,25 +558,25 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
     },
     {
       key: 'prompts',
-      label: '提示词配置',
+      label: t('aiAgent.form.tabs.prompts'),
       icon: <BulbOutlined />,
       children: renderPromptEditor()
     },
     {
       key: 'model',
-      label: '模型选择',
+      label: t('aiAgent.form.tabs.model'),
       icon: <ApiOutlined />,
       children: (
         <div>
           {renderModelSelector()}
           <Divider />
-          <Text strong>模型参数配置：</Text>
+          <Text strong>{t('aiAgent.form.models.parameterConfig')}：</Text>
           <Row gutter={16} style={{ marginTop: 16 }}>
             <Col span={12}>
               <Form.Item
                 name={['model', 'config', 'temperature']}
                 label="Temperature"
-                tooltip="控制输出的随机性，值越高越随机"
+                tooltip={t('aiAgent.form.models.temperatureTooltip')}
               >
                 <Slider
                   min={0}
@@ -588,7 +590,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <Form.Item
                 name={['model', 'config', 'maxTokens']}
                 label="Max Tokens"
-                tooltip="最大输出token数量"
+                tooltip={t('aiAgent.form.models.maxTokensTooltip')}
               >
                 <InputNumber
                   min={1}
@@ -601,7 +603,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <Form.Item
                 name={['model', 'config', 'topP']}
                 label="Top P"
-                tooltip="核采样参数，控制输出的多样性"
+                tooltip={t('aiAgent.form.models.topPTooltip')}
               >
                 <Slider
                   min={0}
@@ -615,7 +617,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <Form.Item
                 name={['model', 'config', 'frequencyPenalty']}
                 label="Frequency Penalty"
-                tooltip="频率惩罚，减少重复内容"
+                tooltip={t('aiAgent.form.models.frequencyPenaltyTooltip')}
               >
                 <Slider
                   min={-2}
@@ -631,20 +633,20 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
     },
     {
       key: 'mcp',
-      label: 'MCP Server',
+      label: t('aiAgent.form.tabs.mcpServer'),
       icon: <ThunderboltOutlined />,
       children: renderMcpServerSelector()
     },
     {
       key: 'settings',
-      label: '高级设置',
+      label: t('aiAgent.form.tabs.settings'),
       icon: <SettingOutlined />,
       children: (
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item
               name={['settings', 'autoStart']}
-              label="自动启动"
+              label={t('aiAgent.form.settings.autoStart')}
               valuePropName="checked"
             >
               <Switch />
@@ -653,7 +655,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={12}>
             <Form.Item
               name={['settings', 'maxConcurrency']}
-              label="最大并发数"
+              label={t('aiAgent.form.settings.maxConcurrency')}
             >
               <InputNumber min={1} max={100} />
             </Form.Item>
@@ -661,7 +663,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={12}>
             <Form.Item
               name={['settings', 'timeout']}
-              label="超时时间(秒)"
+              label={t('aiAgent.form.settings.timeout')}
             >
               <InputNumber min={5} max={300} />
             </Form.Item>
@@ -669,7 +671,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={12}>
             <Form.Item
               name={['settings', 'retryCount']}
-              label="重试次数"
+              label={t('aiAgent.form.settings.retryCount')}
             >
               <InputNumber min={0} max={10} />
             </Form.Item>
@@ -677,7 +679,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={24}>
             <Form.Item
               name={['settings', 'logLevel']}
-              label="日志级别"
+              label={t('aiAgent.form.settings.logLevel')}
             >
               <Select>
                 <Option value="debug">Debug</Option>

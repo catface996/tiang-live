@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import { AIAgentFormComponent } from './components';
 
@@ -59,6 +60,7 @@ interface AIAgentFormData {
 }
 
 const AIAgentForm: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
@@ -67,11 +69,11 @@ const AIAgentForm: React.FC = () => {
   const [initialData, setInitialData] = useState<AIAgentFormData | undefined>();
 
   useEffect(() => {
-    setPageTitle(isEdit ? '编辑AI智能体' : '创建AI智能体');
+    setPageTitle(isEdit ? t('aiAgent.form.editTitle') : t('aiAgent.form.createTitle'));
     if (isEdit) {
       loadAgentData();
     }
-  }, [isEdit, id]);
+  }, [isEdit, id, t]);
 
   // 模拟加载智能体数据
   const loadAgentData = async () => {
@@ -80,8 +82,8 @@ const AIAgentForm: React.FC = () => {
       // 模拟API调用
       const agentData: AIAgentFormData = {
         id: id,
-        name: '客服助手',
-        description: '智能客服助手，处理用户咨询和问题解答',
+        name: t('aiAgent.form.mockData.customerServiceName'),
+        description: t('aiAgent.form.mockData.customerServiceDescription'),
         type: 'chat',
         status: 'active',
         model: {
@@ -97,10 +99,10 @@ const AIAgentForm: React.FC = () => {
           }
         },
         prompts: {
-          system: '你是一个专业的客服助手，请友好、准确地回答用户问题。',
+          system: t('aiAgent.form.mockData.systemPrompt'),
           templates: ['customer-service-template'],
           variables: {
-            company_name: '天工AI',
+            company_name: t('aiAgent.form.mockData.companyName'),
             service_hours: '9:00-18:00'
           }
         },
@@ -113,12 +115,12 @@ const AIAgentForm: React.FC = () => {
           retryCount: 3,
           logLevel: 'info'
         },
-        tags: ['客服', '对话', '智能助手']
+        tags: [t('aiAgent.form.mockData.tags.customerService'), t('aiAgent.form.mockData.tags.dialogue'), t('aiAgent.form.mockData.tags.assistant')]
       };
 
       setInitialData(agentData);
     } catch (error) {
-      message.error('加载智能体数据失败');
+      message.error(t('aiAgent.form.messages.loadDataFailed'));
     } finally {
       setLoading(false);
     }
@@ -130,10 +132,10 @@ const AIAgentForm: React.FC = () => {
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      message.success(isEdit ? '智能体更新成功' : '智能体创建成功');
+      message.success(isEdit ? t('aiAgent.form.messages.updateSuccess') : t('aiAgent.form.messages.createSuccess'));
       navigate('/ai-agents');
     } catch (error) {
-      message.error(isEdit ? '更新失败' : '创建失败');
+      message.error(isEdit ? t('aiAgent.form.messages.updateFailed') : t('aiAgent.form.messages.createFailed'));
     } finally {
       setLoading(false);
     }
@@ -148,11 +150,11 @@ const AIAgentForm: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <RobotOutlined style={{ color: '#1890ff' }} />
-                {isEdit ? '编辑AI智能体' : '创建AI智能体'}
+                {isEdit ? t('aiAgent.form.editTitle') : t('aiAgent.form.createTitle')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16, color: '#666' }}>
-              {isEdit ? '修改智能体配置和参数' : '配置新的AI智能体，包括模型、提示词和能力'}
+              {isEdit ? t('aiAgent.form.editSubtitle') : t('aiAgent.form.createSubtitle')}
             </Paragraph>
           </div>
           <Space>
@@ -160,7 +162,7 @@ const AIAgentForm: React.FC = () => {
               icon={<ArrowLeftOutlined />} 
               onClick={() => navigate('/ai-agents')}
             >
-              返回列表
+              {t('common.backToList')}
             </Button>
           </Space>
         </div>
@@ -178,7 +180,7 @@ const AIAgentForm: React.FC = () => {
         <div style={{ textAlign: 'right' }}>
           <Space>
             <Button onClick={() => navigate('/ai-agents')}>
-              取消
+              {t('common.cancel')}
             </Button>
             <Button 
               type="primary" 
@@ -187,7 +189,7 @@ const AIAgentForm: React.FC = () => {
               form="ai-agent-form"
               htmlType="submit"
             >
-              {isEdit ? '更新智能体' : '创建智能体'}
+              {isEdit ? t('aiAgent.form.updateAgent') : t('aiAgent.form.createAgent')}
             </Button>
           </Space>
         </div>

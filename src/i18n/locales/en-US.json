@@ -1850,5 +1850,168 @@
     "switchToDark": "Switch to Dark Theme",
     "light": "Light Theme",
     "dark": "Dark Theme"
+  },
+  "aiAgent": {
+    "form": {
+      "createTitle": "Create AI Agent",
+      "editTitle": "Edit AI Agent",
+      "createSubtitle": "Configure a new AI agent, including models, prompts, and capabilities",
+      "editSubtitle": "Modify agent configuration and parameters",
+      "createAgent": "Create Agent",
+      "updateAgent": "Update Agent",
+      "tabs": {
+        "basic": "Basic Information",
+        "prompts": "Prompt Configuration",
+        "model": "Model Selection",
+        "mcpServer": "MCP Server",
+        "settings": "Advanced Settings"
+      },
+      "fields": {
+        "name": "Agent Name",
+        "description": "Description",
+        "type": "Agent Type",
+        "status": "Status",
+        "tags": "Tags"
+      },
+      "placeholders": {
+        "name": "Enter agent name",
+        "description": "Enter agent functionality description",
+        "type": "Select type",
+        "status": "Select status",
+        "tags": "Enter tags, press Enter to add"
+      },
+      "validation": {
+        "nameRequired": "Please enter agent name",
+        "descriptionRequired": "Please enter description",
+        "typeRequired": "Please select agent type",
+        "statusRequired": "Please select status"
+      },
+      "types": {
+        "chat": "Chat Assistant",
+        "task": "Task Execution",
+        "analysis": "Data Analysis",
+        "monitoring": "System Monitoring"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "training": "Training"
+      },
+      "prompts": {
+        "useTemplate": "Use Prompt Template",
+        "customPrompt": "Custom Prompt",
+        "selectTemplate": "Select Prompt Template",
+        "templateVariables": "Template Variables",
+        "enterVariableValue": "Enter value for {{variable}}",
+        "customPromptPlaceholder": "Enter custom system prompt...",
+        "tip": "Tip",
+        "customPromptTip": "Custom prompts will serve as system instructions for the AI agent. Please ensure content is accurate and clear."
+      },
+      "promptTemplates": {
+        "customerService": {
+          "name": "Customer Service Template",
+          "description": "Professional customer service dialogue template, including greetings, Q&A, and transfer scenarios",
+          "content": "You are a professional customer service assistant for {{company_name}}. Working hours: {{service_hours}}. Please answer user questions friendly and accurately. If unable to resolve, please transfer to human customer service promptly."
+        },
+        "dataAnalysis": {
+          "name": "Data Analysis Template",
+          "description": "Data analysis and report generation template, supporting multiple data formats",
+          "content": "You are a professional data analyst. Please analyze the provided data and generate clear analysis reports, including key indicators, trend analysis, and recommendations."
+        },
+        "codeReview": {
+          "name": "Code Review Template",
+          "description": "Code quality review and suggestion template",
+          "content": "You are a senior code review expert. Please carefully review the code, focusing on code quality, security, performance, and best practices, providing specific improvement suggestions."
+        },
+        "monitoring": {
+          "name": "System Monitoring Template",
+          "description": "System monitoring and alert handling template",
+          "content": "You are a system monitoring expert. Please analyze system metrics and alert information, determine problem severity, and provide handling suggestions and preventive measures."
+        },
+        "categories": {
+          "dialogue": "Dialogue",
+          "analysis": "Analysis",
+          "development": "Development",
+          "operations": "Operations"
+        }
+      },
+      "models": {
+        "selectModel": "Select AI Model",
+        "available": "Available",
+        "unavailable": "Unavailable",
+        "version": "Version",
+        "pricing": "Pricing",
+        "free": "Free",
+        "localDeployment": "Local Deployment",
+        "parameterConfig": "Model Parameter Configuration",
+        "temperatureTooltip": "Controls output randomness, higher values are more random",
+        "maxTokensTooltip": "Maximum output token count",
+        "topPTooltip": "Nucleus sampling parameter, controls output diversity",
+        "frequencyPenaltyTooltip": "Frequency penalty, reduces repetitive content",
+        "gpt4": {
+          "description": "Most advanced large language model, suitable for complex tasks"
+        },
+        "gpt35": {
+          "description": "Cost-effective dialogue model with fast response speed"
+        },
+        "claude3": {
+          "description": "Strong reasoning capabilities, suitable for analytical tasks"
+        },
+        "llama2": {
+          "description": "Open source model, local deployment, data security"
+        }
+      },
+      "mcpServers": {
+        "selectServers": "Select MCP Server",
+        "description": "MCP Servers provide additional tools and capabilities, such as database access, file operations, etc.",
+        "running": "Running",
+        "stopped": "Stopped",
+        "database": {
+          "name": "Database Connector",
+          "description": "Connect and query various databases"
+        },
+        "email": {
+          "name": "Email Service",
+          "description": "Send and receive emails"
+        },
+        "file": {
+          "name": "File Operations",
+          "description": "File read/write and management"
+        },
+        "api": {
+          "name": "API Caller",
+          "description": "Call external API services"
+        },
+        "scheduler": {
+          "name": "Task Scheduler",
+          "description": "Scheduled tasks and scheduling management"
+        }
+      },
+      "settings": {
+        "autoStart": "Auto Start",
+        "maxConcurrency": "Max Concurrency",
+        "timeout": "Timeout (seconds)",
+        "retryCount": "Retry Count",
+        "logLevel": "Log Level"
+      },
+      "messages": {
+        "loadDataFailed": "Failed to load agent data",
+        "createSuccess": "Agent created successfully",
+        "updateSuccess": "Agent updated successfully",
+        "createFailed": "Creation failed",
+        "updateFailed": "Update failed"
+      },
+      "mockData": {
+        "customerServiceName": "Customer Service Assistant",
+        "customerServiceDescription": "Intelligent customer service assistant for handling user inquiries and problem solving",
+        "systemPrompt": "You are a professional customer service assistant, please answer user questions friendly and accurately.",
+        "companyName": "Tiangong AI",
+        "tags": {
+          "customerService": "Customer Service",
+          "dialogue": "Dialogue",
+          "assistant": "Assistant"
+        }
+      }
+    }
   }
 }

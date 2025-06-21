@@ -1,0 +1,165 @@
+{
+  "aiAgent": {
+    "form": {
+      "createTitle": "创建AI智能体",
+      "editTitle": "编辑AI智能体",
+      "createSubtitle": "配置新的AI智能体，包括模型、提示词和能力",
+      "editSubtitle": "修改智能体配置和参数",
+      "createAgent": "创建智能体",
+      "updateAgent": "更新智能体",
+      "tabs": {
+        "basic": "基本信息",
+        "prompts": "提示词配置",
+        "model": "模型选择",
+        "mcpServer": "MCP Server",
+        "settings": "高级设置"
+      },
+      "fields": {
+        "name": "智能体名称",
+        "description": "描述",
+        "type": "智能体类型",
+        "status": "状态",
+        "tags": "标签"
+      },
+      "placeholders": {
+        "name": "请输入智能体名称",
+        "description": "请输入智能体的功能描述",
+        "type": "请选择类型",
+        "status": "请选择状态",
+        "tags": "请输入标签，按回车添加"
+      },
+      "validation": {
+        "nameRequired": "请输入智能体名称",
+        "descriptionRequired": "请输入描述",
+        "typeRequired": "请选择智能体类型",
+        "statusRequired": "请选择状态"
+      },
+      "types": {
+        "chat": "对话助手",
+        "task": "任务执行",
+        "analysis": "数据分析",
+        "monitoring": "系统监控"
+      },
+      "status": {
+        "active": "激活",
+        "inactive": "未激活",
+        "training": "训练中"
+      },
+      "prompts": {
+        "useTemplate": "使用提示词模板",
+        "customPrompt": "自定义提示词",
+        "selectTemplate": "选择提示词模板",
+        "templateVariables": "模板变量",
+        "enterVariableValue": "请输入 {{variable}} 的值",
+        "customPromptPlaceholder": "请输入自定义的系统提示词...",
+        "tip": "提示",
+        "customPromptTip": "自定义提示词将作为AI智能体的系统指令，请确保内容准确、清晰。"
+      },
+      "promptTemplates": {
+        "customerService": {
+          "name": "客服助手模板",
+          "description": "专业的客服对话模板，包含问候、问题解答、转接等场景",
+          "content": "你是{{company_name}}的专业客服助手。工作时间：{{service_hours}}。请友好、准确地回答用户问题，如无法解决请及时转接人工客服。"
+        },
+        "dataAnalysis": {
+          "name": "数据分析模板",
+          "description": "数据分析和报告生成模板，支持多种数据格式",
+          "content": "你是一个专业的数据分析师。请分析提供的数据，生成清晰的分析报告，包含关键指标、趋势分析和建议。"
+        },
+        "codeReview": {
+          "name": "代码审查模板",
+          "description": "代码质量审查和建议模板",
+          "content": "你是一个资深的代码审查专家。请仔细审查代码，关注代码质量、安全性、性能和最佳实践，提供具体的改进建议。"
+        },
+        "monitoring": {
+          "name": "系统监控模板",
+          "description": "系统监控和告警处理模板",
+          "content": "你是一个系统监控专家。请分析系统指标和告警信息，判断问题严重程度，提供处理建议和预防措施。"
+        },
+        "categories": {
+          "dialogue": "对话",
+          "analysis": "分析",
+          "development": "开发",
+          "operations": "运维"
+        }
+      },
+      "models": {
+        "selectModel": "选择AI模型",
+        "available": "可用",
+        "unavailable": "不可用",
+        "version": "版本",
+        "pricing": "定价",
+        "free": "免费",
+        "localDeployment": "本地部署",
+        "parameterConfig": "模型参数配置",
+        "temperatureTooltip": "控制输出的随机性，值越高越随机",
+        "maxTokensTooltip": "最大输出token数量",
+        "topPTooltip": "核采样参数，控制输出的多样性",
+        "frequencyPenaltyTooltip": "频率惩罚，减少重复内容",
+        "gpt4": {
+          "description": "最先进的大语言模型，适合复杂任务"
+        },
+        "gpt35": {
+          "description": "高性价比的对话模型，响应速度快"
+        },
+        "claude3": {
+          "description": "强大的推理能力，适合分析任务"
+        },
+        "llama2": {
+          "description": "开源模型，本地部署，数据安全"
+        }
+      },
+      "mcpServers": {
+        "selectServers": "选择MCP Server",
+        "description": "MCP Server提供额外的工具和能力，如数据库访问、文件操作等。",
+        "running": "运行中",
+        "stopped": "已停止",
+        "database": {
+          "name": "数据库连接器",
+          "description": "连接和查询各种数据库"
+        },
+        "email": {
+          "name": "邮件服务",
+          "description": "发送和接收邮件"
+        },
+        "file": {
+          "name": "文件操作",
+          "description": "文件读写和管理"
+        },
+        "api": {
+          "name": "API调用器",
+          "description": "调用外部API服务"
+        },
+        "scheduler": {
+          "name": "任务调度器",
+          "description": "定时任务和调度管理"
+        }
+      },
+      "settings": {
+        "autoStart": "自动启动",
+        "maxConcurrency": "最大并发数",
+        "timeout": "超时时间(秒)",
+        "retryCount": "重试次数",
+        "logLevel": "日志级别"
+      },
+      "messages": {
+        "loadDataFailed": "加载智能体数据失败",
+        "createSuccess": "智能体创建成功",
+        "updateSuccess": "智能体更新成功",
+        "createFailed": "创建失败",
+        "updateFailed": "更新失败"
+      },
+      "mockData": {
+        "customerServiceName": "客服助手",
+        "customerServiceDescription": "智能客服助手，处理用户咨询和问题解答",
+        "systemPrompt": "你是一个专业的客服助手，请友好、准确地回答用户问题。",
+        "companyName": "天工AI",
+        "tags": {
+          "customerService": "客服",
+          "dialogue": "对话",
+          "assistant": "智能助手"
+        }
+      }
+    }
+  }
+}
