@@ -66,7 +66,88 @@ const SolutionCard = styled(Card)`
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+  
+  .ant-card-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    
+    .ant-card-head-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+  
+  .ant-card-body {
+    padding: 20px;
+    height: calc(100% - 64px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-tags {
+    margin-bottom: 16px;
+    min-height: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .card-description {
+    flex: 1;
+    margin-bottom: 16px;
+    min-height: 48px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .card-stats {
+    margin-bottom: 16px;
+    
+    .ant-statistic {
+      .ant-statistic-title {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+      }
+      
+      .ant-statistic-content {
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+  }
+  
+  .card-tags-section {
+    margin-bottom: 16px;
+    min-height: 28px;
+  }
+  
+  .card-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #f5f5f5;
+    font-size: 12px;
+    color: #999;
+    
+    .footer-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 `;
 
@@ -658,7 +739,7 @@ const IndustrySolutionManagement: React.FC = () => {
             placeholder: t('solutions.search.complexity'),
             width: 100,
             options: [
-              { value: 'all', label: '所有复杂度' },
+              { value: 'all', label: t('solutions.allComplexities') },
               { value: 'simple', label: t('solutions.complexity.simple') },
               { value: 'medium', label: t('solutions.complexity.medium') },
               { value: 'complex', label: t('solutions.complexity.complex') }
@@ -671,7 +752,7 @@ const IndustrySolutionManagement: React.FC = () => {
             placeholder: t('solutions.search.status'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
+              { value: 'all', label: t('solutions.allStatuses') },
               { value: 'active', label: t('solutions.status.active') },
               { value: 'draft', label: t('solutions.status.draft') },
               { value: 'deprecated', label: t('solutions.status.deprecated') }
@@ -682,11 +763,11 @@ const IndustrySolutionManagement: React.FC = () => {
       />
 
       {/* 方案卡片列表 */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={[24, 24]}>
         {solutionData.map(solution => {
           const industryConfig = industryMap[solution.industry as keyof typeof industryMap];
           return (
-            <Col xs={24} sm={12} lg={8} xl={6} key={solution.id}>
+            <Col xs={24} sm={24} md={12} lg={8} xl={6} key={solution.id}>
               <SolutionCard
                 title={
                   <Space>
@@ -719,55 +800,79 @@ const IndustrySolutionManagement: React.FC = () => {
                 }
                 onClick={() => handleViewSolution(solution)}
               >
-                <div style={{ marginBottom: 12 }}>
-                  <Tag color={industryConfig?.color} icon={industryConfig?.icon}>
-                    {industryConfig?.name}
-                  </Tag>
-                  {getComplexityTag(solution.complexity)}
-                </div>
-                
-                <Paragraph 
-                  ellipsis={{ rows: 2 }} 
-                  style={{ marginBottom: 16, minHeight: 40 }}
-                >
-                  {solution.description}
-                </Paragraph>
+                <div className="card-content">
+                  {/* 标签区域 */}
+                  <div className="card-tags">
+                    <Tag color={industryConfig?.color} icon={industryConfig?.icon}>
+                      {industryConfig?.name}
+                    </Tag>
+                    {getComplexityTag(solution.complexity)}
+                  </div>
+                  
+                  {/* 描述区域 */}
+                  <div className="card-description">
+                    <Paragraph 
+                      ellipsis={{ rows: 2, tooltip: solution.description }} 
+                      style={{ margin: 0, color: '#666', lineHeight: '1.5' }}
+                    >
+                      {solution.description}
+                    </Paragraph>
+                  </div>
 
-                <div style={{ marginBottom: 12 }}>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Statistic
-                        title={t('solutions.card.businessEntities')}
-                        value={solution.entities.length}
-                        suffix={t('common.unit.count')}
-                        valueStyle={{ fontSize: 14 }}
-                      />
-                    </Col>
-                    <Col span={12}>
-                      <Statistic
-                        title={t('solutions.card.usageCount')}
-                        value={solution.usageCount}
-                        suffix={t('common.unit.times')}
-                        valueStyle={{ fontSize: 14 }}
-                      />
-                    </Col>
-                  </Row>
-                </div>
+                  {/* 统计数据 */}
+                  <div className="card-stats">
+                    <Row gutter={16}>
+                      <Col span={8}>
+                        <Statistic
+                          title={t('solutions.card.businessEntities')}
+                          value={solution.entities.length}
+                          valueStyle={{ fontSize: 16, color: '#1890ff' }}
+                        />
+                      </Col>
+                      <Col span={8}>
+                        <Statistic
+                          title={t('solutions.modal.relationCount')}
+                          value={solution.relations.length}
+                          valueStyle={{ fontSize: 16, color: '#52c41a' }}
+                        />
+                      </Col>
+                      <Col span={8}>
+                        <Statistic
+                          title={t('solutions.card.usageCount')}
+                          value={solution.usageCount}
+                          valueStyle={{ fontSize: 16, color: '#722ed1' }}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
 
-                <div style={{ marginBottom: 12 }}>
-                  <Space wrap>
-                    {solution.tags.slice(0, 3).map(tag => (
-                      <Tag key={tag} size="small">{tag}</Tag>
-                    ))}
-                    {solution.tags.length > 3 && (
-                      <Tag size="small">+{solution.tags.length - 3}</Tag>
-                    )}
-                  </Space>
-                </div>
+                  {/* 标签展示 */}
+                  <div className="card-tags-section">
+                    <Space wrap size={[4, 4]}>
+                      {solution.tags.slice(0, 4).map(tag => (
+                        <Tag key={tag} size="small" color="blue-inverse">
+                          {tag}
+                        </Tag>
+                      ))}
+                      {solution.tags.length > 4 && (
+                        <Tag size="small" color="default">
+                          +{solution.tags.length - 4}
+                        </Tag>
+                      )}
+                    </Space>
+                  </div>
 
-                <div style={{ fontSize: 12, color: '#666' }}>
-                  <div>{t('solutions.card.creator')}: {solution.createdBy}</div>
-                  <div>{t('solutions.card.updateTime')}: {solution.lastModified}</div>
+                  {/* 底部信息 */}
+                  <div className="card-footer">
+                    <div className="footer-item">
+                      <span>{t('solutions.card.creator')}</span>
+                      <span>{solution.createdBy}</span>
+                    </div>
+                    <div className="footer-item">
+                      <span>{t('solutions.card.updateTime')}</span>
+                      <span>{solution.lastModified}</span>
+                    </div>
+                  </div>
                 </div>
               </SolutionCard>
             </Col>

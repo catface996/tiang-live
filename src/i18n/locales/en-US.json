@@ -397,6 +397,8 @@
       "status": "Status"
     },
     "allIndustries": "All Industries",
+    "allComplexities": "All Complexities",
+    "allStatuses": "All Statuses",
     "complexity": {
       "simple": "Simple",
       "medium": "Medium",
@@ -419,6 +421,7 @@
       "viewDetails": "View Details",
       "edit": "Edit",
       "businessEntities": "Business Entities",
+      "relationCount": "Relations",
       "usageCount": "Usage Count",
       "creator": "Creator",
       "updateTime": "Update Time"

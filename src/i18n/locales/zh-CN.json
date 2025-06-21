@@ -676,6 +676,8 @@
       "status": "状态"
     },
     "allIndustries": "所有行业",
+    "allComplexities": "所有复杂度",
+    "allStatuses": "所有状态",
     "complexity": {
       "simple": "简单",
       "medium": "中等",
@@ -698,6 +700,7 @@
       "viewDetails": "查看详情",
       "edit": "编辑",
       "businessEntities": "业务实体",
+      "relationCount": "关系数量",
       "usageCount": "使用次数",
       "creator": "创建者",
       "updateTime": "更新时间"
