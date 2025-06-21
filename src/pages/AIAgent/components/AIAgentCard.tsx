@@ -161,8 +161,11 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   .agent-avatar {
     margin-right: 12px;
     flex-shrink: 0;
+    width: 48px; /* 限制avatar容器宽度 */
+    height: 48px; /* 限制avatar容器高度 */
     display: flex;
     align-items: center;
+    justify-content: center;
   }
   
   .agent-info {
