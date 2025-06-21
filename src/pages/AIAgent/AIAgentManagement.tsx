@@ -513,7 +513,7 @@ const AIAgentManagement: React.FC = () => {
     });
 
     return filteredAgents.map(agent => (
-      <Col xs={24} sm={12} lg={8} xl={6} key={agent.id}>
+      <Col xs={24} sm={24} lg={12} xl={8} key={agent.id}>
         <AgentCard
           agent={{
             ...agent,

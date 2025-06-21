@@ -73,6 +73,7 @@ export interface AgentCardProps {
 // Styled Components
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
   height: 100%;
+  min-height: 420px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
@@ -95,6 +96,9 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   .ant-card-body {
     padding: 24px;
     background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   
   .ant-card-actions {
@@ -170,6 +174,10 @@ const AgentName = styled.div<{ $isDark: boolean }>`
   color: ${props => props.$isDark ? '#ffffff' : '#262626'};
   line-height: 1.4;
   word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 `;
 
 const TagContainer = styled.div`
@@ -199,10 +207,21 @@ const StyledTag = styled(Tag)<{ $bgColor?: string; $borderColor?: string; $textC
 
 const StatsContainer = styled.div<{ $isDark: boolean }>`
   margin: 20px 0;
-  padding: 20px;
+  padding: 16px;
   background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   border-radius: 8px;
+  
+  .ant-space {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .ant-space-item {
+    flex: 1;
+    text-align: center;
+    min-width: 0;
+  }
 `;
 
 const StatsSeparator = styled.span<{ $isDark: boolean }>`
@@ -217,14 +236,21 @@ const StatsTitle = styled.span<{ $isDark: boolean }>`
 
 const StyledStatistic = styled(Statistic)<{ $isDark: boolean }>`
   .ant-statistic-content-value {
-    font-size: 16px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     color: ${props => props.$isDark ? '#ffffff' : '#262626'} !important;
+    white-space: nowrap;
   }
   
   .ant-statistic-content-suffix {
     font-size: 12px !important;
     color: ${props => props.$isDark ? '#8c8c8c' : '#666'} !important;
+  }
+  
+  .ant-statistic-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -232,7 +258,11 @@ const Description = styled(Paragraph)<{ $isDark: boolean }>`
   margin: 16px 0 !important;
   color: ${props => props.$isDark ? '#8c8c8c' : '#666'} !important;
   font-size: 14px !important;
-  line-height: 1.6 !important;
+  line-height: 1.5 !important;
+  
+  .ant-typography {
+    margin-bottom: 0 !important;
+  }
 `;
 
 const UserTagsContainer = styled.div`
@@ -253,11 +283,20 @@ const FooterContainer = styled.div`
   padding-top: 16px;
   border-top: 1px solid;
   border-color: ${props => props.theme.isDark ? '#303030' : '#f0f0f0'};
+  gap: 12px;
 `;
 
 const FooterText = styled(Text)<{ $isDark: boolean }>`
   font-size: 12px !important;
   color: ${props => props.$isDark ? '#8c8c8c' : '#999'} !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  
+  &:last-child {
+    text-align: right;
+  }
 `;
 
 const StatusIndicator = styled.span<{ status: string }>`
@@ -545,7 +584,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
       </Description>
 
       <StatsContainer $isDark={isDark}>
-        <Space split={<StatsSeparator $isDark={isDark}>|</StatsSeparator>} size="large">
+        <Space split={<StatsSeparator $isDark={isDark}>|</StatsSeparator>} size="small" style={{ width: '100%', justifyContent: 'space-between' }}>
           <StyledStatistic 
             $isDark={isDark}
             title={<StatsTitle $isDark={isDark}>{t('agents.stats.tasksCompleted')}</StatsTitle>} 
