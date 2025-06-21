@@ -320,8 +320,8 @@ const ModelManagement: React.FC = () => {
             </div>
 
             <div style={{ fontSize: 12, color: '#666' }}>
-              <div>版本: {model.version}</div>
-              <div>上次使用: {model.lastUsed}</div>
+              <div>{t('models.stats.version')}: {model.version}</div>
+              <div>{t('models.stats.lastUsed')}: {model.lastUsed}</div>
             </div>
           </ModelCard>
         </Col>
@@ -657,7 +657,7 @@ const ModelManagement: React.FC = () => {
               <Tabs.TabPane tab={t('models.detail.parameters')} key="parameters">
                 <Row gutter={16}>
                   <Col span={12}>
-                    <Card title="生成参数" size="small">
+                    <Card title={t('models.detail.parameters')} size="small">
                       <Descriptions column={1} size="small">
                         <Descriptions.Item label={t('models.detail.maxTokens')}>
                           {selectedModel.maxTokens}
@@ -665,13 +665,13 @@ const ModelManagement: React.FC = () => {
                         <Descriptions.Item label={t('models.detail.temperature')}>
                           {selectedModel.temperature}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Top P">
+                        <Descriptions.Item label={t('models.detail.topP')}>
                           {selectedModel.topP}
                         </Descriptions.Item>
-                        <Descriptions.Item label="频率惩罚">
+                        <Descriptions.Item label={t('models.detail.frequencyPenalty')}>
                           {selectedModel.frequencyPenalty}
                         </Descriptions.Item>
-                        <Descriptions.Item label="存在惩罚">
+                        <Descriptions.Item label={t('models.detail.presencePenalty')}>
                           {selectedModel.presencePenalty}
                         </Descriptions.Item>
                       </Descriptions>
