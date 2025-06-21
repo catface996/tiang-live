@@ -59,6 +59,7 @@ const SequenceCard = styled(Card)`
   height: 100%;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-height: 320px;
   
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -67,10 +68,123 @@ const SequenceCard = styled(Card)`
   
   .ant-card-head {
     border-bottom: 1px solid #f0f0f0;
+    padding: 12px 16px;
+    
+    .ant-card-head-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
   }
   
   .ant-card-body {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 57px);
+  }
+  
+  .sequence-description {
+    flex: 1;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 36px;
+  }
+  
+  .sequence-stats {
+    margin-bottom: 12px;
+    
+    .ant-statistic-title {
+      font-size: 11px;
+      margin-bottom: 2px;
+      color: #999;
+    }
+    
+    .ant-statistic-content {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+  
+  .sequence-meta {
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 12px;
+    
+    > div {
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  .sequence-actions {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .participants-count {
+      font-size: 11px;
+      color: #999;
+      font-weight: 500;
+    }
+  }
+  
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    min-height: 280px;
+    
+    .ant-card-head {
+      padding: 10px 12px;
+      
+      .ant-card-head-title {
+        font-size: 13px;
+      }
+    }
+    
+    .ant-card-body {
+      padding: 12px;
+    }
+    
+    .sequence-description {
+      font-size: 12px;
+      -webkit-line-clamp: 3;
+      min-height: 42px;
+    }
+    
+    .sequence-stats {
+      .ant-statistic-content {
+        font-size: 13px;
+      }
+    }
+  }
+  
+  @media (max-width: 576px) {
+    min-height: 260px;
+    
+    .sequence-stats {
+      .ant-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .ant-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none;
+      }
+    }
   }
 `;
 
@@ -133,7 +247,7 @@ const SequenceManagement: React.FC = () => {
     return sequenceData.map(sequence => {
       const typeConfig = sequenceTypeMap[sequence.type as keyof typeof sequenceTypeMap];
       return (
-        <Col xs={24} sm={12} lg={8} xl={6} key={sequence.id}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={sequence.id}>
           <SequenceCard
             title={
               <Space>
@@ -149,44 +263,38 @@ const SequenceManagement: React.FC = () => {
               </Tag>
             </div>
             
-            <div style={{ marginBottom: 12, fontSize: 13, color: '#666' }}>
+            <div className="sequence-description">
               {sequence.description}
             </div>
             
-            <div style={{ marginBottom: 12 }}>
+            <div className="sequence-stats">
               <Row gutter={16}>
                 <Col span={12}>
                   <Statistic
                     title={t('sequences.stepCount')}
                     value={sequence.steps}
                     suffix={t('sequences.steps')}
-                    valueStyle={{ fontSize: 16 }}
+                    valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
                 <Col span={12}>
                   <Statistic
                     title={t('sequences.executionDuration')}
                     value={sequence.duration}
-                    valueStyle={{ fontSize: 16 }}
+                    valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
               </Row>
             </div>
 
-            <div style={{ fontSize: 12, color: '#666', marginBottom: 16 }}>
+            <div className="sequence-meta">
               <div>{t('sequences.createdBy')}: {sequence.createdBy}</div>
               <div>{t('sequences.lastModified')}: {sequence.lastModified}</div>
             </div>
 
             {/* Action Buttons at Bottom */}
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center',
-              paddingTop: 12,
-              borderTop: '1px solid #f0f0f0'
-            }}>
-              <div style={{ fontSize: 12, color: '#999' }}>
+            <div className="sequence-actions">
+              <div className="participants-count">
                 {t('sequences.participants')}: {sequence.participants.length}
               </div>
               <Space>
@@ -201,13 +309,14 @@ const SequenceManagement: React.FC = () => {
                     }}
                   />
                 </Tooltip>
-                <Tooltip title={t('common.edit')}>
+                <Tooltip title={t('sequences.editSequence')}>
                   <Button 
                     type="text" 
                     icon={<EditOutlined />} 
                     size="small"
                     onClick={(e) => {
                       e.stopPropagation();
+                      // Handle edit action
                     }}
                   />
                 </Tooltip>
@@ -331,7 +440,7 @@ const SequenceManagement: React.FC = () => {
       />
 
       {/* Sequence Cards List */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={[24, 24]}>
         {renderSequenceCards()}
       </Row>
 
