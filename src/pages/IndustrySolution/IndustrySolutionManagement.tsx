@@ -943,7 +943,7 @@ const IndustrySolutionManagement: React.FC = () => {
                   <div className="card-tags-section">
                     <Space wrap size={[4, 4]}>
                       {solution.tags.slice(0, 4).map(tag => (
-                        <Tag key={tag} size="small" color="blue-inverse">
+                        <Tag key={tag} size="small" color="geekblue">
                           {tag}
                         </Tag>
                       ))}
