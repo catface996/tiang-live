@@ -1232,25 +1232,56 @@
       "subtitle": "System tag classification and management",
       "createTitle": "Create Tag",
       "editTitle": "Edit Tag",
+      "createTag": "Create Tag",
       "stats": {
         "totalTags": "Total Tags",
-        "activeTags": "Active Tags",
-        "taggedItems": "Tagged Items",
-        "categories": "Categories"
+        "categoryCount": "Category Count",
+        "totalUsage": "Total Usage",
+        "averageUsage": "Average Usage",
+        "averageUsageSuffix": "times/tag"
       },
-      "columns": {
+      "search": {
+        "placeholder": "Search tag name, description...",
+        "category": "Select Category",
+        "allCategories": "All Categories"
+      },
+      "categoryDisplay": {
+        "title": "Tag Categories"
+      },
+      "table": {
+        "title": "Tag List",
         "tagName": "Tag Name",
         "category": "Category",
-        "color": "Color",
+        "description": "Description",
         "usageCount": "Usage Count",
-        "description": "Description"
+        "createTime": "Create Time",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleteConfirm": "Are you sure you want to delete this tag?",
+        "deleteDescription": "This action cannot be undone and will affect resources using this tag."
+      },
+      "messages": {
+        "deleteSuccess": "Tag deleted successfully",
+        "updateSuccess": "Tag updated successfully",
+        "createSuccess": "Tag created successfully"
       },
       "form": {
         "tagName": "Tag Name",
-        "category": "Category",
-        "color": "Color",
-        "icon": "Icon",
-        "description": "Description"
+        "tagNamePlaceholder": "Enter tag name",
+        "tagNameRequired": "Please enter tag name",
+        "category": "Tag Category",
+        "categoryPlaceholder": "Select category",
+        "categoryRequired": "Please select tag category",
+        "color": "Tag Color",
+        "colorPlaceholder": "Select color",
+        "colorRequired": "Please select tag color",
+        "description": "Tag Description",
+        "descriptionPlaceholder": "Enter tag description, explain the purpose and applicable scenarios",
+        "descriptionRequired": "Please enter tag description",
+        "icon": "Icon"
       }
     }
   },

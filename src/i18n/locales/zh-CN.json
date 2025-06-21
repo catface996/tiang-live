@@ -1232,25 +1232,56 @@
       "subtitle": "系统标签分类和管理",
       "createTitle": "创建标签",
       "editTitle": "编辑标签",
+      "createTag": "创建标签",
       "stats": {
-        "totalTags": "总标签数",
-        "activeTags": "活跃标签",
-        "taggedItems": "已标记项",
-        "categories": "分类数"
+        "totalTags": "标签总数",
+        "categoryCount": "分类数量",
+        "totalUsage": "总使用次数",
+        "averageUsage": "平均使用率",
+        "averageUsageSuffix": "次/标签"
       },
-      "columns": {
+      "search": {
+        "placeholder": "搜索标签名称、描述...",
+        "category": "选择分类",
+        "allCategories": "所有分类"
+      },
+      "categoryDisplay": {
+        "title": "标签分类"
+      },
+      "table": {
+        "title": "标签列表",
         "tagName": "标签名称",
         "category": "分类",
-        "color": "颜色",
+        "description": "描述",
         "usageCount": "使用次数",
-        "description": "描述"
+        "createTime": "创建时间",
+        "actions": "操作"
+      },
+      "actions": {
+        "edit": "编辑",
+        "delete": "删除",
+        "deleteConfirm": "确定要删除这个标签吗？",
+        "deleteDescription": "删除后将无法恢复，且会影响已使用此标签的资源。"
+      },
+      "messages": {
+        "deleteSuccess": "标签删除成功",
+        "updateSuccess": "标签更新成功",
+        "createSuccess": "标签创建成功"
       },
       "form": {
         "tagName": "标签名称",
-        "category": "分类",
-        "color": "颜色",
-        "icon": "图标",
-        "description": "描述"
+        "tagNamePlaceholder": "请输入标签名称",
+        "tagNameRequired": "请输入标签名称",
+        "category": "标签分类",
+        "categoryPlaceholder": "请选择分类",
+        "categoryRequired": "请选择标签分类",
+        "color": "标签颜色",
+        "colorPlaceholder": "选择颜色",
+        "colorRequired": "请选择标签颜色",
+        "description": "标签描述",
+        "descriptionPlaceholder": "请输入标签描述，说明标签的用途和适用场景",
+        "descriptionRequired": "请输入标签描述",
+        "icon": "图标"
       }
     },
     "entityScan": {

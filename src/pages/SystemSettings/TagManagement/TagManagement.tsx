@@ -190,16 +190,16 @@ const TagManagement: React.FC = () => {
   };
 
   const handleDeleteTag = (tagId: string) => {
-    message.success('标签删除成功');
+    message.success(t('systemSettings.tags.messages.deleteSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingTag) {
-        message.success('标签更新成功');
+        message.success(t('systemSettings.tags.messages.updateSuccess'));
       } else {
-        message.success('标签创建成功');
+        message.success(t('systemSettings.tags.messages.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -215,7 +215,7 @@ const TagManagement: React.FC = () => {
 
   const columns = [
     {
-      title: '标签名称',
+      title: t('systemSettings.tags.table.tagName'),
       dataIndex: 'name',
       key: 'name',
       render: (text: string, record: any) => (
@@ -225,7 +225,7 @@ const TagManagement: React.FC = () => {
       ),
     },
     {
-      title: '分类',
+      title: t('systemSettings.tags.table.category'),
       dataIndex: 'category',
       key: 'category',
       render: (category: string) => {
@@ -239,13 +239,13 @@ const TagManagement: React.FC = () => {
       },
     },
     {
-      title: '描述',
+      title: t('systemSettings.tags.table.description'),
       dataIndex: 'description',
       key: 'description',
       ellipsis: true,
     },
     {
-      title: '使用次数',
+      title: t('systemSettings.tags.table.usageCount'),
       dataIndex: 'usageCount',
       key: 'usageCount',
       render: (count: number) => (
@@ -253,12 +253,12 @@ const TagManagement: React.FC = () => {
       ),
     },
     {
-      title: '创建时间',
+      title: t('systemSettings.tags.table.createTime'),
       dataIndex: 'createdAt',
       key: 'createdAt',
     },
     {
-      title: '操作',
+      title: t('systemSettings.tags.table.actions'),
       key: 'action',
       render: (_, record: any) => (
         <Space>
@@ -268,14 +268,14 @@ const TagManagement: React.FC = () => {
             size="small"
             onClick={() => handleEditTag(record)}
           >
-            编辑
+            {t('systemSettings.tags.actions.edit')}
           </Button>
           <Popconfirm
-            title="确定要删除这个标签吗？"
-            description="删除后将无法恢复，且会影响已使用此标签的资源。"
+            title={t('systemSettings.tags.actions.deleteConfirm')}
+            description={t('systemSettings.tags.actions.deleteDescription')}
             onConfirm={() => handleDeleteTag(record.key)}
-            okText="确定"
-            cancelText="取消"
+            okText={t('common.confirm')}
+            cancelText={t('common.cancel')}
           >
             <Button 
               type="link" 
@@ -283,7 +283,7 @@ const TagManagement: React.FC = () => {
               size="small"
               danger
             >
-              删除
+              {t('systemSettings.tags.actions.delete')}
             </Button>
           </Popconfirm>
         </Space>
@@ -363,9 +363,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="标签总数"
+              title={t('systemSettings.tags.stats.totalTags')}
               value={tagData.length}
-              suffix="个"
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<TagsOutlined />}
             />
@@ -374,9 +374,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="分类数量"
+              title={t('systemSettings.tags.stats.categoryCount')}
               value={Object.keys(categoryMap).length}
-              suffix="个"
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<AppstoreOutlined />}
             />
@@ -385,9 +385,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="总使用次数"
+              title={t('systemSettings.tags.stats.totalUsage')}
               value={tagData.reduce((sum, tag) => sum + tag.usageCount, 0)}
-              suffix="次"
+              suffix={t('common.unit.times')}
               valueStyle={{ color: '#faad14' }}
               prefix={<BgColorsOutlined />}
             />
@@ -396,9 +396,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="平均使用率"
+              title={t('systemSettings.tags.stats.averageUsage')}
               value={Math.round(tagData.reduce((sum, tag) => sum + tag.usageCount, 0) / tagData.length)}
-              suffix="次/标签"
+              suffix={t('systemSettings.tags.stats.averageUsageSuffix')}
               valueStyle={{ color: '#722ed1' }}
               prefix={<NodeIndexOutlined />}
             />
@@ -407,7 +407,7 @@ const TagManagement: React.FC = () => {
       </Row>
 
       {/* 分类展示 */}
-      <Card title="标签分类" style={{ marginBottom: 24 }}>
+      <Card title={t('systemSettings.tags.categoryDisplay.title')} style={{ marginBottom: 24 }}>
         <Row gutter={[16, 16]}>
           {renderTagsByCategory()}
         </Row>
@@ -417,16 +417,16 @@ const TagManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder="搜索标签名称、描述..."
+        searchPlaceholder={t('systemSettings.tags.search.placeholder')}
         filters={[
           {
             key: 'category',
             value: filterCategory,
             onChange: setFilterCategory,
-            placeholder: '选择分类',
+            placeholder: t('systemSettings.tags.search.category'),
             width: 120,
             options: [
-              { value: 'all', label: '所有分类' },
+              { value: 'all', label: t('systemSettings.tags.search.allCategories') },
               ...Object.entries(categoryMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -439,7 +439,7 @@ const TagManagement: React.FC = () => {
       />
 
       {/* 标签列表 */}
-      <Card title="标签列表">
+      <Card title={t('systemSettings.tags.table.title')}>
         <Table
           columns={columns}
           dataSource={tagData}
@@ -457,7 +457,7 @@ const TagManagement: React.FC = () => {
 
       {/* 创建/编辑标签模态框 */}
       <Modal
-        title={editingTag ? '编辑标签' : '创建标签'}
+        title={editingTag ? t('systemSettings.tags.editTitle') : t('systemSettings.tags.createTitle')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={handleModalCancel}
@@ -473,21 +473,21 @@ const TagManagement: React.FC = () => {
         >
           <Form.Item
             name="name"
-            label="标签名称"
+            label={t('systemSettings.tags.form.tagName')}
             rules={[
-              { required: true, message: '请输入标签名称' },
-              { max: 20, message: '标签名称不能超过20个字符' }
+              { required: true, message: t('systemSettings.tags.form.tagNameRequired') },
+              { max: 20, message: t('validation.maxLength', { max: 20 }) }
             ]}
           >
-            <Input placeholder="请输入标签名称" />
+            <Input placeholder={t('systemSettings.tags.form.tagNamePlaceholder')} />
           </Form.Item>
 
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="color"
-                label="标签颜色"
-                rules={[{ required: true, message: '请选择标签颜色' }]}
+                label={t('systemSettings.tags.form.color')}
+                rules={[{ required: true, message: t('systemSettings.tags.form.colorRequired') }]}
               >
                 <ColorPicker showText />
               </Form.Item>
@@ -495,10 +495,10 @@ const TagManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="category"
-                label="标签分类"
-                rules={[{ required: true, message: '请选择标签分类' }]}
+                label={t('systemSettings.tags.form.category')}
+                rules={[{ required: true, message: t('systemSettings.tags.form.categoryRequired') }]}
               >
-                <Select placeholder="请选择分类">
+                <Select placeholder={t('systemSettings.tags.form.categoryPlaceholder')}>
                   {Object.entries(categoryMap).map(([key, config]) => (
                     <Option key={key} value={key}>
                       <Space>
@@ -514,15 +514,15 @@ const TagManagement: React.FC = () => {
 
           <Form.Item
             name="description"
-            label="标签描述"
+            label={t('systemSettings.tags.form.description')}
             rules={[
-              { required: true, message: '请输入标签描述' },
-              { max: 100, message: '描述不能超过100个字符' }
+              { required: true, message: t('systemSettings.tags.form.descriptionRequired') },
+              { max: 100, message: t('validation.maxLength', { max: 100 }) }
             ]}
           >
             <Input.TextArea 
               rows={3} 
-              placeholder="请输入标签描述，说明标签的用途和适用场景"
+              placeholder={t('systemSettings.tags.form.descriptionPlaceholder')}
             />
           </Form.Item>
         </Form>
