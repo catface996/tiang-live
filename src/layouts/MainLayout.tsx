@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   Layout,
@@ -38,11 +38,33 @@ const { Text } = Typography;
 
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const isDarkMode = currentTheme === 'dark';
+
+  // 检测屏幕尺寸
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth <= 768) {
+        setCollapsed(true);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // 移动端点击遮罩层关闭侧边栏
+  const handleMaskClick = () => {
+    if (isMobile) {
+      setCollapsed(true);
+    }
+  };
 
   // 动态菜单项（使用翻译）
   const menuItems = [
@@ -173,125 +195,184 @@ const MainLayout: React.FC = () => {
   // 移除颜色变量，改用CSS类
 
   return (
-    <Layout className="app-layout" style={{ minHeight: '100vh' }}>
-      <Sider 
-        trigger={null} 
-        collapsible 
-        collapsed={collapsed}
-        className="app-sider"
-      >
-        {/* Logo区域 */}
-        <div className="app-logo" style={{ 
-          height: '64px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: collapsed ? 'center' : 'flex-start',
-          padding: collapsed ? '0' : '0 16px',
-          transition: 'all 0.2s'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center',
-            fontSize: '18px',
-            fontWeight: 600, 
-            gap: '8px',
-            transition: 'all 0.2s'
-          }}>
-            <img 
-              src={ASSETS.LOGO} 
-              alt="Logo" 
-              style={{ 
-                width: '32px', 
-                height: '32px',
-                objectFit: 'contain',
-                transition: 'all 0.2s'
-              }} 
-            />
-            {!collapsed && (
-              <Text className="app-title" style={{ 
-                fontSize: '16px', 
-                fontWeight: 600,
-                whiteSpace: 'nowrap'
-              }}>
-                {t('layout.title')}
-              </Text>
-            )}
-          </div>
-        </div>
-
-        {/* 菜单 */}
-        <Menu
-          className="app-menu"
-          theme={isDarkMode ? "dark" : "light"}
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          items={menuItems}
-          onClick={handleMenuClick}
+    <>
+      {/* 移动端遮罩层 */}
+      {isMobile && !collapsed && (
+        <div 
+          className="mobile-mask show" 
+          onClick={handleMaskClick}
         />
-      </Sider>
+      )}
+      
+      <Layout className="app-layout" style={{ minHeight: '100vh', height: '100vh', overflow: 'hidden' }}>
+        <Sider 
+          trigger={null} 
+          collapsible 
+          collapsed={isMobile ? collapsed : collapsed}
+          className="app-sider"
+          style={{
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            height: '100vh',
+            zIndex: isMobile ? 1000 : 100,
+            overflow: 'auto',
+            transform: isMobile && collapsed ? 'translateX(-100%)' : 'translateX(0)',
+            transition: 'transform 0.3s ease'
+          }}
+        >
+          {/* Logo区域 */}
+          <div className="app-logo" style={{ 
+            height: '64px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: collapsed ? 'center' : 'flex-start',
+            padding: collapsed ? '0' : '0 16px',
+            transition: 'all 0.2s',
+            borderBottom: '1px solid var(--border-color)',
+            position: 'sticky',
+            top: 0,
+            zIndex: 101,
+            backgroundColor: 'var(--sider-bg)'
+          }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              fontSize: '18px',
+              fontWeight: 600, 
+              gap: '8px',
+              transition: 'all 0.2s'
+            }}>
+              <img 
+                src={ASSETS.LOGO} 
+                alt="Logo" 
+                style={{ 
+                  width: '32px', 
+                  height: '32px',
+                  objectFit: 'contain',
+                  transition: 'all 0.2s'
+                }} 
+              />
+              {!collapsed && (
+                <Text className="app-title" style={{ 
+                  fontSize: '16px', 
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap'
+                }}>
+                  {t('layout.title')}
+                </Text>
+              )}
+            </div>
+          </div>
 
-      <Layout>
-        {/* 顶部导航栏 */}
-        <Header className="app-header">
-          <Button
-            className="collapse-button"
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
+          {/* 菜单 */}
+          <Menu
+            className="app-menu"
+            theme={isDarkMode ? "dark" : "light"}
+            mode="inline"
+            selectedKeys={[location.pathname]}
+            items={menuItems}
+            onClick={(item) => {
+              handleMenuClick(item);
+              // 移动端点击菜单后自动收起
+              if (isMobile) {
+                setCollapsed(true);
+              }
+            }}
+            style={{ 
+              border: 'none',
+              height: 'calc(100vh - 64px)',
+              overflow: 'auto'
+            }}
           />
+        </Sider>
 
-          <Space size={16}>
-            {/* 主题切换 */}
-            <ThemeToggle className="toolbar-button" />
-            
-            {/* 语言切换器 */}
-            <LanguageSwitcher className="language-switcher" />
-            
-            {/* 用户菜单 */}
-            <Dropdown
-              menu={{ 
-                items: userMenuItems,
-                onClick: handleUserMenuClick
-              }}
-              placement="bottomRight"
-              trigger={['click']}
-            >
-              <Button
-                className="toolbar-button user-info"
-                type="text"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: 'auto',
-                  padding: '8px 12px',
-                  border: 'none'
-                }}
-              >
-                <Space>
-                  <Avatar 
-                    className="user-avatar"
-                    size="small" 
-                    icon={<UserOutlined />}
-                  />
-                  <Text className="user-info">
-                    管理员
-                  </Text>
-                </Space>
-              </Button>
-            </Dropdown>
-          </Space>
-        </Header>
-
-        {/* 主内容区域 */}
-        <Content className="app-content" style={{ 
-          margin: 0,
-          minHeight: 'calc(100vh - 64px)',
-          overflow: 'auto'
+        <Layout style={{ 
+          marginLeft: isMobile ? 0 : (collapsed ? 80 : 200),
+          transition: 'margin-left 0.2s',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column'
         }}>
-          <Outlet />
-        </Content>
+          {/* 顶部导航栏 */}
+          <Header 
+            className="app-header"
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              left: isMobile ? 0 : (collapsed ? 80 : 200),
+              zIndex: 99,
+              transition: 'left 0.2s',
+              height: '64px',
+              lineHeight: '64px'
+            }}
+          >
+            <Button
+              className="collapse-button"
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+            />
+
+            <Space size={16}>
+              {/* 主题切换 */}
+              <ThemeToggle className="toolbar-button" />
+              
+              {/* 语言切换器 */}
+              <LanguageSwitcher className="language-switcher" />
+              
+              {/* 用户菜单 */}
+              <Dropdown
+                menu={{ 
+                  items: userMenuItems,
+                  onClick: handleUserMenuClick
+                }}
+                placement="bottomRight"
+                trigger={['click']}
+              >
+                <Button
+                  className="toolbar-button user-info"
+                  type="text"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: 'auto',
+                    padding: '8px 12px',
+                    border: 'none'
+                  }}
+                >
+                  <Space>
+                    <Avatar 
+                      className="user-avatar"
+                      size="small" 
+                      icon={<UserOutlined />}
+                    />
+                    <Text className="user-info">
+                      管理员
+                    </Text>
+                  </Space>
+                </Button>
+              </Dropdown>
+            </Space>
+          </Header>
+
+          {/* 主内容区域 */}
+          <Content 
+            className="app-content" 
+            style={{ 
+              marginTop: '64px',
+              height: 'calc(100vh - 64px)',
+              overflow: 'auto',
+              position: 'relative'
+            }}
+          >
+            <Outlet />
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </>
   );
 };
 

@@ -74,19 +74,130 @@
 .app-layout {
   color: var(--text-color);
   background-color: var(--background-color);
+  height: 100vh;
+  overflow: hidden;
 }
 
 .app-header {
   background-color: var(--header-bg) !important;
   border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 0 16px 0 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
 }
 
 .app-sider {
   background-color: var(--sider-bg) !important;
+  border-right: 1px solid var(--border-color);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
 }
 
 .app-content {
   background-color: var(--content-bg) !important;
+  position: relative;
+}
+
+/* 侧边栏滚动条样式 */
+.app-sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-sider .ant-menu {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 自定义滚动条样式 */
+.app-sider .ant-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.app-sider .ant-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-sider .ant-menu::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.app-sider .ant-menu::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
+}
+
+/* 主内容区域滚动条样式 */
+.app-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.app-content::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+.app-content::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.app-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .app-layout {
+    height: 100vh;
+  }
+  
+  .app-sider {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    z-index: 1000 !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .app-sider.ant-layout-sider-collapsed {
+    transform: translateX(-100%);
+  }
+  
+  .app-sider:not(.ant-layout-sider-collapsed) {
+    transform: translateX(0);
+  }
+  
+  .app-header {
+    left: 0 !important;
+    right: 0 !important;
+  }
+  
+  .app-content {
+    margin-left: 0 !important;
+  }
+  
+  /* 移动端遮罩层 */
+  .mobile-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 999;
+    display: none;
+  }
+  
+  .mobile-mask.show {
+    display: block;
+  }
 }
 
 /* 页面标题样式 */
@@ -856,17 +967,19 @@
 }
 
 /* 导航栏样式 */
-.app-header {
-  padding: 0 16px 0 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-}
-
 .collapse-button {
   font-size: 16px !important;
   width: 64px !important;
   height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s !important;
+}
+
+.collapse-button:hover {
+  background-color: var(--menu-item-hover-bg) !important;
+}
   margin-left: 0 !important;
   padding-left: 0 !important;
   justify-content: flex-start !important;
