@@ -46,9 +46,10 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
-import { AIAgentCard } from './components';
 import { useAppSelector } from '../../store';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
+import { AgentCard } from '../../components/AgentCard';
+import type { Agent } from '../../components/AgentCard';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -513,7 +514,7 @@ const AIAgentManagement: React.FC = () => {
 
     return filteredAgents.map(agent => (
       <Col xs={24} sm={12} lg={8} xl={6} key={agent.id}>
-        <AIAgentCard
+        <AgentCard
           agent={{
             ...agent,
             stats: {
@@ -522,7 +523,7 @@ const AIAgentManagement: React.FC = () => {
               avgResponseTime: Math.floor(Math.random() * 200) + 100,
               uptime: '2天3小时'
             }
-          }}
+          } as Agent}
           onEdit={handleEditAgent}
           onDelete={handleDeleteAgent}
           onStart={handleStartAgent}
