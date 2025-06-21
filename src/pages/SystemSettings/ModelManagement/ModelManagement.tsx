@@ -293,14 +293,14 @@ const ModelManagement: React.FC = () => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Statistic
-                    title="使用次数"
+                    title={t('models.stats.usageCount')}
                     value={model.usageCount}
                     valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title="最大Token"
+                    title={t('models.stats.maxTokens')}
                     value={model.maxTokens}
                     valueStyle={{ fontSize: 14 }}
                   />
@@ -386,7 +386,7 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="总使用次数"
+              title={t('models.stats.totalUsage')}
               value={totalUsage}
               valueStyle={{ color: '#faad14' }}
               prefix={<ThunderboltOutlined />}
@@ -396,7 +396,7 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="平均温度"
+              title={t('models.stats.avgTemperature')}
               value={avgTemperature.toFixed(1)}
               valueStyle={{ color: '#722ed1' }}
               prefix={<MonitorOutlined />}
@@ -542,22 +542,22 @@ const ModelManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="maxTokens"
-                label="最大Token数"
-                rules={[{ required: true, message: '请输入最大Token数' }]}
+                label={t('models.form.maxTokens')}
+                rules={[{ required: true, message: t('models.form.maxTokensRequired') }]}
               >
                 <InputNumber
                   min={1}
                   max={128000}
                   style={{ width: '100%' }}
-                  placeholder="请输入最大Token数"
+                  placeholder={t('models.form.maxTokensPlaceholder')}
                 />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="temperature"
-                label="温度参数"
-                rules={[{ required: true, message: '请设置温度参数' }]}
+                label={t('models.form.temperature')}
+                rules={[{ required: true, message: t('models.form.temperatureRequired') }]}
               >
                 <Slider
                   min={0}
@@ -659,10 +659,10 @@ const ModelManagement: React.FC = () => {
                   <Col span={12}>
                     <Card title="生成参数" size="small">
                       <Descriptions column={1} size="small">
-                        <Descriptions.Item label="最大Token数">
+                        <Descriptions.Item label={t('models.detail.maxTokens')}>
                           {selectedModel.maxTokens}
                         </Descriptions.Item>
-                        <Descriptions.Item label="温度参数">
+                        <Descriptions.Item label={t('models.detail.temperature')}>
                           {selectedModel.temperature}
                         </Descriptions.Item>
                         <Descriptions.Item label="Top P">
@@ -678,15 +678,15 @@ const ModelManagement: React.FC = () => {
                     </Card>
                   </Col>
                   <Col span={12}>
-                    <Card title="限制配置" size="small">
+                    <Card title={t('models.detail.limits')} size="small">
                       <Descriptions column={1} size="small">
-                        <Descriptions.Item label="每分钟请求数">
+                        <Descriptions.Item label={t('models.detail.requestsPerMinute')}>
                           {selectedModel.limits.requestsPerMinute}
                         </Descriptions.Item>
-                        <Descriptions.Item label="每分钟Token数">
+                        <Descriptions.Item label={t('models.detail.tokensPerMinute')}>
                           {selectedModel.limits.tokensPerMinute}
                         </Descriptions.Item>
-                        <Descriptions.Item label="每日限制">
+                        <Descriptions.Item label={t('models.detail.dailyLimit')}>
                           {selectedModel.limits.dailyLimit}
                         </Descriptions.Item>
                       </Descriptions>
