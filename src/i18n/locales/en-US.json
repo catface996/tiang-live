@@ -1117,6 +1117,7 @@
       "createTitle": "Create Template",
       "editTitle": "Edit Template",
       "addTemplate": "Create Template",
+      "createPrompt": "Create Template",
       "stats": {
         "totalTemplates": "Total Templates",
         "publicTemplates": "Public Templates",
@@ -1190,7 +1191,10 @@
         "description": "Description",
         "content": "Prompt Content",
         "variables": "Variables",
-        "examples": "Examples"
+        "examples": "Examples",
+        "variablesList": "Variables List",
+        "tags": "Tags",
+        "noVariables": "No Variables"
       },
       "columns": {
         "templateName": "Template Name",
@@ -1218,7 +1222,9 @@
         "difficulty": "Difficulty",
         "difficultyRequired": "Please select difficulty",
         "variables": "Variables",
-        "examples": "Examples"
+        "examples": "Examples",
+        "variableTip": "Tip",
+        "variableTipDescription": "Use {variable} format in prompt content to define variables, the system will automatically recognize and provide variable replacement functionality."
       }
     },
     "tags": {

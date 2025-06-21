@@ -1117,6 +1117,7 @@
       "createTitle": "创建模板",
       "editTitle": "编辑模板",
       "addTemplate": "创建模板",
+      "createPrompt": "创建模板",
       "stats": {
         "totalTemplates": "模板总数",
         "publicTemplates": "公开模板",
@@ -1190,7 +1191,10 @@
         "description": "描述",
         "content": "提示词内容",
         "variables": "变量说明",
-        "examples": "使用示例"
+        "examples": "使用示例",
+        "variablesList": "变量列表",
+        "tags": "标签",
+        "noVariables": "无变量"
       },
       "columns": {
         "templateName": "模板名称",
@@ -1218,7 +1222,9 @@
         "difficulty": "难度",
         "difficultyRequired": "请选择难度",
         "variables": "变量定义",
-        "examples": "使用示例"
+        "examples": "使用示例",
+        "variableTip": "提示",
+        "variableTipDescription": "使用 {变量名} 格式在提示词中定义变量，系统会自动识别并提供变量替换功能。"
       }
     },
     "tags": {

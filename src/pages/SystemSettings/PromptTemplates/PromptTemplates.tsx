@@ -297,6 +297,18 @@ API接口：{api_details}
     advanced: { name: '高级', color: 'red' },
   };
 
+  const getCategoryKey = (category: string) => {
+    const categoryKeyMap: { [key: string]: string } = {
+      '开发工具': 'devTools',
+      '运维工具': 'opsTools',
+      '产品管理': 'productManagement',
+      '文档工具': 'docTools',
+      '客服助手': 'customerService',
+      '数据分析': 'dataAnalysis'
+    };
+    return categoryKeyMap[category] || 'devTools';
+  };
+
   const handleCreatePrompt = () => {
     setEditingPrompt(null);
     form.resetFields();
@@ -419,10 +431,10 @@ API接口：{api_details}
             <div style={{ marginBottom: 12 }}>
               <Space wrap>
                 <Tag color={categoryConfig?.color} icon={categoryConfig?.icon}>
-                  {prompt.category}
+                  {t(`systemSettings.prompts.categories.${getCategoryKey(prompt.category)}`)}
                 </Tag>
                 <Tag color={difficultyConfig?.color}>
-                  {difficultyConfig?.name}
+                  {t(`systemSettings.prompts.difficulty.${prompt.difficulty}`)}
                 </Tag>
                 {prompt.isPublic && <Tag color="blue">{t('systemSettings.prompts.status.public')}</Tag>}
               </Space>
@@ -566,10 +578,12 @@ API接口：{api_details}
             width: 120,
             options: [
               { value: 'all', label: t('systemSettings.prompts.search.allCategories') },
-              ...Object.entries(categoryMap).map(([key, config]) => ({
-                value: key,
-                label: key
-              }))
+              { value: '开发工具', label: t('systemSettings.prompts.categories.devTools') },
+              { value: '运维工具', label: t('systemSettings.prompts.categories.opsTools') },
+              { value: '产品管理', label: t('systemSettings.prompts.categories.productManagement') },
+              { value: '文档工具', label: t('systemSettings.prompts.categories.docTools') },
+              { value: '客服助手', label: t('systemSettings.prompts.categories.customerService') },
+              { value: '数据分析', label: t('systemSettings.prompts.categories.dataAnalysis') }
             ]
           },
           {
@@ -713,8 +727,8 @@ API接口：{api_details}
           </Row>
 
           <Alert
-            message="提示"
-            description="使用 {变量名} 格式在提示词中定义变量，系统会自动识别并提供变量替换功能。"
+            message={t('systemSettings.prompts.form.variableTip')}
+            description={t('systemSettings.prompts.form.variableTipDescription')}
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -743,7 +757,7 @@ API接口：{api_details}
                   color={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.color}
                   icon={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.icon}
                 >
-                  {selectedPrompt.category}
+                  {t(`systemSettings.prompts.categories.${getCategoryKey(selectedPrompt.category)}`)}
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item label={t('systemSettings.prompts.detail.difficulty')}>
@@ -804,7 +818,7 @@ API接口：{api_details}
             {/* 变量和标签 */}
             <Row gutter={16}>
               <Col span={12}>
-                <Card title="变量列表" size="small">
+                <Card title={t('systemSettings.prompts.detail.variablesList')} size="small">
                   {selectedPrompt.variables.length > 0 ? (
                     <Space wrap>
                       {selectedPrompt.variables.map(variable => (
@@ -814,12 +828,12 @@ API接口：{api_details}
                       ))}
                     </Space>
                   ) : (
-                    <Text type="secondary">无变量</Text>
+                    <Text type="secondary">{t('systemSettings.prompts.detail.noVariables')}</Text>
                   )}
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="标签" size="small">
+                <Card title={t('systemSettings.prompts.detail.tags')} size="small">
                   <Space wrap>
                     {selectedPrompt.tags.map(tag => (
                       <Tag key={tag}>{tag}</Tag>
