@@ -154,6 +154,9 @@ const AIAgentManagement: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingAgent, setEditingAgent] = useState<AIAgent | null>(null);
   const [selectedAgent, setSelectedAgent] = useState<AIAgent | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterType, setFilterType] = useState('all');
   const [form] = Form.useForm();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
@@ -245,30 +248,198 @@ const AIAgentManagement: React.FC = () => {
         autoRestart: false,
       },
     },
+    {
+      id: '5',
+      name: '安全扫描智能体',
+      type: 'security',
+      status: 'running',
+      description: '执行安全漏洞扫描和威胁检测，保障系统安全',
+      version: 'v2.3.1',
+      cpu: 18.9,
+      memory: 384,
+      tasks: 673,
+      successRate: 97.3,
+      lastActive: '2024-06-15 14:25:45',
+      createdAt: '2024-05-05',
+      config: {
+        maxConcurrency: 8,
+        timeout: 90,
+        retryCount: 2,
+        autoRestart: true,
+      },
+    },
+    {
+      id: '6',
+      name: '数据备份智能体',
+      type: 'backup',
+      status: 'running',
+      description: '自动化数据备份和恢复管理，确保数据安全',
+      version: 'v1.9.3',
+      cpu: 12.3,
+      memory: 192,
+      tasks: 445,
+      successRate: 99.8,
+      lastActive: '2024-06-15 14:20:15',
+      createdAt: '2024-04-20',
+      config: {
+        maxConcurrency: 4,
+        timeout: 300,
+        retryCount: 3,
+        autoRestart: true,
+      },
+    },
+    {
+      id: '7',
+      name: 'API网关智能体',
+      type: 'gateway',
+      status: 'running',
+      description: '智能API路由和负载均衡，优化请求分发',
+      version: 'v2.0.5',
+      cpu: 31.7,
+      memory: 768,
+      tasks: 2156,
+      successRate: 99.1,
+      lastActive: '2024-06-15 14:32:08',
+      createdAt: '2024-05-15',
+      config: {
+        maxConcurrency: 20,
+        timeout: 15,
+        retryCount: 1,
+        autoRestart: true,
+      },
+    },
+    {
+      id: '8',
+      name: '容量规划智能体',
+      type: 'planning',
+      status: 'paused',
+      description: '分析资源使用趋势，提供容量规划建议',
+      version: 'v1.4.2',
+      cpu: 5.8,
+      memory: 96,
+      tasks: 89,
+      successRate: 95.5,
+      lastActive: '2024-06-15 10:45:30',
+      createdAt: '2024-03-25',
+      config: {
+        maxConcurrency: 2,
+        timeout: 240,
+        retryCount: 2,
+        autoRestart: false,
+      },
+    },
+    {
+      id: '9',
+      name: '故障诊断智能体',
+      type: 'diagnosis',
+      status: 'running',
+      description: '智能故障诊断和根因分析，快速定位问题',
+      version: 'v2.2.0',
+      cpu: 21.4,
+      memory: 512,
+      tasks: 567,
+      successRate: 96.2,
+      lastActive: '2024-06-15 14:18:55',
+      createdAt: '2024-04-30',
+      config: {
+        maxConcurrency: 6,
+        timeout: 120,
+        retryCount: 3,
+        autoRestart: true,
+      },
+    },
+    {
+      id: '10',
+      name: '配置管理智能体',
+      type: 'config',
+      status: 'stopped',
+      description: '自动化配置管理和版本控制，确保配置一致性',
+      version: 'v1.7.1',
+      cpu: 0,
+      memory: 0,
+      tasks: 234,
+      successRate: 98.9,
+      lastActive: '2024-06-14 16:20:12',
+      createdAt: '2024-03-15',
+      config: {
+        maxConcurrency: 3,
+        timeout: 60,
+        retryCount: 2,
+        autoRestart: false,
+      },
+    },
+    {
+      id: '11',
+      name: '流量分析智能体',
+      type: 'traffic',
+      status: 'running',
+      description: '实时流量分析和异常检测，优化网络性能',
+      version: 'v1.6.4',
+      cpu: 16.2,
+      memory: 320,
+      tasks: 789,
+      successRate: 97.8,
+      lastActive: '2024-06-15 14:29:33',
+      createdAt: '2024-05-10',
+      config: {
+        maxConcurrency: 12,
+        timeout: 45,
+        retryCount: 2,
+        autoRestart: true,
+      },
+    },
+    {
+      id: '12',
+      name: '资源清理智能体',
+      type: 'cleanup',
+      status: 'paused',
+      description: '定期清理无用资源和临时文件，释放存储空间',
+      version: 'v1.3.0',
+      cpu: 3.1,
+      memory: 64,
+      tasks: 156,
+      successRate: 99.4,
+      lastActive: '2024-06-15 08:30:00',
+      createdAt: '2024-02-28',
+      config: {
+        maxConcurrency: 1,
+        timeout: 600,
+        retryCount: 1,
+        autoRestart: false,
+      },
+    }
   ];
 
   const agentTypeMap = {
-    monitor: { name: '监控', color: 'blue', icon: <MonitorOutlined /> },
-    analysis: { name: '分析', color: 'green', icon: <BarChartOutlined /> },
-    deployment: { name: '部署', color: 'purple', icon: <ApiOutlined /> },
-    optimization: { name: '优化', color: 'orange', icon: <ThunderboltOutlined /> },
+    monitor: { name: t('agents.types.monitor'), color: 'blue', icon: <MonitorOutlined /> },
+    analysis: { name: t('agents.types.analysis'), color: 'green', icon: <BarChartOutlined /> },
+    deployment: { name: t('agents.types.deployment'), color: 'purple', icon: <ApiOutlined /> },
+    optimization: { name: t('agents.types.optimization'), color: 'orange', icon: <ThunderboltOutlined /> },
+    security: { name: t('agents.types.security'), color: 'red', icon: <ExclamationCircleOutlined /> },
+    backup: { name: t('agents.types.backup'), color: 'cyan', icon: <CheckCircleOutlined /> },
+    gateway: { name: t('agents.types.gateway'), color: 'geekblue', icon: <ApiOutlined /> },
+    planning: { name: t('agents.types.planning'), color: 'magenta', icon: <BarChartOutlined /> },
+    diagnosis: { name: t('agents.types.diagnosis'), color: 'volcano', icon: <MonitorOutlined /> },
+    config: { name: t('agents.types.config'), color: 'lime', icon: <ApiOutlined /> },
+    traffic: { name: t('agents.types.traffic'), color: 'gold', icon: <BarChartOutlined /> },
+    cleanup: { name: t('agents.types.cleanup'), color: 'gray', icon: <DeleteOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
       running: { 
         color: isDark ? '#52c41a' : 'green', 
-        text: '运行中',
+        text: t('agents.status.running'),
         bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
       },
       stopped: { 
         color: isDark ? '#f5222d' : 'red', 
-        text: '已停止',
+        text: t('agents.status.stopped'),
         bgColor: isDark ? 'rgba(245, 34, 45, 0.1)' : undefined
       },
       paused: { 
         color: isDark ? '#faad14' : 'orange', 
-        text: '已暂停',
+        text: t('agents.status.paused'),
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
       },
     };
@@ -329,7 +500,17 @@ const AIAgentManagement: React.FC = () => {
   };
 
   const renderAgentCards = () => {
-    return agentData.map(agent => (
+    // 过滤逻辑
+    const filteredAgents = agentData.filter(agent => {
+      const matchesSearch = agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                           agent.description.toLowerCase().includes(searchText.toLowerCase());
+      const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
+      const matchesType = filterType === 'all' || agent.type === filterType;
+      
+      return matchesSearch && matchesStatus && matchesType;
+    });
+
+    return filteredAgents.map(agent => (
       <Col xs={24} sm={12} lg={8} xl={6} key={agent.id}>
         <AIAgentCard
           agent={{
@@ -402,9 +583,9 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title="智能体总数"
+              title={t('agents.stats.totalAgents')}
               value={agentData.length}
-              suffix="个"
+              suffix={t('agents.stats.unit')}
               valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               prefix={<RobotOutlined />}
             />
@@ -413,9 +594,9 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title="运行中"
+              title={t('agents.stats.runningAgents')}
               value={runningAgents}
-              suffix="个"
+              suffix={t('agents.stats.unit')}
               valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
@@ -424,9 +605,9 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title="总执行任务"
+              title={t('agents.stats.totalTasks')}
               value={totalTasks}
-              suffix="次"
+              suffix={t('agents.stats.taskUnit')}
               valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               prefix={<ThunderboltOutlined />}
             />
@@ -435,7 +616,7 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title="平均成功率"
+              title={t('agents.stats.avgSuccessRate')}
               value={avgSuccessRate.toFixed(1)}
               suffix="%"
               valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
@@ -449,14 +630,99 @@ const AIAgentManagement: React.FC = () => {
       {totalCpu > 60 && (
         <StyledAlert
           $isDark={isDark}
-          message="系统资源使用率较高"
-          description={`当前CPU总使用率为 ${totalCpu.toFixed(1)}%，建议关注系统性能状况。`}
+          message={t('agents.alerts.highCpuUsage')}
+          description={t('agents.alerts.highCpuUsageDesc', { cpu: totalCpu.toFixed(1) })}
           type="warning"
           showIcon
           closable
           style={{ marginBottom: 24 }}
         />
       )}
+
+      {/* 搜索和筛选区域 */}
+      <Card 
+        style={{ 
+          marginBottom: 24,
+          background: isDark ? '#141414' : '#ffffff',
+          borderColor: isDark ? '#303030' : '#f0f0f0'
+        }}
+      >
+        <Row gutter={16} align="middle">
+          <Col xs={24} sm={12} md={8}>
+            <Input.Search
+              placeholder={t('agents.searchPlaceholder')}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{
+                backgroundColor: isDark ? '#000000' : '#ffffff',
+              }}
+              allowClear
+            />
+          </Col>
+          <Col xs={12} sm={6} md={4}>
+            <Select
+              value={filterStatus}
+              onChange={setFilterStatus}
+              style={{ width: '100%' }}
+              placeholder={t('agents.filterByStatus')}
+            >
+              <Select.Option value="all">{t('common.all')}</Select.Option>
+              <Select.Option value="running">{t('agents.status.running')}</Select.Option>
+              <Select.Option value="paused">{t('agents.status.paused')}</Select.Option>
+              <Select.Option value="stopped">{t('agents.status.stopped')}</Select.Option>
+            </Select>
+          </Col>
+          <Col xs={12} sm={6} md={4}>
+            <Select
+              value={filterType}
+              onChange={setFilterType}
+              style={{ width: '100%' }}
+              placeholder={t('agents.filterByType')}
+            >
+              <Select.Option value="all">{t('common.all')}</Select.Option>
+              {Object.entries(agentTypeMap).map(([key, config]) => (
+                <Select.Option key={key} value={key}>
+                  <Space>
+                    {config.icon}
+                    {config.name}
+                  </Space>
+                </Select.Option>
+              ))}
+            </Select>
+          </Col>
+          <Col xs={24} sm={24} md={8}>
+            <div style={{ textAlign: 'right' }}>
+              <Space>
+                <Button 
+                  onClick={() => {
+                    setSearchText('');
+                    setFilterStatus('all');
+                    setFilterType('all');
+                  }}
+                  style={{
+                    color: isDark ? '#ffffff' : undefined,
+                    borderColor: isDark ? '#434343' : undefined,
+                    backgroundColor: isDark ? 'transparent' : undefined
+                  }}
+                >
+                  {t('common.reset')}
+                </Button>
+                <Text type="secondary">
+                  {t('agents.totalFound', { 
+                    count: agentData.filter(agent => {
+                      const matchesSearch = agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                                           agent.description.toLowerCase().includes(searchText.toLowerCase());
+                      const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
+                      const matchesType = filterType === 'all' || agent.type === filterType;
+                      return matchesSearch && matchesStatus && matchesType;
+                    }).length 
+                  })}
+                </Text>
+              </Space>
+            </div>
+          </Col>
+        </Row>
+      </Card>
 
       {/* 智能体卡片展示 */}
       <Row gutter={16}>
@@ -465,7 +731,7 @@ const AIAgentManagement: React.FC = () => {
 
       {/* 创建/编辑智能体模态框 */}
       <Modal
-        title={editingAgent ? '编辑智能体' : '创建智能体'}
+        title={editingAgent ? t('agents.editAgent') : t('agents.createAgent')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}

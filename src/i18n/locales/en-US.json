@@ -50,6 +50,8 @@
     "retryCount": "Retry Count",
     "retryCountRequired": "Please set retry count",
     "locale": "en-US",
+    "reset": "Reset",
+    "all": "All",
     "retryCountPlaceholder": "Retry count",
     "success": "Success",
     "timeout": "Timeout",
@@ -1185,6 +1187,47 @@
       "sequenceManagement": "Sequence management features:\n1. Define business sequence processes\n2. Configure sequence nodes and conditions\n3. Monitor sequence execution status\n4. Exception handling and retry mechanisms\n5. Sequence performance analysis\n\nEnsure correctness and reliability of sequence logic.",
       "aiAgent": "AI Agent management:\n1. Create and configure agents\n2. Train and optimize models\n3. Deploy and monitor agents\n4. Agent collaboration and scheduling\n5. Performance evaluation and improvement\n\nAgents can automate complex tasks.",
       "default": "Thank you for your question! I'm the AI assistant for the Tiang Ops system, and I can help you with:\n\n• Understanding system features and operations\n• Answering technical questions and best practices\n• Providing configuration advice and troubleshooting\n• Assisting with system optimization and management\n\nPlease let me know what help you need, and I'll do my best to answer."
+    }
+  },
+  "agents": {
+    "title": "AI Agent Management",
+    "subtitle": "Manage and monitor AI agent runtime status, configure agent parameters and task scheduling",
+    "createAgent": "Create Agent",
+    "editAgent": "Edit Agent",
+    "searchPlaceholder": "Search agent name or description...",
+    "filterByStatus": "Filter by Status",
+    "filterByType": "Filter by Type",
+    "totalFound": "Found {{count}} agents",
+    "stats": {
+      "totalAgents": "Total Agents",
+      "runningAgents": "Running",
+      "totalTasks": "Total Tasks",
+      "avgSuccessRate": "Avg Success Rate",
+      "unit": "",
+      "taskUnit": " times"
+    },
+    "status": {
+      "running": "Running",
+      "stopped": "Stopped",
+      "paused": "Paused"
+    },
+    "types": {
+      "monitor": "Monitor",
+      "analysis": "Analysis",
+      "deployment": "Deployment",
+      "optimization": "Optimization",
+      "security": "Security",
+      "backup": "Backup",
+      "gateway": "Gateway",
+      "planning": "Planning",
+      "diagnosis": "Diagnosis",
+      "config": "Config",
+      "traffic": "Traffic",
+      "cleanup": "Cleanup"
+    },
+    "alerts": {
+      "highCpuUsage": "High System Resource Usage",
+      "highCpuUsageDesc": "Current total CPU usage is {{cpu}}%, please monitor system performance."
     }
   },
   "validation": {

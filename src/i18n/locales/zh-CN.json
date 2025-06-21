@@ -49,6 +49,8 @@
     "retryCount": "重试次数",
     "retryCountRequired": "请设置重试次数",
     "locale": "zh-CN",
+    "reset": "重置",
+    "all": "全部",
     "retryCountPlaceholder": "重试次数",
     "success": "成功",
     "timeout": "超时",
@@ -1287,6 +1289,47 @@
     "lastWeek": "上周",
     "lastMonth": "上月",
     "custom": "自定义"
+  },
+  "agents": {
+    "title": "AI智能体管理",
+    "subtitle": "管理和监控AI智能体的运行状态，配置智能体参数和任务调度",
+    "createAgent": "创建智能体",
+    "editAgent": "编辑智能体",
+    "searchPlaceholder": "搜索智能体名称或描述...",
+    "filterByStatus": "按状态筛选",
+    "filterByType": "按类型筛选",
+    "totalFound": "共找到 {{count}} 个智能体",
+    "stats": {
+      "totalAgents": "智能体总数",
+      "runningAgents": "运行中",
+      "totalTasks": "总执行任务",
+      "avgSuccessRate": "平均成功率",
+      "unit": "个",
+      "taskUnit": "次"
+    },
+    "status": {
+      "running": "运行中",
+      "stopped": "已停止",
+      "paused": "已暂停"
+    },
+    "types": {
+      "monitor": "监控",
+      "analysis": "分析",
+      "deployment": "部署",
+      "optimization": "优化",
+      "security": "安全",
+      "backup": "备份",
+      "gateway": "网关",
+      "planning": "规划",
+      "diagnosis": "诊断",
+      "config": "配置",
+      "traffic": "流量",
+      "cleanup": "清理"
+    },
+    "alerts": {
+      "highCpuUsage": "系统资源使用率较高",
+      "highCpuUsageDesc": "当前CPU总使用率为 {{cpu}}%，建议关注系统性能状况。"
+    }
   },
   "pagination": {
     "total": "共 {{total}} 条",
