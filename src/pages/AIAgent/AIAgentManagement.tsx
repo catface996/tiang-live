@@ -48,6 +48,7 @@ import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import { AIAgentCard } from './components';
 import { useAppSelector } from '../../store';
+import SearchFilterBar from '../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -640,89 +641,55 @@ const AIAgentManagement: React.FC = () => {
       )}
 
       {/* 搜索和筛选区域 */}
-      <Card 
-        style={{ 
-          marginBottom: 24,
-          background: isDark ? '#141414' : '#ffffff',
-          borderColor: isDark ? '#303030' : '#f0f0f0'
-        }}
-      >
-        <Row gutter={16} align="middle">
-          <Col xs={24} sm={12} md={8}>
-            <Input.Search
-              placeholder={t('agents.searchPlaceholder')}
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              style={{
-                backgroundColor: isDark ? '#000000' : '#ffffff',
-              }}
-              allowClear
-            />
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <Select
-              value={filterStatus}
-              onChange={setFilterStatus}
-              style={{ width: '100%' }}
-              placeholder={t('agents.filterByStatus')}
-            >
-              <Select.Option value="all">{t('common.all')}</Select.Option>
-              <Select.Option value="running">{t('agents.status.running')}</Select.Option>
-              <Select.Option value="paused">{t('agents.status.paused')}</Select.Option>
-              <Select.Option value="stopped">{t('agents.status.stopped')}</Select.Option>
-            </Select>
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <Select
-              value={filterType}
-              onChange={setFilterType}
-              style={{ width: '100%' }}
-              placeholder={t('agents.filterByType')}
-            >
-              <Select.Option value="all">{t('common.all')}</Select.Option>
-              {Object.entries(agentTypeMap).map(([key, config]) => (
-                <Select.Option key={key} value={key}>
-                  <Space>
-                    {config.icon}
-                    {config.name}
-                  </Space>
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col xs={24} sm={24} md={8}>
-            <div style={{ textAlign: 'right' }}>
-              <Space>
-                <Button 
-                  onClick={() => {
-                    setSearchText('');
-                    setFilterStatus('all');
-                    setFilterType('all');
-                  }}
-                  style={{
-                    color: isDark ? '#ffffff' : undefined,
-                    borderColor: isDark ? '#434343' : undefined,
-                    backgroundColor: isDark ? 'transparent' : undefined
-                  }}
-                >
-                  {t('common.reset')}
-                </Button>
-                <Text type="secondary">
-                  {t('agents.totalFound', { 
-                    count: agentData.filter(agent => {
-                      const matchesSearch = agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                                           agent.description.toLowerCase().includes(searchText.toLowerCase());
-                      const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
-                      const matchesType = filterType === 'all' || agent.type === filterType;
-                      return matchesSearch && matchesStatus && matchesType;
-                    }).length 
-                  })}
-                </Text>
-              </Space>
-            </div>
-          </Col>
-        </Row>
-      </Card>
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder={t('agents.searchPlaceholder')}
+        filters={[
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: t('agents.filterByStatus'),
+            width: 120,
+            options: [
+              { value: 'all', label: t('common.all') },
+              { value: 'running', label: t('agents.status.running') },
+              { value: 'paused', label: t('agents.status.paused') },
+              { value: 'stopped', label: t('agents.status.stopped') },
+            ]
+          },
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: t('agents.filterByType'),
+            width: 140,
+            options: [
+              { value: 'all', label: t('common.all') },
+              ...Object.entries(agentTypeMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          }
+        ]}
+        extraActions={
+          <div style={{ textAlign: 'right' }}>
+            <span style={{ color: isDark ? '#8c8c8c' : '#666666', fontSize: '14px' }}>
+              {t('agents.totalFound', { 
+                count: agentData.filter(agent => {
+                  const matchesSearch = agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                                       agent.description.toLowerCase().includes(searchText.toLowerCase());
+                  const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
+                  const matchesType = filterType === 'all' || agent.type === filterType;
+                  return matchesSearch && matchesStatus && matchesType;
+                }).length 
+              })}
+            </span>
+          </div>
+        }
+      />
 
       {/* 智能体卡片展示 */}
       <Row gutter={16}>

@@ -58,7 +58,21 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   transition: all 0.3s ease;
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-  border-radius: 8px;
+  border-radius: 8px !important;
+  
+  /* 确保所有角都是圆角 */
+  .ant-card-head {
+    border-radius: 8px 8px 0 0 !important;
+  }
+  
+  .ant-card-body {
+    border-radius: 0 0 8px 8px !important;
+  }
+  
+  /* 当没有actions时，body的底部也要圆角 */
+  &:not(.ant-card-actions) .ant-card-body {
+    border-radius: 0 0 8px 8px !important;
+  }
   
   &:hover {
     transform: translateY(-2px);
@@ -77,6 +91,7 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   .ant-card-actions {
     background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
     border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    border-radius: 0 0 8px 8px !important;
     
     li {
       border-right: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
@@ -141,20 +156,21 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   
   .agent-stats {
     margin: 16px 0;
-    padding: 12px;
+    padding: 16px;
     background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
     border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
     border-radius: 6px;
   }
   
   .agent-description {
-    margin: 12px 0;
+    margin: 16px 0;
     color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
     font-size: 13px;
+    line-height: 1.5;
   }
   
   .agent-tags {
-    margin: 12px 0;
+    margin: 16px 0;
   }
   
   .agent-actions {
