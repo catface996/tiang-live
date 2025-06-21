@@ -510,9 +510,9 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="模板总数"
+              title={t('systemSettings.prompts.stats.totalTemplates')}
               value={promptData.length}
-              suffix="个"
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<FileTextOutlined />}
             />
@@ -521,9 +521,9 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="公开模板"
+              title={t('systemSettings.prompts.stats.publicTemplates')}
               value={publicPrompts}
-              suffix="个"
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
@@ -532,9 +532,9 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="收藏模板"
+              title={t('systemSettings.prompts.stats.favoriteTemplates')}
               value={favoritePrompts}
-              suffix="个"
+              suffix={t('common.unit.count')}
               valueStyle={{ color: '#faad14' }}
               prefix={<StarOutlined />}
             />
@@ -543,7 +543,7 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="平均评分"
+              title={t('systemSettings.prompts.stats.averageRating')}
               value={avgRating.toFixed(1)}
               valueStyle={{ color: '#722ed1' }}
               prefix={<RobotOutlined />}
@@ -556,16 +556,16 @@ API接口：{api_details}
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder="搜索提示词名称、描述、标签..."
+        searchPlaceholder={t('systemSettings.prompts.search.placeholder')}
         filters={[
           {
             key: 'category',
             value: filterCategory,
             onChange: setFilterCategory,
-            placeholder: '分类',
+            placeholder: t('systemSettings.prompts.search.category'),
             width: 120,
             options: [
-              { value: 'all', label: '所有分类' },
+              { value: 'all', label: t('systemSettings.prompts.search.allCategories') },
               ...Object.entries(categoryMap).map(([key, config]) => ({
                 value: key,
                 label: key
@@ -576,26 +576,26 @@ API接口：{api_details}
             key: 'difficulty',
             value: filterDifficulty,
             onChange: setFilterDifficulty,
-            placeholder: '难度',
+            placeholder: t('systemSettings.prompts.search.difficulty'),
             width: 100,
             options: [
-              { value: 'all', label: '所有难度' },
-              { value: 'beginner', label: '初级' },
-              { value: 'intermediate', label: '中级' },
-              { value: 'advanced', label: '高级' }
+              { value: 'all', label: t('systemSettings.prompts.search.allDifficulties') },
+              { value: 'beginner', label: t('systemSettings.prompts.difficulty.beginner') },
+              { value: 'intermediate', label: t('systemSettings.prompts.difficulty.intermediate') },
+              { value: 'advanced', label: t('systemSettings.prompts.difficulty.advanced') }
             ]
           },
           {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: '状态',
+            placeholder: t('systemSettings.prompts.search.status'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
-              { value: 'public', label: '公开' },
-              { value: 'private', label: '私有' },
-              { value: 'favorite', label: '收藏' }
+              { value: 'all', label: t('systemSettings.prompts.search.allStatuses') },
+              { value: 'public', label: t('systemSettings.prompts.status.public') },
+              { value: 'private', label: t('systemSettings.prompts.status.private') },
+              { value: 'favorite', label: t('systemSettings.prompts.status.favorite') }
             ]
           }
         ]}

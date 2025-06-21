@@ -1116,11 +1116,69 @@
       "subtitle": "AI prompt template management and optimization",
       "createTitle": "Create Template",
       "editTitle": "Edit Template",
+      "addTemplate": "Create Template",
       "stats": {
         "totalTemplates": "Total Templates",
-        "activeTemplates": "Active Templates",
+        "publicTemplates": "Public Templates",
+        "favoriteTemplates": "Favorite Templates",
+        "averageRating": "Average Rating",
+        "usageCount": "Usage Count"
+      },
+      "search": {
+        "placeholder": "Search prompt name, description, tags...",
+        "category": "Category",
+        "difficulty": "Difficulty",
+        "status": "Status",
+        "allCategories": "All Categories",
+        "allDifficulties": "All Difficulties",
+        "allStatuses": "All Statuses"
+      },
+      "status": {
+        "public": "Public",
+        "private": "Private",
+        "favorite": "Favorite"
+      },
+      "difficulty": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "categories": {
+        "codeGeneration": "Code Generation",
+        "textAnalysis": "Text Analysis",
+        "translation": "Translation",
+        "qa": "Q&A",
+        "creative": "Creative Writing",
+        "technical": "Technical Documentation"
+      },
+      "actions": {
+        "copy": "Copy Content",
+        "favorite": "Add to Favorites",
+        "unfavorite": "Remove from Favorites",
+        "edit": "Edit",
+        "delete": "Delete",
+        "view": "View Details"
+      },
+      "messages": {
+        "copySuccess": "Prompt content copied to clipboard",
+        "favoriteSuccess": "Favorite status updated successfully",
+        "deleteSuccess": "Prompt template deleted successfully",
+        "updateSuccess": "Prompt template updated successfully",
+        "createSuccess": "Prompt template created successfully"
+      },
+      "detail": {
+        "basicInfo": "Basic Information",
+        "templateName": "Template Name",
+        "category": "Category",
+        "difficulty": "Difficulty",
+        "rating": "Rating",
         "usageCount": "Usage Count",
-        "averageRating": "Average Rating"
+        "isPublic": "Public Template",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "content": "Template Content",
+        "variables": "Variables",
+        "examples": "Examples"
       },
       "columns": {
         "templateName": "Template Name",

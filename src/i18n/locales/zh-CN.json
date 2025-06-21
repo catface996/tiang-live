@@ -1116,11 +1116,69 @@
       "subtitle": "AI提示词模板管理和优化",
       "createTitle": "创建模板",
       "editTitle": "编辑模板",
+      "addTemplate": "创建模板",
       "stats": {
-        "totalTemplates": "总模板数",
-        "activeTemplates": "活跃模板",
+        "totalTemplates": "模板总数",
+        "publicTemplates": "公开模板",
+        "favoriteTemplates": "收藏模板",
+        "averageRating": "平均评分",
+        "usageCount": "使用次数"
+      },
+      "search": {
+        "placeholder": "搜索提示词名称、描述、标签...",
+        "category": "分类",
+        "difficulty": "难度",
+        "status": "状态",
+        "allCategories": "所有分类",
+        "allDifficulties": "所有难度",
+        "allStatuses": "所有状态"
+      },
+      "status": {
+        "public": "公开",
+        "private": "私有",
+        "favorite": "收藏"
+      },
+      "difficulty": {
+        "beginner": "初级",
+        "intermediate": "中级",
+        "advanced": "高级"
+      },
+      "categories": {
+        "codeGeneration": "代码生成",
+        "textAnalysis": "文本分析",
+        "translation": "翻译",
+        "qa": "问答",
+        "creative": "创意写作",
+        "technical": "技术文档"
+      },
+      "actions": {
+        "copy": "复制内容",
+        "favorite": "添加收藏",
+        "unfavorite": "取消收藏",
+        "edit": "编辑",
+        "delete": "删除",
+        "view": "查看详情"
+      },
+      "messages": {
+        "copySuccess": "提示词内容已复制到剪贴板",
+        "favoriteSuccess": "收藏状态更新成功",
+        "deleteSuccess": "提示词模板删除成功",
+        "updateSuccess": "提示词模板更新成功",
+        "createSuccess": "提示词模板创建成功"
+      },
+      "detail": {
+        "basicInfo": "基本信息",
+        "templateName": "模板名称",
+        "category": "分类",
+        "difficulty": "难度",
+        "rating": "评分",
         "usageCount": "使用次数",
-        "averageRating": "平均评分"
+        "isPublic": "公开模板",
+        "createdAt": "创建时间",
+        "updatedAt": "更新时间",
+        "content": "模板内容",
+        "variables": "变量说明",
+        "examples": "使用示例"
       },
       "columns": {
         "templateName": "模板名称",
