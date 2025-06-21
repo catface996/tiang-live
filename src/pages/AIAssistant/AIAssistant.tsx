@@ -381,7 +381,8 @@ const AIAssistant: React.FC = () => {
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('zh-CN', { 
+    const locale = t('common.locale') === 'zh-CN' ? 'zh-CN' : 'en-US';
+    return date.toLocaleTimeString(locale, { 
       hour: '2-digit', 
       minute: '2-digit' 
     });
@@ -489,7 +490,7 @@ const AIAssistant: React.FC = () => {
               <Empty 
                 description={
                   <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}>
-                    还没有对话记录，开始你的第一个问题吧！
+                    {t('aiAssistant.emptyMessage')}
                   </span>
                 }
                 image={Empty.PRESENTED_IMAGE_SIMPLE}

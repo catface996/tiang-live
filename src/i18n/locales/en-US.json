@@ -49,6 +49,7 @@
     "timeout": "Timeout",
     "retryCount": "Retry Count",
     "retryCountRequired": "Please set retry count",
+    "locale": "en-US",
     "retryCountPlaceholder": "Retry count",
     "success": "Success",
     "timeout": "Timeout",
@@ -1163,7 +1164,28 @@
     "suggestions": "Suggested Questions",
     "thinking": "Thinking...",
     "error": "Sorry, an error occurred",
-    "retry": "Retry"
+    "retry": "Retry",
+    "emptyMessage": "No conversation history yet, start with your first question!",
+    "sendShortcut": "Ctrl + Enter to send quickly",
+    "suggestions": {
+      "createPlane": "How to create a new plane?",
+      "entityRelation": "How to manage relationships between entities?",
+      "healthMonitor": "How to monitor system health?",
+      "planeDependency": "How to configure plane dependencies?",
+      "tagManagement": "How to manage tags?",
+      "systemReport": "How to generate system reports?"
+    },
+    "responses": {
+      "createPlane": "Steps to create a plane:\n1. Go to Plane Management page\n2. Click 'Create Plane' button\n3. Fill in basic plane information (name, description, etc.)\n4. Configure plane properties and rules\n5. Save and activate the plane\n\nNote the uniqueness of plane names and accuracy of descriptions.",
+      "entityRelation": "Entity relationship management includes:\n1. Define entity types and attributes\n2. Establish associations between entities\n3. Configure relationship constraints\n4. Visualize relationship graphs\n5. Monitor relationship changes\n\nRecommend planning the entity model before configuration.",
+      "healthMonitor": "System health monitoring features:\n1. Real-time monitoring of component status\n2. Set health thresholds and alerts\n3. Generate health reports\n4. Historical trend analysis\n5. Exception event tracking\n\nYou can view overall health status through the dashboard.",
+      "dependency": "Plane dependency configuration:\n1. Analyze dependencies between planes\n2. Set dependency types and strength\n3. Detect circular dependency issues\n4. Optimize dependency structure\n5. Monitor dependency changes\n\nAvoid creating overly complex dependency relationships.",
+      "tagManagement": "Tag management features:\n1. Create and edit tags\n2. Assign tags to entities\n3. Classify and filter based on tags\n4. Tag usage statistics\n5. Tag hierarchy management\n\nA reasonable tag system helps improve management efficiency.",
+      "reportGeneration": "Report generation process:\n1. Select report type and template\n2. Configure report parameters and data sources\n3. Set report generation cycle\n4. Automatically generate and distribute reports\n5. Report archiving and management\n\nSupports multiple format report exports.",
+      "sequenceManagement": "Sequence management features:\n1. Define business sequence processes\n2. Configure sequence nodes and conditions\n3. Monitor sequence execution status\n4. Exception handling and retry mechanisms\n5. Sequence performance analysis\n\nEnsure correctness and reliability of sequence logic.",
+      "aiAgent": "AI Agent management:\n1. Create and configure agents\n2. Train and optimize models\n3. Deploy and monitor agents\n4. Agent collaboration and scheduling\n5. Performance evaluation and improvement\n\nAgents can automate complex tasks.",
+      "default": "Thank you for your question! I'm the AI assistant for the Tiang Ops system, and I can help you with:\n\n• Understanding system features and operations\n• Answering technical questions and best practices\n• Providing configuration advice and troubleshooting\n• Assisting with system optimization and management\n\nPlease let me know what help you need, and I'll do my best to answer."
+    }
   },
   "validation": {
     "required": "This field is required",
