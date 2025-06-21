@@ -465,8 +465,8 @@ API接口：{api_details}
             </div>
 
             <div style={{ fontSize: 12, color: '#666' }}>
-              <div>版本: {prompt.version}</div>
-              <div>上次使用: {prompt.lastUsed}</div>
+              <div>{t('systemSettings.prompts.detail.version')}: {prompt.version}</div>
+              <div>{t('systemSettings.prompts.detail.lastUsed')}: {prompt.lastUsed}</div>
             </div>
           </PromptCard>
         </Col>
@@ -628,25 +628,25 @@ API接口：{api_details}
             <Col span={12}>
               <Form.Item
                 name="name"
-                label="模板名称"
-                rules={[{ required: true, message: '请输入模板名称' }]}
+                label={t('systemSettings.prompts.form.templateName')}
+                rules={[{ required: true, message: t('systemSettings.prompts.form.templateNameRequired') }]}
               >
-                <Input placeholder="请输入模板名称" />
+                <Input placeholder={t('systemSettings.prompts.form.templateNamePlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="category"
-                label="分类"
-                rules={[{ required: true, message: '请选择分类' }]}
+                label={t('systemSettings.prompts.form.category')}
+                rules={[{ required: true, message: t('systemSettings.prompts.form.categoryRequired') }]}
               >
-                <Select placeholder="请选择分类">
-                  <Option value="开发工具">开发工具</Option>
-                  <Option value="运维工具">运维工具</Option>
-                  <Option value="产品管理">产品管理</Option>
-                  <Option value="文档工具">文档工具</Option>
-                  <Option value="客服助手">客服助手</Option>
-                  <Option value="数据分析">数据分析</Option>
+                <Select placeholder={t('systemSettings.prompts.form.categoryPlaceholder')}>
+                  <Option value="开发工具">{t('systemSettings.prompts.categories.devTools')}</Option>
+                  <Option value="运维工具">{t('systemSettings.prompts.categories.opsTools')}</Option>
+                  <Option value="产品管理">{t('systemSettings.prompts.categories.productManagement')}</Option>
+                  <Option value="文档工具">{t('systemSettings.prompts.categories.docTools')}</Option>
+                  <Option value="客服助手">{t('systemSettings.prompts.categories.customerService')}</Option>
+                  <Option value="数据分析">{t('systemSettings.prompts.categories.dataAnalysis')}</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -654,23 +654,23 @@ API接口：{api_details}
 
           <Form.Item
             name="description"
-            label="描述"
-            rules={[{ required: true, message: '请输入模板描述' }]}
+            label={t('systemSettings.prompts.form.description')}
+            rules={[{ required: true, message: t('systemSettings.prompts.form.descriptionRequired') }]}
           >
             <TextArea 
               rows={2} 
-              placeholder="请输入模板的功能描述和使用场景"
+              placeholder={t('systemSettings.prompts.form.descriptionPlaceholder')}
             />
           </Form.Item>
 
           <Form.Item
             name="content"
-            label="提示词内容"
-            rules={[{ required: true, message: '请输入提示词内容' }]}
+            label={t('systemSettings.prompts.form.content')}
+            rules={[{ required: true, message: t('systemSettings.prompts.form.contentRequired') }]}
           >
             <TextArea 
               rows={8} 
-              placeholder="请输入提示词内容，使用 {变量名} 格式定义变量"
+              placeholder={t('systemSettings.prompts.form.contentPlaceholder')}
             />
           </Form.Item>
 
@@ -678,10 +678,10 @@ API接口：{api_details}
             <Col span={8}>
               <Form.Item
                 name="language"
-                label="语言"
-                rules={[{ required: true, message: '请选择语言' }]}
+                label={t('systemSettings.prompts.form.language')}
+                rules={[{ required: true, message: t('systemSettings.prompts.form.languageRequired') }]}
               >
-                <Select placeholder="请选择语言">
+                <Select placeholder={t('systemSettings.prompts.form.languagePlaceholder')}>
                   <Option value="zh-CN">中文</Option>
                   <Option value="en-US">English</Option>
                   <Option value="ja-JP">日本語</Option>
@@ -691,8 +691,8 @@ API接口：{api_details}
             <Col span={8}>
               <Form.Item
                 name="difficulty"
-                label="难度"
-                rules={[{ required: true, message: '请选择难度' }]}
+                label={t('systemSettings.prompts.form.difficulty')}
+                rules={[{ required: true, message: t('systemSettings.prompts.form.difficultyRequired') }]}
               >
                 <Select placeholder={t('systemSettings.prompts.search.difficulty')}>
                   <Option value="beginner">{t('systemSettings.prompts.difficulty.beginner')}</Option>
@@ -735,10 +735,10 @@ API接口：{api_details}
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label="模板名称" span={2}>
+              <Descriptions.Item label={t('systemSettings.prompts.detail.templateName')} span={2}>
                 {selectedPrompt.name}
               </Descriptions.Item>
-              <Descriptions.Item label="分类">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.category')}>
                 <Tag 
                   color={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.color}
                   icon={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.icon}
@@ -746,9 +746,9 @@ API接口：{api_details}
                   {selectedPrompt.category}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="难度">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.difficulty')}>
                 <Tag color={difficultyMap[selectedPrompt.difficulty]?.color}>
-                  {difficultyMap[selectedPrompt.difficulty]?.name}
+                  {t(`systemSettings.prompts.difficulty.${selectedPrompt.difficulty}`)}
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item label={t('systemSettings.prompts.detail.rating')}>
@@ -760,34 +760,34 @@ API接口：{api_details}
               <Descriptions.Item label={t('systemSettings.prompts.detail.usageCount')}>
                 {selectedPrompt.usageCount}{t('common.unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label="语言">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.language')}>
                 {selectedPrompt.language}
               </Descriptions.Item>
-              <Descriptions.Item label="版本">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.version')}>
                 {selectedPrompt.version}
               </Descriptions.Item>
-              <Descriptions.Item label="状态">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.status')}>
                 <Space>
                   {selectedPrompt.isPublic && <Tag color="blue">{t('systemSettings.prompts.status.public')}</Tag>}
                   {selectedPrompt.isFavorite && <Tag color="gold" icon={<StarOutlined />}>{t('systemSettings.prompts.status.favorite')}</Tag>}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="创建者">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.creator')}>
                 {selectedPrompt.createdBy}
               </Descriptions.Item>
               <Descriptions.Item label={t('systemSettings.prompts.detail.createdAt')}>
                 {selectedPrompt.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label="上次使用">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.lastUsed')}>
                 {selectedPrompt.lastUsed}
               </Descriptions.Item>
-              <Descriptions.Item label="描述" span={2}>
+              <Descriptions.Item label={t('systemSettings.prompts.detail.description')} span={2}>
                 {selectedPrompt.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 提示词内容 */}
-            <Card title="提示词内容" style={{ marginBottom: 16 }}>
+            <Card title={t('systemSettings.prompts.detail.content')} style={{ marginBottom: 16 }}>
               <PromptContent>
                 {selectedPrompt.content}
               </PromptContent>
