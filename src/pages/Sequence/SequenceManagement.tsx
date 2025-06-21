@@ -61,9 +61,12 @@ const formatDuration = (duration: string, t: any): string => {
   if (minNum >= 1000) {
     const minSec = minNum / 1000;
     const maxSec = maxNum / 1000;
-    return `${minSec}-${maxSec}${t('sequences.units.seconds')}`;
+    // 格式化秒数，去掉不必要的小数点
+    const minSecStr = minSec % 1 === 0 ? minSec.toString() : minSec.toFixed(1);
+    const maxSecStr = maxSec % 1 === 0 ? maxSec.toString() : maxSec.toFixed(1);
+    return `${minSecStr}-${maxSecStr} ${t('sequences.units.seconds')}`;
   } else {
-    return `${min}-${max}${t('sequences.units.milliseconds')}`;
+    return `${min}-${max} ${t('sequences.units.milliseconds')}`;
   }
 };
 
