@@ -465,30 +465,30 @@ const EntityScan: React.FC = () => {
   // 状态标签
   const getStatusTag = (status: string) => {
     const statusMap = {
-      connected: { color: 'success', text: '已连接' },
-      disconnected: { color: 'default', text: '未连接' },
-      error: { color: 'error', text: '连接错误' },
-      pending: { color: 'default', text: '等待中' },
-      running: { color: 'processing', text: '扫描中' },
-      completed: { color: 'success', text: '已完成' },
-      failed: { color: 'error', text: '失败' },
-      paused: { color: 'warning', text: '已暂停' }
+      connected: { color: 'success', text: t('systemSettings.entityScan.dataSources.connected') },
+      disconnected: { color: 'default', text: t('systemSettings.entityScan.dataSources.disconnected') },
+      error: { color: 'error', text: t('systemSettings.entityScan.dataSources.error') },
+      pending: { color: 'default', text: t('systemSettings.entityScan.status.pending') },
+      running: { color: 'processing', text: t('systemSettings.entityScan.status.running') },
+      completed: { color: 'success', text: t('systemSettings.entityScan.status.completed') },
+      failed: { color: 'error', text: t('systemSettings.entityScan.status.failed') },
+      paused: { color: 'warning', text: t('systemSettings.entityScan.status.paused') }
     };
     
-    const config = statusMap[status as keyof typeof statusMap] || statusMap.default;
+    const config = statusMap[status as keyof typeof statusMap] || statusMap.disconnected;
     return <StatusTag status={config.color}>{config.text}</StatusTag>;
   };
 
   // 开始扫描
   const handleStartScan = async (values: any) => {
     if (!selectedDataSource) {
-      message.error('请选择数据源');
+      message.error(t('systemSettings.entityScan.messages.selectDataSourceFirst'));
       return;
     }
 
     const dataSource = dataSources.find(ds => ds.id === selectedDataSource);
     if (!dataSource) {
-      message.error('数据源不存在');
+      message.error(t('systemSettings.entityScan.messages.dataSourceNotFound'));
       return;
     }
 
@@ -511,7 +511,7 @@ const EntityScan: React.FC = () => {
 
     // 模拟扫描过程
     simulateScanProcess(newTask);
-    message.success('扫描任务已启动');
+    message.success(t('systemSettings.entityScan.messages.scanStarted'));
   };
 
   // 模拟扫描过程
@@ -788,12 +788,12 @@ const EntityScan: React.FC = () => {
 
   // 获取数据源类型映射
   const getDataSourceTypeMap = () => ({
-    database: { name: '数据库', color: '#1890ff' },
-    api: { name: 'API接口', color: '#52c41a' },
-    cloud: { name: '云服务', color: '#722ed1' },
-    monitoring: { name: '监控系统', color: '#fa8c16' },
-    metrics: { name: '指标数据', color: '#13c2c2' },
-    file: { name: '文件', color: '#eb2f96' }
+    database: { name: t('systemSettings.entityScan.dataSources.types.database'), color: '#1890ff' },
+    api: { name: t('systemSettings.entityScan.dataSources.types.api'), color: '#52c41a' },
+    cloud: { name: t('systemSettings.entityScan.dataSources.types.cloud'), color: '#722ed1' },
+    monitoring: { name: t('systemSettings.entityScan.dataSources.types.monitoring'), color: '#fa8c16' },
+    metrics: { name: t('systemSettings.entityScan.dataSources.types.metrics'), color: '#13c2c2' },
+    file: { name: t('systemSettings.entityScan.dataSources.types.file'), color: '#eb2f96' }
   });
 
   const getDataSourceSubTypeMap = () => ({
@@ -813,10 +813,10 @@ const EntityScan: React.FC = () => {
   // 获取状态配置
   const getStatusConfig = (status: string) => {
     const statusMap = {
-      connected: { text: '已连接', color: 'success', icon: <CheckCircleOutlined /> },
-      disconnected: { text: '未连接', color: 'error', icon: <ExclamationCircleOutlined /> },
-      connecting: { text: '连接中', color: 'processing', icon: <ReloadOutlined spin /> },
-      error: { text: '连接错误', color: 'error', icon: <ExclamationCircleOutlined /> }
+      connected: { text: t('systemSettings.entityScan.dataSources.connected'), color: 'success', icon: <CheckCircleOutlined /> },
+      disconnected: { text: t('systemSettings.entityScan.dataSources.disconnected'), color: 'error', icon: <ExclamationCircleOutlined /> },
+      connecting: { text: t('systemSettings.entityScan.dataSources.connecting'), color: 'processing', icon: <ReloadOutlined spin /> },
+      error: { text: t('systemSettings.entityScan.dataSources.error'), color: 'error', icon: <ExclamationCircleOutlined /> }
     };
     return statusMap[status as keyof typeof statusMap] || statusMap.disconnected;
   };
@@ -870,22 +870,12 @@ const EntityScan: React.FC = () => {
             </DataSourceHeader>
 
             <DataSourceMeta>
-              <MetaItem $isDark={isDark}>
-                <MetaLabel $isDark={isDark}>主机地址:</MetaLabel>
-                <MetaValue $isDark={isDark}>{dataSource.host}:{dataSource.port}</MetaValue>
-              </MetaItem>
-              <MetaItem $isDark={isDark}>
-                <MetaLabel $isDark={isDark}>数据库:</MetaLabel>
-                <MetaValue $isDark={isDark}>{dataSource.database || '-'}</MetaValue>
-              </MetaItem>
-              <MetaItem $isDark={isDark}>
-                <MetaLabel $isDark={isDark}>最后连接:</MetaLabel>
-                <MetaValue $isDark={isDark}>{dataSource.lastConnected || '从未连接'}</MetaValue>
-              </MetaItem>
-              <MetaItem $isDark={isDark}>
-                <MetaLabel $isDark={isDark}>扫描次数:</MetaLabel>
-                <MetaValue $isDark={isDark}>{dataSource.scanCount || 0} 次</MetaValue>
-              </MetaItem>
+              {getDataSourceCardInfo(dataSource).map((info, index) => (
+                <MetaItem key={index} $isDark={isDark}>
+                  <MetaLabel $isDark={isDark}>{info.label}:</MetaLabel>
+                  <MetaValue $isDark={isDark}>{info.value}</MetaValue>
+                </MetaItem>
+              ))}
             </DataSourceMeta>
 
             <Divider style={{ margin: '12px 0' }} />
@@ -901,7 +891,7 @@ const EntityScan: React.FC = () => {
                   loading={isScanning && selectedDataSource === dataSource.id}
                   block
                 >
-                  {isScanning && selectedDataSource === dataSource.id ? '扫描中...' : '开始扫描'}
+                  {isScanning && selectedDataSource === dataSource.id ? t('systemSettings.entityScan.status.running') : t('systemSettings.entityScan.scanConfig.startScan')}
                 </Button>
               </div>
               
@@ -912,7 +902,7 @@ const EntityScan: React.FC = () => {
                   icon={<EyeOutlined />}
                   onClick={() => handleViewDataSource(dataSource)}
                 >
-                  查看
+                  {t('common.view')}
                 </Button>
                 <Button 
                   type="text" 
@@ -920,7 +910,7 @@ const EntityScan: React.FC = () => {
                   icon={<EditOutlined />}
                   onClick={() => handleEditDataSource(dataSource)}
                 >
-                  编辑
+                  {t('common.edit')}
                 </Button>
                 <Button 
                   type="text" 
@@ -929,7 +919,7 @@ const EntityScan: React.FC = () => {
                   onClick={() => handleTestConnection(dataSource)}
                   loading={dataSource.status === 'connecting'}
                 >
-                  测试
+                  {t('systemSettings.entityScan.dataSources.testConnection')}
                 </Button>
                 <Button 
                   type="text" 
@@ -938,7 +928,7 @@ const EntityScan: React.FC = () => {
                   icon={<DeleteOutlined />}
                   onClick={() => handleDeleteDataSource(dataSource)}
                 >
-                  删除
+                  {t('common.delete')}
                 </Button>
               </div>
             </DataSourceActions>
@@ -948,35 +938,252 @@ const EntityScan: React.FC = () => {
     });
   };
 
+  // 根据数据源类型获取卡片显示的关键信息
+  const getDataSourceCardInfo = (dataSource: DataSource) => {
+    const info: Array<{ label: string; value: string }> = [];
+
+    switch (dataSource.type) {
+      case 'database':
+        info.push(
+          { label: t('systemSettings.entityScan.fields.host'), value: `${dataSource.config?.host}:${dataSource.config?.port}` },
+          { label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database || '-' }
+        );
+        break;
+
+      case 'api':
+        info.push(
+          { label: t('systemSettings.entityScan.fields.baseUrl'), value: dataSource.config?.baseUrl || '-' },
+          { label: t('systemSettings.entityScan.fields.endpoints'), value: dataSource.config?.endpoints?.length ? t('systemSettings.entityScan.units.endpoints', { count: dataSource.config.endpoints.length }) : '-' }
+        );
+        break;
+
+      case 'cloud':
+        info.push(
+          { label: t('systemSettings.entityScan.fields.endpoint'), value: dataSource.config?.endpoint || '-' },
+          { label: t('systemSettings.entityScan.fields.bucket'), value: dataSource.config?.bucket || '-' }
+        );
+        break;
+
+      case 'monitoring':
+        switch (dataSource.subType) {
+          case 'prometheus':
+            info.push(
+              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('systemSettings.entityScan.fields.maxSamples'), value: dataSource.config?.maxSamples?.toString() || '-' }
+            );
+            break;
+          case 'grafana':
+            info.push(
+              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('systemSettings.entityScan.fields.orgId'), value: dataSource.config?.orgId?.toString() || '-' }
+            );
+            break;
+          case 'elasticsearch':
+            info.push(
+              { label: t('systemSettings.entityScan.fields.hosts'), value: dataSource.config?.hosts?.length ? t('systemSettings.entityScan.units.nodes', { count: dataSource.config.hosts.length }) : '-' },
+              { label: t('systemSettings.entityScan.fields.indices'), value: dataSource.config?.indices?.length ? t('systemSettings.entityScan.units.indices', { count: dataSource.config.indices.length }) : '-' }
+            );
+            break;
+          case 'jaeger':
+            info.push(
+              { label: t('systemSettings.entityScan.fields.queryUrl'), value: dataSource.config?.queryUrl || '-' },
+              { label: t('systemSettings.entityScan.fields.services'), value: dataSource.config?.services?.length ? t('systemSettings.entityScan.units.services', { count: dataSource.config.services.length }) : '-' }
+            );
+            break;
+          case 'zabbix':
+            info.push(
+              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('systemSettings.entityScan.fields.apiVersion'), value: dataSource.config?.apiVersion || '-' }
+            );
+            break;
+          case 'datadog':
+            info.push(
+              { label: t('systemSettings.entityScan.fields.site'), value: dataSource.config?.site || '-' },
+              { label: t('systemSettings.entityScan.fields.environment'), value: dataSource.config?.env || '-' }
+            );
+            break;
+          default:
+            info.push(
+              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' }
+            );
+        }
+        break;
+
+      case 'metrics':
+        switch (dataSource.subType) {
+          case 'influxdb':
+            info.push(
+              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database || '-' }
+            );
+            break;
+        }
+        break;
+
+      case 'file':
+        info.push(
+          { label: t('systemSettings.entityScan.fields.path'), value: dataSource.config?.path || '-' },
+          { label: t('systemSettings.entityScan.fields.format'), value: dataSource.config?.format || '-' }
+        );
+        break;
+
+      default:
+        info.push(
+          { label: t('systemSettings.entityScan.fields.description'), value: dataSource.description || '-' }
+        );
+    }
+
+    // 添加通用信息
+    info.push(
+      { label: t('systemSettings.entityScan.dataSources.lastScan'), value: dataSource.lastScan || t('systemSettings.entityScan.status.neverScanned') },
+      { label: t('systemSettings.entityScan.dataSources.entityCount'), value: t('systemSettings.entityScan.units.entities', { count: dataSource.entityCount || 0 }) }
+    );
+
+    return info;
+  };
+  const getDataSourceFields = (dataSource: DataSource) => {
+    const baseFields = [
+      { key: 'name', label: t('systemSettings.entityScan.fields.name'), value: dataSource.name },
+      { key: 'type', label: t('systemSettings.entityScan.fields.type'), value: dataSource.type },
+      { key: 'subType', label: t('systemSettings.entityScan.fields.subType'), value: dataSource.subType },
+      { key: 'status', label: t('systemSettings.entityScan.fields.status'), value: dataSource.status, isStatus: true },
+      { key: 'description', label: t('systemSettings.entityScan.fields.description'), value: dataSource.description }
+    ];
+
+    // 根据数据源类型添加特定字段
+    const specificFields: Array<{ key: string; label: string; value: any; isArray?: boolean }> = [];
+
+    switch (dataSource.type) {
+      case 'database':
+        specificFields.push(
+          { key: 'host', label: t('systemSettings.entityScan.fields.host'), value: `${dataSource.config?.host}:${dataSource.config?.port}` },
+          { key: 'database', label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database || '-' },
+          { key: 'username', label: t('systemSettings.entityScan.fields.username'), value: dataSource.config?.username }
+        );
+        break;
+
+      case 'api':
+        specificFields.push(
+          { key: 'baseUrl', label: t('systemSettings.entityScan.fields.baseUrl'), value: dataSource.config?.baseUrl },
+          { key: 'endpoints', label: t('systemSettings.entityScan.fields.endpoints'), value: dataSource.config?.endpoints, isArray: true },
+          { key: 'apiKey', label: t('systemSettings.entityScan.fields.apiKey'), value: dataSource.config?.apiKey ? '***hidden***' : '-' }
+        );
+        break;
+
+      case 'cloud':
+        specificFields.push(
+          { key: 'endpoint', label: t('systemSettings.entityScan.fields.endpoint'), value: dataSource.config?.endpoint },
+          { key: 'bucket', label: t('systemSettings.entityScan.fields.bucket'), value: dataSource.config?.bucket },
+          { key: 'accessKeyId', label: t('systemSettings.entityScan.fields.accessKeyId'), value: dataSource.config?.accessKeyId ? '***hidden***' : '-' }
+        );
+        break;
+
+      case 'monitoring':
+        switch (dataSource.subType) {
+          case 'prometheus':
+            specificFields.push(
+              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
+              { key: 'timeout', label: t('systemSettings.entityScan.fields.timeout'), value: `${dataSource.config?.timeout || 0}ms` },
+              { key: 'maxSamples', label: t('systemSettings.entityScan.fields.maxSamples'), value: dataSource.config?.maxSamples }
+            );
+            break;
+          case 'grafana':
+            specificFields.push(
+              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
+              { key: 'orgId', label: t('systemSettings.entityScan.fields.orgId'), value: dataSource.config?.orgId },
+              { key: 'includeDashboards', label: t('systemSettings.entityScan.fields.includeDashboards'), value: dataSource.config?.includeDashboards ? t('common.yes') : t('common.no') }
+            );
+            break;
+          case 'elasticsearch':
+            specificFields.push(
+              { key: 'hosts', label: t('systemSettings.entityScan.fields.hosts'), value: dataSource.config?.hosts, isArray: true },
+              { key: 'indices', label: t('systemSettings.entityScan.fields.indices'), value: dataSource.config?.indices, isArray: true },
+              { key: 'version', label: t('systemSettings.entityScan.fields.version'), value: dataSource.config?.version }
+            );
+            break;
+          case 'jaeger':
+            specificFields.push(
+              { key: 'queryUrl', label: t('systemSettings.entityScan.fields.queryUrl'), value: dataSource.config?.queryUrl },
+              { key: 'services', label: t('systemSettings.entityScan.fields.services'), value: dataSource.config?.services, isArray: true },
+              { key: 'lookback', label: t('systemSettings.entityScan.fields.lookback'), value: dataSource.config?.lookback }
+            );
+            break;
+          case 'zabbix':
+            specificFields.push(
+              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
+              { key: 'apiVersion', label: t('systemSettings.entityScan.fields.apiVersion'), value: dataSource.config?.apiVersion },
+              { key: 'hostGroups', label: t('systemSettings.entityScan.fields.hostGroups'), value: dataSource.config?.hostGroups, isArray: true }
+            );
+            break;
+          case 'datadog':
+            specificFields.push(
+              { key: 'site', label: t('systemSettings.entityScan.fields.site'), value: dataSource.config?.site },
+              { key: 'services', label: t('systemSettings.entityScan.fields.services'), value: dataSource.config?.services, isArray: true },
+              { key: 'env', label: t('systemSettings.entityScan.fields.environment'), value: dataSource.config?.env }
+            );
+            break;
+        }
+        break;
+
+      case 'metrics':
+        switch (dataSource.subType) {
+          case 'influxdb':
+            specificFields.push(
+              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
+              { key: 'database', label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database },
+              { key: 'retention', label: t('systemSettings.entityScan.fields.retention'), value: dataSource.config?.retention }
+            );
+            break;
+        }
+        break;
+
+      case 'file':
+        specificFields.push(
+          { key: 'path', label: t('systemSettings.entityScan.fields.path'), value: dataSource.config?.path },
+          { key: 'format', label: t('systemSettings.entityScan.fields.format'), value: dataSource.config?.format },
+          { key: 'encoding', label: t('systemSettings.entityScan.fields.encoding'), value: dataSource.config?.encoding || 'UTF-8' }
+        );
+        break;
+    }
+
+    return [...baseFields, ...specificFields];
+  };
+
+  // 渲染字段值
+  const renderFieldValue = (field: { key: string; label: string; value: any; isStatus?: boolean; isArray?: boolean }) => {
+    if (field.isStatus) {
+      const statusConfig = getStatusConfig(field.value);
+      return (
+        <Badge 
+          status={statusConfig.color as any} 
+          text={statusConfig.text}
+        />
+      );
+    }
+    
+    if (field.isArray && Array.isArray(field.value)) {
+      return field.value.join(', ');
+    }
+    
+    return field.value || '-';
+  };
+
   // 数据源操作处理函数
   const handleViewDataSource = (dataSource: DataSource) => {
+    const fields = getDataSourceFields(dataSource);
+    
     Modal.info({
-      title: `数据源详情 - ${dataSource.name}`,
+      title: `${t('systemSettings.entityScan.dataSources.details')} - ${dataSource.name}`,
       width: 600,
       content: (
         <div style={{ marginTop: 16 }}>
           <Row gutter={[16, 8]}>
-            <Col span={8}><strong>名称:</strong></Col>
-            <Col span={16}>{dataSource.name}</Col>
-            <Col span={8}><strong>类型:</strong></Col>
-            <Col span={16}>{dataSource.type}</Col>
-            <Col span={8}><strong>子类型:</strong></Col>
-            <Col span={16}>{dataSource.subType}</Col>
-            <Col span={8}><strong>主机:</strong></Col>
-            <Col span={16}>{dataSource.host}:{dataSource.port}</Col>
-            <Col span={8}><strong>数据库:</strong></Col>
-            <Col span={16}>{dataSource.database || '-'}</Col>
-            <Col span={8}><strong>用户名:</strong></Col>
-            <Col span={16}>{dataSource.username}</Col>
-            <Col span={8}><strong>状态:</strong></Col>
-            <Col span={16}>
-              <Badge 
-                status={getStatusConfig(dataSource.status).color as any} 
-                text={getStatusConfig(dataSource.status).text}
-              />
-            </Col>
-            <Col span={8}><strong>描述:</strong></Col>
-            <Col span={16}>{dataSource.description}</Col>
+            {fields.map(field => (
+              <React.Fragment key={field.key}>
+                <Col span={8}><strong>{field.label}:</strong></Col>
+                <Col span={16}>{renderFieldValue(field)}</Col>
+              </React.Fragment>
+            ))}
           </Row>
         </div>
       )
@@ -1010,20 +1217,20 @@ const EntityScan: React.FC = () => {
       ));
 
       message[isSuccess ? 'success' : 'error'](
-        isSuccess ? '连接测试成功！' : '连接测试失败，请检查配置。'
+        isSuccess ? t('systemSettings.entityScan.messages.connectionTestSuccess') : t('systemSettings.entityScan.messages.connectionTestFailed')
       );
     } catch (error) {
       setDataSources(prev => prev.map(ds => 
         ds.id === dataSource.id ? { ...ds, status: 'error' } : ds
       ));
-      message.error('连接测试失败！');
+      message.error(t('systemSettings.entityScan.messages.connectionTestFailed'));
     }
   };
 
   // 针对单个数据源开始扫描 - 跳转到扫描详情页
   const handleStartScanForDataSource = (dataSource: DataSource) => {
     if (dataSource.status !== 'connected') {
-      message.warning('请先确保数据源连接正常！');
+      message.warning(t('systemSettings.entityScan.messages.ensureConnectionFirst'));
       return;
     }
 
@@ -1033,14 +1240,14 @@ const EntityScan: React.FC = () => {
 
   const handleDeleteDataSource = (dataSource: DataSource) => {
     Modal.confirm({
-      title: '确认删除',
-      content: `确定要删除数据源 "${dataSource.name}" 吗？此操作不可恢复。`,
-      okText: '删除',
+      title: t('common.confirmDelete'),
+      content: t('systemSettings.entityScan.messages.confirmDeleteDataSource', { name: dataSource.name }),
+      okText: t('common.delete'),
       okType: 'danger',
-      cancelText: '取消',
+      cancelText: t('common.cancel'),
       onOk: () => {
         setDataSources(prev => prev.filter(ds => ds.id !== dataSource.id));
-        message.success('数据源删除成功！');
+        message.success(t('systemSettings.entityScan.messages.dataSourceDeleted'));
       }
     });
   };
@@ -1048,33 +1255,33 @@ const EntityScan: React.FC = () => {
   // 刷新数据源列表
   const handleRefreshDataSources = async () => {
     try {
-      message.loading('正在刷新数据源列表...', 1);
+      message.loading(t('systemSettings.entityScan.messages.refreshingDataSources'), 1);
       await loadDataSources();
-      message.success('数据源列表刷新成功！');
+      message.success(t('systemSettings.entityScan.messages.refreshSuccess'));
     } catch (error) {
-      message.error('刷新失败，请重试！');
+      message.error(t('systemSettings.entityScan.messages.refreshFailed'));
     }
   };
 
   // 创建数据源
   const handleCreateDataSource = () => {
     Modal.info({
-      title: '创建数据源',
+      title: t('systemSettings.entityScan.dataSources.addDataSource'),
       width: 800,
       content: (
         <div style={{ marginTop: 16 }}>
           <Alert
-            message="数据源配置功能"
-            description="此功能正在开发中，将支持配置MySQL、PostgreSQL、MongoDB、Redis、Elasticsearch等多种数据源类型。"
+            message={t('systemSettings.entityScan.messages.dataSourceConfigFeature')}
+            description={t('systemSettings.entityScan.messages.featureInDevelopment')}
             type="info"
             showIcon
             style={{ marginBottom: 16 }}
           />
           <div style={{ padding: '20px 0', textAlign: 'center', color: '#8c8c8c' }}>
             <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
-            <div>数据源配置向导即将上线</div>
+            <div>{t('systemSettings.entityScan.messages.configWizardComingSoon')}</div>
             <div style={{ fontSize: '12px', marginTop: '8px' }}>
-              支持可视化配置连接参数、测试连接、批量导入等功能
+              {t('systemSettings.entityScan.messages.wizardFeatures')}
             </div>
           </div>
         </div>
@@ -1156,7 +1363,7 @@ const EntityScan: React.FC = () => {
       title: '最后扫描',
       dataIndex: 'lastScan',
       key: 'lastScan',
-      render: (time: string) => time || '从未扫描',
+      render: (time: string) => time || t('systemSettings.entityScan.status.neverScanned'),
     },
     {
       title: '操作',
@@ -1257,57 +1464,57 @@ const EntityScan: React.FC = () => {
           <Button
             icon={<ReloadOutlined />}
             onClick={handleRefreshDataSources}
-            title="刷新数据源列表"
+            title={t('systemSettings.entityScan.dataSources.refreshDataSources')}
           >
-            刷新
+            {t('common.refresh')}
           </Button>
           <Button
             type="primary"
             icon={<PlusOutlined />}
             onClick={handleCreateDataSource}
           >
-            创建数据源
+            {t('systemSettings.entityScan.dataSources.addDataSource')}
           </Button>
         </PageHeaderActions>
       </PageHeader>
 
       {/* 统计数据 */}
-      <StatsCard $isDark={isDark} title="扫描统计">
+      <StatsCard $isDark={isDark} title={t('systemSettings.entityScan.stats.title')}>
         <Row gutter={[16, 16]}>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#1890ff">{getStatistics().totalDataSources}</StatValue>
-              <StatLabel $isDark={isDark}>数据源总数</StatLabel>
+              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.totalDataSources')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#52c41a">{getStatistics().connectedDataSources}</StatValue>
-              <StatLabel $isDark={isDark}>已连接</StatLabel>
+              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.connectedSources')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#722ed1">{getStatistics().totalEntities}</StatValue>
-              <StatLabel $isDark={isDark}>扫描实体</StatLabel>
+              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.totalEntities')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#fa8c16">{getStatistics().selectedEntities}</StatValue>
-              <StatLabel $isDark={isDark}>已选择</StatLabel>
+              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.selectedEntities')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#13c2c2">{getStatistics().completedScans}</StatValue>
-              <StatLabel $isDark={isDark}>完成扫描</StatLabel>
+              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.completedScans')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#eb2f96">{getStatistics().runningScans}</StatValue>
-              <StatLabel $isDark={isDark}>进行中</StatLabel>
+              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.runningScans')}</StatLabel>
             </StatItem>
           </Col>
         </Row>
@@ -1317,36 +1524,36 @@ const EntityScan: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder="搜索数据源名称、描述、主机地址..."
+        searchPlaceholder={t('systemSettings.entityScan.dataSources.searchPlaceholder')}
         filters={[
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: '数据源类型',
+            placeholder: t('systemSettings.entityScan.dataSources.filterByType'),
             width: 120,
             options: [
-              { value: 'all', label: '所有类型' },
-              { value: 'database', label: '数据库' },
-              { value: 'api', label: 'API接口' },
-              { value: 'cloud', label: '云服务' },
-              { value: 'monitoring', label: '监控系统' },
-              { value: 'metrics', label: '指标数据' },
-              { value: 'file', label: '文件' }
+              { value: 'all', label: t('systemSettings.entityScan.dataSources.allTypes') },
+              { value: 'database', label: t('systemSettings.entityScan.dataSources.types.database') },
+              { value: 'api', label: t('systemSettings.entityScan.dataSources.types.api') },
+              { value: 'cloud', label: t('systemSettings.entityScan.dataSources.types.cloud') },
+              { value: 'monitoring', label: t('systemSettings.entityScan.dataSources.types.monitoring') },
+              { value: 'metrics', label: t('systemSettings.entityScan.dataSources.types.metrics') },
+              { value: 'file', label: t('systemSettings.entityScan.dataSources.types.file') }
             ]
           },
           {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: '连接状态',
+            placeholder: t('systemSettings.entityScan.dataSources.filterByStatus'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
-              { value: 'connected', label: '已连接' },
-              { value: 'disconnected', label: '未连接' },
-              { value: 'connecting', label: '连接中' },
-              { value: 'error', label: '连接错误' }
+              { value: 'all', label: t('systemSettings.entityScan.dataSources.allStatuses') },
+              { value: 'connected', label: t('systemSettings.entityScan.dataSources.connected') },
+              { value: 'disconnected', label: t('systemSettings.entityScan.dataSources.disconnected') },
+              { value: 'connecting', label: t('systemSettings.entityScan.dataSources.connecting') },
+              { value: 'error', label: t('systemSettings.entityScan.dataSources.error') }
             ]
           }
         ]}
@@ -1354,25 +1561,28 @@ const EntityScan: React.FC = () => {
         style={{ marginBottom: 24 }}
       />
 
-      {/* 数据源管理 */}
-      <ScanCard $isDark={isDark} title="数据源管理">
-        <Row gutter={[16, 16]}>
-          {renderDataSourceCards()}
-        </Row>
-        
-        {getFilteredDataSources().length === 0 && (
-          <div style={{ textAlign: 'center', padding: '40px 0', color: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)' }}>
-            <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
-            <div>暂无数据源</div>
-            <div style={{ fontSize: '12px', marginTop: '8px' }}>
-              {searchText || filterType !== 'all' || filterStatus !== 'all' 
-                ? '没有找到符合条件的数据源' 
-                : '请先配置数据源以开始实体扫描'
-              }
-            </div>
+      {/* 数据源 */}
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        {renderDataSourceCards()}
+      </Row>
+      
+      {getFilteredDataSources().length === 0 && (
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '40px 0', 
+          color: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)',
+          marginBottom: 24
+        }}>
+          <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
+          <div>{t('systemSettings.entityScan.dataSources.noDataSources')}</div>
+          <div style={{ fontSize: '12px', marginTop: '8px' }}>
+            {searchText || filterType !== 'all' || filterStatus !== 'all' 
+              ? t('systemSettings.entityScan.dataSources.noMatchingDataSources')
+              : t('systemSettings.entityScan.dataSources.configureDataSourcesFirst')
+            }
           </div>
-        )}
-      </ScanCard>
+        </div>
+      )}
 
 
       {/* 扫描进度 */}
@@ -1396,7 +1606,7 @@ const EntityScan: React.FC = () => {
                     <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1890ff' }}>
                       {currentTask.scannedCount}
                     </div>
-                    <Text type="secondary">已扫描</Text>
+                    <Text type="secondary">{t('systemSettings.entityScan.progress.scanned')}</Text>
                   </div>
                 </Col>
                 <Col span={8}>
@@ -1404,7 +1614,7 @@ const EntityScan: React.FC = () => {
                     <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#52c41a' }}>
                       {currentTask.generatedCount}
                     </div>
-                    <Text type="secondary">已生成</Text>
+                    <Text type="secondary">{t('systemSettings.entityScan.progress.generated')}</Text>
                   </div>
                 </Col>
                 <Col span={8}>
@@ -1436,7 +1646,10 @@ const EntityScan: React.FC = () => {
         <ScanCard $isDark={isDark} title="扫描结果">
           <div style={{ marginBottom: 16 }}>
             <Alert
-              message={`扫描完成，发现 ${scanResults.length} 个实体，已选择 ${scanResults.filter(r => r.selected).length} 个`}
+              message={t('systemSettings.entityScan.results.scanCompleted', { 
+                total: scanResults.length, 
+                selected: scanResults.filter(r => r.selected).length 
+              })}
               type="success"
               showIcon
               action={
@@ -1478,19 +1691,19 @@ const EntityScan: React.FC = () => {
 
       {/* 结果确认模态框 */}
       <Modal
-        title="确认生成实体"
+        title={t('systemSettings.entityScan.results.confirmGenerate')}
         open={showResultModal}
         onCancel={() => setShowResultModal(false)}
         onOk={() => {
           const selectedCount = scanResults.filter(r => r.selected).length;
-          message.success(`已生成 ${selectedCount} 个实体定义`);
+          message.success(t('systemSettings.entityScan.messages.entitiesGenerated', { count: selectedCount }));
           setShowResultModal(false);
         }}
         width={800}
       >
         <Alert
-          message={`将生成 ${scanResults.filter(r => r.selected).length} 个实体定义`}
-          description="生成的实体将添加到实体管理中，您可以进一步编辑和完善这些实体定义。"
+          message={t('systemSettings.entityScan.results.willGenerate', { count: scanResults.filter(r => r.selected).length })}
+          description={t('systemSettings.entityScan.results.generateDescription')}
           type="info"
           showIcon
           style={{ marginBottom: 16 }}

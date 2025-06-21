@@ -699,7 +699,7 @@ const ScanDetail: React.FC = () => {
                 height: 'auto'
               }}
             >
-              实体扫描
+              {t('menu.entityScan')}
             </Button>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
