@@ -34,22 +34,61 @@ import { useAppSelector } from '../../../store';
 
 const { Text, Paragraph } = Typography;
 
-const CustomAvatar = styled(Avatar)<{ $bgColor: string }>`
+const StyledAvatar = styled(Avatar)<{ $bgColor: string }>`
   background-color: ${props => props.$bgColor} !important;
-  transition: background-color 0.3s ease;
+  color: #ffffff !important;
   
-  /* 强制覆盖所有可能的全局样式 */
-  &.ant-avatar {
-    background-color: ${props => props.$bgColor} !important;
-  }
-  
-  /* 确保图标始终为白色，在彩色背景上清晰可见 */
   .anticon {
     color: #ffffff !important;
   }
   
   svg {
     color: #ffffff !important;
+  }
+`;
+
+const StyledTag = styled(Tag)<{ $bgColor?: string; $borderColor?: string; $textColor?: string }>`
+  ${props => props.$bgColor && `
+    background-color: ${props.$bgColor} !important;
+    border: 1px solid ${props.$borderColor} !important;
+    color: ${props.$textColor} !important;
+  `}
+  
+  .anticon {
+    color: ${props => props.$textColor || 'inherit'} !important;
+  }
+`;
+
+const StatsSeparator = styled.span<{ $isDark: boolean }>`
+  color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
+`;
+
+const StatsTitle = styled.span<{ $isDark: boolean }>`
+  color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
+`;
+
+const TagContainer = styled.div`
+  .ant-tag {
+    margin-bottom: 4px;
+  }
+`;
+
+const FooterContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+`;
+
+const FooterText = styled(Text)<{ $isDark: boolean }>`
+  font-size: 12px;
+  color: ${props => props.$isDark ? '#8c8c8c' : '#999'} !important;
+`;
+
+const StyledStatistic = styled(Statistic)<{ $isDark: boolean }>`
+  .ant-statistic-content-value {
+    font-size: 14px !important;
+    color: ${props => props.$isDark ? '#ffffff' : '#262626'} !important;
   }
 `;
 
@@ -114,36 +153,31 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   
   .agent-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 16px;
+    width: 100%;
   }
   
   .agent-avatar {
     margin-right: 12px;
-    
-    .ant-avatar {
-      background-color: unset !important;
-    }
-    
-    .custom-avatar {
-      background-color: unset !important;
-    }
-    
-    /* 强制覆盖全局样式 */
-    .ant-avatar.custom-avatar {
-      background-color: unset !important;
-    }
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
   }
   
   .agent-info {
     flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
   }
   
   .agent-name {
     font-size: 16px;
     font-weight: 600;
-    margin: 0;
+    margin: 0 0 8px 0;
     color: ${props => props.$isDark ? '#ffffff' : '#262626'};
+    line-height: 1.4;
   }
   
   .agent-type {
@@ -463,7 +497,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
     >
       <div className="agent-header">
         <div className="agent-avatar">
-          <CustomAvatar 
+          <StyledAvatar 
             size={48} 
             icon={<RobotOutlined />} 
             $bgColor={avatarBgColor}
@@ -472,33 +506,25 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
         <div className="agent-info">
           <div className="agent-name">{agent.name}</div>
           <div className="agent-type">
-            <Tag 
+            <StyledTag 
               color={typeConfig.color} 
-              icon={React.cloneElement(typeConfig.icon, { 
-                style: { color: typeConfig.color } 
-              })}
-              style={typeConfig.bgColor ? { 
-                backgroundColor: typeConfig.bgColor,
-                border: `1px solid ${typeConfig.color}`,
-                color: typeConfig.color
-              } : {}}
+              icon={typeConfig.icon}
+              $bgColor={typeConfig.bgColor}
+              $borderColor={typeConfig.color}
+              $textColor={typeConfig.color}
             >
               {typeConfig.name}
-            </Tag>
-            <Tag 
+            </StyledTag>
+            <StyledTag 
               color={statusConfig.color} 
-              icon={React.cloneElement(statusConfig.icon, { 
-                style: { color: statusConfig.color } 
-              })}
-              style={statusConfig.bgColor ? { 
-                backgroundColor: statusConfig.bgColor,
-                border: `1px solid ${statusConfig.color}`,
-                color: statusConfig.color
-              } : {}}
+              icon={statusConfig.icon}
+              $bgColor={statusConfig.bgColor}
+              $borderColor={statusConfig.color}
+              $textColor={statusConfig.color}
             >
               <span className={`status-indicator ${agent.status}`}></span>
               {statusConfig.text}
-            </Tag>
+            </StyledTag>
           </div>
         </div>
       </div>
@@ -508,58 +534,43 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
       </Paragraph>
 
       <div className="agent-stats">
-        <Space split={<span style={{ color: isDark ? '#434343' : '#d9d9d9' }}>|</span>} size="large">
-          <Statistic 
-            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>完成任务</span>} 
+        <Space split={<StatsSeparator $isDark={isDark}>|</StatsSeparator>} size="large">
+          <StyledStatistic 
+            $isDark={isDark}
+            title={<StatsTitle $isDark={isDark}>完成任务</StatsTitle>} 
             value={agent.stats.tasksCompleted} 
-            valueStyle={{ 
-              fontSize: 14,
-              color: isDark ? '#ffffff' : '#262626'
-            }}
           />
-          <Statistic 
-            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>成功率</span>} 
+          <StyledStatistic 
+            $isDark={isDark}
+            title={<StatsTitle $isDark={isDark}>成功率</StatsTitle>} 
             value={agent.stats.successRate} 
             suffix="%" 
-            valueStyle={{ 
-              fontSize: 14,
-              color: isDark ? '#ffffff' : '#262626'
-            }}
           />
-          <Statistic 
-            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>响应时间</span>} 
+          <StyledStatistic 
+            $isDark={isDark}
+            title={<StatsTitle $isDark={isDark}>响应时间</StatsTitle>} 
             value={agent.stats.avgResponseTime} 
             suffix="ms" 
-            valueStyle={{ 
-              fontSize: 14,
-              color: isDark ? '#ffffff' : '#262626'
-            }}
           />
         </Space>
       </div>
 
-      <div className="agent-tags">
+      <TagContainer className="agent-tags">
         {agent.tags && agent.tags.map(tag => (
-          <Tag key={tag} style={{ marginBottom: 4 }}>
+          <Tag key={tag}>
             {tag}
           </Tag>
         ))}
-      </div>
+      </TagContainer>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 }}>
-        <Text type="secondary" style={{ 
-          fontSize: 12,
-          color: isDark ? '#8c8c8c' : '#999'
-        }}>
+      <FooterContainer>
+        <FooterText type="secondary" $isDark={isDark}>
           最后活跃: {agent.lastActive}
-        </Text>
-        <Text type="secondary" style={{ 
-          fontSize: 12,
-          color: isDark ? '#8c8c8c' : '#999'
-        }}>
+        </FooterText>
+        <FooterText type="secondary" $isDark={isDark}>
           运行时间: {agent.stats.uptime}
-        </Text>
-      </div>
+        </FooterText>
+      </FooterContainer>
     </StyledCard>
   );
 };
