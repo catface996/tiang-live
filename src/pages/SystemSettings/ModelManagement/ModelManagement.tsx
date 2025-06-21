@@ -132,7 +132,7 @@ const ModelManagement: React.FC = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setPageTitle(t('systemSettings.models.title'));
+    setPageTitle(t('models.title'));
   }, [t]);
 
   // 模型配置数据
@@ -151,7 +151,7 @@ const ModelManagement: React.FC = () => {
       frequencyPenalty: 0.0,
       presencePenalty: 0.0,
       status: 'active',
-      description: '最新的GPT-4 Turbo模型，支持128K上下文长度，适用于复杂推理和长文本处理',
+      description: t('models.detail.description'),
       capabilities: ['文本生成', '代码生成', '问答对话', '文本分析', '翻译'],
       pricing: {
         inputTokens: 0.01,
@@ -275,17 +275,17 @@ const ModelManagement: React.FC = () => {
   };
 
   const modelTypeMap = {
-    llm: { name: '大语言模型', color: 'blue', icon: <ExperimentOutlined /> },
-    embedding: { name: '嵌入模型', color: 'green', icon: <ApiOutlined /> },
-    image: { name: '图像模型', color: 'orange', icon: <MonitorOutlined /> },
-    audio: { name: '音频模型', color: 'purple', icon: <ThunderboltOutlined /> },
+    llm: { name: t('models.types.llm'), color: 'blue', icon: <ExperimentOutlined /> },
+    embedding: { name: t('models.types.embedding'), color: 'green', icon: <ApiOutlined /> },
+    image: { name: t('models.types.image'), color: 'orange', icon: <MonitorOutlined /> },
+    audio: { name: t('models.types.audio'), color: 'purple', icon: <ThunderboltOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      active: { color: 'green', text: '活跃' },
-      inactive: { color: 'red', text: '停用' },
-      testing: { color: 'orange', text: '测试中' },
+      active: { color: 'green', text: t('models.status.active') },
+      inactive: { color: 'red', text: t('models.status.inactive') },
+      testing: { color: 'orange', text: t('models.status.testing') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -318,20 +318,20 @@ const ModelManagement: React.FC = () => {
   };
 
   const handleDeleteModel = (modelId: string) => {
-    message.success('模型配置删除成功');
+    message.success(t('models.alerts.deleteSuccess'));
   };
 
   const handleTestModel = (modelId: string) => {
-    message.success('模型连接测试成功');
+    message.success(t('models.alerts.testSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingModel) {
-        message.success('模型配置更新成功');
+        message.success(t('models.alerts.updateSuccess'));
       } else {
-        message.success('模型配置创建成功');
+        message.success(t('models.alerts.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -357,7 +357,7 @@ const ModelManagement: React.FC = () => {
             }
             extra={
               <Space>
-                <Tooltip title="测试连接">
+                <Tooltip title={t('models.testConnection')}>
                   <Button 
                     type="link" 
                     icon={<CheckCircleOutlined />} 
@@ -368,7 +368,7 @@ const ModelManagement: React.FC = () => {
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="查看详情">
+                <Tooltip title={t('models.viewDetails')}>
                   <Button 
                     type="link" 
                     icon={<EyeOutlined />} 
@@ -379,7 +379,7 @@ const ModelManagement: React.FC = () => {
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="编辑">
+                <Tooltip title={t('common.edit')}>
                   <Button 
                     type="link" 
                     icon={<EditOutlined />} 
@@ -487,9 +487,9 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="模型总数"
+              title={t('models.stats.totalModels')}
               value={modelData.length}
-              suffix="个"
+              suffix={t('models.stats.unit')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<ExperimentOutlined />}
             />
@@ -498,9 +498,9 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title="活跃模型"
+              title={t('models.stats.activeModels')}
               value={activeModels}
-              suffix="个"
+              suffix={t('models.stats.unit')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
@@ -532,19 +532,19 @@ const ModelManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder="搜索模型名称、提供商..."
+        searchPlaceholder={t('models.searchPlaceholder')}
         filters={[
           {
             key: 'provider',
             value: filterProvider,
             onChange: setFilterProvider,
-            placeholder: '提供商',
+            placeholder: t('models.filterByProvider'),
             width: 120,
             options: [
-              { value: 'all', label: '所有提供商' },
+              { value: 'all', label: t('models.providers.all') },
               ...Object.entries(providerMap).map(([key, config]) => ({
                 value: key,
-                label: key
+                label: t(`models.providers.${key}`)
               }))
             ]
           },
@@ -552,10 +552,10 @@ const ModelManagement: React.FC = () => {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: '模型类型',
+            placeholder: t('models.filterByType'),
             width: 120,
             options: [
-              { value: 'all', label: '所有类型' },
+              { value: 'all', label: t('common.all') },
               ...Object.entries(modelTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -566,13 +566,13 @@ const ModelManagement: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: '状态',
+            placeholder: t('models.filterByStatus'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
-              { value: 'active', label: '活跃' },
-              { value: 'inactive', label: '停用' },
-              { value: 'testing', label: '测试中' }
+              { value: 'all', label: t('common.all') },
+              { value: 'active', label: t('models.status.active') },
+              { value: 'inactive', label: t('models.status.inactive') },
+              { value: 'testing', label: t('models.status.testing') }
             ]
           }
         ]}
@@ -586,7 +586,7 @@ const ModelManagement: React.FC = () => {
 
       {/* 创建/编辑模型模态框 */}
       <Modal
-        title={editingModel ? '编辑模型配置' : '添加模型配置'}
+        title={editingModel ? t('models.editModel') : t('models.createModel')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
@@ -605,23 +605,23 @@ const ModelManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="name"
-                label="模型名称"
-                rules={[{ required: true, message: '请输入模型名称' }]}
+                label={t('models.form.name')}
+                rules={[{ required: true, message: t('models.form.nameRequired') }]}
               >
-                <Input placeholder="请输入模型名称" />
+                <Input placeholder={t('models.form.namePlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="provider"
-                label="提供商"
-                rules={[{ required: true, message: '请选择提供商' }]}
+                label={t('models.form.provider')}
+                rules={[{ required: true, message: t('models.form.providerRequired') }]}
               >
-                <Select placeholder="请选择提供商">
-                  <Option value="OpenAI">OpenAI</Option>
-                  <Option value="Anthropic">Anthropic</Option>
-                  <Option value="Google">Google</Option>
-                  <Option value="Azure">Azure</Option>
+                <Select placeholder={t('models.form.providerPlaceholder')}>
+                  <Option value="OpenAI">{t('models.providers.OpenAI')}</Option>
+                  <Option value="Anthropic">{t('models.providers.Anthropic')}</Option>
+                  <Option value="Google">{t('models.providers.Google')}</Option>
+                  <Option value="Azure">{t('models.providers.Azure')}</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -631,34 +631,34 @@ const ModelManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="modelType"
-                label="模型类型"
-                rules={[{ required: true, message: '请选择模型类型' }]}
+                label={t('models.form.modelType')}
+                rules={[{ required: true, message: t('models.form.typeRequired') }]}
               >
-                <Select placeholder="请选择模型类型">
-                  <Option value="llm">大语言模型</Option>
-                  <Option value="embedding">嵌入模型</Option>
-                  <Option value="image">图像模型</Option>
-                  <Option value="audio">音频模型</Option>
+                <Select placeholder={t('models.form.typePlaceholder')}>
+                  <Option value="llm">{t('models.types.llm')}</Option>
+                  <Option value="embedding">{t('models.types.embedding')}</Option>
+                  <Option value="image">{t('models.types.image')}</Option>
+                  <Option value="audio">{t('models.types.audio')}</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="version"
-                label="模型版本"
-                rules={[{ required: true, message: '请输入模型版本' }]}
+                label={t('models.form.version')}
+                rules={[{ required: true, message: t('models.form.versionRequired') }]}
               >
-                <Input placeholder="请输入模型版本" />
+                <Input placeholder={t('models.form.versionPlaceholder')} />
               </Form.Item>
             </Col>
           </Row>
 
           <Form.Item
             name="apiEndpoint"
-            label="API端点"
-            rules={[{ required: true, message: '请输入API端点' }]}
+            label={t('models.form.apiEndpoint')}
+            rules={[{ required: true, message: t('models.form.endpointRequired') }]}
           >
-            <Input placeholder="请输入API端点URL" />
+            <Input placeholder={t('models.form.endpointPlaceholder')} />
           </Form.Item>
 
           <Row gutter={16}>
@@ -698,12 +698,12 @@ const ModelManagement: React.FC = () => {
 
           <Form.Item
             name="description"
-            label="描述"
-            rules={[{ required: true, message: '请输入模型描述' }]}
+            label={t('models.form.description')}
+            rules={[{ required: true, message: t('models.form.descriptionRequired') }]}
           >
             <TextArea 
               rows={3} 
-              placeholder="请输入模型的功能描述和使用场景"
+              placeholder={t('models.form.descriptionPlaceholder')}
             />
           </Form.Item>
 
@@ -730,10 +730,10 @@ const ModelManagement: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label="模型名称" span={2}>
+              <Descriptions.Item label={t('models.detail.name')} span={2}>
                 {selectedModel.name}
               </Descriptions.Item>
-              <Descriptions.Item label="提供商">
+              <Descriptions.Item label={t('models.detail.provider')}>
                 <Tag 
                   color={providerMap[selectedModel.provider as keyof typeof providerMap]?.color}
                   icon={providerMap[selectedModel.provider as keyof typeof providerMap]?.icon}
@@ -741,7 +741,7 @@ const ModelManagement: React.FC = () => {
                   {selectedModel.provider}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="模型类型">
+              <Descriptions.Item label={t('models.detail.type')}>
                 <Tag 
                   color={modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.color}
                   icon={modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.icon}
@@ -749,35 +749,35 @@ const ModelManagement: React.FC = () => {
                   {modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="版本">
+              <Descriptions.Item label={t('models.detail.version')}>
                 {selectedModel.version}
               </Descriptions.Item>
-              <Descriptions.Item label="状态">
+              <Descriptions.Item label={t('models.detail.status')}>
                 {getStatusTag(selectedModel.status)}
               </Descriptions.Item>
-              <Descriptions.Item label="API端点" span={2}>
+              <Descriptions.Item label={t('models.detail.apiEndpoint')} span={2}>
                 <Text code>{selectedModel.apiEndpoint}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label="使用次数">
-                {selectedModel.usageCount}次
+              <Descriptions.Item label={t('models.detail.usageCount')}>
+                {selectedModel.usageCount}{t('models.stats.requestUnit')}
               </Descriptions.Item>
-              <Descriptions.Item label="上次使用">
+              <Descriptions.Item label={t('models.detail.lastUsed')}>
                 {selectedModel.lastUsed}
               </Descriptions.Item>
-              <Descriptions.Item label="创建者">
+              <Descriptions.Item label={t('models.detail.createdBy')}>
                 {selectedModel.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label="创建时间">
+              <Descriptions.Item label={t('models.detail.createdAt')}>
                 {selectedModel.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label="描述" span={2}>
+              <Descriptions.Item label={t('models.detail.description')} span={2}>
                 {selectedModel.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细配置 */}
             <Tabs defaultActiveKey="parameters">
-              <Tabs.TabPane tab="参数配置" key="parameters">
+              <Tabs.TabPane tab={t('models.detail.parameters')} key="parameters">
                 <Row gutter={16}>
                   <Col span={12}>
                     <Card title="生成参数" size="small">
