@@ -63,7 +63,8 @@
     "unit": {
       "count": "个",
       "times": "次",
-      "seconds": "秒"
+      "seconds": "秒",
+      "events": "个事件"
     },
     "unitType": "种",
     "unitRelation": "条",
