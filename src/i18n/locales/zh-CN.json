@@ -744,6 +744,32 @@
         "schedule": "执行计划",
         "lastRun": "最后执行",
         "status": "状态"
+      },
+      "detail": {
+        "taskName": "任务名称",
+        "taskType": "任务类型",
+        "successRate": "成功率",
+        "executionCount": "执行次数",
+        "avgDuration": "平均耗时",
+        "seconds": "秒",
+        "nextExecution": "下次执行",
+        "creator": "创建者",
+        "taskCollections": "任务集合",
+        "triggeredCollections": "触发的任务集合",
+        "noCollections": "无任务集合",
+        "configParams": "配置参数",
+        "timeout": "超时时间",
+        "retryCount": "重试次数",
+        "alertThreshold": "告警阈值",
+        "scheduleExpression": "调度表达式",
+        "timezone": "时区",
+        "checkpoints": "检查点",
+        "executionHistory": "执行历史",
+        "recentResults": "最近执行结果",
+        "startTime": "开始时间",
+        "endTime": "结束时间",
+        "executionStatus": "执行状态",
+        "executionDuration": "执行耗时"
       }
     },
     "hooks": {

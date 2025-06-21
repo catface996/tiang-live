@@ -722,10 +722,10 @@ const InspectionTasks: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label="任务名称" span={2}>
+              <Descriptions.Item label={t('tasks.inspection.detail.taskName')} span={2}>
                 {selectedTask.name}
               </Descriptions.Item>
-              <Descriptions.Item label="任务类型">
+              <Descriptions.Item label={t('tasks.inspection.detail.taskType')}>
                 <Tag 
                   color={taskTypeMap[selectedTask.type]?.color}
                   icon={taskTypeMap[selectedTask.type]?.icon}
@@ -733,36 +733,36 @@ const InspectionTasks: React.FC = () => {
                   {taskTypeMap[selectedTask.type]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="状态">
+              <Descriptions.Item label={t('common.status')}>
                 {getStatusTag(selectedTask.status)}
               </Descriptions.Item>
-              <Descriptions.Item label="成功率">
+              <Descriptions.Item label={t('tasks.inspection.detail.successRate')}>
                 {selectedTask.statistics.successRate}%
               </Descriptions.Item>
-              <Descriptions.Item label="执行次数">
-                {selectedTask.statistics.totalRuns}次
+              <Descriptions.Item label={t('tasks.inspection.detail.executionCount')}>
+                {selectedTask.statistics.totalRuns}{t('common.unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label="平均耗时">
-                {selectedTask.statistics.avgDuration}秒
+              <Descriptions.Item label={t('tasks.inspection.detail.avgDuration')}>
+                {selectedTask.statistics.avgDuration}{t('tasks.inspection.detail.seconds')}
               </Descriptions.Item>
-              <Descriptions.Item label="下次执行">
+              <Descriptions.Item label={t('tasks.inspection.detail.nextExecution')}>
                 {selectedTask.nextRun}
               </Descriptions.Item>
-              <Descriptions.Item label="创建者">
+              <Descriptions.Item label={t('tasks.inspection.detail.creator')}>
                 {selectedTask.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label="创建时间">
+              <Descriptions.Item label={t('common.createTime')}>
                 {selectedTask.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label="描述" span={2}>
+              <Descriptions.Item label={t('common.description')} span={2}>
                 {selectedTask.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细配置 */}
             <Tabs defaultActiveKey="collections">
-              <Tabs.TabPane tab="任务集合" key="collections">
-                <Card title="触发的任务集合" size="small">
+              <Tabs.TabPane tab={t('tasks.inspection.detail.taskCollections')} key="collections">
+                <Card title={t('tasks.inspection.detail.triggeredCollections')} size="small">
                   {selectedTask.taskCollections.length > 0 ? (
                     <Space wrap>
                       {selectedTask.taskCollections.map(collection => (
@@ -772,29 +772,29 @@ const InspectionTasks: React.FC = () => {
                       ))}
                     </Space>
                   ) : (
-                    <Text type="secondary">无任务集合</Text>
+                    <Text type="secondary">{t('tasks.inspection.detail.noCollections')}</Text>
                   )}
                 </Card>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab="配置参数" key="config">
+              <Tabs.TabPane tab={t('tasks.inspection.detail.configParams')} key="config">
                 <Descriptions column={2} size="small">
-                  <Descriptions.Item label="超时时间">
-                    {selectedTask.config.timeout}秒
+                  <Descriptions.Item label={t('tasks.inspection.detail.timeout')}>
+                    {selectedTask.config.timeout}{t('tasks.inspection.detail.seconds')}
                   </Descriptions.Item>
-                  <Descriptions.Item label="重试次数">
-                    {selectedTask.config.retryCount}次
+                  <Descriptions.Item label={t('tasks.inspection.detail.retryCount')}>
+                    {selectedTask.config.retryCount}{t('common.unit.times')}
                   </Descriptions.Item>
-                  <Descriptions.Item label="告警阈值">
+                  <Descriptions.Item label={t('tasks.inspection.detail.alertThreshold')}>
                     {selectedTask.config.alertThreshold}%
                   </Descriptions.Item>
-                  <Descriptions.Item label="调度表达式">
+                  <Descriptions.Item label={t('tasks.inspection.detail.scheduleExpression')}>
                     {selectedTask.schedule.expression}
                   </Descriptions.Item>
-                  <Descriptions.Item label="时区">
+                  <Descriptions.Item label={t('tasks.inspection.detail.timezone')}>
                     {selectedTask.schedule.timezone}
                   </Descriptions.Item>
-                  <Descriptions.Item label="检查点" span={2}>
+                  <Descriptions.Item label={t('tasks.inspection.detail.checkpoints')} span={2}>
                     <Space wrap>
                       {selectedTask.config.checkpoints.map(checkpoint => (
                         <Tag key={checkpoint}>{checkpoint}</Tag>
@@ -804,20 +804,20 @@ const InspectionTasks: React.FC = () => {
                 </Descriptions>
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab="执行历史" key="history">
-                <Card title="最近执行结果" size="small">
+              <Tabs.TabPane tab={t('tasks.inspection.detail.executionHistory')} key="history">
+                <Card title={t('tasks.inspection.detail.recentResults')} size="small">
                   <Descriptions column={2} size="small">
-                    <Descriptions.Item label="开始时间">
+                    <Descriptions.Item label={t('tasks.inspection.detail.startTime')}>
                       {selectedTask.lastRun.startTime}
                     </Descriptions.Item>
-                    <Descriptions.Item label="结束时间">
+                    <Descriptions.Item label={t('tasks.inspection.detail.endTime')}>
                       {selectedTask.lastRun.endTime}
                     </Descriptions.Item>
-                    <Descriptions.Item label="执行状态">
+                    <Descriptions.Item label={t('tasks.inspection.detail.executionStatus')}>
                       {getLastRunStatusTag(selectedTask.lastRun.status)}
                     </Descriptions.Item>
-                    <Descriptions.Item label="执行耗时">
-                      {selectedTask.lastRun.duration}秒
+                    <Descriptions.Item label={t('tasks.inspection.detail.executionDuration')}>
+                      {selectedTask.lastRun.duration}{t('tasks.inspection.detail.seconds')}
                     </Descriptions.Item>
                   </Descriptions>
                 </Card>

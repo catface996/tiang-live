@@ -744,6 +744,32 @@
         "schedule": "Schedule",
         "lastRun": "Last Run",
         "status": "Status"
+      },
+      "detail": {
+        "taskName": "Task Name",
+        "taskType": "Task Type",
+        "successRate": "Success Rate",
+        "executionCount": "Execution Count",
+        "avgDuration": "Average Duration",
+        "seconds": " seconds",
+        "nextExecution": "Next Execution",
+        "creator": "Creator",
+        "taskCollections": "Task Collections",
+        "triggeredCollections": "Triggered Collections",
+        "noCollections": "No Collections",
+        "configParams": "Configuration Parameters",
+        "timeout": "Timeout",
+        "retryCount": "Retry Count",
+        "alertThreshold": "Alert Threshold",
+        "scheduleExpression": "Schedule Expression",
+        "timezone": "Timezone",
+        "checkpoints": "Checkpoints",
+        "executionHistory": "Execution History",
+        "recentResults": "Recent Results",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "executionStatus": "Execution Status",
+        "executionDuration": "Execution Duration"
       }
     },
     "hooks": {
