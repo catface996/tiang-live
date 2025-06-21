@@ -57,10 +57,43 @@ const StatsCard = styled(Card)`
   .ant-card-body {
     padding: 16px;
   }
+  
+  .ant-statistic {
+    .ant-statistic-title {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .ant-statistic-content {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .ant-card-body {
+      padding: 12px;
+    }
+    
+    .ant-statistic {
+      .ant-statistic-title {
+        font-size: 11px;
+      }
+      
+      .ant-statistic-content {
+        font-size: 18px;
+      }
+    }
+  }
 `;
 
 const SolutionCard = styled(Card)`
   height: 100%;
+  min-height: 420px;
   transition: all 0.3s ease;
   cursor: pointer;
   
@@ -76,6 +109,7 @@ const SolutionCard = styled(Card)`
     .ant-card-head-title {
       font-size: 16px;
       font-weight: 600;
+      line-height: 1.4;
     }
   }
   
@@ -114,14 +148,19 @@ const SolutionCard = styled(Card)`
     
     .ant-statistic {
       .ant-statistic-title {
-        font-size: 12px;
+        font-size: 11px;
         color: #666;
         margin-bottom: 4px;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       
       .ant-statistic-content {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
+        line-height: 1.2;
       }
     }
   }
@@ -146,6 +185,60 @@ const SolutionCard = styled(Card)`
       
       &:last-child {
         margin-bottom: 0;
+      }
+      
+      .footer-label {
+        flex-shrink: 0;
+        margin-right: 8px;
+      }
+      
+      .footer-value {
+        flex: 1;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    min-height: 380px;
+    
+    .ant-card-head {
+      padding: 12px 16px;
+      
+      .ant-card-head-title {
+        font-size: 14px;
+      }
+    }
+    
+    .ant-card-body {
+      padding: 16px;
+    }
+    
+    .card-stats {
+      .ant-statistic {
+        .ant-statistic-title {
+          font-size: 10px;
+        }
+        
+        .ant-statistic-content {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 576px) {
+    min-height: 360px;
+    
+    .card-stats {
+      .ant-row {
+        .ant-col {
+          margin-bottom: 8px;
+        }
       }
     }
   }
@@ -665,8 +758,8 @@ const IndustrySolutionManagement: React.FC = () => {
       </PageHeader>
 
       {/* 统计信息 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} md={6}>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('solutions.stats.totalSolutions')}
@@ -677,7 +770,7 @@ const IndustrySolutionManagement: React.FC = () => {
             />
           </StatsCard>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('solutions.stats.activeSolutions')}
@@ -688,7 +781,7 @@ const IndustrySolutionManagement: React.FC = () => {
             />
           </StatsCard>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('solutions.stats.businessEntities')}
@@ -699,7 +792,7 @@ const IndustrySolutionManagement: React.FC = () => {
             />
           </StatsCard>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('solutions.stats.totalUsage')}
@@ -763,11 +856,11 @@ const IndustrySolutionManagement: React.FC = () => {
       />
 
       {/* 方案卡片列表 */}
-      <Row gutter={[24, 24]}>
+      <Row gutter={[20, 20]}>
         {solutionData.map(solution => {
           const industryConfig = industryMap[solution.industry as keyof typeof industryMap];
           return (
-            <Col xs={24} sm={24} md={12} lg={8} xl={6} key={solution.id}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={solution.id}>
               <SolutionCard
                 title={
                   <Space>
@@ -821,26 +914,26 @@ const IndustrySolutionManagement: React.FC = () => {
 
                   {/* 统计数据 */}
                   <div className="card-stats">
-                    <Row gutter={16}>
+                    <Row gutter={[8, 8]}>
                       <Col span={8}>
                         <Statistic
                           title={t('solutions.card.businessEntities')}
                           value={solution.entities.length}
-                          valueStyle={{ fontSize: 16, color: '#1890ff' }}
+                          valueStyle={{ fontSize: 18, color: '#1890ff' }}
                         />
                       </Col>
                       <Col span={8}>
                         <Statistic
                           title={t('solutions.modal.relationCount')}
                           value={solution.relations.length}
-                          valueStyle={{ fontSize: 16, color: '#52c41a' }}
+                          valueStyle={{ fontSize: 18, color: '#52c41a' }}
                         />
                       </Col>
                       <Col span={8}>
                         <Statistic
                           title={t('solutions.card.usageCount')}
                           value={solution.usageCount}
-                          valueStyle={{ fontSize: 16, color: '#722ed1' }}
+                          valueStyle={{ fontSize: 18, color: '#722ed1' }}
                         />
                       </Col>
                     </Row>
@@ -865,12 +958,12 @@ const IndustrySolutionManagement: React.FC = () => {
                   {/* 底部信息 */}
                   <div className="card-footer">
                     <div className="footer-item">
-                      <span>{t('solutions.card.creator')}</span>
-                      <span>{solution.createdBy}</span>
+                      <span className="footer-label">{t('solutions.card.creator')}</span>
+                      <span className="footer-value">{solution.createdBy}</span>
                     </div>
                     <div className="footer-item">
-                      <span>{t('solutions.card.updateTime')}</span>
-                      <span>{solution.lastModified}</span>
+                      <span className="footer-label">{t('solutions.card.updateTime')}</span>
+                      <span className="footer-value">{solution.lastModified}</span>
                     </div>
                   </div>
                 </div>
