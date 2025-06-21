@@ -145,21 +145,6 @@ const FilterBar = styled.div<{ $isDark: boolean }>`
   }
 `;
 
-const MainCard = styled(Card)<{ $isDark: boolean }>`
-  border-radius: 8px;
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
-  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-  transition: all 0.3s ease;
-  
-  .ant-card-body {
-    padding: 24px;
-  }
-`;
-
 const ReportManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -359,19 +344,17 @@ const ReportManagement: React.FC = () => {
 
   // 渲染卡片视图
   const renderCardView = () => (
-    <Row gutter={[16, 16]}>
-      {reportData.map(report => (
-        <Col xs={24} sm={12} lg={8} xl={6} key={report.key}>
-          <ReportCard
-            report={report}
-            onView={handleViewReport}
-            onEdit={handleEditReport}
-            onDownload={handleDownloadReport}
-            onDelete={handleDeleteReport}
-          />
-        </Col>
-      ))}
-    </Row>
+    reportData.map(report => (
+      <Col xs={24} sm={12} lg={8} xl={6} key={report.key}>
+        <ReportCard
+          report={report}
+          onView={handleViewReport}
+          onEdit={handleEditReport}
+          onDownload={handleDownloadReport}
+          onDelete={handleDeleteReport}
+        />
+      </Col>
+    ))
   );
 
   return (
@@ -515,11 +498,10 @@ const ReportManagement: React.FC = () => {
         onRefresh={() => window.location.reload()}
       />
 
-      {/* 报告列表 */}
-      <MainCard $isDark={isDark}>
-        {/* 卡片视图 */}
+      {/* 报告卡片列表 */}
+      <Row gutter={[16, 16]}>
         {renderCardView()}
-      </MainCard>
+      </Row>
     </PageContainer>
   );
 };

@@ -35,7 +35,8 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   transition: all 0.3s ease;
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-  border-radius: 8px;
+  border-radius: 8px !important;
+  overflow: hidden;
   
   &:hover {
     box-shadow: ${props => props.$isDark 
@@ -46,9 +47,16 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
     border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
   }
   
+  .ant-card-head {
+    border-radius: 8px 8px 0 0 !important;
+    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+    border-bottom: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  }
+  
   .ant-card-body {
     padding: 20px;
     background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+    border-radius: 0 0 8px 8px !important;
   }
   
   .ant-card-actions {
