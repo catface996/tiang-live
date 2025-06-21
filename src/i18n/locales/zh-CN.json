@@ -684,6 +684,8 @@
       "status": "状态",
       "responseTime": "响应时间",
       "errorRate": "错误率",
+      "availability": "可用性",
+      "requests": "请求量",
       "healthy": "健康",
       "warning": "警告",
       "critical": "严重",
@@ -691,7 +693,10 @@
       "highPriority": "高优先级",
       "mediumPriority": "中优先级",
       "lowPriority": "低优先级",
-      "deadline": "截止时间"
+      "deadline": "截止时间",
+      "assignee": "负责人",
+      "estimatedHours": "预估工时",
+      "expectedImpact": "预期影响"
     }
   },
   "tasks": {

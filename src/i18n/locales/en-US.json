@@ -684,6 +684,8 @@
       "status": "Status",
       "responseTime": "Response Time",
       "errorRate": "Error Rate",
+      "availability": "Availability",
+      "requests": "Requests",
       "healthy": "Healthy",
       "warning": "Warning",
       "critical": "Critical",
@@ -691,7 +693,10 @@
       "highPriority": "High Priority",
       "mediumPriority": "Medium Priority",
       "lowPriority": "Low Priority",
-      "deadline": "Deadline"
+      "deadline": "Deadline",
+      "assignee": "Assignee",
+      "estimatedHours": "Estimated Hours",
+      "expectedImpact": "Expected Impact"
     }
   },
   "tasks": {
