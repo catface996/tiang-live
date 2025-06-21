@@ -45,6 +45,28 @@ import SequenceDiagram from '../../components/SequenceDiagram';
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import sequenceDataJson from '../../data/sequenceData.json';
 
+// 时间格式化工具函数
+const formatDuration = (duration: string, t: any): string => {
+  if (!duration) return '';
+  
+  // 解析数字范围，如 "2000-5000" 或 "100-500"
+  const match = duration.match(/^(\d+)-(\d+)$/);
+  if (!match) return duration;
+  
+  const [, min, max] = match;
+  const minNum = parseInt(min);
+  const maxNum = parseInt(max);
+  
+  // 判断单位：大于等于1000的使用秒，小于1000的使用毫秒
+  if (minNum >= 1000) {
+    const minSec = minNum / 1000;
+    const maxSec = maxNum / 1000;
+    return `${minSec}-${maxSec}${t('sequences.units.seconds')}`;
+  } else {
+    return `${min}-${max}${t('sequences.units.milliseconds')}`;
+  }
+};
+
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -364,7 +386,7 @@ const SequenceManagement: React.FC = () => {
                 <Col span={12}>
                   <Statistic
                     title={t('sequences.executionDuration')}
-                    value={sequence.duration}
+                    value={formatDuration(sequence.duration, t)}
                     valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
@@ -560,7 +582,7 @@ const SequenceManagement: React.FC = () => {
                 {selectedSequence.steps}{t('sequences.steps')}
               </Descriptions.Item>
               <Descriptions.Item label={t('sequences.executionDuration')}>
-                {selectedSequence.duration}
+                {formatDuration(selectedSequence.duration, t)}
               </Descriptions.Item>
               <Descriptions.Item label={t('sequences.participants')} span={2}>
                 <Space wrap>
@@ -712,13 +734,13 @@ const SequenceManagement: React.FC = () => {
                   placeholder={t('sequences.form.participantsPlaceholder')}
                   style={{ width: '100%' }}
                 >
-                  <Option value="User">{t('sequences.participants.user')}</Option>
-                  <Option value="Frontend">{t('sequences.participants.frontend')}</Option>
-                  <Option value="Backend">{t('sequences.participants.backend')}</Option>
-                  <Option value="Database">{t('sequences.participants.database')}</Option>
-                  <Option value="Cache">{t('sequences.participants.cache')}</Option>
-                  <Option value="Queue">{t('sequences.participants.queue')}</Option>
-                  <Option value="External API">{t('sequences.participants.externalApi')}</Option>
+                  <Option value="User">{t('sequences.participantOptions.user')}</Option>
+                  <Option value="Frontend">{t('sequences.participantOptions.frontend')}</Option>
+                  <Option value="Backend">{t('sequences.participantOptions.backend')}</Option>
+                  <Option value="Database">{t('sequences.participantOptions.database')}</Option>
+                  <Option value="Cache">{t('sequences.participantOptions.cache')}</Option>
+                  <Option value="Queue">{t('sequences.participantOptions.queue')}</Option>
+                  <Option value="External API">{t('sequences.participantOptions.externalApi')}</Option>
                 </Select>
               </Form.Item>
             </Col>
