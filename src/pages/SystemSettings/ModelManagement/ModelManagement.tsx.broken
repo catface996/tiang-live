@@ -153,6 +153,139 @@ const ModelManagement: React.FC = () => {
 
   const modelTypeMap = {
     llm: { name: t('models.types.llm'), color: 'blue', icon: <ExperimentOutlined /> },
+      apiEndpoint: 'https://api.openai.com/v1/chat/completions',
+      apiKey: 'sk-*********************',
+      maxTokens: 4096,
+      temperature: 0.7,
+      topP: 1.0,
+      frequencyPenalty: 0.0,
+      presencePenalty: 0.0,
+      status: 'active',
+      description: t('models.detail.description'),
+      capabilities: ['文本生成', '代码生成', '问答对话', '文本分析', '翻译'],
+      pricing: {
+        inputTokens: 0.01,
+        outputTokens: 0.03,
+        currency: 'USD'
+      },
+      limits: {
+        requestsPerMinute: 500,
+        tokensPerMinute: 150000,
+        dailyLimit: 1000000
+      },
+      createdBy: '系统管理员',
+      createdAt: '2024-06-01',
+      lastModified: '2024-06-14',
+      lastUsed: '2024-06-15 14:30:00',
+      usageCount: 15847
+    },
+    {
+      id: '2',
+      name: 'Claude-3 Sonnet',
+      provider: 'Anthropic',
+      modelType: 'llm',
+      version: 'claude-3-sonnet-20240229',
+      apiEndpoint: 'https://api.anthropic.com/v1/messages',
+      apiKey: 'sk-ant-*********************',
+      maxTokens: 4096,
+      temperature: 0.8,
+      topP: 1.0,
+      frequencyPenalty: 0.0,
+      presencePenalty: 0.0,
+      status: 'active',
+      description: 'Claude-3 Sonnet模型，在推理、数学和编程方面表现优异，适合复杂任务处理',
+      capabilities: ['文本生成', '代码分析', '逻辑推理', '数学计算', '文档分析'],
+      pricing: {
+        inputTokens: 0.003,
+        outputTokens: 0.015,
+        currency: 'USD'
+      },
+      limits: {
+        requestsPerMinute: 1000,
+        tokensPerMinute: 200000,
+        dailyLimit: 2000000
+      },
+      createdBy: '系统管理员',
+      createdAt: '2024-06-05',
+      lastModified: '2024-06-13',
+      lastUsed: '2024-06-15 14:25:00',
+      usageCount: 8934
+    },
+    {
+      id: '3',
+      name: 'Text Embedding Ada 002',
+      provider: 'OpenAI',
+      modelType: 'embedding',
+      version: 'text-embedding-ada-002',
+      apiEndpoint: 'https://api.openai.com/v1/embeddings',
+      apiKey: 'sk-*********************',
+      maxTokens: 8191,
+      temperature: 0.0,
+      topP: 1.0,
+      frequencyPenalty: 0.0,
+      presencePenalty: 0.0,
+      status: 'active',
+      description: 'OpenAI的文本嵌入模型，用于文本相似度计算和语义搜索',
+      capabilities: ['文本嵌入', '语义搜索', '相似度计算', '聚类分析'],
+      pricing: {
+        inputTokens: 0.0001,
+        outputTokens: 0.0,
+        currency: 'USD'
+      },
+      limits: {
+        requestsPerMinute: 3000,
+        tokensPerMinute: 1000000,
+        dailyLimit: 10000000
+      },
+      createdBy: '系统管理员',
+      createdAt: '2024-05-20',
+      lastModified: '2024-06-10',
+      lastUsed: '2024-06-15 14:20:00',
+      usageCount: 25678
+    },
+    {
+      id: '4',
+      name: 'Gemini Pro',
+      provider: 'Google',
+      modelType: 'llm',
+      version: 'gemini-pro',
+      apiEndpoint: 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent',
+      apiKey: 'AIza*********************',
+      maxTokens: 2048,
+      temperature: 0.9,
+      topP: 1.0,
+      frequencyPenalty: 0.0,
+      presencePenalty: 0.0,
+      status: 'testing',
+      description: 'Google的Gemini Pro模型，支持多模态输入，在创意写作方面表现出色',
+      capabilities: ['文本生成', '多模态理解', '创意写作', '代码生成'],
+      pricing: {
+        inputTokens: 0.0005,
+        outputTokens: 0.0015,
+        currency: 'USD'
+      },
+      limits: {
+        requestsPerMinute: 60,
+        tokensPerMinute: 32000,
+        dailyLimit: 100000
+      },
+      createdBy: '开发工程师',
+      createdAt: '2024-06-10',
+      lastModified: '2024-06-14',
+      lastUsed: '2024-06-15 13:45:00',
+      usageCount: 234
+    }
+  ];
+
+  const providerMap = {
+    'OpenAI': { color: 'green', icon: <ExperimentOutlined /> },
+    'Anthropic': { color: 'blue', icon: <RobotOutlined /> },
+    'Google': { color: 'red', icon: <CloudOutlined /> },
+    'Azure': { color: 'cyan', icon: <DatabaseOutlined /> },
+  };
+
+  const modelTypeMap = {
+    llm: { name: t('models.types.llm'), color: 'blue', icon: <ExperimentOutlined /> },
     embedding: { name: t('models.types.embedding'), color: 'green', icon: <ApiOutlined /> },
     image: { name: t('models.types.image'), color: 'orange', icon: <MonitorOutlined /> },
     audio: { name: t('models.types.audio'), color: 'purple', icon: <ThunderboltOutlined /> },
