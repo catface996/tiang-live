@@ -67,16 +67,189 @@ const StatsCard = styled(Card)`
   .ant-card-body {
     padding: 16px;
   }
+  
+  .ant-statistic {
+    .ant-statistic-title {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .ant-statistic-content {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .ant-card-body {
+      padding: 12px;
+    }
+    
+    .ant-statistic {
+      .ant-statistic-title {
+        font-size: 11px;
+      }
+      
+      .ant-statistic-content {
+        font-size: 18px;
+      }
+    }
+  }
 `;
 
 const TaskCard = styled(Card)`
   height: 100%;
+  min-height: 450px;
   transition: all 0.3s ease;
   cursor: pointer;
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+  
+  .ant-card-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    
+    .ant-card-head-title {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+  }
+  
+  .ant-card-body {
+    padding: 20px;
+    height: calc(100% - 64px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-tags {
+    margin-bottom: 16px;
+    min-height: 32px;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .card-description {
+    flex: 1;
+    margin-bottom: 16px;
+    min-height: 48px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .card-stats {
+    margin-bottom: 16px;
+    
+    .ant-statistic {
+      .ant-statistic-title {
+        font-size: 11px;
+        color: #666;
+        margin-bottom: 4px;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .ant-statistic-content {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+    }
+  }
+  
+  .card-progress {
+    margin-bottom: 16px;
+  }
+  
+  .card-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #f5f5f5;
+    font-size: 12px;
+    color: #999;
+    
+    .footer-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .footer-label {
+        flex-shrink: 0;
+        margin-right: 8px;
+      }
+      
+      .footer-value {
+        flex: 1;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    min-height: 420px;
+    
+    .ant-card-head {
+      padding: 12px 16px;
+      
+      .ant-card-head-title {
+        font-size: 14px;
+      }
+    }
+    
+    .ant-card-body {
+      padding: 16px;
+    }
+    
+    .card-stats {
+      .ant-statistic {
+        .ant-statistic-title {
+          font-size: 10px;
+        }
+        
+        .ant-statistic-content {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 576px) {
+    min-height: 400px;
+    
+    .card-stats {
+      .ant-row {
+        .ant-col {
+          margin-bottom: 8px;
+        }
+      }
+    }
   }
 `;
 
@@ -369,7 +542,7 @@ const TaskCollectionManagement: React.FC = () => {
       const totalActions = task.targets.reduce((sum, t) => sum + t.actions.length, 0);
 
       return (
-        <Col xs={24} sm={12} lg={8} xl={6} key={task.id}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={task.id}>
           <TaskCard
             title={
               <Space>
@@ -431,8 +604,9 @@ const TaskCollectionManagement: React.FC = () => {
             }
             onClick={() => handleViewTask(task)}
           >
-            <div style={{ marginBottom: 12 }}>
-              <Space wrap>
+            <div className="card-content">
+              {/* 标签区域 */}
+              <div className="card-tags">
                 <Tag icon={<NodeIndexOutlined />} color="blue">
                   {entityCount}{t('tasks.collections.card.entities')}
                 </Tag>
@@ -442,49 +616,67 @@ const TaskCollectionManagement: React.FC = () => {
                 <Tag icon={<MonitorOutlined />} color="orange">
                   {totalActions}{t('tasks.collections.card.actions')}
                 </Tag>
-              </Space>
-            </div>
-            
-            <Paragraph 
-              ellipsis={{ rows: 2 }} 
-              style={{ marginBottom: 16, minHeight: 40 }}
-            >
-              {task.description}
-            </Paragraph>
+              </div>
+              
+              {/* 描述区域 */}
+              <div className="card-description">
+                <Paragraph 
+                  ellipsis={{ rows: 2, tooltip: task.description }} 
+                  style={{ margin: 0, color: '#666', lineHeight: '1.5' }}
+                >
+                  {task.description}
+                </Paragraph>
+              </div>
 
-            <div style={{ marginBottom: 12 }}>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Statistic
-                    title={t('tasks.collections.card.successRate')}
-                    value={task.successRate}
-                    suffix="%"
-                    valueStyle={{ fontSize: 14 }}
-                  />
-                </Col>
-                <Col span={12}>
-                  <Statistic
-                    title={t('tasks.collections.card.executionCount')}
-                    value={task.totalRuns}
-                    valueStyle={{ fontSize: 14 }}
-                  />
-                </Col>
-              </Row>
-            </div>
+              {/* 统计数据 */}
+              <div className="card-stats">
+                <Row gutter={[8, 8]}>
+                  <Col span={12}>
+                    <Statistic
+                      title={t('tasks.collections.card.successRate')}
+                      value={task.successRate}
+                      suffix="%"
+                      valueStyle={{ fontSize: 18, color: task.successRate > 95 ? '#52c41a' : '#faad14' }}
+                    />
+                  </Col>
+                  <Col span={12}>
+                    <Statistic
+                      title={t('tasks.collections.card.executionCount')}
+                      value={task.totalRuns}
+                      valueStyle={{ fontSize: 18, color: '#1890ff' }}
+                    />
+                  </Col>
+                </Row>
+              </div>
 
-            <div style={{ marginBottom: 12 }}>
-              <Text strong>{t('tasks.collections.card.successRate')}: </Text>
-              <Progress 
-                percent={task.successRate} 
-                size="small"
-                strokeColor={task.successRate > 95 ? '#52c41a' : '#faad14'}
-              />
-            </div>
+              {/* 进度条 */}
+              <div className="card-progress">
+                <Text strong style={{ fontSize: 12, color: '#666' }}>
+                  {t('tasks.collections.card.successRate')}: 
+                </Text>
+                <Progress 
+                  percent={task.successRate} 
+                  size="small"
+                  strokeColor={task.successRate > 95 ? '#52c41a' : '#faad14'}
+                  style={{ marginTop: 4 }}
+                />
+              </div>
 
-            <div style={{ fontSize: 12, color: '#666' }}>
-              <div>{t('tasks.collections.card.schedule')}: {task.schedule}</div>
-              <div>{t('tasks.collections.card.nextExecution')}: {task.nextRun}</div>
-              <div>{t('tasks.collections.card.creator')}: {task.createdBy}</div>
+              {/* 底部信息 */}
+              <div className="card-footer">
+                <div className="footer-item">
+                  <span className="footer-label">{t('tasks.collections.card.schedule')}</span>
+                  <span className="footer-value">{task.schedule}</span>
+                </div>
+                <div className="footer-item">
+                  <span className="footer-label">{t('tasks.collections.card.nextExecution')}</span>
+                  <span className="footer-value">{task.nextRun}</span>
+                </div>
+                <div className="footer-item">
+                  <span className="footer-label">{t('tasks.collections.card.creator')}</span>
+                  <span className="footer-value">{task.createdBy}</span>
+                </div>
+              </div>
             </div>
           </TaskCard>
         </Col>
@@ -526,8 +718,8 @@ const TaskCollectionManagement: React.FC = () => {
       </PageHeader>
 
       {/* 统计信息 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} md={6}>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('tasks.collections.stats.totalCollections')}
@@ -538,7 +730,7 @@ const TaskCollectionManagement: React.FC = () => {
             />
           </StatsCard>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('tasks.collections.stats.activeCollections')}
@@ -549,7 +741,7 @@ const TaskCollectionManagement: React.FC = () => {
             />
           </StatsCard>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('tasks.collections.stats.totalTasks')}
@@ -560,7 +752,7 @@ const TaskCollectionManagement: React.FC = () => {
             />
           </StatsCard>
         </Col>
-        <Col xs={24} sm={12} md={6}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
               title={t('tasks.collections.stats.executionRate')}
@@ -611,7 +803,7 @@ const TaskCollectionManagement: React.FC = () => {
       />
 
       {/* 任务集合卡片列表 */}
-      <Row gutter={16}>
+      <Row gutter={[20, 20]}>
         {renderTaskCards()}
       </Row>
 
