@@ -42,6 +42,7 @@ import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import SequenceDiagram from '../../components/SequenceDiagram';
+import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import sequenceDataJson from '../../data/sequenceData.json';
 
 const { Title, Paragraph, Text } = Typography;
@@ -54,6 +55,25 @@ const PageContainer = styled.div`
 
 const PageHeader = styled.div`
   margin-bottom: 24px;
+`;
+
+const MermaidCodeEditor = styled(TextArea)`
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+  font-size: 13px;
+  line-height: 1.5;
+  background-color: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  
+  &:focus {
+    background-color: #ffffff;
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  
+  &::placeholder {
+    color: #8c8c8c;
+    font-size: 12px;
+  }
 `;
 
 const StatsCard = styled(Card)`
@@ -215,6 +235,8 @@ const SequenceManagement: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [formModalVisible, setFormModalVisible] = useState(false);
   const [editingSequence, setEditingSequence] = useState<SequenceData | null>(null);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewChart, setPreviewChart] = useState('');
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -267,7 +289,8 @@ const SequenceManagement: React.FC = () => {
       type: sequence.type,
       status: sequence.status,
       participants: sequence.participants,
-      duration: sequence.duration
+      duration: sequence.duration,
+      mermaidChart: sequence.mermaidChart
     });
     setFormModalVisible(true);
   };
@@ -292,6 +315,16 @@ const SequenceManagement: React.FC = () => {
     setFormModalVisible(false);
     form.resetFields();
     setEditingSequence(null);
+  };
+
+  const handlePreviewChart = () => {
+    const chartCode = form.getFieldValue('mermaidChart');
+    if (chartCode) {
+      setPreviewChart(chartCode);
+      setPreviewVisible(true);
+    } else {
+      message.warning(t('sequences.messages.noChartCode'));
+    }
   };
 
   const renderSequenceCards = () => {
@@ -395,6 +428,7 @@ const SequenceManagement: React.FC = () => {
             </Paragraph>
           </div>
           <Space>
+            <LanguageSwitcher />
             <Button icon={<ReloadOutlined />}>
               {t('common.refresh')}
             </Button>
@@ -696,7 +730,37 @@ const SequenceManagement: React.FC = () => {
               >
                 <Input 
                   placeholder={t('sequences.form.durationPlaceholder')}
-                  addonAfter="ms"
+                  addonAfter={t('sequences.form.durationUnit')}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="mermaidChart"
+                label={
+                  <Space>
+                    {t('sequences.form.mermaidChart')}
+                    <Button 
+                      type="link" 
+                      size="small" 
+                      icon={<EyeOutlined />}
+                      onClick={handlePreviewChart}
+                    >
+                      {t('sequences.form.previewChart')}
+                    </Button>
+                  </Space>
+                }
+                rules={[
+                  { required: true, message: t('sequences.form.mermaidChartRequired') }
+                ]}
+              >
+                <MermaidCodeEditor 
+                  rows={8} 
+                  placeholder={t('sequences.form.mermaidChartPlaceholder')}
+                  showCount
                 />
               </Form.Item>
             </Col>
@@ -715,6 +779,23 @@ const SequenceManagement: React.FC = () => {
             </Space>
           </div>
         </Form>
+      </Modal>
+
+      {/* Chart Preview Modal */}
+      <Modal
+        title={t('sequences.form.chartPreview')}
+        open={previewVisible}
+        onCancel={() => setPreviewVisible(false)}
+        footer={null}
+        width={1000}
+        style={{ top: 20 }}
+      >
+        {previewChart && (
+          <SequenceDiagram 
+            chart={previewChart}
+            title={t('sequences.form.previewTitle')}
+          />
+        )}
       </Modal>
     </PageContainer>
   );

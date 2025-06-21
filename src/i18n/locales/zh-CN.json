@@ -1056,7 +1056,14 @@
       "participantsPlaceholder": "请选择或输入参与者，支持自定义",
       "duration": "执行时长",
       "durationRequired": "请输入预估执行时长",
-      "durationPlaceholder": "请输入预估执行时长"
+      "durationPlaceholder": "请输入预估执行时长",
+      "durationUnit": "毫秒",
+      "mermaidChart": "时序图代码",
+      "mermaidChartRequired": "请输入Mermaid时序图代码",
+      "mermaidChartPlaceholder": "请输入Mermaid语法的时序图代码，例如：\nsequenceDiagram\n    participant A as 用户\n    participant B as 前端\n    participant C as 后端\n    A->>B: 发起请求\n    B->>C: 转发请求\n    C-->>B: 返回响应\n    B-->>A: 显示结果",
+      "previewChart": "预览图表",
+      "chartPreview": "时序图预览",
+      "previewTitle": "实时预览"
     },
     "participants": {
       "user": "用户",
@@ -1073,7 +1080,8 @@
       "updateSuccess": "时序更新成功",
       "updateFailed": "时序更新失败",
       "deleteSuccess": "时序删除成功",
-      "deleteFailed": "时序删除失败"
+      "deleteFailed": "时序删除失败",
+      "noChartCode": "请先输入时序图代码"
     },
     "editSequence": "编辑时序"
   },

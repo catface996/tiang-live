@@ -588,7 +588,55 @@
       "status": "Status",
       "lastExecution": "Last Execution",
       "successRate": "Success Rate"
-    }
+    },
+    "form": {
+      "name": "Sequence Name",
+      "nameRequired": "Please enter sequence name",
+      "nameMaxLength": "Sequence name cannot exceed 100 characters",
+      "namePlaceholder": "Please enter sequence name",
+      "description": "Sequence Description",
+      "descriptionRequired": "Please enter sequence description",
+      "descriptionMaxLength": "Sequence description cannot exceed 500 characters",
+      "descriptionPlaceholder": "Please enter sequence description, detailing the purpose and process of this sequence",
+      "type": "Sequence Type",
+      "typeRequired": "Please select sequence type",
+      "typePlaceholder": "Please select sequence type",
+      "status": "Sequence Status",
+      "statusRequired": "Please select sequence status",
+      "statusPlaceholder": "Please select sequence status",
+      "participants": "Participants",
+      "participantsRequired": "Please select or enter participants",
+      "participantsPlaceholder": "Please select or enter participants, custom input supported",
+      "duration": "Execution Duration",
+      "durationRequired": "Please enter estimated execution duration",
+      "durationPlaceholder": "Please enter estimated execution duration",
+      "durationUnit": "ms",
+      "mermaidChart": "Sequence Diagram Code",
+      "mermaidChartRequired": "Please enter Mermaid sequence diagram code",
+      "mermaidChartPlaceholder": "Please enter Mermaid syntax sequence diagram code, for example:\nsequenceDiagram\n    participant A as User\n    participant B as Frontend\n    participant C as Backend\n    A->>B: Send Request\n    B->>C: Forward Request\n    C-->>B: Return Response\n    B-->>A: Display Result",
+      "previewChart": "Preview Chart",
+      "chartPreview": "Sequence Diagram Preview",
+      "previewTitle": "Live Preview"
+    },
+    "participants": {
+      "user": "User",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "database": "Database",
+      "cache": "Cache",
+      "queue": "Message Queue",
+      "externalApi": "External API"
+    },
+    "messages": {
+      "createSuccess": "Sequence created successfully",
+      "createFailed": "Failed to create sequence",
+      "updateSuccess": "Sequence updated successfully",
+      "updateFailed": "Failed to update sequence",
+      "deleteSuccess": "Sequence deleted successfully",
+      "deleteFailed": "Failed to delete sequence",
+      "noChartCode": "Please enter sequence diagram code first"
+    },
+    "editSequence": "Edit Sequence"
   },
   "agents": {
     "title": "AI Agents",
