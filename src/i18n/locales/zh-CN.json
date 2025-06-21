@@ -806,7 +806,10 @@
         "enabled": "启用状态",
         "retryDelay": "重试延迟(秒)",
         "retryDelayRequired": "请设置重试延迟",
-        "retryDelayPlaceholder": "重试延迟"
+        "retryDelayPlaceholder": "重试延迟",
+        "timeout": "超时时间(秒)",
+        "timeoutRequired": "请设置超时时间",
+        "timeoutPlaceholder": "超时时间"
       },
       "types": {
         "webhook": "Webhook",
@@ -872,7 +875,15 @@
         "authentication": "认证方式",
         "encryption": "加密传输",
         "ipWhitelist": "IP白名单",
-        "noRestriction": "无限制"
+        "noRestriction": "无限制",
+        "authTypes": {
+          "bearerToken": "Bearer Token",
+          "databaseCredentials": "数据库凭证",
+          "apiKey": "API密钥",
+          "basicAuth": "基础认证",
+          "oauth2": "OAuth2",
+          "none": "无认证"
+        }
       }
     },
     "collections": {

@@ -145,6 +145,19 @@ const HookTasks: React.FC = () => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
 
+  // 认证方式映射
+  const getAuthenticationDisplay = (auth: string) => {
+    const authMap: Record<string, string> = {
+      'bearer_token': t('tasks.hooks.detail.authTypes.bearerToken'),
+      'database_credentials': t('tasks.hooks.detail.authTypes.databaseCredentials'),
+      'api_key': t('tasks.hooks.detail.authTypes.apiKey'),
+      'basic_auth': t('tasks.hooks.detail.authTypes.basicAuth'),
+      'oauth2': t('tasks.hooks.detail.authTypes.oauth2'),
+      'none': t('tasks.hooks.detail.authTypes.none')
+    };
+    return authMap[auth] || auth;
+  };
+
   useEffect(() => {
     setPageTitle(t('tasks.hooks.title'));
   }, [t]);
@@ -631,10 +644,10 @@ const HookTasks: React.FC = () => {
             <Col span={8}>
               <Form.Item
                 name="timeout"
-                label="超时时间(秒)"
-                rules={[{ required: true, message: '请设置超时时间' }]}
+                label={t('tasks.hooks.form.timeout')}
+                rules={[{ required: true, message: t('tasks.hooks.form.timeoutRequired') }]}
               >
-                <Input type="number" placeholder="超时时间" />
+                <Input type="number" placeholder={t('tasks.hooks.form.timeoutPlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -779,7 +792,7 @@ const HookTasks: React.FC = () => {
               <Tabs.TabPane tab={t('tasks.hooks.detail.securityConfig')} key="security">
                 <Descriptions column={2} size="small">
                   <Descriptions.Item label={t('tasks.hooks.detail.authentication')}>
-                    {selectedHook.security.authentication}
+                    {getAuthenticationDisplay(selectedHook.security.authentication)}
                   </Descriptions.Item>
                   <Descriptions.Item label={t('tasks.hooks.detail.encryption')}>
                     {selectedHook.security.encryption ? t('common.yes') : t('common.no')}

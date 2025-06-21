@@ -806,7 +806,10 @@
         "enabled": "Enabled Status",
         "retryDelay": "Retry Delay (seconds)",
         "retryDelayRequired": "Please set retry delay",
-        "retryDelayPlaceholder": "Retry delay"
+        "retryDelayPlaceholder": "Retry delay",
+        "timeout": "Timeout (seconds)",
+        "timeoutRequired": "Please set timeout",
+        "timeoutPlaceholder": "Timeout"
       },
       "types": {
         "webhook": "Webhook",
@@ -872,7 +875,15 @@
         "authentication": "Authentication",
         "encryption": "Encryption",
         "ipWhitelist": "IP Whitelist",
-        "noRestriction": "No Restriction"
+        "noRestriction": "No Restriction",
+        "authTypes": {
+          "bearerToken": "Bearer Token",
+          "databaseCredentials": "Database Credentials",
+          "apiKey": "API Key",
+          "basicAuth": "Basic Authentication",
+          "oauth2": "OAuth2",
+          "none": "No Authentication"
+        }
       }
     },
     "collections": {
