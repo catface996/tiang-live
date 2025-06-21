@@ -13,7 +13,11 @@ import {
   Tooltip,
   Input,
   Select,
-  Descriptions
+  Descriptions,
+  Form,
+  Switch,
+  message,
+  Divider
 } from 'antd';
 import { 
   ControlOutlined, 
@@ -29,7 +33,9 @@ import {
   ApiOutlined,
   DatabaseOutlined,
   CloudOutlined,
-  MobileOutlined
+  MobileOutlined,
+  SaveOutlined,
+  CloseOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -40,6 +46,7 @@ import sequenceDataJson from '../../data/sequenceData.json';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
+const { TextArea } = Input;
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -206,9 +213,12 @@ interface SequenceData {
 const SequenceManagement: React.FC = () => {
   const [selectedSequence, setSelectedSequence] = useState<SequenceData | null>(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [formModalVisible, setFormModalVisible] = useState(false);
+  const [editingSequence, setEditingSequence] = useState<SequenceData | null>(null);
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [form] = Form.useForm();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -241,6 +251,47 @@ const SequenceManagement: React.FC = () => {
   const handleViewSequence = (sequence: SequenceData) => {
     setSelectedSequence(sequence);
     setDetailModalVisible(true);
+  };
+
+  const handleCreateSequence = () => {
+    setEditingSequence(null);
+    form.resetFields();
+    setFormModalVisible(true);
+  };
+
+  const handleEditSequence = (sequence: SequenceData) => {
+    setEditingSequence(sequence);
+    form.setFieldsValue({
+      name: sequence.name,
+      description: sequence.description,
+      type: sequence.type,
+      status: sequence.status,
+      participants: sequence.participants,
+      duration: sequence.duration
+    });
+    setFormModalVisible(true);
+  };
+
+  const handleFormSubmit = async (values: any) => {
+    try {
+      if (editingSequence) {
+        // 编辑逻辑
+        message.success(t('sequences.messages.updateSuccess'));
+      } else {
+        // 创建逻辑
+        message.success(t('sequences.messages.createSuccess'));
+      }
+      setFormModalVisible(false);
+      form.resetFields();
+    } catch (error) {
+      message.error(editingSequence ? t('sequences.messages.updateFailed') : t('sequences.messages.createFailed'));
+    }
+  };
+
+  const handleFormCancel = () => {
+    setFormModalVisible(false);
+    form.resetFields();
+    setEditingSequence(null);
   };
 
   const renderSequenceCards = () => {
@@ -316,7 +367,7 @@ const SequenceManagement: React.FC = () => {
                     size="small"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Handle edit action
+                      handleEditSequence(sequence);
                     }}
                   />
                 </Tooltip>
@@ -347,7 +398,7 @@ const SequenceManagement: React.FC = () => {
             <Button icon={<ReloadOutlined />}>
               {t('common.refresh')}
             </Button>
-            <Button type="primary" icon={<PlusOutlined />}>
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateSequence}>
               {t('sequences.createSequence')}
             </Button>
           </Space>
@@ -504,6 +555,166 @@ const SequenceManagement: React.FC = () => {
             />
           </div>
         )}
+      </Modal>
+
+      {/* Create/Edit Sequence Form Modal */}
+      <Modal
+        title={editingSequence ? t('sequences.editSequence') : t('sequences.createSequence')}
+        open={formModalVisible}
+        onCancel={handleFormCancel}
+        footer={null}
+        width={800}
+        destroyOnClose
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleFormSubmit}
+          initialValues={{
+            status: 'draft',
+            type: 'business'
+          }}
+        >
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="name"
+                label={t('sequences.form.name')}
+                rules={[
+                  { required: true, message: t('sequences.form.nameRequired') },
+                  { max: 100, message: t('sequences.form.nameMaxLength') }
+                ]}
+              >
+                <Input placeholder={t('sequences.form.namePlaceholder')} />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="description"
+                label={t('sequences.form.description')}
+                rules={[
+                  { required: true, message: t('sequences.form.descriptionRequired') },
+                  { max: 500, message: t('sequences.form.descriptionMaxLength') }
+                ]}
+              >
+                <TextArea 
+                  rows={4} 
+                  placeholder={t('sequences.form.descriptionPlaceholder')}
+                  showCount
+                  maxLength={500}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="type"
+                label={t('sequences.form.type')}
+                rules={[{ required: true, message: t('sequences.form.typeRequired') }]}
+              >
+                <Select placeholder={t('sequences.form.typePlaceholder')}>
+                  <Option value="authentication">
+                    <Space>
+                      <UserOutlined />
+                      {t('sequences.types.authentication')}
+                    </Space>
+                  </Option>
+                  <Option value="business">
+                    <Space>
+                      <ApiOutlined />
+                      {t('sequences.types.business')}
+                    </Space>
+                  </Option>
+                  <Option value="monitoring">
+                    <Space>
+                      <ClockCircleOutlined />
+                      {t('sequences.types.monitoring')}
+                    </Space>
+                  </Option>
+                  <Option value="data">
+                    <Space>
+                      <DatabaseOutlined />
+                      {t('sequences.types.data')}
+                    </Space>
+                  </Option>
+                  <Option value="gateway">
+                    <Space>
+                      <CloudOutlined />
+                      {t('sequences.types.gateway')}
+                    </Space>
+                  </Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="status"
+                label={t('sequences.form.status')}
+                rules={[{ required: true, message: t('sequences.form.statusRequired') }]}
+              >
+                <Select placeholder={t('sequences.form.statusPlaceholder')}>
+                  <Option value="draft">{t('sequences.statuses.draft')}</Option>
+                  <Option value="active">{t('sequences.statuses.active')}</Option>
+                  <Option value="inactive">{t('sequences.statuses.inactive')}</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="participants"
+                label={t('sequences.form.participants')}
+                rules={[{ required: true, message: t('sequences.form.participantsRequired') }]}
+              >
+                <Select
+                  mode="tags"
+                  placeholder={t('sequences.form.participantsPlaceholder')}
+                  style={{ width: '100%' }}
+                >
+                  <Option value="User">{t('sequences.participants.user')}</Option>
+                  <Option value="Frontend">{t('sequences.participants.frontend')}</Option>
+                  <Option value="Backend">{t('sequences.participants.backend')}</Option>
+                  <Option value="Database">{t('sequences.participants.database')}</Option>
+                  <Option value="Cache">{t('sequences.participants.cache')}</Option>
+                  <Option value="Queue">{t('sequences.participants.queue')}</Option>
+                  <Option value="External API">{t('sequences.participants.externalApi')}</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="duration"
+                label={t('sequences.form.duration')}
+                rules={[{ required: true, message: t('sequences.form.durationRequired') }]}
+              >
+                <Input 
+                  placeholder={t('sequences.form.durationPlaceholder')}
+                  addonAfter="ms"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Divider />
+
+          <div style={{ textAlign: 'right' }}>
+            <Space>
+              <Button onClick={handleFormCancel} icon={<CloseOutlined />}>
+                {t('common.cancel')}
+              </Button>
+              <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+                {editingSequence ? t('common.update') : t('common.create')}
+              </Button>
+            </Space>
+          </div>
+        </Form>
       </Modal>
     </PageContainer>
   );

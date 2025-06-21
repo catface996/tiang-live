@@ -1035,7 +1035,48 @@
       "status": "状态",
       "lastExecution": "最后执行",
       "successRate": "成功率"
-    ,
+    },
+    "form": {
+      "name": "时序名称",
+      "nameRequired": "请输入时序名称",
+      "nameMaxLength": "时序名称不能超过100个字符",
+      "namePlaceholder": "请输入时序名称",
+      "description": "时序描述",
+      "descriptionRequired": "请输入时序描述",
+      "descriptionMaxLength": "时序描述不能超过500个字符",
+      "descriptionPlaceholder": "请输入时序描述，详细说明该时序的用途和流程",
+      "type": "时序类型",
+      "typeRequired": "请选择时序类型",
+      "typePlaceholder": "请选择时序类型",
+      "status": "时序状态",
+      "statusRequired": "请选择时序状态",
+      "statusPlaceholder": "请选择时序状态",
+      "participants": "参与者",
+      "participantsRequired": "请选择或输入参与者",
+      "participantsPlaceholder": "请选择或输入参与者，支持自定义",
+      "duration": "执行时长",
+      "durationRequired": "请输入预估执行时长",
+      "durationPlaceholder": "请输入预估执行时长"
+    },
+    "participants": {
+      "user": "用户",
+      "frontend": "前端",
+      "backend": "后端",
+      "database": "数据库",
+      "cache": "缓存",
+      "queue": "消息队列",
+      "externalApi": "外部API"
+    },
+    "messages": {
+      "createSuccess": "时序创建成功",
+      "createFailed": "时序创建失败",
+      "updateSuccess": "时序更新成功",
+      "updateFailed": "时序更新失败",
+      "deleteSuccess": "时序删除成功",
+      "deleteFailed": "时序删除失败"
+    },
+    "editSequence": "编辑时序"
+  },
   "aiAgent": {
     "form": {
       "createTitle": "创建AI智能体",
@@ -1090,8 +1131,6 @@
         "updateFailed": "更新失败"
       }
     }
-  }
-}
   },
   "agents": {
     "title": "AI智能体",
