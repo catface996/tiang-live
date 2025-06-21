@@ -324,24 +324,24 @@ API接口：{api_details}
 
   const handleCopyPrompt = (prompt: PromptTemplate) => {
     navigator.clipboard.writeText(prompt.content);
-    message.success('提示词内容已复制到剪贴板');
+    message.success(t('systemSettings.prompts.messages.copySuccess'));
   };
 
   const handleToggleFavorite = (promptId: string) => {
-    message.success('收藏状态更新成功');
+    message.success(t('systemSettings.prompts.messages.favoriteSuccess'));
   };
 
   const handleDeletePrompt = (promptId: string) => {
-    message.success('提示词模板删除成功');
+    message.success(t('systemSettings.prompts.messages.deleteSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingPrompt) {
-        message.success('提示词模板更新成功');
+        message.success(t('systemSettings.prompts.messages.updateSuccess'));
       } else {
-        message.success('提示词模板创建成功');
+        message.success(t('systemSettings.prompts.messages.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -367,7 +367,7 @@ API接口：{api_details}
             }
             extra={
               <Space>
-                <Tooltip title="复制内容">
+                <Tooltip title={t('systemSettings.prompts.actions.copy')}>
                   <Button 
                     type="link" 
                     icon={<CopyOutlined />} 
@@ -378,7 +378,7 @@ API接口：{api_details}
                     }}
                   />
                 </Tooltip>
-                <Tooltip title={prompt.isFavorite ? '取消收藏' : '添加收藏'}>
+                <Tooltip title={prompt.isFavorite ? t('systemSettings.prompts.actions.unfavorite') : t('systemSettings.prompts.actions.favorite')}>
                   <Button 
                     type="link" 
                     icon={<StarOutlined />} 
@@ -390,7 +390,7 @@ API接口：{api_details}
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="查看详情">
+                <Tooltip title={t('systemSettings.prompts.actions.view')}>
                   <Button 
                     type="link" 
                     icon={<EyeOutlined />} 
@@ -401,7 +401,7 @@ API接口：{api_details}
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="编辑">
+                <Tooltip title={t('systemSettings.prompts.actions.edit')}>
                   <Button 
                     type="link" 
                     icon={<EditOutlined />} 
@@ -424,7 +424,7 @@ API接口：{api_details}
                 <Tag color={difficultyConfig?.color}>
                   {difficultyConfig?.name}
                 </Tag>
-                {prompt.isPublic && <Tag color="blue">公开</Tag>}
+                {prompt.isPublic && <Tag color="blue">{t('systemSettings.prompts.status.public')}</Tag>}
               </Space>
             </div>
             
@@ -445,7 +445,7 @@ API接口：{api_details}
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title="使用次数"
+                    title={t('systemSettings.prompts.stats.usageCount')}
                     value={prompt.usageCount}
                     valueStyle={{ fontSize: 14 }}
                   />
@@ -694,17 +694,17 @@ API接口：{api_details}
                 label="难度"
                 rules={[{ required: true, message: '请选择难度' }]}
               >
-                <Select placeholder="请选择难度">
-                  <Option value="beginner">初级</Option>
-                  <Option value="intermediate">中级</Option>
-                  <Option value="advanced">高级</Option>
+                <Select placeholder={t('systemSettings.prompts.search.difficulty')}>
+                  <Option value="beginner">{t('systemSettings.prompts.difficulty.beginner')}</Option>
+                  <Option value="intermediate">{t('systemSettings.prompts.difficulty.intermediate')}</Option>
+                  <Option value="advanced">{t('systemSettings.prompts.difficulty.advanced')}</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 name="isPublic"
-                label="公开模板"
+                label={t('systemSettings.prompts.detail.isPublic')}
                 valuePropName="checked"
               >
                 <Switch />
@@ -751,14 +751,14 @@ API接口：{api_details}
                   {difficultyMap[selectedPrompt.difficulty]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="评分">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.rating')}>
                 <Space>
                   <Rate disabled value={selectedPrompt.rating} allowHalf />
                   <Text>{selectedPrompt.rating}</Text>
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="使用次数">
-                {selectedPrompt.usageCount}次
+              <Descriptions.Item label={t('systemSettings.prompts.detail.usageCount')}>
+                {selectedPrompt.usageCount}{t('common.unit.times')}
               </Descriptions.Item>
               <Descriptions.Item label="语言">
                 {selectedPrompt.language}
@@ -768,14 +768,14 @@ API接口：{api_details}
               </Descriptions.Item>
               <Descriptions.Item label="状态">
                 <Space>
-                  {selectedPrompt.isPublic && <Tag color="blue">公开</Tag>}
-                  {selectedPrompt.isFavorite && <Tag color="gold" icon={<StarOutlined />}>收藏</Tag>}
+                  {selectedPrompt.isPublic && <Tag color="blue">{t('systemSettings.prompts.status.public')}</Tag>}
+                  {selectedPrompt.isFavorite && <Tag color="gold" icon={<StarOutlined />}>{t('systemSettings.prompts.status.favorite')}</Tag>}
                 </Space>
               </Descriptions.Item>
               <Descriptions.Item label="创建者">
                 {selectedPrompt.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label="创建时间">
+              <Descriptions.Item label={t('systemSettings.prompts.detail.createdAt')}>
                 {selectedPrompt.createdAt}
               </Descriptions.Item>
               <Descriptions.Item label="上次使用">
@@ -796,7 +796,7 @@ API接口：{api_details}
                   icon={<CopyOutlined />} 
                   onClick={() => handleCopyPrompt(selectedPrompt)}
                 >
-                  复制内容
+                  {t('systemSettings.prompts.actions.copy')}
                 </Button>
               </div>
             </Card>
