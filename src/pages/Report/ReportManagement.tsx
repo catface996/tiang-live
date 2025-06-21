@@ -27,6 +27,7 @@ import {
   EditOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import { ReportCard } from './components';
@@ -151,6 +152,7 @@ const ReportManagement: React.FC = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
@@ -327,7 +329,7 @@ const ReportManagement: React.FC = () => {
 
   // 处理报告操作
   const handleViewReport = (report: any) => {
-    message.info(`查看报告: ${report.name}`);
+    navigate(`/reports/${report.key}`);
   };
 
   const handleEditReport = (report: any) => {

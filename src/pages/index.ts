@@ -6,6 +6,7 @@ export { default as SequenceManagement } from './Sequence';
 export { default as IndustrySolutionManagement } from './IndustrySolution';
 export { default as TaskCollectionManagement } from './TaskCollection';
 export { default as ReportManagement } from './Report';
+export { default as ReportDetail } from './Report/ReportDetail';
 export { default as AIAssistant } from './AIAssistant';
 export { AIAgentManagement, AIAgentForm } from './AIAgent';
 

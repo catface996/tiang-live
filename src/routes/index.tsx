@@ -9,6 +9,7 @@ import {
   IndustrySolutionManagement,
   TaskCollectionManagement,
   ReportManagement,
+  ReportDetail,
   TagManagement,
   AIAssistant,
   AIAgentManagement,
@@ -38,6 +39,7 @@ const AppRoutes: React.FC = () => {
         <Route path="task-management/inspection-tasks" element={<InspectionTasks />} />
         <Route path="task-management/hook-tasks" element={<HookTasks />} />
         <Route path="reports" element={<ReportManagement />} />
+        <Route path="reports/:id" element={<ReportDetail />} />
         <Route path="ai-assistant" element={<AIAssistant />} />
         <Route path="ai-agents" element={<AIAgentManagement />} />
         <Route path="ai-agents/create" element={<AIAgentForm />} />
