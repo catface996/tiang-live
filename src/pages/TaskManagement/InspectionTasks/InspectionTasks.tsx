@@ -582,10 +582,10 @@ const InspectionTasks: React.FC = () => {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: '任务类型',
+            placeholder: t('tasks.inspection.search.type'),
             width: 120,
             options: [
-              { value: 'all', label: '所有类型' },
+              { value: 'all', label: t('tasks.inspection.search.allTypes') },
               ...Object.entries(taskTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -596,14 +596,14 @@ const InspectionTasks: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: '状态',
+            placeholder: t('tasks.inspection.search.status'),
             width: 100,
             options: [
-              { value: 'all', label: '所有状态' },
-              { value: 'running', label: '运行中' },
-              { value: 'paused', label: '已暂停' },
-              { value: 'stopped', label: '已停止' },
-              { value: 'error', label: '错误' }
+              { value: 'all', label: t('tasks.inspection.search.allStatuses') },
+              { value: 'running', label: t('tasks.inspection.status.active') },
+              { value: 'paused', label: t('tasks.inspection.status.paused') },
+              { value: 'stopped', label: t('tasks.inspection.status.draft') },
+              { value: 'error', label: t('tasks.inspection.status.failed') }
             ]
           }
         ]}

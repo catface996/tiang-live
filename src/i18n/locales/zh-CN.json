@@ -682,7 +682,9 @@
         "placeholder": "搜索巡检任务名称、描述...",
         "type": "类型",
         "status": "状态",
-        "schedule": "调度"
+        "schedule": "调度",
+        "allTypes": "所有类型",
+        "allStatuses": "所有状态"
       },
       "form": {
         "name": "任务名称",

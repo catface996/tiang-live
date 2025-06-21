@@ -682,7 +682,9 @@
         "placeholder": "Search inspection task name, description...",
         "type": "Type",
         "status": "Status",
-        "schedule": "Schedule"
+        "schedule": "Schedule",
+        "allTypes": "All Types",
+        "allStatuses": "All Statuses"
       },
       "form": {
         "name": "Task Name",
