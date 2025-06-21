@@ -630,7 +630,10 @@
     },
     "search": {
       "placeholder": "搜索报告名称、创建者...",
-      "type": "报告类型"
+      "type": "报告类型",
+      "status": "状态",
+      "allTypes": "所有类型",
+      "allStatuses": "所有状态"
     },
     "status": {
       "published": "已发布",

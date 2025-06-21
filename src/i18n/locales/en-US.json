@@ -630,7 +630,10 @@
     },
     "search": {
       "placeholder": "Search report name, creator...",
-      "type": "Report Type"
+      "type": "Report Type",
+      "status": "Status",
+      "allTypes": "All Types",
+      "allStatuses": "All Statuses"
     },
     "status": {
       "published": "Published",

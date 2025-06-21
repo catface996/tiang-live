@@ -31,6 +31,7 @@ import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import { ReportCard } from './components';
 import { useAppSelector } from '../../store';
+import SearchFilterBar from '../../components/Common/SearchFilterBar';
 
 const { Title, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
@@ -161,6 +162,9 @@ const MainCard = styled(Card)<{ $isDark: boolean }>`
 
 const ReportManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
   const { t } = useTranslation();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
@@ -169,6 +173,14 @@ const ReportManagement: React.FC = () => {
   useEffect(() => {
     setPageTitle(t('report.title'));
   }, [t]);
+
+  // 报告类型映射
+  const reportTypeMap = {
+    health: { name: t('reports.types.health'), color: 'green', icon: <FileTextOutlined /> },
+    dependency: { name: t('reports.types.dependency'), color: 'blue', icon: <FileTextOutlined /> },
+    relationship: { name: t('reports.types.relationship'), color: 'orange', icon: <FileTextOutlined /> },
+    performance: { name: t('reports.types.performance'), color: 'purple', icon: <FileTextOutlined /> }
+  };
 
   // 模拟报告数据
   const reportData = [
@@ -466,59 +478,45 @@ const ReportManagement: React.FC = () => {
         </Col>
       </Row>
 
+      {/* 筛选栏 */}
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder={t('reports.search.placeholder')}
+        filters={[
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: t('reports.search.type'),
+            width: 120,
+            options: [
+              { value: 'all', label: t('reports.search.allTypes') },
+              ...Object.entries(reportTypeMap).map(([key, config]) => ({
+                value: key,
+                label: config.name
+              }))
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: t('reports.search.status'),
+            width: 100,
+            options: [
+              { value: 'all', label: t('reports.search.allStatuses') },
+              { value: 'published', label: t('reports.status.published') },
+              { value: 'draft', label: t('reports.status.draft') },
+              { value: 'archived', label: t('reports.status.archived') }
+            ]
+          }
+        ]}
+        onRefresh={() => window.location.reload()}
+      />
+
       {/* 报告列表 */}
       <MainCard $isDark={isDark}>
-        {/* 筛选栏 */}
-        <FilterBar $isDark={isDark}>
-          <Row gutter={16} align="middle">
-            <Col flex="auto">
-              <Input
-                placeholder={t('reports.search.placeholder')}
-                prefix={<SearchOutlined />}
-                allowClear
-              />
-            </Col>
-            <Col>
-              <Select
-                placeholder={t('reports.search.type')}
-                style={{ width: 120 }}
-                allowClear
-              >
-                <Option value="health">{t('reports.types.health')}</Option>
-                <Option value="dependency">{t('reports.types.dependency')}</Option>
-                <Option value="relationship">{t('reports.types.relationship')}</Option>
-                <Option value="performance">{t('reports.types.performance')}</Option>
-              </Select>
-            </Col>
-            <Col>
-              <Select
-                placeholder={t('common.status')}
-                style={{ width: 100 }}
-                allowClear
-              >
-                <Option value="published">{t('reports.status.published')}</Option>
-                <Option value="draft">{t('reports.status.draft')}</Option>
-                <Option value="archived">{t('reports.status.archived')}</Option>
-              </Select>
-            </Col>
-            <Col>
-              <RangePicker placeholder={[t('common.startDate'), t('common.endDate')]} />
-            </Col>
-            <Col>
-              <Button 
-                icon={<FilterOutlined />}
-                style={{
-                  color: isDark ? '#ffffff' : undefined,
-                  borderColor: isDark ? '#434343' : undefined,
-                  backgroundColor: isDark ? 'transparent' : undefined
-                }}
-              >
-                {t('common.filter')}
-              </Button>
-            </Col>
-          </Row>
-        </FilterBar>
-
         {/* 卡片视图 */}
         {renderCardView()}
       </MainCard>
