@@ -60,7 +60,8 @@
     "previous": "上一步",
     "unit": {
       "count": "个",
-      "times": "次"
+      "times": "次",
+      "seconds": "秒"
     },
     "unitType": "种",
     "unitRelation": "条",
@@ -69,6 +70,8 @@
     "open": "打开",
     "enable": "启用",
     "disable": "禁用",
+    "yes": "是",
+    "no": "否",
     "active": "活跃",
     "inactive": "非活跃",
     "online": "在线",

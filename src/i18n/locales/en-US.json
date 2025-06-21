@@ -64,12 +64,15 @@
     "open": "Open",
     "unit": {
       "count": "",
-      "times": " times"
+      "times": " times",
+      "seconds": " seconds"
     },
     "unitType": " types",
     "unitRelation": " relations",
     "enable": "Enable",
     "disable": "Disable",
+    "yes": "Yes",
+    "no": "No",
     "active": "Active",
     "inactive": "Inactive",
     "online": "Online",
