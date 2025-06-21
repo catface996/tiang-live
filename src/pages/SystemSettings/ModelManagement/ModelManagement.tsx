@@ -695,7 +695,7 @@ const ModelManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab="能力特性" key="capabilities">
+              <Tabs.TabPane tab={t('models.detail.capabilities')} key="capabilities">
                 <Row gutter={16}>
                   {selectedModel.capabilities.map(capability => (
                     <Col xs={24} sm={12} lg={8} key={capability}>
@@ -713,16 +713,16 @@ const ModelManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab="定价信息" key="pricing">
-                <Card title="定价详情" size="small">
+              <Tabs.TabPane tab={t('models.detail.pricing')} key="pricing">
+                <Card title={t('models.detail.pricingDetails')} size="small">
                   <Descriptions column={2} size="small">
-                    <Descriptions.Item label="输入Token价格">
+                    <Descriptions.Item label={t('models.detail.inputTokenPrice')}>
                       ${selectedModel.pricing.inputTokens} / 1K tokens
                     </Descriptions.Item>
-                    <Descriptions.Item label="输出Token价格">
+                    <Descriptions.Item label={t('models.detail.outputTokenPrice')}>
                       ${selectedModel.pricing.outputTokens} / 1K tokens
                     </Descriptions.Item>
-                    <Descriptions.Item label="货币单位">
+                    <Descriptions.Item label={t('models.detail.currency')}>
                       {selectedModel.pricing.currency}
                     </Descriptions.Item>
                   </Descriptions>
