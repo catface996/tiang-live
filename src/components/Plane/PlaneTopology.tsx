@@ -59,55 +59,49 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
 
   if (loading) {
     return (
-      <Card title={t('planes.topology.title')}>
-        <TopologyContainer>
-          <div className="loading-container">
-            <Spin size="large" />
-            <div className="loading-text">{t('planes.loading.topology')}</div>
-          </div>
-        </TopologyContainer>
-      </Card>
+      <TopologyContainer>
+        <div className="loading-container">
+          <Spin size="large" />
+          <div className="loading-text">{t('planes.loading.topology')}</div>
+        </div>
+      </TopologyContainer>
     );
   }
 
   if (planes.length === 0) {
     return (
-      <Card title={t('planes.topology.title')}>
-        <TopologyContainer>
-          <Empty 
-            description={t('planes.loading.noPlaneData')}
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
-        </TopologyContainer>
-      </Card>
+      <TopologyContainer>
+        <Empty 
+          description={t('planes.loading.noPlaneData')}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      </TopologyContainer>
     );
   }
 
   return (
-    <Card title={t('planes.topology.title')}>
-      <TopologyContainer>
-        {sortedPlanes.map((plane, index) => {
-          return (
-            <PlaneLevel key={plane.id}>
-              <PlaneCard
-                plane={plane}
-                onAction={onPlaneAction}
+    <TopologyContainer>
+      {sortedPlanes.map((plane, index) => {
+        return (
+          <PlaneLevel key={plane.id}>
+            <PlaneCard
+              plane={plane}
+              onAction={onPlaneAction}
+            />
+            
+            {/* 如果有下一个层级（层级数字更小），显示多重依赖箭头 */}
+            {hasNextLevel(plane.level) && (
+              <MultipleDependencyArrows
+                currentPlane={plane}
+                allPlanes={sortedPlanes}
+                relationships={relationships}
+                animated={true}
               />
-              
-              {/* 如果有下一个层级（层级数字更小），显示多重依赖箭头 */}
-              {hasNextLevel(plane.level) && (
-                <MultipleDependencyArrows
-                  currentPlane={plane}
-                  allPlanes={sortedPlanes}
-                  relationships={relationships}
-                  animated={true}
-                />
-              )}
-            </PlaneLevel>
-          );
-        })}
-      </TopologyContainer>
-    </Card>
+            )}
+          </PlaneLevel>
+        );
+      })}
+    </TopologyContainer>
   );
 };
 
