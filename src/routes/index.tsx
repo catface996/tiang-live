@@ -21,6 +21,7 @@ import {
 } from '../pages';
 import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
 import AIAgentForm from '../pages/AIAgent/AIAgentForm';
+import AgentDetail from '../pages/AIAgent/AgentDetail';
 import ScanDetail from '../pages/SystemSettings/EntityScan/ScanDetail';
 
 const AppRoutes: React.FC = () => {
@@ -44,6 +45,7 @@ const AppRoutes: React.FC = () => {
         <Route path="ai-agents" element={<AIAgentManagement />} />
         <Route path="ai-agents/create" element={<AIAgentForm />} />
         <Route path="ai-agents/edit/:id" element={<AIAgentForm />} />
+        <Route path="ai-agents/detail/:id" element={<AgentDetail />} />
         <Route path="system-settings/model-management" element={<ModelManagement />} />
         <Route path="system-settings/prompt-templates" element={<PromptTemplates />} />
         <Route path="system-settings/tag-management" element={<TagManagement />} />

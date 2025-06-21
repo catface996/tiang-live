@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Card, 
   Avatar, 
@@ -411,6 +412,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { t } = useTranslation();
   const { token } = theme.useToken();
+  const navigate = useNavigate();
   const isDark = currentTheme === 'dark';
   
   // 使用 useMemo 来确保配置对象的稳定性
@@ -442,7 +444,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
         onStop(agent.id);
         break;
       case 'view':
-        onView(agent);
+        navigate(`/ai-agents/detail/${agent.id}`);
         break;
     }
   };
