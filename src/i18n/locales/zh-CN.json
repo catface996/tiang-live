@@ -1083,15 +1083,11 @@
       "deleteFailed": "时序删除失败",
       "noChartCode": "请先输入时序图代码"
     },
-    "editSequence": "编辑时序"
-  },
-  "units": {
-    "seconds": "秒",
-    "milliseconds": "毫秒"
-  },
-  "units": {
-    "seconds": "秒",
-    "milliseconds": "毫秒"
+    "editSequence": "编辑时序",
+    "units": {
+      "seconds": "秒",
+      "milliseconds": "毫秒"
+    }
   },
   "data": {
     "names": {

@@ -636,15 +636,11 @@
       "deleteFailed": "Failed to delete sequence",
       "noChartCode": "Please enter sequence diagram code first"
     },
-    "editSequence": "Edit Sequence"
-  },
-  "units": {
-    "seconds": "s",
-    "milliseconds": "ms"
-  },
-  "units": {
-    "seconds": "s",
-    "milliseconds": "ms"
+    "editSequence": "Edit Sequence",
+    "units": {
+      "seconds": "s",
+      "milliseconds": "ms"
+    }
   },
   "agents": {
     "title": "AI Agents",
