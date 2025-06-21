@@ -803,7 +803,10 @@
         "typeRequired": "Please select Hook type",
         "triggerEvent": "Trigger Event",
         "taskCollections": "Task Collections",
-        "enabled": "Enabled Status"
+        "enabled": "Enabled Status",
+        "retryDelay": "Retry Delay (seconds)",
+        "retryDelayRequired": "Please set retry delay",
+        "retryDelayPlaceholder": "Retry delay"
       },
       "types": {
         "webhook": "Webhook",
@@ -859,6 +862,17 @@
         "status": "Status",
         "lastTriggered": "Last Triggered",
         "executionCount": "Execution Count"
+      },
+      "detail": {
+        "retryDelay": "Retry Delay",
+        "seconds": " seconds",
+        "targetUrl": "Target URL",
+        "httpMethod": "HTTP Method",
+        "securityConfig": "Security Configuration",
+        "authentication": "Authentication",
+        "encryption": "Encryption",
+        "ipWhitelist": "IP Whitelist",
+        "noRestriction": "No Restriction"
       }
     },
     "collections": {

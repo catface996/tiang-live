@@ -649,10 +649,10 @@ const HookTasks: React.FC = () => {
             <Col span={8}>
               <Form.Item
                 name="retryDelay"
-                label="重试延迟(秒)"
-                rules={[{ required: true, message: '请设置重试延迟' }]}
+                label={t('tasks.hooks.form.retryDelay')}
+                rules={[{ required: true, message: t('tasks.hooks.form.retryDelayRequired') }]}
               >
-                <Input type="number" placeholder="重试延迟" />
+                <Input type="number" placeholder={t('tasks.hooks.form.retryDelayPlaceholder')} />
               </Form.Item>
             </Col>
           </Row>
@@ -760,31 +760,31 @@ const HookTasks: React.FC = () => {
                   <Descriptions.Item label={t('common.retryCount')}>
                     {selectedHook.config.retryCount}{t('common.unit.times')}
                   </Descriptions.Item>
-                  <Descriptions.Item label="重试延迟">
-                    {selectedHook.config.retryDelay}秒
+                  <Descriptions.Item label={t('tasks.hooks.detail.retryDelay')}>
+                    {selectedHook.config.retryDelay}{t('tasks.hooks.detail.seconds')}
                   </Descriptions.Item>
                   {selectedHook.config.url && (
-                    <Descriptions.Item label="目标URL" span={2}>
+                    <Descriptions.Item label={t('tasks.hooks.detail.targetUrl')} span={2}>
                       <Text code>{selectedHook.config.url}</Text>
                     </Descriptions.Item>
                   )}
                   {selectedHook.config.method && (
-                    <Descriptions.Item label="HTTP方法">
+                    <Descriptions.Item label={t('tasks.hooks.detail.httpMethod')}>
                       <Tag color="blue">{selectedHook.config.method}</Tag>
                     </Descriptions.Item>
                   )}
                 </Descriptions>
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab="安全配置" key="security">
+              <Tabs.TabPane tab={t('tasks.hooks.detail.securityConfig')} key="security">
                 <Descriptions column={2} size="small">
-                  <Descriptions.Item label="认证方式">
+                  <Descriptions.Item label={t('tasks.hooks.detail.authentication')}>
                     {selectedHook.security.authentication}
                   </Descriptions.Item>
-                  <Descriptions.Item label="加密传输">
-                    {selectedHook.security.encryption ? '是' : '否'}
+                  <Descriptions.Item label={t('tasks.hooks.detail.encryption')}>
+                    {selectedHook.security.encryption ? t('common.yes') : t('common.no')}
                   </Descriptions.Item>
-                  <Descriptions.Item label="IP白名单" span={2}>
+                  <Descriptions.Item label={t('tasks.hooks.detail.ipWhitelist')} span={2}>
                     {selectedHook.security.ipWhitelist.length > 0 ? (
                       <Space wrap>
                         {selectedHook.security.ipWhitelist.map(ip => (
@@ -792,7 +792,7 @@ const HookTasks: React.FC = () => {
                         ))}
                       </Space>
                     ) : (
-                      <Text type="secondary">无限制</Text>
+                      <Text type="secondary">{t('tasks.hooks.detail.noRestriction')}</Text>
                     )}
                   </Descriptions.Item>
                 </Descriptions>

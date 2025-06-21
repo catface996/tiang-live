@@ -803,7 +803,10 @@
         "typeRequired": "请选择Hook类型",
         "triggerEvent": "触发事件",
         "taskCollections": "任务集合",
-        "enabled": "启用状态"
+        "enabled": "启用状态",
+        "retryDelay": "重试延迟(秒)",
+        "retryDelayRequired": "请设置重试延迟",
+        "retryDelayPlaceholder": "重试延迟"
       },
       "types": {
         "webhook": "Webhook",
@@ -859,6 +862,17 @@
         "status": "状态",
         "lastTriggered": "最后触发",
         "executionCount": "执行次数"
+      },
+      "detail": {
+        "retryDelay": "重试延迟",
+        "seconds": "秒",
+        "targetUrl": "目标URL",
+        "httpMethod": "HTTP方法",
+        "securityConfig": "安全配置",
+        "authentication": "认证方式",
+        "encryption": "加密传输",
+        "ipWhitelist": "IP白名单",
+        "noRestriction": "无限制"
       }
     },
     "collections": {
