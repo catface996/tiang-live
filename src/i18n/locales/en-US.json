@@ -909,7 +909,13 @@
       },
       "detail": {
         "duration": "Duration",
-        "suggestedFrequency": "Suggested Frequency"
+        "suggestedFrequency": "Suggested Frequency",
+        "monitoringTargets": "Monitoring Targets",
+        "inspectionActions": "Inspection Actions",
+        "entity": "Entity",
+        "sequence": "Sequence",
+        "inspectionActionsLabel": "Inspection Actions",
+        "inUse": "In Use"
       },
       "entities": {
         "userService": "User Service",

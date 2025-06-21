@@ -909,7 +909,13 @@
       },
       "detail": {
         "duration": "执行时长",
-        "suggestedFrequency": "建议频率"
+        "suggestedFrequency": "建议频率",
+        "monitoringTargets": "监控目标",
+        "inspectionActions": "巡检动作",
+        "entity": "实体",
+        "sequence": "时序",
+        "inspectionActionsLabel": "巡检动作",
+        "inUse": "使用中"
       },
       "entities": {
         "userService": "用户服务",

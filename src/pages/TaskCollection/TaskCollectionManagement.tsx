@@ -726,7 +726,7 @@ const TaskCollectionManagement: React.FC = () => {
 
             {/* 监控目标和巡检动作 */}
             <Tabs defaultActiveKey="targets">
-              <Tabs.TabPane tab="监控目标" key="targets">
+              <Tabs.TabPane tab={t('tasks.collections.detail.monitoringTargets')} key="targets">
                 <Row gutter={16}>
                   {selectedTask.targets.map(target => (
                     <Col xs={24} sm={12} lg={8} key={target.id}>
@@ -745,12 +745,12 @@ const TaskCollectionManagement: React.FC = () => {
                       >
                         <div style={{ marginBottom: 8 }}>
                           <Tag color={target.type === 'entity' ? 'blue' : 'green'}>
-                            {target.type === 'entity' ? '实体' : '时序'}
+                            {target.type === 'entity' ? t('tasks.collections.detail.entity') : t('tasks.collections.detail.sequence')}
                           </Tag>
                           <Tag>{target.category}</Tag>
                         </div>
                         <div>
-                          <Text strong style={{ fontSize: 12 }}>巡检动作:</Text>
+                          <Text strong style={{ fontSize: 12 }}>{t('tasks.collections.detail.inspectionActionsLabel')}:</Text>
                           <div style={{ marginTop: 4 }}>
                             {target.actions.map(actionId => {
                               const action = inspectionActions.find(a => a.id === actionId);
@@ -775,7 +775,7 @@ const TaskCollectionManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab="巡检动作" key="actions">
+              <Tabs.TabPane tab={t('tasks.collections.detail.inspectionActions')} key="actions">
                 <Row gutter={16}>
                   {inspectionActions.map(action => {
                     const actionConfig = actionTypeMap[action.type];
@@ -790,7 +790,7 @@ const TaskCollectionManagement: React.FC = () => {
                             <Space>
                               {actionConfig?.icon}
                               {action.name}
-                              {isUsed && <Badge status="success" text="使用中" />}
+                              {isUsed && <Badge status="success" text={t('tasks.collections.detail.inUse')} />}
                             </Space>
                           }
                           size="small"
