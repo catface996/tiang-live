@@ -126,6 +126,30 @@ const SequenceCard = styled(Card)`
       font-size: 14px;
       font-weight: 600;
       line-height: 1.4;
+      width: 100%;
+    }
+    
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      
+      .title-left {
+        flex: 1;
+        min-width: 0; /* 允许文本截断 */
+        
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      
+      .title-right {
+        flex-shrink: 0;
+        margin-left: 8px;
+      }
     }
   }
   
@@ -359,10 +383,14 @@ const SequenceManagement: React.FC = () => {
         <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={sequence.id}>
           <SequenceCard
             title={
-              <Space>
-                <span>{sequence.name}</span>
-                {getStatusTag(sequence.status)}
-              </Space>
+              <div className="card-title">
+                <div className="title-left">
+                  <span>{sequence.name}</span>
+                </div>
+                <div className="title-right">
+                  {getStatusTag(sequence.status)}
+                </div>
+              </div>
             }
             onClick={() => handleViewSequence(sequence)}
           >

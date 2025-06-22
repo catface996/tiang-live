@@ -110,6 +110,30 @@ const SolutionCard = styled(Card)`
       font-size: 16px;
       font-weight: 600;
       line-height: 1.4;
+      width: 100%;
+    }
+    
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      
+      .title-left {
+        flex: 1;
+        min-width: 0; /* 允许文本截断 */
+        
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      
+      .title-right {
+        flex-shrink: 0;
+        margin-left: 8px;
+      }
     }
   }
   
@@ -174,51 +198,47 @@ const SolutionCard = styled(Card)`
     margin-top: auto;
     padding-top: 12px;
     border-top: 1px solid #f5f5f5;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    font-size: 12px;
+    color: #999;
     
-    .footer-info {
-      flex: 1;
-      font-size: 12px;
-      color: #999;
+    .footer-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
       
-      .footer-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 4px;
-        
-        &:last-child {
-          margin-bottom: 0;
-        }
-        
-        .footer-label {
-          flex-shrink: 0;
-          margin-right: 8px;
-        }
-        
-        .footer-value {
-          flex: 1;
-          text-align: right;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .footer-label {
+        flex-shrink: 0;
+        margin-right: 8px;
+      }
+      
+      .footer-value {
+        flex: 1;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
+  }
+  
+  .card-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
     
-    .card-actions {
-      flex-shrink: 0;
-      margin-left: 12px;
+    .ant-btn {
+      color: #666;
       
-      .ant-btn {
-        color: #666;
-        
-        &:hover {
-          color: #1890ff;
-          background-color: rgba(24, 144, 255, 0.1);
-        }
+      &:hover {
+        color: #1890ff;
+        background-color: rgba(24, 144, 255, 0.1);
       }
     }
   }
@@ -884,11 +904,17 @@ const IndustrySolutionManagement: React.FC = () => {
             <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={solution.id}>
               <SolutionCard
                 title={
-                  <Space>
-                    {industryConfig?.icon}
-                    <span>{solution.name}</span>
-                    {getStatusTag(solution.status)}
-                  </Space>
+                  <div className="card-title">
+                    <div className="title-left">
+                      <Space>
+                        {industryConfig?.icon}
+                        <span>{solution.name}</span>
+                      </Space>
+                    </div>
+                    <div className="title-right">
+                      {getStatusTag(solution.status)}
+                    </div>
+                  </div>
                 }
                 onClick={() => handleViewSolution(solution)}
               >
@@ -956,44 +982,42 @@ const IndustrySolutionManagement: React.FC = () => {
 
                   {/* 底部信息 */}
                   <div className="card-footer">
-                    <div className="footer-info">
-                      <div className="footer-item">
-                        <span className="footer-label">{t('solutions.card.creator')}</span>
-                        <span className="footer-value">{solution.createdBy}</span>
-                      </div>
-                      <div className="footer-item">
-                        <span className="footer-label">{t('solutions.card.updateTime')}</span>
-                        <span className="footer-value">{solution.lastModified}</span>
-                      </div>
+                    <div className="footer-item">
+                      <span className="footer-label">{t('solutions.card.creator')}</span>
+                      <span className="footer-value">{solution.createdBy}</span>
                     </div>
-                    
-                    {/* 操作按钮区域 */}
-                    <div className="card-actions">
-                      <Space>
-                        <Tooltip title={t('solutions.card.viewDetails')}>
-                          <Button 
-                            type="text" 
-                            icon={<EyeOutlined />} 
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleViewSolution(solution);
-                            }}
-                          />
-                        </Tooltip>
-                        <Tooltip title={t('solutions.card.edit')}>
-                          <Button 
-                            type="text" 
-                            icon={<EditOutlined />} 
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // 这里可以添加编辑功能
-                            }}
-                          />
-                        </Tooltip>
-                      </Space>
+                    <div className="footer-item">
+                      <span className="footer-label">{t('solutions.card.updateTime')}</span>
+                      <span className="footer-value">{solution.lastModified}</span>
                     </div>
+                  </div>
+                  
+                  {/* 操作按钮区域 - 单独一行 */}
+                  <div className="card-actions">
+                    <Space>
+                      <Tooltip title={t('solutions.card.viewDetails')}>
+                        <Button 
+                          type="text" 
+                          icon={<EyeOutlined />} 
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewSolution(solution);
+                          }}
+                        />
+                      </Tooltip>
+                      <Tooltip title={t('solutions.card.edit')}>
+                        <Button 
+                          type="text" 
+                          icon={<EditOutlined />} 
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // 这里可以添加编辑功能
+                          }}
+                        />
+                      </Tooltip>
+                    </Space>
                   </div>
                 </div>
               </SolutionCard>
