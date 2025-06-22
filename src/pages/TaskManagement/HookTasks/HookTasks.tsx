@@ -72,12 +72,62 @@ const StatsCard = styled(Card)`
 
 const HookCard = styled(Card)`
   height: 100%;
+  min-height: 340px;
   transition: all 0.3s ease;
   cursor: pointer;
   
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .ant-card-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 57px);
+  }
+
+  .ant-card-head {
+    padding: 12px 16px;
+    min-height: 57px;
+    
+    .ant-card-head-title {
+      padding: 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .ant-card-extra {
+      padding: 0;
+    }
+  }
+
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    min-height: 300px;
+    
+    .ant-card-head {
+      padding: 10px 12px;
+      min-height: 50px;
+    }
+    
+    .ant-card-body {
+      padding: 12px;
+      height: calc(100% - 50px);
+    }
+  }
+`;
+
+const HookCardsContainer = styled.div`
+  .ant-col {
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .ant-col {
+      margin-bottom: 12px;
+    }
   }
 `;
 
@@ -477,12 +527,13 @@ const HookTasks: React.FC = () => {
       />
 
       {/* Hook任务卡片列表 */}
-      <Row gutter={16}>
-        {hookTaskData.map(hook => {
+      <HookCardsContainer>
+        <Row gutter={[16, 16]}>
+          {hookTaskData.map(hook => {
           const typeConfig = hookTypeMap[hook.type];
           const totalCollections = hook.taskCollections.length;
           return (
-            <Col xs={24} sm={12} lg={8} xl={6} key={hook.id}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={hook.id}>
               <HookCard
                 title={
                   <Space>
@@ -530,8 +581,9 @@ const HookTasks: React.FC = () => {
                 }
                 onClick={() => handleViewHook(hook)}
               >
+                {/* Hook类型和事件标签 */}
                 <div style={{ marginBottom: 12 }}>
-                  <Space wrap>
+                  <Space wrap size="small">
                     <Tag color={typeConfig?.color} icon={typeConfig?.icon}>
                       {typeConfig?.name}
                     </Tag>
@@ -544,15 +596,19 @@ const HookTasks: React.FC = () => {
                   </Space>
                 </div>
                 
-                <Paragraph 
-                  ellipsis={{ rows: 2 }} 
-                  style={{ marginBottom: 16, minHeight: 40 }}
-                >
-                  {hook.description}
-                </Paragraph>
+                {/* Hook描述 */}
+                <div style={{ marginBottom: 16, flex: 1 }}>
+                  <Paragraph 
+                    ellipsis={{ rows: 2, tooltip: hook.description }} 
+                    style={{ marginBottom: 0, minHeight: 44, fontSize: 13, lineHeight: '1.5' }}
+                  >
+                    {hook.description}
+                  </Paragraph>
+                </div>
 
+                {/* 统计信息 */}
                 <div style={{ marginBottom: 12 }}>
-                  <Row gutter={16}>
+                  <Row gutter={12}>
                     <Col span={12}>
                       <Statistic
                         title={t('tasks.hooks.card.successRate')}
@@ -571,23 +627,36 @@ const HookTasks: React.FC = () => {
                   </Row>
                 </div>
 
+                {/* 最后触发状态 */}
                 <div style={{ marginBottom: 12 }}>
-                  <Text strong>{t('tasks.hooks.card.lastTriggered')}: </Text>
-                  {getExecutionStatusTag(hook.lastExecution.status)}
-                  <Text type="secondary" style={{ fontSize: 12, marginLeft: 8 }}>
-                    {hook.lastExecution.responseTime}ms
-                  </Text>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <Text strong style={{ fontSize: 12 }}>{t('tasks.hooks.card.lastTriggered')}</Text>
+                    <Text type="secondary" style={{ fontSize: 11 }}>
+                      {hook.lastExecution.responseTime}ms
+                    </Text>
+                  </div>
+                  <div>
+                    {getExecutionStatusTag(hook.lastExecution.status)}
+                  </div>
                 </div>
 
-                <div style={{ fontSize: 12, color: '#666' }}>
-                  <div>{t('tasks.hooks.card.triggerEvent')}: {hook.trigger.events.join(', ')}</div>
-                  <div>{t('tasks.hooks.card.lastTriggered')}: {hook.lastExecution.timestamp}</div>
+                {/* 触发信息 */}
+                <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
+                  <div style={{ marginBottom: 2 }}>
+                    <Text strong>{t('tasks.hooks.card.triggerEvent')}: </Text>
+                    <Text>{hook.trigger.events.join(', ')}</Text>
+                  </div>
+                  <div>
+                    <Text strong>{t('tasks.hooks.card.lastTriggered')}: </Text>
+                    <Text>{hook.lastExecution.timestamp}</Text>
+                  </div>
                 </div>
               </HookCard>
             </Col>
           );
         })}
       </Row>
+      </HookCardsContainer>
 
       {/* 创建/编辑Hook任务模态框 */}
       <Modal
