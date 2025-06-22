@@ -128,6 +128,27 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
       }
     }
   }
+  
+  .card-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    display: flex;
+    justify-content: flex-end;
+    
+    .ant-btn {
+      color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
+      border: none;
+      background: transparent;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
+        background: ${props => props.$isDark ? 'rgba(23, 125, 220, 0.1)' : 'rgba(64, 169, 255, 0.1)'};
+        transform: scale(1.05);
+      }
+    }
+  }
 `;
 
 const AgentHeader = styled.div`
@@ -277,13 +298,11 @@ const UserTagsContainer = styled.div`
 
 const FooterContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid;
-  border-color: ${props => props.theme.isDark ? '#303030' : '#f0f0f0'};
-  gap: 12px;
+  gap: 4px;
 `;
 
 const FooterText = styled(Text)<{ $isDark: boolean }>`
@@ -493,57 +512,6 @@ const AgentCard: React.FC<AgentCardProps> = ({
       $isDark={isDark}
       hoverable
       onClick={() => onView(agent)}
-      actions={[
-        <Tooltip title={t('common.view')} key="view">
-          <Button 
-            type="text" 
-            icon={<EyeOutlined />} 
-            onClick={(e) => handleAction('view', e)}
-          />
-        </Tooltip>,
-        <Tooltip title={t('common.edit')} key="edit">
-          <Button 
-            type="text" 
-            icon={<EditOutlined />} 
-            onClick={(e) => handleAction('edit', e)}
-          />
-        </Tooltip>,
-        agent.status === 'running' ? (
-          <Tooltip title={t('agents.actions.stop')} key="stop">
-            <Button 
-              type="text" 
-              icon={<PauseCircleOutlined />} 
-              onClick={(e) => handleAction('stop', e)}
-            />
-          </Tooltip>
-        ) : (
-          <Tooltip title={t('agents.actions.start')} key="start">
-            <Button 
-              type="text" 
-              icon={<PlayCircleOutlined />} 
-              onClick={(e) => handleAction('start', e)}
-            />
-          </Tooltip>
-        ),
-        <Tooltip title={t('common.delete')} key="delete">
-          <Popconfirm
-            title={t('agents.deleteConfirm')}
-            onConfirm={(e) => {
-              e?.stopPropagation();
-              onDelete(agent.id);
-            }}
-            onCancel={(e) => e?.stopPropagation()}
-            onClick={(e) => e?.stopPropagation()}
-          >
-            <Button 
-              type="text" 
-              danger 
-              icon={<DeleteOutlined />} 
-              onClick={(e) => e.stopPropagation()}
-            />
-          </Popconfirm>
-        </Tooltip>
-      ]}
     >
       <AgentHeader>
         <AvatarContainer>
@@ -584,25 +552,30 @@ const AgentCard: React.FC<AgentCardProps> = ({
       </Description>
 
       <StatsContainer $isDark={isDark}>
-        <Space split={<StatsSeparator $isDark={isDark}>|</StatsSeparator>} size="small" style={{ width: '100%', justifyContent: 'space-between' }}>
-          <StyledStatistic 
-            $isDark={isDark}
-            title={<StatsTitle $isDark={isDark}>{t('agents.stats.tasksCompleted')}</StatsTitle>} 
-            value={agent.stats.tasksCompleted} 
-          />
-          <StyledStatistic 
-            $isDark={isDark}
-            title={<StatsTitle $isDark={isDark}>{t('agents.stats.successRate')}</StatsTitle>} 
-            value={agent.stats.successRate} 
-            suffix="%" 
-          />
-          <StyledStatistic 
-            $isDark={isDark}
-            title={<StatsTitle $isDark={isDark}>{t('agents.stats.responseTime')}</StatsTitle>} 
-            value={agent.stats.avgResponseTime} 
-            suffix="ms" 
-          />
-        </Space>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+          <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
+            {t('agents.stats.tasksCompleted')}:
+          </span>
+          <span style={{ color: isDark ? '#ffffff' : '#262626', fontSize: '14px', fontWeight: 'bold' }}>
+            {agent.stats.tasksCompleted}
+          </span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+          <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
+            {t('agents.stats.successRate')}:
+          </span>
+          <span style={{ color: isDark ? '#ffffff' : '#262626', fontSize: '14px', fontWeight: 'bold' }}>
+            {agent.stats.successRate}%
+          </span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
+            {t('agents.stats.responseTime')}:
+          </span>
+          <span style={{ color: isDark ? '#ffffff' : '#262626', fontSize: '14px', fontWeight: 'bold' }}>
+            {agent.stats.avgResponseTime}ms
+          </span>
+        </div>
       </StatsContainer>
 
       {agent.tags && agent.tags.length > 0 && (
@@ -616,13 +589,45 @@ const AgentCard: React.FC<AgentCardProps> = ({
       )}
 
       <FooterContainer>
-        <FooterText $isDark={isDark}>
-          {t('agents.lastActive')}: {agent.lastActive}
-        </FooterText>
-        <FooterText $isDark={isDark}>
-          {t('agents.uptime')}: {agent.stats.uptime}
-        </FooterText>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
+            {t('agents.lastActive')}:
+          </span>
+          <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
+            {agent.lastActive}
+          </span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
+            {t('agents.uptime')}:
+          </span>
+          <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
+            {agent.stats.uptime}
+          </span>
+        </div>
       </FooterContainer>
+      
+      {/* 操作按钮区域 - 单独一行，右对齐 */}
+      <div className="card-actions">
+        <Space>
+          <Tooltip title={t('common.view')}>
+            <Button 
+              type="text" 
+              icon={<EyeOutlined />} 
+              size="small"
+              onClick={(e) => handleAction('view', e)}
+            />
+          </Tooltip>
+          <Tooltip title={t('common.edit')}>
+            <Button 
+              type="text" 
+              icon={<EditOutlined />} 
+              size="small"
+              onClick={(e) => handleAction('edit', e)}
+            />
+          </Tooltip>
+        </Space>
+      </div>
     </StyledCard>
   );
 };
