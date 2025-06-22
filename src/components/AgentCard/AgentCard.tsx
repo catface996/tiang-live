@@ -130,8 +130,8 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   }
   
   .card-actions {
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
     display: flex;
     justify-content: flex-end;
@@ -154,7 +154,7 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
 const AgentHeader = styled.div`
   display: flex;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   gap: 16px;
 `;
 
@@ -227,8 +227,8 @@ const StyledTag = styled(Tag)<{ $bgColor?: string; $borderColor?: string; $textC
 `;
 
 const StatsContainer = styled.div<{ $isDark: boolean }>`
-  margin: 20px 0;
-  padding: 16px;
+  margin: 16px 0;
+  padding: 14px;
   background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   border-radius: 8px;
@@ -276,7 +276,7 @@ const StyledStatistic = styled(Statistic)<{ $isDark: boolean }>`
 `;
 
 const Description = styled(Paragraph)<{ $isDark: boolean }>`
-  margin: 16px 0 !important;
+  margin: 12px 0 !important;
   color: ${props => props.$isDark ? '#8c8c8c' : '#666'} !important;
   font-size: 14px !important;
   line-height: 1.5 !important;
@@ -287,7 +287,7 @@ const Description = styled(Paragraph)<{ $isDark: boolean }>`
 `;
 
 const UserTagsContainer = styled.div`
-  margin: 16px 0;
+  margin: 12px 0;
   
   .ant-tag {
     margin: 0 4px 4px 0;
@@ -300,8 +300,8 @@ const FooterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: 16px;
+  padding-top: 12px;
   gap: 4px;
 `;
 
@@ -552,7 +552,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
       </Description>
 
       <StatsContainer $isDark={isDark}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
             {t('agents.stats.tasksCompleted')}:
           </span>
@@ -560,7 +560,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
             {agent.stats.tasksCompleted}
           </span>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
             {t('agents.stats.successRate')}:
           </span>
