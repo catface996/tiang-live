@@ -16,11 +16,12 @@ export default defineConfig(({ command, mode }) => {
       outDir: 'dist',
       assetsDir: 'assets',
       sourcemap: false,
-      chunkSizeWarningLimit: 1500, // 进一步提高警告阈值到1500KB
+      chunkSizeWarningLimit: 1500,
       rollupOptions: {
         output: {
+          format: 'es', // 确保使用ES模块格式
           manualChunks: (id) => {
-            // React 核心库 - 进一步细分
+            // React 核心库
             if (id.includes('react-dom')) {
               return 'react-dom';
             }
@@ -28,7 +29,7 @@ export default defineConfig(({ command, mode }) => {
               return 'react';
             }
             
-            // Antd 相关 - 细分
+            // Antd 相关
             if (id.includes('@ant-design/icons')) {
               return 'antd-icons';
             }
@@ -36,7 +37,7 @@ export default defineConfig(({ command, mode }) => {
               return 'antd-core';
             }
             
-            // 图表库 - 细分
+            // 图表库
             if (id.includes('echarts-for-react')) {
               return 'echarts-react';
             }
@@ -44,12 +45,12 @@ export default defineConfig(({ command, mode }) => {
               return 'echarts-core';
             }
             
-            // Mermaid 图表库 - 单独分块
+            // Mermaid 图表库
             if (id.includes('mermaid')) {
               return 'mermaid';
             }
             
-            // D3 相关库 - 细分
+            // D3 和 Cytoscape
             if (id.includes('cytoscape')) {
               return 'cytoscape';
             }
@@ -57,23 +58,20 @@ export default defineConfig(({ command, mode }) => {
               return 'd3';
             }
             
-            // 大型工具库单独分块
+            // 工具库
             if (id.includes('lodash')) {
               return 'lodash';
-            }
-            if (id.includes('moment')) {
-              return 'moment';
             }
             if (id.includes('dayjs')) {
               return 'dayjs';
             }
             
-            // 国际化相关
+            // 国际化
             if (id.includes('i18next') || id.includes('react-i18next')) {
               return 'i18n';
             }
             
-            // 路由相关
+            // 路由
             if (id.includes('react-router')) {
               return 'router';
             }
@@ -83,7 +81,7 @@ export default defineConfig(({ command, mode }) => {
               return 'redux';
             }
             
-            // 样式相关
+            // 样式
             if (id.includes('styled-components')) {
               return 'styled-components';
             }
@@ -91,30 +89,44 @@ export default defineConfig(({ command, mode }) => {
               return 'emotion';
             }
             
-            // 数学和算法库
+            // 数学库
             if (id.includes('katex') || id.includes('mathjax')) {
               return 'math';
             }
             
-            // 其他可视化库
-            if (id.includes('vis-') || id.includes('sigma') || id.includes('three')) {
-              return 'visualization-extra';
+            // 媒体处理
+            if (id.includes('pdf') || id.includes('canvas')) {
+              return 'media';
             }
             
-            // 其他第三方库按大小分组
+            // 其他第三方库
             if (id.includes('node_modules')) {
-              // 大型库单独分块
-              if (id.includes('monaco-editor') || id.includes('codemirror')) {
-                return 'editor';
-              }
-              if (id.includes('pdf') || id.includes('canvas')) {
-                return 'media';
-              }
               return 'vendor';
             }
           }
         }
       }
+    },
+    define: {
+      // 确保全局变量正确定义
+      global: 'globalThis',
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'antd',
+        '@ant-design/icons',
+        'react-router-dom',
+        'react-i18next',
+        'i18next',
+        '@reduxjs/toolkit',
+        'react-redux'
+      ],
+      exclude: [
+        'cytoscape',
+        'mermaid'
+      ]
     }
   }
 })
