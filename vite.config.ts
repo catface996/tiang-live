@@ -19,7 +19,22 @@ export default defineConfig(({ command, mode }) => {
       chunkSizeWarningLimit: 1500,
       rollupOptions: {
         output: {
-          format: 'es', // 确保使用ES模块格式
+          format: 'es',
+          // 为每个chunk添加必要的全局变量初始化
+          banner: (chunk) => {
+            if (chunk.name === 'mermaid' || chunk.fileName.includes('cytoscape')) {
+              return `
+var global = globalThis;
+if (typeof exports === 'undefined') {
+  var exports = {};
+}
+if (typeof module === 'undefined') {
+  var module = { exports: exports };
+}
+`;
+            }
+            return '';
+          },
           manualChunks: (id) => {
             // React 核心库
             if (id.includes('react-dom')) {
@@ -45,15 +60,12 @@ export default defineConfig(({ command, mode }) => {
               return 'echarts-core';
             }
             
-            // Mermaid 图表库
-            if (id.includes('mermaid')) {
+            // Mermaid 和 Cytoscape - 放在一起
+            if (id.includes('mermaid') || id.includes('cytoscape')) {
               return 'mermaid';
             }
             
-            // D3 和 Cytoscape
-            if (id.includes('cytoscape')) {
-              return 'cytoscape';
-            }
+            // D3
             if (id.includes('d3')) {
               return 'd3';
             }
@@ -110,6 +122,7 @@ export default defineConfig(({ command, mode }) => {
     define: {
       // 确保全局变量正确定义
       global: 'globalThis',
+      'process.env.NODE_ENV': JSON.stringify(mode),
     },
     optimizeDeps: {
       include: [
@@ -124,7 +137,6 @@ export default defineConfig(({ command, mode }) => {
         'react-redux'
       ],
       exclude: [
-        'cytoscape',
         'mermaid'
       ]
     }
