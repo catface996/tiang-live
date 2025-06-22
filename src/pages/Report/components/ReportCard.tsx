@@ -67,11 +67,8 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
     height: 64px;
     
     li {
-      border-right: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-      
-      &:last-child {
-        border-right: none;
-      }
+      /* 移除按钮间的分割线 */
+      border-right: none;
     }
     
     .ant-btn {
@@ -481,22 +478,6 @@ const ReportCard: React.FC<ReportCardProps> = ({
             prefix={<CloudDownloadOutlined style={{ color: isDark ? '#1890ff' : '#1890ff', fontSize: 12 }} />}
           />
         </Space>
-        <div style={{ marginTop: 8 }}>
-          <Text type="secondary" style={{ 
-            fontSize: 11,
-            color: isDark ? '#8c8c8c' : '#666'
-          }}>
-            {t('reports.card.storageUsage')}
-          </Text>
-          <Progress 
-            percent={getSizeProgress(report.size)} 
-            size="small" 
-            strokeColor={getSizeProgress(report.size) > 80 ? '#ff4d4f' : '#52c41a'}
-            showInfo={false}
-            style={{ marginTop: 4 }}
-            trailColor={isDark ? '#262626' : '#f5f5f5'}
-          />
-        </div>
       </div>
 
       <div className="report-footer">
