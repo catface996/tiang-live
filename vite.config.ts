@@ -35,6 +35,10 @@ if (typeof module === 'undefined') {
             }
             return '';
           },
+          // 确保变量名不会被过度压缩导致冲突
+          generatedCode: {
+            constBindings: true
+          },
           manualChunks: (id) => {
             // React 核心库
             if (id.includes('react-dom')) {
@@ -106,9 +110,14 @@ if (typeof module === 'undefined') {
               return 'math';
             }
             
-            // 媒体处理
-            if (id.includes('pdf') || id.includes('canvas')) {
-              return 'media';
+            // 媒体处理 - 分离出来避免冲突
+            if (id.includes('pdf-lib') || id.includes('pdfjs') || id.includes('canvas')) {
+              return 'pdf-utils';
+            }
+            
+            // 其他媒体相关
+            if (id.includes('image') || id.includes('media') || id.includes('file-saver')) {
+              return 'media-utils';
             }
             
             // 其他第三方库
