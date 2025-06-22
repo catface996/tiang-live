@@ -96,10 +96,51 @@ const HookCard = styled(Card)`
       padding: 0;
       font-size: 14px;
       font-weight: 500;
+      width: 100%;
     }
     
     .ant-card-extra {
       padding: 0;
+    }
+    
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      
+      .title-left {
+        flex: 1;
+        min-width: 0; /* 允许文本截断 */
+        
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      
+      .title-right {
+        flex-shrink: 0;
+        margin-left: 8px;
+      }
+    }
+  }
+  
+  .card-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    
+    .ant-btn {
+      color: #666;
+      
+      &:hover {
+        color: #1890ff;
+        background-color: rgba(24, 144, 255, 0.1);
+      }
     }
   }
 
@@ -536,48 +577,17 @@ const HookTasks: React.FC = () => {
             <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={hook.id}>
               <HookCard
                 title={
-                  <Space>
-                    {typeConfig?.icon}
-                    <span>{hook.name}</span>
-                    {getStatusTag(hook.status)}
-                  </Space>
-                }
-                extra={
-                  <Space>
-                    <Tooltip title={t('tasks.hooks.card.viewDetails')}>
-                      <Button 
-                        type="link" 
-                        icon={<EyeOutlined />} 
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewHook(hook);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={t('tasks.hooks.card.edit')}>
-                      <Button 
-                        type="link" 
-                        icon={<EditOutlined />} 
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditHook(hook);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={hook.status === 'active' ? t('tasks.hooks.card.disable') : t('tasks.hooks.card.enable')}>
-                      <Button 
-                        type="link" 
-                        icon={hook.status === 'active' ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleToggleHook(hook.id, hook.status);
-                        }}
-                      />
-                    </Tooltip>
-                  </Space>
+                  <div className="card-title">
+                    <div className="title-left">
+                      <Space>
+                        {typeConfig?.icon}
+                        <span>{hook.name}</span>
+                      </Space>
+                    </div>
+                    <div className="title-right">
+                      {getStatusTag(hook.status)}
+                    </div>
+                  </div>
                 }
                 onClick={() => handleViewHook(hook)}
               >
@@ -627,29 +637,68 @@ const HookTasks: React.FC = () => {
                   </Row>
                 </div>
 
-                {/* 最后触发状态 */}
+                {/* 最后触发状态 - 水平排列 */}
                 <div style={{ marginBottom: 12 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <Text strong style={{ fontSize: 12 }}>{t('tasks.hooks.card.lastTriggered')}</Text>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Text strong style={{ fontSize: 12 }}>{t('tasks.hooks.card.lastTriggered')}</Text>
+                      {getExecutionStatusTag(hook.lastExecution.status)}
+                    </div>
                     <Text type="secondary" style={{ fontSize: 11 }}>
                       {hook.lastExecution.responseTime}ms
                     </Text>
-                  </div>
-                  <div>
-                    {getExecutionStatusTag(hook.lastExecution.status)}
                   </div>
                 </div>
 
                 {/* 触发信息 */}
                 <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
                   <div style={{ marginBottom: 2 }}>
-                    <Text strong>{t('tasks.hooks.card.triggerEvent')}: </Text>
+                    <Text>{t('tasks.hooks.card.triggerEvent')}: </Text>
                     <Text>{hook.trigger.events.join(', ')}</Text>
                   </div>
                   <div>
-                    <Text strong>{t('tasks.hooks.card.lastTriggered')}: </Text>
+                    <Text>{t('tasks.hooks.card.lastTriggered')}: </Text>
                     <Text>{hook.lastExecution.timestamp}</Text>
                   </div>
+                </div>
+                
+                {/* 操作按钮区域 - 单独一行 */}
+                <div className="card-actions">
+                  <Space>
+                    <Tooltip title={t('tasks.hooks.card.viewDetails')}>
+                      <Button 
+                        type="text" 
+                        icon={<EyeOutlined />} 
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleViewHook(hook);
+                        }}
+                      />
+                    </Tooltip>
+                    <Tooltip title={t('tasks.hooks.card.edit')}>
+                      <Button 
+                        type="text" 
+                        icon={<EditOutlined />} 
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditHook(hook);
+                        }}
+                      />
+                    </Tooltip>
+                    <Tooltip title={hook.status === 'active' ? t('tasks.hooks.card.disable') : t('tasks.hooks.card.enable')}>
+                      <Button 
+                        type="text" 
+                        icon={hook.status === 'active' ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleHook(hook.id, hook.status);
+                        }}
+                      />
+                    </Tooltip>
+                  </Space>
                 </div>
               </HookCard>
             </Col>
