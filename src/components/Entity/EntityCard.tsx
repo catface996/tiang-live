@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Tag, Badge, Progress, Statistic, Space, Typography, Tooltip } from 'antd';
+import { Card, Tag, Badge, Progress, Statistic, Space, Typography, Tooltip, Button } from 'antd';
 import { 
   FileTextOutlined, 
   LinkOutlined, 
@@ -13,7 +13,8 @@ import {
   SettingOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  ClockCircleOutlined
+  ClockCircleOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 
@@ -22,6 +23,7 @@ const { Text, Paragraph } = Typography;
 interface EntityCardProps {
   entity: any;
   onClick?: (entity: any) => void;
+  onEdit?: (entity: any) => void;
 }
 
 const StyledCard = styled(Card)`
@@ -67,7 +69,7 @@ const MetricItem = styled.div`
   }
 `;
 
-const EntityCard: React.FC<EntityCardProps> = ({ entity, onClick }) => {
+const EntityCard: React.FC<EntityCardProps> = ({ entity, onClick, onEdit }) => {
   const getEntityIcon = (type: string) => {
     const iconMap = {
       report: { icon: <FileTextOutlined />, color: '#1890ff' },
@@ -552,10 +554,22 @@ const EntityCard: React.FC<EntityCardProps> = ({ entity, onClick }) => {
         </Space>
       }
       extra={
-        <Badge 
-          status={getStatusColor(entity.status) as any} 
-          text={entity.status}
-        />
+        <Space>
+          <Button
+            type="text"
+            size="small"
+            icon={<EditOutlined />}
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(entity);
+            }}
+            style={{ color: '#1890ff' }}
+          />
+          <Badge 
+            status={getStatusColor(entity.status) as any} 
+            text={entity.status}
+          />
+        </Space>
       }
     >
       <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 12 }}>

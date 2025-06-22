@@ -20,6 +20,8 @@ import {
   EntityScan,
 } from '../pages';
 import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
+import EntityCreatePage from '../pages/Entity/EntityCreatePage';
+import EntityEditPage from '../pages/Entity/EntityEditPage';
 import AIAgentForm from '../pages/AIAgent/AIAgentForm';
 import AgentDetail from '../pages/AIAgent/AgentDetail';
 import ScanDetail from '../pages/SystemSettings/EntityScan/ScanDetail';
@@ -34,6 +36,8 @@ const AppRoutes: React.FC = () => {
         <Route path="planes/create" element={<PlaneCreateEdit />} />
         <Route path="planes/edit/:id" element={<PlaneCreateEdit />} />
         <Route path="entities" element={<EntityManagement />} />
+        <Route path="entities/create" element={<EntityCreatePage />} />
+        <Route path="entities/edit/:id" element={<EntityEditPage />} />
         <Route path="sequences" element={<SequenceManagement />} />
         <Route path="industry-solutions" element={<IndustrySolutionManagement />} />
         <Route path="task-management/task-collections" element={<TaskCollectionManagement />} />

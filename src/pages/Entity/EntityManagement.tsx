@@ -30,10 +30,12 @@ import {
   AppstoreOutlined,
   ApiOutlined,
   DatabaseOutlined,
-  TableOutlined
+  TableOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
@@ -77,6 +79,7 @@ const EntityGrid = styled.div`
 
 const EntityManagement: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('entities');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchText, setSearchText] = useState('');
@@ -90,6 +93,16 @@ const EntityManagement: React.FC = () => {
     setPageTitle(t('entities.title'));
     setEntities(entitiesData.entities);
   }, [t]);
+
+  // 处理创建实体
+  const handleCreateEntity = () => {
+    navigate('/entities/create');
+  };
+
+  // 处理编辑实体
+  const handleEditEntity = (entity: any) => {
+    navigate(`/entities/edit/${entity.id}`);
+  };
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
@@ -168,7 +181,7 @@ const EntityManagement: React.FC = () => {
             <Button icon={<ReloadOutlined />}>
               {t('common.refresh')}
             </Button>
-            <Button type="primary" icon={<PlusOutlined />}>
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateEntity}>
               {t('entities.createEntity')}
             </Button>
           </Space>
@@ -347,6 +360,7 @@ const EntityManagement: React.FC = () => {
                 key={entity.id}
                 entity={entity}
                 onClick={handleEntityClick}
+                onEdit={handleEditEntity}
               />
             ))}
           </EntityGrid>
