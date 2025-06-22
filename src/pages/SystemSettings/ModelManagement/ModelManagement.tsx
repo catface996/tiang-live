@@ -345,8 +345,14 @@ const ModelManagement: React.FC = () => {
             </div>
 
             <div style={{ fontSize: 12, color: '#666' }}>
-              <div>{t('models.stats.version')}: {model.version}</div>
-              <div>{t('models.stats.lastUsed')}: {model.lastUsed}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <span>{t('models.stats.version')}:</span>
+                <span>{model.version}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>{t('models.stats.lastUsed')}:</span>
+                <span>{model.lastUsed}</span>
+              </div>
             </div>
             
             {/* 操作按钮区域 - 单独一行，右对齐 */}
@@ -510,7 +516,7 @@ const ModelManagement: React.FC = () => {
       />
 
       {/* 模型卡片列表 */}
-      <Row gutter={16}>
+      <Row gutter={[16, 16]}>
         {renderModelCards()}
       </Row>
 

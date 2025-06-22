@@ -77,6 +77,62 @@ const PromptCard = styled(Card)`
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
+  
+  .ant-card-head {
+    padding: 12px 16px;
+    min-height: 57px;
+    
+    .ant-card-head-title {
+      padding: 0;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+    }
+    
+    .ant-card-extra {
+      padding: 0;
+    }
+    
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      
+      .title-left {
+        flex: 1;
+        min-width: 0; /* 允许文本截断 */
+        
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      
+      .title-right {
+        flex-shrink: 0;
+        margin-left: 8px;
+      }
+    }
+  }
+  
+  .card-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    
+    .ant-btn {
+      color: #666;
+      
+      &:hover {
+        color: #1890ff;
+        background-color: rgba(24, 144, 255, 0.1);
+      }
+    }
+  }
 `;
 
 const FilterBar = styled.div`
@@ -368,63 +424,20 @@ API接口：{api_details}
       const difficultyConfig = difficultyMap[prompt.difficulty];
 
       return (
-        <Col xs={24} sm={12} lg={8} xl={6} key={prompt.id}>
+        <Col xs={24} sm={24} md={12} lg={8} xl={8} key={prompt.id}>
           <PromptCard
             title={
-              <Space>
-                {categoryConfig?.icon}
-                <span>{prompt.name}</span>
-                {prompt.isFavorite && <StarOutlined style={{ color: '#faad14' }} />}
-              </Space>
-            }
-            extra={
-              <Space>
-                <Tooltip title={t('systemSettings.prompts.actions.copy')}>
-                  <Button 
-                    type="link" 
-                    icon={<CopyOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopyPrompt(prompt);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title={prompt.isFavorite ? t('systemSettings.prompts.actions.unfavorite') : t('systemSettings.prompts.actions.favorite')}>
-                  <Button 
-                    type="link" 
-                    icon={<StarOutlined />} 
-                    size="small"
-                    style={{ color: prompt.isFavorite ? '#faad14' : undefined }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleToggleFavorite(prompt.id);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title={t('systemSettings.prompts.actions.view')}>
-                  <Button 
-                    type="link" 
-                    icon={<EyeOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewPrompt(prompt);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title={t('systemSettings.prompts.actions.edit')}>
-                  <Button 
-                    type="link" 
-                    icon={<EditOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditPrompt(prompt);
-                    }}
-                  />
-                </Tooltip>
-              </Space>
+              <div className="card-title">
+                <div className="title-left">
+                  <Space>
+                    {categoryConfig?.icon}
+                    <span>{prompt.name}</span>
+                  </Space>
+                </div>
+                <div className="title-right">
+                  {prompt.isFavorite && <StarOutlined style={{ color: '#faad14' }} />}
+                </div>
+              </div>
             }
             onClick={() => handleViewPrompt(prompt)}
           >
@@ -477,8 +490,42 @@ API接口：{api_details}
             </div>
 
             <div style={{ fontSize: 12, color: '#666' }}>
-              <div>{t('systemSettings.prompts.detail.version')}: {prompt.version}</div>
-              <div>{t('systemSettings.prompts.detail.lastUsed')}: {prompt.lastUsed}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <span>{t('systemSettings.prompts.detail.version')}:</span>
+                <span>{prompt.version}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>{t('systemSettings.prompts.detail.lastUsed')}:</span>
+                <span>{prompt.lastUsed}</span>
+              </div>
+            </div>
+            
+            {/* 操作按钮区域 - 单独一行，右对齐 */}
+            <div className="card-actions">
+              <Space>
+                <Tooltip title={t('systemSettings.prompts.actions.view')}>
+                  <Button 
+                    type="text" 
+                    icon={<EyeOutlined />} 
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewPrompt(prompt);
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title={t('systemSettings.prompts.actions.edit')}>
+                  <Button 
+                    type="text" 
+                    icon={<EditOutlined />} 
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditPrompt(prompt);
+                    }}
+                  />
+                </Tooltip>
+              </Space>
             </div>
           </PromptCard>
         </Col>
@@ -617,7 +664,7 @@ API接口：{api_details}
       />
 
       {/* 提示词卡片列表 */}
-      <Row gutter={16}>
+      <Row gutter={[16, 16]}>
         {renderPromptCards()}
       </Row>
 
