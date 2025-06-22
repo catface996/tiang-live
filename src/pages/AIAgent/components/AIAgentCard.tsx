@@ -275,91 +275,91 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
   onView
 }) => {
   const { currentTheme } = useAppSelector((state) => state.theme);
-  const { t } = useTranslation();
+  const { t } = useTranslation(['agents', 'common']);
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
   
   // 使用 useMemo 来确保配置对象的稳定性
   const agentTypeMap = useMemo(() => ({
     monitor: { 
-      name: t('agents.types.monitor'), 
+      name: t('agents:types.monitor'), 
       color: isDark ? '#1890ff' : 'blue', 
       icon: <MonitorOutlined />,
       bgColor: isDark ? 'rgba(24, 144, 255, 0.1)' : undefined,
       avatarColor: isDark ? '#1890ff' : '#4096ff'
     },
     analysis: { 
-      name: t('agents.types.analysis'), 
+      name: t('agents:types.analysis'), 
       color: isDark ? '#52c41a' : 'green', 
       icon: <BarChartOutlined />,
       bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined,
       avatarColor: isDark ? '#52c41a' : '#73d13d'
     },
     deployment: { 
-      name: t('agents.types.deployment'), 
+      name: t('agents:types.deployment'), 
       color: isDark ? '#722ed1' : 'purple', 
       icon: <ApiOutlined />,
       bgColor: isDark ? 'rgba(114, 46, 209, 0.1)' : undefined,
       avatarColor: isDark ? '#722ed1' : '#9254de'
     },
     optimization: { 
-      name: t('agents.types.optimization'), 
+      name: t('agents:types.optimization'), 
       color: isDark ? '#fa8c16' : 'orange', 
       icon: <ThunderboltOutlined />,
       bgColor: isDark ? 'rgba(250, 140, 22, 0.1)' : undefined,
       avatarColor: isDark ? '#fa8c16' : '#ffa940'
     },
     security: { 
-      name: t('agents.types.security'), 
+      name: t('agents:types.security'), 
       color: isDark ? '#ff4d4f' : 'red', 
       icon: <ExclamationCircleOutlined />,
       bgColor: isDark ? 'rgba(255, 77, 79, 0.1)' : undefined,
       avatarColor: isDark ? '#ff4d4f' : '#ff7875'
     },
     backup: { 
-      name: t('agents.types.backup'), 
+      name: t('agents:types.backup'), 
       color: isDark ? '#13c2c2' : 'cyan', 
       icon: <CheckCircleOutlined />,
       bgColor: isDark ? 'rgba(19, 194, 194, 0.1)' : undefined,
       avatarColor: isDark ? '#13c2c2' : '#36cfc9'
     },
     gateway: { 
-      name: t('agents.types.gateway'), 
+      name: t('agents:types.gateway'), 
       color: isDark ? '#2f54eb' : 'geekblue', 
       icon: <ApiOutlined />,
       bgColor: isDark ? 'rgba(47, 84, 235, 0.1)' : undefined,
       avatarColor: isDark ? '#2f54eb' : '#597ef7'
     },
     planning: { 
-      name: t('agents.types.planning'), 
+      name: t('agents:types.planning'), 
       color: isDark ? '#eb2f96' : 'magenta', 
       icon: <BarChartOutlined />,
       bgColor: isDark ? 'rgba(235, 47, 150, 0.1)' : undefined,
       avatarColor: isDark ? '#eb2f96' : '#f759ab'
     },
     diagnosis: { 
-      name: t('agents.types.diagnosis'), 
+      name: t('agents:types.diagnosis'), 
       color: isDark ? '#fa541c' : 'volcano', 
       icon: <MonitorOutlined />,
       bgColor: isDark ? 'rgba(250, 84, 28, 0.1)' : undefined,
       avatarColor: isDark ? '#fa541c' : '#ff7a45'
     },
     config: { 
-      name: t('agents.types.config'), 
+      name: t('agents:types.config'), 
       color: isDark ? '#a0d911' : 'lime', 
       icon: <ApiOutlined />,
       bgColor: isDark ? 'rgba(160, 217, 17, 0.1)' : undefined,
       avatarColor: isDark ? '#a0d911' : '#b7eb8f'
     },
     traffic: { 
-      name: t('agents.types.traffic'), 
+      name: t('agents:types.traffic'), 
       color: isDark ? '#fadb14' : 'gold', 
       icon: <BarChartOutlined />,
       bgColor: isDark ? 'rgba(250, 219, 20, 0.1)' : undefined,
       avatarColor: isDark ? '#fadb14' : '#ffd666'
     },
     cleanup: { 
-      name: t('agents.types.cleanup'), 
+      name: t('agents:types.cleanup'), 
       color: isDark ? '#8c8c8c' : 'gray', 
       icon: <DeleteOutlined />,
       bgColor: isDark ? 'rgba(140, 140, 140, 0.1)' : undefined,
@@ -371,19 +371,19 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
     const statusMap = {
       running: { 
         color: isDark ? '#52c41a' : 'green', 
-        text: t('agents.status.running'), 
+        text: t('agents:status.running'), 
         icon: <CheckCircleOutlined />,
         bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
       },
       stopped: { 
         color: isDark ? '#ff4d4f' : 'red', 
-        text: t('agents.status.stopped'), 
+        text: t('agents:status.stopped'), 
         icon: <ExclamationCircleOutlined />,
         bgColor: isDark ? 'rgba(255, 77, 79, 0.1)' : undefined
       },
       paused: { 
         color: isDark ? '#faad14' : 'orange', 
-        text: t('agents.status.paused'), 
+        text: t('agents:status.paused'), 
         icon: <ClockCircleOutlined />,
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
       },

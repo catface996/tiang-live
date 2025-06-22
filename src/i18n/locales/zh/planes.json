@@ -1,0 +1,186 @@
+{
+  "title": "平面管理",
+  "subtitle": "管理系统平面及其层次依赖关系",
+  "createTitle": "创建平面",
+  "editTitle": "编辑平面",
+  "createSubtitle": "创建新的平面定义",
+  "editSubtitle": "修改平面配置和属性",
+  "userPlane": "用户平面",
+  "orderPlane": "订单平面",
+  "paymentPlane": "支付平面",
+  "productPlane": "产品平面",
+  "inventoryPlane": "库存平面",
+  "stats": {
+    "totalPlanes": "总平面数",
+    "activePlanes": "活跃平面",
+    "warningPlanes": "警告平面",
+    "errorPlanes": "错误平面",
+    "totalInstances": "总实例数",
+    "totalEntities": "总实体数",
+    "healthyEntities": "健康实体",
+    "warningEntities": "警告实体",
+    "errorEntities": "错误实体"
+  },
+  "status": {
+    "ACTIVE": "活跃",
+    "WARNING": "警告",
+    "ERROR": "错误",
+    "INACTIVE": "非活跃"
+  },
+  "levels": {
+    "infrastructure": "基础设施平面",
+    "middleware": "中间件平面",
+    "businessSystem": "业务系统平面",
+    "businessChain": "业务链平面",
+    "businessScenario": "业务场景平面"
+  },
+  "errors": {
+    "loadDataFailed": "加载平面数据失败",
+    "planeDefinitionLoadFailed": "加载平面定义失败",
+    "topologyLoadFailed": "加载拓扑结构失败",
+    "metricsLoadFailed": "加载指标数据失败"
+  },
+  "operations": {
+    "title": "操作说明",
+    "levelDescription": "平面层级说明",
+    "levelDetails": {
+      "l1": "L1 - 基础设施平面",
+      "l1Desc": "包含服务器、网络、存储等基础设施组件",
+      "l2": "L2 - 中间件平面",
+      "l2Desc": "包含数据库、消息队列、缓存等中间件服务",
+      "l3": "L3 - 业务系统平面",
+      "l3Desc": "包含各个业务系统和微服务",
+      "l4": "L4 - 业务链平面",
+      "l4Desc": "包含跨系统的业务流程和服务链",
+      "l5": "L5 - 业务场景平面",
+      "l5Desc": "包含完整的业务场景和用户旅程",
+      "multipleDependency": "支持多重依赖",
+      "complexDependency": "复杂依赖关系"
+    },
+    "features": {
+      "title": "功能特性",
+      "multipleDependencySupport": "多重依赖支持",
+      "multipleDependencySupportDesc": "支持平面间的多重依赖关系管理",
+      "complexityAnalysis": "复杂度分析",
+      "complexityAnalysisDesc": "自动分析平面依赖的复杂度和风险",
+      "visualization": "可视化展示",
+      "visualizationDesc": "直观展示平面拓扑结构和依赖关系",
+      "realTimeMonitoring": "实时监控",
+      "realTimeMonitoringDesc": "实时监控平面状态和健康度",
+      "riskAssessment": "风险评估",
+      "riskAssessmentDesc": "评估依赖变更对系统的影响风险"
+    }
+  },
+  "loading": {
+    "topology": "加载拓扑结构中...",
+    "noPlaneData": "暂无平面数据"
+  },
+  "card": {
+    "labels": {
+      "level": "层级",
+      "dependencies": "依赖",
+      "totalEntities": "总实体数",
+      "entityHealthStatus": "实体健康状态",
+      "createdAt": "创建时间",
+      "planesCount": "平面数量",
+      "multipleDependency": "多重依赖"
+    },
+    "status": {
+      "ACTIVE": "活跃",
+      "WARNING": "警告", 
+      "ERROR": "错误",
+      "INACTIVE": "非活跃",
+      "UNKNOWN": "未知"
+    },
+    "tooltips": {
+      "viewDetails": "查看详情",
+      "editConfig": "编辑配置",
+      "addInstance": "添加实例"
+    },
+    "entityStats": {
+      "healthy": "健康",
+      "warning": "警告",
+      "error": "错误",
+      "noEntities": "无实体",
+      "healthyTooltip": "健康实体数量",
+      "warningTooltip": "警告实体数量",
+      "errorTooltip": "错误实体数量"
+    }
+  },
+  "dependency": {
+    "title": "平面依赖复杂度分析",
+    "stats": {
+      "totalComplexity": "总复杂度",
+      "maxDependencies": "最大依赖数",
+      "mediumRiskPlanes": "中等风险平面",
+      "highRiskPlanes": "高风险平面"
+    },
+    "columns": {
+      "planeName": "平面名称",
+      "dependencyCount": "依赖数量",
+      "dependentCount": "被依赖数量",
+      "complexityScore": "复杂度评分",
+      "riskLevel": "风险等级"
+    },
+    "riskExplanation": {
+      "title": "风险等级说明",
+      "low": "低风险：依赖关系简单，影响范围有限",
+      "medium": "中等风险：存在多重依赖，需要关注变更影响",
+      "high": "高风险：复杂依赖网络，变更需要谨慎评估"
+    },
+    "tooltips": {
+      "dependencyPlanes": "依赖的平面",
+      "dependentPlanes": "被依赖的平面",
+      "none": "无"
+    },
+    "riskLevels": {
+      "low": "低风险",
+      "medium": "中等风险",
+      "high": "高风险"
+    }
+  },
+  "createEdit": {
+    "createTitle": "创建平面",
+    "editTitle": "编辑平面",
+    "formLabels": {
+      "planeName": "平面名称",
+      "planeNamePlaceholder": "请输入平面名称",
+      "planeNameHelp": "平面的唯一标识符",
+      "displayName": "显示名称",
+      "displayNamePlaceholder": "请输入显示名称",
+      "displayNameHelp": "用于界面显示的友好名称",
+      "description": "描述",
+      "descriptionPlaceholder": "请输入平面描述",
+      "level": "层级",
+      "levelHelp": "选择平面所属的层级",
+      "dependencies": "依赖平面",
+      "dependenciesHelp": "选择此平面依赖的其他平面"
+    },
+    "levelOptions": {
+      "1": "L1 - 基础设施平面",
+      "2": "L2 - 中间件平面",
+      "3": "L3 - 业务系统平面",
+      "4": "L4 - 业务链平面",
+      "5": "L5 - 业务场景平面"
+    },
+    "validation": {
+      "planeNameRequired": "请输入平面名称",
+      "displayNameRequired": "请输入显示名称",
+      "descriptionRequired": "请输入平面描述",
+      "levelRequired": "请选择平面层级"
+    },
+    "buttons": {
+      "save": "保存",
+      "cancel": "取消",
+      "reset": "重置"
+    },
+    "preview": {
+      "title": "预览",
+      "subtitle": "平面配置预览",
+      "dependencies": "依赖关系"
+    }
+  },
+  "form": {
+    "basicInfo": "基本信息"
+  }
+}

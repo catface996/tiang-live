@@ -149,7 +149,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   onSubmit,
   loading = false
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['agents', 'common']);
   const [form] = Form.useForm();
   const [activeTab, setActiveTab] = useState('basic');
   const [selectedPromptType, setSelectedPromptType] = useState<'template' | 'custom'>('template');
@@ -179,35 +179,35 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   const promptTemplates = [
     {
       id: 'customer-service-template',
-      name: t('aiAgent.form.promptTemplates.customerService.name'),
-      description: t('aiAgent.form.promptTemplates.customerService.description'),
-      content: t('aiAgent.form.promptTemplates.customerService.content'),
+      name: t('agents:form.promptTemplates.customerService.name'),
+      description: t('agents:form.promptTemplates.customerService.description'),
+      content: t('agents:form.promptTemplates.customerService.content'),
       variables: ['company_name', 'service_hours'],
-      category: t('aiAgent.form.promptTemplates.categories.dialogue')
+      category: t('agents:form.promptTemplates.categories.dialogue')
     },
     {
       id: 'data-analysis-template',
-      name: t('aiAgent.form.promptTemplates.dataAnalysis.name'),
-      description: t('aiAgent.form.promptTemplates.dataAnalysis.description'),
-      content: t('aiAgent.form.promptTemplates.dataAnalysis.content'),
+      name: t('agents:form.promptTemplates.dataAnalysis.name'),
+      description: t('agents:form.promptTemplates.dataAnalysis.description'),
+      content: t('agents:form.promptTemplates.dataAnalysis.content'),
       variables: [],
-      category: t('aiAgent.form.promptTemplates.categories.analysis')
+      category: t('agents:form.promptTemplates.categories.analysis')
     },
     {
       id: 'code-review-template',
-      name: t('aiAgent.form.promptTemplates.codeReview.name'),
-      description: t('aiAgent.form.promptTemplates.codeReview.description'),
-      content: t('aiAgent.form.promptTemplates.codeReview.content'),
+      name: t('agents:form.promptTemplates.codeReview.name'),
+      description: t('agents:form.promptTemplates.codeReview.description'),
+      content: t('agents:form.promptTemplates.codeReview.content'),
       variables: [],
-      category: t('aiAgent.form.promptTemplates.categories.development')
+      category: t('agents:form.promptTemplates.categories.development')
     },
     {
       id: 'monitoring-template',
-      name: t('aiAgent.form.promptTemplates.monitoring.name'),
-      description: t('aiAgent.form.promptTemplates.monitoring.description'),
-      content: t('aiAgent.form.promptTemplates.monitoring.content'),
+      name: t('agents:form.promptTemplates.monitoring.name'),
+      description: t('agents:form.promptTemplates.monitoring.description'),
+      content: t('agents:form.promptTemplates.monitoring.content'),
       variables: [],
-      category: t('aiAgent.form.promptTemplates.categories.operations')
+      category: t('agents:form.promptTemplates.categories.operations')
     }
   ];
 
@@ -218,7 +218,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       provider: 'OpenAI',
       name: 'GPT-4',
       version: 'gpt-4-0613',
-      description: t('aiAgent.form.models.gpt4.description'),
+      description: t('agents:form.models.gpt4.description'),
       status: 'available',
       pricing: '$0.03/1K tokens'
     },
@@ -227,7 +227,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       provider: 'OpenAI',
       name: 'GPT-3.5 Turbo',
       version: 'gpt-3.5-turbo-0613',
-      description: t('aiAgent.form.models.gpt35.description'),
+      description: t('agents:form.models.gpt35.description'),
       status: 'available',
       pricing: '$0.002/1K tokens'
     },
@@ -236,18 +236,18 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       provider: 'Anthropic',
       name: 'Claude 3',
       version: 'claude-3-opus-20240229',
-      description: t('aiAgent.form.models.claude3.description'),
+      description: t('agents:form.models.claude3.description'),
       status: 'available',
       pricing: '$0.015/1K tokens'
     },
     {
       id: 'local-llama2',
-      provider: t('aiAgent.form.models.localDeployment'),
+      provider: t('agents:form.models.localDeployment'),
       name: 'Llama 2',
       version: 'llama2-7b-chat',
-      description: t('aiAgent.form.models.llama2.description'),
+      description: t('agents:form.models.llama2.description'),
       status: 'available',
-      pricing: t('aiAgent.form.models.free')
+      pricing: t('agents:form.models.free')
     }
   ];
 
@@ -255,36 +255,36 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   const mcpServers = [
     {
       id: 'database-mcp',
-      name: t('aiAgent.form.mcpServers.database.name'),
-      description: t('aiAgent.form.mcpServers.database.description'),
+      name: t('agents:form.mcpServers.database.name'),
+      description: t('agents:form.mcpServers.database.description'),
       status: 'running',
       capabilities: ['mysql', 'postgresql', 'mongodb']
     },
     {
       id: 'email-mcp',
-      name: t('aiAgent.form.mcpServers.email.name'),
-      description: t('aiAgent.form.mcpServers.email.description'),
+      name: t('agents:form.mcpServers.email.name'),
+      description: t('agents:form.mcpServers.email.description'),
       status: 'running',
       capabilities: ['smtp', 'imap', 'templates']
     },
     {
       id: 'file-mcp',
-      name: t('aiAgent.form.mcpServers.file.name'),
-      description: t('aiAgent.form.mcpServers.file.description'),
+      name: t('agents:form.mcpServers.file.name'),
+      description: t('agents:form.mcpServers.file.description'),
       status: 'running',
       capabilities: ['read', 'write', 'search']
     },
     {
       id: 'api-mcp',
-      name: t('aiAgent.form.mcpServers.api.name'),
-      description: t('aiAgent.form.mcpServers.api.description'),
+      name: t('agents:form.mcpServers.api.name'),
+      description: t('agents:form.mcpServers.api.description'),
       status: 'running',
       capabilities: ['http', 'rest', 'graphql']
     },
     {
       id: 'scheduler-mcp',
-      name: t('aiAgent.form.mcpServers.scheduler.name'),
-      description: t('aiAgent.form.mcpServers.scheduler.description'),
+      name: t('agents:form.mcpServers.scheduler.name'),
+      description: t('agents:form.mcpServers.scheduler.description'),
       status: 'stopped',
       capabilities: ['cron', 'interval', 'webhook']
     }
@@ -343,13 +343,13 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
         onChange={(e) => setSelectedPromptType(e.target.value)}
         style={{ marginBottom: 16 }}
       >
-        <Radio value="template">{t('aiAgent.form.prompts.useTemplate')}</Radio>
-        <Radio value="custom">{t('aiAgent.form.prompts.customPrompt')}</Radio>
+        <Radio value="template">{t('agents:form.prompts.useTemplate')}</Radio>
+        <Radio value="custom">{t('agents:form.prompts.customPrompt')}</Radio>
       </Radio.Group>
 
       {selectedPromptType === 'template' ? (
         <div>
-          <Text strong>{t('aiAgent.form.prompts.selectTemplate')}：</Text>
+          <Text strong>{t('agents:form.prompts.selectTemplate')}：</Text>
           <div style={{ marginTop: 12 }}>
             {promptTemplates.map(template => (
               <div
@@ -368,12 +368,12 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                 </div>
                 {selectedPromptTemplate === template.id && template.variables.length > 0 && (
                   <div className="prompt-variables">
-                    <Text strong>{t('aiAgent.form.prompts.templateVariables')}：</Text>
+                    <Text strong>{t('agents:form.prompts.templateVariables')}：</Text>
                     {template.variables.map(variable => (
                       <div key={variable} style={{ marginTop: 8 }}>
                         <Text>{variable}:</Text>
                         <Input
-                          placeholder={t('aiAgent.form.prompts.enterVariableValue', { variable })}
+                          placeholder={t('agents:form.prompts.enterVariableValue', { variable })}
                           value={promptVariables[variable] || ''}
                           onChange={(e) => handleVariableChange(variable, e.target.value)}
                           style={{ marginTop: 4 }}
@@ -388,17 +388,17 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
         </div>
       ) : (
         <div>
-          <Text strong>{t('aiAgent.form.prompts.customPrompt')}：</Text>
+          <Text strong>{t('agents:form.prompts.customPrompt')}：</Text>
           <TextArea
             rows={8}
-            placeholder={t('aiAgent.form.prompts.customPromptPlaceholder')}
+            placeholder={t('agents:form.prompts.customPromptPlaceholder')}
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             style={{ marginTop: 8 }}
           />
           <Alert
-            message={t('aiAgent.form.prompts.tip')}
-            description={t('aiAgent.form.prompts.customPromptTip')}
+            message={t('agents:form.prompts.tip')}
+            description={t('agents:form.prompts.customPromptTip')}
             type="info"
             showIcon
             style={{ marginTop: 12 }}
@@ -410,7 +410,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
 
   const renderModelSelector = () => (
     <ModelSelector>
-      <Text strong>{t('aiAgent.form.models.selectModel')}：</Text>
+      <Text strong>{t('agents:form.models.selectModel')}：</Text>
       <div style={{ marginTop: 12 }}>
         {availableModels.map(model => (
           <div
@@ -422,11 +422,11 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                 <Text strong>{model.provider} - {model.name}</Text>
                 <Tag color={model.status === 'available' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                  {model.status === 'available' ? t('aiAgent.form.models.available') : t('aiAgent.form.models.unavailable')}
+                  {model.status === 'available' ? t('agents:form.models.available') : t('agents:form.models.unavailable')}
                 </Tag>
               </div>
               <Text type="secondary" style={{ fontSize: 12 }}>
-                {t('aiAgent.form.models.version')}: {model.version} | {t('aiAgent.form.models.pricing')}: {model.pricing}
+                {t('agents:form.models.version')}: {model.version} | {t('agents:form.models.pricing')}: {model.pricing}
               </Text>
               <Paragraph style={{ margin: '4px 0 0 0', fontSize: 12, color: '#666' }}>
                 {model.description}
@@ -440,9 +440,9 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
 
   const renderMcpServerSelector = () => (
     <div>
-      <Text strong>{t('aiAgent.form.mcpServers.selectServers')}：</Text>
+      <Text strong>{t('agents:form.mcpServers.selectServers')}：</Text>
       <Paragraph type="secondary" style={{ marginTop: 4 }}>
-        {t('aiAgent.form.mcpServers.description')}
+        {t('agents:form.mcpServers.description')}
       </Paragraph>
       <div style={{ marginTop: 12 }}>
         {mcpServers.map(server => (
@@ -468,7 +468,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                     <Text strong>{server.name}</Text>
                   </Checkbox>
                   <Tag color={server.status === 'running' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                    {server.status === 'running' ? t('aiAgent.form.mcpServers.running') : t('aiAgent.form.mcpServers.stopped')}
+                    {server.status === 'running' ? t('agents:form.mcpServers.running') : t('agents:form.mcpServers.stopped')}
                   </Tag>
                 </div>
                 <Text type="secondary" style={{ fontSize: 12 }}>
@@ -492,63 +492,63 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
   const tabItems = [
     {
       key: 'basic',
-      label: t('aiAgent.form.tabs.basic'),
+      label: t('agents:form.tabs.basic'),
       icon: <SettingOutlined />,
       children: (
         <Row gutter={24}>
           <Col span={24}>
             <Form.Item
               name="name"
-              label={t('aiAgent.form.fields.name')}
-              rules={[{ required: true, message: t('aiAgent.form.validation.nameRequired') }]}
+              label={t('agents:form.fields.name')}
+              rules={[{ required: true, message: t('agents:form.validation.nameRequired') }]}
             >
-              <Input placeholder={t('aiAgent.form.placeholders.name')} />
+              <Input placeholder={t('agents:form.placeholders.name')} />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
               name="description"
-              label={t('aiAgent.form.fields.description')}
-              rules={[{ required: true, message: t('aiAgent.form.validation.descriptionRequired') }]}
+              label={t('agents:form.fields.description')}
+              rules={[{ required: true, message: t('agents:form.validation.descriptionRequired') }]}
             >
-              <TextArea rows={3} placeholder={t('aiAgent.form.placeholders.description')} />
+              <TextArea rows={3} placeholder={t('agents:form.placeholders.description')} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               name="type"
-              label={t('aiAgent.form.fields.type')}
-              rules={[{ required: true, message: t('aiAgent.form.validation.typeRequired') }]}
+              label={t('agents:form.fields.type')}
+              rules={[{ required: true, message: t('agents:form.validation.typeRequired') }]}
             >
-              <Select placeholder={t('aiAgent.form.placeholders.type')}>
-                <Option value="chat">{t('aiAgent.form.types.chat')}</Option>
-                <Option value="task">{t('aiAgent.form.types.task')}</Option>
-                <Option value="analysis">{t('aiAgent.form.types.analysis')}</Option>
-                <Option value="monitoring">{t('aiAgent.form.types.monitoring')}</Option>
+              <Select placeholder={t('agents:form.placeholders.type')}>
+                <Option value="chat">{t('agents:form.types.chat')}</Option>
+                <Option value="task">{t('agents:form.types.task')}</Option>
+                <Option value="analysis">{t('agents:form.types.analysis')}</Option>
+                <Option value="monitoring">{t('agents:form.types.monitoring')}</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               name="status"
-              label={t('aiAgent.form.fields.status')}
-              rules={[{ required: true, message: t('aiAgent.form.validation.statusRequired') }]}
+              label={t('agents:form.fields.status')}
+              rules={[{ required: true, message: t('agents:form.validation.statusRequired') }]}
             >
-              <Select placeholder={t('aiAgent.form.placeholders.status')}>
-                <Option value="active">{t('aiAgent.form.status.active')}</Option>
-                <Option value="inactive">{t('aiAgent.form.status.inactive')}</Option>
-                <Option value="training">{t('aiAgent.form.status.training')}</Option>
+              <Select placeholder={t('agents:form.placeholders.status')}>
+                <Option value="active">{t('agents:form.status.active')}</Option>
+                <Option value="inactive">{t('agents:form.status.inactive')}</Option>
+                <Option value="training">{t('agents:form.status.training')}</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
               name="tags"
-              label={t('aiAgent.form.fields.tags')}
+              label={t('agents:form.fields.tags')}
             >
               <Select
                 mode="tags"
-                placeholder={t('aiAgent.form.placeholders.tags')}
+                placeholder={t('agents:form.placeholders.tags')}
                 style={{ width: '100%' }}
               />
             </Form.Item>
@@ -558,25 +558,25 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
     },
     {
       key: 'prompts',
-      label: t('aiAgent.form.tabs.prompts'),
+      label: t('agents:form.tabs.prompts'),
       icon: <BulbOutlined />,
       children: renderPromptEditor()
     },
     {
       key: 'model',
-      label: t('aiAgent.form.tabs.model'),
+      label: t('agents:form.tabs.model'),
       icon: <ApiOutlined />,
       children: (
         <div>
           {renderModelSelector()}
           <Divider />
-          <Text strong>{t('aiAgent.form.models.parameterConfig')}：</Text>
+          <Text strong>{t('agents:form.models.parameterConfig')}：</Text>
           <Row gutter={16} style={{ marginTop: 16 }}>
             <Col span={12}>
               <Form.Item
                 name={['model', 'config', 'temperature']}
                 label="Temperature"
-                tooltip={t('aiAgent.form.models.temperatureTooltip')}
+                tooltip={t('agents:form.models.temperatureTooltip')}
               >
                 <Slider
                   min={0}
@@ -590,7 +590,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <Form.Item
                 name={['model', 'config', 'maxTokens']}
                 label="Max Tokens"
-                tooltip={t('aiAgent.form.models.maxTokensTooltip')}
+                tooltip={t('agents:form.models.maxTokensTooltip')}
               >
                 <InputNumber
                   min={1}
@@ -603,7 +603,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <Form.Item
                 name={['model', 'config', 'topP']}
                 label="Top P"
-                tooltip={t('aiAgent.form.models.topPTooltip')}
+                tooltip={t('agents:form.models.topPTooltip')}
               >
                 <Slider
                   min={0}
@@ -617,7 +617,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
               <Form.Item
                 name={['model', 'config', 'frequencyPenalty']}
                 label="Frequency Penalty"
-                tooltip={t('aiAgent.form.models.frequencyPenaltyTooltip')}
+                tooltip={t('agents:form.models.frequencyPenaltyTooltip')}
               >
                 <Slider
                   min={-2}
@@ -633,20 +633,20 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
     },
     {
       key: 'mcp',
-      label: t('aiAgent.form.tabs.mcpServer'),
+      label: t('agents:form.tabs.mcpServer'),
       icon: <ThunderboltOutlined />,
       children: renderMcpServerSelector()
     },
     {
       key: 'settings',
-      label: t('aiAgent.form.tabs.settings'),
+      label: t('agents:form.tabs.settings'),
       icon: <SettingOutlined />,
       children: (
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item
               name={['settings', 'autoStart']}
-              label={t('aiAgent.form.settings.autoStart')}
+              label={t('agents:form.settings.autoStart')}
               valuePropName="checked"
             >
               <Switch />
@@ -655,7 +655,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={12}>
             <Form.Item
               name={['settings', 'maxConcurrency']}
-              label={t('aiAgent.form.settings.maxConcurrency')}
+              label={t('agents:form.settings.maxConcurrency')}
             >
               <InputNumber min={1} max={100} />
             </Form.Item>
@@ -663,7 +663,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={12}>
             <Form.Item
               name={['settings', 'timeout']}
-              label={t('aiAgent.form.settings.timeout')}
+              label={t('agents:form.settings.timeout')}
             >
               <InputNumber min={5} max={300} />
             </Form.Item>
@@ -671,7 +671,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={12}>
             <Form.Item
               name={['settings', 'retryCount']}
-              label={t('aiAgent.form.settings.retryCount')}
+              label={t('agents:form.settings.retryCount')}
             >
               <InputNumber min={0} max={10} />
             </Form.Item>
@@ -679,7 +679,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           <Col span={24}>
             <Form.Item
               name={['settings', 'logLevel']}
-              label={t('aiAgent.form.settings.logLevel')}
+              label={t('agents:form.settings.logLevel')}
             >
               <Select>
                 <Option value="debug">Debug</Option>

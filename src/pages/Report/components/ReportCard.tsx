@@ -224,7 +224,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
   onDownload,
   onDelete
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['reports', 'common']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
@@ -233,19 +233,19 @@ const ReportCard: React.FC<ReportCardProps> = ({
     const statusMap = {
       published: { 
         color: isDark ? '#52c41a' : 'green', 
-        text: t('reports.status.published'), 
+        text: t('reports:status.published'), 
         icon: '🟢',
         bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
       },
       draft: { 
         color: isDark ? '#faad14' : 'orange', 
-        text: t('reports.status.draft'), 
+        text: t('reports:status.draft'), 
         icon: '🟡',
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
       },
       archived: { 
         color: isDark ? '#8c8c8c' : 'gray', 
-        text: t('reports.status.archived'), 
+        text: t('reports:status.archived'), 
         icon: '⚪',
         bgColor: isDark ? 'rgba(140, 140, 140, 0.1)' : undefined
       },
@@ -260,22 +260,22 @@ const ReportCard: React.FC<ReportCardProps> = ({
 
   const getTypeConfig = (type: string) => {
     const typeMap = {
-      [t('reports.types.health')]: { 
+      [t('reports:types.health')]: { 
         color: isDark ? '#1890ff' : 'blue', 
         icon: '📊',
         bgColor: isDark ? 'rgba(24, 144, 255, 0.1)' : undefined
       },
-      [t('reports.types.dependency')]: { 
+      [t('reports:types.dependency')]: { 
         color: isDark ? '#722ed1' : 'purple', 
         icon: '🔗',
         bgColor: isDark ? 'rgba(114, 46, 209, 0.1)' : undefined
       },
-      [t('reports.types.relationship')]: { 
+      [t('reports:types.relationship')]: { 
         color: isDark ? '#13c2c2' : 'cyan', 
         icon: '🕸️',
         bgColor: isDark ? 'rgba(19, 194, 194, 0.1)' : undefined
       },
-      [t('reports.types.performance')]: { 
+      [t('reports:types.performance')]: { 
         color: isDark ? '#faad14' : 'gold', 
         icon: '⚡',
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
@@ -295,19 +295,19 @@ const ReportCard: React.FC<ReportCardProps> = ({
     {
       key: 'view',
       icon: <EyeOutlined />,
-      label: t('common.view'),
+      label: t('common:view'),
       onClick: () => onView(report)
     },
     {
       key: 'edit',
       icon: <EditOutlined />,
-      label: t('common.edit'),
+      label: t('common:edit'),
       onClick: () => onEdit(report)
     },
     {
       key: 'download',
       icon: <DownloadOutlined />,
-      label: t('common.download'),
+      label: t('common:download'),
       onClick: () => onDownload(report)
     },
     {
@@ -316,7 +316,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
     {
       key: 'delete',
       icon: <DeleteOutlined />,
-      label: t('common.delete'),
+      label: t('common:delete'),
       danger: true,
       onClick: () => onDelete(report)
     }
@@ -356,21 +356,21 @@ const ReportCard: React.FC<ReportCardProps> = ({
       hoverable
       onClick={() => onView(report)}
       actions={[
-        <Tooltip title={t('common.view')} key="view">
+        <Tooltip title={t('common:view')} key="view">
           <Button 
             type="text" 
             icon={<EyeOutlined />} 
             onClick={(e) => handleAction('view', e)}
           />
         </Tooltip>,
-        <Tooltip title={t('common.edit')} key="edit">
+        <Tooltip title={t('common:edit')} key="edit">
           <Button 
             type="text" 
             icon={<EditOutlined />} 
             onClick={(e) => handleAction('edit', e)}
           />
         </Tooltip>,
-        <Tooltip title={t('common.download')} key="download">
+        <Tooltip title={t('common:download')} key="download">
           <Button 
             type="text" 
             icon={<DownloadOutlined />} 
@@ -441,7 +441,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
         <Paragraph 
           ellipsis={{ 
             rows: 2, 
-            tooltip: report.description || t('reports.card.defaultDescription', { type: report.type })
+            tooltip: report.description || t('reports:card.defaultDescription', { type: report.type })
           }} 
           style={{ 
             margin: 0, 
@@ -450,7 +450,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
             lineHeight: '1.5'
           }}
         >
-          {report.description || t('reports.card.defaultDescription', { type: report.type })}
+          {report.description || t('reports:card.defaultDescription', { type: report.type })}
         </Paragraph>
       </div>
 
@@ -461,7 +461,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
           wrap
         >
           <Statistic 
-            title={<span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: 11 }}>{t('reports.card.fileSize')}</span>} 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: 11 }}>{t('reports:card.fileSize')}</span>} 
             value={report.size} 
             valueStyle={{ 
               fontSize: 13,
@@ -469,7 +469,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
             }}
           />
           <Statistic 
-            title={<span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: 11 }}>{t('reports.card.downloads')}</span>} 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: 11 }}>{t('reports:card.downloads')}</span>} 
             value={report.downloads} 
             valueStyle={{ 
               fontSize: 13,
@@ -492,14 +492,14 @@ const ReportCard: React.FC<ReportCardProps> = ({
             marginBottom: 2 
           }}>
             <CalendarOutlined style={{ marginRight: 4 }} />
-            {t('reports.card.created')}: {report.createdAt.split(' ')[0]}
+            {t('reports:card.created')}: {report.createdAt.split(' ')[0]}
           </div>
           <div style={{ 
             fontSize: 12, 
             color: isDark ? '#8c8c8c' : '#999' 
           }}>
             <ClockCircleOutlined style={{ marginRight: 4 }} />
-            {t('reports.card.updated')}: {report.lastModified.split(' ')[0]}
+            {t('reports:card.updated')}: {report.lastModified.split(' ')[0]}
           </div>
         </div>
       </div>

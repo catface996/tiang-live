@@ -1,0 +1,31 @@
+{
+  "title": "AI助手",
+  "subtitle": "智能运维助手，帮您快速解决问题",
+  "chatPlaceholder": "请输入您的问题...",
+  "send": "发送",
+  "sendShortcut": "Ctrl+Enter 发送",
+  "clear": "清空对话",
+  "chatCleared": "对话已清空",
+  "emptyMessage": "请输入消息内容",
+  "thinking": "思考中...",
+  "suggestiondescription": "建议",
+  "suggestions": {
+    "createPlane": "创建新平面",
+    "entityRelation": "查看实体关系",
+    "healthMonitor": "系统健康监控",
+    "planeDependency": "平面依赖分析",
+    "systemReport": "生成系统报告",
+    "tagManagement": "标签管理"
+  },
+  "responses": {
+    "default": "我是您的AI运维助手，有什么可以帮助您的吗？",
+    "createPlane": "我可以帮您创建新的平面。请告诉我平面的基本信息。",
+    "entityRelation": "我来为您分析实体关系图谱。",
+    "healthMonitor": "让我检查系统的健康状态。",
+    "dependency": "我来分析平面间的依赖关系。",
+    "reportGeneration": "我可以为您生成详细的系统报告。",
+    "sequenceManagement": "我来帮您管理时序流程。",
+    "tagManagement": "我可以协助您进行标签管理。",
+    "aiAgent": "关于AI智能体的问题，我很乐意为您解答。"
+  }
+}

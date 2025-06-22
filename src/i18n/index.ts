@@ -3,17 +3,91 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { languageStorage } from '../utils/storage';
 
-// 导入语言资源
-import zhCN from './locales/zh-CN.json';
-import enUS from './locales/en-US.json';
+// 导入中文语言资源
+import zhCommon from './locales/zh/common.json';
+import zhLayout from './locales/zh/layout.json';
+import zhMenu from './locales/zh/menu.json';
+import zhDashboard from './locales/zh/dashboard.json';
+import zhPlanes from './locales/zh/planes.json';
+import zhAgents from './locales/zh/agents.json';
+import zhModels from './locales/zh/models.json';
+import zhEntities from './locales/zh/entities.json';
+import zhSequences from './locales/zh/sequences.json';
+import zhTasks from './locales/zh/tasks.json';
+import zhMessages from './locales/zh/messages.json';
+import zhReports from './locales/zh/reports.json';
+import zhRelationships from './locales/zh/relationships.json';
+import zhAiAssistant from './locales/zh/aiAssistant.json';
+import zhSolutions from './locales/zh/solutions.json';
+import zhTags from './locales/zh/tags.json';
+import zhPrompts from './locales/zh/prompts.json';
+import zhEntityScan from './locales/zh/entityScan.json';
+import zhTheme from './locales/zh/theme.json';
+
+// 导入英文语言资源
+import enCommon from './locales/en/common.json';
+import enLayout from './locales/en/layout.json';
+import enMenu from './locales/en/menu.json';
+import enDashboard from './locales/en/dashboard.json';
+import enPlanes from './locales/en/planes.json';
+import enAgents from './locales/en/agents.json';
+import enModels from './locales/en/models.json';
+import enEntities from './locales/en/entities.json';
+import enSequences from './locales/en/sequences.json';
+import enTasks from './locales/en/tasks.json';
+import enMessages from './locales/en/messages.json';
+import enReports from './locales/en/reports.json';
+import enRelationships from './locales/en/relationships.json';
+import enAiAssistant from './locales/en/aiAssistant.json';
+import enSolutions from './locales/en/solutions.json';
+import enTags from './locales/en/tags.json';
+import enPrompts from './locales/en/prompts.json';
+import enEntityScan from './locales/en/entityScan.json';
+import enTheme from './locales/en/theme.json';
 
 // 语言资源配置
 const resources = {
   'zh-CN': {
-    translation: zhCN
+    common: zhCommon,
+    layout: zhLayout,
+    menu: zhMenu,
+    dashboard: zhDashboard,
+    planes: zhPlanes,
+    agents: zhAgents,
+    models: zhModels,
+    entities: zhEntities,
+    sequences: zhSequences,
+    tasks: zhTasks,
+    messages: zhMessages,
+    reports: zhReports,
+    relationships: zhRelationships,
+    aiAssistant: zhAiAssistant,
+    solutions: zhSolutions,
+    tags: zhTags,
+    prompts: zhPrompts,
+    entityScan: zhEntityScan,
+    theme: zhTheme
   },
   'en-US': {
-    translation: enUS
+    common: enCommon,
+    layout: enLayout,
+    menu: enMenu,
+    dashboard: enDashboard,
+    planes: enPlanes,
+    agents: enAgents,
+    models: enModels,
+    entities: enEntities,
+    sequences: enSequences,
+    tasks: enTasks,
+    messages: enMessages,
+    reports: enReports,
+    relationships: enRelationships,
+    aiAssistant: enAiAssistant,
+    solutions: enSolutions,
+    tags: enTags,
+    prompts: enPrompts,
+    entityScan: enEntityScan,
+    theme: enTheme
   }
 };
 
@@ -52,8 +126,8 @@ i18n
     },
     
     // 命名空间配置
-    defaultNS: 'translation',
-    ns: ['translation'],
+    defaultNS: 'common',
+    ns: ['common', 'layout', 'menu', 'dashboard', 'planes', 'agents', 'models', 'entities', 'sequences', 'tasks', 'messages', 'reports', 'relationships', 'aiAssistant', 'solutions', 'tags', 'prompts', 'entityScan', 'theme'],
     
     // 键值分隔符
     keySeparator: '.',

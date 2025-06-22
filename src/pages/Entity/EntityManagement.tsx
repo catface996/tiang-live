@@ -78,7 +78,7 @@ const EntityGrid = styled.div`
 `;
 
 const EntityManagement: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['entities', 'common']);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('entities');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -90,7 +90,7 @@ const EntityManagement: React.FC = () => {
   const [entities, setEntities] = useState<any[]>([]);
 
   useEffect(() => {
-    setPageTitle(t('entities.title'));
+    setPageTitle(t('entities:title'));
     setEntities(entitiesData.entities);
   }, [t]);
 
@@ -169,20 +169,20 @@ const EntityManagement: React.FC = () => {
       <TabContent>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
-            <Title level={3} style={{ margin: 0 }}>{t('entities.title')}</Title>
+            <Title level={3} style={{ margin: 0 }}>{t('entities:title')}</Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
-              {t('entities.subtitle')}
+              {t('entities:subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ExportOutlined />}>
-              {t('common.export')}
+              {t('common:export')}
             </Button>
             <Button icon={<ReloadOutlined />}>
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateEntity}>
-              {t('entities.createEntity')}
+              {t('entities:createEntity')}
             </Button>
           </Space>
         </div>
@@ -192,9 +192,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title={t('entities.stats.totalEntities')}
+                title={t('entities:stats.totalEntities')}
                 value={stats.total}
-                suffix={t('common.unit.count')}
+                suffix={t('common:unit.count')}
                 valueStyle={{ color: '#1890ff' }}
               />
             </StatsCard>
@@ -202,9 +202,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title={t('entities.stats.activeEntities')}
+                title={t('entities:stats.activeEntities')}
                 value={stats.active}
-                suffix={t('common.unit.count')}
+                suffix={t('common:unit.count')}
                 valueStyle={{ color: '#52c41a' }}
               />
             </StatsCard>
@@ -212,9 +212,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title={t('entities.stats.warningEntities')}
+                title={t('entities:stats.warningEntities')}
                 value={stats.warning}
-                suffix={t('common.unit.count')}
+                suffix={t('common:unit.count')}
                 valueStyle={{ color: '#faad14' }}
               />
             </StatsCard>
@@ -222,9 +222,9 @@ const EntityManagement: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard>
               <Statistic
-                title={t('entities.stats.errorEntities')}
+                title={t('entities:stats.errorEntities')}
                 value={stats.inactive}
-                suffix={t('common.unit.count')}
+                suffix={t('common:unit.count')}
                 valueStyle={{ color: '#f5222d' }}
               />
             </StatsCard>
@@ -244,55 +244,55 @@ const EntityManagement: React.FC = () => {
               checked={selectedCategory === 'report'}
               onChange={() => setSelectedCategory('report')}
             >
-              📊 {t('entities.types.report')} ({typeStats.report || 0})
+              📊 {t('entities:types.report')} ({typeStats.report || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'business_link'}
               onChange={() => setSelectedCategory('business_link')}
             >
-              🔗 {t('entities.types.businessLink')} ({typeStats.business_link || 0})
+              🔗 {t('entities:types.businessLink')} ({typeStats.business_link || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'business_system'}
               onChange={() => setSelectedCategory('business_system')}
             >
-              🏢 {t('entities.types.businessSystem')} ({typeStats.business_system || 0})
+              🏢 {t('entities:types.businessSystem')} ({typeStats.business_system || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'api'}
               onChange={() => setSelectedCategory('api')}
             >
-              🔌 {t('entities.types.api')} ({typeStats.api || 0})
+              🔌 {t('entities:types.api')} ({typeStats.api || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'database'}
               onChange={() => setSelectedCategory('database')}
             >
-              💾 {t('entities.types.database')} ({typeStats.database || 0})
+              💾 {t('entities:types.database')} ({typeStats.database || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'table'}
               onChange={() => setSelectedCategory('table')}
             >
-              📋 {t('entities.types.table')} ({typeStats.table || 0})
+              📋 {t('entities:types.table')} ({typeStats.table || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'middleware'}
               onChange={() => setSelectedCategory('middleware')}
             >
-              ☁️ {t('entities.types.middleware')} ({typeStats.middleware || 0})
+              ☁️ {t('entities:types.middleware')} ({typeStats.middleware || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'microservice'}
               onChange={() => setSelectedCategory('microservice')}
             >
-              🔧 {t('entities.types.microservice')} ({typeStats.microservice || 0})
+              🔧 {t('entities:types.microservice')} ({typeStats.microservice || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'scheduled_job'}
               onChange={() => setSelectedCategory('scheduled_job')}
             >
-              ⏰ {t('entities.types.scheduledJob')} ({typeStats.scheduled_job || 0})
+              ⏰ {t('entities:types.scheduledJob')} ({typeStats.scheduled_job || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
               checked={selectedCategory === 'configuration'}
@@ -308,7 +308,7 @@ const EntityManagement: React.FC = () => {
           <Row gutter={16} align="middle">
             <Col flex="auto">
               <Search
-                placeholder={t('entities.searchPlaceholder')}
+                placeholder={t('entities:searchPlaceholder')}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 style={{ width: '100%' }}
@@ -320,19 +320,19 @@ const EntityManagement: React.FC = () => {
                 value={filterType}
                 onChange={setFilterType}
                 style={{ width: 120 }}
-                placeholder={t('entities.typeFilter')}
+                placeholder={t('entities:typeFilter')}
               >
-                <Option value="all">{t('entities.allTypes')}</Option>
-                <Option value="report">{t('entities.types.report')}</Option>
-                <Option value="business_link">{t('entities.types.businessLink')}</Option>
-                <Option value="business_system">{t('entities.types.businessSystem')}</Option>
-                <Option value="api">{t('entities.types.api')}</Option>
-                <Option value="database">{t('entities.types.database')}</Option>
-                <Option value="table">{t('entities.types.table')}</Option>
-                <Option value="middleware">{t('entities.types.middleware')}</Option>
-                <Option value="microservice">{t('entities.types.microservice')}</Option>
-                <Option value="scheduled_job">{t('entities.types.scheduledJob')}</Option>
-                <Option value="configuration">{t('entities.types.configuration')}</Option>
+                <Option value="all">{t('entities:allTypes')}</Option>
+                <Option value="report">{t('entities:types.report')}</Option>
+                <Option value="business_link">{t('entities:types.businessLink')}</Option>
+                <Option value="business_system">{t('entities:types.businessSystem')}</Option>
+                <Option value="api">{t('entities:types.api')}</Option>
+                <Option value="database">{t('entities:types.database')}</Option>
+                <Option value="table">{t('entities:types.table')}</Option>
+                <Option value="middleware">{t('entities:types.middleware')}</Option>
+                <Option value="microservice">{t('entities:types.microservice')}</Option>
+                <Option value="scheduled_job">{t('entities:types.scheduledJob')}</Option>
+                <Option value="configuration">{t('entities:types.configuration')}</Option>
               </Select>
             </Col>
             <Col>
@@ -366,7 +366,7 @@ const EntityManagement: React.FC = () => {
           </EntityGrid>
         ) : (
           <Empty 
-            description={t('entities.noEntitiesFound')}
+            description={t('entities:noEntitiesFound')}
             style={{ margin: '60px 0' }}
           />
         )}
@@ -379,19 +379,19 @@ const EntityManagement: React.FC = () => {
 
     return (
       <Drawer
-        title={`${t('entities.entityDetail')}: ${selectedEntity.name}`}
+        title={`${t('entities:entityDetail')}: ${selectedEntity.name}`}
         placement="right"
         width={600}
         onClose={() => setDrawerVisible(false)}
         open={drawerVisible}
       >
         <Descriptions column={1} bordered size="small">
-          <Descriptions.Item label={t('entities.entityId')}>{selectedEntity.id}</Descriptions.Item>
-          <Descriptions.Item label={t('entities.entityName')}>{selectedEntity.name}</Descriptions.Item>
-          <Descriptions.Item label={t('entities.entityType')}>
+          <Descriptions.Item label={t('entities:entityId')}>{selectedEntity.id}</Descriptions.Item>
+          <Descriptions.Item label={t('entities:entityName')}>{selectedEntity.name}</Descriptions.Item>
+          <Descriptions.Item label={t('entities:entityType')}>
             <Tag color="blue">{selectedEntity.type}</Tag>
           </Descriptions.Item>
-          <Descriptions.Item label={t('entities.category')}>{selectedEntity.category}</Descriptions.Item>
+          <Descriptions.Item label={t('entities:category')}>{selectedEntity.category}</Descriptions.Item>
           <Descriptions.Item label="状态">
             <Badge 
               status={selectedEntity.status === 'active' || selectedEntity.status === 'running' ? 'success' : 'error'} 
@@ -422,17 +422,17 @@ const EntityManagement: React.FC = () => {
           )}
           
           {selectedEntity.path && (
-            <Descriptions.Item label={t('entities.apiPath')}>
+            <Descriptions.Item label={t('entities:apiPath')}>
               <code>{selectedEntity.path}</code>
             </Descriptions.Item>
           )}
           
           {selectedEntity.database && (
-            <Descriptions.Item label={t('entities.belongsToDatabase')}>{selectedEntity.database}</Descriptions.Item>
+            <Descriptions.Item label={t('entities:belongsToDatabase')}>{selectedEntity.database}</Descriptions.Item>
           )}
           
           {selectedEntity.tableName && (
-            <Descriptions.Item label={t('entities.tableName')}>
+            <Descriptions.Item label={t('entities:tableName')}>
               <code>{selectedEntity.tableName}</code>
             </Descriptions.Item>
           )}
@@ -483,20 +483,20 @@ const EntityManagement: React.FC = () => {
     <TabContent>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ margin: 0 }}>{t('entities.relationshipGraph')}</Title>
+          <Title level={3} style={{ margin: 0 }}>{t('entities:relationshipGraph')}</Title>
           <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
-            {t('entities.relationshipGraphDesc')}
+            {t('entities:relationshipGraphDesc')}
           </Paragraph>
         </div>
         <Space>
           <Button icon={<ExportOutlined />}>
-            {t('entities.exportGraph')}
+            {t('entities:exportGraph')}
           </Button>
           <Button icon={<SettingOutlined />}>
-            {t('entities.graphSettings')}
+            {t('entities:graphSettings')}
           </Button>
           <Button icon={<ReloadOutlined />}>
-            {t('entities.refreshGraph')}
+            {t('entities:refreshGraph')}
           </Button>
         </Space>
       </div>
@@ -506,9 +506,9 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('entities.stats.totalRelations')}
+              title={t('entities:stats.totalRelations')}
               value={25}
-              suffix={t('common.unitRelation')}
+              suffix={t('common:unitRelation')}
               valueStyle={{ color: '#1890ff' }}
             />
           </StatsCard>
@@ -516,9 +516,9 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('entities.stats.relationTypes')}
+              title={t('entities:stats.relationTypes')}
               value={5}
-              suffix={t('common.unitType')}
+              suffix={t('common:unitType')}
               valueStyle={{ color: '#52c41a' }}
             />
           </StatsCard>
@@ -526,9 +526,9 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('entities.stats.graphNodes')}
+              title={t('entities:stats.graphNodes')}
               value={21}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#faad14' }}
             />
           </StatsCard>
@@ -536,9 +536,9 @@ const EntityManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('entities.stats.connectedSystems')}
+              title={t('entities:stats.connectedSystems')}
               value={5}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#722ed1' }}
             />
           </StatsCard>
@@ -558,7 +558,7 @@ const EntityManagement: React.FC = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <Title level={2} style={{ margin: 0 }}>
-              {t('entities.title')}
+              {t('entities:title')}
               <Badge 
                 count="NEW" 
                 style={{ 
@@ -569,7 +569,7 @@ const EntityManagement: React.FC = () => {
               />
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('entities.description')}
+              {t('entities:description')}
             </Paragraph>
           </div>
         </div>
@@ -586,7 +586,7 @@ const EntityManagement: React.FC = () => {
             tab={
               <Space>
                 <NodeIndexOutlined />
-                {t('entities.title')}
+                {t('entities:title')}
                 <Badge count={getEntityStats().total} showZero />
               </Space>
             } 
@@ -599,7 +599,7 @@ const EntityManagement: React.FC = () => {
             tab={
               <Space>
                 <ShareAltOutlined />
-                {t('entities.relationshipGraph')}
+                {t('entities:relationshipGraph')}
               </Space>
             } 
             key="relationships"

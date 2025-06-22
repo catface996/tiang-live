@@ -24,7 +24,7 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
   metrics = [], 
   loading = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['planes', 'common']);
   
   // 计算统计数据
   const totalPlanes = planes.length;
@@ -42,49 +42,49 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
 
   const statsData = [
     {
-      title: t('planes.stats.totalPlanes'),
+      title: t('planes:stats.totalPlanes'),
       value: totalPlanes,
       icon: <AppstoreOutlined />,
       color: '#1890ff',
     },
     {
-      title: t('planes.stats.activePlanes'),
+      title: t('planes:stats.activePlanes'),
       value: activePlanes,
       icon: <CheckCircleOutlined />,
       color: '#52c41a',
     },
     {
-      title: t('planes.stats.warningPlanes'),
+      title: t('planes:stats.warningPlanes'),
       value: warningPlanes,
       icon: <ExclamationCircleOutlined />,
       color: '#faad14',
     },
     {
-      title: t('planes.stats.errorPlanes'),
+      title: t('planes:stats.errorPlanes'),
       value: errorPlanes,
       icon: <CloseCircleOutlined />,
       color: '#ff4d4f',
     },
     {
-      title: t('planes.stats.totalInstances'),
+      title: t('planes:stats.totalInstances'),
       value: totalInstances,
       icon: <NodeIndexOutlined />,
       color: '#722ed1',
     },
     {
-      title: t('planes.stats.healthyEntities'),
+      title: t('planes:stats.healthyEntities'),
       value: totalHealthyEntities,
       icon: <CheckCircleOutlined />,
       color: '#52c41a',
     },
     {
-      title: t('planes.stats.warningEntities'),
+      title: t('planes:stats.warningEntities'),
       value: totalWarningEntities,
       icon: <ExclamationCircleOutlined />,
       color: '#faad14',
     },
     {
-      title: t('planes.stats.errorEntities'),
+      title: t('planes:stats.errorEntities'),
       value: totalErrorEntities,
       icon: <CloseCircleOutlined />,
       color: '#ff4d4f',

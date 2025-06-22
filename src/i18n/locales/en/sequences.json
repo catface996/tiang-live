@@ -1,0 +1,88 @@
+{
+  "title": "Sequence Management",
+  "createSequence": "Create Sequence",
+  "editSequence": "Edit Sequence",
+  "sequenceName": "Sequence Name",
+  "description": "Description",
+  "participants": "Participants",
+  "steps": "Steps",
+  "stepCount": "Step Count",
+  "executionDuration": "Execution Duration",
+  "executionUnit": "Execution Unit",
+  "createdAt": "Created At",
+  "createdBy": "Created By",
+  "lastModified": "Last Modified",
+  "sequenceDiagram": "Sequence Diagram",
+  "viewSequenceDiagram": "View Sequence Diagram",
+  "searchPlaceholder": "Search sequence name, type...",
+  "typeFilter": "Type Filter",
+  "allTypes": "All Types",
+  "allStatuses": "All Statuses",
+  "stats": {
+    "totalSequences": "Total Sequences",
+    "activeSequences": "Active Sequences",
+    "executionCount": "Execution Count",
+    "successRate": "Success Rate"
+  },
+  "types": {
+    "business": "Business Process",
+    "authentication": "Authentication Process",
+    "data": "Data Processing",
+    "gateway": "Gateway Routing",
+    "monitoring": "Monitoring & Alerting"
+  },
+  "statuses": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "draft": "Draft"
+  },
+  "units": {
+    "seconds": "Seconds",
+    "milliseconds": "Milliseconds"
+  },
+  "participantOptions": {
+    "user": "User",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "database": "Database",
+    "cache": "Cache",
+    "queue": "Message Queue",
+    "externalApi": "External API"
+  },
+  "form": {
+    "name": "Sequence Name",
+    "namePlaceholder": "Enter sequence name",
+    "nameRequired": "Please enter sequence name",
+    "nameMaxLength": "Sequence name cannot exceed 50 characters",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter sequence description",
+    "descriptionRequired": "Please enter sequence description",
+    "descriptionMaxLength": "Description cannot exceed 200 characters",
+    "type": "Sequence Type",
+    "typePlaceholder": "Select sequence type",
+    "typeRequired": "Please select sequence type",
+    "status": "Status",
+    "statusPlaceholder": "Select status",
+    "statusRequired": "Please select status",
+    "participants": "Participants",
+    "participantsPlaceholder": "Select participants",
+    "participantsRequired": "Please select at least one participant",
+    "duration": "Execution Duration",
+    "durationPlaceholder": "Enter execution duration",
+    "durationRequired": "Please enter execution duration",
+    "durationUnit": "Duration Unit",
+    "mermaidChart": "Mermaid Chart Code",
+    "mermaidChartPlaceholder": "Enter Mermaid sequence diagram code",
+    "mermaidChartRequired": "Please enter Mermaid chart code",
+    "chartPreview": "Chart Preview",
+    "previewChart": "Preview Chart",
+    "previewTitle": "Sequence Diagram Preview"
+  },
+  "messages": {
+    "createSuccess": "Sequence created successfully",
+    "createFailed": "Failed to create sequence",
+    "updateSuccess": "Sequence updated successfully",
+    "updateFailed": "Failed to update sequence",
+    "noChartCode": "No chart code available"
+  }
+}

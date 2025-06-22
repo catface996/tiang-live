@@ -68,7 +68,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
   loading = false
 }) => {
   const [form] = Form.useForm();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['planes', 'common']);
   const [previewLevel, setPreviewLevel] = useState<number>(1);
   const [selectedDependencies, setSelectedDependencies] = useState<string[]>([]);
 
@@ -188,21 +188,21 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
       <Card
         title={
           <Space>
-            {mode === 'create' ? t('planes.createEdit.createTitle') : t('planes.createEdit.editTitle')}
-            <Tooltip title={t('planes.createEdit.formLabels.levelHelp')}>
+            {mode === 'create' ? t('planes:createEdit.createTitle') : t('planes:createEdit.editTitle')}
+            <Tooltip title={t('planes:createEdit.formLabels.levelHelp')}>
               <InfoCircleOutlined style={{ color: '#1890ff' }} />
             </Tooltip>
           </Space>
         }
         extra={
           <Space>
-            <Tooltip title={mode === 'edit' ? t('planes.createEdit.buttons.reset') : t('planes.createEdit.buttons.reset')}>
+            <Tooltip title={mode === 'edit' ? t('planes:createEdit.buttons.reset') : t('planes:createEdit.buttons.reset')}>
               <Button onClick={handleReset} icon={<ReloadOutlined />}>
-                {t('planes.createEdit.buttons.reset')}
+                {t('planes:createEdit.buttons.reset')}
               </Button>
             </Tooltip>
             <Button onClick={onCancel}>
-              {t('planes.createEdit.buttons.cancel')}
+              {t('planes:createEdit.buttons.cancel')}
             </Button>
           </Space>
         }
@@ -217,63 +217,63 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
         >
           {/* 基本信息 */}
           <div>
-            <Title level={4}>{t('planes.form.basicInfo')}</Title>
+            <Title level={4}>{t('planes:form.basicInfo')}</Title>
             
             <Form.Item
               name="name"
-              label={t('planes.createEdit.formLabels.planeName')}
+              label={t('planes:createEdit.formLabels.planeName')}
               rules={[
-                { required: true, message: t('planes.createEdit.validation.planeNameRequired') },
+                { required: true, message: t('planes:createEdit.validation.planeNameRequired') },
                 { pattern: /^[a-z0-9-]+$/, message: 'Only lowercase letters, numbers and hyphens are allowed' }
               ]}
-              extra={t('planes.createEdit.formLabels.planeNameHelp')}
+              extra={t('planes:createEdit.formLabels.planeNameHelp')}
             >
-              <Input placeholder={t('planes.createEdit.formLabels.planeNamePlaceholder')} />
+              <Input placeholder={t('planes:createEdit.formLabels.planeNamePlaceholder')} />
             </Form.Item>
 
             <Form.Item
               name="displayName"
-              label={t('planes.createEdit.formLabels.displayName')}
-              rules={[{ required: true, message: t('planes.createEdit.validation.displayNameRequired') }]}
-              extra={t('planes.createEdit.formLabels.displayNameHelp')}
+              label={t('planes:createEdit.formLabels.displayName')}
+              rules={[{ required: true, message: t('planes:createEdit.validation.displayNameRequired') }]}
+              extra={t('planes:createEdit.formLabels.displayNameHelp')}
             >
-              <Input placeholder={t('planes.createEdit.formLabels.displayNamePlaceholder')} />
+              <Input placeholder={t('planes:createEdit.formLabels.displayNamePlaceholder')} />
             </Form.Item>
 
             <Form.Item
               name="description"
-              label={t('planes.createEdit.formLabels.description')}
-              rules={[{ required: true, message: t('planes.createEdit.validation.descriptionRequired') }]}
+              label={t('planes:createEdit.formLabels.description')}
+              rules={[{ required: true, message: t('planes:createEdit.validation.descriptionRequired') }]}
             >
               <TextArea
                 rows={4}
-                placeholder={t('planes.createEdit.formLabels.descriptionPlaceholder')}
+                placeholder={t('planes:createEdit.formLabels.descriptionPlaceholder')}
               />
             </Form.Item>
 
             <Form.Item
               name="level"
-              label={t('planes.createEdit.formLabels.level')}
-              rules={[{ required: true, message: t('planes.createEdit.validation.levelRequired') }]}
-              extra={t('planes.createEdit.formLabels.levelHelp')}
+              label={t('planes:createEdit.formLabels.level')}
+              rules={[{ required: true, message: t('planes:createEdit.validation.levelRequired') }]}
+              extra={t('planes:createEdit.formLabels.levelHelp')}
             >
               <Select onChange={handleLevelChange}>
-                <Option value={1}>{t('planes.createEdit.levelOptions.1')}</Option>
-                <Option value={2}>{t('planes.createEdit.levelOptions.2')}</Option>
-                <Option value={3}>{t('planes.createEdit.levelOptions.3')}</Option>
-                <Option value={4}>{t('planes.createEdit.levelOptions.4')}</Option>
-                <Option value={5}>{t('planes.createEdit.levelOptions.5')}</Option>
+                <Option value={1}>{t('planes:createEdit.levelOptions.1')}</Option>
+                <Option value={2}>{t('planes:createEdit.levelOptions.2')}</Option>
+                <Option value={3}>{t('planes:createEdit.levelOptions.3')}</Option>
+                <Option value={4}>{t('planes:createEdit.levelOptions.4')}</Option>
+                <Option value={5}>{t('planes:createEdit.levelOptions.5')}</Option>
               </Select>
             </Form.Item>
 
             <Form.Item
               name="dependencies"
-              label={t('planes.createEdit.formLabels.dependencies')}
-              extra={t('planes.createEdit.formLabels.dependenciesHelp')}
+              label={t('planes:createEdit.formLabels.dependencies')}
+              extra={t('planes:createEdit.formLabels.dependenciesHelp')}
             >
               <Select
                 mode="multiple"
-                placeholder={t('planes.createEdit.formLabels.dependencies')}
+                placeholder={t('planes:createEdit.formLabels.dependencies')}
                 onChange={handleDependenciesChange}
                 disabled={previewLevel === 1}
               >
@@ -287,7 +287,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
 
             {previewLevel === 1 && (
               <Alert
-                message={t('planes.createEdit.levelOptions.1') + ' ' + t('planes.createEdit.formLabels.dependenciesHelp')}
+                message={t('planes:createEdit.levelOptions.1') + ' ' + t('planes:createEdit.formLabels.dependenciesHelp')}
                 type="info"
                 showIcon
                 style={{ marginBottom: 16 }}
@@ -297,16 +297,16 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
 
           {/* 预览效果 */}
           <div style={{ marginTop: 32 }}>
-            <Title level={4}>{t('planes.createEdit.preview.title')}</Title>
+            <Title level={4}>{t('planes:createEdit.preview.title')}</Title>
             <Text type="secondary" style={{ display: 'block', marginBottom: 16 }}>
-              {t('planes.createEdit.preview.subtitle')}
+              {t('planes:createEdit.preview.subtitle')}
             </Text>
             <PreviewCard
               $level={previewLevel}
               title={
                 <Space>
                   <span>{getPlaneIcon(previewLevel)}</span>
-                  <span>{form.getFieldValue('displayName') || t('planes.createEdit.formLabels.displayName')}</span>
+                  <span>{form.getFieldValue('displayName') || t('planes:createEdit.formLabels.displayName')}</span>
                   <Tag color="white" style={{ color: getPlaneColorByLevel(previewLevel).primary }}>
                     L{previewLevel}
                   </Tag>
@@ -315,12 +315,12 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
               size="small"
             >
               <Text type="secondary">
-                {form.getFieldValue('description') || t('planes.createEdit.formLabels.descriptionPlaceholder')}
+                {form.getFieldValue('description') || t('planes:createEdit.formLabels.descriptionPlaceholder')}
               </Text>
               
               {selectedDependencies.length > 0 && (
                 <div style={{ marginTop: 12 }}>
-                  <Text strong>{t('planes.createEdit.preview.dependencies')}: </Text>
+                  <Text strong>{t('planes:createEdit.preview.dependencies')}: </Text>
                   {selectedDependencies.map(depId => {
                     const depPlane = existingPlanes.find(p => p.id === depId);
                     return depPlane ? (
@@ -338,7 +338,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
           <div style={{ textAlign: 'center', marginTop: 24 }}>
             <Space size="large">
               <Button onClick={onCancel} size="large">
-                {t('planes.createEdit.buttons.cancel')}
+                {t('planes:createEdit.buttons.cancel')}
               </Button>
               <Button
                 type="primary"
@@ -347,7 +347,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
                 loading={loading}
                 size="large"
               >
-                {mode === 'create' ? t('planes.createEdit.createTitle') : t('planes.createEdit.buttons.save')}
+                {mode === 'create' ? t('planes:createEdit.createTitle') : t('planes:createEdit.buttons.save')}
               </Button>
             </Space>
           </div>

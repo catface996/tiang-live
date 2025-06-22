@@ -89,10 +89,10 @@ const AlertCard = styled(Card)`
 const Dashboard: React.FC = () => {
   const [timeRange, setTimeRange] = useState<string>('7d');
   const [loading, setLoading] = useState(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation(['dashboard', 'common', 'entities', 'planes', 'sequences', 'tasks', 'agents', 'messages', 'systemSettings']);
 
   useEffect(() => {
-    setPageTitle(t('dashboard.title'));
+    setPageTitle(t('dashboard:title'));
   }, [t]);
 
   // 系统概览统计数据
@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
       axisPointer: { type: 'cross' }
     },
     legend: {
-      data: [t('tasks.collections.title'), t('tasks.inspection.title'), t('tasks.hooks.title')],
+      data: [t('common:tasks'), t('common:inspection'), t('common:hooks')],
       top: 10
     },
     grid: {
@@ -132,25 +132,25 @@ const Dashboard: React.FC = () => {
     },
     yAxis: {
       type: 'value',
-      name: t('dashboard.executionCount')
+      name: t('dashboard:executionCount')
     },
     series: [
       {
-        name: t('tasks.collections.title'),
+        name: t('tasks:collections.title'),
         type: 'line',
         smooth: true,
         data: [120, 132, 101, 134, 90, 230, 210],
         itemStyle: { color: '#1890ff' }
       },
       {
-        name: t('tasks.inspection.title'),
+        name: t('tasks:inspection.title'),
         type: 'line',
         smooth: true,
         data: [220, 182, 191, 234, 290, 330, 310],
         itemStyle: { color: '#52c41a' }
       },
       {
-        name: t('tasks.hooks.title'),
+        name: t('tasks:hooks.title'),
         type: 'line',
         smooth: true,
         data: [150, 232, 201, 154, 190, 330, 410],
@@ -166,7 +166,7 @@ const Dashboard: React.FC = () => {
     },
     series: [
       {
-        name: t('dashboard.systemHealthScore'),
+        name: t('dashboard:systemHealthScore'),
         type: 'gauge',
         detail: {
           formatter: '{value}%',
@@ -174,7 +174,7 @@ const Dashboard: React.FC = () => {
           fontWeight: 'bold',
           color: '#1890ff'
         },
-        data: [{ value: systemStats.systemHealth, name: t('dashboard.healthScore') }],
+        data: [{ value: systemStats.systemHealth, name: t('dashboard:healthScore') }],
         axisLine: {
           lineStyle: {
             width: 20,
@@ -224,11 +224,11 @@ const Dashboard: React.FC = () => {
     legend: {
       orient: 'vertical',
       left: 'left',
-      data: [t('common.success'), t('common.failed'), t('common.pending')]
+      data: [t('common:success'), t('common:failed'), t('common:pending')]
     },
     series: [
       {
-        name: t('dashboard.taskSuccessRate'),
+        name: t('dashboard:taskSuccessRate'),
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
@@ -249,17 +249,17 @@ const Dashboard: React.FC = () => {
         data: [
           { 
             value: 85, 
-            name: t('common.success'),
+            name: t('common:success'),
             itemStyle: { color: '#52c41a' }
           },
           { 
             value: 10, 
-            name: t('common.failed'),
+            name: t('common:failed'),
             itemStyle: { color: '#ff4d4f' }
           },
           { 
             value: 5, 
-            name: t('common.pending'),
+            name: t('common:pending'),
             itemStyle: { color: '#faad14' }
           }
         ]
@@ -274,7 +274,7 @@ const Dashboard: React.FC = () => {
       axisPointer: { type: 'cross' }
     },
     legend: {
-      data: [t('dashboard.apiResponseTime'), t('dashboard.dbResponseTime'), t('dashboard.cacheResponseTime')],
+      data: [t('dashboard:apiResponseTime'), t('dashboard:dbResponseTime'), t('dashboard:cacheResponseTime')],
       top: 10
     },
     grid: {
@@ -290,25 +290,25 @@ const Dashboard: React.FC = () => {
     },
     yAxis: {
       type: 'value',
-      name: t('dashboard.responseTimeMs')
+      name: t('dashboard:responseTimeMs')
     },
     series: [
       {
-        name: t('dashboard.apiResponseTime'),
+        name: t('dashboard:apiResponseTime'),
         type: 'line',
         smooth: true,
         data: [120, 110, 130, 150, 180, 160, 140],
         itemStyle: { color: '#1890ff' }
       },
       {
-        name: t('dashboard.dbResponseTime'),
+        name: t('dashboard:dbResponseTime'),
         type: 'line',
         smooth: true,
         data: [250, 230, 280, 320, 350, 300, 270],
         itemStyle: { color: '#52c41a' }
       },
       {
-        name: t('dashboard.cacheResponseTime'),
+        name: t('dashboard:cacheResponseTime'),
         type: 'line',
         smooth: true,
         data: [80, 75, 85, 90, 95, 88, 82],
@@ -322,24 +322,24 @@ const Dashboard: React.FC = () => {
     {
       id: 1,
       type: 'success',
-      title: t('tasks.inspection.title'),
-      description: t('messages.operationSuccess'),
+      title: t('tasks:inspection.title'),
+      description: t('messages:operationSuccess'),
       time: '2分钟前',
       icon: <CheckCircleOutlined className="text-success" />
     },
     {
       id: 2,
       type: 'warning',
-      title: t('dashboard.alertSummary'),
-      description: t('common.warning'),
+      title: t('dashboard:alertSummary'),
+      description: t('common:warning'),
       time: '5分钟前',
       icon: <AlertOutlined className="text-warning" />
     },
     {
       id: 3,
       type: 'info',
-      title: t('agents.title'),
-      description: t('common.running'),
+      title: t('agents:title'),
+      description: t('common:running'),
       time: '10分钟前',
       icon: <RocketOutlined className="text-primary" />
     }
@@ -349,8 +349,8 @@ const Dashboard: React.FC = () => {
     <PageContainer>
       {/* 页面头部 */}
       <div className="page-header">
-        <Title className="page-title" level={2}>{t('dashboard.title')}</Title>
-        <Paragraph className="page-subtitle">{t('dashboard.subtitle')}</Paragraph>
+        <Title className="page-title" level={2}>{t('dashboard:title')}</Title>
+        <Paragraph className="page-subtitle">{t('dashboard:subtitle')}</Paragraph>
       </div>
 
       {/* 系统概览统计 */}
@@ -358,7 +358,7 @@ const Dashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('planes.stats.totalPlanes')}
+              title={t('planes:stats.totalPlanes')}
               value={systemStats.totalPlanes}
               prefix={<AppstoreOutlined />}
               valueStyle={{ color: '#1890ff' }}
@@ -368,7 +368,7 @@ const Dashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('entities.stats.totalEntities')}
+              title={t('entities:stats.totalEntities')}
               value={systemStats.totalEntities}
               prefix={<DatabaseOutlined />}
               valueStyle={{ color: '#52c41a' }}
@@ -378,7 +378,7 @@ const Dashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('sequences.stats.totalSequences')}
+              title={t('sequences:stats.totalSequences')}
               value={systemStats.totalSequences}
               prefix={<ThunderboltOutlined />}
               valueStyle={{ color: '#722ed1' }}
@@ -388,7 +388,7 @@ const Dashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('dashboard.activeUsers')}
+              title={t('dashboard:activeUsers')}
               value={systemStats.runningTasks}
               prefix={<UserOutlined />}
               suffix={<ArrowUpOutlined className="text-success" />}
@@ -401,7 +401,7 @@ const Dashboard: React.FC = () => {
       {/* 图表区域 */}
       <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} lg={16}>
-          <ChartCard title={t('dashboard.performanceMetrics')}>
+          <ChartCard title={t('dashboard:performanceMetrics')}>
             <ReactECharts 
               option={getTaskTrendOption()} 
               className="chart-container"
@@ -410,7 +410,7 @@ const Dashboard: React.FC = () => {
           </ChartCard>
         </Col>
         <Col xs={24} lg={8}>
-          <ChartCard title={t('dashboard.systemStatus')}>
+          <ChartCard title={t('dashboard:systemStatus')}>
             <ReactECharts 
               option={getSystemHealthOption()} 
               className="chart-container"
@@ -423,7 +423,7 @@ const Dashboard: React.FC = () => {
       {/* 任务成功率和响应时间统计 */}
       <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} lg={12}>
-          <ChartCard title={t('dashboard.taskSuccessRate')}>
+          <ChartCard title={t('dashboard:taskSuccessRate')}>
             <ReactECharts 
               option={getTaskCompletionOption()} 
               className="chart-container"
@@ -432,7 +432,7 @@ const Dashboard: React.FC = () => {
           </ChartCard>
         </Col>
         <Col xs={24} lg={12}>
-          <ChartCard title={t('dashboard.averageResponseTime')}>
+          <ChartCard title={t('dashboard:averageResponseTime')}>
             <ReactECharts 
               option={getResponseTimeOption()} 
               className="chart-container"
@@ -445,7 +445,7 @@ const Dashboard: React.FC = () => {
       {/* 最近活动和快捷操作 */}
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
-          <Card title={t('dashboard.recentActivities')}>
+          <Card title={t('dashboard:recentActivities')}>
             <List
               itemLayout="horizontal"
               dataSource={recentActivities}
@@ -467,19 +467,19 @@ const Dashboard: React.FC = () => {
           </Card>
         </Col>
         <Col xs={24} lg={12}>
-          <Card title={t('dashboard.quickActions')}>
+          <Card title={t('dashboard:quickActions')}>
             <Space direction="vertical" className="width-100">
               <Button type="primary" block icon={<RocketOutlined />}>
-                {t('common.create')} {t('tasks.inspection.title')}
+                {t('common:create')} {t('tasks:inspection.title')}
               </Button>
               <Button block icon={<DatabaseOutlined />}>
-                {t('common.view')} {t('entities.title')}
+                {t('common:view')} {t('entities:title')}
               </Button>
               <Button block icon={<AlertOutlined />}>
-                {t('dashboard.alertSummary')}
+                {t('dashboard:alertSummary')}
               </Button>
               <Button block icon={<SafetyCertificateOutlined />}>
-                {t('systemSettings.title')}
+                {t('menu:systemSettings')}
               </Button>
             </Space>
           </Card>

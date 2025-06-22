@@ -94,7 +94,7 @@ const TooltipContainer = styled.div`
 `;
 
 const D3RelationshipGraph: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['relationships', 'common']);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -522,30 +522,30 @@ const D3RelationshipGraph: React.FC = () => {
   }
 
   return (
-    <Card title={t('relationships.businessRelationshipGraph')} style={{ marginBottom: 24 }}>
+    <Card title={t('relationships:businessRelationshipGraph')} style={{ marginBottom: 24 }}>
       <GraphContainer ref={containerRef}>
         <svg ref={svgRef}></svg>
         
         {/* 控制面板 */}
         <ControlPanel>
           <Space direction="vertical" size="small">
-            <Button size="small" icon={<ZoomInOutlined />} onClick={handleZoomIn} title={t('relationships.zoomIn')} />
-            <Button size="small" icon={<ZoomOutOutlined />} onClick={handleZoomOut} title={t('relationships.zoomOut')} />
-            <Button size="small" icon={<FullscreenOutlined />} onClick={handleResetZoom} title={t('relationships.resetView')} />
-            <Button size="small" icon={<UndoOutlined />} onClick={handleResetNodePositions} title={t('relationships.resetNodePositions')} />
-            <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} title={t('relationships.refreshGraph')} />
+            <Button size="small" icon={<ZoomInOutlined />} onClick={handleZoomIn} title={t('relationships:zoomIn')} />
+            <Button size="small" icon={<ZoomOutOutlined />} onClick={handleZoomOut} title={t('relationships:zoomOut')} />
+            <Button size="small" icon={<FullscreenOutlined />} onClick={handleResetZoom} title={t('relationships:resetView')} />
+            <Button size="small" icon={<UndoOutlined />} onClick={handleResetNodePositions} title={t('relationships:resetNodePositions')} />
+            <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} title={t('relationships:refreshGraph')} />
           </Space>
         </ControlPanel>
 
         {/* Legend */}
         <LegendContainer>
           <div style={{ marginBottom: 12, fontWeight: 'bold', fontSize: '14px' }}>
-            {t('relationships.legend')}
+            {t('relationships:legend')}
           </div>
           
           {/* Plane Legend */}
           <div style={{ marginBottom: 12 }}>
-            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships.planes')}:</div>
+            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships:planes')}:</div>
             {graphData?.planes.map((plane: Plane) => (
               <div key={plane.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -564,7 +564,7 @@ const D3RelationshipGraph: React.FC = () => {
           </div>
 
           <div style={{ marginBottom: 8 }}>
-            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships.nodeTypes')}:</div>
+            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships:nodeTypes')}:</div>
             {graphData?.metadata.levels.map((level: any) => (
               <div key={level.level} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -581,7 +581,7 @@ const D3RelationshipGraph: React.FC = () => {
             ))}
           </div>
           <div>
-            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships.relationTypes')}:</div>
+            <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships:relationTypes')}:</div>
             {graphData?.metadata.relationTypes.map((relType: any) => (
               <div key={relType.type} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -602,10 +602,10 @@ const D3RelationshipGraph: React.FC = () => {
         {tooltip && (
           <TooltipContainer style={{ left: tooltip.x, top: tooltip.y }}>
             <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{tooltip.content.name}</div>
-            <div style={{ marginBottom: 2 }}>{t('relationships.type')}: {tooltip.content.type}</div>
-            <div style={{ marginBottom: 2 }}>{t('relationships.level')}: {tooltip.content.level}</div>
-            <div style={{ marginBottom: 2 }}>{t('relationships.plane')}: {tooltip.content.plane}</div>
-            <div style={{ marginBottom: 2 }}>{t('relationships.status')}: 
+            <div style={{ marginBottom: 2 }}>{t('relationships:type')}: {tooltip.content.type}</div>
+            <div style={{ marginBottom: 2 }}>{t('relationships:level')}: {tooltip.content.level}</div>
+            <div style={{ marginBottom: 2 }}>{t('relationships:plane')}: {tooltip.content.plane}</div>
+            <div style={{ marginBottom: 2 }}>{t('relationships:status')}: 
               <Tag color={tooltip.content.status === 'active' || tooltip.content.status === 'running' ? 'green' : 'red'} size="small" style={{ marginLeft: 4 }}>
                 {tooltip.content.status}
               </Tag>
@@ -620,22 +620,22 @@ const D3RelationshipGraph: React.FC = () => {
       {/* Selected Node Details */}
       {selectedNode && (
         <Card 
-          title={`${t('relationships.nodeDetails')}: ${selectedNode.name}`} 
+          title={`${t('relationships:nodeDetails')}: ${selectedNode.name}`} 
           size="small" 
           style={{ marginTop: 16 }}
-          extra={<Button size="small" onClick={() => setSelectedNode(null)}>{t('common.close')}</Button>}
+          extra={<Button size="small" onClick={() => setSelectedNode(null)}>{t('common:close')}</Button>}
         >
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             <div>
-              <strong>{t('relationships.basicInfo')}:</strong>
+              <strong>{t('relationships:basicInfo')}:</strong>
               <div>ID: {selectedNode.id}</div>
-              <div>{t('relationships.type')}: {selectedNode.type}</div>
-              <div>{t('relationships.level')}: {selectedNode.level}</div>
-              <div>{t('relationships.plane')}: {selectedNode.plane}</div>
-              <div>{t('relationships.status')}: <Tag color={selectedNode.status === 'active' || selectedNode.status === 'running' ? 'green' : 'red'}>{selectedNode.status}</Tag></div>
+              <div>{t('relationships:type')}: {selectedNode.type}</div>
+              <div>{t('relationships:level')}: {selectedNode.level}</div>
+              <div>{t('relationships:plane')}: {selectedNode.plane}</div>
+              <div>{t('relationships:status')}: <Tag color={selectedNode.status === 'active' || selectedNode.status === 'running' ? 'green' : 'red'}>{selectedNode.status}</Tag></div>
             </div>
             <div>
-              <strong>{t('common.description')}:</strong>
+              <strong>{t('common:description')}:</strong>
               <div>{selectedNode.description}</div>
             </div>
             {selectedNode.instances && (
@@ -648,16 +648,16 @@ const D3RelationshipGraph: React.FC = () => {
             )}
             {selectedNode.nodes && (
               <div>
-                <strong>{t('relationships.clusterInfo')}:</strong>
-                <div>{t('relationships.nodeCount')}: {selectedNode.nodes}</div>
-                {selectedNode.config && <div>{t('relationships.config')}: {selectedNode.config}</div>}
-                {selectedNode.technology && <div>{t('relationships.technology')}: {selectedNode.technology}</div>}
-                {selectedNode.region && <div>{t('relationships.region')}: {selectedNode.region}</div>}
+                <strong>{t('relationships:clusterInfo')}:</strong>
+                <div>{t('relationships:nodeCount')}: {selectedNode.nodes}</div>
+                {selectedNode.config && <div>{t('relationships:config')}: {selectedNode.config}</div>}
+                {selectedNode.technology && <div>{t('relationships:technology')}: {selectedNode.technology}</div>}
+                {selectedNode.region && <div>{t('relationships:region')}: {selectedNode.region}</div>}
               </div>
             )}
             {selectedNode.databases && (
               <div>
-                <strong>{t('relationships.databases')}:</strong>
+                <strong>{t('relationships:databases')}:</strong>
                 <div style={{ marginTop: 4 }}>
                   {selectedNode.databases.map((db: string, index: number) => (
                     <Tag key={index} color="blue" style={{ marginBottom: 4 }}>

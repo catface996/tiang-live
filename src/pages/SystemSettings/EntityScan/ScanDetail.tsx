@@ -230,7 +230,7 @@ interface ScanTask {
 }
 
 const ScanDetail: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['entityScan', 'common']);
   const navigate = useNavigate();
   const { dataSourceId } = useParams<{ dataSourceId: string }>();
   const isDark = useAppSelector(state => state.theme.isDark);
@@ -699,7 +699,7 @@ const ScanDetail: React.FC = () => {
                 height: 'auto'
               }}
             >
-              {t('menu.entityScan')}
+              {t('menu:entityScan')}
             </Button>
           </Breadcrumb.Item>
           <Breadcrumb.Item>

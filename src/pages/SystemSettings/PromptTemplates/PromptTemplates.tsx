@@ -177,7 +177,7 @@ interface PromptTemplate {
 }
 
 const PromptTemplates: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['prompts', 'common']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const isDarkMode = currentTheme === 'dark';
   const iconColor = isDarkMode ? '#ffffff' : '#1890ff';
@@ -194,7 +194,7 @@ const PromptTemplates: React.FC = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setPageTitle(t('systemSettings.prompts.title'));
+    setPageTitle(t('prompts:title'));
   }, [t]);
 
   // 提示词模板数据
@@ -392,24 +392,24 @@ API接口：{api_details}
 
   const handleCopyPrompt = (prompt: PromptTemplate) => {
     navigator.clipboard.writeText(prompt.content);
-    message.success(t('systemSettings.prompts.messages.copySuccess'));
+    message.success(t('prompts:messages.copySuccess'));
   };
 
   const handleToggleFavorite = (promptId: string) => {
-    message.success(t('systemSettings.prompts.messages.favoriteSuccess'));
+    message.success(t('prompts:messages.favoriteSuccess'));
   };
 
   const handleDeletePrompt = (promptId: string) => {
-    message.success(t('systemSettings.prompts.messages.deleteSuccess'));
+    message.success(t('prompts:messages.deleteSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingPrompt) {
-        message.success(t('systemSettings.prompts.messages.updateSuccess'));
+        message.success(t('prompts:messages.updateSuccess'));
       } else {
-        message.success(t('systemSettings.prompts.messages.createSuccess'));
+        message.success(t('prompts:messages.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -444,12 +444,12 @@ API接口：{api_details}
             <div style={{ marginBottom: 12 }}>
               <Space wrap>
                 <Tag color={categoryConfig?.color} icon={categoryConfig?.icon}>
-                  {t(`systemSettings.prompts.categories.${getCategoryKey(prompt.category)}`)}
+                  {t(`prompts:categories.${getCategoryKey(prompt.category)}`)}
                 </Tag>
                 <Tag color={difficultyConfig?.color}>
-                  {t(`systemSettings.prompts.difficulty.${prompt.difficulty}`)}
+                  {t(`prompts:difficulty.${prompt.difficulty}`)}
                 </Tag>
-                {prompt.isPublic && <Tag color="blue">{t('systemSettings.prompts.status.public')}</Tag>}
+                {prompt.isPublic && <Tag color="blue">{t('prompts:status.public')}</Tag>}
               </Space>
             </div>
             
@@ -470,7 +470,7 @@ API接口：{api_details}
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title={t('systemSettings.prompts.stats.usageCount')}
+                    title={t('prompts:stats.usageCount')}
                     value={prompt.usageCount}
                     valueStyle={{ fontSize: 14 }}
                   />
@@ -491,11 +491,11 @@ API接口：{api_details}
 
             <div style={{ fontSize: 12, color: '#666' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                <span>{t('systemSettings.prompts.detail.version')}:</span>
+                <span>{t('prompts:detail.version')}:</span>
                 <span>{prompt.version}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>{t('systemSettings.prompts.detail.lastUsed')}:</span>
+                <span>{t('prompts:detail.lastUsed')}:</span>
                 <span>{prompt.lastUsed}</span>
               </div>
             </div>
@@ -503,7 +503,7 @@ API接口：{api_details}
             {/* 操作按钮区域 - 单独一行，右对齐 */}
             <div className="card-actions">
               <Space>
-                <Tooltip title={t('systemSettings.prompts.actions.view')}>
+                <Tooltip title={t('prompts:actions.view')}>
                   <Button 
                     type="text" 
                     icon={<EyeOutlined />} 
@@ -514,7 +514,7 @@ API接口：{api_details}
                     }}
                   />
                 </Tooltip>
-                <Tooltip title={t('systemSettings.prompts.actions.edit')}>
+                <Tooltip title={t('prompts:actions.edit')}>
                   <Button 
                     type="text" 
                     icon={<EditOutlined />} 
@@ -546,19 +546,19 @@ API接口：{api_details}
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <FileTextOutlined style={{ color: iconColor }} />
-                {t('systemSettings.prompts.title')}
+                {t('prompts:title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('systemSettings.prompts.subtitle')}
+              {t('prompts:subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreatePrompt}>
-              {t('systemSettings.prompts.createPrompt')}
+              {t('prompts:createPrompt')}
             </Button>
           </Space>
         </div>
@@ -569,9 +569,9 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.prompts.stats.totalTemplates')}
+              title={t('prompts:stats.totalTemplates')}
               value={promptData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<FileTextOutlined />}
             />
@@ -580,9 +580,9 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.prompts.stats.publicTemplates')}
+              title={t('prompts:stats.publicTemplates')}
               value={publicPrompts}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
@@ -591,9 +591,9 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.prompts.stats.favoriteTemplates')}
+              title={t('prompts:stats.favoriteTemplates')}
               value={favoritePrompts}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#faad14' }}
               prefix={<StarOutlined />}
             />
@@ -602,7 +602,7 @@ API接口：{api_details}
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.prompts.stats.averageRating')}
+              title={t('prompts:stats.averageRating')}
               value={avgRating.toFixed(1)}
               valueStyle={{ color: '#722ed1' }}
               prefix={<RobotOutlined />}
@@ -615,48 +615,48 @@ API接口：{api_details}
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('systemSettings.prompts.search.placeholder')}
+        searchPlaceholder={t('prompts:search.placeholder')}
         filters={[
           {
             key: 'category',
             value: filterCategory,
             onChange: setFilterCategory,
-            placeholder: t('systemSettings.prompts.search.category'),
+            placeholder: t('prompts:search.category'),
             width: 120,
             options: [
-              { value: 'all', label: t('systemSettings.prompts.search.allCategories') },
-              { value: '开发工具', label: t('systemSettings.prompts.categories.devTools') },
-              { value: '运维工具', label: t('systemSettings.prompts.categories.opsTools') },
-              { value: '产品管理', label: t('systemSettings.prompts.categories.productManagement') },
-              { value: '文档工具', label: t('systemSettings.prompts.categories.docTools') },
-              { value: '客服助手', label: t('systemSettings.prompts.categories.customerService') },
-              { value: '数据分析', label: t('systemSettings.prompts.categories.dataAnalysis') }
+              { value: 'all', label: t('prompts:search.allCategories') },
+              { value: '开发工具', label: t('prompts:categories.devTools') },
+              { value: '运维工具', label: t('prompts:categories.opsTools') },
+              { value: '产品管理', label: t('prompts:categories.productManagement') },
+              { value: '文档工具', label: t('prompts:categories.docTools') },
+              { value: '客服助手', label: t('prompts:categories.customerService') },
+              { value: '数据分析', label: t('prompts:categories.dataAnalysis') }
             ]
           },
           {
             key: 'difficulty',
             value: filterDifficulty,
             onChange: setFilterDifficulty,
-            placeholder: t('systemSettings.prompts.search.difficulty'),
+            placeholder: t('prompts:search.difficulty'),
             width: 100,
             options: [
-              { value: 'all', label: t('systemSettings.prompts.search.allDifficulties') },
-              { value: 'beginner', label: t('systemSettings.prompts.difficulty.beginner') },
-              { value: 'intermediate', label: t('systemSettings.prompts.difficulty.intermediate') },
-              { value: 'advanced', label: t('systemSettings.prompts.difficulty.advanced') }
+              { value: 'all', label: t('prompts:search.allDifficulties') },
+              { value: 'beginner', label: t('prompts:difficulty.beginner') },
+              { value: 'intermediate', label: t('prompts:difficulty.intermediate') },
+              { value: 'advanced', label: t('prompts:difficulty.advanced') }
             ]
           },
           {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('systemSettings.prompts.search.status'),
+            placeholder: t('prompts:search.status'),
             width: 100,
             options: [
-              { value: 'all', label: t('systemSettings.prompts.search.allStatuses') },
-              { value: 'public', label: t('systemSettings.prompts.status.public') },
-              { value: 'private', label: t('systemSettings.prompts.status.private') },
-              { value: 'favorite', label: t('systemSettings.prompts.status.favorite') }
+              { value: 'all', label: t('prompts:search.allStatuses') },
+              { value: 'public', label: t('prompts:status.public') },
+              { value: 'private', label: t('prompts:status.private') },
+              { value: 'favorite', label: t('prompts:status.favorite') }
             ]
           }
         ]}
@@ -689,25 +689,25 @@ API接口：{api_details}
             <Col span={12}>
               <Form.Item
                 name="name"
-                label={t('systemSettings.prompts.form.templateName')}
-                rules={[{ required: true, message: t('systemSettings.prompts.form.templateNameRequired') }]}
+                label={t('prompts:form.templateName')}
+                rules={[{ required: true, message: t('prompts:form.templateNameRequired') }]}
               >
-                <Input placeholder={t('systemSettings.prompts.form.templateNamePlaceholder')} />
+                <Input placeholder={t('prompts:form.templateNamePlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="category"
-                label={t('systemSettings.prompts.form.category')}
-                rules={[{ required: true, message: t('systemSettings.prompts.form.categoryRequired') }]}
+                label={t('prompts:form.category')}
+                rules={[{ required: true, message: t('prompts:form.categoryRequired') }]}
               >
-                <Select placeholder={t('systemSettings.prompts.form.categoryPlaceholder')}>
-                  <Option value="开发工具">{t('systemSettings.prompts.categories.devTools')}</Option>
-                  <Option value="运维工具">{t('systemSettings.prompts.categories.opsTools')}</Option>
-                  <Option value="产品管理">{t('systemSettings.prompts.categories.productManagement')}</Option>
-                  <Option value="文档工具">{t('systemSettings.prompts.categories.docTools')}</Option>
-                  <Option value="客服助手">{t('systemSettings.prompts.categories.customerService')}</Option>
-                  <Option value="数据分析">{t('systemSettings.prompts.categories.dataAnalysis')}</Option>
+                <Select placeholder={t('prompts:form.categoryPlaceholder')}>
+                  <Option value="开发工具">{t('prompts:categories.devTools')}</Option>
+                  <Option value="运维工具">{t('prompts:categories.opsTools')}</Option>
+                  <Option value="产品管理">{t('prompts:categories.productManagement')}</Option>
+                  <Option value="文档工具">{t('prompts:categories.docTools')}</Option>
+                  <Option value="客服助手">{t('prompts:categories.customerService')}</Option>
+                  <Option value="数据分析">{t('prompts:categories.dataAnalysis')}</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -715,23 +715,23 @@ API接口：{api_details}
 
           <Form.Item
             name="description"
-            label={t('systemSettings.prompts.form.description')}
-            rules={[{ required: true, message: t('systemSettings.prompts.form.descriptionRequired') }]}
+            label={t('prompts:form.description')}
+            rules={[{ required: true, message: t('prompts:form.descriptionRequired') }]}
           >
             <TextArea 
               rows={2} 
-              placeholder={t('systemSettings.prompts.form.descriptionPlaceholder')}
+              placeholder={t('prompts:form.descriptionPlaceholder')}
             />
           </Form.Item>
 
           <Form.Item
             name="content"
-            label={t('systemSettings.prompts.form.content')}
-            rules={[{ required: true, message: t('systemSettings.prompts.form.contentRequired') }]}
+            label={t('prompts:form.content')}
+            rules={[{ required: true, message: t('prompts:form.contentRequired') }]}
           >
             <TextArea 
               rows={8} 
-              placeholder={t('systemSettings.prompts.form.contentPlaceholder')}
+              placeholder={t('prompts:form.contentPlaceholder')}
             />
           </Form.Item>
 
@@ -739,10 +739,10 @@ API接口：{api_details}
             <Col span={8}>
               <Form.Item
                 name="language"
-                label={t('systemSettings.prompts.form.language')}
-                rules={[{ required: true, message: t('systemSettings.prompts.form.languageRequired') }]}
+                label={t('prompts:form.language')}
+                rules={[{ required: true, message: t('prompts:form.languageRequired') }]}
               >
-                <Select placeholder={t('systemSettings.prompts.form.languagePlaceholder')}>
+                <Select placeholder={t('prompts:form.languagePlaceholder')}>
                   <Option value="zh-CN">中文</Option>
                   <Option value="en-US">English</Option>
                   <Option value="ja-JP">日本語</Option>
@@ -752,20 +752,20 @@ API接口：{api_details}
             <Col span={8}>
               <Form.Item
                 name="difficulty"
-                label={t('systemSettings.prompts.form.difficulty')}
-                rules={[{ required: true, message: t('systemSettings.prompts.form.difficultyRequired') }]}
+                label={t('prompts:form.difficulty')}
+                rules={[{ required: true, message: t('prompts:form.difficultyRequired') }]}
               >
-                <Select placeholder={t('systemSettings.prompts.search.difficulty')}>
-                  <Option value="beginner">{t('systemSettings.prompts.difficulty.beginner')}</Option>
-                  <Option value="intermediate">{t('systemSettings.prompts.difficulty.intermediate')}</Option>
-                  <Option value="advanced">{t('systemSettings.prompts.difficulty.advanced')}</Option>
+                <Select placeholder={t('prompts:search.difficulty')}>
+                  <Option value="beginner">{t('prompts:difficulty.beginner')}</Option>
+                  <Option value="intermediate">{t('prompts:difficulty.intermediate')}</Option>
+                  <Option value="advanced">{t('prompts:difficulty.advanced')}</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 name="isPublic"
-                label={t('systemSettings.prompts.detail.isPublic')}
+                label={t('prompts:detail.isPublic')}
                 valuePropName="checked"
               >
                 <Switch />
@@ -774,8 +774,8 @@ API接口：{api_details}
           </Row>
 
           <Alert
-            message={t('systemSettings.prompts.form.variableTip')}
-            description={t('systemSettings.prompts.form.variableTipDescription')}
+            message={t('prompts:form.variableTip')}
+            description={t('prompts:form.variableTipDescription')}
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -796,59 +796,59 @@ API接口：{api_details}
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.templateName')} span={2}>
+              <Descriptions.Item label={t('prompts:detail.templateName')} span={2}>
                 {selectedPrompt.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.category')}>
+              <Descriptions.Item label={t('prompts:detail.category')}>
                 <Tag 
                   color={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.color}
                   icon={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.icon}
                 >
-                  {t(`systemSettings.prompts.categories.${getCategoryKey(selectedPrompt.category)}`)}
+                  {t(`prompts:categories.${getCategoryKey(selectedPrompt.category)}`)}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.difficulty')}>
+              <Descriptions.Item label={t('prompts:detail.difficulty')}>
                 <Tag color={difficultyMap[selectedPrompt.difficulty]?.color}>
-                  {t(`systemSettings.prompts.difficulty.${selectedPrompt.difficulty}`)}
+                  {t(`prompts:difficulty.${selectedPrompt.difficulty}`)}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.rating')}>
+              <Descriptions.Item label={t('prompts:detail.rating')}>
                 <Space>
                   <Rate disabled value={selectedPrompt.rating} allowHalf />
                   <Text>{selectedPrompt.rating}</Text>
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.usageCount')}>
-                {selectedPrompt.usageCount}{t('common.unit.times')}
+              <Descriptions.Item label={t('prompts:detail.usageCount')}>
+                {selectedPrompt.usageCount}{t('common:unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.language')}>
+              <Descriptions.Item label={t('prompts:detail.language')}>
                 {selectedPrompt.language}
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.version')}>
+              <Descriptions.Item label={t('prompts:detail.version')}>
                 {selectedPrompt.version}
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.status')}>
+              <Descriptions.Item label={t('prompts:detail.status')}>
                 <Space>
-                  {selectedPrompt.isPublic && <Tag color="blue">{t('systemSettings.prompts.status.public')}</Tag>}
-                  {selectedPrompt.isFavorite && <Tag color="gold" icon={<StarOutlined />}>{t('systemSettings.prompts.status.favorite')}</Tag>}
+                  {selectedPrompt.isPublic && <Tag color="blue">{t('prompts:status.public')}</Tag>}
+                  {selectedPrompt.isFavorite && <Tag color="gold" icon={<StarOutlined />}>{t('prompts:status.favorite')}</Tag>}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.creator')}>
+              <Descriptions.Item label={t('prompts:detail.creator')}>
                 {selectedPrompt.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.createdAt')}>
+              <Descriptions.Item label={t('prompts:detail.createdAt')}>
                 {selectedPrompt.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.lastUsed')}>
+              <Descriptions.Item label={t('prompts:detail.lastUsed')}>
                 {selectedPrompt.lastUsed}
               </Descriptions.Item>
-              <Descriptions.Item label={t('systemSettings.prompts.detail.description')} span={2}>
+              <Descriptions.Item label={t('prompts:detail.description')} span={2}>
                 {selectedPrompt.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 提示词内容 */}
-            <Card title={t('systemSettings.prompts.detail.content')} style={{ marginBottom: 16 }}>
+            <Card title={t('prompts:detail.content')} style={{ marginBottom: 16 }}>
               <PromptContent>
                 {selectedPrompt.content}
               </PromptContent>
@@ -857,7 +857,7 @@ API接口：{api_details}
                   icon={<CopyOutlined />} 
                   onClick={() => handleCopyPrompt(selectedPrompt)}
                 >
-                  {t('systemSettings.prompts.actions.copy')}
+                  {t('prompts:actions.copy')}
                 </Button>
               </div>
             </Card>
@@ -865,7 +865,7 @@ API接口：{api_details}
             {/* 变量和标签 */}
             <Row gutter={16}>
               <Col span={12}>
-                <Card title={t('systemSettings.prompts.detail.variablesList')} size="small">
+                <Card title={t('prompts:detail.variablesList')} size="small">
                   {selectedPrompt.variables.length > 0 ? (
                     <Space wrap>
                       {selectedPrompt.variables.map(variable => (
@@ -875,12 +875,12 @@ API接口：{api_details}
                       ))}
                     </Space>
                   ) : (
-                    <Text type="secondary">{t('systemSettings.prompts.detail.noVariables')}</Text>
+                    <Text type="secondary">{t('prompts:detail.noVariables')}</Text>
                   )}
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title={t('systemSettings.prompts.detail.tags')} size="small">
+                <Card title={t('prompts:detail.tags')} size="small">
                   <Space wrap>
                     {selectedPrompt.tags.map(tag => (
                       <Tag key={tag}>{tag}</Tag>

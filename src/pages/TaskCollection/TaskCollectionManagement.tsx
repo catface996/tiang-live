@@ -345,7 +345,7 @@ const TaskCollectionManagement: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterFrequency, setFilterFrequency] = useState('all');
   const [form] = Form.useForm();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['tasks', 'common']);
 
   // 新增状态：实体和动作选择
   const [selectedEntities, setSelectedEntities] = useState<string[]>([]);
@@ -355,42 +355,42 @@ const TaskCollectionManagement: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
-    setPageTitle(t('tasks.collections.title'));
+    setPageTitle(t('tasks:collections.title'));
   }, [t]);
 
   // 巡检动作定义
   const inspectionActions: InspectionAction[] = [
     {
       id: 'health_check',
-      name: t('tasks.collections.actions.healthCheck'),
+      name: t('tasks:collections.actions.healthCheck'),
       type: 'health_check',
-      description: t('tasks.collections.actionDescriptions.healthCheck'),
-      duration: t('tasks.collections.duration.healthCheck'),
-      frequency: t('tasks.collections.frequency.every5min')
+      description: t('tasks:collections.actionDescriptions.healthCheck'),
+      duration: t('tasks:collections.duration.healthCheck'),
+      frequency: t('tasks:collections.frequency.every5min')
     },
     {
       id: 'fault_analysis',
-      name: t('tasks.collections.actions.faultAnalysis'),
+      name: t('tasks:collections.actions.faultAnalysis'),
       type: 'fault_analysis',
-      description: t('tasks.collections.actionDescriptions.faultAnalysis'),
-      duration: t('tasks.collections.duration.faultAnalysis'),
-      frequency: t('tasks.collections.frequency.every30min')
+      description: t('tasks:collections.actionDescriptions.faultAnalysis'),
+      duration: t('tasks:collections.duration.faultAnalysis'),
+      frequency: t('tasks:collections.frequency.every30min')
     },
     {
       id: 'performance_analysis',
-      name: t('tasks.collections.actions.performanceAnalysis'),
+      name: t('tasks:collections.actions.performanceAnalysis'),
       type: 'performance_analysis',
-      description: t('tasks.collections.actionDescriptions.performanceAnalysis'),
-      duration: t('tasks.collections.duration.performanceAnalysis'),
-      frequency: t('tasks.collections.frequency.hourly')
+      description: t('tasks:collections.actionDescriptions.performanceAnalysis'),
+      duration: t('tasks:collections.duration.performanceAnalysis'),
+      frequency: t('tasks:collections.frequency.hourly')
     },
     {
       id: 'security_scan',
-      name: t('tasks.collections.actions.securityScan'),
+      name: t('tasks:collections.actions.securityScan'),
       type: 'security_scan',
-      description: t('tasks.collections.actionDescriptions.securityScan'),
-      duration: t('tasks.collections.duration.securityScan'),
-      frequency: t('tasks.collections.frequency.daily')
+      description: t('tasks:collections.actionDescriptions.securityScan'),
+      duration: t('tasks:collections.duration.securityScan'),
+      frequency: t('tasks:collections.frequency.daily')
     }
   ];
 
@@ -457,9 +457,9 @@ const TaskCollectionManagement: React.FC = () => {
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      active: { color: 'green', text: t('tasks.collections.status.active') },
-      paused: { color: 'orange', text: t('tasks.collections.status.paused') },
-      draft: { color: 'gray', text: t('tasks.collections.status.draft') },
+      active: { color: 'green', text: t('tasks:collections.status.active') },
+      paused: { color: 'orange', text: t('tasks:collections.status.paused') },
+      draft: { color: 'gray', text: t('tasks:collections.status.draft') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -582,15 +582,15 @@ const TaskCollectionManagement: React.FC = () => {
   };
 
   const handleStartTask = (taskId: string) => {
-    message.success(t('tasks.collections.messages.startSuccess'));
+    message.success(t('tasks:collections.messages.startSuccess'));
   };
 
   const handlePauseTask = (taskId: string) => {
-    message.success(t('tasks.collections.messages.pauseSuccess'));
+    message.success(t('tasks:collections.messages.pauseSuccess'));
   };
 
   const handleDeleteTask = (taskId: string) => {
-    message.success(t('tasks.collections.messages.deleteSuccess'));
+    message.success(t('tasks:collections.messages.deleteSuccess'));
   };
 
   const handleModalOk = async () => {
@@ -647,9 +647,9 @@ const TaskCollectionManagement: React.FC = () => {
       });
 
       if (editingTask) {
-        message.success(t('tasks.collections.messages.updateSuccess'));
+        message.success(t('tasks:collections.messages.updateSuccess'));
       } else {
-        message.success(t('tasks.collections.messages.createSuccess'));
+        message.success(t('tasks:collections.messages.createSuccess'));
       }
       
       setModalVisible(false);
@@ -692,13 +692,13 @@ const TaskCollectionManagement: React.FC = () => {
               {/* 标签区域 */}
               <div className="card-tags">
                 <Tag icon={<NodeIndexOutlined />} color="blue">
-                  {entityCount}{t('tasks.collections.card.entities')}
+                  {entityCount}{t('tasks:collections.card.entities')}
                 </Tag>
                 <Tag icon={<ControlOutlined />} color="green">
-                  {sequenceCount}{t('tasks.collections.card.sequences')}
+                  {sequenceCount}{t('tasks:collections.card.sequences')}
                 </Tag>
                 <Tag icon={<MonitorOutlined />} color="orange">
-                  {totalActions}{t('tasks.collections.card.actions')}
+                  {totalActions}{t('tasks:collections.card.actions')}
                 </Tag>
               </div>
               
@@ -717,7 +717,7 @@ const TaskCollectionManagement: React.FC = () => {
                 <Row gutter={[8, 8]}>
                   <Col span={12}>
                     <Statistic
-                      title={t('tasks.collections.card.successRate')}
+                      title={t('tasks:collections.card.successRate')}
                       value={task.successRate}
                       suffix="%"
                       valueStyle={{ fontSize: 18, color: task.successRate > 95 ? '#52c41a' : '#faad14' }}
@@ -725,7 +725,7 @@ const TaskCollectionManagement: React.FC = () => {
                   </Col>
                   <Col span={12}>
                     <Statistic
-                      title={t('tasks.collections.card.executionCount')}
+                      title={t('tasks:collections.card.executionCount')}
                       value={task.totalRuns}
                       valueStyle={{ fontSize: 18, color: '#1890ff' }}
                     />
@@ -736,7 +736,7 @@ const TaskCollectionManagement: React.FC = () => {
               {/* 进度条 */}
               <div className="card-progress">
                 <Text strong style={{ fontSize: 12, color: '#666' }}>
-                  {t('tasks.collections.card.successRate')}: 
+                  {t('tasks:collections.card.successRate')}: 
                 </Text>
                 <Progress 
                   percent={task.successRate} 
@@ -749,15 +749,15 @@ const TaskCollectionManagement: React.FC = () => {
               {/* 底部信息 */}
               <div className="card-footer">
                 <div className="footer-item">
-                  <span className="footer-label">{t('tasks.collections.card.schedule')}</span>
+                  <span className="footer-label">{t('tasks:collections.card.schedule')}</span>
                   <span className="footer-value">{task.schedule}</span>
                 </div>
                 <div className="footer-item">
-                  <span className="footer-label">{t('tasks.collections.card.nextExecution')}</span>
+                  <span className="footer-label">{t('tasks:collections.card.nextExecution')}</span>
                   <span className="footer-value">{task.nextRun}</span>
                 </div>
                 <div className="footer-item">
-                  <span className="footer-label">{t('tasks.collections.card.creator')}</span>
+                  <span className="footer-label">{t('tasks:collections.card.creator')}</span>
                   <span className="footer-value">{task.createdBy}</span>
                 </div>
               </div>
@@ -765,7 +765,7 @@ const TaskCollectionManagement: React.FC = () => {
               {/* 操作按钮区域 - 单独一行 */}
               <div className="card-actions">
                 <Space>
-                  <Tooltip title={t('tasks.collections.card.viewDetails')}>
+                  <Tooltip title={t('tasks:collections.card.viewDetails')}>
                     <Button 
                       type="text" 
                       icon={<EyeOutlined />} 
@@ -776,7 +776,7 @@ const TaskCollectionManagement: React.FC = () => {
                       }}
                     />
                   </Tooltip>
-                  <Tooltip title={t('tasks.collections.card.edit')}>
+                  <Tooltip title={t('tasks:collections.card.edit')}>
                     <Button 
                       type="text" 
                       icon={<EditOutlined />} 
@@ -811,19 +811,19 @@ const TaskCollectionManagement: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <UnorderedListOutlined style={{ color: '#1890ff' }} />
-                {t('tasks.collections.title')}
+                {t('tasks:collections.title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('tasks.collections.subtitle')}
+              {t('tasks:collections.subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              {t('tasks.collections.refresh')}
+              {t('tasks:collections.refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTask}>
-              {t('tasks.collections.createCollection')}
+              {t('tasks:collections.createCollection')}
             </Button>
           </Space>
         </div>
@@ -834,9 +834,9 @@ const TaskCollectionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.collections.stats.totalCollections')}
+              title={t('tasks:collections.stats.totalCollections')}
               value={taskCollectionData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<UnorderedListOutlined />}
             />
@@ -845,9 +845,9 @@ const TaskCollectionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.collections.stats.activeCollections')}
+              title={t('tasks:collections.stats.activeCollections')}
               value={activeTasks}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
@@ -856,9 +856,9 @@ const TaskCollectionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.collections.stats.totalTasks')}
+              title={t('tasks:collections.stats.totalTasks')}
               value={totalTargets}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#faad14' }}
               prefix={<MonitorOutlined />}
             />
@@ -867,7 +867,7 @@ const TaskCollectionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.collections.stats.executionRate')}
+              title={t('tasks:collections.stats.executionRate')}
               value={avgSuccessRate.toFixed(1)}
               suffix="%"
               valueStyle={{ color: '#722ed1' }}
@@ -881,33 +881,33 @@ const TaskCollectionManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('tasks.collections.search.placeholder')}
+        searchPlaceholder={t('tasks:collections.search.placeholder')}
         filters={[
           {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('tasks.collections.filter.status'),
+            placeholder: t('tasks:collections.filter.status'),
             width: 100,
             options: [
-              { value: 'all', label: t('tasks.collections.filter.allStatus') },
-              { value: 'active', label: t('tasks.collections.status.active') },
-              { value: 'paused', label: t('tasks.collections.status.paused') },
-              { value: 'draft', label: t('tasks.collections.status.draft') }
+              { value: 'all', label: t('tasks:collections.filter.allStatus') },
+              { value: 'active', label: t('tasks:collections.status.active') },
+              { value: 'paused', label: t('tasks:collections.status.paused') },
+              { value: 'draft', label: t('tasks:collections.status.draft') }
             ]
           },
           {
             key: 'frequency',
             value: filterFrequency,
             onChange: setFilterFrequency,
-            placeholder: t('tasks.collections.filter.frequency'),
+            placeholder: t('tasks:collections.filter.frequency'),
             width: 120,
             options: [
-              { value: 'all', label: t('tasks.collections.filter.allFrequency') },
-              { value: '5min', label: t('tasks.collections.frequency.every5min') },
-              { value: '15min', label: t('tasks.collections.frequency.every15min') },
-              { value: '1hour', label: t('tasks.collections.frequency.everyHour') },
-              { value: '1day', label: t('tasks.collections.frequency.everyDay') }
+              { value: 'all', label: t('tasks:collections.filter.allFrequency') },
+              { value: '5min', label: t('tasks:collections.frequency.every5min') },
+              { value: '15min', label: t('tasks:collections.frequency.every15min') },
+              { value: '1hour', label: t('tasks:collections.frequency.everyHour') },
+              { value: '1day', label: t('tasks:collections.frequency.everyDay') }
             ]
           }
         ]}
@@ -921,7 +921,7 @@ const TaskCollectionManagement: React.FC = () => {
 
       {/* 创建/编辑任务集合模态框 */}
       <Modal
-        title={editingTask ? t('tasks.collections.editTitle') : t('tasks.collections.createTitle')}
+        title={editingTask ? t('tasks:collections.editTitle') : t('tasks:collections.createTitle')}
         open={modalVisible}
         onOk={handleModalOk}
         width={1000}
@@ -1009,35 +1009,35 @@ const TaskCollectionManagement: React.FC = () => {
           >
             <Form.Item
               name="name"
-              label={t('tasks.collections.form.name')}
+              label={t('tasks:collections.form.name')}
               rules={[
-                { required: true, message: t('tasks.collections.form.nameRequired') },
-                { max: 50, message: t('tasks.collections.form.nameMaxLength') }
+                { required: true, message: t('tasks:collections.form.nameRequired') },
+                { max: 50, message: t('tasks:collections.form.nameMaxLength') }
               ]}
             >
-              <Input placeholder={t('tasks.collections.form.namePlaceholder')} />
+              <Input placeholder={t('tasks:collections.form.namePlaceholder')} />
             </Form.Item>
 
             <Form.Item
               name="description"
-              label={t('tasks.collections.form.description')}
+              label={t('tasks:collections.form.description')}
               rules={[
-                { required: true, message: t('tasks.collections.form.descriptionRequired') },
-                { max: 200, message: t('tasks.collections.form.descriptionMaxLength') }
+                { required: true, message: t('tasks:collections.form.descriptionRequired') },
+                { max: 200, message: t('tasks:collections.form.descriptionMaxLength') }
               ]}
             >
               <TextArea 
                 rows={3} 
-                placeholder={t('tasks.collections.form.descriptionPlaceholder')}
+                placeholder={t('tasks:collections.form.descriptionPlaceholder')}
               />
             </Form.Item>
 
             <Form.Item
               name="schedule"
-              label={t('tasks.collections.form.schedule')}
-              rules={[{ required: true, message: t('tasks.collections.form.scheduleRequired') }]}
+              label={t('tasks:collections.form.schedule')}
+              rules={[{ required: true, message: t('tasks:collections.form.scheduleRequired') }]}
             >
-              <Select placeholder={t('tasks.collections.form.schedulePlaceholder')}>
+              <Select placeholder={t('tasks:collections.form.schedulePlaceholder')}>
                 {taskCollectionMockData.scheduleOptions.map(option => (
                   <Option key={option} value={option}>{option}</Option>
                 ))}
@@ -1252,41 +1252,41 @@ const TaskCollectionManagement: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('tasks.collections.modal.taskName')} span={2}>
+              <Descriptions.Item label={t('tasks:collections.modal.taskName')} span={2}>
                 {selectedTask.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.status')}>
+              <Descriptions.Item label={t('common:status')}>
                 {getStatusTag(selectedTask.status)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.collections.modal.scheduleFrequency')}>
+              <Descriptions.Item label={t('tasks:collections.modal.scheduleFrequency')}>
                 {selectedTask.schedule}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.collections.card.successRate')}>
+              <Descriptions.Item label={t('tasks:collections.card.successRate')}>
                 {selectedTask.successRate}%
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.collections.card.executionCount')}>
-                {selectedTask.totalRuns}{t('common.unit.times')}
+              <Descriptions.Item label={t('tasks:collections.card.executionCount')}>
+                {selectedTask.totalRuns}{t('common:unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.collections.modal.lastExecution')}>
+              <Descriptions.Item label={t('tasks:collections.modal.lastExecution')}>
                 {selectedTask.lastRun}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.collections.card.nextExecution')}>
+              <Descriptions.Item label={t('tasks:collections.card.nextExecution')}>
                 {selectedTask.nextRun}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.collections.card.creator')}>
+              <Descriptions.Item label={t('tasks:collections.card.creator')}>
                 {selectedTask.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.createTime')}>
+              <Descriptions.Item label={t('common:createTime')}>
                 {selectedTask.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.description')} span={2}>
+              <Descriptions.Item label={t('common:description')} span={2}>
                 {selectedTask.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 监控目标和巡检动作 */}
             <Tabs defaultActiveKey="targets">
-              <Tabs.TabPane tab={t('tasks.collections.detail.monitoringTargets')} key="targets">
+              <Tabs.TabPane tab={t('tasks:collections.detail.monitoringTargets')} key="targets">
                 <Row gutter={16}>
                   {selectedTask.targets.map(target => (
                     <Col xs={24} sm={12} lg={8} key={target.id}>
@@ -1305,12 +1305,12 @@ const TaskCollectionManagement: React.FC = () => {
                       >
                         <div style={{ marginBottom: 8 }}>
                           <Tag color={target.type === 'entity' ? 'blue' : 'green'}>
-                            {target.type === 'entity' ? t('tasks.collections.detail.entity') : t('tasks.collections.detail.sequence')}
+                            {target.type === 'entity' ? t('tasks:collections.detail.entity') : t('tasks:collections.detail.sequence')}
                           </Tag>
                           <Tag>{target.category}</Tag>
                         </div>
                         <div>
-                          <Text strong style={{ fontSize: 12 }}>{t('tasks.collections.detail.inspectionActionsLabel')}:</Text>
+                          <Text strong style={{ fontSize: 12 }}>{t('tasks:collections.detail.inspectionActionsLabel')}:</Text>
                           <div style={{ marginTop: 4 }}>
                             {target.actions.map(actionId => {
                               const action = inspectionActions.find(a => a.id === actionId);
@@ -1335,7 +1335,7 @@ const TaskCollectionManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab={t('tasks.collections.detail.inspectionActions')} key="actions">
+              <Tabs.TabPane tab={t('tasks:collections.detail.inspectionActions')} key="actions">
                 <Row gutter={16}>
                   {inspectionActions.map(action => {
                     const actionConfig = actionTypeMap[action.type];
@@ -1350,7 +1350,7 @@ const TaskCollectionManagement: React.FC = () => {
                             <Space>
                               {actionConfig?.icon}
                               {action.name}
-                              {isUsed && <Badge status="success" text={t('tasks.collections.detail.inUse')} />}
+                              {isUsed && <Badge status="success" text={t('tasks:collections.detail.inUse')} />}
                             </Space>
                           }
                           size="small"
@@ -1368,8 +1368,8 @@ const TaskCollectionManagement: React.FC = () => {
                             {action.description}
                           </Paragraph>
                           <div style={{ fontSize: 11, color: '#666' }}>
-                            <div>{t('tasks.collections.detail.duration')}: {action.duration}</div>
-                            <div>{t('tasks.collections.detail.suggestedFrequency')}: {action.frequency}</div>
+                            <div>{t('tasks:collections.detail.duration')}: {action.duration}</div>
+                            <div>{t('tasks:collections.detail.suggestedFrequency')}: {action.frequency}</div>
                           </div>
                         </Card>
                       </Col>

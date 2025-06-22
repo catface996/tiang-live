@@ -1,0 +1,20 @@
+{
+  "dashboard": "仪表盘",
+  "planes": "平面管理",
+  "entities": "实体管理",
+  "relationships": "关系图谱",
+  "sequences": "时序管理",
+  "agents": "AI智能体",
+  "reports": "报告管理",
+  "tasks": "任务管理",
+  "inspectionTasks": "巡检任务",
+  "hookTasks": "钩子任务",
+  "collections": "任务集合",
+  "solutions": "行业模型",
+  "systemSettings": "系统设置",
+  "modelManagement": "模型管理",
+  "promptTemplates": "提示词模板",
+  "tagManagement": "标签管理",
+  "entityScan": "实体扫描",
+  "aiAssistant": "AI助手"
+}

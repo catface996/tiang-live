@@ -48,6 +48,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
 import { entityScanService } from '../../../services/entityScanService';
+import MonitoringDataSourceConfig from './MonitoringDataSourceConfig';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 
 const { Title, Text, Paragraph } = Typography;
@@ -369,7 +370,7 @@ interface ScanResult {
 }
 
 const EntityScan: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['entityScan', 'common']);
   const navigate = useNavigate();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const isDark = currentTheme === 'dark';
@@ -383,6 +384,7 @@ const EntityScan: React.FC = () => {
   const [currentTask, setCurrentTask] = useState<ScanTask | null>(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
+  const [showDataSourceConfig, setShowDataSourceConfig] = useState(false);
   
   // 搜索和筛选状态
   const [searchText, setSearchText] = useState('');
@@ -465,14 +467,14 @@ const EntityScan: React.FC = () => {
   // 状态标签
   const getStatusTag = (status: string) => {
     const statusMap = {
-      connected: { color: 'success', text: t('systemSettings.entityScan.dataSources.connected') },
-      disconnected: { color: 'default', text: t('systemSettings.entityScan.dataSources.disconnected') },
-      error: { color: 'error', text: t('systemSettings.entityScan.dataSources.error') },
-      pending: { color: 'default', text: t('systemSettings.entityScan.status.pending') },
-      running: { color: 'processing', text: t('systemSettings.entityScan.status.running') },
-      completed: { color: 'success', text: t('systemSettings.entityScan.status.completed') },
-      failed: { color: 'error', text: t('systemSettings.entityScan.status.failed') },
-      paused: { color: 'warning', text: t('systemSettings.entityScan.status.paused') }
+      connected: { color: 'success', text: t('entityScan:dataSources.connected') },
+      disconnected: { color: 'default', text: t('entityScan:dataSources.disconnected') },
+      error: { color: 'error', text: t('entityScan:dataSources.error') },
+      pending: { color: 'default', text: t('entityScan:status.pending') },
+      running: { color: 'processing', text: t('entityScan:status.running') },
+      completed: { color: 'success', text: t('entityScan:status.completed') },
+      failed: { color: 'error', text: t('entityScan:status.failed') },
+      paused: { color: 'warning', text: t('entityScan:status.paused') }
     };
     
     const config = statusMap[status as keyof typeof statusMap] || statusMap.disconnected;
@@ -482,13 +484,13 @@ const EntityScan: React.FC = () => {
   // 开始扫描
   const handleStartScan = async (values: any) => {
     if (!selectedDataSource) {
-      message.error(t('systemSettings.entityScan.messages.selectDataSourceFirst'));
+      message.error(t('entityScan:messages.selectDataSourceFirst'));
       return;
     }
 
     const dataSource = dataSources.find(ds => ds.id === selectedDataSource);
     if (!dataSource) {
-      message.error(t('systemSettings.entityScan.messages.dataSourceNotFound'));
+      message.error(t('entityScan:messages.dataSourceNotFound'));
       return;
     }
 
@@ -511,7 +513,7 @@ const EntityScan: React.FC = () => {
 
     // 模拟扫描过程
     simulateScanProcess(newTask);
-    message.success(t('systemSettings.entityScan.messages.scanStarted'));
+    message.success(t('entityScan:messages.scanStarted'));
   };
 
   // 模拟扫描过程
@@ -788,12 +790,12 @@ const EntityScan: React.FC = () => {
 
   // 获取数据源类型映射
   const getDataSourceTypeMap = () => ({
-    database: { name: t('systemSettings.entityScan.dataSources.types.database'), color: '#1890ff' },
-    api: { name: t('systemSettings.entityScan.dataSources.types.api'), color: '#52c41a' },
-    cloud: { name: t('systemSettings.entityScan.dataSources.types.cloud'), color: '#722ed1' },
-    monitoring: { name: t('systemSettings.entityScan.dataSources.types.monitoring'), color: '#fa8c16' },
-    metrics: { name: t('systemSettings.entityScan.dataSources.types.metrics'), color: '#13c2c2' },
-    file: { name: t('systemSettings.entityScan.dataSources.types.file'), color: '#eb2f96' }
+    database: { name: t('entityScan:dataSources.types.database'), color: '#1890ff' },
+    api: { name: t('entityScan:dataSources.types.api'), color: '#52c41a' },
+    cloud: { name: t('entityScan:dataSources.types.cloud'), color: '#722ed1' },
+    monitoring: { name: t('entityScan:dataSources.types.monitoring'), color: '#fa8c16' },
+    metrics: { name: t('entityScan:dataSources.types.metrics'), color: '#13c2c2' },
+    file: { name: t('entityScan:dataSources.types.file'), color: '#eb2f96' }
   });
 
   const getDataSourceSubTypeMap = () => ({
@@ -813,10 +815,10 @@ const EntityScan: React.FC = () => {
   // 获取状态配置
   const getStatusConfig = (status: string) => {
     const statusMap = {
-      connected: { text: t('systemSettings.entityScan.dataSources.connected'), color: 'success', icon: <CheckCircleOutlined /> },
-      disconnected: { text: t('systemSettings.entityScan.dataSources.disconnected'), color: 'error', icon: <ExclamationCircleOutlined /> },
-      connecting: { text: t('systemSettings.entityScan.dataSources.connecting'), color: 'processing', icon: <ReloadOutlined spin /> },
-      error: { text: t('systemSettings.entityScan.dataSources.error'), color: 'error', icon: <ExclamationCircleOutlined /> }
+      connected: { text: t('entityScan:dataSources.connected'), color: 'success', icon: <CheckCircleOutlined /> },
+      disconnected: { text: t('entityScan:dataSources.disconnected'), color: 'error', icon: <ExclamationCircleOutlined /> },
+      connecting: { text: t('entityScan:dataSources.connecting'), color: 'processing', icon: <ReloadOutlined spin /> },
+      error: { text: t('entityScan:dataSources.error'), color: 'error', icon: <ExclamationCircleOutlined /> }
     };
     return statusMap[status as keyof typeof statusMap] || statusMap.disconnected;
   };
@@ -891,7 +893,7 @@ const EntityScan: React.FC = () => {
                   loading={isScanning && selectedDataSource === dataSource.id}
                   block
                 >
-                  {isScanning && selectedDataSource === dataSource.id ? t('systemSettings.entityScan.status.running') : t('systemSettings.entityScan.scanConfig.startScan')}
+                  {isScanning && selectedDataSource === dataSource.id ? t('entityScan:status.running') : t('entityScan:scanConfig.startScan')}
                 </Button>
               </div>
               
@@ -902,7 +904,7 @@ const EntityScan: React.FC = () => {
                   icon={<EyeOutlined />}
                   onClick={() => handleViewDataSource(dataSource)}
                 >
-                  {t('common.view')}
+                  {t('common:view')}
                 </Button>
                 <Button 
                   type="text" 
@@ -910,7 +912,7 @@ const EntityScan: React.FC = () => {
                   icon={<EditOutlined />}
                   onClick={() => handleEditDataSource(dataSource)}
                 >
-                  {t('common.edit')}
+                  {t('common:edit')}
                 </Button>
                 <Button 
                   type="text" 
@@ -919,7 +921,7 @@ const EntityScan: React.FC = () => {
                   onClick={() => handleTestConnection(dataSource)}
                   loading={dataSource.status === 'connecting'}
                 >
-                  {t('systemSettings.entityScan.dataSources.testConnection')}
+                  {t('entityScan:dataSources.testConnection')}
                 </Button>
                 <Button 
                   type="text" 
@@ -928,7 +930,7 @@ const EntityScan: React.FC = () => {
                   icon={<DeleteOutlined />}
                   onClick={() => handleDeleteDataSource(dataSource)}
                 >
-                  {t('common.delete')}
+                  {t('common:delete')}
                 </Button>
               </div>
             </DataSourceActions>
@@ -945,22 +947,22 @@ const EntityScan: React.FC = () => {
     switch (dataSource.type) {
       case 'database':
         info.push(
-          { label: t('systemSettings.entityScan.fields.host'), value: `${dataSource.config?.host}:${dataSource.config?.port}` },
-          { label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database || '-' }
+          { label: t('entityScan:fields.host'), value: `${dataSource.config?.host}:${dataSource.config?.port}` },
+          { label: t('entityScan:fields.database'), value: dataSource.config?.database || '-' }
         );
         break;
 
       case 'api':
         info.push(
-          { label: t('systemSettings.entityScan.fields.baseUrl'), value: dataSource.config?.baseUrl || '-' },
-          { label: t('systemSettings.entityScan.fields.endpoints'), value: dataSource.config?.endpoints?.length ? t('systemSettings.entityScan.units.endpoints', { count: dataSource.config.endpoints.length }) : '-' }
+          { label: t('entityScan:fields.baseUrl'), value: dataSource.config?.baseUrl || '-' },
+          { label: t('entityScan:fields.endpoints'), value: dataSource.config?.endpoints?.length ? t('entityScan:units.endpoints', { count: dataSource.config.endpoints.length }) : '-' }
         );
         break;
 
       case 'cloud':
         info.push(
-          { label: t('systemSettings.entityScan.fields.endpoint'), value: dataSource.config?.endpoint || '-' },
-          { label: t('systemSettings.entityScan.fields.bucket'), value: dataSource.config?.bucket || '-' }
+          { label: t('entityScan:fields.endpoint'), value: dataSource.config?.endpoint || '-' },
+          { label: t('entityScan:fields.bucket'), value: dataSource.config?.bucket || '-' }
         );
         break;
 
@@ -968,43 +970,43 @@ const EntityScan: React.FC = () => {
         switch (dataSource.subType) {
           case 'prometheus':
             info.push(
-              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
-              { label: t('systemSettings.entityScan.fields.maxSamples'), value: dataSource.config?.maxSamples?.toString() || '-' }
+              { label: t('entityScan:fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('entityScan:fields.maxSamples'), value: dataSource.config?.maxSamples?.toString() || '-' }
             );
             break;
           case 'grafana':
             info.push(
-              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
-              { label: t('systemSettings.entityScan.fields.orgId'), value: dataSource.config?.orgId?.toString() || '-' }
+              { label: t('entityScan:fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('entityScan:fields.orgId'), value: dataSource.config?.orgId?.toString() || '-' }
             );
             break;
           case 'elasticsearch':
             info.push(
-              { label: t('systemSettings.entityScan.fields.hosts'), value: dataSource.config?.hosts?.length ? t('systemSettings.entityScan.units.nodes', { count: dataSource.config.hosts.length }) : '-' },
-              { label: t('systemSettings.entityScan.fields.indices'), value: dataSource.config?.indices?.length ? t('systemSettings.entityScan.units.indices', { count: dataSource.config.indices.length }) : '-' }
+              { label: t('entityScan:fields.hosts'), value: dataSource.config?.hosts?.length ? t('entityScan:units.nodes', { count: dataSource.config.hosts.length }) : '-' },
+              { label: t('entityScan:fields.indices'), value: dataSource.config?.indices?.length ? t('entityScan:units.indices', { count: dataSource.config.indices.length }) : '-' }
             );
             break;
           case 'jaeger':
             info.push(
-              { label: t('systemSettings.entityScan.fields.queryUrl'), value: dataSource.config?.queryUrl || '-' },
-              { label: t('systemSettings.entityScan.fields.services'), value: dataSource.config?.services?.length ? t('systemSettings.entityScan.units.services', { count: dataSource.config.services.length }) : '-' }
+              { label: t('entityScan:fields.queryUrl'), value: dataSource.config?.queryUrl || '-' },
+              { label: t('entityScan:fields.services'), value: dataSource.config?.services?.length ? t('entityScan:units.services', { count: dataSource.config.services.length }) : '-' }
             );
             break;
           case 'zabbix':
             info.push(
-              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
-              { label: t('systemSettings.entityScan.fields.apiVersion'), value: dataSource.config?.apiVersion || '-' }
+              { label: t('entityScan:fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('entityScan:fields.apiVersion'), value: dataSource.config?.apiVersion || '-' }
             );
             break;
           case 'datadog':
             info.push(
-              { label: t('systemSettings.entityScan.fields.site'), value: dataSource.config?.site || '-' },
-              { label: t('systemSettings.entityScan.fields.environment'), value: dataSource.config?.env || '-' }
+              { label: t('entityScan:fields.site'), value: dataSource.config?.site || '-' },
+              { label: t('entityScan:fields.environment'), value: dataSource.config?.env || '-' }
             );
             break;
           default:
             info.push(
-              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' }
+              { label: t('entityScan:fields.url'), value: dataSource.config?.url || '-' }
             );
         }
         break;
@@ -1013,8 +1015,8 @@ const EntityScan: React.FC = () => {
         switch (dataSource.subType) {
           case 'influxdb':
             info.push(
-              { label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url || '-' },
-              { label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database || '-' }
+              { label: t('entityScan:fields.url'), value: dataSource.config?.url || '-' },
+              { label: t('entityScan:fields.database'), value: dataSource.config?.database || '-' }
             );
             break;
         }
@@ -1022,32 +1024,32 @@ const EntityScan: React.FC = () => {
 
       case 'file':
         info.push(
-          { label: t('systemSettings.entityScan.fields.path'), value: dataSource.config?.path || '-' },
-          { label: t('systemSettings.entityScan.fields.format'), value: dataSource.config?.format || '-' }
+          { label: t('entityScan:fields.path'), value: dataSource.config?.path || '-' },
+          { label: t('entityScan:fields.format'), value: dataSource.config?.format || '-' }
         );
         break;
 
       default:
         info.push(
-          { label: t('systemSettings.entityScan.fields.description'), value: dataSource.description || '-' }
+          { label: t('entityScan:fields.description'), value: dataSource.description || '-' }
         );
     }
 
     // 添加通用信息
     info.push(
-      { label: t('systemSettings.entityScan.dataSources.lastScan'), value: dataSource.lastScan || t('systemSettings.entityScan.status.neverScanned') },
-      { label: t('systemSettings.entityScan.dataSources.entityCount'), value: t('systemSettings.entityScan.units.entities', { count: dataSource.entityCount || 0 }) }
+      { label: t('entityScan:dataSources.lastScan'), value: dataSource.lastScan || t('entityScan:status.neverScanned') },
+      { label: t('entityScan:dataSources.entityCount'), value: t('entityScan:units.entities', { count: dataSource.entityCount || 0 }) }
     );
 
     return info;
   };
   const getDataSourceFields = (dataSource: DataSource) => {
     const baseFields = [
-      { key: 'name', label: t('systemSettings.entityScan.fields.name'), value: dataSource.name },
-      { key: 'type', label: t('systemSettings.entityScan.fields.type'), value: dataSource.type },
-      { key: 'subType', label: t('systemSettings.entityScan.fields.subType'), value: dataSource.subType },
-      { key: 'status', label: t('systemSettings.entityScan.fields.status'), value: dataSource.status, isStatus: true },
-      { key: 'description', label: t('systemSettings.entityScan.fields.description'), value: dataSource.description }
+      { key: 'name', label: t('entityScan:fields.name'), value: dataSource.name },
+      { key: 'type', label: t('entityScan:fields.type'), value: dataSource.type },
+      { key: 'subType', label: t('entityScan:fields.subType'), value: dataSource.subType },
+      { key: 'status', label: t('entityScan:fields.status'), value: dataSource.status, isStatus: true },
+      { key: 'description', label: t('entityScan:fields.description'), value: dataSource.description }
     ];
 
     // 根据数据源类型添加特定字段
@@ -1056,25 +1058,25 @@ const EntityScan: React.FC = () => {
     switch (dataSource.type) {
       case 'database':
         specificFields.push(
-          { key: 'host', label: t('systemSettings.entityScan.fields.host'), value: `${dataSource.config?.host}:${dataSource.config?.port}` },
-          { key: 'database', label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database || '-' },
-          { key: 'username', label: t('systemSettings.entityScan.fields.username'), value: dataSource.config?.username }
+          { key: 'host', label: t('entityScan:fields.host'), value: `${dataSource.config?.host}:${dataSource.config?.port}` },
+          { key: 'database', label: t('entityScan:fields.database'), value: dataSource.config?.database || '-' },
+          { key: 'username', label: t('entityScan:fields.username'), value: dataSource.config?.username }
         );
         break;
 
       case 'api':
         specificFields.push(
-          { key: 'baseUrl', label: t('systemSettings.entityScan.fields.baseUrl'), value: dataSource.config?.baseUrl },
-          { key: 'endpoints', label: t('systemSettings.entityScan.fields.endpoints'), value: dataSource.config?.endpoints, isArray: true },
-          { key: 'apiKey', label: t('systemSettings.entityScan.fields.apiKey'), value: dataSource.config?.apiKey ? '***hidden***' : '-' }
+          { key: 'baseUrl', label: t('entityScan:fields.baseUrl'), value: dataSource.config?.baseUrl },
+          { key: 'endpoints', label: t('entityScan:fields.endpoints'), value: dataSource.config?.endpoints, isArray: true },
+          { key: 'apiKey', label: t('entityScan:fields.apiKey'), value: dataSource.config?.apiKey ? '***hidden***' : '-' }
         );
         break;
 
       case 'cloud':
         specificFields.push(
-          { key: 'endpoint', label: t('systemSettings.entityScan.fields.endpoint'), value: dataSource.config?.endpoint },
-          { key: 'bucket', label: t('systemSettings.entityScan.fields.bucket'), value: dataSource.config?.bucket },
-          { key: 'accessKeyId', label: t('systemSettings.entityScan.fields.accessKeyId'), value: dataSource.config?.accessKeyId ? '***hidden***' : '-' }
+          { key: 'endpoint', label: t('entityScan:fields.endpoint'), value: dataSource.config?.endpoint },
+          { key: 'bucket', label: t('entityScan:fields.bucket'), value: dataSource.config?.bucket },
+          { key: 'accessKeyId', label: t('entityScan:fields.accessKeyId'), value: dataSource.config?.accessKeyId ? '***hidden***' : '-' }
         );
         break;
 
@@ -1082,44 +1084,44 @@ const EntityScan: React.FC = () => {
         switch (dataSource.subType) {
           case 'prometheus':
             specificFields.push(
-              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
-              { key: 'timeout', label: t('systemSettings.entityScan.fields.timeout'), value: `${dataSource.config?.timeout || 0}ms` },
-              { key: 'maxSamples', label: t('systemSettings.entityScan.fields.maxSamples'), value: dataSource.config?.maxSamples }
+              { key: 'url', label: t('entityScan:fields.url'), value: dataSource.config?.url },
+              { key: 'timeout', label: t('entityScan:fields.timeout'), value: `${dataSource.config?.timeout || 0}ms` },
+              { key: 'maxSamples', label: t('entityScan:fields.maxSamples'), value: dataSource.config?.maxSamples }
             );
             break;
           case 'grafana':
             specificFields.push(
-              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
-              { key: 'orgId', label: t('systemSettings.entityScan.fields.orgId'), value: dataSource.config?.orgId },
-              { key: 'includeDashboards', label: t('systemSettings.entityScan.fields.includeDashboards'), value: dataSource.config?.includeDashboards ? t('common.yes') : t('common.no') }
+              { key: 'url', label: t('entityScan:fields.url'), value: dataSource.config?.url },
+              { key: 'orgId', label: t('entityScan:fields.orgId'), value: dataSource.config?.orgId },
+              { key: 'includeDashboards', label: t('entityScan:fields.includeDashboards'), value: dataSource.config?.includeDashboards ? t('common:yes') : t('common:no') }
             );
             break;
           case 'elasticsearch':
             specificFields.push(
-              { key: 'hosts', label: t('systemSettings.entityScan.fields.hosts'), value: dataSource.config?.hosts, isArray: true },
-              { key: 'indices', label: t('systemSettings.entityScan.fields.indices'), value: dataSource.config?.indices, isArray: true },
-              { key: 'version', label: t('systemSettings.entityScan.fields.version'), value: dataSource.config?.version }
+              { key: 'hosts', label: t('entityScan:fields.hosts'), value: dataSource.config?.hosts, isArray: true },
+              { key: 'indices', label: t('entityScan:fields.indices'), value: dataSource.config?.indices, isArray: true },
+              { key: 'version', label: t('entityScan:fields.version'), value: dataSource.config?.version }
             );
             break;
           case 'jaeger':
             specificFields.push(
-              { key: 'queryUrl', label: t('systemSettings.entityScan.fields.queryUrl'), value: dataSource.config?.queryUrl },
-              { key: 'services', label: t('systemSettings.entityScan.fields.services'), value: dataSource.config?.services, isArray: true },
-              { key: 'lookback', label: t('systemSettings.entityScan.fields.lookback'), value: dataSource.config?.lookback }
+              { key: 'queryUrl', label: t('entityScan:fields.queryUrl'), value: dataSource.config?.queryUrl },
+              { key: 'services', label: t('entityScan:fields.services'), value: dataSource.config?.services, isArray: true },
+              { key: 'lookback', label: t('entityScan:fields.lookback'), value: dataSource.config?.lookback }
             );
             break;
           case 'zabbix':
             specificFields.push(
-              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
-              { key: 'apiVersion', label: t('systemSettings.entityScan.fields.apiVersion'), value: dataSource.config?.apiVersion },
-              { key: 'hostGroups', label: t('systemSettings.entityScan.fields.hostGroups'), value: dataSource.config?.hostGroups, isArray: true }
+              { key: 'url', label: t('entityScan:fields.url'), value: dataSource.config?.url },
+              { key: 'apiVersion', label: t('entityScan:fields.apiVersion'), value: dataSource.config?.apiVersion },
+              { key: 'hostGroups', label: t('entityScan:fields.hostGroups'), value: dataSource.config?.hostGroups, isArray: true }
             );
             break;
           case 'datadog':
             specificFields.push(
-              { key: 'site', label: t('systemSettings.entityScan.fields.site'), value: dataSource.config?.site },
-              { key: 'services', label: t('systemSettings.entityScan.fields.services'), value: dataSource.config?.services, isArray: true },
-              { key: 'env', label: t('systemSettings.entityScan.fields.environment'), value: dataSource.config?.env }
+              { key: 'site', label: t('entityScan:fields.site'), value: dataSource.config?.site },
+              { key: 'services', label: t('entityScan:fields.services'), value: dataSource.config?.services, isArray: true },
+              { key: 'env', label: t('entityScan:fields.environment'), value: dataSource.config?.env }
             );
             break;
         }
@@ -1129,9 +1131,9 @@ const EntityScan: React.FC = () => {
         switch (dataSource.subType) {
           case 'influxdb':
             specificFields.push(
-              { key: 'url', label: t('systemSettings.entityScan.fields.url'), value: dataSource.config?.url },
-              { key: 'database', label: t('systemSettings.entityScan.fields.database'), value: dataSource.config?.database },
-              { key: 'retention', label: t('systemSettings.entityScan.fields.retention'), value: dataSource.config?.retention }
+              { key: 'url', label: t('entityScan:fields.url'), value: dataSource.config?.url },
+              { key: 'database', label: t('entityScan:fields.database'), value: dataSource.config?.database },
+              { key: 'retention', label: t('entityScan:fields.retention'), value: dataSource.config?.retention }
             );
             break;
         }
@@ -1139,9 +1141,9 @@ const EntityScan: React.FC = () => {
 
       case 'file':
         specificFields.push(
-          { key: 'path', label: t('systemSettings.entityScan.fields.path'), value: dataSource.config?.path },
-          { key: 'format', label: t('systemSettings.entityScan.fields.format'), value: dataSource.config?.format },
-          { key: 'encoding', label: t('systemSettings.entityScan.fields.encoding'), value: dataSource.config?.encoding || 'UTF-8' }
+          { key: 'path', label: t('entityScan:fields.path'), value: dataSource.config?.path },
+          { key: 'format', label: t('entityScan:fields.format'), value: dataSource.config?.format },
+          { key: 'encoding', label: t('entityScan:fields.encoding'), value: dataSource.config?.encoding || 'UTF-8' }
         );
         break;
     }
@@ -1173,7 +1175,7 @@ const EntityScan: React.FC = () => {
     const fields = getDataSourceFields(dataSource);
     
     Modal.info({
-      title: `${t('systemSettings.entityScan.dataSources.details')} - ${dataSource.name}`,
+      title: `${t('entityScan:dataSources.details')} - ${dataSource.name}`,
       width: 600,
       content: (
         <div style={{ marginTop: 16 }}>
@@ -1217,20 +1219,20 @@ const EntityScan: React.FC = () => {
       ));
 
       message[isSuccess ? 'success' : 'error'](
-        isSuccess ? t('systemSettings.entityScan.messages.connectionTestSuccess') : t('systemSettings.entityScan.messages.connectionTestFailed')
+        isSuccess ? t('entityScan:messages.connectionTestSuccess') : t('entityScan:messages.connectionTestFailed')
       );
     } catch (error) {
       setDataSources(prev => prev.map(ds => 
         ds.id === dataSource.id ? { ...ds, status: 'error' } : ds
       ));
-      message.error(t('systemSettings.entityScan.messages.connectionTestFailed'));
+      message.error(t('entityScan:messages.connectionTestFailed'));
     }
   };
 
   // 针对单个数据源开始扫描 - 跳转到扫描详情页
   const handleStartScanForDataSource = (dataSource: DataSource) => {
     if (dataSource.status !== 'connected') {
-      message.warning(t('systemSettings.entityScan.messages.ensureConnectionFirst'));
+      message.warning(t('entityScan:messages.ensureConnectionFirst'));
       return;
     }
 
@@ -1240,14 +1242,14 @@ const EntityScan: React.FC = () => {
 
   const handleDeleteDataSource = (dataSource: DataSource) => {
     Modal.confirm({
-      title: t('common.confirmDelete'),
-      content: t('systemSettings.entityScan.messages.confirmDeleteDataSource', { name: dataSource.name }),
-      okText: t('common.delete'),
+      title: t('common:confirmDelete'),
+      content: t('entityScan:messages.confirmDeleteDataSource', { name: dataSource.name }),
+      okText: t('common:delete'),
       okType: 'danger',
-      cancelText: t('common.cancel'),
+      cancelText: t('common:cancel'),
       onOk: () => {
         setDataSources(prev => prev.filter(ds => ds.id !== dataSource.id));
-        message.success(t('systemSettings.entityScan.messages.dataSourceDeleted'));
+        message.success(t('entityScan:messages.dataSourceDeleted'));
       }
     });
   };
@@ -1255,39 +1257,32 @@ const EntityScan: React.FC = () => {
   // 刷新数据源列表
   const handleRefreshDataSources = async () => {
     try {
-      message.loading(t('systemSettings.entityScan.messages.refreshingDataSources'), 1);
+      message.loading(t('entityScan:messages.refreshingDataSources'), 1);
       await loadDataSources();
-      message.success(t('systemSettings.entityScan.messages.refreshSuccess'));
+      message.success(t('entityScan:messages.refreshSuccess'));
     } catch (error) {
-      message.error(t('systemSettings.entityScan.messages.refreshFailed'));
+      message.error(t('entityScan:messages.refreshFailed'));
     }
   };
 
   // 创建数据源
   const handleCreateDataSource = () => {
-    Modal.info({
-      title: t('systemSettings.entityScan.dataSources.addDataSource'),
-      width: 800,
-      content: (
-        <div style={{ marginTop: 16 }}>
-          <Alert
-            message={t('systemSettings.entityScan.messages.dataSourceConfigFeature')}
-            description={t('systemSettings.entityScan.messages.featureInDevelopment')}
-            type="info"
-            showIcon
-            style={{ marginBottom: 16 }}
-          />
-          <div style={{ padding: '20px 0', textAlign: 'center', color: '#8c8c8c' }}>
-            <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
-            <div>{t('systemSettings.entityScan.messages.configWizardComingSoon')}</div>
-            <div style={{ fontSize: '12px', marginTop: '8px' }}>
-              {t('systemSettings.entityScan.messages.wizardFeatures')}
-            </div>
-          </div>
-        </div>
-      ),
-      okText: '知道了'
-    });
+    setShowDataSourceConfig(true);
+  };
+
+  // 处理数据源配置保存
+  const handleDataSourceConfigSave = (config: any) => {
+    console.log('Saving data source config:', config);
+    // 这里可以调用API保存数据源配置
+    message.success(t('entityScan:messages.dataSourceCreated'));
+    setShowDataSourceConfig(false);
+    // 刷新数据源列表
+    loadDataSources();
+  };
+
+  // 处理数据源配置取消
+  const handleDataSourceConfigCancel = () => {
+    setShowDataSourceConfig(false);
   };
 
   // 数据源表格列
@@ -1363,7 +1358,7 @@ const EntityScan: React.FC = () => {
       title: '最后扫描',
       dataIndex: 'lastScan',
       key: 'lastScan',
-      render: (time: string) => time || t('systemSettings.entityScan.status.neverScanned'),
+      render: (time: string) => time || t('entityScan:status.neverScanned'),
     },
     {
       title: '操作',
@@ -1454,67 +1449,67 @@ const EntityScan: React.FC = () => {
       <PageHeader>
         <PageHeaderContent>
           <Title level={2} style={{ margin: 0 }}>
-            <ScanOutlined /> {t('systemSettings.entityScan.title', '实体扫描')}
+            <ScanOutlined /> {t('entityScan:title', '实体扫描')}
           </Title>
           <Paragraph style={{ margin: '8px 0 0 0', color: isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)' }}>
-            {t('systemSettings.entityScan.description', '从外部数据源扫描和生成实体定义，支持数据库、API、云服务等多种数据源类型。')}
+            {t('entityScan:description', '从外部数据源扫描和生成实体定义，支持数据库、API、云服务等多种数据源类型。')}
           </Paragraph>
         </PageHeaderContent>
         <PageHeaderActions>
           <Button
             icon={<ReloadOutlined />}
             onClick={handleRefreshDataSources}
-            title={t('systemSettings.entityScan.dataSources.refreshDataSources')}
+            title={t('entityScan:dataSources.refreshDataSources')}
           >
-            {t('common.refresh')}
+            {t('common:refresh')}
           </Button>
           <Button
             type="primary"
             icon={<PlusOutlined />}
             onClick={handleCreateDataSource}
           >
-            {t('systemSettings.entityScan.dataSources.addDataSource')}
+            {t('entityScan:dataSources.addDataSource')}
           </Button>
         </PageHeaderActions>
       </PageHeader>
 
       {/* 统计数据 */}
-      <StatsCard $isDark={isDark} title={t('systemSettings.entityScan.stats.title')}>
+      <StatsCard $isDark={isDark} title={t('entityScan:stats.title')}>
         <Row gutter={[16, 16]}>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#1890ff">{getStatistics().totalDataSources}</StatValue>
-              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.totalDataSources')}</StatLabel>
+              <StatLabel $isDark={isDark}>{t('entityScan:stats.totalDataSources')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#52c41a">{getStatistics().connectedDataSources}</StatValue>
-              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.connectedSources')}</StatLabel>
+              <StatLabel $isDark={isDark}>{t('entityScan:stats.connectedSources')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#722ed1">{getStatistics().totalEntities}</StatValue>
-              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.totalEntities')}</StatLabel>
+              <StatLabel $isDark={isDark}>{t('entityScan:stats.totalEntities')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#fa8c16">{getStatistics().selectedEntities}</StatValue>
-              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.selectedEntities')}</StatLabel>
+              <StatLabel $isDark={isDark}>{t('entityScan:stats.selectedEntities')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#13c2c2">{getStatistics().completedScans}</StatValue>
-              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.completedScans')}</StatLabel>
+              <StatLabel $isDark={isDark}>{t('entityScan:stats.completedScans')}</StatLabel>
             </StatItem>
           </Col>
           <Col xs={12} sm={8} lg={4}>
             <StatItem $isDark={isDark}>
               <StatValue color="#eb2f96">{getStatistics().runningScans}</StatValue>
-              <StatLabel $isDark={isDark}>{t('systemSettings.entityScan.stats.runningScans')}</StatLabel>
+              <StatLabel $isDark={isDark}>{t('entityScan:stats.runningScans')}</StatLabel>
             </StatItem>
           </Col>
         </Row>
@@ -1524,36 +1519,36 @@ const EntityScan: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('systemSettings.entityScan.dataSources.searchPlaceholder')}
+        searchPlaceholder={t('entityScan:dataSources.searchPlaceholder')}
         filters={[
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: t('systemSettings.entityScan.dataSources.filterByType'),
+            placeholder: t('entityScan:dataSources.filterByType'),
             width: 120,
             options: [
-              { value: 'all', label: t('systemSettings.entityScan.dataSources.allTypes') },
-              { value: 'database', label: t('systemSettings.entityScan.dataSources.types.database') },
-              { value: 'api', label: t('systemSettings.entityScan.dataSources.types.api') },
-              { value: 'cloud', label: t('systemSettings.entityScan.dataSources.types.cloud') },
-              { value: 'monitoring', label: t('systemSettings.entityScan.dataSources.types.monitoring') },
-              { value: 'metrics', label: t('systemSettings.entityScan.dataSources.types.metrics') },
-              { value: 'file', label: t('systemSettings.entityScan.dataSources.types.file') }
+              { value: 'all', label: t('entityScan:dataSources.allTypes') },
+              { value: 'database', label: t('entityScan:dataSources.types.database') },
+              { value: 'api', label: t('entityScan:dataSources.types.api') },
+              { value: 'cloud', label: t('entityScan:dataSources.types.cloud') },
+              { value: 'monitoring', label: t('entityScan:dataSources.types.monitoring') },
+              { value: 'metrics', label: t('entityScan:dataSources.types.metrics') },
+              { value: 'file', label: t('entityScan:dataSources.types.file') }
             ]
           },
           {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('systemSettings.entityScan.dataSources.filterByStatus'),
+            placeholder: t('entityScan:dataSources.filterByStatus'),
             width: 100,
             options: [
-              { value: 'all', label: t('systemSettings.entityScan.dataSources.allStatuses') },
-              { value: 'connected', label: t('systemSettings.entityScan.dataSources.connected') },
-              { value: 'disconnected', label: t('systemSettings.entityScan.dataSources.disconnected') },
-              { value: 'connecting', label: t('systemSettings.entityScan.dataSources.connecting') },
-              { value: 'error', label: t('systemSettings.entityScan.dataSources.error') }
+              { value: 'all', label: t('entityScan:dataSources.allStatuses') },
+              { value: 'connected', label: t('entityScan:dataSources.connected') },
+              { value: 'disconnected', label: t('entityScan:dataSources.disconnected') },
+              { value: 'connecting', label: t('entityScan:dataSources.connecting') },
+              { value: 'error', label: t('entityScan:dataSources.error') }
             ]
           }
         ]}
@@ -1574,11 +1569,11 @@ const EntityScan: React.FC = () => {
           marginBottom: 24
         }}>
           <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
-          <div>{t('systemSettings.entityScan.dataSources.noDataSources')}</div>
+          <div>{t('entityScan:dataSources.noDataSources')}</div>
           <div style={{ fontSize: '12px', marginTop: '8px' }}>
             {searchText || filterType !== 'all' || filterStatus !== 'all' 
-              ? t('systemSettings.entityScan.dataSources.noMatchingDataSources')
-              : t('systemSettings.entityScan.dataSources.configureDataSourcesFirst')
+              ? t('entityScan:dataSources.noMatchingDataSources')
+              : t('entityScan:dataSources.configureDataSourcesFirst')
             }
           </div>
         </div>
@@ -1606,7 +1601,7 @@ const EntityScan: React.FC = () => {
                     <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1890ff' }}>
                       {currentTask.scannedCount}
                     </div>
-                    <Text type="secondary">{t('systemSettings.entityScan.progress.scanned')}</Text>
+                    <Text type="secondary">{t('entityScan:progress.scanned')}</Text>
                   </div>
                 </Col>
                 <Col span={8}>
@@ -1614,7 +1609,7 @@ const EntityScan: React.FC = () => {
                     <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#52c41a' }}>
                       {currentTask.generatedCount}
                     </div>
-                    <Text type="secondary">{t('systemSettings.entityScan.progress.generated')}</Text>
+                    <Text type="secondary">{t('entityScan:progress.generated')}</Text>
                   </div>
                 </Col>
                 <Col span={8}>
@@ -1646,7 +1641,7 @@ const EntityScan: React.FC = () => {
         <ScanCard $isDark={isDark} title="扫描结果">
           <div style={{ marginBottom: 16 }}>
             <Alert
-              message={t('systemSettings.entityScan.results.scanCompleted', { 
+              message={t('entityScan:results.scanCompleted', { 
                 total: scanResults.length, 
                 selected: scanResults.filter(r => r.selected).length 
               })}
@@ -1691,19 +1686,19 @@ const EntityScan: React.FC = () => {
 
       {/* 结果确认模态框 */}
       <Modal
-        title={t('systemSettings.entityScan.results.confirmGenerate')}
+        title={t('entityScan:results.confirmGenerate')}
         open={showResultModal}
         onCancel={() => setShowResultModal(false)}
         onOk={() => {
           const selectedCount = scanResults.filter(r => r.selected).length;
-          message.success(t('systemSettings.entityScan.messages.entitiesGenerated', { count: selectedCount }));
+          message.success(t('entityScan:messages.entitiesGenerated', { count: selectedCount }));
           setShowResultModal(false);
         }}
         width={800}
       >
         <Alert
-          message={t('systemSettings.entityScan.results.willGenerate', { count: scanResults.filter(r => r.selected).length })}
-          description={t('systemSettings.entityScan.results.generateDescription')}
+          message={t('entityScan:results.willGenerate', { count: scanResults.filter(r => r.selected).length })}
+          description={t('entityScan:results.generateDescription')}
           type="info"
           showIcon
           style={{ marginBottom: 16 }}
@@ -1716,6 +1711,13 @@ const EntityScan: React.FC = () => {
           size="small"
         />
       </Modal>
+
+      {/* 数据源配置对话框 */}
+      <MonitoringDataSourceConfig
+        visible={showDataSourceConfig}
+        onCancel={handleDataSourceConfigCancel}
+        onOk={handleDataSourceConfigSave}
+      />
     </ScanContainer>
   );
 };

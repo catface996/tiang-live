@@ -11,21 +11,21 @@ const PageHeader = styled.div`
 `;
 
 const RelationshipGraph: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common']);
 
   useEffect(() => {
-    setPageTitle(t('relationships.title'));
+    setPageTitle(t('relationships:title'));
   }, [t]);
 
   return (
     <div style={{ padding: '24px' }}>
       <PageHeader>
-        <Title level={2}>{t('relationships.title')}</Title>
-        <Paragraph>{t('relationships.subtitle')}</Paragraph>
+        <Title level={2}>{t('relationships:title')}</Title>
+        <Paragraph>{t('relationships:subtitle')}</Paragraph>
       </PageHeader>
       
       <Card>
-        <p>{t('common.loading')}</p>
+        <p>{t('common:loading')}</p>
       </Card>
     </div>
   );

@@ -89,13 +89,13 @@ const ReportDetail: React.FC = () => {
   const [reportData, setReportData] = useState<any>(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['reports', 'common']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
 
   useEffect(() => {
-    setPageTitle(t('reports.detail.title'));
+    setPageTitle(t('reports:detail.title'));
     // 模拟加载报告数据
     setTimeout(() => {
       setReportData(getMockReportData(id));
@@ -491,9 +491,9 @@ const ReportDetail: React.FC = () => {
 
   const getStatusText = (status: string) => {
     const texts = {
-      published: t('reports.status.published'),
-      draft: t('reports.status.draft'),
-      archived: t('reports.status.archived')
+      published: t('reports:status.published'),
+      draft: t('reports:status.draft'),
+      archived: t('reports:status.archived')
     };
     return texts[status as keyof typeof texts] || status;
   };
@@ -518,45 +518,45 @@ const ReportDetail: React.FC = () => {
 
   const serviceColumns = [
     {
-      title: t('reports.detail.service'),
+      title: t('reports:detail.service'),
       dataIndex: 'service',
       key: 'service',
       width: '25%',
     },
     {
-      title: t('reports.detail.status'),
+      title: t('reports:detail.status'),
       dataIndex: 'status',
       key: 'status',
       width: '15%',
       render: (status: string) => (
         <Badge 
           status={getServiceStatusColor(status)} 
-          text={status === 'healthy' ? t('reports.detail.healthy') : 
-                status === 'warning' ? t('reports.detail.warning') : 
-                t('reports.detail.critical')} 
+          text={status === 'healthy' ? t('reports:detail.healthy') : 
+                status === 'warning' ? t('reports:detail.warning') : 
+                t('reports:detail.critical')} 
         />
       ),
     },
     {
-      title: t('reports.detail.responseTime'),
+      title: t('reports:detail.responseTime'),
       dataIndex: 'responseTime',
       key: 'responseTime',
       width: '15%',
     },
     {
-      title: t('reports.detail.errorRate'),
+      title: t('reports:detail.errorRate'),
       dataIndex: 'errorRate',
       key: 'errorRate',
       width: '15%',
     },
     {
-      title: t('reports.detail.availability'),
+      title: t('reports:detail.availability'),
       dataIndex: 'availability',
       key: 'availability',
       width: '15%',
     },
     {
-      title: t('reports.detail.requests'),
+      title: t('reports:detail.requests'),
       dataIndex: 'requests',
       key: 'requests',
       width: '15%',
@@ -569,7 +569,7 @@ const ReportDetail: React.FC = () => {
         <div style={{ textAlign: 'center', padding: '100px 0' }}>
           <Spin size="large" />
           <div style={{ marginTop: 16, color: isDark ? '#ffffff' : '#666666' }}>
-            {t('reports.detail.loading')}
+            {t('reports:detail.loading')}
           </div>
         </div>
       </PageContainer>
@@ -580,13 +580,13 @@ const ReportDetail: React.FC = () => {
     return (
       <PageContainer $isDark={isDark}>
         <Alert
-          message={t('reports.detail.notFound')}
-          description={t('reports.detail.notFoundDesc')}
+          message={t('reports:detail.notFound')}
+          description={t('reports:detail.notFoundDesc')}
           type="error"
           showIcon
           action={
             <Button size="small" onClick={() => navigate('/reports')}>
-              {t('common.back')}
+              {t('common:back')}
             </Button>
           }
         />
@@ -603,7 +603,7 @@ const ReportDetail: React.FC = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item>
           <span onClick={() => navigate('/reports')} style={{ cursor: 'pointer' }}>
-            {t('reports.title')}
+            {t('reports:title')}
           </span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>{reportData.name}</Breadcrumb.Item>
@@ -631,13 +631,13 @@ const ReportDetail: React.FC = () => {
           </div>
           <Space>
             <Button icon={<ShareAltOutlined />}>
-              {t('reports.detail.share')}
+              {t('reports:detail.share')}
             </Button>
             <Button icon={<PrinterOutlined />}>
-              {t('reports.detail.print')}
+              {t('reports:detail.print')}
             </Button>
             <Button type="primary" icon={<DownloadOutlined />}>
-              {t('reports.detail.download')}
+              {t('reports:detail.download')}
             </Button>
           </Space>
         </div>
@@ -647,16 +647,16 @@ const ReportDetail: React.FC = () => {
         </Paragraph>
 
         <Descriptions column={4} style={{ marginTop: 24 }}>
-          <Descriptions.Item label={t('reports.detail.fileSize')}>
+          <Descriptions.Item label={t('reports:detail.fileSize')}>
             {reportData.size}
           </Descriptions.Item>
-          <Descriptions.Item label={t('reports.detail.downloads')}>
+          <Descriptions.Item label={t('reports:detail.downloads')}>
             {reportData.downloads}
           </Descriptions.Item>
-          <Descriptions.Item label={t('reports.detail.lastModified')}>
+          <Descriptions.Item label={t('reports:detail.lastModified')}>
             {reportData.lastModified}
           </Descriptions.Item>
-          <Descriptions.Item label={t('reports.detail.reportId')}>
+          <Descriptions.Item label={t('reports:detail.reportId')}>
             {reportData.id}
           </Descriptions.Item>
         </Descriptions>
@@ -668,7 +668,7 @@ const ReportDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('reports.detail.totalServices')}
+                title={t('reports:detail.totalServices')}
                 value={reportData.summary.totalServices}
                 prefix={<BarChartOutlined />}
                 valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
@@ -678,7 +678,7 @@ const ReportDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('reports.detail.healthyServices')}
+                title={t('reports:detail.healthyServices')}
                 value={reportData.summary.healthyServices}
                 prefix={<CheckCircleOutlined />}
                 valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
@@ -688,7 +688,7 @@ const ReportDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('reports.detail.warningServices')}
+                title={t('reports:detail.warningServices')}
                 value={reportData.summary.warningServices}
                 prefix={<ExclamationCircleOutlined />}
                 valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
@@ -698,7 +698,7 @@ const ReportDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('reports.detail.overallScore')}
+                title={t('reports:detail.overallScore')}
                 value={reportData.summary.overallScore}
                 suffix="%"
                 prefix={<PieChartOutlined />}
@@ -730,7 +730,7 @@ const ReportDetail: React.FC = () => {
             <div style={{ textAlign: 'center', padding: '40px 0' }}>
               <LineChartOutlined style={{ fontSize: 48, color: isDark ? '#1890ff' : '#1890ff' }} />
               <div style={{ marginTop: 16, color: isDark ? '#ffffff' : '#666666' }}>
-                {t('reports.detail.chartPlaceholder')}
+                {t('reports:detail.chartPlaceholder')}
               </div>
             </div>
           )}
@@ -750,9 +750,9 @@ const ReportDetail: React.FC = () => {
                   <div>
                     <Space>
                       <Tag color={getPriorityColor(rec.priority)}>
-                        {rec.priority === 'high' ? t('reports.detail.highPriority') :
-                         rec.priority === 'medium' ? t('reports.detail.mediumPriority') :
-                         t('reports.detail.lowPriority')}
+                        {rec.priority === 'high' ? t('reports:detail.highPriority') :
+                         rec.priority === 'medium' ? t('reports:detail.mediumPriority') :
+                         t('reports:detail.lowPriority')}
                       </Tag>
                       <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
                         {rec.item}
@@ -762,27 +762,27 @@ const ReportDetail: React.FC = () => {
                       <Row gutter={[16, 8]}>
                         <Col span={12}>
                           <Text type="secondary">
-                            <ClockCircleOutlined /> {t('reports.detail.deadline')}: {rec.deadline}
+                            <ClockCircleOutlined /> {t('reports:detail.deadline')}: {rec.deadline}
                           </Text>
                         </Col>
                         {rec.assignee && (
                           <Col span={12}>
                             <Text type="secondary">
-                              <UserOutlined /> {t('reports.detail.assignee')}: {rec.assignee}
+                              <UserOutlined /> {t('reports:detail.assignee')}: {rec.assignee}
                             </Text>
                           </Col>
                         )}
                         {rec.estimatedHours && (
                           <Col span={12}>
                             <Text type="secondary">
-                              <ClockCircleOutlined /> {t('reports.detail.estimatedHours')}: {rec.estimatedHours}
+                              <ClockCircleOutlined /> {t('reports:detail.estimatedHours')}: {rec.estimatedHours}
                             </Text>
                           </Col>
                         )}
                         {rec.impact && (
                           <Col span={24}>
                             <Text type="secondary" style={{ fontStyle: 'italic' }}>
-                              {t('reports.detail.expectedImpact')}: {rec.impact}
+                              {t('reports:detail.expectedImpact')}: {rec.impact}
                             </Text>
                           </Col>
                         )}

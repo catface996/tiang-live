@@ -26,7 +26,7 @@ const PlaneContainer = styled.div`
 const PlaneManagement: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['planes', 'common']);
   const { 
     definitions: planes, 
     topology, 
@@ -36,7 +36,7 @@ const PlaneManagement: React.FC = () => {
   } = useAppSelector(state => state.plane);
 
   useEffect(() => {
-    setPageTitle(t('planes.title'));
+    setPageTitle(t('planes:title'));
     loadPlaneData();
   }, [t]);
 
@@ -52,7 +52,7 @@ const PlaneManagement: React.FC = () => {
         const definitionsResponse = await planeService.getPlaneDefinitions();
         dispatch(setDefinitions(definitionsResponse.data));
       } catch (error: any) {
-        dispatch(setError({ type: 'definitions', error: error.message || t('planes.errors.planeDefinitionLoadFailed') }));
+        dispatch(setError({ type: 'definitions', error: error.message || t('planes:errors.planeDefinitionLoadFailed') }));
       }
 
       // 加载拓扑结构
@@ -60,7 +60,7 @@ const PlaneManagement: React.FC = () => {
         const topologyResponse = await planeService.getPlaneTopology();
         dispatch(setTopology(topologyResponse));
       } catch (error: any) {
-        dispatch(setError({ type: 'topology', error: error.message || t('planes.errors.topologyLoadFailed') }));
+        dispatch(setError({ type: 'topology', error: error.message || t('planes:errors.topologyLoadFailed') }));
       }
 
       // 加载指标数据
@@ -68,11 +68,11 @@ const PlaneManagement: React.FC = () => {
         const metricsResponse = await planeService.getAllPlanesMetrics();
         dispatch(setMetrics(metricsResponse));
       } catch (error: any) {
-        dispatch(setError({ type: 'metrics', error: error.message || t('planes.errors.metricsLoadFailed') }));
+        dispatch(setError({ type: 'metrics', error: error.message || t('planes:errors.metricsLoadFailed') }));
       }
 
     } catch (error) {
-      message.error(t('planes.errors.loadDataFailed'));
+      message.error(t('planes:errors.loadDataFailed'));
       console.error('Failed to load plane data:', error);
     }
   };
@@ -89,14 +89,14 @@ const PlaneManagement: React.FC = () => {
 
     switch (action) {
       case 'view':
-        message.info(`${t('common.view')}: ${plane?.displayName || planeId}`);
+        message.info(`${t('common:view')}: ${plane?.displayName || planeId}`);
         // TODO: 打开平面详情模态框或跳转到详情页
         break;
       case 'edit':
         navigate(`/planes/edit/${planeId}`);
         break;
       case 'add':
-        message.info(`${t('common.add')}: ${plane?.displayName || planeId}`);
+        message.info(`${t('common:add')}: ${plane?.displayName || planeId}`);
         // TODO: 打开添加实例模态框
         break;
       default:
@@ -114,9 +114,9 @@ const PlaneManagement: React.FC = () => {
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <Title level={2}>{t('planes.title')}</Title>
+            <Title level={2}>{t('planes:title')}</Title>
             <Paragraph>
-              {t('planes.subtitle')}
+              {t('planes:subtitle')}
             </Paragraph>
           </div>
           <Space>
@@ -125,14 +125,14 @@ const PlaneManagement: React.FC = () => {
               onClick={handleRefresh}
               loading={loading.definitions || loading.topology || loading.metrics}
             >
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button 
               type="primary" 
               icon={<PlusOutlined />} 
               onClick={handleCreatePlane}
             >
-              {t('common.add')} {t('planes.title')}
+              {t('common:add')} {t('planes:title')}
             </Button>
           </Space>
         </div>
@@ -142,9 +142,9 @@ const PlaneManagement: React.FC = () => {
       {(error.definitions || error.topology || error.metrics) && (
         <Card style={{ marginBottom: 24, borderColor: '#ff4d4f' }}>
           <div style={{ color: '#ff4d4f' }}>
-            {error.definitions && <div>{t('planes.errors.planeDefinitionLoadFailed')}: {error.definitions}</div>}
-            {error.topology && <div>{t('planes.errors.topologyLoadFailed')}: {error.topology}</div>}
-            {error.metrics && <div>{t('planes.errors.metricsLoadFailed')}: {error.metrics}</div>}
+            {error.definitions && <div>{t('planes:errors.planeDefinitionLoadFailed')}: {error.definitions}</div>}
+            {error.topology && <div>{t('planes:errors.topologyLoadFailed')}: {error.topology}</div>}
+            {error.metrics && <div>{t('planes:errors.metricsLoadFailed')}: {error.metrics}</div>}
           </div>
         </Card>
       )}
@@ -171,26 +171,26 @@ const PlaneManagement: React.FC = () => {
       />
 
       {/* 操作说明 */}
-      <Card title={t('planes.operations.title')} style={{ marginTop: 24 }}>
+      <Card title={t('planes:operations.title')} style={{ marginTop: 24 }}>
         <Row gutter={[16, 16]}>
           <Col xs={24} md={12}>
-            <Title level={4}>{t('planes.operations.levelDescription')}</Title>
+            <Title level={4}>{t('planes:operations.levelDescription')}</Title>
             <ul>
-              <li><strong>{t('planes.operations.levelDetails.l1')}</strong>: {t('planes.operations.levelDetails.l1Desc')}</li>
-              <li><strong>{t('planes.operations.levelDetails.l2')}</strong>: {t('planes.operations.levelDetails.l2Desc')}</li>
-              <li><strong>{t('planes.operations.levelDetails.l3')}</strong>: {t('planes.operations.levelDetails.l3Desc')} <span style={{color: '#fa8c16'}}>({t('planes.operations.levelDetails.multipleDependency')})</span></li>
-              <li><strong>{t('planes.operations.levelDetails.l4')}</strong>: {t('planes.operations.levelDetails.l4Desc')} <span style={{color: '#fa8c16'}}>({t('planes.operations.levelDetails.multipleDependency')})</span></li>
-              <li><strong>{t('planes.operations.levelDetails.l5')}</strong>: {t('planes.operations.levelDetails.l5Desc')} <span style={{color: '#ff4d4f'}}>({t('planes.operations.levelDetails.complexDependency')})</span></li>
+              <li><strong>{t('planes:operations.levelDetails.l1')}</strong>: {t('planes:operations.levelDetails.l1Desc')}</li>
+              <li><strong>{t('planes:operations.levelDetails.l2')}</strong>: {t('planes:operations.levelDetails.l2Desc')}</li>
+              <li><strong>{t('planes:operations.levelDetails.l3')}</strong>: {t('planes:operations.levelDetails.l3Desc')} <span style={{color: '#fa8c16'}}>({t('planes:operations.levelDetails.multipleDependency')})</span></li>
+              <li><strong>{t('planes:operations.levelDetails.l4')}</strong>: {t('planes:operations.levelDetails.l4Desc')} <span style={{color: '#fa8c16'}}>({t('planes:operations.levelDetails.multipleDependency')})</span></li>
+              <li><strong>{t('planes:operations.levelDetails.l5')}</strong>: {t('planes:operations.levelDetails.l5Desc')} <span style={{color: '#ff4d4f'}}>({t('planes:operations.levelDetails.complexDependency')})</span></li>
             </ul>
           </Col>
           <Col xs={24} md={12}>
-            <Title level={4}>{t('planes.operations.features.title')}</Title>
+            <Title level={4}>{t('planes:operations.features.title')}</Title>
             <ul>
-              <li><strong>{t('planes.operations.features.multipleDependencySupport')}</strong>: {t('planes.operations.features.multipleDependencySupportDesc')}</li>
-              <li><strong>{t('planes.operations.features.complexityAnalysis')}</strong>: {t('planes.operations.features.complexityAnalysisDesc')}</li>
-              <li><strong>{t('planes.operations.features.visualization')}</strong>: {t('planes.operations.features.visualizationDesc')}</li>
-              <li><strong>{t('planes.operations.features.realTimeMonitoring')}</strong>: {t('planes.operations.features.realTimeMonitoringDesc')}</li>
-              <li><strong>{t('planes.operations.features.riskAssessment')}</strong>: {t('planes.operations.features.riskAssessmentDesc')}</li>
+              <li><strong>{t('planes:operations.features.multipleDependencySupport')}</strong>: {t('planes:operations.features.multipleDependencySupportDesc')}</li>
+              <li><strong>{t('planes:operations.features.complexityAnalysis')}</strong>: {t('planes:operations.features.complexityAnalysisDesc')}</li>
+              <li><strong>{t('planes:operations.features.visualization')}</strong>: {t('planes:operations.features.visualizationDesc')}</li>
+              <li><strong>{t('planes:operations.features.realTimeMonitoring')}</strong>: {t('planes:operations.features.realTimeMonitoringDesc')}</li>
+              <li><strong>{t('planes:operations.features.riskAssessment')}</strong>: {t('planes:operations.features.riskAssessmentDesc')}</li>
             </ul>
           </Col>
         </Row>

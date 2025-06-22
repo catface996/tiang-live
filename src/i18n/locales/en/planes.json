@@ -1,0 +1,186 @@
+{
+  "title": "Plane Management",
+  "subtitle": "Manage system planes and their hierarchical dependencies",
+  "createTitle": "Create Plane",
+  "editTitle": "Edit Plane",
+  "createSubtitle": "Create new plane definition",
+  "editSubtitle": "Modify plane configuration and properties",
+  "userPlane": "User Plane",
+  "orderPlane": "Order Plane",
+  "paymentPlane": "Payment Plane",
+  "productPlane": "Product Plane",
+  "inventoryPlane": "Inventory Plane",
+  "stats": {
+    "totalPlanes": "Total Planes",
+    "activePlanes": "Active Planes",
+    "warningPlanes": "Warning Planes",
+    "errorPlanes": "Error Planes",
+    "totalInstances": "Total Instances",
+    "totalEntities": "Total Entities",
+    "healthyEntities": "Healthy Entities",
+    "warningEntities": "Warning Entities",
+    "errorEntities": "Error Entities"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "WARNING": "Warning",
+    "ERROR": "Error",
+    "INACTIVE": "Inactive"
+  },
+  "levels": {
+    "infrastructure": "Infrastructure Plane",
+    "middleware": "Middleware Plane",
+    "businessSystem": "Business System Plane",
+    "businessChain": "Business Chain Plane",
+    "businessScenario": "Business Scenario Plane"
+  },
+  "errors": {
+    "loadDataFailed": "Failed to load plane data",
+    "planeDefinitionLoadFailed": "Failed to load plane definitions",
+    "topologyLoadFailed": "Failed to load topology structure",
+    "metricsLoadFailed": "Failed to load metrics data"
+  },
+  "operations": {
+    "title": "Operation Instructions",
+    "levelDescription": "Plane Level Description",
+    "levelDetails": {
+      "l1": "L1 - Infrastructure Plane",
+      "l1Desc": "Contains infrastructure components such as servers, networks, storage",
+      "l2": "L2 - Middleware Plane", 
+      "l2Desc": "Contains middleware services such as databases, message queues, caches",
+      "l3": "L3 - Business System Plane",
+      "l3Desc": "Contains various business systems and microservices",
+      "l4": "L4 - Business Chain Plane",
+      "l4Desc": "Contains cross-system business processes and service chains",
+      "l5": "L5 - Business Scenario Plane",
+      "l5Desc": "Contains complete business scenarios and user journeys",
+      "multipleDependency": "Multiple Dependencies Supported",
+      "complexDependency": "Complex Dependencies"
+    },
+    "features": {
+      "title": "Features",
+      "multipleDependencySupport": "Multiple Dependency Support",
+      "multipleDependencySupportDesc": "Support for managing multiple dependencies between planes",
+      "complexityAnalysis": "Complexity Analysis",
+      "complexityAnalysisDesc": "Automatically analyze the complexity and risks of plane dependencies",
+      "visualization": "Visualization",
+      "visualizationDesc": "Intuitively display plane topology and dependency relationships",
+      "realTimeMonitoring": "Real-time Monitoring",
+      "realTimeMonitoringDesc": "Real-time monitoring of plane status and health",
+      "riskAssessment": "Risk Assessment",
+      "riskAssessmentDesc": "Assess the impact risk of dependency changes on the system"
+    }
+  },
+  "loading": {
+    "topology": "Loading topology...",
+    "noPlaneData": "No plane data available"
+  },
+  "card": {
+    "labels": {
+      "level": "Level",
+      "dependencies": "Dependencies",
+      "totalEntities": "Total Entities",
+      "entityHealthStatus": "Entity Health Status",
+      "createdAt": "Created At",
+      "planesCount": "Planes Count",
+      "multipleDependency": "Multiple Dependencies"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "WARNING": "Warning",
+      "ERROR": "Error", 
+      "INACTIVE": "Inactive",
+      "UNKNOWN": "Unknown"
+    },
+    "tooltips": {
+      "viewDetails": "View Details",
+      "editConfig": "Edit Configuration",
+      "addInstance": "Add Instance"
+    },
+    "entityStats": {
+      "healthy": "Healthy",
+      "warning": "Warning",
+      "error": "Error",
+      "noEntities": "No Entities",
+      "healthyTooltip": "Number of healthy entities",
+      "warningTooltip": "Number of warning entities",
+      "errorTooltip": "Number of error entities"
+    }
+  },
+  "dependency": {
+    "title": "Plane Dependency Complexity Analysis",
+    "stats": {
+      "totalComplexity": "Total Complexity",
+      "maxDependencies": "Max Dependencies",
+      "mediumRiskPlanes": "Medium Risk Planes",
+      "highRiskPlanes": "High Risk Planes"
+    },
+    "columns": {
+      "planeName": "Plane Name",
+      "dependencyCount": "Dependency Count",
+      "dependentCount": "Dependent Count",
+      "complexityScore": "Complexity Score",
+      "riskLevel": "Risk Level"
+    },
+    "riskExplanation": {
+      "title": "Risk Level Explanation",
+      "low": "Low Risk: Simple dependencies with limited impact scope",
+      "medium": "Medium Risk: Multiple dependencies exist, need to monitor change impact",
+      "high": "High Risk: Complex dependency network, changes require careful assessment"
+    },
+    "tooltips": {
+      "dependencyPlanes": "Dependency planes",
+      "dependentPlanes": "Dependent planes",
+      "none": "None"
+    },
+    "riskLevels": {
+      "low": "Low Risk",
+      "medium": "Medium Risk",
+      "high": "High Risk"
+    }
+  },
+  "createEdit": {
+    "createTitle": "Create Plane",
+    "editTitle": "Edit Plane",
+    "formLabels": {
+      "planeName": "Plane Name",
+      "planeNamePlaceholder": "Enter plane name",
+      "planeNameHelp": "Unique identifier for the plane",
+      "displayName": "Display Name",
+      "displayNamePlaceholder": "Enter display name",
+      "displayNameHelp": "Friendly name for UI display",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter plane description",
+      "level": "Level",
+      "levelHelp": "Select the level this plane belongs to",
+      "dependencies": "Dependency Planes",
+      "dependenciesHelp": "Select other planes this plane depends on"
+    },
+    "levelOptions": {
+      "1": "L1 - Infrastructure Plane",
+      "2": "L2 - Middleware Plane",
+      "3": "L3 - Business System Plane",
+      "4": "L4 - Business Chain Plane",
+      "5": "L5 - Business Scenario Plane"
+    },
+    "validation": {
+      "planeNameRequired": "Please enter plane name",
+      "displayNameRequired": "Please enter display name",
+      "descriptionRequired": "Please enter plane description",
+      "levelRequired": "Please select plane level"
+    },
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "reset": "Reset"
+    },
+    "preview": {
+      "title": "Preview",
+      "subtitle": "Plane Configuration Preview",
+      "dependencies": "Dependencies"
+    }
+  },
+  "form": {
+    "basicInfo": "Basic Information"
+  }
+}

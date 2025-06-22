@@ -20,7 +20,7 @@ const PlaneCreateEdit: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id?: string }>();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['planes', 'common']);
   
   const { definitions: planes, loading } = useAppSelector(state => state.plane);
   const [currentPlane, setCurrentPlane] = useState<PlaneDefinition | null>(null);

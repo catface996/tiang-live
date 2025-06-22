@@ -325,10 +325,10 @@ const IndustrySolutionManagement: React.FC = () => {
   const [filterIndustry, setFilterIndustry] = useState('all');
   const [filterComplexity, setFilterComplexity] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common']);
 
   useEffect(() => {
-    setPageTitle(t('solutions.title'));
+    setPageTitle(t('solutions:title'));
   }, [t]);
 
   // 行业方案数据
@@ -738,19 +738,19 @@ const IndustrySolutionManagement: React.FC = () => {
   ];
 
   const industryMap = {
-    ecommerce: { name: t('solutions.industry.ecommerce'), color: 'blue', icon: <ShopOutlined /> },
-    finance: { name: t('solutions.industry.finance'), color: 'green', icon: <BankOutlined /> },
-    healthcare: { name: t('solutions.industry.healthcare'), color: 'red', icon: <MedicineBoxOutlined /> },
-    automotive: { name: t('solutions.industry.automotive'), color: 'orange', icon: <CarOutlined /> },
-    education: { name: t('solutions.industry.education'), color: 'purple', icon: <BookOutlined /> },
-    logistics: { name: t('solutions.industry.logistics'), color: 'cyan', icon: <GlobalOutlined /> },
+    ecommerce: { name: t('solutions:industry.ecommerce'), color: 'blue', icon: <ShopOutlined /> },
+    finance: { name: t('solutions:industry.finance'), color: 'green', icon: <BankOutlined /> },
+    healthcare: { name: t('solutions:industry.healthcare'), color: 'red', icon: <MedicineBoxOutlined /> },
+    automotive: { name: t('solutions:industry.automotive'), color: 'orange', icon: <CarOutlined /> },
+    education: { name: t('solutions:industry.education'), color: 'purple', icon: <BookOutlined /> },
+    logistics: { name: t('solutions:industry.logistics'), color: 'cyan', icon: <GlobalOutlined /> },
   };
 
   const getComplexityTag = (complexity: string) => {
     const complexityMap = {
-      simple: { color: 'green', text: t('solutions.complexity.simple') },
-      medium: { color: 'orange', text: t('solutions.complexity.medium') },
-      complex: { color: 'red', text: t('solutions.complexity.complex') },
+      simple: { color: 'green', text: t('solutions:complexity.simple') },
+      medium: { color: 'orange', text: t('solutions:complexity.medium') },
+      complex: { color: 'red', text: t('solutions:complexity.complex') },
     };
     const config = complexityMap[complexity as keyof typeof complexityMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -758,9 +758,9 @@ const IndustrySolutionManagement: React.FC = () => {
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      active: { color: 'green', text: t('solutions.status.active') },
-      draft: { color: 'orange', text: t('solutions.status.draft') },
-      deprecated: { color: 'red', text: t('solutions.status.deprecated') },
+      active: { color: 'green', text: t('solutions:status.active') },
+      draft: { color: 'orange', text: t('solutions:status.draft') },
+      deprecated: { color: 'red', text: t('solutions:status.deprecated') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -779,19 +779,19 @@ const IndustrySolutionManagement: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <SolutionOutlined style={{ color: '#1890ff' }} />
-                {t('solutions.title')}
+                {t('solutions:title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('solutions.subtitle')}
+              {t('solutions:subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              {t('solutions.refresh')}
+              {t('solutions:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />}>
-              {t('solutions.createSolution')}
+              {t('solutions:createSolution')}
             </Button>
           </Space>
         </div>
@@ -802,9 +802,9 @@ const IndustrySolutionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('solutions.stats.totalSolutions')}
+              title={t('solutions:stats.totalSolutions')}
               value={solutionData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<SolutionOutlined />}
             />
@@ -813,9 +813,9 @@ const IndustrySolutionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('solutions.stats.activeSolutions')}
+              title={t('solutions:stats.activeSolutions')}
               value={solutionData.filter(s => s.status === 'active').length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<DeploymentUnitOutlined />}
             />
@@ -824,9 +824,9 @@ const IndustrySolutionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('solutions.stats.businessEntities')}
+              title={t('solutions:stats.businessEntities')}
               value={solutionData.reduce((sum, s) => sum + s.entities.length, 0)}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#faad14' }}
               prefix={<ApiOutlined />}
             />
@@ -835,9 +835,9 @@ const IndustrySolutionManagement: React.FC = () => {
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
           <StatsCard>
             <Statistic
-              title={t('solutions.stats.totalUsage')}
+              title={t('solutions:stats.totalUsage')}
               value={solutionData.reduce((sum, s) => sum + s.usageCount, 0)}
-              suffix={t('common.unit.times')}
+              suffix={t('common:unit.times')}
               valueStyle={{ color: '#722ed1' }}
               prefix={<TeamOutlined />}
             />
@@ -849,16 +849,16 @@ const IndustrySolutionManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('solutions.search.placeholder')}
+        searchPlaceholder={t('solutions:search.placeholder')}
         filters={[
           {
             key: 'industry',
             value: filterIndustry,
             onChange: setFilterIndustry,
-            placeholder: t('solutions.search.industryType'),
+            placeholder: t('solutions:search.industryType'),
             width: 120,
             options: [
-              { value: 'all', label: t('solutions.allIndustries') },
+              { value: 'all', label: t('solutions:allIndustries') },
               ...Object.entries(industryMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -869,26 +869,26 @@ const IndustrySolutionManagement: React.FC = () => {
             key: 'complexity',
             value: filterComplexity,
             onChange: setFilterComplexity,
-            placeholder: t('solutions.search.complexity'),
+            placeholder: t('solutions:search.complexity'),
             width: 100,
             options: [
-              { value: 'all', label: t('solutions.allComplexities') },
-              { value: 'simple', label: t('solutions.complexity.simple') },
-              { value: 'medium', label: t('solutions.complexity.medium') },
-              { value: 'complex', label: t('solutions.complexity.complex') }
+              { value: 'all', label: t('solutions:allComplexities') },
+              { value: 'simple', label: t('solutions:complexity.simple') },
+              { value: 'medium', label: t('solutions:complexity.medium') },
+              { value: 'complex', label: t('solutions:complexity.complex') }
             ]
           },
           {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('solutions.search.status'),
+            placeholder: t('solutions:search.status'),
             width: 100,
             options: [
-              { value: 'all', label: t('solutions.allStatuses') },
-              { value: 'active', label: t('solutions.status.active') },
-              { value: 'draft', label: t('solutions.status.draft') },
-              { value: 'deprecated', label: t('solutions.status.deprecated') }
+              { value: 'all', label: t('solutions:allStatuses') },
+              { value: 'active', label: t('solutions:status.active') },
+              { value: 'draft', label: t('solutions:status.draft') },
+              { value: 'deprecated', label: t('solutions:status.deprecated') }
             ]
           }
         ]}
@@ -941,21 +941,21 @@ const IndustrySolutionManagement: React.FC = () => {
                     <Row gutter={[8, 8]}>
                       <Col span={8}>
                         <Statistic
-                          title={t('solutions.card.businessEntities')}
+                          title={t('solutions:card.businessEntities')}
                           value={solution.entities.length}
                           valueStyle={{ fontSize: 18, color: '#1890ff' }}
                         />
                       </Col>
                       <Col span={8}>
                         <Statistic
-                          title={t('solutions.modal.relationCount')}
+                          title={t('solutions:modal.relationCount')}
                           value={solution.relations.length}
                           valueStyle={{ fontSize: 18, color: '#52c41a' }}
                         />
                       </Col>
                       <Col span={8}>
                         <Statistic
-                          title={t('solutions.card.usageCount')}
+                          title={t('solutions:card.usageCount')}
                           value={solution.usageCount}
                           valueStyle={{ fontSize: 18, color: '#722ed1' }}
                         />
@@ -982,11 +982,11 @@ const IndustrySolutionManagement: React.FC = () => {
                   {/* 底部信息 */}
                   <div className="card-footer">
                     <div className="footer-item">
-                      <span className="footer-label">{t('solutions.card.creator')}</span>
+                      <span className="footer-label">{t('solutions:card.creator')}</span>
                       <span className="footer-value">{solution.createdBy}</span>
                     </div>
                     <div className="footer-item">
-                      <span className="footer-label">{t('solutions.card.updateTime')}</span>
+                      <span className="footer-label">{t('solutions:card.updateTime')}</span>
                       <span className="footer-value">{solution.lastModified}</span>
                     </div>
                   </div>
@@ -994,7 +994,7 @@ const IndustrySolutionManagement: React.FC = () => {
                   {/* 操作按钮区域 - 单独一行 */}
                   <div className="card-actions">
                     <Space>
-                      <Tooltip title={t('solutions.card.viewDetails')}>
+                      <Tooltip title={t('solutions:card.viewDetails')}>
                         <Button 
                           type="text" 
                           icon={<EyeOutlined />} 
@@ -1005,7 +1005,7 @@ const IndustrySolutionManagement: React.FC = () => {
                           }}
                         />
                       </Tooltip>
-                      <Tooltip title={t('solutions.card.edit')}>
+                      <Tooltip title={t('solutions:card.edit')}>
                         <Button 
                           type="text" 
                           icon={<EditOutlined />} 
@@ -1038,10 +1038,10 @@ const IndustrySolutionManagement: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('solutions.modal.solutionName')} span={2}>
+              <Descriptions.Item label={t('solutions:modal.solutionName')} span={2}>
                 {selectedSolution.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.industryType')}>
+              <Descriptions.Item label={t('solutions:modal.industryType')}>
                 <Tag 
                   color={industryMap[selectedSolution.industry as keyof typeof industryMap]?.color}
                   icon={industryMap[selectedSolution.industry as keyof typeof industryMap]?.icon}
@@ -1049,45 +1049,45 @@ const IndustrySolutionManagement: React.FC = () => {
                   {industryMap[selectedSolution.industry as keyof typeof industryMap]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.complexity')}>
+              <Descriptions.Item label={t('solutions:modal.complexity')}>
                 {getComplexityTag(selectedSolution.complexity)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.status')}>
+              <Descriptions.Item label={t('solutions:modal.status')}>
                 {getStatusTag(selectedSolution.status)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.usageCount')}>
-                {selectedSolution.usageCount}{t('common.unit.times')}
+              <Descriptions.Item label={t('solutions:modal.usageCount')}>
+                {selectedSolution.usageCount}{t('common:unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.entityCount')}>
-                {selectedSolution.entities.length}{t('common.unit.count')}
+              <Descriptions.Item label={t('solutions:modal.entityCount')}>
+                {selectedSolution.entities.length}{t('common:unit.count')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.relationCount')}>
-                {selectedSolution.relations.length}{t('common.unit.count')}
+              <Descriptions.Item label={t('solutions:modal.relationCount')}>
+                {selectedSolution.relations.length}{t('common:unit.count')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.creator')}>
+              <Descriptions.Item label={t('solutions:modal.creator')}>
                 {selectedSolution.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.createTime')}>
+              <Descriptions.Item label={t('solutions:modal.createTime')}>
                 {selectedSolution.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.tags')} span={2}>
+              <Descriptions.Item label={t('solutions:modal.tags')} span={2}>
                 <Space wrap>
                   {selectedSolution.tags.map(tag => (
                     <Tag key={tag}>{tag}</Tag>
                   ))}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.description')} span={2}>
+              <Descriptions.Item label={t('solutions:modal.description')} span={2}>
                 {selectedSolution.description}
               </Descriptions.Item>
-              <Descriptions.Item label={t('solutions.modal.scenario')} span={2}>
+              <Descriptions.Item label={t('solutions:modal.scenario')} span={2}>
                 {selectedSolution.scenario}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细内容标签页 */}
             <Tabs defaultActiveKey="entities">
-              <Tabs.TabPane tab={t('solutions.modal.businessEntities')} key="entities">
+              <Tabs.TabPane tab={t('solutions:modal.businessEntities')} key="entities">
                 <Row gutter={16}>
                   {selectedSolution.entities.map(entity => (
                     <Col xs={24} sm={12} lg={8} key={entity.id}>
@@ -1108,7 +1108,7 @@ const IndustrySolutionManagement: React.FC = () => {
                           {entity.description}
                         </Paragraph>
                         <div>
-                          <Text strong style={{ fontSize: 12 }}>{t('solutions.modal.attributes')}:</Text>
+                          <Text strong style={{ fontSize: 12 }}>{t('solutions:modal.attributes')}:</Text>
                           <div style={{ marginTop: 4 }}>
                             {entity.attributes.map(attr => (
                               <Tag key={attr} size="small" style={{ marginBottom: 4 }}>
@@ -1123,7 +1123,7 @@ const IndustrySolutionManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab={t('solutions.modal.entityRelations')} key="relations">
+              <Tabs.TabPane tab={t('solutions:modal.entityRelations')} key="relations">
                 <Row gutter={16}>
                   {selectedSolution.relations.map(relation => (
                     <Col xs={24} sm={12} lg={8} key={relation.id}>

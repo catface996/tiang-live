@@ -21,7 +21,7 @@ import {
   FileTextOutlined,
   BarChartOutlined,
   MonitorOutlined,
-  TestTubeOutlined,
+  ExperimentOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined
 } from '@ant-design/icons';
@@ -45,7 +45,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
   onOk,
   dataSource
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['entityScan', 'common']);
   const [form] = Form.useForm();
   const [selectedType, setSelectedType] = useState<string>('prometheus');
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
@@ -55,59 +55,59 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
   const monitoringTypes = [
     {
       key: 'prometheus',
-      name: 'Prometheus',
+      name: t('entityScan:dataSourceConfig.types.prometheus.name'),
       icon: <LineChartOutlined style={{ color: '#e6522c' }} />,
-      description: '开源监控和告警工具，专注于时序数据收集',
+      description: t('entityScan:dataSourceConfig.types.prometheus.description'),
       defaultPort: 9090,
-      features: ['时序数据', '指标收集', 'PromQL查询', '告警规则']
+      features: t('entityScan:dataSourceConfig.types.prometheus.features', { returnObjects: true })
     },
     {
       key: 'grafana',
-      name: 'Grafana',
+      name: t('entityScan:dataSourceConfig.types.grafana.name'),
       icon: <DashboardOutlined style={{ color: '#f46800' }} />,
-      description: '开源可视化和分析平台，支持多种数据源',
+      description: t('entityScan:dataSourceConfig.types.grafana.description'),
       defaultPort: 3000,
-      features: ['仪表板', '数据源管理', '告警配置', '用户管理']
+      features: t('entityScan:dataSourceConfig.types.grafana.features', { returnObjects: true })
     },
     {
       key: 'elasticsearch',
-      name: 'Elasticsearch',
+      name: t('entityScan:dataSourceConfig.types.elasticsearch.name'),
       icon: <FileTextOutlined style={{ color: '#005571' }} />,
-      description: '分布式搜索和分析引擎，适用于日志分析',
+      description: t('entityScan:dataSourceConfig.types.elasticsearch.description'),
       defaultPort: 9200,
-      features: ['全文搜索', '日志分析', '聚合查询', '索引管理']
+      features: t('entityScan:dataSourceConfig.types.elasticsearch.features', { returnObjects: true })
     },
     {
       key: 'influxdb',
-      name: 'InfluxDB',
+      name: t('entityScan:dataSourceConfig.types.influxdb.name'),
       icon: <BarChartOutlined style={{ color: '#22adf6' }} />,
-      description: '专为时序数据设计的数据库',
+      description: t('entityScan:dataSourceConfig.types.influxdb.description'),
       defaultPort: 8086,
-      features: ['时序存储', '高性能写入', 'SQL查询', '数据压缩']
+      features: t('entityScan:dataSourceConfig.types.influxdb.features', { returnObjects: true })
     },
     {
       key: 'jaeger',
-      name: 'Jaeger',
+      name: t('entityScan:dataSourceConfig.types.jaeger.name'),
       icon: <BarChartOutlined style={{ color: '#60d0e4' }} />,
-      description: '分布式链路追踪系统',
+      description: t('entityScan:dataSourceConfig.types.jaeger.description'),
       defaultPort: 16686,
-      features: ['链路追踪', '性能分析', '依赖分析', '服务拓扑']
+      features: t('entityScan:dataSourceConfig.types.jaeger.features', { returnObjects: true })
     },
     {
       key: 'zabbix',
-      name: 'Zabbix',
+      name: t('entityScan:dataSourceConfig.types.zabbix.name'),
       icon: <MonitorOutlined style={{ color: '#d40000' }} />,
-      description: '企业级监控解决方案',
+      description: t('entityScan:dataSourceConfig.types.zabbix.description'),
       defaultPort: 80,
-      features: ['主机监控', '网络监控', '应用监控', '告警通知']
+      features: t('entityScan:dataSourceConfig.types.zabbix.features', { returnObjects: true })
     },
     {
       key: 'datadog',
-      name: 'Datadog',
+      name: t('entityScan:dataSourceConfig.types.datadog.name'),
       icon: <LineChartOutlined style={{ color: '#632ca6' }} />,
-      description: '云原生监控和分析平台',
+      description: t('entityScan:dataSourceConfig.types.datadog.description'),
       defaultPort: 443,
-      features: ['APM', '日志管理', '基础设施监控', '安全监控']
+      features: t('entityScan:dataSourceConfig.types.datadog.features', { returnObjects: true })
     }
   ];
 
@@ -126,12 +126,12 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
       const success = Math.random() > 0.3;
       setTestResult({
         success,
-        message: success ? '连接测试成功！' : '连接失败，请检查配置参数。'
+        message: success ? t('entityScan:dataSourceConfig.messages.testSuccess') : t('entityScan:dataSourceConfig.messages.testFailed')
       });
     } catch (error) {
       setTestResult({
         success: false,
-        message: '配置验证失败，请检查必填项。'
+        message: t('entityScan:dataSourceConfig.messages.validationFailed')
       });
     } finally {
       setTesting(false);
@@ -145,29 +145,29 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
         return (
           <>
             <Form.Item
-              label="Prometheus URL"
+              label={t('entityScan:dataSourceConfig.fields.url')}
               name={['config', 'url']}
-              rules={[{ required: true, message: '请输入Prometheus地址' }]}
+              rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.urlRequired') }]}
             >
               <Input placeholder="http://prometheus.example.com:9090" />
             </Form.Item>
-            <Form.Item label="认证方式" name={['config', 'authType']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.authType')} name={['config', 'authType']}>
               <Select defaultValue="none">
-                <Option value="none">无认证</Option>
-                <Option value="basic">Basic Auth</Option>
-                <Option value="bearer">Bearer Token</Option>
+                <Option value="none">{t('entityScan:dataSourceConfig.fields.authNone')}</Option>
+                <Option value="basic">{t('entityScan:dataSourceConfig.fields.authBasic')}</Option>
+                <Option value="bearer">{t('entityScan:dataSourceConfig.fields.authToken')}</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="用户名" name={['config', 'username']}>
-              <Input placeholder="用户名（可选）" />
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.username')} name={['config', 'username']}>
+              <Input placeholder={t('entityScan:dataSourceConfig.fields.usernamePlaceholder')} />
             </Form.Item>
-            <Form.Item label="密码" name={['config', 'password']}>
-              <Input.Password placeholder="密码（可选）" />
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.password')} name={['config', 'password']}>
+              <Input.Password placeholder={t('entityScan:dataSourceConfig.fields.passwordPlaceholder')} />
             </Form.Item>
-            <Form.Item label="查询超时(秒)" name={['config', 'timeout']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.timeout')} name={['config', 'timeout']}>
               <InputNumber min={1} max={300} defaultValue={30} />
             </Form.Item>
-            <Form.Item label="最大样本数" name={['config', 'maxSamples']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.maxSamples')} name={['config', 'maxSamples']}>
               <InputNumber min={1000} max={1000000} defaultValue={50000} />
             </Form.Item>
           </>
@@ -177,29 +177,29 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
         return (
           <>
             <Form.Item
-              label="Grafana URL"
+              label={t('entityScan:dataSourceConfig.fields.url')}
               name={['config', 'url']}
-              rules={[{ required: true, message: '请输入Grafana地址' }]}
+              rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.urlRequired') }]}
             >
               <Input placeholder="http://grafana.example.com:3000" />
             </Form.Item>
             <Form.Item
-              label="API Key"
+              label={t('entityScan:dataSourceConfig.fields.apiKey')}
               name={['config', 'apiKey']}
-              rules={[{ required: true, message: '请输入API Key' }]}
+              rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.apiKeyRequired') }]}
             >
               <Input.Password placeholder="Grafana API Key" />
             </Form.Item>
-            <Form.Item label="组织ID" name={['config', 'orgId']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.orgId')} name={['config', 'orgId']}>
               <InputNumber min={1} defaultValue={1} />
             </Form.Item>
-            <Form.Item label="包含仪表板" name={['config', 'includeDashboards']} valuePropName="checked">
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.includeDashboards')} name={['config', 'includeDashboards']} valuePropName="checked">
               <Switch defaultChecked />
             </Form.Item>
-            <Form.Item label="包含数据源" name={['config', 'includeDataSources']} valuePropName="checked">
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.includeDataSources')} name={['config', 'includeDataSources']} valuePropName="checked">
               <Switch defaultChecked />
             </Form.Item>
-            <Form.Item label="包含告警规则" name={['config', 'includeAlerts']} valuePropName="checked">
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.includeAlerts')} name={['config', 'includeAlerts']} valuePropName="checked">
               <Switch />
             </Form.Item>
           </>
@@ -209,28 +209,28 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
         return (
           <>
             <Form.Item
-              label="Elasticsearch集群"
+              label={t('entityScan:dataSourceConfig.fields.cluster')}
               name={['config', 'hosts']}
-              rules={[{ required: true, message: '请输入集群地址' }]}
+              rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.clusterRequired') }]}
             >
               <TextArea 
                 placeholder="http://es1.example.com:9200&#10;http://es2.example.com:9200"
                 rows={3}
               />
             </Form.Item>
-            <Form.Item label="用户名" name={['config', 'username']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.username')} name={['config', 'username']}>
               <Input placeholder="elastic" />
             </Form.Item>
-            <Form.Item label="密码" name={['config', 'password']}>
-              <Input.Password placeholder="密码" />
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.password')} name={['config', 'password']}>
+              <Input.Password placeholder={t('entityScan:dataSourceConfig.fields.passwordPlaceholder')} />
             </Form.Item>
-            <Form.Item label="索引模式" name={['config', 'indices']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.indices')} name={['config', 'indices']}>
               <TextArea 
                 placeholder="app-logs-*&#10;access-logs-*&#10;error-logs-*"
                 rows={3}
               />
             </Form.Item>
-            <Form.Item label="版本" name={['config', 'version']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.version')} name={['config', 'version']}>
               <Select defaultValue="8.x">
                 <Option value="7.x">7.x</Option>
                 <Option value="8.x">8.x</Option>
@@ -243,26 +243,26 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
         return (
           <>
             <Form.Item
-              label="InfluxDB URL"
+              label={t('entityScan:dataSourceConfig.fields.url')}
               name={['config', 'url']}
-              rules={[{ required: true, message: '请输入InfluxDB地址' }]}
+              rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.urlRequired') }]}
             >
               <Input placeholder="http://influxdb.example.com:8086" />
             </Form.Item>
             <Form.Item
-              label="数据库名"
+              label={t('entityScan:dataSourceConfig.fields.database')}
               name={['config', 'database']}
-              rules={[{ required: true, message: '请输入数据库名' }]}
+              rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.databaseRequired') }]}
             >
               <Input placeholder="metrics" />
             </Form.Item>
-            <Form.Item label="用户名" name={['config', 'username']}>
-              <Input placeholder="用户名" />
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.username')} name={['config', 'username']}>
+              <Input placeholder={t('entityScan:dataSourceConfig.fields.usernamePlaceholder')} />
             </Form.Item>
-            <Form.Item label="密码" name={['config', 'password']}>
-              <Input.Password placeholder="密码" />
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.password')} name={['config', 'password']}>
+              <Input.Password placeholder={t('entityScan:dataSourceConfig.fields.passwordPlaceholder')} />
             </Form.Item>
-            <Form.Item label="保留策略" name={['config', 'retention']}>
+            <Form.Item label={t('entityScan:dataSourceConfig.fields.retention')} name={['config', 'retention']}>
               <Input placeholder="30d" />
             </Form.Item>
           </>
@@ -271,8 +271,8 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
       default:
         return (
           <Alert
-            message="配置表单"
-            description="请选择具体的监控系统类型以显示相应的配置选项。"
+            message={t('entityScan:dataSourceConfig.configForm')}
+            description={t('entityScan:dataSourceConfig.selectTypeDescription')}
             type="info"
             showIcon
           />
@@ -282,10 +282,12 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
 
   return (
     <Modal
-      title="监控系统数据源配置"
+      title={t('entityScan:dataSourceConfig.title')}
       open={visible}
       onCancel={onCancel}
       onOk={() => form.submit()}
+      okText={t('common:save')}
+      cancelText={t('common:cancel')}
       width={800}
       destroyOnClose
     >
@@ -316,7 +318,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
                     {type.description}
                   </Paragraph>
                   <div>
-                    <Text strong>主要功能: </Text>
+                    <Text strong>{t('entityScan:dataSourceConfig.mainFeatures')}: </Text>
                     {type.features.map(feature => (
                       <Tag key={feature} color="blue" style={{ margin: '2px' }}>
                         {feature}
@@ -327,16 +329,16 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
               </Card>
 
               <Form.Item
-                label="数据源名称"
+                label={t('entityScan:dataSourceConfig.fields.name')}
                 name="name"
-                rules={[{ required: true, message: '请输入数据源名称' }]}
+                rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.nameRequired') }]}
               >
-                <Input placeholder={`${type.name}数据源`} />
+                <Input placeholder={`${type.name}${t('entityScan:dataSourceConfig.fields.namePlaceholder')}`} />
               </Form.Item>
 
-              <Form.Item label="描述" name="description">
+              <Form.Item label={t('entityScan:dataSourceConfig.fields.description')} name="description">
                 <TextArea 
-                  placeholder={`${type.name}监控系统数据源`}
+                  placeholder={`${type.name}${t('entityScan:dataSourceConfig.fields.descriptionPlaceholder')}`}
                   rows={2}
                 />
               </Form.Item>
@@ -349,11 +351,11 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
 
               <Space>
                 <Button
-                  icon={<TestTubeOutlined />}
+                  icon={<ExperimentOutlined />}
                   onClick={handleTestConnection}
                   loading={testing}
                 >
-                  测试连接
+                  {t('entityScan:dataSourceConfig.testConnection')}
                 </Button>
                 {testResult && (
                   <Alert

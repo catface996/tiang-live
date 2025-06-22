@@ -41,7 +41,7 @@ const MainLayout: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['menu', 'layout']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const isDarkMode = currentTheme === 'dark';
 
@@ -71,82 +71,82 @@ const MainLayout: React.FC = () => {
     {
       key: '/dashboard',
       icon: <DashboardOutlined />,
-      label: t('menu.dashboard'),
+      label: t('menu:dashboard'),
     },
     {
       key: '/planes',
       icon: <AppstoreOutlined />,
-      label: t('menu.planes'),
+      label: t('menu:planes'),
     },
     {
       key: '/entities',
       icon: <NodeIndexOutlined />,
-      label: t('menu.entities'),
+      label: t('menu:entities'),
     },
     {
       key: '/sequences',
       icon: <ControlOutlined />,
-      label: t('menu.sequences'),
+      label: t('menu:sequences'),
     },
     {
       key: '/industry-solutions',
       icon: <SolutionOutlined />,
-      label: t('menu.solutions'),
+      label: t('menu:solutions'),
     },
     {
       key: 'task-management',
       icon: <ProjectOutlined />,
-      label: t('menu.tasks'),
+      label: t('menu:tasks'),
       children: [
         {
           key: '/task-management/task-collections',
-          label: t('menu.collections'),
+          label: t('menu:collections'),
         },
         {
           key: '/task-management/inspection-tasks',
-          label: t('menu.inspectionTasks'),
+          label: t('menu:inspectionTasks'),
         },
         {
           key: '/task-management/hook-tasks',
-          label: t('menu.hookTasks'),
+          label: t('menu:hookTasks'),
         },
       ],
     },
     {
       key: '/reports',
       icon: <FileTextOutlined />,
-      label: t('menu.reports'),
+      label: t('menu:reports'),
     },
     {
       key: '/ai-assistant',
       icon: <MessageOutlined />,
-      label: t('menu.aiAssistant'),
+      label: t('menu:aiAssistant'),
     },
     {
       key: '/ai-agents',
       icon: <RobotOutlined />,
-      label: t('menu.agents'),
+      label: t('menu:agents'),
     },
     {
       key: 'system-settings',
       icon: <SettingOutlined />,
-      label: t('menu.systemSettings'),
+      label: t('menu:systemSettings'),
       children: [
         {
           key: '/system-settings/model-management',
-          label: t('menu.modelManagement'),
+          label: t('menu:modelManagement'),
         },
         {
           key: '/system-settings/prompt-templates',
-          label: t('menu.promptTemplates'),
+          label: t('menu:promptTemplates'),
         },
         {
           key: '/system-settings/tag-management',
-          label: t('menu.tagManagement'),
+          label: t('menu:tagManagement'),
         },
         {
           key: '/system-settings/entity-scan',
-          label: t('menu.entityScan'),
+          label: t('menu:entityScan'),
         },
       ],
     },
@@ -156,12 +156,12 @@ const MainLayout: React.FC = () => {
     {
       key: 'profile',
       icon: <UserOutlined />,
-      label: t('layout.profile'),
+      label: t('layout:profile'),
     },
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: t('layout.settings'),
+      label: t('layout:settings'),
     },
     {
       type: 'divider' as const,
@@ -169,7 +169,7 @@ const MainLayout: React.FC = () => {
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: t('layout.logout'),
+      label: t('layout:logout'),
       danger: true,
     },
   ];
@@ -260,7 +260,7 @@ const MainLayout: React.FC = () => {
                   fontWeight: 600,
                   whiteSpace: 'nowrap'
                 }}>
-                  {t('layout.title')}
+                  {t('layout:title')}
                 </Text>
               )}
             </div>

@@ -65,11 +65,11 @@ const getStatusColor = (status: string) => {
 };
 
 const getStatusText = (status: string, t: any) => {
-  return t(`planes.card.status.${status}`) || t('planes.card.status.UNKNOWN');
+  return t(`planes:status.${status}`) || t('planes:status.UNKNOWN');
 };
 
 const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['planes', 'common']);
   
   const handleAction = (action: 'view' | 'edit' | 'add') => {
     onAction(action, plane.id);
@@ -91,7 +91,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
       }
       extra={
         <Space>
-          <Tooltip title={t('planes.card.tooltips.viewDetails')}>
+          <Tooltip title={t('planes:card.tooltips.viewDetails')}>
             <Button 
               type="text" 
               icon={<EyeOutlined />} 
@@ -99,7 +99,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               className="plane-action-btn"
             />
           </Tooltip>
-          <Tooltip title={t('planes.card.tooltips.editConfig')}>
+          <Tooltip title={t('planes:card.tooltips.editConfig')}>
             <Button 
               type="text" 
               icon={<EditOutlined />} 
@@ -107,7 +107,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               className="plane-action-btn"
             />
           </Tooltip>
-          <Tooltip title={t('planes.card.tooltips.addInstance')}>
+          <Tooltip title={t('planes:card.tooltips.addInstance')}>
             <Button 
               type="text" 
               icon={<PlusOutlined />} 
@@ -124,7 +124,7 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
 
       {/* 实体健康状态统计 */}
       <div className="entity-health-section">
-        <Text strong className="section-title">{t('planes.card.labels.entityHealthStatus')}:</Text>
+        <Text strong className="section-title">{t('planes:card.labels.entityHealthStatus')}:</Text>
         <EntityHealthStats 
           entityHealth={plane.entityHealth} 
           showProgress={true}
@@ -137,15 +137,15 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
       <StatsContainer>
         <Space size="large">
           <div>
-            <Text strong>{t('planes.card.labels.level')}: </Text>
+            <Text strong>{t('planes:card.labels.level')}: </Text>
             <Text>L{plane.level}</Text>
           </div>
           <div>
-            <Text strong>{t('planes.card.labels.totalEntities')}: </Text>
+            <Text strong>{t('planes:card.labels.totalEntities')}: </Text>
             <Text>{plane.entityHealth.total}</Text>
           </div>
           <div>
-            <Text strong>{t('planes.card.labels.createdAt')}: </Text>
+            <Text strong>{t('planes:card.labels.createdAt')}: </Text>
             <Text>{new Date(plane.createdAt).toLocaleDateString()}</Text>
           </div>
         </Space>
@@ -153,8 +153,8 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
         {plane.dependencies && plane.dependencies.length > 0 && (
           <div>
             <Text type="secondary" className="dependency-text">
-              {t('planes.card.labels.dependencies')}: {plane.dependencies.length} {t('planes.card.labels.planesCount')}
-              {plane.dependencies.length > 1 && <span className="multiple-dependency-warning"> ({t('planes.card.labels.multipleDependency')})</span>}
+              {t('planes:card.labels.dependencies')}: {plane.dependencies.length} {t('planes:card.labels.planesCount')}
+              {plane.dependencies.length > 1 && <span className="multiple-dependency-warning"> ({t('planes:card.labels.multipleDependency')})</span>}
             </Text>
             <div className="dependency-list">
               {plane.dependencies.map((depId, index) => (

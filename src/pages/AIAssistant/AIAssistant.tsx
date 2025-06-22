@@ -243,17 +243,17 @@ const AIAssistant: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
 
   useEffect(() => {
-    setPageTitle(t('aiAssistant.title'));
+    setPageTitle(t('aiAssistant:title'));
     // 初始欢迎消息
     const welcomeMessage: Message = {
       id: '1',
-      content: t('dashboard.welcome'),
+      content: t('dashboard:welcome'),
       isUser: false,
       timestamp: new Date(),
     };
@@ -274,12 +274,12 @@ const AIAssistant: React.FC = () => {
   };
 
   const suggestions = [
-    t('aiAssistant.suggestions.createPlane'),
-    t('aiAssistant.suggestions.entityRelation'),
-    t('aiAssistant.suggestions.healthMonitor'),
-    t('aiAssistant.suggestions.planeDependency'),
-    t('aiAssistant.suggestions.tagManagement'),
-    t('aiAssistant.suggestions.systemReport'),
+    t('aiAssistant:suggestions.createPlane'),
+    t('aiAssistant:suggestions.entityRelation'),
+    t('aiAssistant:suggestions.healthMonitor'),
+    t('aiAssistant:suggestions.planeDependency'),
+    t('aiAssistant:suggestions.tagManagement'),
+    t('aiAssistant:suggestions.systemReport'),
   ];
 
   const handleSendMessage = async (content?: string) => {
@@ -330,45 +330,45 @@ const AIAssistant: React.FC = () => {
       keywords.some(keyword => lowerMessage.includes(keyword));
     
     if (isChineseKeyword(['平面', '创建']) || isEnglishKeyword(['plane', 'create'])) {
-      return t('aiAssistant.responses.createPlane');
+      return t('aiAssistant:responses.createPlane');
     }
     
     if (isChineseKeyword(['实体', '关系']) || isEnglishKeyword(['entity', 'relation'])) {
-      return t('aiAssistant.responses.entityRelation');
+      return t('aiAssistant:responses.entityRelation');
     }
     
     if (isChineseKeyword(['健康度', '监控']) || isEnglishKeyword(['health', 'monitor'])) {
-      return t('aiAssistant.responses.healthMonitor');
+      return t('aiAssistant:responses.healthMonitor');
     }
     
     if (isChineseKeyword(['依赖', '配置']) || isEnglishKeyword(['dependency', 'config'])) {
-      return t('aiAssistant.responses.dependency');
+      return t('aiAssistant:responses.dependency');
     }
     
     if (isChineseKeyword(['标签', '管理']) || isEnglishKeyword(['tag', 'management'])) {
-      return t('aiAssistant.responses.tagManagement');
+      return t('aiAssistant:responses.tagManagement');
     }
     
     if (isChineseKeyword(['报告', '生成']) || isEnglishKeyword(['report', 'generate'])) {
-      return t('aiAssistant.responses.reportGeneration');
+      return t('aiAssistant:responses.reportGeneration');
     }
     
     if (isChineseKeyword(['时序', '管理']) || isEnglishKeyword(['sequence', 'management'])) {
-      return t('aiAssistant.responses.sequenceManagement');
+      return t('aiAssistant:responses.sequenceManagement');
     }
     
     if (isChineseKeyword(['智能体', 'agent']) || isEnglishKeyword(['agent', 'ai'])) {
-      return t('aiAssistant.responses.aiAgent');
+      return t('aiAssistant:responses.aiAgent');
     }
     
     // 默认回复
-    return t('aiAssistant.responses.default');
+    return t('aiAssistant:responses.default');
   };
 
   const handleClearChat = () => {
     setMessages([{
       id: '1',
-      content: t('aiAssistant.chatCleared'),
+      content: t('aiAssistant:chatCleared'),
       isUser: false,
       timestamp: new Date(),
     }]);
@@ -381,7 +381,7 @@ const AIAssistant: React.FC = () => {
   };
 
   const formatTime = (date: Date) => {
-    const locale = t('common.locale') === 'zh-CN' ? 'zh-CN' : 'en-US';
+    const locale = t('common:locale') === 'zh-CN' ? 'zh-CN' : 'en-US';
     return date.toLocaleTimeString(locale, { 
       hour: '2-digit', 
       minute: '2-digit' 
@@ -400,7 +400,7 @@ const AIAssistant: React.FC = () => {
             }}>
               <Space>
                 <MessageOutlined style={{ color: isDark ? '#177ddc' : '#1890ff' }} />
-                {t('aiAssistant.title')}
+                {t('aiAssistant:title')}
                 <Badge 
                   count="Beta" 
                   style={{ 
@@ -416,12 +416,12 @@ const AIAssistant: React.FC = () => {
               fontSize: 16,
               color: isDark ? '#8c8c8c' : '#666666'
             }}>
-              {t('aiAssistant.subtitle')}
+              {t('aiAssistant:subtitle')}
             </Paragraph>
           </Col>
           <Col>
             <Space>
-              <Tooltip title={t('aiAssistant.clear')}>
+              <Tooltip title={t('aiAssistant:clear')}>
                 <Button 
                   icon={<DeleteOutlined />} 
                   onClick={handleClearChat}
@@ -431,10 +431,10 @@ const AIAssistant: React.FC = () => {
                     backgroundColor: isDark ? 'transparent' : undefined
                   }}
                 >
-                  {t('aiAssistant.clear')}
+                  {t('aiAssistant:clear')}
                 </Button>
               </Tooltip>
-              <Tooltip title={t('common.refresh')}>
+              <Tooltip title={t('common:refresh')}>
                 <Button 
                   icon={<ReloadOutlined />}
                   onClick={() => window.location.reload()}
@@ -444,7 +444,7 @@ const AIAssistant: React.FC = () => {
                     backgroundColor: isDark ? 'transparent' : undefined
                   }}
                 >
-                  {t('common.refresh')}
+                  {t('common:refresh')}
                 </Button>
               </Tooltip>
             </Space>
@@ -461,7 +461,7 @@ const AIAssistant: React.FC = () => {
                 <Space>
                   <BulbOutlined style={{ color: '#faad14' }} />
                   <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
-                    {t('aiAssistant.suggestions')}：
+                    {t('aiAssistant:suggestiondescription')}：
                   </Text>
                 </Space>
               </div>
@@ -490,7 +490,7 @@ const AIAssistant: React.FC = () => {
               <Empty 
                 description={
                   <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}>
-                    {t('aiAssistant.emptyMessage')}
+                    {t('aiAssistant:emptyMessage')}
                   </span>
                 }
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -545,7 +545,7 @@ const AIAssistant: React.FC = () => {
                       <Text type="secondary" style={{ 
                         color: isDark ? '#8c8c8c' : '#666666' 
                       }}>
-                        {t('aiAssistant.thinking')}
+                        {t('aiAssistant:thinking')}
                       </Text>
                     </Space>
                   </MessageBubble>
@@ -561,7 +561,7 @@ const AIAssistant: React.FC = () => {
             <TextArea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder={t('aiAssistant.chatPlaceholder')}
+              placeholder={t('aiAssistant:chatPlaceholder')}
               autoSize={{ minRows: 1, maxRows: 4 }}
               onPressEnter={(e) => {
                 if (e.ctrlKey) {
@@ -578,7 +578,7 @@ const AIAssistant: React.FC = () => {
               disabled={!inputValue.trim()}
               style={{ height: 'auto', minHeight: 32 }}
             >
-              {t('aiAssistant.send')}
+              {t('aiAssistant:send')}
             </Button>
           </InputContainer>
           
@@ -589,7 +589,7 @@ const AIAssistant: React.FC = () => {
             }}>
               <Space>
                 <ThunderboltOutlined />
-                {t('aiAssistant.sendShortcut')}
+                {t('aiAssistant:sendShortcut')}
               </Space>
             </Text>
           </div>

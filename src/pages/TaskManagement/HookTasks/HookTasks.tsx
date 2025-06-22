@@ -234,23 +234,23 @@ const HookTasks: React.FC = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['tasks', 'common']);
 
   // 认证方式映射
   const getAuthenticationDisplay = (auth: string) => {
     const authMap: Record<string, string> = {
-      'bearer_token': t('tasks.hooks.detail.authTypes.bearerToken'),
-      'database_credentials': t('tasks.hooks.detail.authTypes.databaseCredentials'),
-      'api_key': t('tasks.hooks.detail.authTypes.apiKey'),
-      'basic_auth': t('tasks.hooks.detail.authTypes.basicAuth'),
-      'oauth2': t('tasks.hooks.detail.authTypes.oauth2'),
-      'none': t('tasks.hooks.detail.authTypes.none')
+      'bearer_token': t('tasks:hooks.detail.authTypes.bearerToken'),
+      'database_credentials': t('tasks:hooks.detail.authTypes.databaseCredentials'),
+      'api_key': t('tasks:hooks.detail.authTypes.apiKey'),
+      'basic_auth': t('tasks:hooks.detail.authTypes.basicAuth'),
+      'oauth2': t('tasks:hooks.detail.authTypes.oauth2'),
+      'none': t('tasks:hooks.detail.authTypes.none')
     };
     return authMap[auth] || auth;
   };
 
   useEffect(() => {
-    setPageTitle(t('tasks.hooks.title'));
+    setPageTitle(t('tasks:hooks.title'));
   }, [t]);
 
   // Hook任务数据
@@ -381,18 +381,18 @@ const HookTasks: React.FC = () => {
   ];
 
   const hookTypeMap = {
-    webhook: { name: t('tasks.hooks.types.webhook'), color: 'blue', icon: <LinkOutlined /> },
-    database: { name: t('tasks.hooks.types.database'), color: 'green', icon: <DatabaseOutlined /> },
-    message_queue: { name: t('tasks.hooks.types.messageQueue'), color: 'orange', icon: <BellOutlined /> },
-    api_call: { name: t('tasks.hooks.types.apiCall'), color: 'purple', icon: <ApiOutlined /> },
-    script: { name: t('tasks.hooks.types.script'), color: 'cyan', icon: <CodeOutlined /> },
+    webhook: { name: t('tasks:hooks.types.webhook'), color: 'blue', icon: <LinkOutlined /> },
+    database: { name: t('tasks:hooks.types.database'), color: 'green', icon: <DatabaseOutlined /> },
+    message_queue: { name: t('tasks:hooks.types.messageQueue'), color: 'orange', icon: <BellOutlined /> },
+    api_call: { name: t('tasks:hooks.types.apiCall'), color: 'purple', icon: <ApiOutlined /> },
+    script: { name: t('tasks:hooks.types.script'), color: 'cyan', icon: <CodeOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      active: { color: 'green', text: t('tasks.hooks.status.active') },
-      inactive: { color: 'orange', text: t('tasks.hooks.status.inactive') },
-      error: { color: 'red', text: t('tasks.hooks.status.error') },
+      active: { color: 'green', text: t('tasks:hooks.status.active') },
+      inactive: { color: 'orange', text: t('tasks:hooks.status.inactive') },
+      error: { color: 'red', text: t('tasks:hooks.status.error') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -400,9 +400,9 @@ const HookTasks: React.FC = () => {
 
   const getExecutionStatusTag = (status: string) => {
     const statusMap = {
-      success: { color: 'green', text: t('common.success') },
-      failed: { color: 'red', text: t('tasks.hooks.status.error') },
-      timeout: { color: 'orange', text: t('common.timeout') },
+      success: { color: 'green', text: t('common:success') },
+      failed: { color: 'red', text: t('tasks:hooks.status.error') },
+      timeout: { color: 'orange', text: t('common:timeout') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -439,16 +439,16 @@ const HookTasks: React.FC = () => {
   };
 
   const handleDeleteHook = (hookId: string) => {
-    message.success(t('tasks.hooks.messages.deleteSuccess'));
+    message.success(t('tasks:hooks.messages.deleteSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingHook) {
-        message.success(t('tasks.hooks.messages.updateSuccess'));
+        message.success(t('tasks:hooks.messages.updateSuccess'));
       } else {
-        message.success(t('tasks.hooks.messages.createSuccess'));
+        message.success(t('tasks:hooks.messages.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -465,19 +465,19 @@ const HookTasks: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <ApiOutlined style={{ color: '#1890ff' }} />
-                {t('tasks.hooks.title')}
+                {t('tasks:hooks.title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('tasks.hooks.subtitle')}
+              {t('tasks:hooks.subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              {t('tasks.hooks.refresh')}
+              {t('tasks:hooks.refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateHook}>
-              {t('tasks.hooks.createHook')}
+              {t('tasks:hooks.createHook')}
             </Button>
           </Space>
         </div>
@@ -488,9 +488,9 @@ const HookTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.hooks.stats.totalHooks')}
+              title={t('tasks:hooks.stats.totalHooks')}
               value={hookTaskData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<ApiOutlined />}
             />
@@ -499,9 +499,9 @@ const HookTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.hooks.stats.activeHooks')}
+              title={t('tasks:hooks.stats.activeHooks')}
               value={hookTaskData.filter(h => h.status === 'active').length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
@@ -510,7 +510,7 @@ const HookTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.hooks.card.triggerCount')}
+              title={t('tasks:hooks.card.triggerCount')}
               value={hookTaskData.reduce((sum, h) => sum + h.statistics.totalTriggers, 0)}
               valueStyle={{ color: '#faad14' }}
               prefix={<ThunderboltOutlined />}
@@ -520,7 +520,7 @@ const HookTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.hooks.stats.successRate')}
+              title={t('tasks:hooks.stats.successRate')}
               value={(hookTaskData.reduce((sum, h) => sum + h.statistics.successRate, 0) / hookTaskData.length).toFixed(1)}
               suffix="%"
               valueStyle={{ color: '#722ed1' }}
@@ -534,16 +534,16 @@ const HookTasks: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('tasks.hooks.search.placeholder')}
+        searchPlaceholder={t('tasks:hooks.search.placeholder')}
         filters={[
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: t('tasks.hooks.search.type'),
+            placeholder: t('tasks:hooks.search.type'),
             width: 120,
             options: [
-              { value: 'all', label: t('tasks.hooks.search.allTypes') },
+              { value: 'all', label: t('tasks:hooks.search.allTypes') },
               ...Object.entries(hookTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -554,13 +554,13 @@ const HookTasks: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('tasks.hooks.search.status'),
+            placeholder: t('tasks:hooks.search.status'),
             width: 100,
             options: [
-              { value: 'all', label: t('tasks.hooks.search.allStatuses') },
-              { value: 'active', label: t('tasks.hooks.status.active') },
-              { value: 'inactive', label: t('tasks.hooks.status.inactive') },
-              { value: 'error', label: t('tasks.hooks.status.error') }
+              { value: 'all', label: t('tasks:hooks.search.allStatuses') },
+              { value: 'active', label: t('tasks:hooks.status.active') },
+              { value: 'inactive', label: t('tasks:hooks.status.inactive') },
+              { value: 'error', label: t('tasks:hooks.status.error') }
             ]
           }
         ]}
@@ -598,10 +598,10 @@ const HookTasks: React.FC = () => {
                       {typeConfig?.name}
                     </Tag>
                     <Tag icon={<BellOutlined />}>
-                      {hook.trigger.events.length}{t('common.unit.events')}
+                      {hook.trigger.events.length}{t('common:unit.events')}
                     </Tag>
                     <Tag icon={<MonitorOutlined />}>
-                      {totalCollections}{t('tasks.hooks.card.taskCollections')}
+                      {totalCollections}{t('tasks:hooks.card.taskCollections')}
                     </Tag>
                   </Space>
                 </div>
@@ -621,7 +621,7 @@ const HookTasks: React.FC = () => {
                   <Row gutter={12}>
                     <Col span={12}>
                       <Statistic
-                        title={t('tasks.hooks.card.successRate')}
+                        title={t('tasks:hooks.card.successRate')}
                         value={hook.statistics.successRate}
                         suffix="%"
                         valueStyle={{ fontSize: 14 }}
@@ -629,7 +629,7 @@ const HookTasks: React.FC = () => {
                     </Col>
                     <Col span={12}>
                       <Statistic
-                        title={t('tasks.hooks.card.triggerCount')}
+                        title={t('tasks:hooks.card.triggerCount')}
                         value={hook.statistics.totalTriggers}
                         valueStyle={{ fontSize: 14 }}
                       />
@@ -641,7 +641,7 @@ const HookTasks: React.FC = () => {
                 <div style={{ marginBottom: 12 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Text strong style={{ fontSize: 12 }}>{t('tasks.hooks.card.lastTriggered')}</Text>
+                      <Text strong style={{ fontSize: 12 }}>{t('tasks:hooks.card.lastTriggered')}</Text>
                       {getExecutionStatusTag(hook.lastExecution.status)}
                     </div>
                     <Text type="secondary" style={{ fontSize: 11 }}>
@@ -653,11 +653,11 @@ const HookTasks: React.FC = () => {
                 {/* 触发信息 */}
                 <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                    <Text>{t('tasks.hooks.card.triggerEvent')}: </Text>
+                    <Text>{t('tasks:hooks.card.triggerEvent')}: </Text>
                     <Text>{hook.trigger.events.join(', ')}</Text>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text>{t('tasks.hooks.card.lastTriggered')}: </Text>
+                    <Text>{t('tasks:hooks.card.lastTriggered')}: </Text>
                     <Text>{hook.lastExecution.timestamp}</Text>
                   </div>
                 </div>
@@ -665,7 +665,7 @@ const HookTasks: React.FC = () => {
                 {/* 操作按钮区域 - 单独一行 */}
                 <div className="card-actions">
                   <Space>
-                    <Tooltip title={t('tasks.hooks.card.viewDetails')}>
+                    <Tooltip title={t('tasks:hooks.card.viewDetails')}>
                       <Button 
                         type="text" 
                         icon={<EyeOutlined />} 
@@ -676,7 +676,7 @@ const HookTasks: React.FC = () => {
                         }}
                       />
                     </Tooltip>
-                    <Tooltip title={t('tasks.hooks.card.edit')}>
+                    <Tooltip title={t('tasks:hooks.card.edit')}>
                       <Button 
                         type="text" 
                         icon={<EditOutlined />} 
@@ -687,7 +687,7 @@ const HookTasks: React.FC = () => {
                         }}
                       />
                     </Tooltip>
-                    <Tooltip title={hook.status === 'active' ? t('tasks.hooks.card.disable') : t('tasks.hooks.card.enable')}>
+                    <Tooltip title={hook.status === 'active' ? t('tasks:hooks.card.disable') : t('tasks:hooks.card.enable')}>
                       <Button 
                         type="text" 
                         icon={hook.status === 'active' ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
@@ -709,7 +709,7 @@ const HookTasks: React.FC = () => {
 
       {/* 创建/编辑Hook任务模态框 */}
       <Modal
-        title={editingHook ? t('tasks.hooks.editTitle') : t('tasks.hooks.createTitle')}
+        title={editingHook ? t('tasks:hooks.editTitle') : t('tasks:hooks.createTitle')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
@@ -727,32 +727,32 @@ const HookTasks: React.FC = () => {
         >
           <Form.Item
             name="name"
-            label={t('tasks.hooks.form.name')}
-            rules={[{ required: true, message: t('tasks.hooks.form.nameRequired') }]}
+            label={t('tasks:hooks.form.name')}
+            rules={[{ required: true, message: t('tasks:hooks.form.nameRequired') }]}
           >
-            <Input placeholder={t('tasks.hooks.form.namePlaceholder')} />
+            <Input placeholder={t('tasks:hooks.form.namePlaceholder')} />
           </Form.Item>
 
           <Form.Item
             name="description"
-            label={t('tasks.hooks.form.description')}
-            rules={[{ required: true, message: t('tasks.hooks.form.descriptionRequired') }]}
+            label={t('tasks:hooks.form.description')}
+            rules={[{ required: true, message: t('tasks:hooks.form.descriptionRequired') }]}
           >
             <TextArea 
               rows={3} 
-              placeholder={t('tasks.hooks.form.descriptionPlaceholder')}
+              placeholder={t('tasks:hooks.form.descriptionPlaceholder')}
             />
           </Form.Item>
 
           <Form.Item
             name="type"
-            label={t('tasks.hooks.form.type')}
-            rules={[{ required: true, message: t('tasks.hooks.form.typeRequired') }]}
+            label={t('tasks:hooks.form.type')}
+            rules={[{ required: true, message: t('tasks:hooks.form.typeRequired') }]}
           >
-            <Select placeholder={t('tasks.hooks.form.typePlaceholder')}>
-              <Option value="webhook">{t('tasks.hooks.types.webhook')}</Option>
-              <Option value="database">{t('tasks.hooks.types.database')}</Option>
-              <Option value="message_queue">{t('tasks.hooks.types.messageQueue')}</Option>
+            <Select placeholder={t('tasks:hooks.form.typePlaceholder')}>
+              <Option value="webhook">{t('tasks:hooks.types.webhook')}</Option>
+              <Option value="database">{t('tasks:hooks.types.database')}</Option>
+              <Option value="message_queue">{t('tasks:hooks.types.messageQueue')}</Option>
               <Option value="api_call">API</Option>
               <Option value="script">Script</Option>
             </Select>
@@ -762,35 +762,35 @@ const HookTasks: React.FC = () => {
             <Col span={8}>
               <Form.Item
                 name="timeout"
-                label={t('tasks.hooks.form.timeout')}
-                rules={[{ required: true, message: t('tasks.hooks.form.timeoutRequired') }]}
+                label={t('tasks:hooks.form.timeout')}
+                rules={[{ required: true, message: t('tasks:hooks.form.timeoutRequired') }]}
               >
-                <Input type="number" placeholder={t('tasks.hooks.form.timeoutPlaceholder')} />
+                <Input type="number" placeholder={t('tasks:hooks.form.timeoutPlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 name="retryCount"
-                label={t('common.retryCount')}
-                rules={[{ required: true, message: t('common.retryCountRequired') }]}
+                label={t('common:retryCount')}
+                rules={[{ required: true, message: t('common:retryCountRequired') }]}
               >
-                <Input type="number" placeholder={t('common.retryCountPlaceholder')} />
+                <Input type="number" placeholder={t('common:retryCountPlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 name="retryDelay"
-                label={t('tasks.hooks.form.retryDelay')}
-                rules={[{ required: true, message: t('tasks.hooks.form.retryDelayRequired') }]}
+                label={t('tasks:hooks.form.retryDelay')}
+                rules={[{ required: true, message: t('tasks:hooks.form.retryDelayRequired') }]}
               >
-                <Input type="number" placeholder={t('tasks.hooks.form.retryDelayPlaceholder')} />
+                <Input type="number" placeholder={t('tasks:hooks.form.retryDelayPlaceholder')} />
               </Form.Item>
             </Col>
           </Row>
 
           <Alert
-            message={t('common.tips')}
-            description={t('tasks.hooks.tips.createHint')}
+            message={t('common:tips')}
+            description={t('tasks:hooks.tips.createHint')}
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -811,10 +811,10 @@ const HookTasks: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('tasks.hooks.modal.hookName')} span={2}>
+              <Descriptions.Item label={t('tasks:hooks.modal.hookName')} span={2}>
                 {selectedHook.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.hooks.modal.hookType')}>
+              <Descriptions.Item label={t('tasks:hooks.modal.hookType')}>
                 <Tag 
                   color={hookTypeMap[selectedHook.type]?.color}
                   icon={hookTypeMap[selectedHook.type]?.icon}
@@ -822,36 +822,36 @@ const HookTasks: React.FC = () => {
                   {hookTypeMap[selectedHook.type]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.status')}>
+              <Descriptions.Item label={t('common:status')}>
                 {getStatusTag(selectedHook.status)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.hooks.card.successRate')}>
+              <Descriptions.Item label={t('tasks:hooks.card.successRate')}>
                 {selectedHook.statistics.successRate}%
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.hooks.card.triggerCount')}>
-                {selectedHook.statistics.totalTriggers}{t('common.unit.times')}
+              <Descriptions.Item label={t('tasks:hooks.card.triggerCount')}>
+                {selectedHook.statistics.totalTriggers}{t('common:unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.avgResponseTime')}>
+              <Descriptions.Item label={t('common:avgResponseTime')}>
                 {selectedHook.statistics.avgResponseTime}ms
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.hooks.card.lastTriggered')}>
+              <Descriptions.Item label={t('tasks:hooks.card.lastTriggered')}>
                 {selectedHook.lastExecution.timestamp}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.hooks.card.creator')}>
+              <Descriptions.Item label={t('tasks:hooks.card.creator')}>
                 {selectedHook.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.createdAt')}>
+              <Descriptions.Item label={t('common:createdAt')}>
                 {selectedHook.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.description')} span={2}>
+              <Descriptions.Item label={t('common:description')} span={2}>
                 {selectedHook.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细配置 */}
             <Tabs defaultActiveKey="collections">
-              <Tabs.TabPane tab={t('tasks.hooks.modal.taskCollections')} key="collections">
-                <Card title={t('tasks.hooks.modal.triggeredCollections')} size="small" style={{ marginBottom: 16 }}>
+              <Tabs.TabPane tab={t('tasks:hooks.modal.taskCollections')} key="collections">
+                <Card title={t('tasks:hooks.modal.triggeredCollections')} size="small" style={{ marginBottom: 16 }}>
                   {selectedHook.taskCollections.length > 0 ? (
                     <Space wrap>
                       {selectedHook.taskCollections.map(collection => (
@@ -861,20 +861,20 @@ const HookTasks: React.FC = () => {
                       ))}
                     </Space>
                   ) : (
-                    <Text type="secondary">{t('tasks.hooks.modal.noCollections')}</Text>
+                    <Text type="secondary">{t('tasks:hooks.modal.noCollections')}</Text>
                   )}
                 </Card>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab={t('tasks.hooks.modal.triggerConfig')} key="trigger">
-                <Card title={t('tasks.hooks.modal.triggerEvent')} size="small" style={{ marginBottom: 16 }}>
+              <Tabs.TabPane tab={t('tasks:hooks.modal.triggerConfig')} key="trigger">
+                <Card title={t('tasks:hooks.modal.triggerEvent')} size="small" style={{ marginBottom: 16 }}>
                   <Space wrap>
                     {selectedHook.trigger.events.map(event => (
                       <Tag key={event} color="blue">{event}</Tag>
                     ))}
                   </Space>
                 </Card>
-                <Card title={t('tasks.hooks.modal.triggerConditions')} size="small">
+                <Card title={t('tasks:hooks.modal.triggerConditions')} size="small">
                   <Space wrap>
                     {selectedHook.trigger.conditions.map(condition => (
                       <Tag key={condition} color="green">{condition}</Tag>
@@ -883,39 +883,39 @@ const HookTasks: React.FC = () => {
                 </Card>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab={t('tasks.hooks.modal.executionConfig')} key="config">
+              <Tabs.TabPane tab={t('tasks:hooks.modal.executionConfig')} key="config">
                 <Descriptions column={2} size="small">
-                  <Descriptions.Item label={t('common.timeout')}>
-                    {selectedHook.config.timeout}{t('common.unit.seconds')}
+                  <Descriptions.Item label={t('common:timeout')}>
+                    {selectedHook.config.timeout}{t('common:unit.seconds')}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('common.retryCount')}>
-                    {selectedHook.config.retryCount}{t('common.unit.times')}
+                  <Descriptions.Item label={t('common:retryCount')}>
+                    {selectedHook.config.retryCount}{t('common:unit.times')}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.hooks.detail.retryDelay')}>
-                    {selectedHook.config.retryDelay}{t('tasks.hooks.detail.seconds')}
+                  <Descriptions.Item label={t('tasks:hooks.detail.retryDelay')}>
+                    {selectedHook.config.retryDelay}{t('tasks:hooks.detail.seconds')}
                   </Descriptions.Item>
                   {selectedHook.config.url && (
-                    <Descriptions.Item label={t('tasks.hooks.detail.targetUrl')} span={2}>
+                    <Descriptions.Item label={t('tasks:hooks.detail.targetUrl')} span={2}>
                       <Text code>{selectedHook.config.url}</Text>
                     </Descriptions.Item>
                   )}
                   {selectedHook.config.method && (
-                    <Descriptions.Item label={t('tasks.hooks.detail.httpMethod')}>
+                    <Descriptions.Item label={t('tasks:hooks.detail.httpMethod')}>
                       <Tag color="blue">{selectedHook.config.method}</Tag>
                     </Descriptions.Item>
                   )}
                 </Descriptions>
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab={t('tasks.hooks.detail.securityConfig')} key="security">
+              <Tabs.TabPane tab={t('tasks:hooks.detail.securityConfig')} key="security">
                 <Descriptions column={2} size="small">
-                  <Descriptions.Item label={t('tasks.hooks.detail.authentication')}>
+                  <Descriptions.Item label={t('tasks:hooks.detail.authentication')}>
                     {getAuthenticationDisplay(selectedHook.security.authentication)}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.hooks.detail.encryption')}>
-                    {selectedHook.security.encryption ? t('common.yes') : t('common.no')}
+                  <Descriptions.Item label={t('tasks:hooks.detail.encryption')}>
+                    {selectedHook.security.encryption ? t('common:yes') : t('common:no')}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.hooks.detail.ipWhitelist')} span={2}>
+                  <Descriptions.Item label={t('tasks:hooks.detail.ipWhitelist')} span={2}>
                     {selectedHook.security.ipWhitelist.length > 0 ? (
                       <Space wrap>
                         {selectedHook.security.ipWhitelist.map(ip => (
@@ -923,7 +923,7 @@ const HookTasks: React.FC = () => {
                         ))}
                       </Space>
                     ) : (
-                      <Text type="secondary">{t('tasks.hooks.detail.noRestriction')}</Text>
+                      <Text type="secondary">{t('tasks:hooks.detail.noRestriction')}</Text>
                     )}
                   </Descriptions.Item>
                 </Descriptions>

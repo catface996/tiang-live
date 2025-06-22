@@ -42,7 +42,7 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
   loading = false,
   onPlaneAction,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['planes', 'common']);
   
   // 按层级排序平面 - 层级数字越大越在顶层显示
   const sortedPlanes = [...planes].sort((a, b) => b.level - a.level);
@@ -62,7 +62,7 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
       <TopologyContainer>
         <div className="loading-container">
           <Spin size="large" />
-          <div className="loading-text">{t('planes.loading.topology')}</div>
+          <div className="loading-text">{t('planes:loading.topology')}</div>
         </div>
       </TopologyContainer>
     );
@@ -72,7 +72,7 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
     return (
       <TopologyContainer>
         <Empty 
-          description={t('planes.loading.noPlaneData')}
+          description={t('planes:loading.noPlaneData')}
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       </TopologyContainer>

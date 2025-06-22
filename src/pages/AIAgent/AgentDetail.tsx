@@ -201,7 +201,7 @@ const mockHistory = [
 const AgentDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['agents', 'common']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
@@ -210,14 +210,14 @@ const AgentDetail: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setPageTitle(t('agents.detail.title'));
+    setPageTitle(t('agents:detail.title'));
     // 这里可以根据id加载具体的智能体数据
     // loadAgentDetail(id);
   }, [id, t]);
 
   const getAgentTypeConfig = () => ({
     analysis: { 
-      name: t('agents.types.analysis'), 
+      name: t('agents:types.analysis'), 
       color: '#52c41a', 
       bgColor: '#f6ffed',
       icon: '📊'
@@ -227,17 +227,17 @@ const AgentDetail: React.FC = () => {
   const getStatusConfig = (status: string) => {
     const statusMap = {
       running: { 
-        text: t('agents.status.running'), 
+        text: t('agents:status.running'), 
         color: '#52c41a', 
         bgColor: '#f6ffed'
       },
       stopped: { 
-        text: t('agents.status.stopped'), 
+        text: t('agents:status.stopped'), 
         color: '#ff4d4f', 
         bgColor: '#fff2f0'
       },
       paused: { 
-        text: t('agents.status.paused'), 
+        text: t('agents:status.paused'), 
         color: '#faad14', 
         bgColor: '#fff7e6'
       }
@@ -267,13 +267,13 @@ const AgentDetail: React.FC = () => {
 
   const logColumns = [
     {
-      title: t('agents.detail.logs'),
+      title: t('agents:detail.logs'),
       dataIndex: 'time',
       key: 'time',
       width: 180
     },
     {
-      title: t('common.level'),
+      title: t('common:level'),
       dataIndex: 'level',
       key: 'level',
       width: 80,
@@ -284,7 +284,7 @@ const AgentDetail: React.FC = () => {
       )
     },
     {
-      title: t('common.message'),
+      title: t('common:message'),
       dataIndex: 'message',
       key: 'message'
     }
@@ -292,36 +292,36 @@ const AgentDetail: React.FC = () => {
 
   const historyColumns = [
     {
-      title: t('agents.detail.history'),
+      title: t('agents:detail.history'),
       dataIndex: 'task',
       key: 'task'
     },
     {
-      title: t('common.startTime'),
+      title: t('common:startTime'),
       dataIndex: 'startTime',
       key: 'startTime',
       width: 180
     },
     {
-      title: t('common.endTime'),
+      title: t('common:endTime'),
       dataIndex: 'endTime',
       key: 'endTime',
       width: 180
     },
     {
-      title: t('common.duration'),
+      title: t('common:duration'),
       dataIndex: 'duration',
       key: 'duration',
       width: 120
     },
     {
-      title: t('common.status'),
+      title: t('common:status'),
       dataIndex: 'status',
       key: 'status',
       width: 100,
       render: (status: string) => (
         <Tag color={status === 'success' ? 'green' : 'red'}>
-          {status === 'success' ? t('common.success') : t('common.failed')}
+          {status === 'success' ? t('common:success') : t('common:failed')}
         </Tag>
       )
     }
@@ -336,7 +336,7 @@ const AgentDetail: React.FC = () => {
             icon={<ArrowLeftOutlined />} 
             onClick={() => navigate('/agents')}
           >
-            {t('common.back')}
+            {t('common:back')}
           </Button>
         </Space>
 
@@ -383,26 +383,26 @@ const AgentDetail: React.FC = () => {
                 loading={loading}
                 onClick={() => handleAction(agent.status === 'running' ? 'stop' : 'start')}
               >
-                {agent.status === 'running' ? t('agents.actions.stop') : t('agents.actions.start')}
+                {agent.status === 'running' ? t('agents:actions.stop') : t('agents:actions.start')}
               </Button>
               <Button 
                 icon={<EditOutlined />}
                 onClick={() => navigate(`/agents/edit/${agent.id}`)}
               >
-                {t('agents.actions.edit')}
+                {t('agents:actions.edit')}
               </Button>
               <Button 
                 icon={<ReloadOutlined />}
                 onClick={() => handleAction('restart')}
               >
-                {t('agents.actions.restart')}
+                {t('agents:actions.restart')}
               </Button>
               <Button 
                 danger 
                 icon={<DeleteOutlined />}
                 onClick={() => handleAction('delete')}
               >
-                {t('agents.actions.delete')}
+                {t('agents:actions.delete')}
               </Button>
             </ActionButtons>
           </AgentInfo>
@@ -413,7 +413,7 @@ const AgentDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('agents.stats.tasksCompleted')}
+                title={t('agents:stats.tasksCompleted')}
                 value={agent.stats.tasksCompleted}
                 prefix={<FileTextOutlined />}
               />
@@ -422,7 +422,7 @@ const AgentDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('agents.stats.successRate')}
+                title={t('agents:stats.successRate')}
                 value={agent.stats.successRate}
                 suffix="%"
                 prefix={<LineChartOutlined />}
@@ -432,7 +432,7 @@ const AgentDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('agents.stats.responseTime')}
+                title={t('agents:stats.responseTime')}
                 value={agent.stats.avgResponseTime}
                 suffix="ms"
                 prefix={<ClockCircleOutlined />}
@@ -442,7 +442,7 @@ const AgentDetail: React.FC = () => {
           <Col xs={24} sm={12} md={6}>
             <StatsCard $isDark={isDark}>
               <Statistic
-                title={t('agents.detail.uptime')}
+                title={t('agents:detail.uptime')}
                 value={agent.stats.uptime}
                 prefix={<ClockCircleOutlined />}
               />
@@ -454,43 +454,43 @@ const AgentDetail: React.FC = () => {
       {/* 详细信息 */}
       <ContentCard $isDark={isDark}>
         <Tabs defaultActiveKey="overview">
-          <TabPane tab={t('agents.detail.overview')} key="overview">
+          <TabPane tab={t('agents:detail.overview')} key="overview">
             <Row gutter={24}>
               <Col xs={24} lg={12}>
-                <Card title={t('agents.detail.basicInfo')} bordered={false}>
+                <Card title={t('agents:detail.basicInfo')} bordered={false}>
                   <Descriptions column={1}>
-                    <Descriptions.Item label={t('agents.detail.id')}>
+                    <Descriptions.Item label={t('agents:detail.id')}>
                       {agent.id}
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('agents.detail.name')}>
+                    <Descriptions.Item label={t('agents:detail.name')}>
                       {agent.name}
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('agents.detail.type')}>
+                    <Descriptions.Item label={t('agents:detail.type')}>
                       {typeConfig.name}
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('agents.detail.status')}>
+                    <Descriptions.Item label={t('agents:detail.status')}>
                       <StatusIndicator status={agent.status} />
                       {statusConfig.text}
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('agents.detail.lastActiveAt')}>
+                    <Descriptions.Item label={t('agents:detail.lastActiveAt')}>
                       {agent.lastActive}
                     </Descriptions.Item>
                   </Descriptions>
                 </Card>
               </Col>
               <Col xs={24} lg={12}>
-                <Card title={t('agents.detail.performance')} bordered={false}>
+                <Card title={t('agents:detail.performance')} bordered={false}>
                   <Space direction="vertical" style={{ width: '100%' }}>
                     <div>
-                      <Text>{t('agents.detail.cpuUsage')}</Text>
+                      <Text>{t('agents:detail.cpuUsage')}</Text>
                       <Progress percent={45} status="active" />
                     </div>
                     <div>
-                      <Text>{t('agents.detail.memoryUsage')}</Text>
+                      <Text>{t('agents:detail.memoryUsage')}</Text>
                       <Progress percent={67} status="active" />
                     </div>
                     <div>
-                      <Text>{t('agents.detail.errorRate')}</Text>
+                      <Text>{t('agents:detail.errorRate')}</Text>
                       <Progress percent={2} status="exception" />
                     </div>
                   </Space>
@@ -499,7 +499,7 @@ const AgentDetail: React.FC = () => {
             </Row>
           </TabPane>
           
-          <TabPane tab={t('agents.detail.logs')} key="logs">
+          <TabPane tab={t('agents:detail.logs')} key="logs">
             <Table
               columns={logColumns}
               dataSource={mockLogs}
@@ -508,7 +508,7 @@ const AgentDetail: React.FC = () => {
             />
           </TabPane>
           
-          <TabPane tab={t('agents.detail.history')} key="history">
+          <TabPane tab={t('agents:detail.history')} key="history">
             <Table
               columns={historyColumns}
               dataSource={mockHistory}
@@ -517,9 +517,9 @@ const AgentDetail: React.FC = () => {
             />
           </TabPane>
           
-          <TabPane tab={t('agents.detail.monitoring')} key="monitoring">
+          <TabPane tab={t('agents:detail.monitoring')} key="monitoring">
             <Alert
-              message={t('common.inDevelopment')}
+              message={t('common:inDevelopment')}
               description="性能监控图表功能正在开发中..."
               type="info"
               showIcon

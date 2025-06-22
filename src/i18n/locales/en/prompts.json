@@ -1,0 +1,91 @@
+{
+  "title": "Prompt Templates",
+  "subtitle": "AI prompt template management and optimization",
+  "createPrompt": "Create Template",
+  "stats": {
+    "totalTemplates": "Total Templates",
+    "publicTemplates": "Public Templates",
+    "favoriteTemplates": "Favorite Templates",
+    "averageRating": "Average Rating",
+    "usageCount": "Usage Count"
+  },
+  "search": {
+    "placeholder": "Search prompt name, description, tags...",
+    "category": "Category",
+    "difficulty": "Difficulty",
+    "status": "Status",
+    "allCategories": "All Categories",
+    "allDifficulties": "All Difficulties",
+    "allStatuses": "All Statuses"
+  },
+  "status": {
+    "public": "Public",
+    "private": "Private",
+    "favorite": "Favorite"
+  },
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "categories": {
+    "customerService": "Customer Service",
+    "dataAnalysis": "Data Analysis",
+    "devTools": "Development Tools",
+    "docTools": "Documentation Tools",
+    "opsTools": "Operations Tools",
+    "productManagement": "Product Management"
+  },
+  "actions": {
+    "copy": "Copy Content",
+    "edit": "Edit",
+    "view": "View Details"
+  },
+  "form": {
+    "templateName": "Template Name",
+    "templateNamePlaceholder": "Enter template name",
+    "templateNameRequired": "Please enter template name",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter template description",
+    "descriptionRequired": "Please enter template description",
+    "content": "Template Content",
+    "contentPlaceholder": "Enter prompt content",
+    "contentRequired": "Please enter prompt content",
+    "category": "Category",
+    "categoryPlaceholder": "Select category",
+    "categoryRequired": "Please select category",
+    "difficulty": "Difficulty",
+    "difficultyRequired": "Please select difficulty",
+    "language": "Language",
+    "languagePlaceholder": "Select language",
+    "languageRequired": "Please select language",
+    "variableTip": "Variable Tip",
+    "variableTipDescription": "Use {{variable_name}} format to define variables"
+  },
+  "detail": {
+    "templateName": "Template Name",
+    "description": "Description",
+    "content": "Content",
+    "category": "Category",
+    "difficulty": "Difficulty",
+    "language": "Language",
+    "status": "Status",
+    "isPublic": "Is Public",
+    "rating": "Rating",
+    "usageCount": "Usage Count",
+    "creator": "Creator",
+    "createdAt": "Created At",
+    "lastUsed": "Last Used",
+    "version": "Version",
+    "tags": "Tags",
+    "variablesList": "Variables List",
+    "noVariables": "No Variables"
+  },
+  "messages": {
+    "createSuccess": "Template created successfully",
+    "updateSuccess": "Template updated successfully",
+    "deleteSuccess": "Template deleted successfully",
+    "copySuccess": "Content copied successfully",
+    "favoriteSuccess": "Added to favorites successfully"
+  }
+}

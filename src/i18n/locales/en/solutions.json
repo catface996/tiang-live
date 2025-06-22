@@ -1,0 +1,64 @@
+{
+  "title": "Industry Solutions",
+  "subtitle": "Manage business models and solutions for various industries",
+  "createSolution": "Create Solution",
+  "refresh": "Refresh",
+  "allIndustries": "All Industries",
+  "allStatuses": "All Statuses",
+  "allComplexities": "All Complexities",
+  "stats": {
+    "totalSolutions": "Total Solutions",
+    "activeSolutions": "Active Solutions",
+    "businessEntities": "Business Entities",
+    "totalUsage": "Total Usage"
+  },
+  "industry": {
+    "finance": "Finance",
+    "healthcare": "Healthcare",
+    "education": "Education",
+    "ecommerce": "E-commerce",
+    "logistics": "Logistics",
+    "automotive": "Automotive"
+  },
+  "status": {
+    "active": "Active",
+    "draft": "Draft",
+    "deprecated": "Deprecated"
+  },
+  "complexity": {
+    "simple": "Simple",
+    "medium": "Medium",
+    "complex": "Complex"
+  },
+  "search": {
+    "placeholder": "Search solution name, description...",
+    "industryType": "Industry Type",
+    "status": "Status",
+    "complexity": "Complexity"
+  },
+  "card": {
+    "viewDetails": "View Details",
+    "edit": "Edit",
+    "creator": "Creator",
+    "updateTime": "Update Time",
+    "usageCount": "Usage Count",
+    "businessEntities": "Business Entities"
+  },
+  "modal": {
+    "solutionName": "Solution Name",
+    "description": "Description",
+    "industryType": "Industry Type",
+    "complexity": "Complexity",
+    "status": "Status",
+    "creator": "Creator",
+    "createTime": "Create Time",
+    "usageCount": "Usage Count",
+    "businessEntities": "Business Entities",
+    "entityCount": "Entity Count",
+    "entityRelations": "Entity Relations",
+    "relationCount": "Relation Count",
+    "scenario": "Application Scenario",
+    "tags": "Tags",
+    "attributes": "Attributes"
+  }
+}

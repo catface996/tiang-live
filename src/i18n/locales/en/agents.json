@@ -1,0 +1,231 @@
+{
+  "title": "AI Agent Management",
+  "subtitle": "Manage and monitor AI agent runtime status, configure agent parameters and task scheduling",
+  "createAgent": "Create Agent",
+  "editAgent": "Edit Agent",
+  "searchPlaceholder": "Search agent name or description...",
+  "filterByStatus": "Filter by Status",
+  "filterByType": "Filter by Type",
+  "totalFound": "Found {{count}} agents",
+  "deleteConfirm": "Are you sure you want to delete this agent?",
+  "lastActive": "Last Active",
+  "uptime": "Uptime",
+  "stats": {
+    "totalAgents": "Total Agents",
+    "runningAgents": "Running",
+    "totalTasks": "Total Tasks",
+    "avgSuccessRate": "Avg Success Rate",
+    "unit": "units",
+    "taskUnit": "times",
+    "tasksCompleted": "Tasks Completed",
+    "successRate": "Success Rate",
+    "responseTime": "Response Time"
+  },
+  "status": {
+    "running": "Running",
+    "stopped": "Stopped",
+    "paused": "Paused"
+  },
+  "types": {
+    "monitor": "Monitor",
+    "analysis": "Analysis",
+    "deployment": "Deployment",
+    "optimization": "Optimization",
+    "security": "Security",
+    "backup": "Backup",
+    "gateway": "Gateway",
+    "planning": "Planning",
+    "diagnosis": "Diagnosis",
+    "config": "Configuration",
+    "traffic": "Traffic",
+    "cleanup": "Cleanup"
+  },
+  "actions": {
+    "start": "Start",
+    "stop": "Stop",
+    "restart": "Restart",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "detail": {
+    "title": "Agent Details",
+    "basicInfo": "Basic Information",
+    "id": "ID",
+    "name": "Name",
+    "type": "Type",
+    "status": "Status",
+    "uptime": "Uptime",
+    "lastActiveAt": "Last Active At",
+    "overview": "Overview",
+    "performance": "Performance",
+    "monitoring": "Monitoring",
+    "logs": "Logs",
+    "history": "History",
+    "cpuUsage": "CPU Usage",
+    "memoryUsage": "Memory Usage",
+    "errorRate": "Error Rate"
+  },
+  "alerts": {
+    "highCpuUsage": "High CPU Usage"
+  },
+  "form": {
+    "createTitle": "Create AI Agent",
+    "editTitle": "Edit AI Agent",
+    "createSubtitle": "Configure new AI agent",
+    "editSubtitle": "Modify AI agent configuration",
+    "createAgent": "Create Agent",
+    "updateAgent": "Update Agent",
+    "tabs": {
+      "basic": "Basic Information",
+      "model": "Model Configuration",
+      "prompts": "Prompt Configuration",
+      "mcpServer": "MCP Server",
+      "settings": "Advanced Settings"
+    },
+    "fields": {
+      "name": "Agent Name",
+      "description": "Description",
+      "type": "Type",
+      "status": "Status",
+      "tags": "Tags"
+    },
+    "placeholders": {
+      "name": "Enter agent name",
+      "description": "Enter agent description",
+      "type": "Select agent type",
+      "status": "Select status",
+      "tags": "Enter tags, separate multiple tags with commas"
+    },
+    "validation": {
+      "nameRequired": "Please enter agent name",
+      "descriptionRequired": "Please enter agent description",
+      "typeRequired": "Please select agent type",
+      "statusRequired": "Please select status"
+    },
+    "types": {
+      "chat": "Chat Assistant",
+      "task": "Task Execution",
+      "analysis": "Data Analysis",
+      "monitoring": "System Monitoring"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "training": "Training"
+    },
+    "models": {
+      "selectModel": "Select Model",
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "free": "Free",
+      "pricing": "Pricing",
+      "version": "Version",
+      "localDeployment": "Local Deployment",
+      "parameterConfig": "Parameter Configuration",
+      "gpt4": {
+        "description": "OpenAI GPT-4 - Most powerful language model"
+      },
+      "gpt35": {
+        "description": "OpenAI GPT-3.5 - Cost-effective choice"
+      },
+      "claude3": {
+        "description": "Anthropic Claude 3 - Safe and reliable AI assistant"
+      },
+      "llama2": {
+        "description": "Meta LLaMA 2 - Open source large language model"
+      },
+      "temperatureTooltip": "Controls randomness of output, higher values are more random",
+      "maxTokensTooltip": "Limits the maximum number of tokens in output",
+      "topPTooltip": "Nucleus sampling parameter, controls output diversity",
+      "frequencyPenaltyTooltip": "Frequency penalty, reduces repetitive content"
+    },
+    "prompts": {
+      "selectTemplate": "Select Template",
+      "useTemplate": "Use Template",
+      "customPrompt": "Custom Prompt",
+      "customPromptPlaceholder": "Enter custom prompt...",
+      "customPromptTip": "You can use variables like {{company_name}}, {{user_name}}, etc.",
+      "templateVariables": "Template Variables",
+      "tip": "Tip: Selecting appropriate prompt templates can improve agent performance"
+    },
+    "promptTemplates": {
+      "categories": {
+        "dialogue": "Dialogue",
+        "analysis": "Analysis",
+        "operations": "Operations",
+        "development": "Development"
+      },
+      "customerService": {
+        "name": "Customer Service Assistant",
+        "description": "Professional customer service dialogue template",
+        "content": "You are a professional customer service assistant, please answer user questions in a friendly and patient manner."
+      },
+      "dataAnalysis": {
+        "name": "Data Analyst",
+        "description": "Data analysis and report generation template",
+        "content": "You are a professional data analyst, please analyze the provided data and give professional insights."
+      },
+      "monitoring": {
+        "name": "System Monitoring",
+        "description": "System monitoring and alert handling template",
+        "content": "You are a system monitoring expert, please analyze system status and provide operational recommendations."
+      },
+      "codeReview": {
+        "name": "Code Review",
+        "description": "Code quality review and suggestion template",
+        "content": "You are a senior code review expert, please carefully review the code and provide improvement suggestions."
+      }
+    },
+    "mcpServers": {
+      "selectServers": "Select MCP Servers",
+      "description": "MCP servers provide additional tools and resources",
+      "running": "Running",
+      "stopped": "Stopped",
+      "file": {
+        "name": "File System",
+        "description": "Provides file read/write operation capabilities"
+      },
+      "database": {
+        "name": "Database",
+        "description": "Provides database query and operation capabilities"
+      },
+      "api": {
+        "name": "API Calls",
+        "description": "Provides external API calling capabilities"
+      },
+      "email": {
+        "name": "Email Service",
+        "description": "Provides email sending and receiving capabilities"
+      },
+      "scheduler": {
+        "name": "Task Scheduler",
+        "description": "Provides scheduled task scheduling capabilities"
+      }
+    },
+    "settings": {
+      "timeout": "Timeout",
+      "retryCount": "Retry Count",
+      "maxConcurrency": "Max Concurrency",
+      "logLevel": "Log Level",
+      "autoStart": "Auto Start"
+    },
+    "mockData": {
+      "companyName": "Tiang Ops Technology",
+      "customerServiceName": "Intelligent Customer Service Assistant",
+      "customerServiceDescription": "Professional customer service AI assistant capable of handling common questions and providing technical support",
+      "systemPrompt": "You are the intelligent customer service assistant of Tiang Ops Technology, please provide professional and friendly help to users.",
+      "tags": {
+        "customerService": "Customer Service",
+        "assistant": "Assistant",
+        "dialogue": "Dialogue"
+      }
+    },
+    "messages": {
+      "createSuccess": "Agent created successfully",
+      "createFailed": "Failed to create agent",
+      "updateSuccess": "Agent updated successfully",
+      "updateFailed": "Failed to update agent",
+      "loadDataFailed": "Failed to load data"
+    }
+  }
+}

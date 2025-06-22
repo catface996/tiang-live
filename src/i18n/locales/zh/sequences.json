@@ -1,0 +1,88 @@
+{
+  "title": "时序管理",
+  "createSequence": "创建时序",
+  "editSequence": "编辑时序",
+  "sequenceName": "时序名称",
+  "description": "描述",
+  "participants": "参与者",
+  "steps": "步骤",
+  "stepCount": "步骤数",
+  "executionDuration": "执行时长",
+  "executionUnit": "执行单位",
+  "createdAt": "创建时间",
+  "createdBy": "创建者",
+  "lastModified": "最后修改",
+  "sequenceDiagram": "时序图",
+  "viewSequenceDiagram": "查看时序图",
+  "searchPlaceholder": "搜索时序名称、类型...",
+  "typeFilter": "类型筛选",
+  "allTypes": "所有类型",
+  "allStatuses": "所有状态",
+  "stats": {
+    "totalSequences": "总时序数",
+    "activeSequences": "活跃时序",
+    "executionCount": "执行次数",
+    "successRate": "成功率"
+  },
+  "types": {
+    "business": "业务流程",
+    "authentication": "认证流程",
+    "data": "数据处理",
+    "gateway": "网关路由",
+    "monitoring": "监控告警"
+  },
+  "statuses": {
+    "active": "活跃",
+    "inactive": "非活跃",
+    "draft": "草稿"
+  },
+  "units": {
+    "seconds": "秒",
+    "milliseconds": "毫秒"
+  },
+  "participantOptions": {
+    "user": "用户",
+    "frontend": "前端",
+    "backend": "后端",
+    "database": "数据库",
+    "cache": "缓存",
+    "queue": "消息队列",
+    "externalApi": "外部API"
+  },
+  "form": {
+    "name": "时序名称",
+    "namePlaceholder": "请输入时序名称",
+    "nameRequired": "请输入时序名称",
+    "nameMaxLength": "时序名称不能超过50个字符",
+    "description": "描述",
+    "descriptionPlaceholder": "请输入时序描述",
+    "descriptionRequired": "请输入时序描述",
+    "descriptionMaxLength": "描述不能超过200个字符",
+    "type": "时序类型",
+    "typePlaceholder": "请选择时序类型",
+    "typeRequired": "请选择时序类型",
+    "status": "状态",
+    "statusPlaceholder": "请选择状态",
+    "statusRequired": "请选择状态",
+    "participants": "参与者",
+    "participantsPlaceholder": "请选择参与者",
+    "participantsRequired": "请选择至少一个参与者",
+    "duration": "执行时长",
+    "durationPlaceholder": "请输入执行时长",
+    "durationRequired": "请输入执行时长",
+    "durationUnit": "时长单位",
+    "mermaidChart": "Mermaid图表代码",
+    "mermaidChartPlaceholder": "请输入Mermaid时序图代码",
+    "mermaidChartRequired": "请输入Mermaid图表代码",
+    "chartPreview": "图表预览",
+    "previewChart": "预览图表",
+    "previewTitle": "时序图预览"
+  },
+  "messages": {
+    "createSuccess": "时序创建成功",
+    "createFailed": "时序创建失败",
+    "updateSuccess": "时序更新成功",
+    "updateFailed": "时序更新失败",
+    "noChartCode": "暂无图表代码"
+  }
+}

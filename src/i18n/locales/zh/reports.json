@@ -1,0 +1,39 @@
+{
+  "title": "报告管理",
+  "subtitle": "统一管理系统生成的各类分析报告，支持报告创建、编辑、发布和分享",
+  "createTitle": "创建报告",
+  "editTitle": "编辑报告",
+  "generateReport": "生成报告",
+  "scheduleReport": "定时报告",
+  "batchExport": "批量导出",
+  "stats": {
+    "totalReports": "总报告数",
+    "published": "已发布",
+    "draft": "草稿",
+    "totalDownloads": "总下载量",
+    "scheduledReports": "定时报告",
+    "generatedToday": "今日生成",
+    "averageSize": "平均大小"
+  },
+  "search": {
+    "placeholder": "搜索报告名称、创建者...",
+    "type": "报告类型",
+    "status": "状态",
+    "allTypes": "所有类型",
+    "allStatuses": "所有状态"
+  },
+  "status": {
+    "published": "已发布",
+    "draft": "草稿",
+    "archived": "已归档"
+  },
+  "types": {
+    "health": "健康分析",
+    "dependency": "依赖分析",
+    "relationship": "关系分析",
+    "performance": "性能分析",
+    "system": "系统报告",
+    "security": "安全报告",
+    "business": "业务报告"
+  }
+}

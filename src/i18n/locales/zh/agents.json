@@ -1,0 +1,231 @@
+{
+  "title": "AI智能体管理",
+  "subtitle": "管理和监控AI智能体运行状态，配置智能体参数和任务调度",
+  "createAgent": "创建智能体",
+  "editAgent": "编辑智能体",
+  "searchPlaceholder": "搜索智能体名称或描述...",
+  "filterByStatus": "按状态筛选",
+  "filterByType": "按类型筛选",
+  "totalFound": "找到 {{count}} 个智能体",
+  "deleteConfirm": "确定要删除这个智能体吗？",
+  "lastActive": "最后活跃",
+  "uptime": "运行时间",
+  "stats": {
+    "totalAgents": "总智能体数",
+    "runningAgents": "运行中",
+    "totalTasks": "总任务数",
+    "avgSuccessRate": "平均成功率",
+    "unit": "个",
+    "taskUnit": "次",
+    "tasksCompleted": "已完成任务",
+    "successRate": "成功率",
+    "responseTime": "响应时间"
+  },
+  "status": {
+    "running": "运行中",
+    "stopped": "已停止",
+    "paused": "已暂停"
+  },
+  "types": {
+    "monitor": "监控",
+    "analysis": "分析",
+    "deployment": "部署",
+    "optimization": "优化",
+    "security": "安全",
+    "backup": "备份",
+    "gateway": "网关",
+    "planning": "规划",
+    "diagnosis": "诊断",
+    "config": "配置",
+    "traffic": "流量",
+    "cleanup": "清理"
+  },
+  "actions": {
+    "start": "启动",
+    "stop": "停止",
+    "restart": "重启",
+    "edit": "编辑",
+    "delete": "删除"
+  },
+  "detail": {
+    "title": "智能体详情",
+    "basicInfo": "基本信息",
+    "id": "ID",
+    "name": "名称",
+    "type": "类型",
+    "status": "状态",
+    "uptime": "运行时间",
+    "lastActiveAt": "最后活跃时间",
+    "overview": "概览",
+    "performance": "性能",
+    "monitoring": "监控",
+    "logs": "日志",
+    "history": "历史记录",
+    "cpuUsage": "CPU使用率",
+    "memoryUsage": "内存使用率",
+    "errorRate": "错误率"
+  },
+  "alerts": {
+    "highCpuUsage": "CPU使用率过高"
+  },
+  "form": {
+    "createTitle": "创建AI智能体",
+    "editTitle": "编辑AI智能体",
+    "createSubtitle": "配置新的AI智能体",
+    "editSubtitle": "修改AI智能体配置",
+    "createAgent": "创建智能体",
+    "updateAgent": "更新智能体",
+    "tabs": {
+      "basic": "基本信息",
+      "model": "模型配置",
+      "prompts": "提示词配置",
+      "mcpServer": "MCP服务器",
+      "settings": "高级设置"
+    },
+    "fields": {
+      "name": "智能体名称",
+      "description": "描述",
+      "type": "类型",
+      "status": "状态",
+      "tags": "标签"
+    },
+    "placeholders": {
+      "name": "请输入智能体名称",
+      "description": "请输入智能体描述",
+      "type": "请选择智能体类型",
+      "status": "请选择状态",
+      "tags": "请输入标签，多个标签用逗号分隔"
+    },
+    "validation": {
+      "nameRequired": "请输入智能体名称",
+      "descriptionRequired": "请输入智能体描述",
+      "typeRequired": "请选择智能体类型",
+      "statusRequired": "请选择状态"
+    },
+    "types": {
+      "chat": "对话助手",
+      "task": "任务执行",
+      "analysis": "数据分析",
+      "monitoring": "系统监控"
+    },
+    "status": {
+      "active": "活跃",
+      "inactive": "非活跃",
+      "training": "训练中"
+    },
+    "models": {
+      "selectModel": "选择模型",
+      "available": "可用",
+      "unavailable": "不可用",
+      "free": "免费",
+      "pricing": "计费",
+      "version": "版本",
+      "localDeployment": "本地部署",
+      "parameterConfig": "参数配置",
+      "gpt4": {
+        "description": "OpenAI GPT-4 - 最强大的语言模型"
+      },
+      "gpt35": {
+        "description": "OpenAI GPT-3.5 - 高性价比选择"
+      },
+      "claude3": {
+        "description": "Anthropic Claude 3 - 安全可靠的AI助手"
+      },
+      "llama2": {
+        "description": "Meta LLaMA 2 - 开源大语言模型"
+      },
+      "temperatureTooltip": "控制输出的随机性，值越高越随机",
+      "maxTokensTooltip": "限制输出的最大token数量",
+      "topPTooltip": "核采样参数，控制输出的多样性",
+      "frequencyPenaltyTooltip": "频率惩罚，减少重复内容"
+    },
+    "prompts": {
+      "selectTemplate": "选择模板",
+      "useTemplate": "使用模板",
+      "customPrompt": "自定义提示词",
+      "customPromptPlaceholder": "请输入自定义提示词...",
+      "customPromptTip": "您可以使用变量如 {{company_name}}、{{user_name}} 等",
+      "templateVariables": "模板变量",
+      "tip": "提示：选择合适的提示词模板可以提高智能体的表现"
+    },
+    "promptTemplates": {
+      "categories": {
+        "dialogue": "对话类",
+        "analysis": "分析类",
+        "operations": "运维类",
+        "development": "开发类"
+      },
+      "customerService": {
+        "name": "客服助手",
+        "description": "专业的客户服务对话模板",
+        "content": "你是一个专业的客服助手，请友好、耐心地回答用户问题。"
+      },
+      "dataAnalysis": {
+        "name": "数据分析师",
+        "description": "数据分析和报告生成模板",
+        "content": "你是一个专业的数据分析师，请分析提供的数据并给出专业见解。"
+      },
+      "monitoring": {
+        "name": "系统监控",
+        "description": "系统监控和告警处理模板",
+        "content": "你是一个系统监控专家，请分析系统状态并提供运维建议。"
+      },
+      "codeReview": {
+        "name": "代码审查",
+        "description": "代码质量审查和建议模板",
+        "content": "你是一个资深的代码审查专家，请仔细审查代码并提供改进建议。"
+      }
+    },
+    "mcpServers": {
+      "selectServers": "选择MCP服务器",
+      "description": "MCP服务器提供额外的工具和资源",
+      "running": "运行中",
+      "stopped": "已停止",
+      "file": {
+        "name": "文件系统",
+        "description": "提供文件读写操作能力"
+      },
+      "database": {
+        "name": "数据库",
+        "description": "提供数据库查询和操作能力"
+      },
+      "api": {
+        "name": "API调用",
+        "description": "提供外部API调用能力"
+      },
+      "email": {
+        "name": "邮件服务",
+        "description": "提供邮件发送和接收能力"
+      },
+      "scheduler": {
+        "name": "任务调度",
+        "description": "提供定时任务调度能力"
+      }
+    },
+    "settings": {
+      "timeout": "超时时间",
+      "retryCount": "重试次数",
+      "maxConcurrency": "最大并发数",
+      "logLevel": "日志级别",
+      "autoStart": "自动启动"
+    },
+    "mockData": {
+      "companyName": "天工开悟科技",
+      "customerServiceName": "智能客服助手",
+      "customerServiceDescription": "专业的客户服务AI助手，能够处理常见问题和提供技术支持",
+      "systemPrompt": "你是天工开悟科技的智能客服助手，请专业、友好地为用户提供帮助。",
+      "tags": {
+        "customerService": "客服",
+        "assistant": "助手",
+        "dialogue": "对话"
+      }
+    },
+    "messages": {
+      "createSuccess": "智能体创建成功",
+      "createFailed": "智能体创建失败",
+      "updateSuccess": "智能体更新成功",
+      "updateFailed": "智能体更新失败",
+      "loadDataFailed": "加载数据失败"
+    }
+  }
+}

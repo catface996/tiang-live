@@ -144,7 +144,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
   planes,
   relationships
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['planes', 'common']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = useToken();
   const isDark = currentTheme === 'dark';
@@ -210,7 +210,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
 
   const columns = [
     {
-      title: t('planes.dependency.columns.planeName'),
+      title: t('planes:dependency.columns.planeName'),
       dataIndex: 'planeName',
       key: 'planeName',
       render: (text: string, record: DependencyAnalysisData) => (
@@ -227,7 +227,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       ),
     },
     {
-      title: t('planes.dependency.columns.dependencyCount'),
+      title: t('planes:dependency.columns.dependencyCount'),
       dataIndex: 'dependencyCount',
       key: 'dependencyCount',
       render: (count: number, record: DependencyAnalysisData) => {
@@ -241,7 +241,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
                         (isDark ? '#434343' : 'default');
         
         return (
-          <Tooltip title={`${t('planes.dependency.tooltips.dependencyPlanes')}: ${dependencyNames || t('planes.dependency.tooltips.none')}`}>
+          <Tooltip title={`${t('planes:dependency.tooltips.dependencyPlanes')}: ${dependencyNames || t('planes:dependency.tooltips.none')}`}>
             <Tag color={tagColor}>
               {count}
             </Tag>
@@ -250,7 +250,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       },
     },
     {
-      title: t('planes.dependency.columns.dependentCount'),
+      title: t('planes:dependency.columns.dependentCount'),
       dataIndex: 'dependentCount',
       key: 'dependentCount',
       render: (count: number, record: DependencyAnalysisData) => {
@@ -264,7 +264,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
                         (isDark ? '#434343' : 'default');
         
         return (
-          <Tooltip title={`${t('planes.dependency.tooltips.dependentPlanes')}: ${dependentNames || t('planes.dependency.tooltips.none')}`}>
+          <Tooltip title={`${t('planes:dependency.tooltips.dependentPlanes')}: ${dependentNames || t('planes:dependency.tooltips.none')}`}>
             <Tag color={tagColor}>
               {count}
             </Tag>
@@ -273,7 +273,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       },
     },
     {
-      title: t('planes.dependency.columns.complexityScore'),
+      title: t('planes:dependency.columns.complexityScore'),
       dataIndex: 'complexityScore',
       key: 'complexityScore',
       render: (score: number) => (
@@ -283,7 +283,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       ),
     },
     {
-      title: t('planes.dependency.columns.riskLevel'),
+      title: t('planes:dependency.columns.riskLevel'),
       dataIndex: 'riskLevel',
       key: 'riskLevel',
       render: (riskLevel: string) => (
@@ -295,7 +295,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
             fontWeight: 'bold'
           }}
         >
-          {t(`planes.dependency.riskLevels.${riskLevel}`)}
+          {t(`planes:dependency.riskLevels.${riskLevel}`)}
         </Tag>
       ),
     },
@@ -313,7 +313,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         <Space>
           <BranchesOutlined style={{ color: isDark ? '#ffffff' : 'rgba(0, 0, 0, 0.85)' }} />
           <span style={{ color: isDark ? '#ffffff' : 'rgba(0, 0, 0, 0.85)' }}>
-            {t('planes.dependency.title')}
+            {t('planes:dependency.title')}
           </span>
         </Space>
       }
@@ -328,7 +328,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         <Space size="large" wrap>
           <div>
             <Text type="secondary" style={{ color: isDark ? '#8c8c8c' : '#595959' }}>
-              {t('planes.dependency.stats.totalComplexity')}: 
+              {t('planes:dependency.stats.totalComplexity')}: 
             </Text>
             <Text strong style={{ 
               fontSize: '16px', 
@@ -340,7 +340,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
           </div>
           <div>
             <Text type="secondary" style={{ color: isDark ? '#8c8c8c' : '#595959' }}>
-              {t('planes.dependency.stats.highRiskPlanes')}: 
+              {t('planes:dependency.stats.highRiskPlanes')}: 
             </Text>
             <Text strong style={{ 
               fontSize: '16px', 
@@ -352,7 +352,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
           </div>
           <div>
             <Text type="secondary" style={{ color: isDark ? '#8c8c8c' : '#595959' }}>
-              {t('planes.dependency.stats.mediumRiskPlanes')}: 
+              {t('planes:dependency.stats.mediumRiskPlanes')}: 
             </Text>
             <Text strong style={{ 
               fontSize: '16px', 
@@ -364,7 +364,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
           </div>
           <div>
             <Text type="secondary" style={{ color: isDark ? '#8c8c8c' : '#595959' }}>
-              {t('planes.dependency.stats.maxDependencies')}: 
+              {t('planes:dependency.stats.maxDependencies')}: 
             </Text>
             <Text strong style={{ 
               fontSize: '16px', 
@@ -399,20 +399,20 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
       {/* 风险说明 */}
       <RiskExplanation $isDark={isDark}>
         <div style={{ fontWeight: 'bold', marginBottom: '8px', color: isDark ? '#ffffff' : '#000000' }}>
-          {t('planes.dependency.riskExplanation.title')}:
+          {t('planes:dependency.riskExplanation.title')}:
         </div>
         <div>
           <span className="risk-item">
             <span className="risk-dot low"></span>
-            {t('planes.dependency.riskExplanation.low')}
+            {t('planes:dependency.riskExplanation.low')}
           </span>
           <span className="risk-item">
             <span className="risk-dot medium"></span>
-            {t('planes.dependency.riskExplanation.medium')}
+            {t('planes:dependency.riskExplanation.medium')}
           </span>
           <span className="risk-item">
             <span className="risk-dot high"></span>
-            {t('planes.dependency.riskExplanation.high')}
+            {t('planes:dependency.riskExplanation.high')}
           </span>
         </div>
       </RiskExplanation>

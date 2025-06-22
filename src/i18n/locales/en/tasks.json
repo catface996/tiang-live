@@ -1,0 +1,291 @@
+{
+  "title": "Task Management",
+  "collections": {
+    "title": "Task Collections",
+    "subtitle": "Manage and schedule task collections",
+    "createCollection": "Create Task Collection",
+    "createTitle": "Create Task Collection",
+    "editTitle": "Edit Task Collection",
+    "refresh": "Refresh",
+    "stats": {
+      "totalCollections": "Total Collections",
+      "activeCollections": "Active Collections",
+      "totalTasks": "Total Tasks",
+      "executionRate": "Execution Success Rate"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "draft": "Draft"
+    },
+    "frequency": {
+      "every5min": "Every 5 Minutes",
+      "every15min": "Every 15 Minutes",
+      "every30min": "Every 30 Minutes",
+      "everyHour": "Every Hour",
+      "hourly": "Hourly",
+      "everyDay": "Every Day",
+      "daily": "Daily"
+    },
+    "filter": {
+      "status": "Status",
+      "frequency": "Frequency",
+      "allStatus": "All Status",
+      "allFrequency": "All Frequency"
+    },
+    "search": {
+      "placeholder": "Search task collection name, description..."
+    },
+    "card": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "creator": "Creator",
+      "schedule": "Schedule",
+      "nextExecution": "Next Execution",
+      "executionCount": "Execution Count",
+      "successRate": "Success Rate",
+      "actions": "Actions",
+      "entities": "Entities",
+      "sequences": "Sequences"
+    },
+    "modal": {
+      "taskName": "Task Name",
+      "scheduleFrequency": "Schedule Frequency",
+      "lastExecution": "Last Execution"
+    },
+    "form": {
+      "name": "Collection Name",
+      "namePlaceholder": "Enter collection name",
+      "nameRequired": "Please enter collection name",
+      "nameMaxLength": "Collection name cannot exceed 50 characters",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter collection description",
+      "descriptionRequired": "Please enter collection description",
+      "descriptionMaxLength": "Description cannot exceed 200 characters",
+      "schedule": "Schedule Settings",
+      "schedulePlaceholder": "Select schedule frequency",
+      "scheduleRequired": "Please select schedule frequency"
+    },
+    "actions": {
+      "healthCheck": "Health Check",
+      "performanceAnalysis": "Performance Analysis",
+      "securityScan": "Security Scan",
+      "faultAnalysis": "Fault Analysis"
+    },
+    "actionDescriptions": {
+      "healthCheck": "Check the health status of system components",
+      "performanceAnalysis": "Analyze system performance metrics",
+      "securityScan": "Scan for security vulnerabilities and risks",
+      "faultAnalysis": "Analyze and diagnose system faults"
+    },
+    "duration": {
+      "healthCheck": "2-5 minutes",
+      "performanceAnalysis": "5-10 minutes",
+      "securityScan": "10-15 minutes",
+      "faultAnalysis": "3-8 minutes"
+    },
+    "detail": {
+      "inspectionActions": "Inspection Actions",
+      "inspectionActionsLabel": "Inspection Actions",
+      "monitoringTargets": "Monitoring Targets",
+      "suggestedFrequency": "Suggested Frequency",
+      "duration": "Estimated Duration",
+      "entity": "Entity",
+      "sequence": "Sequence",
+      "inUse": "In Use"
+    },
+    "messages": {
+      "createSuccess": "Task collection created successfully",
+      "updateSuccess": "Task collection updated successfully",
+      "deleteSuccess": "Task collection deleted successfully",
+      "startSuccess": "Task collection started successfully",
+      "pauseSuccess": "Task collection paused successfully"
+    }
+  },
+  "inspection": {
+    "title": "Inspection Tasks",
+    "subtitle": "Manage system inspection tasks",
+    "createTask": "Create Inspection Task",
+    "createTitle": "Create Inspection Task",
+    "editTitle": "Edit Inspection Task",
+    "refresh": "Refresh",
+    "stats": {
+      "totalTasks": "Total Tasks",
+      "runningTasks": "Running Tasks"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "draft": "Draft",
+      "failed": "Failed"
+    },
+    "types": {
+      "healthCheck": "Health Check",
+      "performanceMonitor": "Performance Monitor",
+      "securityScan": "Security Scan",
+      "logAnalysis": "Log Analysis"
+    },
+    "search": {
+      "placeholder": "Search inspection task name, description...",
+      "status": "Status",
+      "type": "Type",
+      "allStatuses": "All Statuses",
+      "allTypes": "All Types"
+    },
+    "card": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "start": "Start",
+      "pause": "Pause",
+      "schedule": "Schedule",
+      "nextExecution": "Next Execution",
+      "lastExecution": "Last Execution",
+      "executionCount": "Execution Count",
+      "successRate": "Success Rate",
+      "taskCollections": "Task Collections"
+    },
+    "form": {
+      "name": "Task Name",
+      "namePlaceholder": "Enter task name",
+      "nameRequired": "Please enter task name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter task description",
+      "descriptionRequired": "Please enter task description"
+    },
+    "detail": {
+      "taskName": "Task Name",
+      "taskType": "Task Type",
+      "creator": "Creator",
+      "scheduleExpression": "Schedule Expression",
+      "timezone": "Timezone",
+      "timeout": "Timeout",
+      "retryCount": "Retry Count",
+      "alertThreshold": "Alert Threshold",
+      "configParams": "Config Parameters",
+      "executionHistory": "Execution History",
+      "recentResults": "Recent Results",
+      "executionStatus": "Execution Status",
+      "executionCount": "Execution Count",
+      "successRate": "Success Rate",
+      "avgDuration": "Average Duration",
+      "nextExecution": "Next Execution",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "executionDuration": "Execution Duration",
+      "checkpoints": "Checkpoints",
+      "taskCollections": "Task Collections",
+      "triggeredCollections": "Triggered Collections",
+      "noCollections": "No associated collections",
+      "seconds": "seconds"
+    },
+    "messages": {
+      "createSuccess": "Inspection task created successfully",
+      "updateSuccess": "Inspection task updated successfully",
+      "deleteSuccess": "Inspection task deleted successfully",
+      "startSuccess": "Inspection task started successfully",
+      "pauseSuccess": "Inspection task paused successfully"
+    },
+    "tips": {
+      "createHint": "Create inspection tasks to automatically monitor system status"
+    }
+  },
+  "hooks": {
+    "title": "Hook Tasks",
+    "subtitle": "Manage system hook tasks",
+    "createHook": "Create Hook Task",
+    "createTitle": "Create Hook Task",
+    "editTitle": "Edit Hook Task",
+    "refresh": "Refresh",
+    "stats": {
+      "totalHooks": "Total Hooks",
+      "activeHooks": "Active Hooks",
+      "successRate": "Success Rate"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "error": "Error"
+    },
+    "types": {
+      "webhook": "Webhook",
+      "apiCall": "API Call",
+      "database": "Database",
+      "messageQueue": "Message Queue",
+      "script": "Script"
+    },
+    "search": {
+      "placeholder": "Search hook task name, description...",
+      "status": "Status",
+      "type": "Type",
+      "allStatuses": "All Statuses",
+      "allTypes": "All Types"
+    },
+    "card": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "enable": "Enable",
+      "disable": "Disable",
+      "creator": "Creator",
+      "triggerEvent": "Trigger Event",
+      "lastTriggered": "Last Triggered",
+      "triggerCount": "Trigger Count",
+      "successRate": "Success Rate",
+      "taskCollections": "Task Collections"
+    },
+    "form": {
+      "name": "Hook Name",
+      "namePlaceholder": "Enter hook name",
+      "nameRequired": "Please enter hook name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter hook description",
+      "descriptionRequired": "Please enter hook description",
+      "type": "Hook Type",
+      "typePlaceholder": "Select hook type",
+      "typeRequired": "Please select hook type",
+      "timeout": "Timeout",
+      "timeoutPlaceholder": "Enter timeout",
+      "timeoutRequired": "Please enter timeout",
+      "retryDelay": "Retry Delay",
+      "retryDelayPlaceholder": "Enter retry delay",
+      "retryDelayRequired": "Please enter retry delay"
+    },
+    "modal": {
+      "hookName": "Hook Name",
+      "hookType": "Hook Type",
+      "triggerEvent": "Trigger Event",
+      "triggerConditions": "Trigger Conditions",
+      "triggerConfig": "Trigger Configuration",
+      "executionConfig": "Execution Configuration",
+      "taskCollections": "Task Collections",
+      "triggeredCollections": "Triggered Collections",
+      "noCollections": "No associated collections"
+    },
+    "detail": {
+      "targetUrl": "Target URL",
+      "httpMethod": "HTTP Method",
+      "authentication": "Authentication",
+      "securityConfig": "Security Configuration",
+      "encryption": "Encryption",
+      "ipWhitelist": "IP Whitelist",
+      "noRestriction": "No Restriction",
+      "retryDelay": "Retry Delay",
+      "seconds": "seconds",
+      "authTypes": {
+        "none": "None",
+        "basicAuth": "Basic Auth",
+        "bearerToken": "Bearer Token",
+        "apiKey": "API Key",
+        "oauth2": "OAuth 2.0",
+        "databaseCredentials": "Database Credentials"
+      }
+    },
+    "messages": {
+      "createSuccess": "Hook task created successfully",
+      "updateSuccess": "Hook task updated successfully",
+      "deleteSuccess": "Hook task deleted successfully"
+    },
+    "tips": {
+      "createHint": "Create hook tasks to respond to system events"
+    }
+  }
+}

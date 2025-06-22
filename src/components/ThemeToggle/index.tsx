@@ -10,7 +10,7 @@ interface ThemeToggleProps {
 }
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ style }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['theme', 'common']);
   const dispatch = useAppDispatch();
   const { currentTheme } = useAppSelector((state) => state.theme);
   
@@ -19,13 +19,13 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ style }) => {
   };
 
   return (
-    <Tooltip title={currentTheme === 'light' ? t('theme.switchToDark') : t('theme.switchToLight')}>
+    <Tooltip title={currentTheme === 'light' ? t('theme:switchToDark') : t('theme:switchToLight')}>
       <Button
         type="text"
         icon={currentTheme === 'light' ? <BulbOutlined /> : <BulbFilled />}
         onClick={handleToggleTheme}
         style={style}
-        aria-label={t('theme.toggle')}
+        aria-label={t('theme:toggle')}
       />
     </Tooltip>
   );

@@ -176,7 +176,7 @@ interface ModelConfig {
 }
 
 const ModelManagement: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['models', 'common']);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -189,15 +189,15 @@ const ModelManagement: React.FC = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setPageTitle(t('models.title'));
+    setPageTitle(t('models:title'));
   }, [t]);
 
   // 从JSON文件获取模型数据
   const modelData: ModelConfig[] = modelsData.models.map(model => ({
     ...model,
-    description: t(model.description),
-    capabilities: model.capabilities.map(cap => t(cap)),
-    createdBy: t(model.createdBy)
+    description: t(model.description.replace("models.", "models:")),
+    capabilities: model.capabilities.map(cap => t(cap.replace("models.", "models:"))),
+    createdBy: t(model.createdBy.replace("models.", "models:"))
   }));
 
   const providerMap = {
@@ -208,17 +208,17 @@ const ModelManagement: React.FC = () => {
   };
 
   const modelTypeMap = {
-    llm: { name: t('models.types.llm'), color: 'blue', icon: <ExperimentOutlined /> },
-    embedding: { name: t('models.types.embedding'), color: 'green', icon: <ApiOutlined /> },
-    image: { name: t('models.types.image'), color: 'orange', icon: <MonitorOutlined /> },
-    audio: { name: t('models.types.audio'), color: 'purple', icon: <ThunderboltOutlined /> },
+    llm: { name: t('models:types.llm'), color: 'blue', icon: <ExperimentOutlined /> },
+    embedding: { name: t('models:types.embedding'), color: 'green', icon: <ApiOutlined /> },
+    image: { name: t('models:types.image'), color: 'orange', icon: <MonitorOutlined /> },
+    audio: { name: t('models:types.audio'), color: 'purple', icon: <ThunderboltOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      active: { color: 'green', text: t('models.status.active') },
-      inactive: { color: 'red', text: t('models.status.inactive') },
-      testing: { color: 'orange', text: t('models.status.testing') },
+      active: { color: 'green', text: t('models:status.active') },
+      inactive: { color: 'red', text: t('models:status.inactive') },
+      testing: { color: 'orange', text: t('models:status.testing') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -251,20 +251,20 @@ const ModelManagement: React.FC = () => {
   };
 
   const handleDeleteModel = (modelId: string) => {
-    message.success(t('models.alerts.deleteSuccess'));
+    message.success(t('models:alerts.deleteSuccess'));
   };
 
   const handleTestModel = (modelId: string) => {
-    message.success(t('models.alerts.testSuccess'));
+    message.success(t('models:alerts.testSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingModel) {
-        message.success(t('models.alerts.updateSuccess'));
+        message.success(t('models:alerts.updateSuccess'));
       } else {
-        message.success(t('models.alerts.createSuccess'));
+        message.success(t('models:alerts.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -318,14 +318,14 @@ const ModelManagement: React.FC = () => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Statistic
-                    title={t('models.stats.usageCount')}
+                    title={t('models:stats.usageCount')}
                     value={model.usageCount}
                     valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title={t('models.stats.maxTokens')}
+                    title={t('models:stats.maxTokens')}
                     value={model.maxTokens}
                     valueStyle={{ fontSize: 14 }}
                   />
@@ -346,11 +346,11 @@ const ModelManagement: React.FC = () => {
 
             <div style={{ fontSize: 12, color: '#666' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                <span>{t('models.stats.version')}:</span>
+                <span>{t('models:stats.version')}:</span>
                 <span>{model.version}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>{t('models.stats.lastUsed')}:</span>
+                <span>{t('models:stats.lastUsed')}:</span>
                 <span>{model.lastUsed}</span>
               </div>
             </div>
@@ -358,7 +358,7 @@ const ModelManagement: React.FC = () => {
             {/* 操作按钮区域 - 单独一行，右对齐 */}
             <div className="card-actions">
               <Space>
-                <Tooltip title={t('models.viewDetails')}>
+                <Tooltip title={t('models:viewDetails')}>
                   <Button 
                     type="text" 
                     icon={<EyeOutlined />} 
@@ -369,7 +369,7 @@ const ModelManagement: React.FC = () => {
                     }}
                   />
                 </Tooltip>
-                <Tooltip title={t('common.edit')}>
+                <Tooltip title={t('common:edit')}>
                   <Button 
                     type="text" 
                     icon={<EditOutlined />} 
@@ -400,19 +400,19 @@ const ModelManagement: React.FC = () => {
             <Title className="page-title" level={2} style={{ margin: 0 }}>
               <Space>
                 <SettingOutlined />
-                {t('systemSettings.models.title')}
+                {t('models:title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('systemSettings.models.subtitle')}
+              {t('models:subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateModel}>
-              {t('systemSettings.models.addModel')}
+              {t('models:addModel')}
             </Button>
           </Space>
         </div>
@@ -423,9 +423,9 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('models.stats.totalModels')}
+              title={t('models:stats.totalModels')}
               value={modelData.length}
-              suffix={t('models.stats.unit')}
+              suffix={t('models:stats.unit')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<ExperimentOutlined />}
             />
@@ -434,9 +434,9 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('models.stats.activeModels')}
+              title={t('models:stats.activeModels')}
               value={activeModels}
-              suffix={t('models.stats.unit')}
+              suffix={t('models:stats.unit')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
@@ -445,7 +445,7 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('models.stats.totalUsage')}
+              title={t('models:stats.totalUsage')}
               value={totalUsage}
               valueStyle={{ color: '#faad14' }}
               prefix={<ThunderboltOutlined />}
@@ -455,7 +455,7 @@ const ModelManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('models.stats.avgTemperature')}
+              title={t('models:stats.avgTemperature')}
               value={avgTemperature.toFixed(1)}
               valueStyle={{ color: '#722ed1' }}
               prefix={<MonitorOutlined />}
@@ -468,16 +468,16 @@ const ModelManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('models.searchPlaceholder')}
+        searchPlaceholder={t('models:searchPlaceholder')}
         filters={[
           {
             key: 'provider',
             value: filterProvider,
             onChange: setFilterProvider,
-            placeholder: t('models.filterByProvider'),
+            placeholder: t('models:filterByProvider'),
             width: 120,
             options: [
-              { value: 'all', label: t('models.providers.all') },
+              { value: 'all', label: t('models:providers.all') },
               ...Object.entries(providerMap).map(([key, config]) => ({
                 value: key,
                 label: t(`models.providers.${key}`)
@@ -488,10 +488,10 @@ const ModelManagement: React.FC = () => {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: t('models.filterByType'),
+            placeholder: t('models:filterByType'),
             width: 120,
             options: [
-              { value: 'all', label: t('common.all') },
+              { value: 'all', label: t('common:all') },
               ...Object.entries(modelTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -502,13 +502,13 @@ const ModelManagement: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('models.filterByStatus'),
+            placeholder: t('models:filterByStatus'),
             width: 100,
             options: [
-              { value: 'all', label: t('common.all') },
-              { value: 'active', label: t('models.status.active') },
-              { value: 'inactive', label: t('models.status.inactive') },
-              { value: 'testing', label: t('models.status.testing') }
+              { value: 'all', label: t('common:all') },
+              { value: 'active', label: t('models:status.active') },
+              { value: 'inactive', label: t('models:status.inactive') },
+              { value: 'testing', label: t('models:status.testing') }
             ]
           }
         ]}
@@ -522,7 +522,7 @@ const ModelManagement: React.FC = () => {
 
       {/* 创建/编辑模型模态框 */}
       <Modal
-        title={editingModel ? t('models.editModel') : t('models.createModel')}
+        title={editingModel ? t('models:editModel') : t('models:createModel')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
@@ -541,23 +541,23 @@ const ModelManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="name"
-                label={t('models.form.name')}
-                rules={[{ required: true, message: t('models.form.nameRequired') }]}
+                label={t('models:form.name')}
+                rules={[{ required: true, message: t('models:form.nameRequired') }]}
               >
-                <Input placeholder={t('models.form.namePlaceholder')} />
+                <Input placeholder={t('models:form.namePlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="provider"
-                label={t('models.form.provider')}
-                rules={[{ required: true, message: t('models.form.providerRequired') }]}
+                label={t('models:form.provider')}
+                rules={[{ required: true, message: t('models:form.providerRequired') }]}
               >
-                <Select placeholder={t('models.form.providerPlaceholder')}>
-                  <Option value="OpenAI">{t('models.providers.OpenAI')}</Option>
-                  <Option value="Anthropic">{t('models.providers.Anthropic')}</Option>
-                  <Option value="Google">{t('models.providers.Google')}</Option>
-                  <Option value="Azure">{t('models.providers.Azure')}</Option>
+                <Select placeholder={t('models:form.providerPlaceholder')}>
+                  <Option value="OpenAI">{t('models:providers.OpenAI')}</Option>
+                  <Option value="Anthropic">{t('models:providers.Anthropic')}</Option>
+                  <Option value="Google">{t('models:providers.Google')}</Option>
+                  <Option value="Azure">{t('models:providers.Azure')}</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -567,56 +567,56 @@ const ModelManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="modelType"
-                label={t('models.form.modelType')}
-                rules={[{ required: true, message: t('models.form.typeRequired') }]}
+                label={t('models:form.modelType')}
+                rules={[{ required: true, message: t('models:form.typeRequired') }]}
               >
-                <Select placeholder={t('models.form.typePlaceholder')}>
-                  <Option value="llm">{t('models.types.llm')}</Option>
-                  <Option value="embedding">{t('models.types.embedding')}</Option>
-                  <Option value="image">{t('models.types.image')}</Option>
-                  <Option value="audio">{t('models.types.audio')}</Option>
+                <Select placeholder={t('models:form.typePlaceholder')}>
+                  <Option value="llm">{t('models:types.llm')}</Option>
+                  <Option value="embedding">{t('models:types.embedding')}</Option>
+                  <Option value="image">{t('models:types.image')}</Option>
+                  <Option value="audio">{t('models:types.audio')}</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="version"
-                label={t('models.form.version')}
-                rules={[{ required: true, message: t('models.form.versionRequired') }]}
+                label={t('models:form.version')}
+                rules={[{ required: true, message: t('models:form.versionRequired') }]}
               >
-                <Input placeholder={t('models.form.versionPlaceholder')} />
+                <Input placeholder={t('models:form.versionPlaceholder')} />
               </Form.Item>
             </Col>
           </Row>
 
           <Form.Item
             name="apiEndpoint"
-            label={t('models.form.apiEndpoint')}
-            rules={[{ required: true, message: t('models.form.endpointRequired') }]}
+            label={t('models:form.apiEndpoint')}
+            rules={[{ required: true, message: t('models:form.endpointRequired') }]}
           >
-            <Input placeholder={t('models.form.endpointPlaceholder')} />
+            <Input placeholder={t('models:form.endpointPlaceholder')} />
           </Form.Item>
 
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="maxTokens"
-                label={t('models.form.maxTokens')}
-                rules={[{ required: true, message: t('models.form.maxTokensRequired') }]}
+                label={t('models:form.maxTokens')}
+                rules={[{ required: true, message: t('models:form.maxTokensRequired') }]}
               >
                 <InputNumber
                   min={1}
                   max={128000}
                   style={{ width: '100%' }}
-                  placeholder={t('models.form.maxTokensPlaceholder')}
+                  placeholder={t('models:form.maxTokensPlaceholder')}
                 />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="temperature"
-                label={t('models.form.temperature')}
-                rules={[{ required: true, message: t('models.form.temperatureRequired') }]}
+                label={t('models:form.temperature')}
+                rules={[{ required: true, message: t('models:form.temperatureRequired') }]}
               >
                 <Slider
                   min={0}
@@ -634,12 +634,12 @@ const ModelManagement: React.FC = () => {
 
           <Form.Item
             name="description"
-            label={t('models.form.description')}
-            rules={[{ required: true, message: t('models.form.descriptionRequired') }]}
+            label={t('models:form.description')}
+            rules={[{ required: true, message: t('models:form.descriptionRequired') }]}
           >
             <TextArea 
               rows={3} 
-              placeholder={t('models.form.descriptionPlaceholder')}
+              placeholder={t('models:form.descriptionPlaceholder')}
             />
           </Form.Item>
 
@@ -666,10 +666,10 @@ const ModelManagement: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('models.detail.name')} span={2}>
+              <Descriptions.Item label={t('models:detail.name')} span={2}>
                 {selectedModel.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.provider')}>
+              <Descriptions.Item label={t('models:detail.provider')}>
                 <Tag 
                   color={providerMap[selectedModel.provider as keyof typeof providerMap]?.color}
                   icon={providerMap[selectedModel.provider as keyof typeof providerMap]?.icon}
@@ -677,7 +677,7 @@ const ModelManagement: React.FC = () => {
                   {selectedModel.provider}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.type')}>
+              <Descriptions.Item label={t('models:detail.type')}>
                 <Tag 
                   color={modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.color}
                   icon={modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.icon}
@@ -685,67 +685,67 @@ const ModelManagement: React.FC = () => {
                   {modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.version')}>
+              <Descriptions.Item label={t('models:detail.version')}>
                 {selectedModel.version}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.status')}>
+              <Descriptions.Item label={t('models:detail.status')}>
                 {getStatusTag(selectedModel.status)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.apiEndpoint')} span={2}>
+              <Descriptions.Item label={t('models:detail.apiEndpoint')} span={2}>
                 <Text code>{selectedModel.apiEndpoint}</Text>
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.usageCount')}>
-                {selectedModel.usageCount}{t('models.stats.requestUnit')}
+              <Descriptions.Item label={t('models:detail.usageCount')}>
+                {selectedModel.usageCount}{t('models:stats.requestUnit')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.lastUsed')}>
+              <Descriptions.Item label={t('models:detail.lastUsed')}>
                 {selectedModel.lastUsed}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.createdBy')}>
+              <Descriptions.Item label={t('models:detail.createdBy')}>
                 {selectedModel.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.createdAt')}>
+              <Descriptions.Item label={t('models:detail.createdAt')}>
                 {selectedModel.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models.detail.description')} span={2}>
+              <Descriptions.Item label={t('models:detail.description')} span={2}>
                 {selectedModel.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细配置 */}
             <Tabs defaultActiveKey="parameters">
-              <Tabs.TabPane tab={t('models.detail.parameters')} key="parameters">
+              <Tabs.TabPane tab={t('models:detail.parameters')} key="parameters">
                 <Row gutter={16}>
                   <Col span={12}>
-                    <Card title={t('models.detail.parameters')} size="small">
+                    <Card title={t('models:detail.parameters')} size="small">
                       <Descriptions column={1} size="small">
-                        <Descriptions.Item label={t('models.detail.maxTokens')}>
+                        <Descriptions.Item label={t('models:detail.maxTokens')}>
                           {selectedModel.maxTokens}
                         </Descriptions.Item>
-                        <Descriptions.Item label={t('models.detail.temperature')}>
+                        <Descriptions.Item label={t('models:detail.temperature')}>
                           {selectedModel.temperature}
                         </Descriptions.Item>
-                        <Descriptions.Item label={t('models.detail.topP')}>
+                        <Descriptions.Item label={t('models:detail.topP')}>
                           {selectedModel.topP}
                         </Descriptions.Item>
-                        <Descriptions.Item label={t('models.detail.frequencyPenalty')}>
+                        <Descriptions.Item label={t('models:detail.frequencyPenalty')}>
                           {selectedModel.frequencyPenalty}
                         </Descriptions.Item>
-                        <Descriptions.Item label={t('models.detail.presencePenalty')}>
+                        <Descriptions.Item label={t('models:detail.presencePenalty')}>
                           {selectedModel.presencePenalty}
                         </Descriptions.Item>
                       </Descriptions>
                     </Card>
                   </Col>
                   <Col span={12}>
-                    <Card title={t('models.detail.limits')} size="small">
+                    <Card title={t('models:detail.limits')} size="small">
                       <Descriptions column={1} size="small">
-                        <Descriptions.Item label={t('models.detail.requestsPerMinute')}>
+                        <Descriptions.Item label={t('models:detail.requestsPerMinute')}>
                           {selectedModel.limits.requestsPerMinute}
                         </Descriptions.Item>
-                        <Descriptions.Item label={t('models.detail.tokensPerMinute')}>
+                        <Descriptions.Item label={t('models:detail.tokensPerMinute')}>
                           {selectedModel.limits.tokensPerMinute}
                         </Descriptions.Item>
-                        <Descriptions.Item label={t('models.detail.dailyLimit')}>
+                        <Descriptions.Item label={t('models:detail.dailyLimit')}>
                           {selectedModel.limits.dailyLimit}
                         </Descriptions.Item>
                       </Descriptions>
@@ -754,7 +754,7 @@ const ModelManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab={t('models.detail.capabilities')} key="capabilities">
+              <Tabs.TabPane tab={t('models:detail.capabilities')} key="capabilities">
                 <Row gutter={16}>
                   {selectedModel.capabilities.map(capability => (
                     <Col xs={24} sm={12} lg={8} key={capability}>
@@ -772,16 +772,16 @@ const ModelManagement: React.FC = () => {
                 </Row>
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab={t('models.detail.pricing')} key="pricing">
-                <Card title={t('models.detail.pricingDetails')} size="small">
+              <Tabs.TabPane tab={t('models:detail.pricing')} key="pricing">
+                <Card title={t('models:detail.pricingDetails')} size="small">
                   <Descriptions column={2} size="small">
-                    <Descriptions.Item label={t('models.detail.inputTokenPrice')}>
+                    <Descriptions.Item label={t('models:detail.inputTokenPrice')}>
                       ${selectedModel.pricing.inputTokens} / 1K tokens
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('models.detail.outputTokenPrice')}>
+                    <Descriptions.Item label={t('models:detail.outputTokenPrice')}>
                       ${selectedModel.pricing.outputTokens} / 1K tokens
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('models.detail.currency')}>
+                    <Descriptions.Item label={t('models:detail.currency')}>
                       {selectedModel.pricing.currency}
                     </Descriptions.Item>
                   </Descriptions>

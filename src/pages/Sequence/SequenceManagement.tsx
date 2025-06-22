@@ -42,7 +42,6 @@ import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import SequenceDiagram from '../../components/SequenceDiagram';
-import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import sequenceDataJson from '../../data/sequenceData.json';
 
 // 时间格式化工具函数
@@ -64,9 +63,9 @@ const formatDuration = (duration: string, t: any): string => {
     // 格式化秒数，去掉不必要的小数点
     const minSecStr = minSec % 1 === 0 ? minSec.toString() : minSec.toFixed(1);
     const maxSecStr = maxSec % 1 === 0 ? maxSec.toString() : maxSec.toFixed(1);
-    return `${minSecStr}-${maxSecStr} ${t('sequences.units.seconds')}`;
+    return `${minSecStr}-${maxSecStr} ${t('sequences:units.seconds')}`;
   } else {
-    return `${min}-${max} ${t('sequences.units.milliseconds')}`;
+    return `${min}-${max} ${t('sequences:units.milliseconds')}`;
   }
 };
 
@@ -290,28 +289,28 @@ const SequenceManagement: React.FC = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['sequences', 'common']);
 
   useEffect(() => {
-    setPageTitle(t('sequences.title'));
+    setPageTitle(t('sequences:title'));
   }, []);
 
   // Load sequence data from JSON file
   const sequenceData: SequenceData[] = sequenceDataJson.sequences;
 
   const sequenceTypeMap = {
-    authentication: { name: t('sequences.types.authentication'), color: 'blue', icon: <UserOutlined /> },
-    business: { name: t('sequences.types.business'), color: 'green', icon: <ApiOutlined /> },
-    monitoring: { name: t('sequences.types.monitoring'), color: 'orange', icon: <ClockCircleOutlined /> },
-    data: { name: t('sequences.types.data'), color: 'purple', icon: <DatabaseOutlined /> },
-    gateway: { name: t('sequences.types.gateway'), color: 'cyan', icon: <CloudOutlined /> },
+    authentication: { name: t('sequences:types.authentication'), color: 'blue', icon: <UserOutlined /> },
+    business: { name: t('sequences:types.business'), color: 'green', icon: <ApiOutlined /> },
+    monitoring: { name: t('sequences:types.monitoring'), color: 'orange', icon: <ClockCircleOutlined /> },
+    data: { name: t('sequences:types.data'), color: 'purple', icon: <DatabaseOutlined /> },
+    gateway: { name: t('sequences:types.gateway'), color: 'cyan', icon: <CloudOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      active: { color: 'green', text: t('sequences.statuses.active') },
-      inactive: { color: 'red', text: t('sequences.statuses.inactive') },
-      draft: { color: 'orange', text: t('sequences.statuses.draft') },
+      active: { color: 'green', text: t('sequences:statuses.active') },
+      inactive: { color: 'red', text: t('sequences:statuses.inactive') },
+      draft: { color: 'orange', text: t('sequences:statuses.draft') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return config ? <Tag color={config.color}>{config.text}</Tag> : <Tag>{status}</Tag>;
@@ -348,15 +347,15 @@ const SequenceManagement: React.FC = () => {
     try {
       if (editingSequence) {
         // 编辑逻辑
-        message.success(t('sequences.messages.updateSuccess'));
+        message.success(t('sequences:messages.updateSuccess'));
       } else {
         // 创建逻辑
-        message.success(t('sequences.messages.createSuccess'));
+        message.success(t('sequences:messages.createSuccess'));
       }
       setFormModalVisible(false);
       form.resetFields();
     } catch (error) {
-      message.error(editingSequence ? t('sequences.messages.updateFailed') : t('sequences.messages.createFailed'));
+      message.error(editingSequence ? t('sequences:messages.updateFailed') : t('sequences:messages.createFailed'));
     }
   };
 
@@ -372,7 +371,7 @@ const SequenceManagement: React.FC = () => {
       setPreviewChart(chartCode);
       setPreviewVisible(true);
     } else {
-      message.warning(t('sequences.messages.noChartCode'));
+      message.warning(t('sequences:messages.noChartCode'));
     }
   };
 
@@ -408,15 +407,15 @@ const SequenceManagement: React.FC = () => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Statistic
-                    title={t('sequences.stepCount')}
+                    title={t('sequences:stepCount')}
                     value={sequence.steps}
-                    suffix={t('sequences.steps')}
+                    suffix={t('sequences:steps')}
                     valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title={t('sequences.executionDuration')}
+                    title={t('sequences:executionDuration')}
                     value={formatDuration(sequence.duration, t)}
                     valueStyle={{ fontSize: 14 }}
                   />
@@ -425,17 +424,17 @@ const SequenceManagement: React.FC = () => {
             </div>
 
             <div className="sequence-meta">
-              <div>{t('sequences.createdBy')}: {sequence.createdBy}</div>
-              <div>{t('sequences.lastModified')}: {sequence.lastModified}</div>
+              <div>{t('sequences:createdBy')}: {sequence.createdBy}</div>
+              <div>{t('sequences:lastModified')}: {sequence.lastModified}</div>
             </div>
 
             {/* Action Buttons at Bottom */}
             <div className="sequence-actions">
               <div className="participants-count">
-                {t('sequences.participants')}: {sequence.participants.length}
+                {t('sequences:participants')}: {sequence.participants.length}
               </div>
               <Space>
-                <Tooltip title={t('sequences.viewSequenceDiagram')}>
+                <Tooltip title={t('sequences:viewSequenceDiagram')}>
                   <Button 
                     type="text" 
                     icon={<EyeOutlined />} 
@@ -446,7 +445,7 @@ const SequenceManagement: React.FC = () => {
                     }}
                   />
                 </Tooltip>
-                <Tooltip title={t('sequences.editSequence')}>
+                <Tooltip title={t('sequences:editSequence')}>
                   <Button 
                     type="text" 
                     icon={<EditOutlined />} 
@@ -473,20 +472,19 @@ const SequenceManagement: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <ControlOutlined style={{ color: '#1890ff' }} />
-                {t('sequences.title')}
+                {t('sequences:title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('sequences.description')}
+              {t('sequences:description')}
             </Paragraph>
           </div>
           <Space>
-            <LanguageSwitcher />
             <Button icon={<ReloadOutlined />}>
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateSequence}>
-              {t('sequences.createSequence')}
+              {t('sequences:createSequence')}
             </Button>
           </Space>
         </div>
@@ -497,9 +495,9 @@ const SequenceManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('sequences.stats.totalSequences')}
+              title={t('sequences:stats.totalSequences')}
               value={sequenceData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<ControlOutlined />}
             />
@@ -508,9 +506,9 @@ const SequenceManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('sequences.stats.activeSequences')}
+              title={t('sequences:stats.activeSequences')}
               value={activeSequences}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
@@ -519,9 +517,9 @@ const SequenceManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('sequences.stats.executionCount')}
+              title={t('sequences:stats.executionCount')}
               value={1247}
-              suffix={t('sequences.executionUnit')}
+              suffix={t('sequences:executionUnit')}
               valueStyle={{ color: '#722ed1' }}
               prefix={<ClockCircleOutlined />}
             />
@@ -530,7 +528,7 @@ const SequenceManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('sequences.stats.successRate')}
+              title={t('sequences:stats.successRate')}
               value={98.5}
               suffix="%"
               valueStyle={{ color: '#52c41a' }}
@@ -544,16 +542,16 @@ const SequenceManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('sequences.searchPlaceholder')}
+        searchPlaceholder={t('sequences:searchPlaceholder')}
         filters={[
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: t('sequences.typeFilter'),
+            placeholder: t('sequences:typeFilter'),
             width: 120,
             options: [
-              { value: 'all', label: t('sequences.allTypes') },
+              { value: 'all', label: t('sequences:allTypes') },
               ...Object.entries(sequenceTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -564,13 +562,13 @@ const SequenceManagement: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('common.status'),
+            placeholder: t('common:status'),
             width: 100,
             options: [
-              { value: 'all', label: t('sequences.allStatuses') },
-              { value: 'active', label: t('sequences.statuses.active') },
-              { value: 'inactive', label: t('sequences.statuses.inactive') },
-              { value: 'draft', label: t('sequences.statuses.draft') }
+              { value: 'all', label: t('sequences:allStatuses') },
+              { value: 'active', label: t('sequences:statuses.active') },
+              { value: 'inactive', label: t('sequences:statuses.inactive') },
+              { value: 'draft', label: t('sequences:statuses.draft') }
             ]
           }
         ]}
@@ -595,10 +593,10 @@ const SequenceManagement: React.FC = () => {
           <div>
             {/* Basic Information */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('sequences.sequenceName')} span={2}>
+              <Descriptions.Item label={t('sequences:sequenceName')} span={2}>
                 {selectedSequence.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.type')}>
+              <Descriptions.Item label={t('common:type')}>
                 <Tag 
                   color={sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.color}
                   icon={sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.icon}
@@ -606,16 +604,16 @@ const SequenceManagement: React.FC = () => {
                   {sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.status')}>
+              <Descriptions.Item label={t('common:status')}>
                 {getStatusTag(selectedSequence.status)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('sequences.stepCount')}>
-                {selectedSequence.steps}{t('sequences.steps')}
+              <Descriptions.Item label={t('sequences:stepCount')}>
+                {selectedSequence.steps}{t('sequences:steps')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('sequences.executionDuration')}>
+              <Descriptions.Item label={t('sequences:executionDuration')}>
                 {formatDuration(selectedSequence.duration, t)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('sequences.participants')} span={2}>
+              <Descriptions.Item label={t('sequences:participants')} span={2}>
                 <Space wrap>
                   {selectedSequence.participants.map((participant, index) => (
                     <Tag key={index} icon={<UserOutlined />}>
@@ -624,13 +622,13 @@ const SequenceManagement: React.FC = () => {
                   ))}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={t('sequences.createdBy')}>
+              <Descriptions.Item label={t('sequences:createdBy')}>
                 {selectedSequence.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('sequences.createdAt')}>
+              <Descriptions.Item label={t('sequences:createdAt')}>
                 {selectedSequence.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.description')} span={2}>
+              <Descriptions.Item label={t('common:description')} span={2}>
                 {selectedSequence.description}
               </Descriptions.Item>
             </Descriptions>
@@ -638,7 +636,7 @@ const SequenceManagement: React.FC = () => {
             {/* Sequence Diagram */}
             <SequenceDiagram 
               chart={selectedSequence.mermaidChart}
-              title={t('sequences.sequenceDiagram')}
+              title={t('sequences:sequenceDiagram')}
             />
           </div>
         )}
@@ -646,7 +644,7 @@ const SequenceManagement: React.FC = () => {
 
       {/* Create/Edit Sequence Form Modal */}
       <Modal
-        title={editingSequence ? t('sequences.editSequence') : t('sequences.createSequence')}
+        title={editingSequence ? t('sequences:editSequence') : t('sequences:createSequence')}
         open={formModalVisible}
         onCancel={handleFormCancel}
         footer={null}
@@ -666,13 +664,13 @@ const SequenceManagement: React.FC = () => {
             <Col span={24}>
               <Form.Item
                 name="name"
-                label={t('sequences.form.name')}
+                label={t('sequences:form.name')}
                 rules={[
-                  { required: true, message: t('sequences.form.nameRequired') },
-                  { max: 100, message: t('sequences.form.nameMaxLength') }
+                  { required: true, message: t('sequences:form.nameRequired') },
+                  { max: 100, message: t('sequences:form.nameMaxLength') }
                 ]}
               >
-                <Input placeholder={t('sequences.form.namePlaceholder')} />
+                <Input placeholder={t('sequences:form.namePlaceholder')} />
               </Form.Item>
             </Col>
           </Row>
@@ -681,15 +679,15 @@ const SequenceManagement: React.FC = () => {
             <Col span={24}>
               <Form.Item
                 name="description"
-                label={t('sequences.form.description')}
+                label={t('sequences:form.description')}
                 rules={[
-                  { required: true, message: t('sequences.form.descriptionRequired') },
-                  { max: 500, message: t('sequences.form.descriptionMaxLength') }
+                  { required: true, message: t('sequences:form.descriptionRequired') },
+                  { max: 500, message: t('sequences:form.descriptionMaxLength') }
                 ]}
               >
                 <TextArea 
                   rows={4} 
-                  placeholder={t('sequences.form.descriptionPlaceholder')}
+                  placeholder={t('sequences:form.descriptionPlaceholder')}
                   showCount
                   maxLength={500}
                 />
@@ -701,38 +699,38 @@ const SequenceManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="type"
-                label={t('sequences.form.type')}
-                rules={[{ required: true, message: t('sequences.form.typeRequired') }]}
+                label={t('sequences:form.type')}
+                rules={[{ required: true, message: t('sequences:form.typeRequired') }]}
               >
-                <Select placeholder={t('sequences.form.typePlaceholder')}>
+                <Select placeholder={t('sequences:form.typePlaceholder')}>
                   <Option value="authentication">
                     <Space>
                       <UserOutlined />
-                      {t('sequences.types.authentication')}
+                      {t('sequences:types.authentication')}
                     </Space>
                   </Option>
                   <Option value="business">
                     <Space>
                       <ApiOutlined />
-                      {t('sequences.types.business')}
+                      {t('sequences:types.business')}
                     </Space>
                   </Option>
                   <Option value="monitoring">
                     <Space>
                       <ClockCircleOutlined />
-                      {t('sequences.types.monitoring')}
+                      {t('sequences:types.monitoring')}
                     </Space>
                   </Option>
                   <Option value="data">
                     <Space>
                       <DatabaseOutlined />
-                      {t('sequences.types.data')}
+                      {t('sequences:types.data')}
                     </Space>
                   </Option>
                   <Option value="gateway">
                     <Space>
                       <CloudOutlined />
-                      {t('sequences.types.gateway')}
+                      {t('sequences:types.gateway')}
                     </Space>
                   </Option>
                 </Select>
@@ -741,13 +739,13 @@ const SequenceManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="status"
-                label={t('sequences.form.status')}
-                rules={[{ required: true, message: t('sequences.form.statusRequired') }]}
+                label={t('sequences:form.status')}
+                rules={[{ required: true, message: t('sequences:form.statusRequired') }]}
               >
-                <Select placeholder={t('sequences.form.statusPlaceholder')}>
-                  <Option value="draft">{t('sequences.statuses.draft')}</Option>
-                  <Option value="active">{t('sequences.statuses.active')}</Option>
-                  <Option value="inactive">{t('sequences.statuses.inactive')}</Option>
+                <Select placeholder={t('sequences:form.statusPlaceholder')}>
+                  <Option value="draft">{t('sequences:statuses.draft')}</Option>
+                  <Option value="active">{t('sequences:statuses.active')}</Option>
+                  <Option value="inactive">{t('sequences:statuses.inactive')}</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -757,33 +755,33 @@ const SequenceManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="participants"
-                label={t('sequences.form.participants')}
-                rules={[{ required: true, message: t('sequences.form.participantsRequired') }]}
+                label={t('sequences:form.participants')}
+                rules={[{ required: true, message: t('sequences:form.participantsRequired') }]}
               >
                 <Select
                   mode="tags"
-                  placeholder={t('sequences.form.participantsPlaceholder')}
+                  placeholder={t('sequences:form.participantsPlaceholder')}
                   style={{ width: '100%' }}
                 >
-                  <Option value="User">{t('sequences.participantOptions.user')}</Option>
-                  <Option value="Frontend">{t('sequences.participantOptions.frontend')}</Option>
-                  <Option value="Backend">{t('sequences.participantOptions.backend')}</Option>
-                  <Option value="Database">{t('sequences.participantOptions.database')}</Option>
-                  <Option value="Cache">{t('sequences.participantOptions.cache')}</Option>
-                  <Option value="Queue">{t('sequences.participantOptions.queue')}</Option>
-                  <Option value="External API">{t('sequences.participantOptions.externalApi')}</Option>
+                  <Option value="User">{t('sequences:participantOptions.user')}</Option>
+                  <Option value="Frontend">{t('sequences:participantOptions.frontend')}</Option>
+                  <Option value="Backend">{t('sequences:participantOptions.backend')}</Option>
+                  <Option value="Database">{t('sequences:participantOptions.database')}</Option>
+                  <Option value="Cache">{t('sequences:participantOptions.cache')}</Option>
+                  <Option value="Queue">{t('sequences:participantOptions.queue')}</Option>
+                  <Option value="External API">{t('sequences:participantOptions.externalApi')}</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="duration"
-                label={t('sequences.form.duration')}
-                rules={[{ required: true, message: t('sequences.form.durationRequired') }]}
+                label={t('sequences:form.duration')}
+                rules={[{ required: true, message: t('sequences:form.durationRequired') }]}
               >
                 <Input 
-                  placeholder={t('sequences.form.durationPlaceholder')}
-                  addonAfter={t('sequences.form.durationUnit')}
+                  placeholder={t('sequences:form.durationPlaceholder')}
+                  addonAfter={t('sequences:form.durationUnit')}
                 />
               </Form.Item>
             </Col>
@@ -795,24 +793,24 @@ const SequenceManagement: React.FC = () => {
                 name="mermaidChart"
                 label={
                   <Space>
-                    {t('sequences.form.mermaidChart')}
+                    {t('sequences:form.mermaidChart')}
                     <Button 
                       type="link" 
                       size="small" 
                       icon={<EyeOutlined />}
                       onClick={handlePreviewChart}
                     >
-                      {t('sequences.form.previewChart')}
+                      {t('sequences:form.previewChart')}
                     </Button>
                   </Space>
                 }
                 rules={[
-                  { required: true, message: t('sequences.form.mermaidChartRequired') }
+                  { required: true, message: t('sequences:form.mermaidChartRequired') }
                 ]}
               >
                 <MermaidCodeEditor 
                   rows={8} 
-                  placeholder={t('sequences.form.mermaidChartPlaceholder')}
+                  placeholder={t('sequences:form.mermaidChartPlaceholder')}
                   showCount
                 />
               </Form.Item>
@@ -824,10 +822,10 @@ const SequenceManagement: React.FC = () => {
           <div style={{ textAlign: 'right' }}>
             <Space>
               <Button onClick={handleFormCancel} icon={<CloseOutlined />}>
-                {t('common.cancel')}
+                {t('common:cancel')}
               </Button>
               <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
-                {editingSequence ? t('common.update') : t('common.create')}
+                {editingSequence ? t('common:update') : t('common:create')}
               </Button>
             </Space>
           </div>
@@ -836,7 +834,7 @@ const SequenceManagement: React.FC = () => {
 
       {/* Chart Preview Modal */}
       <Modal
-        title={t('sequences.form.chartPreview')}
+        title={t('sequences:form.chartPreview')}
         open={previewVisible}
         onCancel={() => setPreviewVisible(false)}
         footer={null}
@@ -846,7 +844,7 @@ const SequenceManagement: React.FC = () => {
         {previewChart && (
           <SequenceDiagram 
             chart={previewChart}
-            title={t('sequences.form.previewTitle')}
+            title={t('sequences:form.previewTitle')}
           />
         )}
       </Modal>

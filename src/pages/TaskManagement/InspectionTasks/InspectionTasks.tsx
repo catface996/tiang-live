@@ -235,10 +235,10 @@ const InspectionTasks: React.FC = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['tasks', 'common']);
 
   useEffect(() => {
-    setPageTitle(t('tasks.inspection.title'));
+    setPageTitle(t('tasks:inspection.title'));
   }, [t]);
 
   // 巡检任务数据
@@ -379,18 +379,18 @@ const InspectionTasks: React.FC = () => {
   ];
 
   const taskTypeMap = {
-    health_check: { name: t('tasks.inspection.types.healthCheck'), color: 'green', icon: <HeartOutlined /> },
-    performance_monitor: { name: t('tasks.inspection.types.performanceMonitor'), color: 'blue', icon: <BarChartOutlined /> },
-    security_scan: { name: t('tasks.inspection.types.securityScan'), color: 'orange', icon: <SafetyCertificateOutlined /> },
-    log_analysis: { name: t('tasks.inspection.types.logAnalysis'), color: 'purple', icon: <HistoryOutlined /> },
+    health_check: { name: t('tasks:inspection.types.healthCheck'), color: 'green', icon: <HeartOutlined /> },
+    performance_monitor: { name: t('tasks:inspection.types.performanceMonitor'), color: 'blue', icon: <BarChartOutlined /> },
+    security_scan: { name: t('tasks:inspection.types.securityScan'), color: 'orange', icon: <SafetyCertificateOutlined /> },
+    log_analysis: { name: t('tasks:inspection.types.logAnalysis'), color: 'purple', icon: <HistoryOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      running: { color: 'green', text: t('tasks.inspection.status.active') },
-      paused: { color: 'orange', text: t('tasks.inspection.status.paused') },
-      stopped: { color: 'red', text: t('common.status.stopped') },
-      error: { color: 'red', text: t('common.status.error') },
+      running: { color: 'green', text: t('tasks:inspection.status.active') },
+      paused: { color: 'orange', text: t('tasks:inspection.status.paused') },
+      stopped: { color: 'red', text: t('common:status.stopped') },
+      error: { color: 'red', text: t('common:status.error') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -398,9 +398,9 @@ const InspectionTasks: React.FC = () => {
 
   const getLastRunStatusTag = (status: string) => {
     const statusMap = {
-      success: { color: 'green', text: t('common.status.success') },
-      failed: { color: 'red', text: t('tasks.inspection.status.failed') },
-      timeout: { color: 'orange', text: t('common.status.timeout') },
+      success: { color: 'green', text: t('common:status.success') },
+      failed: { color: 'red', text: t('tasks:inspection.status.failed') },
+      timeout: { color: 'orange', text: t('common:status.timeout') },
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -431,24 +431,24 @@ const InspectionTasks: React.FC = () => {
   };
 
   const handleStartTask = (taskId: string) => {
-    message.success(t('tasks.inspection.messages.startSuccess'));
+    message.success(t('tasks:inspection.messages.startSuccess'));
   };
 
   const handlePauseTask = (taskId: string) => {
-    message.success(t('tasks.inspection.messages.pauseSuccess'));
+    message.success(t('tasks:inspection.messages.pauseSuccess'));
   };
 
   const handleDeleteTask = (taskId: string) => {
-    message.success(t('tasks.inspection.messages.deleteSuccess'));
+    message.success(t('tasks:inspection.messages.deleteSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingTask) {
-        message.success(t('tasks.inspection.messages.updateSuccess'));
+        message.success(t('tasks:inspection.messages.updateSuccess'));
       } else {
-        message.success(t('tasks.inspection.messages.createSuccess'));
+        message.success(t('tasks:inspection.messages.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -487,7 +487,7 @@ const InspectionTasks: React.FC = () => {
                   {typeConfig?.name}
                 </Tag>
                 <Tag icon={<MonitorOutlined />}>
-                  {totalCollections}{t('tasks.inspection.card.taskCollections')}
+                  {totalCollections}{t('tasks:inspection.card.taskCollections')}
                 </Tag>
               </Space>
             </div>
@@ -507,7 +507,7 @@ const InspectionTasks: React.FC = () => {
               <Row gutter={12}>
                 <Col span={12}>
                   <Statistic
-                    title={t('tasks.inspection.card.successRate')}
+                    title={t('tasks:inspection.card.successRate')}
                     value={task.statistics.successRate}
                     suffix="%"
                     valueStyle={{ fontSize: 14 }}
@@ -515,7 +515,7 @@ const InspectionTasks: React.FC = () => {
                 </Col>
                 <Col span={12}>
                   <Statistic
-                    title={t('tasks.inspection.card.executionCount')}
+                    title={t('tasks:inspection.card.executionCount')}
                     value={task.statistics.totalRuns}
                     valueStyle={{ fontSize: 14 }}
                   />
@@ -527,7 +527,7 @@ const InspectionTasks: React.FC = () => {
             <div style={{ marginBottom: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Text strong style={{ fontSize: 12 }}>{t('tasks.inspection.card.lastExecution')}</Text>
+                  <Text strong style={{ fontSize: 12 }}>{t('tasks:inspection.card.lastExecution')}</Text>
                   {getLastRunStatusTag(task.lastRun.status)}
                 </div>
                 <Text type="secondary" style={{ fontSize: 11 }}>
@@ -539,11 +539,11 @@ const InspectionTasks: React.FC = () => {
             {/* 调度信息 */}
             <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                <Text>{t('tasks.inspection.card.schedule')}: </Text>
+                <Text>{t('tasks:inspection.card.schedule')}: </Text>
                 <Text>{task.schedule.expression}</Text>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text>{t('tasks.inspection.card.nextExecution')}: </Text>
+                <Text>{t('tasks:inspection.card.nextExecution')}: </Text>
                 <Text>{task.nextRun}</Text>
               </div>
             </div>
@@ -551,7 +551,7 @@ const InspectionTasks: React.FC = () => {
             {/* 操作按钮区域 - 单独一行 */}
             <div className="card-actions">
               <Space>
-                <Tooltip title={t('tasks.inspection.card.viewDetails')}>
+                <Tooltip title={t('tasks:inspection.card.viewDetails')}>
                   <Button 
                     type="text" 
                     icon={<EyeOutlined />} 
@@ -562,7 +562,7 @@ const InspectionTasks: React.FC = () => {
                     }}
                   />
                 </Tooltip>
-                <Tooltip title={t('tasks.inspection.card.edit')}>
+                <Tooltip title={t('tasks:inspection.card.edit')}>
                   <Button 
                     type="text" 
                     icon={<EditOutlined />} 
@@ -574,7 +574,7 @@ const InspectionTasks: React.FC = () => {
                   />
                 </Tooltip>
                 {task.status === 'running' ? (
-                  <Tooltip title={t('tasks.inspection.card.pause')}>
+                  <Tooltip title={t('tasks:inspection.card.pause')}>
                     <Button 
                       type="text" 
                       icon={<PauseCircleOutlined />} 
@@ -586,7 +586,7 @@ const InspectionTasks: React.FC = () => {
                     />
                   </Tooltip>
                 ) : (
-                  <Tooltip title={t('tasks.inspection.card.start')}>
+                  <Tooltip title={t('tasks:inspection.card.start')}>
                     <Button 
                       type="text" 
                       icon={<PlayCircleOutlined />} 
@@ -622,19 +622,19 @@ const InspectionTasks: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <SearchOutlined style={{ color: '#1890ff' }} />
-                {t('tasks.inspection.title')}
+                {t('tasks:inspection.title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('tasks.inspection.subtitle')}
+              {t('tasks:inspection.subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              {t('tasks.inspection.refresh')}
+              {t('tasks:inspection.refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTask}>
-              {t('tasks.inspection.createTask')}
+              {t('tasks:inspection.createTask')}
             </Button>
           </Space>
         </div>
@@ -645,9 +645,9 @@ const InspectionTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.inspection.stats.totalTasks')}
+              title={t('tasks:inspection.stats.totalTasks')}
               value={inspectionTaskData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<SearchOutlined />}
             />
@@ -656,9 +656,9 @@ const InspectionTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.inspection.stats.runningTasks')}
+              title={t('tasks:inspection.stats.runningTasks')}
               value={runningTasks}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
@@ -667,9 +667,9 @@ const InspectionTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.inspection.card.taskCollections')}
+              title={t('tasks:inspection.card.taskCollections')}
               value={totalCollections}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#faad14' }}
               prefix={<MonitorOutlined />}
             />
@@ -678,7 +678,7 @@ const InspectionTasks: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('tasks.inspection.card.successRate')}
+              title={t('tasks:inspection.card.successRate')}
               value={avgSuccessRate.toFixed(1)}
               suffix="%"
               valueStyle={{ color: '#722ed1' }}
@@ -692,16 +692,16 @@ const InspectionTasks: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('tasks.inspection.search.placeholder')}
+        searchPlaceholder={t('tasks:inspection.search.placeholder')}
         filters={[
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: t('tasks.inspection.search.type'),
+            placeholder: t('tasks:inspection.search.type'),
             width: 120,
             options: [
-              { value: 'all', label: t('tasks.inspection.search.allTypes') },
+              { value: 'all', label: t('tasks:inspection.search.allTypes') },
               ...Object.entries(taskTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -712,14 +712,14 @@ const InspectionTasks: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('tasks.inspection.search.status'),
+            placeholder: t('tasks:inspection.search.status'),
             width: 100,
             options: [
-              { value: 'all', label: t('tasks.inspection.search.allStatuses') },
-              { value: 'running', label: t('tasks.inspection.status.active') },
-              { value: 'paused', label: t('tasks.inspection.status.paused') },
-              { value: 'stopped', label: t('tasks.inspection.status.draft') },
-              { value: 'error', label: t('tasks.inspection.status.failed') }
+              { value: 'all', label: t('tasks:inspection.search.allStatuses') },
+              { value: 'running', label: t('tasks:inspection.status.active') },
+              { value: 'paused', label: t('tasks:inspection.status.paused') },
+              { value: 'stopped', label: t('tasks:inspection.status.draft') },
+              { value: 'error', label: t('tasks:inspection.status.failed') }
             ]
           }
         ]}
@@ -735,7 +735,7 @@ const InspectionTasks: React.FC = () => {
 
       {/* 创建/编辑巡检任务模态框 */}
       <Modal
-        title={editingTask ? t('tasks.inspection.editTitle') : t('tasks.inspection.createTitle')}
+        title={editingTask ? t('tasks:inspection.editTitle') : t('tasks:inspection.createTitle')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
@@ -753,20 +753,20 @@ const InspectionTasks: React.FC = () => {
         >
           <Form.Item
             name="name"
-            label={t('tasks.inspection.form.name')}
-            rules={[{ required: true, message: t('tasks.inspection.form.nameRequired') }]}
+            label={t('tasks:inspection.form.name')}
+            rules={[{ required: true, message: t('tasks:inspection.form.nameRequired') }]}
           >
-            <Input placeholder={t('tasks.inspection.form.namePlaceholder')} />
+            <Input placeholder={t('tasks:inspection.form.namePlaceholder')} />
           </Form.Item>
 
           <Form.Item
             name="description"
-            label={t('tasks.inspection.form.description')}
-            rules={[{ required: true, message: t('tasks.inspection.form.descriptionRequired') }]}
+            label={t('tasks:inspection.form.description')}
+            rules={[{ required: true, message: t('tasks:inspection.form.descriptionRequired') }]}
           >
             <TextArea 
               rows={3} 
-              placeholder={t('tasks.inspection.form.descriptionPlaceholder')}
+              placeholder={t('tasks:inspection.form.descriptionPlaceholder')}
             />
           </Form.Item>
 
@@ -818,8 +818,8 @@ const InspectionTasks: React.FC = () => {
           </Row>
 
           <Alert
-            message={t('common.tips')}
-            description={t('tasks.inspection.tips.createHint')}
+            message={t('common:tips')}
+            description={t('tasks:inspection.tips.createHint')}
             type="info"
             showIcon
             style={{ marginTop: 16 }}
@@ -840,10 +840,10 @@ const InspectionTasks: React.FC = () => {
           <div>
             {/* 基本信息 */}
             <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('tasks.inspection.detail.taskName')} span={2}>
+              <Descriptions.Item label={t('tasks:inspection.detail.taskName')} span={2}>
                 {selectedTask.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.inspection.detail.taskType')}>
+              <Descriptions.Item label={t('tasks:inspection.detail.taskType')}>
                 <Tag 
                   color={taskTypeMap[selectedTask.type]?.color}
                   icon={taskTypeMap[selectedTask.type]?.icon}
@@ -851,36 +851,36 @@ const InspectionTasks: React.FC = () => {
                   {taskTypeMap[selectedTask.type]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.status')}>
+              <Descriptions.Item label={t('common:status')}>
                 {getStatusTag(selectedTask.status)}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.inspection.detail.successRate')}>
+              <Descriptions.Item label={t('tasks:inspection.detail.successRate')}>
                 {selectedTask.statistics.successRate}%
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.inspection.detail.executionCount')}>
-                {selectedTask.statistics.totalRuns}{t('common.unit.times')}
+              <Descriptions.Item label={t('tasks:inspection.detail.executionCount')}>
+                {selectedTask.statistics.totalRuns}{t('common:unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.inspection.detail.avgDuration')}>
-                {selectedTask.statistics.avgDuration}{t('tasks.inspection.detail.seconds')}
+              <Descriptions.Item label={t('tasks:inspection.detail.avgDuration')}>
+                {selectedTask.statistics.avgDuration}{t('tasks:inspection.detail.seconds')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.inspection.detail.nextExecution')}>
+              <Descriptions.Item label={t('tasks:inspection.detail.nextExecution')}>
                 {selectedTask.nextRun}
               </Descriptions.Item>
-              <Descriptions.Item label={t('tasks.inspection.detail.creator')}>
+              <Descriptions.Item label={t('tasks:inspection.detail.creator')}>
                 {selectedTask.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.createTime')}>
+              <Descriptions.Item label={t('common:createTime')}>
                 {selectedTask.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common.description')} span={2}>
+              <Descriptions.Item label={t('common:description')} span={2}>
                 {selectedTask.description}
               </Descriptions.Item>
             </Descriptions>
 
             {/* 详细配置 */}
             <Tabs defaultActiveKey="collections">
-              <Tabs.TabPane tab={t('tasks.inspection.detail.taskCollections')} key="collections">
-                <Card title={t('tasks.inspection.detail.triggeredCollections')} size="small">
+              <Tabs.TabPane tab={t('tasks:inspection.detail.taskCollections')} key="collections">
+                <Card title={t('tasks:inspection.detail.triggeredCollections')} size="small">
                   {selectedTask.taskCollections.length > 0 ? (
                     <Space wrap>
                       {selectedTask.taskCollections.map(collection => (
@@ -890,29 +890,29 @@ const InspectionTasks: React.FC = () => {
                       ))}
                     </Space>
                   ) : (
-                    <Text type="secondary">{t('tasks.inspection.detail.noCollections')}</Text>
+                    <Text type="secondary">{t('tasks:inspection.detail.noCollections')}</Text>
                   )}
                 </Card>
               </Tabs.TabPane>
               
-              <Tabs.TabPane tab={t('tasks.inspection.detail.configParams')} key="config">
+              <Tabs.TabPane tab={t('tasks:inspection.detail.configParams')} key="config">
                 <Descriptions column={2} size="small">
-                  <Descriptions.Item label={t('tasks.inspection.detail.timeout')}>
-                    {selectedTask.config.timeout}{t('tasks.inspection.detail.seconds')}
+                  <Descriptions.Item label={t('tasks:inspection.detail.timeout')}>
+                    {selectedTask.config.timeout}{t('tasks:inspection.detail.seconds')}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.inspection.detail.retryCount')}>
-                    {selectedTask.config.retryCount}{t('common.unit.times')}
+                  <Descriptions.Item label={t('tasks:inspection.detail.retryCount')}>
+                    {selectedTask.config.retryCount}{t('common:unit.times')}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.inspection.detail.alertThreshold')}>
+                  <Descriptions.Item label={t('tasks:inspection.detail.alertThreshold')}>
                     {selectedTask.config.alertThreshold}%
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.inspection.detail.scheduleExpression')}>
+                  <Descriptions.Item label={t('tasks:inspection.detail.scheduleExpression')}>
                     {selectedTask.schedule.expression}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.inspection.detail.timezone')}>
+                  <Descriptions.Item label={t('tasks:inspection.detail.timezone')}>
                     {selectedTask.schedule.timezone}
                   </Descriptions.Item>
-                  <Descriptions.Item label={t('tasks.inspection.detail.checkpoints')} span={2}>
+                  <Descriptions.Item label={t('tasks:inspection.detail.checkpoints')} span={2}>
                     <Space wrap>
                       {selectedTask.config.checkpoints.map(checkpoint => (
                         <Tag key={checkpoint}>{checkpoint}</Tag>
@@ -922,20 +922,20 @@ const InspectionTasks: React.FC = () => {
                 </Descriptions>
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab={t('tasks.inspection.detail.executionHistory')} key="history">
-                <Card title={t('tasks.inspection.detail.recentResults')} size="small">
+              <Tabs.TabPane tab={t('tasks:inspection.detail.executionHistory')} key="history">
+                <Card title={t('tasks:inspection.detail.recentResults')} size="small">
                   <Descriptions column={2} size="small">
-                    <Descriptions.Item label={t('tasks.inspection.detail.startTime')}>
+                    <Descriptions.Item label={t('tasks:inspection.detail.startTime')}>
                       {selectedTask.lastRun.startTime}
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('tasks.inspection.detail.endTime')}>
+                    <Descriptions.Item label={t('tasks:inspection.detail.endTime')}>
                       {selectedTask.lastRun.endTime}
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('tasks.inspection.detail.executionStatus')}>
+                    <Descriptions.Item label={t('tasks:inspection.detail.executionStatus')}>
                       {getLastRunStatusTag(selectedTask.lastRun.status)}
                     </Descriptions.Item>
-                    <Descriptions.Item label={t('tasks.inspection.detail.executionDuration')}>
-                      {selectedTask.lastRun.duration}{t('tasks.inspection.detail.seconds')}
+                    <Descriptions.Item label={t('tasks:inspection.detail.executionDuration')}>
+                      {selectedTask.lastRun.duration}{t('tasks:inspection.detail.seconds')}
                     </Descriptions.Item>
                   </Descriptions>
                 </Card>

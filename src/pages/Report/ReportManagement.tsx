@@ -163,7 +163,7 @@ const ReportManagement: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  const { t } = useTranslation();
+  const { t } = useTranslation(['reports', 'common']);
   const navigate = useNavigate();
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
@@ -175,10 +175,10 @@ const ReportManagement: React.FC = () => {
 
   // 报告类型映射
   const reportTypeMap = {
-    health: { name: t('reports.types.health'), color: 'green', icon: <FileTextOutlined /> },
-    dependency: { name: t('reports.types.dependency'), color: 'blue', icon: <FileTextOutlined /> },
-    relationship: { name: t('reports.types.relationship'), color: 'orange', icon: <FileTextOutlined /> },
-    performance: { name: t('reports.types.performance'), color: 'purple', icon: <FileTextOutlined /> }
+    health: { name: t('reports:types.health'), color: 'green', icon: <FileTextOutlined /> },
+    dependency: { name: t('reports:types.dependency'), color: 'blue', icon: <FileTextOutlined /> },
+    relationship: { name: t('reports:types.relationship'), color: 'orange', icon: <FileTextOutlined /> },
+    performance: { name: t('reports:types.performance'), color: 'purple', icon: <FileTextOutlined /> }
   };
 
   // 模拟报告数据
@@ -186,7 +186,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '1',
       name: '系统健康度分析报告',
-      type: t('reports.types.health'),
+      type: t('reports:types.health'),
       status: 'published',
       author: '系统管理员',
       createdAt: '2024-06-15 10:30:00',
@@ -198,7 +198,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '2',
       name: '平面依赖关系分析报告',
-      type: t('reports.types.dependency'),
+      type: t('reports:types.dependency'),
       status: 'published',
       author: '架构师团队',
       createdAt: '2024-06-10 09:15:00',
@@ -210,7 +210,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '3',
       name: '性能基准测试报告',
-      type: t('reports.types.performance'),
+      type: t('reports:types.performance'),
       status: 'published',
       author: '性能测试团队',
       createdAt: '2024-06-08 14:20:00',
@@ -222,7 +222,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '4',
       name: '安全风险评估报告',
-      type: t('reports.types.security'),
+      type: t('reports:types.security'),
       status: 'draft',
       author: '安全团队',
       createdAt: '2024-06-12 16:00:00',
@@ -234,7 +234,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '5',
       name: '用户行为分析报告',
-      type: t('reports.types.business'),
+      type: t('reports:types.business'),
       status: 'published',
       author: '数据分析师',
       createdAt: '2024-06-05 11:45:00',
@@ -246,7 +246,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '6',
       name: '数据库性能优化报告',
-      type: t('reports.types.performance'),
+      type: t('reports:types.performance'),
       status: 'published',
       author: 'DBA团队',
       createdAt: '2024-06-03 15:30:00',
@@ -258,7 +258,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '7',
       name: '微服务架构评估报告',
-      type: t('reports.types.system'),
+      type: t('reports:types.system'),
       status: 'archived',
       author: '架构师团队',
       createdAt: '2024-05-28 10:00:00',
@@ -270,7 +270,7 @@ const ReportManagement: React.FC = () => {
     {
       key: '8',
       name: '容器化部署分析报告',
-      type: t('reports.types.system'),
+      type: t('reports:types.system'),
       status: 'published',
       author: '运维团队',
       createdAt: '2024-06-01 14:15:00',
@@ -404,9 +404,9 @@ const ReportManagement: React.FC = () => {
               margin: 0,
               color: isDark ? '#ffffff' : '#262626'
             }}>
-              {t('reports.title')}
+              {t('reports:title')}
               <Badge 
-                count={t('common.inDevelopment')} 
+                count={t('common:inDevelopment')} 
                 style={{ 
                   backgroundColor: '#faad14', 
                   marginLeft: 12,
@@ -420,7 +420,7 @@ const ReportManagement: React.FC = () => {
               fontSize: 16,
               color: isDark ? '#8c8c8c' : '#666666'
             }}>
-              {t('reports.subtitle')}
+              {t('reports:subtitle')}
             </Paragraph>
           </div>
           <Space>
@@ -432,7 +432,7 @@ const ReportManagement: React.FC = () => {
                 backgroundColor: isDark ? 'transparent' : undefined
               }}
             >
-              {t('reports.batchExport')}
+              {t('reports:batchExport')}
             </Button>
             <Button 
               icon={<ReloadOutlined />}
@@ -442,10 +442,10 @@ const ReportManagement: React.FC = () => {
                 backgroundColor: isDark ? 'transparent' : undefined
               }}
             >
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />}>
-              {t('reports.createTitle')}
+              {t('reports:createTitle')}
             </Button>
           </Space>
         </div>
@@ -456,9 +456,9 @@ const ReportManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('reports.stats.totalReports')}
+              title={t('reports:stats.totalReports')}
               value={reportData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               prefix={<FileTextOutlined />}
             />
@@ -467,9 +467,9 @@ const ReportManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('reports.stats.published')}
+              title={t('reports:stats.published')}
               value={reportData.filter(r => r.status === 'published').length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               prefix={<EyeOutlined />}
             />
@@ -478,9 +478,9 @@ const ReportManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('reports.stats.draft')}
+              title={t('reports:stats.draft')}
               value={reportData.filter(r => r.status === 'draft').length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               prefix={<EditOutlined />}
             />
@@ -489,9 +489,9 @@ const ReportManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('reports.stats.totalDownloads')}
+              title={t('reports:stats.totalDownloads')}
               value={reportData.reduce((sum, r) => sum + r.downloads, 0)}
-              suffix={t('common.unit.times')}
+              suffix={t('common:unit.times')}
               valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
               prefix={<DownloadOutlined />}
             />
@@ -503,16 +503,16 @@ const ReportManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('reports.search.placeholder')}
+        searchPlaceholder={t('reports:search.placeholder')}
         filters={[
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: t('reports.search.type'),
+            placeholder: t('reports:search.type'),
             width: 120,
             options: [
-              { value: 'all', label: t('reports.search.allTypes') },
+              { value: 'all', label: t('reports:search.allTypes') },
               ...Object.entries(reportTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -523,13 +523,13 @@ const ReportManagement: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('reports.search.status'),
+            placeholder: t('reports:search.status'),
             width: 100,
             options: [
-              { value: 'all', label: t('reports.search.allStatuses') },
-              { value: 'published', label: t('reports.status.published') },
-              { value: 'draft', label: t('reports.status.draft') },
-              { value: 'archived', label: t('reports.status.archived') }
+              { value: 'all', label: t('reports:search.allStatuses') },
+              { value: 'published', label: t('reports:status.published') },
+              { value: 'draft', label: t('reports:status.draft') },
+              { value: 'archived', label: t('reports:status.archived') }
             ]
           }
         ]}

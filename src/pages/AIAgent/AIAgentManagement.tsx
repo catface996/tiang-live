@@ -150,7 +150,7 @@ interface AIAgent {
 
 const AIAgentManagement: React.FC = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['agents', 'common']);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -165,7 +165,7 @@ const AIAgentManagement: React.FC = () => {
   const isDark = currentTheme === 'dark';
 
   useEffect(() => {
-    setPageTitle(t('agents.title'));
+    setPageTitle(t('agents:title'));
   }, [t]);
 
   // 模拟AI智能体数据
@@ -413,35 +413,35 @@ const AIAgentManagement: React.FC = () => {
   ];
 
   const agentTypeMap = {
-    monitor: { name: t('agents.types.monitor'), color: 'blue', icon: <MonitorOutlined /> },
-    analysis: { name: t('agents.types.analysis'), color: 'green', icon: <BarChartOutlined /> },
-    deployment: { name: t('agents.types.deployment'), color: 'purple', icon: <ApiOutlined /> },
-    optimization: { name: t('agents.types.optimization'), color: 'orange', icon: <ThunderboltOutlined /> },
-    security: { name: t('agents.types.security'), color: 'red', icon: <ExclamationCircleOutlined /> },
-    backup: { name: t('agents.types.backup'), color: 'cyan', icon: <CheckCircleOutlined /> },
-    gateway: { name: t('agents.types.gateway'), color: 'geekblue', icon: <ApiOutlined /> },
-    planning: { name: t('agents.types.planning'), color: 'magenta', icon: <BarChartOutlined /> },
-    diagnosis: { name: t('agents.types.diagnosis'), color: 'volcano', icon: <MonitorOutlined /> },
-    config: { name: t('agents.types.config'), color: 'lime', icon: <ApiOutlined /> },
-    traffic: { name: t('agents.types.traffic'), color: 'gold', icon: <BarChartOutlined /> },
-    cleanup: { name: t('agents.types.cleanup'), color: 'gray', icon: <DeleteOutlined /> },
+    monitor: { name: t('agents:types.monitor'), color: 'blue', icon: <MonitorOutlined /> },
+    analysis: { name: t('agents:types.analysis'), color: 'green', icon: <BarChartOutlined /> },
+    deployment: { name: t('agents:types.deployment'), color: 'purple', icon: <ApiOutlined /> },
+    optimization: { name: t('agents:types.optimization'), color: 'orange', icon: <ThunderboltOutlined /> },
+    security: { name: t('agents:types.security'), color: 'red', icon: <ExclamationCircleOutlined /> },
+    backup: { name: t('agents:types.backup'), color: 'cyan', icon: <CheckCircleOutlined /> },
+    gateway: { name: t('agents:types.gateway'), color: 'geekblue', icon: <ApiOutlined /> },
+    planning: { name: t('agents:types.planning'), color: 'magenta', icon: <BarChartOutlined /> },
+    diagnosis: { name: t('agents:types.diagnosis'), color: 'volcano', icon: <MonitorOutlined /> },
+    config: { name: t('agents:types.config'), color: 'lime', icon: <ApiOutlined /> },
+    traffic: { name: t('agents:types.traffic'), color: 'gold', icon: <BarChartOutlined /> },
+    cleanup: { name: t('agents:types.cleanup'), color: 'gray', icon: <DeleteOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
       running: { 
         color: isDark ? '#52c41a' : 'green', 
-        text: t('agents.status.running'),
+        text: t('agents:status.running'),
         bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
       },
       stopped: { 
         color: isDark ? '#f5222d' : 'red', 
-        text: t('agents.status.stopped'),
+        text: t('agents:status.stopped'),
         bgColor: isDark ? 'rgba(245, 34, 45, 0.1)' : undefined
       },
       paused: { 
         color: isDark ? '#faad14' : 'orange', 
-        text: t('agents.status.paused'),
+        text: t('agents:status.paused'),
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
       },
     };
@@ -550,7 +550,7 @@ const AIAgentManagement: React.FC = () => {
             }}>
               <Space>
                 <RobotOutlined style={{ color: isDark ? '#177ddc' : '#1890ff' }} />
-                {t('agents.title')}
+                {t('agents:title')}
               </Space>
             </Title>
             <Paragraph style={{ 
@@ -559,7 +559,7 @@ const AIAgentManagement: React.FC = () => {
               fontSize: 16,
               color: isDark ? '#8c8c8c' : '#666666'
             }}>
-              {t('agents.subtitle')}
+              {t('agents:subtitle')}
             </Paragraph>
           </div>
           <Space>
@@ -571,10 +571,10 @@ const AIAgentManagement: React.FC = () => {
                 backgroundColor: isDark ? 'transparent' : undefined
               }}
             >
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
-              {t('agents.createAgent')}
+              {t('agents:createAgent')}
             </Button>
           </Space>
         </div>
@@ -585,9 +585,9 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('agents.stats.totalAgents')}
+              title={t('agents:stats.totalAgents')}
               value={agentData.length}
-              suffix={t('agents.stats.unit')}
+              suffix={t('agents:stats.unit')}
               valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               prefix={<RobotOutlined />}
             />
@@ -596,9 +596,9 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('agents.stats.runningAgents')}
+              title={t('agents:stats.runningAgents')}
               value={runningAgents}
-              suffix={t('agents.stats.unit')}
+              suffix={t('agents:stats.unit')}
               valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
@@ -607,9 +607,9 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('agents.stats.totalTasks')}
+              title={t('agents:stats.totalTasks')}
               value={totalTasks}
-              suffix={t('agents.stats.taskUnit')}
+              suffix={t('agents:stats.taskUnit')}
               valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               prefix={<ThunderboltOutlined />}
             />
@@ -618,7 +618,7 @@ const AIAgentManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark}>
             <Statistic
-              title={t('agents.stats.avgSuccessRate')}
+              title={t('agents:stats.avgSuccessRate')}
               value={avgSuccessRate.toFixed(1)}
               suffix="%"
               valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
@@ -632,8 +632,8 @@ const AIAgentManagement: React.FC = () => {
       {totalCpu > 60 && (
         <StyledAlert
           $isDark={isDark}
-          message={t('agents.alerts.highCpuUsage')}
-          description={t('agents.alerts.highCpuUsageDesc', { cpu: totalCpu.toFixed(1) })}
+          message={t('agents:alerts.highCpuUsage')}
+          description={t('agents:alerts.highCpuUsageDesc', { cpu: totalCpu.toFixed(1) })}
           type="warning"
           showIcon
           closable
@@ -645,29 +645,29 @@ const AIAgentManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('agents.searchPlaceholder')}
+        searchPlaceholder={t('agents:searchPlaceholder')}
         filters={[
           {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('agents.filterByStatus'),
+            placeholder: t('agents:filterByStatus'),
             width: 120,
             options: [
-              { value: 'all', label: t('common.all') },
-              { value: 'running', label: t('agents.status.running') },
-              { value: 'paused', label: t('agents.status.paused') },
-              { value: 'stopped', label: t('agents.status.stopped') },
+              { value: 'all', label: t('common:all') },
+              { value: 'running', label: t('agents:status.running') },
+              { value: 'paused', label: t('agents:status.paused') },
+              { value: 'stopped', label: t('agents:status.stopped') },
             ]
           },
           {
             key: 'type',
             value: filterType,
             onChange: setFilterType,
-            placeholder: t('agents.filterByType'),
+            placeholder: t('agents:filterByType'),
             width: 140,
             options: [
-              { value: 'all', label: t('common.all') },
+              { value: 'all', label: t('common:all') },
               ...Object.entries(agentTypeMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -678,7 +678,7 @@ const AIAgentManagement: React.FC = () => {
         extraActions={
           <div style={{ textAlign: 'right' }}>
             <span style={{ color: isDark ? '#8c8c8c' : '#666666', fontSize: '14px' }}>
-              {t('agents.totalFound', { 
+              {t('agents:totalFound', { 
                 count: agentData.filter(agent => {
                   const matchesSearch = agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
                                        agent.description.toLowerCase().includes(searchText.toLowerCase());
@@ -699,7 +699,7 @@ const AIAgentManagement: React.FC = () => {
 
       {/* 创建/编辑智能体模态框 */}
       <Modal
-        title={editingAgent ? t('agents.editAgent') : t('agents.createAgent')}
+        title={editingAgent ? t('agents:editAgent') : t('agents:createAgent')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}

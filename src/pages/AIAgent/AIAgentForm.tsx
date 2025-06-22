@@ -60,7 +60,7 @@ interface AIAgentFormData {
 }
 
 const AIAgentForm: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['agents', 'common']);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
@@ -69,7 +69,7 @@ const AIAgentForm: React.FC = () => {
   const [initialData, setInitialData] = useState<AIAgentFormData | undefined>();
 
   useEffect(() => {
-    setPageTitle(isEdit ? t('aiAgent.form.editTitle') : t('aiAgent.form.createTitle'));
+    setPageTitle(isEdit ? t('agents:form.editTitle') : t('agents:form.createTitle'));
     if (isEdit) {
       loadAgentData();
     }
@@ -82,8 +82,8 @@ const AIAgentForm: React.FC = () => {
       // 模拟API调用
       const agentData: AIAgentFormData = {
         id: id,
-        name: t('aiAgent.form.mockData.customerServiceName'),
-        description: t('aiAgent.form.mockData.customerServiceDescription'),
+        name: t('agents:form.mockData.customerServiceName'),
+        description: t('agents:form.mockData.customerServiceDescription'),
         type: 'chat',
         status: 'active',
         model: {
@@ -99,10 +99,10 @@ const AIAgentForm: React.FC = () => {
           }
         },
         prompts: {
-          system: t('aiAgent.form.mockData.systemPrompt'),
+          system: t('agents:form.mockData.systemPrompt'),
           templates: ['customer-service-template'],
           variables: {
-            company_name: t('aiAgent.form.mockData.companyName'),
+            company_name: t('agents:form.mockData.companyName'),
             service_hours: '9:00-18:00'
           }
         },
@@ -115,12 +115,12 @@ const AIAgentForm: React.FC = () => {
           retryCount: 3,
           logLevel: 'info'
         },
-        tags: [t('aiAgent.form.mockData.tags.customerService'), t('aiAgent.form.mockData.tags.dialogue'), t('aiAgent.form.mockData.tags.assistant')]
+        tags: [t('agents:form.mockData.tags.customerService'), t('agents:form.mockData.tags.dialogue'), t('agents:form.mockData.tags.assistant')]
       };
 
       setInitialData(agentData);
     } catch (error) {
-      message.error(t('aiAgent.form.messages.loadDataFailed'));
+      message.error(t('agents:form.messages.loadDataFailed'));
     } finally {
       setLoading(false);
     }
@@ -132,10 +132,10 @@ const AIAgentForm: React.FC = () => {
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      message.success(isEdit ? t('aiAgent.form.messages.updateSuccess') : t('aiAgent.form.messages.createSuccess'));
+      message.success(isEdit ? t('agents:form.messages.updateSuccess') : t('agents:form.messages.createSuccess'));
       navigate('/ai-agents');
     } catch (error) {
-      message.error(isEdit ? t('aiAgent.form.messages.updateFailed') : t('aiAgent.form.messages.createFailed'));
+      message.error(isEdit ? t('agents:form.messages.updateFailed') : t('agents:form.messages.createFailed'));
     } finally {
       setLoading(false);
     }
@@ -150,11 +150,11 @@ const AIAgentForm: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <RobotOutlined style={{ color: '#1890ff' }} />
-                {isEdit ? t('aiAgent.form.editTitle') : t('aiAgent.form.createTitle')}
+                {isEdit ? t('agents:form.editTitle') : t('agents:form.createTitle')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16, color: '#666' }}>
-              {isEdit ? t('aiAgent.form.editSubtitle') : t('aiAgent.form.createSubtitle')}
+              {isEdit ? t('agents:form.editSubtitle') : t('agents:form.createSubtitle')}
             </Paragraph>
           </div>
           <Space>
@@ -162,7 +162,7 @@ const AIAgentForm: React.FC = () => {
               icon={<ArrowLeftOutlined />} 
               onClick={() => navigate('/ai-agents')}
             >
-              {t('common.backToList')}
+              {t('common:backToList')}
             </Button>
           </Space>
         </div>
@@ -180,7 +180,7 @@ const AIAgentForm: React.FC = () => {
         <div style={{ textAlign: 'right' }}>
           <Space>
             <Button onClick={() => navigate('/ai-agents')}>
-              {t('common.cancel')}
+              {t('common:cancel')}
             </Button>
             <Button 
               type="primary" 
@@ -189,7 +189,7 @@ const AIAgentForm: React.FC = () => {
               form="ai-agent-form"
               htmlType="submit"
             >
-              {isEdit ? t('aiAgent.form.updateAgent') : t('aiAgent.form.createAgent')}
+              {isEdit ? t('agents:form.updateAgent') : t('agents:form.createAgent')}
             </Button>
           </Space>
         </div>

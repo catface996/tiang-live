@@ -1,0 +1,31 @@
+{
+  "title": "AI Assistant",
+  "subtitle": "Intelligent operations assistant to help you solve problems quickly",
+  "chatPlaceholder": "Please enter your question...",
+  "send": "Send",
+  "sendShortcut": "Ctrl+Enter to send",
+  "clear": "Clear Chat",
+  "chatCleared": "Chat cleared",
+  "emptyMessage": "Please enter message content",
+  "thinking": "Thinking...",
+  "suggestiondescription": "Suggestions",
+  "suggestions": {
+    "createPlane": "Create New Plane",
+    "entityRelation": "View Entity Relations",
+    "healthMonitor": "System Health Monitoring",
+    "planeDependency": "Plane Dependency Analysis",
+    "systemReport": "Generate System Report",
+    "tagManagement": "Tag Management"
+  },
+  "responses": {
+    "default": "I'm your AI operations assistant. How can I help you?",
+    "createPlane": "I can help you create a new plane. Please tell me the basic information about the plane.",
+    "entityRelation": "Let me analyze the entity relationship graph for you.",
+    "healthMonitor": "Let me check the system health status.",
+    "dependency": "Let me analyze the dependencies between planes.",
+    "reportGeneration": "I can generate a detailed system report for you.",
+    "sequenceManagement": "Let me help you manage sequence processes.",
+    "tagManagement": "I can assist you with tag management.",
+    "aiAgent": "I'm happy to answer questions about AI agents."
+  }
+}

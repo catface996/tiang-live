@@ -1,0 +1,195 @@
+{
+  "title": "Entity Scan",
+  "subtitle": "Scan and discover system entities",
+  "stats": {
+    "title": "Scan Statistics",
+    "totalDataSources": "Total Data Sources",
+    "connectedSources": "Connected Sources",
+    "totalEntities": "Total Entities",
+    "selectedEntities": "Selected Entities",
+    "runningScans": "Running Scans",
+    "completedScans": "Completed Scans"
+  },
+  "status": {
+    "running": "Running",
+    "completed": "Completed",
+    "failed": "Failed",
+    "pending": "Pending",
+    "paused": "Paused",
+    "neverScanned": "Never Scanned"
+  },
+  "dataSources": {
+    "addDataSource": "Add Data Source",
+    "refreshDataSources": "Refresh Data Sources",
+    "searchPlaceholder": "Search data source name, type...",
+    "filterByType": "Filter by Type",
+    "filterByStatus": "Filter by Status",
+    "allTypes": "All Types",
+    "allStatuses": "All Statuses",
+    "testConnection": "Test Connection",
+    "details": "Details",
+    "entityCount": "Entity Count",
+    "lastScan": "Last Scan",
+    "noDataSources": "No data sources",
+    "noMatchingDataSources": "No matching data sources",
+    "configureDataSourcesFirst": "Please configure data sources first",
+    "connected": "Connected",
+    "connecting": "Connecting",
+    "disconnected": "Disconnected",
+    "error": "Error",
+    "types": {
+      "database": "Database",
+      "api": "API Interface",
+      "file": "File System",
+      "cloud": "Cloud Service",
+      "monitoring": "Monitoring System",
+      "metrics": "Metrics System"
+    }
+  },
+  "fields": {
+    "name": "Name",
+    "description": "Description",
+    "type": "Type",
+    "subType": "Sub Type",
+    "status": "Status",
+    "host": "Host",
+    "url": "URL",
+    "endpoint": "Endpoint",
+    "endpoints": "Endpoints",
+    "baseUrl": "Base URL",
+    "queryUrl": "Query URL",
+    "database": "Database",
+    "username": "Username",
+    "apiKey": "API Key",
+    "apiVersion": "API Version",
+    "accessKeyId": "Access Key ID",
+    "bucket": "Bucket",
+    "path": "Path",
+    "format": "Format",
+    "encoding": "Encoding",
+    "timeout": "Timeout",
+    "version": "Version",
+    "environment": "Environment",
+    "site": "Site",
+    "orgId": "Organization ID",
+    "services": "Services",
+    "hosts": "Hosts",
+    "hostGroups": "Host Groups",
+    "indices": "Indices",
+    "retention": "Retention",
+    "lookback": "Lookback",
+    "maxSamples": "Max Samples",
+    "includeDashboards": "Include Dashboards"
+  },
+  "scanConfig": {
+    "startScan": "Start Scan"
+  },
+  "progress": {
+    "scanned": "Scanned",
+    "generated": "Generated"
+  },
+  "results": {
+    "confirmGenerate": "Confirm Generate",
+    "generateDescription": "Generate Entity Description"
+  },
+  "messages": {
+    "scanStarted": "Scan started",
+    "refreshingDataSources": "Refreshing data sources",
+    "refreshSuccess": "Refresh successful",
+    "refreshFailed": "Refresh failed",
+    "connectionTestSuccess": "Connection test successful",
+    "connectionTestFailed": "Connection test failed",
+    "dataSourceDeleted": "Data source deleted",
+    "dataSourceNotFound": "Data source not found",
+    "selectDataSourceFirst": "Please select data source first",
+    "ensureConnectionFirst": "Please ensure connection is established first",
+    "featureInDevelopment": "Feature in development",
+    "dataSourceConfigFeature": "Data source configuration feature",
+    "configWizardComingSoon": "Configuration wizard coming soon",
+    "wizardFeatures": "Wizard features",
+    "dataSourceCreated": "Data source created successfully"
+  },
+  "dataSourceConfig": {
+    "title": "Monitoring System Data Source Configuration",
+    "selectType": "Select Monitoring System Type",
+    "basicConfig": "Basic Configuration",
+    "testConnection": "Test Connection",
+    "mainFeatures": "Main Features",
+    "configForm": "Configuration Form",
+    "selectTypeDescription": "Please select a specific monitoring system type to display the corresponding configuration options.",
+    "types": {
+      "prometheus": {
+        "name": "Prometheus",
+        "description": "Open-source monitoring and alerting toolkit focused on time series data collection",
+        "features": ["Time Series Data", "Metrics Collection", "PromQL Queries", "Alert Rules"]
+      },
+      "grafana": {
+        "name": "Grafana",
+        "description": "Open-source visualization and analytics platform supporting multiple data sources",
+        "features": ["Dashboards", "Data Source Management", "Alert Configuration", "User Management"]
+      },
+      "elasticsearch": {
+        "name": "Elasticsearch",
+        "description": "Distributed search and analytics engine for log analysis",
+        "features": ["Full-text Search", "Log Analysis", "Aggregation Queries", "Index Management"]
+      },
+      "influxdb": {
+        "name": "InfluxDB",
+        "description": "Database designed specifically for time series data",
+        "features": ["Time Series Storage", "High-performance Writes", "SQL Queries", "Data Compression"]
+      },
+      "jaeger": {
+        "name": "Jaeger",
+        "description": "Distributed tracing system",
+        "features": ["Distributed Tracing", "Performance Analysis", "Dependency Analysis", "Service Topology"]
+      },
+      "zabbix": {
+        "name": "Zabbix",
+        "description": "Enterprise-class monitoring solution",
+        "features": ["Host Monitoring", "Network Monitoring", "Application Monitoring", "Alert Notifications"]
+      },
+      "datadog": {
+        "name": "Datadog",
+        "description": "Cloud-native monitoring and analytics platform",
+        "features": ["APM", "Log Management", "Infrastructure Monitoring", "Security Monitoring"]
+      }
+    },
+    "fields": {
+      "name": "Data Source Name",
+      "namePlaceholder": "Data Source",
+      "nameRequired": "Please enter data source name",
+      "description": "Description",
+      "descriptionPlaceholder": "Monitoring System Data Source",
+      "url": "Service URL",
+      "urlRequired": "Please enter service URL",
+      "authType": "Authentication Type",
+      "authNone": "No Authentication",
+      "authBasic": "Basic Authentication",
+      "authToken": "Token Authentication",
+      "username": "Username",
+      "usernamePlaceholder": "Username (optional)",
+      "password": "Password",
+      "passwordPlaceholder": "Password (optional)",
+      "timeout": "Query Timeout (seconds)",
+      "maxSamples": "Max Samples",
+      "apiKey": "API Key",
+      "apiKeyRequired": "Please enter API Key",
+      "orgId": "Organization ID",
+      "includeDashboards": "Include Dashboards",
+      "includeDataSources": "Include Data Sources",
+      "includeAlerts": "Include Alert Rules",
+      "cluster": "Cluster Address",
+      "clusterRequired": "Please enter cluster address",
+      "indices": "Index Pattern",
+      "version": "Version",
+      "database": "Database Name",
+      "databaseRequired": "Please enter database name",
+      "retention": "Retention Policy"
+    },
+    "messages": {
+      "testSuccess": "Connection test successful!",
+      "testFailed": "Connection failed, please check configuration parameters.",
+      "validationFailed": "Configuration validation failed, please check required fields."
+    }
+  }
+}

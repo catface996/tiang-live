@@ -1,0 +1,20 @@
+{
+  "dashboard": "Dashboard",
+  "planes": "Plane Management",
+  "entities": "Entity Management",
+  "relationships": "Relationship Graph",
+  "sequences": "Sequence Management",
+  "agents": "AI Agents",
+  "reports": "Report Management",
+  "tasks": "Task Management",
+  "inspectionTasks": "Inspection Tasks",
+  "hookTasks": "Hook Tasks",
+  "collections": "Task Collections",
+  "solutions": "Industry Models",
+  "systemSettings": "System Settings",
+  "modelManagement": "Model Management",
+  "promptTemplates": "Prompt Templates",
+  "tagManagement": "Tag Management",
+  "entityScan": "Entity Scan",
+  "aiAssistant": "AI Assistant"
+}

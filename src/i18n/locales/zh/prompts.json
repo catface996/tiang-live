@@ -1,0 +1,91 @@
+{
+  "title": "提示词模板",
+  "subtitle": "AI提示词模板管理和优化",
+  "createPrompt": "创建模板",
+  "stats": {
+    "totalTemplates": "总模板数",
+    "publicTemplates": "公开模板",
+    "favoriteTemplates": "收藏模板",
+    "averageRating": "平均评分",
+    "usageCount": "使用次数"
+  },
+  "search": {
+    "placeholder": "搜索提示词名称、描述、标签...",
+    "category": "分类",
+    "difficulty": "难度",
+    "status": "状态",
+    "allCategories": "所有分类",
+    "allDifficulties": "所有难度",
+    "allStatuses": "所有状态"
+  },
+  "status": {
+    "public": "公开",
+    "private": "私有",
+    "favorite": "收藏"
+  },
+  "difficulty": {
+    "beginner": "初级",
+    "intermediate": "中级",
+    "advanced": "高级"
+  },
+  "categories": {
+    "customerService": "客户服务",
+    "dataAnalysis": "数据分析",
+    "devTools": "开发工具",
+    "docTools": "文档工具",
+    "opsTools": "运维工具",
+    "productManagement": "产品管理"
+  },
+  "actions": {
+    "copy": "复制内容",
+    "edit": "编辑",
+    "view": "查看详情"
+  },
+  "form": {
+    "templateName": "模板名称",
+    "templateNamePlaceholder": "请输入模板名称",
+    "templateNameRequired": "请输入模板名称",
+    "description": "描述",
+    "descriptionPlaceholder": "请输入模板描述",
+    "descriptionRequired": "请输入模板描述",
+    "content": "模板内容",
+    "contentPlaceholder": "请输入提示词内容",
+    "contentRequired": "请输入提示词内容",
+    "category": "分类",
+    "categoryPlaceholder": "请选择分类",
+    "categoryRequired": "请选择分类",
+    "difficulty": "难度",
+    "difficultyRequired": "请选择难度",
+    "language": "语言",
+    "languagePlaceholder": "请选择语言",
+    "languageRequired": "请选择语言",
+    "variableTip": "变量提示",
+    "variableTipDescription": "使用 {{变量名}} 格式定义变量"
+  },
+  "detail": {
+    "templateName": "模板名称",
+    "description": "描述",
+    "content": "内容",
+    "category": "分类",
+    "difficulty": "难度",
+    "language": "语言",
+    "status": "状态",
+    "isPublic": "是否公开",
+    "rating": "评分",
+    "usageCount": "使用次数",
+    "creator": "创建者",
+    "createdAt": "创建时间",
+    "lastUsed": "最后使用",
+    "version": "版本",
+    "tags": "标签",
+    "variablesList": "变量列表",
+    "noVariables": "无变量"
+  },
+  "messages": {
+    "createSuccess": "模板创建成功",
+    "updateSuccess": "模板更新成功",
+    "deleteSuccess": "模板删除成功",
+    "copySuccess": "内容复制成功",
+    "favoriteSuccess": "收藏成功"
+  }
+}

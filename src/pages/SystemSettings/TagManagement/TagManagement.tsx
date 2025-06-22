@@ -90,7 +90,7 @@ const TagCardContent = styled.div`
 `;
 
 const TagManagement: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['tags', 'common']);
   const { currentTheme } = useAppSelector((state) => state.theme);
   const isDarkMode = currentTheme === 'dark';
   const iconColor = isDarkMode ? '#ffffff' : '#1890ff';
@@ -103,7 +103,7 @@ const TagManagement: React.FC = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    setPageTitle(t('systemSettings.tags.title'));
+    setPageTitle(t('tags:title'));
   }, [t]);
 
   // 模拟标签数据
@@ -190,16 +190,16 @@ const TagManagement: React.FC = () => {
   };
 
   const handleDeleteTag = (tagId: string) => {
-    message.success(t('systemSettings.tags.messages.deleteSuccess'));
+    message.success(t('tags:messages.deleteSuccess'));
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
       if (editingTag) {
-        message.success(t('systemSettings.tags.messages.updateSuccess'));
+        message.success(t('tags:messages.updateSuccess'));
       } else {
-        message.success(t('systemSettings.tags.messages.createSuccess'));
+        message.success(t('tags:messages.createSuccess'));
       }
       setModalVisible(false);
       form.resetFields();
@@ -215,7 +215,7 @@ const TagManagement: React.FC = () => {
 
   const columns = [
     {
-      title: t('systemSettings.tags.table.tagName'),
+      title: t('tags:table.tagName'),
       dataIndex: 'name',
       key: 'name',
       render: (text: string, record: any) => (
@@ -225,7 +225,7 @@ const TagManagement: React.FC = () => {
       ),
     },
     {
-      title: t('systemSettings.tags.table.category'),
+      title: t('tags:table.category'),
       dataIndex: 'category',
       key: 'category',
       render: (category: string) => {
@@ -239,13 +239,13 @@ const TagManagement: React.FC = () => {
       },
     },
     {
-      title: t('systemSettings.tags.table.description'),
+      title: t('tags:table.description'),
       dataIndex: 'description',
       key: 'description',
       ellipsis: true,
     },
     {
-      title: t('systemSettings.tags.table.usageCount'),
+      title: t('tags:table.usageCount'),
       dataIndex: 'usageCount',
       key: 'usageCount',
       render: (count: number) => (
@@ -253,12 +253,12 @@ const TagManagement: React.FC = () => {
       ),
     },
     {
-      title: t('systemSettings.tags.table.createTime'),
+      title: t('tags:table.createTime'),
       dataIndex: 'createdAt',
       key: 'createdAt',
     },
     {
-      title: t('systemSettings.tags.table.actions'),
+      title: t('tags:table.actions'),
       key: 'action',
       render: (_, record: any) => (
         <Space>
@@ -268,14 +268,14 @@ const TagManagement: React.FC = () => {
             size="small"
             onClick={() => handleEditTag(record)}
           >
-            {t('systemSettings.tags.actions.edit')}
+            {t('tags:actions.edit')}
           </Button>
           <Popconfirm
-            title={t('systemSettings.tags.actions.deleteConfirm')}
-            description={t('systemSettings.tags.actions.deleteDescription')}
+            title={t('tags:actions.deleteConfirm')}
+            description={t('tags:actions.deleteDescription')}
             onConfirm={() => handleDeleteTag(record.key)}
-            okText={t('common.confirm')}
-            cancelText={t('common.cancel')}
+            okText={t('common:confirm')}
+            cancelText={t('common:cancel')}
           >
             <Button 
               type="link" 
@@ -283,7 +283,7 @@ const TagManagement: React.FC = () => {
               size="small"
               danger
             >
-              {t('systemSettings.tags.actions.delete')}
+              {t('tags:actions.delete')}
             </Button>
           </Popconfirm>
         </Space>
@@ -340,19 +340,19 @@ const TagManagement: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               <Space>
                 <TagsOutlined style={{ color: iconColor }} />
-                {t('systemSettings.tags.title')}
+                {t('tags:title')}
               </Space>
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('systemSettings.tags.subtitle')}
+              {t('tags:subtitle')}
             </Paragraph>
           </div>
           <Space>
             <Button icon={<ReloadOutlined />}>
-              {t('common.refresh')}
+              {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTag}>
-              {t('systemSettings.tags.createTag')}
+              {t('tags:createTag')}
             </Button>
           </Space>
         </div>
@@ -363,9 +363,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.tags.stats.totalTags')}
+              title={t('tags:stats.totalTags')}
               value={tagData.length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<TagsOutlined />}
             />
@@ -374,9 +374,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.tags.stats.categoryCount')}
+              title={t('tags:stats.categoryCount')}
               value={Object.keys(categoryMap).length}
-              suffix={t('common.unit.count')}
+              suffix={t('common:unit.count')}
               valueStyle={{ color: '#52c41a' }}
               prefix={<AppstoreOutlined />}
             />
@@ -385,9 +385,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.tags.stats.totalUsage')}
+              title={t('tags:stats.totalUsage')}
               value={tagData.reduce((sum, tag) => sum + tag.usageCount, 0)}
-              suffix={t('common.unit.times')}
+              suffix={t('common:unit.times')}
               valueStyle={{ color: '#faad14' }}
               prefix={<BgColorsOutlined />}
             />
@@ -396,9 +396,9 @@ const TagManagement: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StatsCard>
             <Statistic
-              title={t('systemSettings.tags.stats.averageUsage')}
+              title={t('tags:stats.averageUsage')}
               value={Math.round(tagData.reduce((sum, tag) => sum + tag.usageCount, 0) / tagData.length)}
-              suffix={t('systemSettings.tags.stats.averageUsageSuffix')}
+              suffix={t('tags:stats.averageUsageSuffix')}
               valueStyle={{ color: '#722ed1' }}
               prefix={<NodeIndexOutlined />}
             />
@@ -407,7 +407,7 @@ const TagManagement: React.FC = () => {
       </Row>
 
       {/* 分类展示 */}
-      <Card title={t('systemSettings.tags.categoryDisplay.title')} style={{ marginBottom: 24 }}>
+      <Card title={t('tags:categoryDisplay.title')} style={{ marginBottom: 24 }}>
         <Row gutter={[16, 16]}>
           {renderTagsByCategory()}
         </Row>
@@ -417,16 +417,16 @@ const TagManagement: React.FC = () => {
       <SearchFilterBar
         searchValue={searchText}
         onSearchChange={setSearchText}
-        searchPlaceholder={t('systemSettings.tags.search.placeholder')}
+        searchPlaceholder={t('tags:search.placeholder')}
         filters={[
           {
             key: 'category',
             value: filterCategory,
             onChange: setFilterCategory,
-            placeholder: t('systemSettings.tags.search.category'),
+            placeholder: t('tags:search.category'),
             width: 120,
             options: [
-              { value: 'all', label: t('systemSettings.tags.search.allCategories') },
+              { value: 'all', label: t('tags:search.allCategories') },
               ...Object.entries(categoryMap).map(([key, config]) => ({
                 value: key,
                 label: config.name
@@ -439,7 +439,7 @@ const TagManagement: React.FC = () => {
       />
 
       {/* 标签列表 */}
-      <Card title={t('systemSettings.tags.table.title')}>
+      <Card title={t('tags:table.title')}>
         <Table
           columns={columns}
           dataSource={tagData}
@@ -457,7 +457,7 @@ const TagManagement: React.FC = () => {
 
       {/* 创建/编辑标签模态框 */}
       <Modal
-        title={editingTag ? t('systemSettings.tags.editTitle') : t('systemSettings.tags.createTitle')}
+        title={editingTag ? t('tags:editTitle') : t('tags:createTitle')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={handleModalCancel}
@@ -473,21 +473,21 @@ const TagManagement: React.FC = () => {
         >
           <Form.Item
             name="name"
-            label={t('systemSettings.tags.form.tagName')}
+            label={t('tags:form.tagName')}
             rules={[
-              { required: true, message: t('systemSettings.tags.form.tagNameRequired') },
+              { required: true, message: t('tags:form.tagNameRequired') },
               { max: 20, message: t('validation.maxLength', { max: 20 }) }
             ]}
           >
-            <Input placeholder={t('systemSettings.tags.form.tagNamePlaceholder')} />
+            <Input placeholder={t('tags:form.tagNamePlaceholder')} />
           </Form.Item>
 
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="color"
-                label={t('systemSettings.tags.form.color')}
-                rules={[{ required: true, message: t('systemSettings.tags.form.colorRequired') }]}
+                label={t('tags:form.color')}
+                rules={[{ required: true, message: t('tags:form.colorRequired') }]}
               >
                 <ColorPicker showText />
               </Form.Item>
@@ -495,10 +495,10 @@ const TagManagement: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="category"
-                label={t('systemSettings.tags.form.category')}
-                rules={[{ required: true, message: t('systemSettings.tags.form.categoryRequired') }]}
+                label={t('tags:form.category')}
+                rules={[{ required: true, message: t('tags:form.categoryRequired') }]}
               >
-                <Select placeholder={t('systemSettings.tags.form.categoryPlaceholder')}>
+                <Select placeholder={t('tags:form.categoryPlaceholder')}>
                   {Object.entries(categoryMap).map(([key, config]) => (
                     <Option key={key} value={key}>
                       <Space>
@@ -514,15 +514,15 @@ const TagManagement: React.FC = () => {
 
           <Form.Item
             name="description"
-            label={t('systemSettings.tags.form.description')}
+            label={t('tags:form.description')}
             rules={[
-              { required: true, message: t('systemSettings.tags.form.descriptionRequired') },
+              { required: true, message: t('tags:form.descriptionRequired') },
               { max: 100, message: t('validation.maxLength', { max: 100 }) }
             ]}
           >
             <Input.TextArea 
               rows={3} 
-              placeholder={t('systemSettings.tags.form.descriptionPlaceholder')}
+              placeholder={t('tags:form.descriptionPlaceholder')}
             />
           </Form.Item>
         </Form>

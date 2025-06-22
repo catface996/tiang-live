@@ -342,73 +342,73 @@ const StatusIndicator = styled.span<{ status: string }>`
 // 智能体类型配置
 const getAgentTypeConfig = (t: any) => ({
   monitor: { 
-    name: t('agents.types.monitor'), 
+    name: t('agents:types.monitor'), 
     color: '#1890ff', 
     bgColor: '#e6f7ff',
     icon: <MonitorOutlined />
   },
   analysis: { 
-    name: t('agents.types.analysis'), 
+    name: t('agents:types.analysis'), 
     color: '#52c41a', 
     bgColor: '#f6ffed',
     icon: <BarChartOutlined />
   },
   deployment: { 
-    name: t('agents.types.deployment'), 
+    name: t('agents:types.deployment'), 
     color: '#722ed1', 
     bgColor: '#f9f0ff',
     icon: <DeploymentUnitOutlined />
   },
   optimization: { 
-    name: t('agents.types.optimization'), 
+    name: t('agents:types.optimization'), 
     color: '#fa8c16', 
     bgColor: '#fff7e6',
     icon: <ThunderboltOutlined />
   },
   security: { 
-    name: t('agents.types.security'), 
+    name: t('agents:types.security'), 
     color: '#ff4d4f', 
     bgColor: '#fff2f0',
     icon: <SecurityScanOutlined />
   },
   backup: { 
-    name: t('agents.types.backup'), 
+    name: t('agents:types.backup'), 
     color: '#13c2c2', 
     bgColor: '#e6fffb',
     icon: <DatabaseOutlined />
   },
   gateway: { 
-    name: t('agents.types.gateway'), 
+    name: t('agents:types.gateway'), 
     color: '#2f54eb', 
     bgColor: '#f0f5ff',
     icon: <GatewayOutlined />
   },
   planning: { 
-    name: t('agents.types.planning'), 
+    name: t('agents:types.planning'), 
     color: '#eb2f96', 
     bgColor: '#fff0f6',
     icon: <ProjectOutlined />
   },
   diagnosis: { 
-    name: t('agents.types.diagnosis'), 
+    name: t('agents:types.diagnosis'), 
     color: '#fa541c', 
     bgColor: '#fff2e8',
     icon: <MedicineBoxOutlined />
   },
   config: { 
-    name: t('agents.types.config'), 
+    name: t('agents:types.config'), 
     color: '#a0d911', 
     bgColor: '#fcffe6',
     icon: <SettingOutlined />
   },
   traffic: { 
-    name: t('agents.types.traffic'), 
+    name: t('agents:types.traffic'), 
     color: '#fadb14', 
     bgColor: '#feffe6',
     icon: <CarOutlined />
   },
   cleanup: { 
-    name: t('agents.types.cleanup'), 
+    name: t('agents:types.cleanup'), 
     color: '#8c8c8c', 
     bgColor: '#f5f5f5',
     icon: <ClearOutlined />
@@ -419,19 +419,19 @@ const getAgentTypeConfig = (t: any) => ({
 const getStatusConfig = (status: string, t: any) => {
   const statusMap = {
     running: { 
-      text: t('agents.status.running'), 
+      text: t('agents:status.running'), 
       color: '#52c41a', 
       bgColor: '#f6ffed',
       icon: <CheckCircleOutlined />
     },
     stopped: { 
-      text: t('agents.status.stopped'), 
+      text: t('agents:status.stopped'), 
       color: '#ff4d4f', 
       bgColor: '#fff2f0',
       icon: <ExclamationCircleOutlined />
     },
     paused: { 
-      text: t('agents.status.paused'), 
+      text: t('agents:status.paused'), 
       color: '#faad14', 
       bgColor: '#fff7e6',
       icon: <ClockCircleOutlined />
@@ -468,7 +468,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
   onView
 }) => {
   const { currentTheme } = useAppSelector((state) => state.theme);
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common']);
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const isDark = currentTheme === 'dark';
@@ -554,7 +554,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
       <StatsContainer $isDark={isDark}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
-            {t('agents.stats.tasksCompleted')}:
+            {t('agents:stats.tasksCompleted')}:
           </span>
           <span style={{ color: isDark ? '#ffffff' : '#262626', fontSize: '14px', fontWeight: 'bold' }}>
             {agent.stats.tasksCompleted}
@@ -562,7 +562,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
-            {t('agents.stats.successRate')}:
+            {t('agents:stats.successRate')}:
           </span>
           <span style={{ color: isDark ? '#ffffff' : '#262626', fontSize: '14px', fontWeight: 'bold' }}>
             {agent.stats.successRate}%
@@ -570,7 +570,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: '12px' }}>
-            {t('agents.stats.responseTime')}:
+            {t('agents:stats.responseTime')}:
           </span>
           <span style={{ color: isDark ? '#ffffff' : '#262626', fontSize: '14px', fontWeight: 'bold' }}>
             {agent.stats.avgResponseTime}ms
@@ -591,7 +591,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
       <FooterContainer>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
-            {t('agents.lastActive')}:
+            {t('agents:lastActive')}:
           </span>
           <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
             {agent.lastActive}
@@ -599,7 +599,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
-            {t('agents.uptime')}:
+            {t('agents:uptime')}:
           </span>
           <span style={{ color: isDark ? '#8c8c8c' : '#999', fontSize: '12px' }}>
             {agent.stats.uptime}
@@ -610,7 +610,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
       {/* 操作按钮区域 - 单独一行，右对齐 */}
       <div className="card-actions">
         <Space>
-          <Tooltip title={t('common.view')}>
+          <Tooltip title={t('common:view')}>
             <Button 
               type="text" 
               icon={<EyeOutlined />} 
@@ -618,7 +618,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
               onClick={(e) => handleAction('view', e)}
             />
           </Tooltip>
-          <Tooltip title={t('common.edit')}>
+          <Tooltip title={t('common:edit')}>
             <Button 
               type="text" 
               icon={<EditOutlined />} 

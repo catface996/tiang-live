@@ -1,0 +1,195 @@
+{
+  "title": "实体扫描",
+  "subtitle": "扫描和发现系统实体",
+  "stats": {
+    "title": "扫描统计",
+    "totalDataSources": "总数据源数",
+    "connectedSources": "已连接数据源",
+    "totalEntities": "总实体数",
+    "selectedEntities": "已选实体数",
+    "runningScans": "运行中扫描",
+    "completedScans": "已完成扫描"
+  },
+  "status": {
+    "running": "运行中",
+    "completed": "已完成",
+    "failed": "失败",
+    "pending": "待处理",
+    "paused": "已暂停",
+    "neverScanned": "从未扫描"
+  },
+  "dataSources": {
+    "addDataSource": "添加数据源",
+    "refreshDataSources": "刷新数据源",
+    "searchPlaceholder": "搜索数据源名称、类型...",
+    "filterByType": "按类型筛选",
+    "filterByStatus": "按状态筛选",
+    "allTypes": "所有类型",
+    "allStatuses": "所有状态",
+    "testConnection": "测试连接",
+    "details": "详情",
+    "entityCount": "实体数量",
+    "lastScan": "最后扫描",
+    "noDataSources": "暂无数据源",
+    "noMatchingDataSources": "没有匹配的数据源",
+    "configureDataSourcesFirst": "请先配置数据源",
+    "connected": "已连接",
+    "connecting": "连接中",
+    "disconnected": "已断开",
+    "error": "错误",
+    "types": {
+      "database": "数据库",
+      "api": "API接口",
+      "file": "文件系统",
+      "cloud": "云服务",
+      "monitoring": "监控系统",
+      "metrics": "指标系统"
+    }
+  },
+  "fields": {
+    "name": "名称",
+    "description": "描述",
+    "type": "类型",
+    "subType": "子类型",
+    "status": "状态",
+    "host": "主机",
+    "url": "URL",
+    "endpoint": "端点",
+    "endpoints": "端点列表",
+    "baseUrl": "基础URL",
+    "queryUrl": "查询URL",
+    "database": "数据库",
+    "username": "用户名",
+    "apiKey": "API密钥",
+    "apiVersion": "API版本",
+    "accessKeyId": "访问密钥ID",
+    "bucket": "存储桶",
+    "path": "路径",
+    "format": "格式",
+    "encoding": "编码",
+    "timeout": "超时时间",
+    "version": "版本",
+    "environment": "环境",
+    "site": "站点",
+    "orgId": "组织ID",
+    "services": "服务",
+    "hosts": "主机列表",
+    "hostGroups": "主机组",
+    "indices": "索引",
+    "retention": "保留期",
+    "lookback": "回溯时间",
+    "maxSamples": "最大样本数",
+    "includeDashboards": "包含仪表板"
+  },
+  "scanConfig": {
+    "startScan": "开始扫描"
+  },
+  "progress": {
+    "scanned": "已扫描",
+    "generated": "已生成"
+  },
+  "results": {
+    "confirmGenerate": "确认生成",
+    "generateDescription": "生成实体描述"
+  },
+  "messages": {
+    "scanStarted": "扫描已开始",
+    "refreshingDataSources": "正在刷新数据源",
+    "refreshSuccess": "刷新成功",
+    "refreshFailed": "刷新失败",
+    "connectionTestSuccess": "连接测试成功",
+    "connectionTestFailed": "连接测试失败",
+    "dataSourceDeleted": "数据源已删除",
+    "dataSourceNotFound": "数据源未找到",
+    "selectDataSourceFirst": "请先选择数据源",
+    "ensureConnectionFirst": "请先确保连接正常",
+    "featureInDevelopment": "功能开发中",
+    "dataSourceConfigFeature": "数据源配置功能",
+    "configWizardComingSoon": "配置向导即将推出",
+    "wizardFeatures": "向导功能特性",
+    "dataSourceCreated": "数据源创建成功"
+  },
+  "dataSourceConfig": {
+    "title": "监控系统数据源配置",
+    "selectType": "选择监控系统类型",
+    "basicConfig": "基础配置",
+    "testConnection": "测试连接",
+    "mainFeatures": "主要功能",
+    "configForm": "配置表单",
+    "selectTypeDescription": "请选择具体的监控系统类型以显示相应的配置选项。",
+    "types": {
+      "prometheus": {
+        "name": "Prometheus",
+        "description": "开源监控和告警工具，专注于时序数据收集",
+        "features": ["时序数据", "指标收集", "PromQL查询", "告警规则"]
+      },
+      "grafana": {
+        "name": "Grafana", 
+        "description": "开源可视化和分析平台，支持多种数据源",
+        "features": ["仪表板", "数据源管理", "告警配置", "用户管理"]
+      },
+      "elasticsearch": {
+        "name": "Elasticsearch",
+        "description": "分布式搜索和分析引擎，适用于日志分析",
+        "features": ["全文搜索", "日志分析", "聚合查询", "索引管理"]
+      },
+      "influxdb": {
+        "name": "InfluxDB",
+        "description": "专为时序数据设计的数据库",
+        "features": ["时序存储", "高性能写入", "SQL查询", "数据压缩"]
+      },
+      "jaeger": {
+        "name": "Jaeger",
+        "description": "分布式链路追踪系统",
+        "features": ["链路追踪", "性能分析", "依赖分析", "服务拓扑"]
+      },
+      "zabbix": {
+        "name": "Zabbix",
+        "description": "企业级监控解决方案",
+        "features": ["主机监控", "网络监控", "应用监控", "告警通知"]
+      },
+      "datadog": {
+        "name": "Datadog",
+        "description": "云原生监控和分析平台",
+        "features": ["APM", "日志管理", "基础设施监控", "安全监控"]
+      }
+    },
+    "fields": {
+      "name": "数据源名称",
+      "namePlaceholder": "数据源",
+      "nameRequired": "请输入数据源名称",
+      "description": "描述",
+      "descriptionPlaceholder": "监控系统数据源",
+      "url": "服务地址",
+      "urlRequired": "请输入服务地址",
+      "authType": "认证方式",
+      "authNone": "无认证",
+      "authBasic": "基础认证",
+      "authToken": "Token认证",
+      "username": "用户名",
+      "usernamePlaceholder": "用户名（可选）",
+      "password": "密码",
+      "passwordPlaceholder": "密码（可选）",
+      "timeout": "查询超时(秒)",
+      "maxSamples": "最大样本数",
+      "apiKey": "API Key",
+      "apiKeyRequired": "请输入API Key",
+      "orgId": "组织ID",
+      "includeDashboards": "包含仪表板",
+      "includeDataSources": "包含数据源",
+      "includeAlerts": "包含告警规则",
+      "cluster": "集群地址",
+      "clusterRequired": "请输入集群地址",
+      "indices": "索引模式",
+      "version": "版本",
+      "database": "数据库名",
+      "databaseRequired": "请输入数据库名",
+      "retention": "保留策略"
+    },
+    "messages": {
+      "testSuccess": "连接测试成功！",
+      "testFailed": "连接失败，请检查配置参数。",
+      "validationFailed": "配置验证失败，请检查必填项。"
+    }
+  }
+}
