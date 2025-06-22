@@ -32,6 +32,7 @@ const { Text, Paragraph } = Typography;
 
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
   height: 100%;
+  min-height: 380px;
   transition: all 0.3s ease;
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
@@ -48,20 +49,22 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   }
   
   .ant-card-head {
-    border-radius: 8px 8px 0 0 !important;
-    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-    border-bottom: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    display: none; /* 隐藏默认头部，使用自定义头部 */
   }
   
   .ant-card-body {
     padding: 20px;
     background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-    border-radius: 0 0 8px 8px !important;
+    border-radius: 8px 8px 0 0 !important;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 64px); /* 减去actions的高度 */
   }
   
   .ant-card-actions {
     background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
     border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    height: 64px;
     
     li {
       border-right: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
@@ -108,14 +111,15 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   .report-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 12px;
   }
   
   .report-description {
-    margin: 12px 0;
+    margin: 12px 0 16px 0;
     color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
     font-size: 13px;
+    flex: 1;
   }
   
   .report-stats {
@@ -130,7 +134,7 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 16px;
+    margin-top: auto;
     padding-top: 16px;
     border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   }
@@ -145,6 +149,53 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   .report-actions {
     display: flex;
     gap: 4px;
+  }
+
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    min-height: 340px;
+    
+    .ant-card-body {
+      padding: 16px;
+      height: calc(100% - 56px);
+    }
+    
+    .ant-card-actions {
+      height: 56px;
+    }
+    
+    .report-header {
+      margin-bottom: 12px;
+    }
+    
+    .report-icon {
+      margin-right: 10px;
+    }
+    
+    .report-title {
+      font-size: 15px;
+    }
+    
+    .report-stats {
+      margin: 12px 0;
+      padding: 10px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    min-height: 320px;
+    
+    .ant-card-body {
+      padding: 14px;
+    }
+    
+    .report-title {
+      font-size: 14px;
+    }
+    
+    .report-meta {
+      gap: 4px;
+    }
   }
 `;
 
@@ -391,11 +442,15 @@ const ReportCard: React.FC<ReportCardProps> = ({
 
       <div className="report-description">
         <Paragraph 
-          ellipsis={{ rows: 2 }} 
+          ellipsis={{ 
+            rows: 2, 
+            tooltip: report.description || t('reports.card.defaultDescription', { type: report.type })
+          }} 
           style={{ 
             margin: 0, 
             fontSize: 13, 
-            color: isDark ? '#8c8c8c' : '#666'
+            color: isDark ? '#8c8c8c' : '#666',
+            lineHeight: '1.5'
           }}
         >
           {report.description || t('reports.card.defaultDescription', { type: report.type })}
@@ -403,28 +458,32 @@ const ReportCard: React.FC<ReportCardProps> = ({
       </div>
 
       <div className="report-stats">
-        <Space split={<span style={{ color: isDark ? '#434343' : '#d9d9d9' }}>|</span>} size="large">
+        <Space 
+          split={<span style={{ color: isDark ? '#434343' : '#d9d9d9' }}>|</span>} 
+          size="small"
+          wrap
+        >
           <Statistic 
-            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>{t('reports.card.fileSize')}</span>} 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: 11 }}>{t('reports.card.fileSize')}</span>} 
             value={report.size} 
             valueStyle={{ 
-              fontSize: 14,
+              fontSize: 13,
               color: isDark ? '#ffffff' : '#262626'
             }}
           />
           <Statistic 
-            title={<span style={{ color: isDark ? '#8c8c8c' : '#666' }}>{t('reports.card.downloads')}</span>} 
+            title={<span style={{ color: isDark ? '#8c8c8c' : '#666', fontSize: 11 }}>{t('reports.card.downloads')}</span>} 
             value={report.downloads} 
             valueStyle={{ 
-              fontSize: 14,
+              fontSize: 13,
               color: isDark ? '#ffffff' : '#262626'
             }}
-            prefix={<CloudDownloadOutlined style={{ color: isDark ? '#1890ff' : '#1890ff' }} />}
+            prefix={<CloudDownloadOutlined style={{ color: isDark ? '#1890ff' : '#1890ff', fontSize: 12 }} />}
           />
         </Space>
         <div style={{ marginTop: 8 }}>
           <Text type="secondary" style={{ 
-            fontSize: 12,
+            fontSize: 11,
             color: isDark ? '#8c8c8c' : '#666'
           }}>
             {t('reports.card.storageUsage')}

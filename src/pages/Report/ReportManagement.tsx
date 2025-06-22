@@ -146,6 +146,18 @@ const FilterBar = styled.div<{ $isDark: boolean }>`
   }
 `;
 
+const ReportCardsContainer = styled.div`
+  .ant-col {
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .ant-col {
+      margin-bottom: 12px;
+    }
+  }
+`;
+
 const ReportManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -371,7 +383,7 @@ const ReportManagement: React.FC = () => {
   // 渲染卡片视图
   const renderCardView = () => (
     reportData.map(report => (
-      <Col xs={24} sm={12} lg={8} xl={6} key={report.key}>
+      <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={report.key}>
         <ReportCard
           report={report}
           onView={handleViewReport}
@@ -525,9 +537,11 @@ const ReportManagement: React.FC = () => {
       />
 
       {/* 报告卡片列表 */}
-      <Row gutter={[16, 16]}>
-        {renderCardView()}
-      </Row>
+      <ReportCardsContainer>
+        <Row gutter={[16, 16]}>
+          {renderCardView()}
+        </Row>
+      </ReportCardsContainer>
     </PageContainer>
   );
 };
