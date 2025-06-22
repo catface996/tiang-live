@@ -75,12 +75,62 @@ const StatsCard = styled(Card)`
 
 const TaskCard = styled(Card)`
   height: 100%;
+  min-height: 320px;
   transition: all 0.3s ease;
   cursor: pointer;
   
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .ant-card-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 57px);
+  }
+
+  .ant-card-head {
+    padding: 12px 16px;
+    min-height: 57px;
+    
+    .ant-card-head-title {
+      padding: 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .ant-card-extra {
+      padding: 0;
+    }
+  }
+
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    min-height: 280px;
+    
+    .ant-card-head {
+      padding: 10px 12px;
+      min-height: 50px;
+    }
+    
+    .ant-card-body {
+      padding: 12px;
+      height: calc(100% - 50px);
+    }
+  }
+`;
+
+const TaskCardsContainer = styled.div`
+  .ant-col {
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .ant-col {
+      margin-bottom: 12px;
+    }
   }
 `;
 
@@ -372,7 +422,7 @@ const InspectionTasks: React.FC = () => {
       const totalCollections = task.taskCollections.length;
 
       return (
-        <Col xs={24} sm={12} lg={8} xl={6} key={task.id}>
+        <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={task.id}>
           <TaskCard
             title={
               <Space>
@@ -434,8 +484,9 @@ const InspectionTasks: React.FC = () => {
             }
             onClick={() => handleViewTask(task)}
           >
+            {/* 任务类型和集合标签 */}
             <div style={{ marginBottom: 12 }}>
-              <Space wrap>
+              <Space wrap size="small">
                 <Tag color={typeConfig?.color} icon={typeConfig?.icon}>
                   {typeConfig?.name}
                 </Tag>
@@ -445,15 +496,19 @@ const InspectionTasks: React.FC = () => {
               </Space>
             </div>
             
-            <Paragraph 
-              ellipsis={{ rows: 2 }} 
-              style={{ marginBottom: 16, minHeight: 40 }}
-            >
-              {task.description}
-            </Paragraph>
+            {/* 任务描述 */}
+            <div style={{ marginBottom: 16, flex: 1 }}>
+              <Paragraph 
+                ellipsis={{ rows: 2, tooltip: task.description }} 
+                style={{ marginBottom: 0, minHeight: 44, fontSize: 13, lineHeight: '1.5' }}
+              >
+                {task.description}
+              </Paragraph>
+            </div>
 
+            {/* 统计信息 */}
             <div style={{ marginBottom: 12 }}>
-              <Row gutter={16}>
+              <Row gutter={12}>
                 <Col span={12}>
                   <Statistic
                     title={t('tasks.inspection.card.successRate')}
@@ -472,17 +527,29 @@ const InspectionTasks: React.FC = () => {
               </Row>
             </div>
 
+            {/* 最后执行状态 */}
             <div style={{ marginBottom: 12 }}>
-              <Text strong>{t('tasks.inspection.card.lastExecution')}: </Text>
-              {getLastRunStatusTag(task.lastRun.status)}
-              <Text type="secondary" style={{ fontSize: 12, marginLeft: 8 }}>
-                {task.lastRun.duration}s
-              </Text>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                <Text strong style={{ fontSize: 12 }}>{t('tasks.inspection.card.lastExecution')}</Text>
+                <Text type="secondary" style={{ fontSize: 11 }}>
+                  {task.lastRun.duration}s
+                </Text>
+              </div>
+              <div>
+                {getLastRunStatusTag(task.lastRun.status)}
+              </div>
             </div>
 
-            <div style={{ fontSize: 12, color: '#666' }}>
-              <div>{t('tasks.inspection.card.schedule')}: {task.schedule.expression}</div>
-              <div>下次执行: {task.nextRun}</div>
+            {/* 调度信息 */}
+            <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
+              <div style={{ marginBottom: 2 }}>
+                <Text strong>{t('tasks.inspection.card.schedule')}: </Text>
+                <Text>{task.schedule.expression}</Text>
+              </div>
+              <div>
+                <Text strong>{t('tasks.inspection.card.nextExecution')}: </Text>
+                <Text>{task.nextRun}</Text>
+              </div>
             </div>
           </TaskCard>
         </Col>
@@ -611,9 +678,11 @@ const InspectionTasks: React.FC = () => {
       />
 
       {/* 巡检任务卡片列表 */}
-      <Row gutter={16}>
-        {renderTaskCards()}
-      </Row>
+      <TaskCardsContainer>
+        <Row gutter={[16, 16]}>
+          {renderTaskCards()}
+        </Row>
+      </TaskCardsContainer>
 
       {/* 创建/编辑巡检任务模态框 */}
       <Modal

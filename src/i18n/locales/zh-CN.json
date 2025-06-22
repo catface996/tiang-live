@@ -33,6 +33,7 @@
     "tips": "提示",
     "error": "错误",
     "status": "状态",
+    "success": "成功",
     "description": "描述",
     "createdAt": "创建时间",
     "avgResponseTime": "平均响应时间",
@@ -40,6 +41,15 @@
     "retryCountRequired": "请设置重试次数",
     "locale": "zh-CN",
     "all": "全部",
+    "active": "活跃",
+    "inactive": "非活跃",
+    "deprecated": "已废弃",
+    "coreService": "核心服务",
+    "basicService": "基础服务",
+    "businessService": "业务服务",
+    "database": "数据库",
+    "redisCache": "Redis缓存",
+    "messageQueue": "消息队列",
     "level": "级别",
     "message": "消息",
     "startTime": "开始时间",
@@ -78,7 +88,19 @@
     "stopped": "已停止",
     "pending": "等待中",
     "failed": "失败",
-    "completed": "已完成"
+    "completed": "已完成",
+    "status": {
+      "success": "成功",
+      "failed": "失败",
+      "error": "错误",
+      "timeout": "超时",
+      "pending": "等待中",
+      "active": "活跃",
+      "inactive": "非活跃",
+      "running": "运行中",
+      "stopped": "已停止",
+      "completed": "已完成"
+    }
   },
   "layout": {
     "title": "天工开悟",
@@ -148,6 +170,11 @@
     "editTitle": "编辑平面",
     "createSubtitle": "创建新的平面定义",
     "editSubtitle": "修改平面配置和属性",
+    "userPlane": "用户平面",
+    "orderPlane": "订单平面",
+    "paymentPlane": "支付平面",
+    "productPlane": "商品平面",
+    "inventoryPlane": "库存平面",
     "stats": {
       "totalPlanes": "总平面数",
       "activePlanes": "活跃平面",
@@ -828,8 +855,43 @@
       "entityType": "实体类型",
       "belongsToPlane": "所属平面",
       "properties": "属性配置",
-      "tags": "标签"
-    ,
+      "tags": "标签",
+      "basicInfo": "基本信息",
+      "basicInfoDesc": "设置实体的基本属性",
+      "configInfo": "配置信息",
+      "configInfoDesc": "配置实体的详细参数",
+      "confirmSubmit": "确认提交",
+      "confirmSubmitDesc": "确认信息并提交",
+      "entityNamePlaceholder": "请输入实体名称",
+      "entityNameRequired": "请输入实体名称",
+      "entityNameMaxLength": "名称不能超过50个字符",
+      "entityTypeRequired": "请选择实体类型",
+      "planeRequired": "请选择所属平面",
+      "descriptionRequired": "请输入实体描述",
+      "descriptionMaxLength": "描述不能超过500个字符",
+      "descriptionPlaceholder": "请详细描述该实体的功能和用途",
+      "iconSelection": "图标选择",
+      "version": "版本号",
+      "versionPlaceholder": "如：1.0.0",
+      "port": "端口号",
+      "portPlaceholder": "如：8080",
+      "healthCheckUrl": "健康检查URL",
+      "healthCheckUrlPlaceholder": "如：/health",
+      "tagsPlaceholder": "添加标签",
+      "dependencies": "依赖关系",
+      "dependenciesPlaceholder": "添加依赖的实体",
+      "confirmInfoMessage": "请确认以下信息无误后提交",
+      "notSet": "未设置",
+      "none": "无",
+      "previousStep": "上一步",
+      "nextStep": "下一步",
+      "createEntity": "创建实体",
+      "updateEntity": "更新实体",
+      "createSuccess": "实体创建成功",
+      "updateSuccess": "实体更新成功",
+      "createFailed": "创建失败",
+      "updateFailed": "更新失败"
+    },
   "aiAgent": {
     "form": {
       "createTitle": "创建AI智能体",
@@ -884,8 +946,6 @@
         "updateFailed": "更新失败"
       }
     }
-  }
-}
   },
   "relationships": {
     "title": "关系图谱", 
@@ -3932,4 +3992,5 @@
       }
     }
   }
+}
 }

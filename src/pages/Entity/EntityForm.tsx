@@ -16,10 +16,10 @@ import {
   message,
   Steps,
   Alert,
-  Tabs
+  Tabs,
+  Breadcrumb
 } from 'antd';
 import {
-  ArrowLeftOutlined,
   SaveOutlined,
   CheckOutlined,
   InfoCircleOutlined,
@@ -31,20 +31,42 @@ import {
   AppstoreOutlined,
   TableOutlined,
   CloudServerOutlined,
-  DeploymentUnitOutlined
+  DeploymentUnitOutlined,
+  HomeOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-const { Title, Text } = Typography;
-const { TextArea } = Input;
+const { Title } = Typography;
 const { Option } = Select;
+const { TextArea } = Input;
 
-interface EntityFormProps {
-  mode: 'create' | 'edit';
-  entityId?: string;
-}
+// 样式化组件
+const BreadcrumbContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  
+  .ant-breadcrumb {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    
+    .ant-breadcrumb-link {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+    }
+    
+    .ant-breadcrumb-separator {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      margin: 0 8px;
+    }
+  }
+`;
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -64,27 +86,22 @@ const StyledCard = styled(Card)`
 `;
 
 const IconSelector = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  max-height: 200px;
-  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 `;
 
 const IconOption = styled.div<{ selected: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border: 2px solid ${props => props.selected ? '#1890ff' : '#d9d9d9'};
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
   background: ${props => props.selected ? '#e6f7ff' : '#fff'};
+  transition: all 0.3s;
 
   &:hover {
     border-color: #1890ff;
@@ -92,33 +109,32 @@ const IconOption = styled.div<{ selected: boolean }>`
   }
 
   .anticon {
-    font-size: 20px;
+    font-size: 18px;
     color: ${props => props.selected ? '#1890ff' : '#666'};
   }
 `;
 
-const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
+const EntityForm: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [selectedIcon, setSelectedIcon] = useState('NodeIndexOutlined');
+  const [selectedIcon, setSelectedIcon] = useState('ApiOutlined');
 
-  // 使用路由参数中的id，如果没有则使用props中的entityId
-  const currentEntityId = id || entityId;
+  const mode = id ? 'edit' : 'create';
 
-  // 可选图标列表
+  // 图标选项
   const iconOptions = [
-    { key: 'NodeIndexOutlined', icon: <NodeIndexOutlined /> },
-    { key: 'DatabaseOutlined', icon: <DatabaseOutlined /> },
     { key: 'ApiOutlined', icon: <ApiOutlined /> },
-    { key: 'AppstoreOutlined', icon: <AppstoreOutlined /> },
+    { key: 'DatabaseOutlined', icon: <DatabaseOutlined /> },
     { key: 'TableOutlined', icon: <TableOutlined /> },
+    { key: 'AppstoreOutlined', icon: <AppstoreOutlined /> },
     { key: 'CloudServerOutlined', icon: <CloudServerOutlined /> },
     { key: 'DeploymentUnitOutlined', icon: <DeploymentUnitOutlined /> },
-    { key: 'SettingOutlined', icon: <SettingOutlined /> }
+    { key: 'SettingOutlined', icon: <SettingOutlined /> },
+    { key: 'TagsOutlined', icon: <TagsOutlined /> }
   ];
 
   // 实体类型选项
@@ -134,39 +150,38 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
 
   // 平面选项
   const planeOptions = [
-    { value: 'user-plane', label: '用户平面' },
-    { value: 'order-plane', label: '订单平面' },
-    { value: 'payment-plane', label: '支付平面' },
-    { value: 'product-plane', label: '商品平面' },
-    { value: 'inventory-plane', label: '库存平面' }
+    { value: 'user-plane', label: t('planes.userPlane') },
+    { value: 'order-plane', label: t('planes.orderPlane') },
+    { value: 'payment-plane', label: t('planes.paymentPlane') },
+    { value: 'product-plane', label: t('planes.productPlane') },
+    { value: 'inventory-plane', label: t('planes.inventoryPlane') }
   ];
 
   useEffect(() => {
-    if (mode === 'edit' && currentEntityId) {
-      // 加载实体数据进行编辑
-      loadEntityData(currentEntityId);
+    if (mode === 'edit' && id) {
+      loadEntityData(id);
     }
-  }, [mode, currentEntityId]);
+  }, [id, mode]);
 
-  const loadEntityData = async (id: string) => {
+  const loadEntityData = async (entityId: string) => {
     setLoading(true);
     try {
-      // 模拟加载数据
+      // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // 模拟数据
       const mockData = {
-        name: '用户服务',
+        name: t('entities.form.entityName'),
         type: 'microservice',
         plane: 'user-plane',
-        description: '负责用户注册、登录、个人信息管理等功能的核心微服务',
+        description: t('entities.form.descriptionPlaceholder'),
         icon: 'ApiOutlined',
-        tags: ['核心服务', '用户管理'],
+        tags: [t('common.coreService'), t('common.userManagement')],
         status: 'active',
         version: '1.2.0',
         port: 8080,
         healthCheckUrl: '/health',
-        dependencies: ['数据库', 'Redis缓存'],
+        dependencies: [t('common.database'), t('common.redisCache')],
         attributes: {
           language: 'Java',
           framework: 'Spring Boot',
@@ -177,7 +192,7 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
       form.setFieldsValue(mockData);
       setSelectedIcon(mockData.icon);
     } catch (error) {
-      message.error('加载实体数据失败');
+      message.error(t('entities.form.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -196,10 +211,10 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      message.success(mode === 'create' ? '实体创建成功' : '实体更新成功');
+      message.success(mode === 'create' ? t('entities.form.createSuccess') : t('entities.form.updateSuccess'));
       navigate('/entities');
     } catch (error) {
-      message.error(mode === 'create' ? '创建失败' : '更新失败');
+      message.error(mode === 'create' ? t('entities.form.createFailed') : t('entities.form.updateFailed'));
     } finally {
       setLoading(false);
     }
@@ -211,41 +226,41 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
 
   const steps = [
     {
-      title: '基本信息',
-      description: '设置实体的基本属性'
+      title: t('entities.form.basicInfo'),
+      description: t('entities.form.basicInfoDesc')
     },
     {
-      title: '配置信息',
-      description: '配置实体的详细参数'
+      title: t('entities.form.configInfo'),
+      description: t('entities.form.configInfoDesc')
     },
     {
-      title: '确认提交',
-      description: '确认信息并提交'
+      title: t('entities.form.confirmSubmit'),
+      description: t('entities.form.confirmSubmitDesc')
     }
   ];
 
   const renderBasicInfo = () => (
-    <StyledCard title="基本信息" extra={<InfoCircleOutlined />}>
+    <StyledCard title={t('entities.form.basicInfo')} extra={<InfoCircleOutlined />}>
       <Row gutter={24}>
         <Col xs={24} md={12}>
           <Form.Item
             name="name"
-            label="实体名称"
+            label={t('entities.form.entityName')}
             rules={[
-              { required: true, message: '请输入实体名称' },
-              { max: 50, message: '名称不能超过50个字符' }
+              { required: true, message: t('entities.form.entityNameRequired') },
+              { max: 50, message: t('entities.form.entityNameMaxLength') }
             ]}
           >
-            <Input placeholder="请输入实体名称" />
+            <Input placeholder={t('entities.form.entityNamePlaceholder')} />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
           <Form.Item
             name="type"
-            label="实体类型"
-            rules={[{ required: true, message: '请选择实体类型' }]}
+            label={t('entities.form.entityType')}
+            rules={[{ required: true, message: t('entities.form.entityTypeRequired') }]}
           >
-            <Select placeholder="请选择实体类型">
+            <Select placeholder={t('entities.form.entityTypeRequired')}>
               {entityTypes.map(type => (
                 <Option key={type.value} value={type.value}>
                   <Space>
@@ -260,10 +275,10 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
         <Col xs={24} md={12}>
           <Form.Item
             name="plane"
-            label="所属平面"
-            rules={[{ required: true, message: '请选择所属平面' }]}
+            label={t('entities.form.belongsToPlane')}
+            rules={[{ required: true, message: t('entities.form.planeRequired') }]}
           >
-            <Select placeholder="请选择所属平面">
+            <Select placeholder={t('entities.form.planeRequired')}>
               {planeOptions.map(plane => (
                 <Option key={plane.value} value={plane.value}>
                   {plane.label}
@@ -275,33 +290,33 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
         <Col xs={24} md={12}>
           <Form.Item
             name="status"
-            label="状态"
+            label={t('common.status')}
             initialValue="active"
           >
             <Select>
-              <Option value="active">活跃</Option>
-              <Option value="inactive">非活跃</Option>
-              <Option value="deprecated">已废弃</Option>
+              <Option value="active">{t('common.active')}</Option>
+              <Option value="inactive">{t('common.inactive')}</Option>
+              <Option value="deprecated">{t('common.deprecated')}</Option>
             </Select>
           </Form.Item>
         </Col>
         <Col xs={24}>
           <Form.Item
             name="description"
-            label="描述"
+            label={t('common.description')}
             rules={[
-              { required: true, message: '请输入实体描述' },
-              { max: 500, message: '描述不能超过500个字符' }
+              { required: true, message: t('entities.form.descriptionRequired') },
+              { max: 500, message: t('entities.form.descriptionMaxLength') }
             ]}
           >
             <TextArea 
               rows={4} 
-              placeholder="请详细描述该实体的功能和用途"
+              placeholder={t('entities.form.descriptionPlaceholder')}
             />
           </Form.Item>
         </Col>
         <Col xs={24}>
-          <Form.Item label="图标选择">
+          <Form.Item label={t('entities.form.iconSelection')}>
             <IconSelector>
               {iconOptions.map(option => (
                 <IconOption
@@ -320,23 +335,23 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
   );
 
   const renderConfigInfo = () => (
-    <StyledCard title="配置信息" extra={<SettingOutlined />}>
+    <StyledCard title={t('entities.form.configInfo')} extra={<SettingOutlined />}>
       <Row gutter={24}>
         <Col xs={24} md={12}>
           <Form.Item
             name="version"
-            label="版本号"
+            label={t('entities.form.version')}
           >
-            <Input placeholder="如：1.0.0" />
+            <Input placeholder={t('entities.form.versionPlaceholder')} />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
           <Form.Item
             name="port"
-            label="端口号"
+            label={t('entities.form.port')}
           >
             <InputNumber 
-              placeholder="如：8080" 
+              placeholder={t('entities.form.portPlaceholder')} 
               min={1} 
               max={65535} 
               style={{ width: '100%' }}
@@ -346,40 +361,40 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
         <Col xs={24} md={12}>
           <Form.Item
             name="healthCheckUrl"
-            label="健康检查URL"
+            label={t('entities.form.healthCheckUrl')}
           >
-            <Input placeholder="如：/health" />
+            <Input placeholder={t('entities.form.healthCheckUrlPlaceholder')} />
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
           <Form.Item
             name="tags"
-            label="标签"
+            label={t('entities.form.tags')}
           >
             <Select
               mode="tags"
-              placeholder="添加标签"
+              placeholder={t('entities.form.tagsPlaceholder')}
               style={{ width: '100%' }}
             >
-              <Option value="核心服务">核心服务</Option>
-              <Option value="基础服务">基础服务</Option>
-              <Option value="业务服务">业务服务</Option>
+              <Option value={t('common.coreService')}>{t('common.coreService')}</Option>
+              <Option value={t('common.basicService')}>{t('common.basicService')}</Option>
+              <Option value={t('common.businessService')}>{t('common.businessService')}</Option>
             </Select>
           </Form.Item>
         </Col>
         <Col xs={24}>
           <Form.Item
             name="dependencies"
-            label="依赖关系"
+            label={t('entities.form.dependencies')}
           >
             <Select
               mode="tags"
-              placeholder="添加依赖的实体"
+              placeholder={t('entities.form.dependenciesPlaceholder')}
               style={{ width: '100%' }}
             >
-              <Option value="数据库">数据库</Option>
-              <Option value="Redis缓存">Redis缓存</Option>
-              <Option value="消息队列">消息队列</Option>
+              <Option value={t('common.database')}>{t('common.database')}</Option>
+              <Option value={t('common.redisCache')}>{t('common.redisCache')}</Option>
+              <Option value={t('common.messageQueue')}>{t('common.messageQueue')}</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -388,9 +403,9 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
   );
 
   const renderConfirmInfo = () => (
-    <StyledCard title="确认信息" extra={<CheckOutlined />}>
+    <StyledCard title={t('entities.form.confirmSubmit')} extra={<CheckOutlined />}>
       <Alert
-        message="请确认以下信息无误后提交"
+        message={t('entities.form.confirmInfoMessage')}
         type="info"
         showIcon
         style={{ marginBottom: 24 }}
@@ -399,27 +414,27 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
         items={[
           {
             key: 'basic',
-            label: '基本信息',
+            label: t('entities.form.basicInfo'),
             children: (
               <div>
-                <p><strong>实体名称：</strong>{form.getFieldValue('name')}</p>
-                <p><strong>实体类型：</strong>{entityTypes.find(t => t.value === form.getFieldValue('type'))?.label}</p>
-                <p><strong>所属平面：</strong>{planeOptions.find(p => p.value === form.getFieldValue('plane'))?.label}</p>
-                <p><strong>状态：</strong>{form.getFieldValue('status')}</p>
-                <p><strong>描述：</strong>{form.getFieldValue('description')}</p>
+                <p><strong>{t('entities.form.entityName')}：</strong>{form.getFieldValue('name')}</p>
+                <p><strong>{t('entities.form.entityType')}：</strong>{entityTypes.find(t => t.value === form.getFieldValue('type'))?.label}</p>
+                <p><strong>{t('entities.form.belongsToPlane')}：</strong>{planeOptions.find(p => p.value === form.getFieldValue('plane'))?.label}</p>
+                <p><strong>{t('common.status')}：</strong>{form.getFieldValue('status')}</p>
+                <p><strong>{t('common.description')}：</strong>{form.getFieldValue('description')}</p>
               </div>
             )
           },
           {
             key: 'config',
-            label: '配置信息',
+            label: t('entities.form.configInfo'),
             children: (
               <div>
-                <p><strong>版本号：</strong>{form.getFieldValue('version') || '未设置'}</p>
-                <p><strong>端口号：</strong>{form.getFieldValue('port') || '未设置'}</p>
-                <p><strong>健康检查URL：</strong>{form.getFieldValue('healthCheckUrl') || '未设置'}</p>
-                <p><strong>标签：</strong>{form.getFieldValue('tags')?.join(', ') || '无'}</p>
-                <p><strong>依赖关系：</strong>{form.getFieldValue('dependencies')?.join(', ') || '无'}</p>
+                <p><strong>{t('entities.form.version')}：</strong>{form.getFieldValue('version') || t('entities.form.notSet')}</p>
+                <p><strong>{t('entities.form.port')}：</strong>{form.getFieldValue('port') || t('entities.form.notSet')}</p>
+                <p><strong>{t('entities.form.healthCheckUrl')}：</strong>{form.getFieldValue('healthCheckUrl') || t('entities.form.notSet')}</p>
+                <p><strong>{t('entities.form.tags')}：</strong>{form.getFieldValue('tags')?.join(', ') || t('entities.form.none')}</p>
+                <p><strong>{t('entities.form.dependencies')}：</strong>{form.getFieldValue('dependencies')?.join(', ') || t('entities.form.none')}</p>
               </div>
             )
           }
@@ -431,19 +446,41 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
   return (
     <PageContainer>
       <FormContainer>
+        {/* 面包屑导航 */}
+        <BreadcrumbContainer>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Button 
+                type="text" 
+                icon={<HomeOutlined />}
+                onClick={() => navigate('/entities')}
+                style={{ 
+                  padding: 0, 
+                  border: 'none', 
+                  background: 'transparent',
+                  height: 'auto'
+                }}
+              >
+                {t('menu.entities')}
+              </Button>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                <NodeIndexOutlined style={{ marginRight: 8, color: '#1890ff' }} />
+                {mode === 'create' ? t('entities.createTitle') : t('entities.editTitle')}
+              </span>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </BreadcrumbContainer>
+
         {/* 页面头部 */}
         <div style={{ marginBottom: 24 }}>
-          <Space>
-            <Button icon={<ArrowLeftOutlined />} onClick={handleBack}>
-              返回
-            </Button>
-            <Title level={2} style={{ margin: 0 }}>
-              <Space>
-                <NodeIndexOutlined style={{ color: '#1890ff' }} />
-                {mode === 'create' ? '创建实体' : '编辑实体'}
-              </Space>
-            </Title>
-          </Space>
+          <Title level={2} style={{ margin: 0 }}>
+            <Space>
+              <NodeIndexOutlined style={{ color: '#1890ff' }} />
+              {mode === 'create' ? t('entities.createTitle') : t('entities.editTitle')}
+            </Space>
+          </Title>
         </div>
 
         {/* 步骤条 */}
@@ -474,20 +511,20 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
               <div>
                 {currentStep > 0 && (
                   <Button onClick={() => setCurrentStep(currentStep - 1)}>
-                    上一步
+                    {t('entities.form.previousStep')}
                   </Button>
                 )}
               </div>
               <Space>
                 <Button onClick={handleBack}>
-                  取消
+                  {t('common.cancel')}
                 </Button>
                 {currentStep < steps.length - 1 ? (
                   <Button 
                     type="primary" 
                     onClick={() => setCurrentStep(currentStep + 1)}
                   >
-                    下一步
+                    {t('entities.form.nextStep')}
                   </Button>
                 ) : (
                   <Button 
@@ -496,7 +533,7 @@ const EntityForm: React.FC<EntityFormProps> = ({ mode, entityId }) => {
                     loading={loading}
                     icon={<SaveOutlined />}
                   >
-                    {mode === 'create' ? '创建实体' : '更新实体'}
+                    {mode === 'create' ? t('entities.form.createEntity') : t('entities.form.updateEntity')}
                   </Button>
                 )}
               </Space>
