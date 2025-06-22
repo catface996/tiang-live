@@ -12,6 +12,13 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins: [react()],
     base,
+    server: {
+      // 开发服务器配置
+      port: 5173,
+      host: true,
+      // 强制预构建依赖
+      force: true
+    },
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
@@ -133,21 +140,35 @@ if (typeof module === 'undefined') {
       global: 'globalThis',
       'process.env.NODE_ENV': JSON.stringify(mode),
     },
+    resolve: {
+      alias: {
+        // 确保dayjs使用正确的ES模块版本
+        'dayjs': 'dayjs/esm/index.js'
+      }
+    },
     optimizeDeps: {
+      // 强制预构建这些依赖
       include: [
         'react',
         'react-dom',
+        'react-dom/client',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
         'antd',
         '@ant-design/icons',
         'react-router-dom',
         'react-i18next',
         'i18next',
         '@reduxjs/toolkit',
-        'react-redux'
+        'react-redux',
+        'd3',
+        'dayjs'
       ],
       exclude: [
         'mermaid'
-      ]
+      ],
+      // 强制重新构建依赖
+      force: command === 'serve'
     }
   }
 })
