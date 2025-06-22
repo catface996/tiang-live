@@ -122,6 +122,30 @@ const TaskCard = styled(Card)`
       font-size: 16px;
       font-weight: 600;
       line-height: 1.4;
+      width: 100%;
+    }
+    
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      
+      .title-left {
+        flex: 1;
+        min-width: 0; /* 允许文本截断 */
+        
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      
+      .title-right {
+        flex-shrink: 0;
+        margin-left: 8px;
+      }
     }
   }
   
@@ -184,7 +208,6 @@ const TaskCard = styled(Card)`
   .card-footer {
     margin-top: auto;
     padding-top: 12px;
-    border-top: 1px solid #f5f5f5;
     font-size: 12px;
     color: #999;
     
@@ -651,11 +674,17 @@ const TaskCollectionManagement: React.FC = () => {
         <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={task.id}>
           <TaskCard
             title={
-              <Space>
-                <UnorderedListOutlined style={{ color: '#1890ff' }} />
-                <span>{task.name}</span>
-                {getStatusTag(task.status)}
-              </Space>
+              <div className="card-title">
+                <div className="title-left">
+                  <Space>
+                    <UnorderedListOutlined style={{ color: '#1890ff' }} />
+                    <span>{task.name}</span>
+                  </Space>
+                </div>
+                <div className="title-right">
+                  {getStatusTag(task.status)}
+                </div>
+              </div>
             }
             onClick={() => handleViewTask(task)}
           >
