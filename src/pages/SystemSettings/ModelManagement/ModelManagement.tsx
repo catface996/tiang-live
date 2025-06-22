@@ -77,6 +77,62 @@ const ModelCard = styled(Card)`
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
+  
+  .ant-card-head {
+    padding: 12px 16px;
+    min-height: 57px;
+    
+    .ant-card-head-title {
+      padding: 0;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+    }
+    
+    .ant-card-extra {
+      padding: 0;
+    }
+    
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      
+      .title-left {
+        flex: 1;
+        min-width: 0; /* 允许文本截断 */
+        
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      
+      .title-right {
+        flex-shrink: 0;
+        margin-left: 8px;
+      }
+    }
+  }
+  
+  .card-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    
+    .ant-btn {
+      color: #666;
+      
+      &:hover {
+        color: #1890ff;
+        background-color: rgba(24, 144, 255, 0.1);
+      }
+    }
+  }
 `;
 
 const FilterBar = styled.div`
@@ -223,51 +279,20 @@ const ModelManagement: React.FC = () => {
       const typeConfig = modelTypeMap[model.modelType as keyof typeof modelTypeMap];
 
       return (
-        <Col xs={24} sm={12} lg={8} xl={6} key={model.id}>
+        <Col xs={24} sm={24} md={12} lg={8} xl={8} key={model.id}>
           <ModelCard
             title={
-              <Space>
-                {providerConfig?.icon}
-                <span>{model.name}</span>
-                {getStatusTag(model.status)}
-              </Space>
-            }
-            extra={
-              <Space>
-                <Tooltip title={t('models.testConnection')}>
-                  <Button 
-                    type="link" 
-                    icon={<CheckCircleOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleTestModel(model.id);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title={t('models.viewDetails')}>
-                  <Button 
-                    type="link" 
-                    icon={<EyeOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewModel(model);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title={t('common.edit')}>
-                  <Button 
-                    type="link" 
-                    icon={<EditOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditModel(model);
-                    }}
-                  />
-                </Tooltip>
-              </Space>
+              <div className="card-title">
+                <div className="title-left">
+                  <Space>
+                    {providerConfig?.icon}
+                    <span>{model.name}</span>
+                  </Space>
+                </div>
+                <div className="title-right">
+                  {getStatusTag(model.status)}
+                </div>
+              </div>
             }
             onClick={() => handleViewModel(model)}
           >
@@ -322,6 +347,34 @@ const ModelManagement: React.FC = () => {
             <div style={{ fontSize: 12, color: '#666' }}>
               <div>{t('models.stats.version')}: {model.version}</div>
               <div>{t('models.stats.lastUsed')}: {model.lastUsed}</div>
+            </div>
+            
+            {/* 操作按钮区域 - 单独一行，右对齐 */}
+            <div className="card-actions">
+              <Space>
+                <Tooltip title={t('models.viewDetails')}>
+                  <Button 
+                    type="text" 
+                    icon={<EyeOutlined />} 
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewModel(model);
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title={t('common.edit')}>
+                  <Button 
+                    type="text" 
+                    icon={<EditOutlined />} 
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditModel(model);
+                    }}
+                  />
+                </Tooltip>
+              </Space>
             </div>
           </ModelCard>
         </Col>
