@@ -174,30 +174,51 @@ const SolutionCard = styled(Card)`
     margin-top: auto;
     padding-top: 12px;
     border-top: 1px solid #f5f5f5;
-    font-size: 12px;
-    color: #999;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     
-    .footer-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
+    .footer-info {
+      flex: 1;
+      font-size: 12px;
+      color: #999;
       
-      &:last-child {
-        margin-bottom: 0;
+      .footer-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        .footer-label {
+          flex-shrink: 0;
+          margin-right: 8px;
+        }
+        
+        .footer-value {
+          flex: 1;
+          text-align: right;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
+    }
+    
+    .card-actions {
+      flex-shrink: 0;
+      margin-left: 12px;
       
-      .footer-label {
-        flex-shrink: 0;
-        margin-right: 8px;
-      }
-      
-      .footer-value {
-        flex: 1;
-        text-align: right;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .ant-btn {
+        color: #666;
+        
+        &:hover {
+          color: #1890ff;
+          background-color: rgba(24, 144, 255, 0.1);
+        }
       }
     }
   }
@@ -869,28 +890,6 @@ const IndustrySolutionManagement: React.FC = () => {
                     {getStatusTag(solution.status)}
                   </Space>
                 }
-                extra={
-                  <Space>
-                    <Tooltip title={t('solutions.card.viewDetails')}>
-                      <Button 
-                        type="link" 
-                        icon={<EyeOutlined />} 
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewSolution(solution);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={t('solutions.card.edit')}>
-                      <Button 
-                        type="link" 
-                        icon={<EditOutlined />} 
-                        size="small"
-                      />
-                    </Tooltip>
-                  </Space>
-                }
                 onClick={() => handleViewSolution(solution)}
               >
                 <div className="card-content">
@@ -957,13 +956,43 @@ const IndustrySolutionManagement: React.FC = () => {
 
                   {/* 底部信息 */}
                   <div className="card-footer">
-                    <div className="footer-item">
-                      <span className="footer-label">{t('solutions.card.creator')}</span>
-                      <span className="footer-value">{solution.createdBy}</span>
+                    <div className="footer-info">
+                      <div className="footer-item">
+                        <span className="footer-label">{t('solutions.card.creator')}</span>
+                        <span className="footer-value">{solution.createdBy}</span>
+                      </div>
+                      <div className="footer-item">
+                        <span className="footer-label">{t('solutions.card.updateTime')}</span>
+                        <span className="footer-value">{solution.lastModified}</span>
+                      </div>
                     </div>
-                    <div className="footer-item">
-                      <span className="footer-label">{t('solutions.card.updateTime')}</span>
-                      <span className="footer-value">{solution.lastModified}</span>
+                    
+                    {/* 操作按钮区域 */}
+                    <div className="card-actions">
+                      <Space>
+                        <Tooltip title={t('solutions.card.viewDetails')}>
+                          <Button 
+                            type="text" 
+                            icon={<EyeOutlined />} 
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewSolution(solution);
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title={t('solutions.card.edit')}>
+                          <Button 
+                            type="text" 
+                            icon={<EditOutlined />} 
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // 这里可以添加编辑功能
+                            }}
+                          />
+                        </Tooltip>
+                      </Space>
                     </div>
                   </div>
                 </div>
