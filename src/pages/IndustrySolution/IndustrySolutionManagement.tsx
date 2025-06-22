@@ -197,7 +197,6 @@ const SolutionCard = styled(Card)`
   .card-footer {
     margin-top: auto;
     padding-top: 12px;
-    border-top: 1px solid #f5f5f5;
     font-size: 12px;
     color: #999;
     
