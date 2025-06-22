@@ -213,6 +213,23 @@ const TaskCard = styled(Card)`
     }
   }
   
+  .card-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    
+    .ant-btn {
+      color: #666;
+      
+      &:hover {
+        color: #1890ff;
+        background-color: rgba(24, 144, 255, 0.1);
+      }
+    }
+  }
+  
   /* 响应式优化 */
   @media (max-width: 768px) {
     min-height: 420px;
@@ -640,57 +657,6 @@ const TaskCollectionManagement: React.FC = () => {
                 {getStatusTag(task.status)}
               </Space>
             }
-            extra={
-              <Space>
-                <Tooltip title={t('tasks.collections.card.viewDetails')}>
-                  <Button 
-                    type="link" 
-                    icon={<EyeOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewTask(task);
-                    }}
-                  />
-                </Tooltip>
-                <Tooltip title={t('tasks.collections.card.edit')}>
-                  <Button 
-                    type="link" 
-                    icon={<EditOutlined />} 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditTask(task);
-                    }}
-                  />
-                </Tooltip>
-                {task.status === 'active' ? (
-                  <Tooltip title={t('tasks.collections.card.pause')}>
-                    <Button 
-                      type="link" 
-                      icon={<PauseCircleOutlined />} 
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePauseTask(task.id);
-                      }}
-                    />
-                  </Tooltip>
-                ) : (
-                  <Tooltip title={t('tasks.collections.card.start')}>
-                    <Button 
-                      type="link" 
-                      icon={<PlayCircleOutlined />} 
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleStartTask(task.id);
-                      }}
-                    />
-                  </Tooltip>
-                )}
-              </Space>
-            }
             onClick={() => handleViewTask(task)}
           >
             <div className="card-content">
@@ -765,6 +731,34 @@ const TaskCollectionManagement: React.FC = () => {
                   <span className="footer-label">{t('tasks.collections.card.creator')}</span>
                   <span className="footer-value">{task.createdBy}</span>
                 </div>
+              </div>
+              
+              {/* 操作按钮区域 - 单独一行 */}
+              <div className="card-actions">
+                <Space>
+                  <Tooltip title={t('tasks.collections.card.viewDetails')}>
+                    <Button 
+                      type="text" 
+                      icon={<EyeOutlined />} 
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewTask(task);
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip title={t('tasks.collections.card.edit')}>
+                    <Button 
+                      type="text" 
+                      icon={<EditOutlined />} 
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditTask(task);
+                      }}
+                    />
+                  </Tooltip>
+                </Space>
               </div>
             </div>
           </TaskCard>

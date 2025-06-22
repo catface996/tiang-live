@@ -1,60 +1,171 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Spin } from 'antd';
 import MainLayout from '../layouts/MainLayout';
-import {
-  Dashboard,
-  PlaneManagement,
-  EntityManagement,
-  SequenceManagement,
-  IndustrySolutionManagement,
-  TaskCollectionManagement,
-  ReportManagement,
-  ReportDetail,
-  TagManagement,
-  AIAssistant,
-  AIAgentManagement,
-  InspectionTasks,
-  HookTasks,
-  ModelManagement,
-  PromptTemplates,
-  EntityScan,
-} from '../pages';
-import PlaneCreateEdit from '../pages/Plane/PlaneCreateEdit';
-import EntityCreatePage from '../pages/Entity/EntityCreatePage';
-import EntityEditPage from '../pages/Entity/EntityEditPage';
-import AIAgentForm from '../pages/AIAgent/AIAgentForm';
-import AgentDetail from '../pages/AIAgent/AgentDetail';
-import ScanDetail from '../pages/SystemSettings/EntityScan/ScanDetail';
+
+// 使用懒加载优化代码分割
+const Dashboard = React.lazy(() => import('../pages/Dashboard'));
+const PlaneManagement = React.lazy(() => import('../pages/Plane'));
+const EntityManagement = React.lazy(() => import('../pages/Entity'));
+const SequenceManagement = React.lazy(() => import('../pages/Sequence'));
+const IndustrySolutionManagement = React.lazy(() => import('../pages/IndustrySolution'));
+const TaskCollectionManagement = React.lazy(() => import('../pages/TaskCollection'));
+const ReportManagement = React.lazy(() => import('../pages/Report'));
+const ReportDetail = React.lazy(() => import('../pages/Report/ReportDetail'));
+const TagManagement = React.lazy(() => import('../pages/SystemSettings/TagManagement'));
+const AIAssistant = React.lazy(() => import('../pages/AIAssistant'));
+const AIAgentManagement = React.lazy(() => import('../pages/AIAgent/AIAgentManagement'));
+const InspectionTasks = React.lazy(() => import('../pages/TaskManagement/InspectionTasks'));
+const HookTasks = React.lazy(() => import('../pages/TaskManagement/HookTasks'));
+const ModelManagement = React.lazy(() => import('../pages/SystemSettings/ModelManagement'));
+const PromptTemplates = React.lazy(() => import('../pages/SystemSettings/PromptTemplates'));
+const EntityScan = React.lazy(() => import('../pages/SystemSettings/EntityScan'));
+
+// 子页面组件
+const PlaneCreateEdit = React.lazy(() => import('../pages/Plane/PlaneCreateEdit'));
+const EntityCreatePage = React.lazy(() => import('../pages/Entity/EntityCreatePage'));
+const EntityEditPage = React.lazy(() => import('../pages/Entity/EntityEditPage'));
+const AIAgentForm = React.lazy(() => import('../pages/AIAgent/AIAgentForm'));
+const AgentDetail = React.lazy(() => import('../pages/AIAgent/AgentDetail'));
+const ScanDetail = React.lazy(() => import('../pages/SystemSettings/EntityScan/ScanDetail'));
+
+// 加载中组件
+const PageLoading: React.FC = () => (
+  <div style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '200px' 
+  }}>
+    <Spin size="large" />
+  </div>
+);
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="planes" element={<PlaneManagement />} />
-        <Route path="planes/create" element={<PlaneCreateEdit />} />
-        <Route path="planes/edit/:id" element={<PlaneCreateEdit />} />
-        <Route path="entities" element={<EntityManagement />} />
-        <Route path="entities/create" element={<EntityCreatePage />} />
-        <Route path="entities/edit/:id" element={<EntityEditPage />} />
-        <Route path="sequences" element={<SequenceManagement />} />
-        <Route path="industry-solutions" element={<IndustrySolutionManagement />} />
-        <Route path="task-management/task-collections" element={<TaskCollectionManagement />} />
-        <Route path="task-management/inspection-tasks" element={<InspectionTasks />} />
-        <Route path="task-management/hook-tasks" element={<HookTasks />} />
-        <Route path="reports" element={<ReportManagement />} />
-        <Route path="reports/:id" element={<ReportDetail />} />
-        <Route path="ai-assistant" element={<AIAssistant />} />
-        <Route path="ai-agents" element={<AIAgentManagement />} />
-        <Route path="ai-agents/create" element={<AIAgentForm />} />
-        <Route path="ai-agents/edit/:id" element={<AIAgentForm />} />
-        <Route path="ai-agents/detail/:id" element={<AgentDetail />} />
-        <Route path="system-settings/model-management" element={<ModelManagement />} />
-        <Route path="system-settings/prompt-templates" element={<PromptTemplates />} />
-        <Route path="system-settings/tag-management" element={<TagManagement />} />
-        <Route path="system-settings/entity-scan" element={<EntityScan />} />
-        <Route path="system-settings/entity-scan/:dataSourceId" element={<ScanDetail />} />
+        <Route path="dashboard" element={
+          <Suspense fallback={<PageLoading />}>
+            <Dashboard />
+          </Suspense>
+        } />
+        <Route path="planes" element={
+          <Suspense fallback={<PageLoading />}>
+            <PlaneManagement />
+          </Suspense>
+        } />
+        <Route path="planes/create" element={
+          <Suspense fallback={<PageLoading />}>
+            <PlaneCreateEdit />
+          </Suspense>
+        } />
+        <Route path="planes/edit/:id" element={
+          <Suspense fallback={<PageLoading />}>
+            <PlaneCreateEdit />
+          </Suspense>
+        } />
+        <Route path="entities" element={
+          <Suspense fallback={<PageLoading />}>
+            <EntityManagement />
+          </Suspense>
+        } />
+        <Route path="entities/create" element={
+          <Suspense fallback={<PageLoading />}>
+            <EntityCreatePage />
+          </Suspense>
+        } />
+        <Route path="entities/edit/:id" element={
+          <Suspense fallback={<PageLoading />}>
+            <EntityEditPage />
+          </Suspense>
+        } />
+        <Route path="sequences" element={
+          <Suspense fallback={<PageLoading />}>
+            <SequenceManagement />
+          </Suspense>
+        } />
+        <Route path="industry-solutions" element={
+          <Suspense fallback={<PageLoading />}>
+            <IndustrySolutionManagement />
+          </Suspense>
+        } />
+        <Route path="task-management/task-collections" element={
+          <Suspense fallback={<PageLoading />}>
+            <TaskCollectionManagement />
+          </Suspense>
+        } />
+        <Route path="task-management/inspection-tasks" element={
+          <Suspense fallback={<PageLoading />}>
+            <InspectionTasks />
+          </Suspense>
+        } />
+        <Route path="task-management/hook-tasks" element={
+          <Suspense fallback={<PageLoading />}>
+            <HookTasks />
+          </Suspense>
+        } />
+        <Route path="reports" element={
+          <Suspense fallback={<PageLoading />}>
+            <ReportManagement />
+          </Suspense>
+        } />
+        <Route path="reports/:id" element={
+          <Suspense fallback={<PageLoading />}>
+            <ReportDetail />
+          </Suspense>
+        } />
+        <Route path="ai-assistant" element={
+          <Suspense fallback={<PageLoading />}>
+            <AIAssistant />
+          </Suspense>
+        } />
+        <Route path="ai-agents" element={
+          <Suspense fallback={<PageLoading />}>
+            <AIAgentManagement />
+          </Suspense>
+        } />
+        <Route path="ai-agents/create" element={
+          <Suspense fallback={<PageLoading />}>
+            <AIAgentForm />
+          </Suspense>
+        } />
+        <Route path="ai-agents/edit/:id" element={
+          <Suspense fallback={<PageLoading />}>
+            <AIAgentForm />
+          </Suspense>
+        } />
+        <Route path="ai-agents/detail/:id" element={
+          <Suspense fallback={<PageLoading />}>
+            <AgentDetail />
+          </Suspense>
+        } />
+        <Route path="system-settings/model-management" element={
+          <Suspense fallback={<PageLoading />}>
+            <ModelManagement />
+          </Suspense>
+        } />
+        <Route path="system-settings/prompt-templates" element={
+          <Suspense fallback={<PageLoading />}>
+            <PromptTemplates />
+          </Suspense>
+        } />
+        <Route path="system-settings/tag-management" element={
+          <Suspense fallback={<PageLoading />}>
+            <TagManagement />
+          </Suspense>
+        } />
+        <Route path="system-settings/entity-scan" element={
+          <Suspense fallback={<PageLoading />}>
+            <EntityScan />
+          </Suspense>
+        } />
+        <Route path="system-settings/entity-scan/:dataSourceId" element={
+          <Suspense fallback={<PageLoading />}>
+            <ScanDetail />
+          </Suspense>
+        } />
       </Route>
     </Routes>
   );
