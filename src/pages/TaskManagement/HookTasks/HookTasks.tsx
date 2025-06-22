@@ -652,11 +652,11 @@ const HookTasks: React.FC = () => {
 
                 {/* 触发信息 */}
                 <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
-                  <div style={{ marginBottom: 2 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
                     <Text>{t('tasks.hooks.card.triggerEvent')}: </Text>
                     <Text>{hook.trigger.events.join(', ')}</Text>
                   </div>
-                  <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text>{t('tasks.hooks.card.lastTriggered')}: </Text>
                     <Text>{hook.lastExecution.timestamp}</Text>
                   </div>

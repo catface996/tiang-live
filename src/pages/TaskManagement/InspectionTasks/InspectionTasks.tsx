@@ -538,11 +538,11 @@ const InspectionTasks: React.FC = () => {
 
             {/* 调度信息 */}
             <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
-              <div style={{ marginBottom: 2 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
                 <Text>{t('tasks.inspection.card.schedule')}: </Text>
                 <Text>{task.schedule.expression}</Text>
               </div>
-              <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text>{t('tasks.inspection.card.nextExecution')}: </Text>
                 <Text>{task.nextRun}</Text>
               </div>
