@@ -44,9 +44,11 @@ import {
   ThunderboltOutlined,
   BarChartOutlined,
   SafetyCertificateOutlined,
-  MonitorOutlined
+  MonitorOutlined,
+  LineChartOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
@@ -346,6 +348,7 @@ const TaskCollectionManagement: React.FC = () => {
   const [filterFrequency, setFilterFrequency] = useState('all');
   const [form] = Form.useForm();
   const { t } = useTranslation(['tasks', 'common']);
+  const navigate = useNavigate();
 
   // 新增状态：实体和动作选择
   const [selectedEntities, setSelectedEntities] = useState<string[]>([]);
@@ -581,6 +584,12 @@ const TaskCollectionManagement: React.FC = () => {
     setDetailModalVisible(true);
   };
 
+  const handleViewRunDetail = (taskId: string) => {
+    // 模拟生成运行ID，实际应该从API获取最新的运行记录
+    const runId = `run_${taskId}_${Date.now()}`;
+    navigate(`/task-management/task-collections/run/${runId}`);
+  };
+
   const handleStartTask = (taskId: string) => {
     message.success(t('tasks:collections.messages.startSuccess'));
   };
@@ -765,6 +774,17 @@ const TaskCollectionManagement: React.FC = () => {
               {/* 操作按钮区域 - 单独一行 */}
               <div className="card-actions">
                 <Space>
+                  <Tooltip title="查看运行详情">
+                    <Button 
+                      type="text" 
+                      icon={<LineChartOutlined />} 
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewRunDetail(task.id);
+                      }}
+                    />
+                  </Tooltip>
                   <Tooltip title={t('tasks:collections.card.viewDetails')}>
                     <Button 
                       type="text" 

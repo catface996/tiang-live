@@ -1,0 +1,539 @@
+{
+  "diagnosticReports": [
+    {
+      "nodeId": "node_1",
+      "nodeName": "用户服务",
+      "nodeType": "entity",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-24 13:00:00",
+        "endTime": "2024-06-24 13:02:30",
+        "totalDuration": 150
+      },
+      "actions": [
+        {
+          "id": "health_check_1",
+          "name": "健康检查",
+          "description": "检查服务基础健康状态和可用性",
+          "type": "health_check",
+          "status": "success",
+          "startTime": "2024-06-24 13:00:00",
+          "endTime": "2024-06-24 13:01:00",
+          "duration": 60,
+          "overallScore": 95,
+          "summary": "服务运行状态良好，所有健康指标均在正常范围内",
+          "metrics": [
+            {
+              "id": "response_time",
+              "name": "响应时间",
+              "description": "API平均响应时间",
+              "unit": "ms",
+              "healthyRange": {
+                "max": 200,
+                "optimal": 100,
+                "description": "< 200ms 正常, < 100ms 优秀"
+              },
+              "actualValue": 85,
+              "health": "healthy",
+              "healthScore": 95,
+              "timestamp": "2024-06-24 13:01:00",
+              "trend": "stable",
+              "previousValue": 88
+            },
+            {
+              "id": "availability",
+              "name": "可用性",
+              "description": "服务可用性百分比",
+              "unit": "%",
+              "healthyRange": {
+                "min": 99,
+                "optimal": 99.9,
+                "description": "> 99% 正常, > 99.9% 优秀"
+              },
+              "actualValue": 99.8,
+              "health": "healthy",
+              "healthScore": 98,
+              "timestamp": "2024-06-24 13:01:00",
+              "trend": "up",
+              "previousValue": 99.5
+            },
+            {
+              "id": "error_rate",
+              "name": "错误率",
+              "description": "请求错误率",
+              "unit": "%",
+              "healthyRange": {
+                "max": 1,
+                "optimal": 0.1,
+                "description": "< 1% 正常, < 0.1% 优秀"
+              },
+              "actualValue": 0.2,
+              "health": "healthy",
+              "healthScore": 90,
+              "timestamp": "2024-06-24 13:01:00",
+              "trend": "down",
+              "previousValue": 0.5
+            }
+          ]
+        },
+        {
+          "id": "performance_analysis_1",
+          "name": "性能分析",
+          "description": "分析服务性能指标和资源使用情况",
+          "type": "performance_analysis",
+          "status": "success",
+          "startTime": "2024-06-24 13:01:30",
+          "endTime": "2024-06-24 13:02:30",
+          "duration": 60,
+          "overallScore": 88,
+          "summary": "性能表现良好，CPU和内存使用率在合理范围内",
+          "metrics": [
+            {
+              "id": "cpu_usage",
+              "name": "CPU使用率",
+              "description": "服务器CPU平均使用率",
+              "unit": "%",
+              "healthyRange": {
+                "max": 80,
+                "optimal": 50,
+                "description": "< 80% 正常, < 50% 优秀"
+              },
+              "actualValue": 45,
+              "health": "healthy",
+              "healthScore": 85,
+              "timestamp": "2024-06-24 13:02:30",
+              "trend": "stable",
+              "previousValue": 47
+            },
+            {
+              "id": "memory_usage",
+              "name": "内存使用率",
+              "description": "服务器内存平均使用率",
+              "unit": "%",
+              "healthyRange": {
+                "max": 85,
+                "optimal": 60,
+                "description": "< 85% 正常, < 60% 优秀"
+              },
+              "actualValue": 60,
+              "health": "healthy",
+              "healthScore": 80,
+              "timestamp": "2024-06-24 13:02:30",
+              "trend": "up",
+              "previousValue": 55
+            },
+            {
+              "id": "throughput",
+              "name": "吞吐量",
+              "description": "每秒处理请求数",
+              "unit": "req/s",
+              "healthyRange": {
+                "min": 100,
+                "optimal": 500,
+                "description": "> 100 req/s 正常, > 500 req/s 优秀"
+              },
+              "actualValue": 320,
+              "health": "healthy",
+              "healthScore": 85,
+              "timestamp": "2024-06-24 13:02:30",
+              "trend": "stable",
+              "previousValue": 315
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 92,
+        "riskLevel": "low",
+        "keyFindings": [
+          "服务响应时间优秀，平均85ms远低于200ms阈值",
+          "可用性达到99.8%，接近优秀水平",
+          "CPU和内存使用率合理，系统负载健康",
+          "吞吐量稳定在320 req/s，满足业务需求"
+        ],
+        "performanceSummary": "用户服务性能表现优秀，响应时间快，吞吐量稳定。CPU使用率45%，内存使用率60%，均在健康范围内。建议继续保持当前配置。",
+        "securitySummary": "基础健康检查通过，服务可用性高。建议定期进行安全扫描以确保系统安全性。",
+        "recommendations": [
+          {
+            "priority": "low",
+            "category": "maintenance",
+            "title": "定期清理日志文件",
+            "description": "建议每周清理一次应用日志，避免磁盘空间不足",
+            "estimatedImpact": "预防磁盘空间问题，提升系统稳定性"
+          },
+          {
+            "priority": "medium",
+            "category": "performance",
+            "title": "监控内存使用趋势",
+            "description": "内存使用率呈上升趋势，建议加强监控",
+            "estimatedImpact": "及早发现内存泄漏，避免服务异常"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-24 13:02:30"
+    },
+    {
+      "nodeId": "node_2",
+      "nodeName": "订单服务",
+      "nodeType": "entity",
+      "status": "failed",
+      "executionTime": {
+        "startTime": "2024-06-24 13:00:00",
+        "endTime": "2024-06-24 13:03:00",
+        "totalDuration": 180
+      },
+      "actions": [
+        {
+          "id": "health_check_2",
+          "name": "健康检查",
+          "description": "检查订单服务基础健康状态",
+          "type": "health_check",
+          "status": "error",
+          "startTime": "2024-06-24 13:00:00",
+          "endTime": "2024-06-24 13:01:30",
+          "duration": 90,
+          "overallScore": 25,
+          "summary": "服务健康检查失败，多项关键指标异常",
+          "metrics": [
+            {
+              "id": "response_time",
+              "name": "响应时间",
+              "description": "API平均响应时间",
+              "unit": "ms",
+              "healthyRange": {
+                "max": 200,
+                "optimal": 100,
+                "description": "< 200ms 正常, < 100ms 优秀"
+              },
+              "actualValue": 5000,
+              "health": "critical",
+              "healthScore": 10,
+              "timestamp": "2024-06-24 13:01:30",
+              "trend": "up",
+              "previousValue": 3000
+            },
+            {
+              "id": "availability",
+              "name": "可用性",
+              "description": "服务可用性百分比",
+              "unit": "%",
+              "healthyRange": {
+                "min": 99,
+                "optimal": 99.9,
+                "description": "> 99% 正常, > 99.9% 优秀"
+              },
+              "actualValue": 85,
+              "health": "critical",
+              "healthScore": 20,
+              "timestamp": "2024-06-24 13:01:30",
+              "trend": "down",
+              "previousValue": 95
+            },
+            {
+              "id": "error_rate",
+              "name": "错误率",
+              "description": "请求错误率",
+              "unit": "%",
+              "healthyRange": {
+                "max": 1,
+                "optimal": 0.1,
+                "description": "< 1% 正常, < 0.1% 优秀"
+              },
+              "actualValue": 15,
+              "health": "critical",
+              "healthScore": 5,
+              "timestamp": "2024-06-24 13:01:30",
+              "trend": "up",
+              "previousValue": 8
+            }
+          ]
+        },
+        {
+          "id": "fault_analysis_2",
+          "name": "故障分析",
+          "description": "分析服务故障原因和影响范围",
+          "type": "fault_analysis",
+          "status": "warning",
+          "startTime": "2024-06-24 13:01:30",
+          "endTime": "2024-06-24 13:03:00",
+          "duration": 90,
+          "overallScore": 45,
+          "summary": "检测到内存泄漏和数据库连接池耗尽问题",
+          "metrics": [
+            {
+              "id": "memory_leak",
+              "name": "内存泄漏检测",
+              "description": "检测内存使用增长趋势",
+              "unit": "MB/h",
+              "healthyRange": {
+                "max": 10,
+                "optimal": 0,
+                "description": "< 10MB/h 正常, 0MB/h 优秀"
+              },
+              "actualValue": 150,
+              "health": "critical",
+              "healthScore": 15,
+              "timestamp": "2024-06-24 13:03:00",
+              "trend": "up",
+              "previousValue": 120
+            },
+            {
+              "id": "db_connections",
+              "name": "数据库连接数",
+              "description": "活跃数据库连接数量",
+              "unit": "个",
+              "healthyRange": {
+                "max": 100,
+                "optimal": 50,
+                "description": "< 100个 正常, < 50个 优秀"
+              },
+              "actualValue": 150,
+              "health": "warning",
+              "healthScore": 40,
+              "timestamp": "2024-06-24 13:03:00",
+              "trend": "up",
+              "previousValue": 120
+            },
+            {
+              "id": "gc_frequency",
+              "name": "GC频率",
+              "description": "垃圾回收执行频率",
+              "unit": "次/min",
+              "healthyRange": {
+                "max": 5,
+                "optimal": 2,
+                "description": "< 5次/min 正常, < 2次/min 优秀"
+              },
+              "actualValue": 12,
+              "health": "warning",
+              "healthScore": 30,
+              "timestamp": "2024-06-24 13:03:00",
+              "trend": "up",
+              "previousValue": 8
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 35,
+        "riskLevel": "critical",
+        "keyFindings": [
+          "服务响应时间严重超标，达到5000ms",
+          "可用性下降至85%，远低于99%的标准",
+          "错误率高达15%，严重影响用户体验",
+          "检测到严重内存泄漏，增长率150MB/h",
+          "数据库连接池接近耗尽，连接数达到150个"
+        ],
+        "performanceSummary": "订单服务性能严重下降，响应时间超标25倍，可用性和错误率均不达标。系统负载过高，需要立即处理。",
+        "securitySummary": "服务稳定性存在严重问题，可能影响数据一致性和业务连续性。建议立即采取应急措施。",
+        "recommendations": [
+          {
+            "priority": "high",
+            "category": "reliability",
+            "title": "立即重启服务实例",
+            "description": "服务状态异常，建议立即重启以恢复正常状态",
+            "estimatedImpact": "快速恢复服务可用性，减少业务影响"
+          },
+          {
+            "priority": "high",
+            "category": "performance",
+            "title": "修复内存泄漏问题",
+            "description": "检查代码中的内存泄漏点，优化内存使用",
+            "estimatedImpact": "解决根本问题，防止服务再次异常"
+          },
+          {
+            "priority": "high",
+            "category": "performance",
+            "title": "优化数据库连接池配置",
+            "description": "增加连接池大小或优化连接使用策略",
+            "estimatedImpact": "提升数据库访问性能，减少连接等待"
+          },
+          {
+            "priority": "medium",
+            "category": "maintenance",
+            "title": "增加监控告警",
+            "description": "为关键指标设置告警阈值，及时发现问题",
+            "estimatedImpact": "提前预警，避免问题扩大"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-24 13:03:00"
+    },
+    {
+      "nodeId": "node_4",
+      "nodeName": "用户登录流程",
+      "nodeType": "sequence",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-24 13:00:30",
+        "endTime": "2024-06-24 13:01:45",
+        "totalDuration": 75
+      },
+      "actions": [
+        {
+          "id": "health_check_4",
+          "name": "流程健康检查",
+          "description": "检查用户登录流程的完整性和性能",
+          "type": "health_check",
+          "status": "success",
+          "startTime": "2024-06-24 13:00:30",
+          "endTime": "2024-06-24 13:01:45",
+          "duration": 75,
+          "overallScore": 88,
+          "summary": "登录流程运行正常，各环节响应时间合理",
+          "metrics": [
+            {
+              "id": "login_success_rate",
+              "name": "登录成功率",
+              "description": "用户登录成功的比例",
+              "unit": "%",
+              "healthyRange": {
+                "min": 95,
+                "optimal": 99,
+                "description": "> 95% 正常, > 99% 优秀"
+              },
+              "actualValue": 98.5,
+              "health": "healthy",
+              "healthScore": 95,
+              "timestamp": "2024-06-24 13:01:45",
+              "trend": "stable",
+              "previousValue": 98.2
+            },
+            {
+              "id": "avg_login_time",
+              "name": "平均登录时间",
+              "description": "用户完成登录的平均时间",
+              "unit": "s",
+              "healthyRange": {
+                "max": 3,
+                "optimal": 1.5,
+                "description": "< 3s 正常, < 1.5s 优秀"
+              },
+              "actualValue": 2.3,
+              "health": "healthy",
+              "healthScore": 80,
+              "timestamp": "2024-06-24 13:01:45",
+              "trend": "stable",
+              "previousValue": 2.4
+            },
+            {
+              "id": "auth_failures",
+              "name": "认证失败率",
+              "description": "认证环节失败的比例",
+              "unit": "%",
+              "healthyRange": {
+                "max": 2,
+                "optimal": 0.5,
+                "description": "< 2% 正常, < 0.5% 优秀"
+              },
+              "actualValue": 1.5,
+              "health": "healthy",
+              "healthScore": 85,
+              "timestamp": "2024-06-24 13:01:45",
+              "trend": "down",
+              "previousValue": 1.8
+            }
+          ]
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 88,
+        "riskLevel": "low",
+        "keyFindings": [
+          "登录成功率达到98.5%，接近优秀水平",
+          "平均登录时间2.3秒，在合理范围内",
+          "认证失败率呈下降趋势，系统稳定性良好"
+        ],
+        "performanceSummary": "用户登录流程运行稳定，成功率高，响应时间合理。整体性能表现良好。",
+        "securitySummary": "认证环节工作正常，失败率在可接受范围内。建议继续监控异常登录行为。",
+        "recommendations": [
+          {
+            "priority": "low",
+            "category": "performance",
+            "title": "优化登录响应时间",
+            "description": "可考虑优化认证流程，进一步缩短登录时间",
+            "estimatedImpact": "提升用户体验，减少登录等待时间"
+          },
+          {
+            "priority": "medium",
+            "category": "security",
+            "title": "加强异常登录监控",
+            "description": "增加对异常登录行为的检测和告警",
+            "estimatedImpact": "提高系统安全性，及时发现安全威胁"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-24 13:01:45"
+    }
+  ],
+  "metricHealthLevels": {
+    "healthy": {
+      "color": "#52c41a",
+      "label": "健康",
+      "description": "指标在正常范围内"
+    },
+    "warning": {
+      "color": "#faad14",
+      "label": "警告",
+      "description": "指标接近阈值，需要关注"
+    },
+    "critical": {
+      "color": "#ff4d4f",
+      "label": "严重",
+      "description": "指标超出阈值，需要立即处理"
+    },
+    "unknown": {
+      "color": "#d9d9d9",
+      "label": "未知",
+      "description": "无法获取指标数据"
+    }
+  },
+  "actionTypes": {
+    "health_check": {
+      "name": "健康检查",
+      "icon": "heart",
+      "color": "#52c41a",
+      "description": "检查服务基础健康状态"
+    },
+    "performance_analysis": {
+      "name": "性能分析",
+      "icon": "bar-chart",
+      "color": "#1890ff",
+      "description": "分析性能指标和资源使用"
+    },
+    "fault_analysis": {
+      "name": "故障分析",
+      "icon": "bug",
+      "color": "#ff4d4f",
+      "description": "分析故障原因和影响"
+    },
+    "security_scan": {
+      "name": "安全扫描",
+      "icon": "safety-certificate",
+      "color": "#faad14",
+      "description": "扫描安全漏洞和风险"
+    }
+  },
+  "riskLevels": {
+    "low": {
+      "color": "#52c41a",
+      "label": "低风险",
+      "description": "系统运行正常，风险较低"
+    },
+    "medium": {
+      "color": "#faad14",
+      "label": "中等风险",
+      "description": "存在一些问题，需要关注"
+    },
+    "high": {
+      "color": "#ff7a45",
+      "label": "高风险",
+      "description": "存在严重问题，需要及时处理"
+    },
+    "critical": {
+      "color": "#ff4d4f",
+      "label": "严重风险",
+      "description": "系统异常，需要立即处理"
+    }
+  }
+}
