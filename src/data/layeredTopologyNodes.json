@@ -1,0 +1,182 @@
+[
+  {
+    "id": "scenario_001",
+    "name": "用户购买流程",
+    "type": "sequence",
+    "category": "business_scenario",
+    "layer": "L5",
+    "status": "running",
+    "actions": ["场景监控", "用户体验分析"],
+    "dependencies": []
+  },
+  {
+    "id": "scenario_002",
+    "name": "订单履约场景",
+    "type": "sequence",
+    "category": "business_scenario",
+    "layer": "L5",
+    "status": "completed",
+    "actions": ["履约监控", "异常处理"],
+    "dependencies": []
+  },
+  {
+    "id": "chain_001",
+    "name": "用户注册链路",
+    "type": "sequence",
+    "category": "business_chain",
+    "layer": "L4",
+    "status": "completed",
+    "actions": ["链路追踪", "性能监控"],
+    "dependencies": ["scenario_001"]
+  },
+  {
+    "id": "chain_002",
+    "name": "支付处理链路",
+    "type": "sequence",
+    "category": "business_chain",
+    "layer": "L4",
+    "status": "running",
+    "actions": ["支付监控", "风控检查"],
+    "dependencies": ["scenario_001"]
+  },
+  {
+    "id": "chain_003",
+    "name": "库存管理链路",
+    "type": "sequence",
+    "category": "business_chain",
+    "layer": "L4",
+    "status": "pending",
+    "actions": ["库存监控", "补货预警"],
+    "dependencies": ["scenario_002"]
+  },
+  {
+    "id": "system_001",
+    "name": "用户管理系统",
+    "type": "entity",
+    "category": "business_system",
+    "layer": "L3",
+    "status": "completed",
+    "actions": ["系统健康检查", "接口监控"],
+    "dependencies": ["chain_001"]
+  },
+  {
+    "id": "system_002",
+    "name": "订单管理系统",
+    "type": "entity",
+    "category": "business_system",
+    "layer": "L3",
+    "status": "running",
+    "actions": ["订单处理监控", "数据一致性检查"],
+    "dependencies": ["chain_002", "chain_003"]
+  },
+  {
+    "id": "system_003",
+    "name": "支付系统",
+    "type": "entity",
+    "category": "business_system",
+    "layer": "L3",
+    "status": "completed",
+    "actions": ["支付网关检查", "交易监控"],
+    "dependencies": ["chain_002"]
+  },
+  {
+    "id": "system_004",
+    "name": "库存系统",
+    "type": "entity",
+    "category": "business_system",
+    "layer": "L3",
+    "status": "failed",
+    "actions": ["库存同步检查", "预警机制"],
+    "dependencies": ["chain_003"]
+  },
+  {
+    "id": "middleware_001",
+    "name": "API网关",
+    "type": "entity",
+    "category": "middleware",
+    "layer": "L2",
+    "status": "completed",
+    "actions": ["网关健康检查", "限流监控"],
+    "dependencies": ["system_001", "system_002", "system_003"]
+  },
+  {
+    "id": "middleware_002",
+    "name": "Redis缓存",
+    "type": "entity",
+    "category": "middleware",
+    "layer": "L2",
+    "status": "running",
+    "actions": ["缓存命中率检查", "内存使用监控"],
+    "dependencies": ["system_001", "system_002"]
+  },
+  {
+    "id": "middleware_003",
+    "name": "消息队列",
+    "type": "entity",
+    "category": "middleware",
+    "layer": "L2",
+    "status": "completed",
+    "actions": ["队列积压监控", "消费者状态检查"],
+    "dependencies": ["system_002", "system_004"]
+  },
+  {
+    "id": "middleware_004",
+    "name": "配置中心",
+    "type": "entity",
+    "category": "middleware",
+    "layer": "L2",
+    "status": "completed",
+    "actions": ["配置同步检查", "版本管理"],
+    "dependencies": ["system_001", "system_002", "system_003", "system_004"]
+  },
+  {
+    "id": "infra_001",
+    "name": "Kubernetes集群",
+    "type": "entity",
+    "category": "infrastructure",
+    "layer": "L1",
+    "status": "completed",
+    "actions": ["集群健康检查", "资源使用监控"],
+    "dependencies": ["middleware_001", "middleware_002", "middleware_003"]
+  },
+  {
+    "id": "infra_002",
+    "name": "MySQL数据库",
+    "type": "entity",
+    "category": "infrastructure",
+    "layer": "L1",
+    "status": "running",
+    "actions": ["数据库性能检查", "连接池监控"],
+    "dependencies": ["middleware_002", "middleware_004"]
+  },
+  {
+    "id": "infra_003",
+    "name": "负载均衡器",
+    "type": "entity",
+    "category": "infrastructure",
+    "layer": "L1",
+    "status": "completed",
+    "actions": ["负载均衡检查", "健康节点监控"],
+    "dependencies": ["middleware_001"]
+  },
+  {
+    "id": "infra_004",
+    "name": "存储系统",
+    "type": "entity",
+    "category": "infrastructure",
+    "layer": "L1",
+    "status": "completed",
+    "actions": ["存储容量检查", "IO性能监控"],
+    "dependencies": ["middleware_003", "middleware_004"]
+  },
+  {
+    "id": "infra_005",
+    "name": "网络设备",
+    "type": "entity",
+    "category": "infrastructure",
+    "layer": "L1",
+    "status": "completed",
+    "actions": ["网络连通性检查", "带宽使用监控"],
+    "dependencies": ["middleware_001", "middleware_002", "middleware_003", "middleware_004"]
+  }
+]

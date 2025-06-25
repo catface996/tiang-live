@@ -20,7 +20,7 @@ import {
   SafetyCertificateOutlined,
   FileTextOutlined
 } from '@ant-design/icons';
-import type { TaskNode, Panel } from './TaskTopology';
+import type { TaskNode, Panel } from '../types';
 
 const { Text } = Typography;
 

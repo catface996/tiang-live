@@ -1,0 +1,672 @@
+import React, { useEffect, useRef, useMemo, useState } from 'react';
+import { Alert, Space } from 'antd';
+import styled from 'styled-components';
+import * as d3 from 'd3';
+import { NodeStatus } from '../types';
+
+const TopologyContainer = styled.div`
+  width: 100%;
+  height: 800px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background: #fafafa;
+  position: relative;
+  overflow: hidden;
+  margin-top: 16px;
+  
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+// 右上角图例容器
+const RightTopLegendsContainer = styled.div`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+`;
+
+// 图例卡片
+const LegendCard = styled.div`
+  background: white;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-width: 120px;
+`;
+
+const LegendTitle = styled.div`
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  &::before {
+    content: '⋮⋮';
+    color: #ccc;
+    font-size: 10px;
+    line-height: 1;
+  }
+`;
+
+const LegendList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const LegendItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const LegendIcon = styled.span`
+  font-size: 14px;
+`;
+
+// Tips容器样式
+const TipsContainer = styled.div`
+  width: 100%;
+  margin-bottom: 16px;
+  
+  .ant-alert {
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    border: 1px solid #d9ecff;
+    
+    .ant-alert-message {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #1890ff;
+    }
+    
+    .ant-alert-description {
+      line-height: 1.6;
+      color: rgba(0, 0, 0, 0.65);
+      margin: 0;
+    }
+    
+    .ant-alert-icon {
+      color: #1890ff;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .ant-alert {
+      .ant-alert-description {
+        font-size: 13px;
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    margin-bottom: 12px;
+    
+    .ant-alert {
+      .ant-alert-message {
+        font-size: 14px;
+      }
+      
+      .ant-alert-description {
+        font-size: 12px;
+        line-height: 1.5;
+      }
+    }
+  }
+`;
+
+// 主容器样式
+const MainContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const LegendText = styled.span`
+  font-size: 11px;
+`;
+
+const LayerLegendList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const LayerLegendItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const LayerLegendText = styled.span`
+  font-size: 11px;
+  color: #666;
+`;
+
+// 业务层级定义（本地定义避免导入问题）
+interface BusinessLayer {
+  id: string;
+  name: string;
+  level: number; // L5-L1
+  color: string;
+  borderColor: string;
+  description: string;
+  height: number;
+}
+
+// 分层任务节点类型（本地定义避免导入问题）
+interface LayeredTaskNode {
+  id: string;
+  name: string;
+  type: 'entity' | 'sequence';
+  category: string;
+  layer: string; // 对应业务层级ID
+  status: NodeStatus;
+  actions: string[];
+  startTime?: string;
+  endTime?: string;
+  duration?: number;
+  results?: any[];
+  dependencies?: string[];
+  x?: number;
+  y?: number;
+}
+
+interface LayeredTaskTopologyProps {
+  nodes: LayeredTaskNode[];
+  onNodeClick?: (node: LayeredTaskNode) => void;
+}
+
+// 预定义的业务层级
+const BUSINESS_LAYERS: BusinessLayer[] = [
+  {
+    id: 'L5',
+    name: 'L5 - 业务场景层',
+    level: 5,
+    color: 'rgba(114, 46, 209, 0.1)',
+    borderColor: '#722ed1',
+    description: '业务场景和用户体验层面',
+    height: 120
+  },
+  {
+    id: 'L4',
+    name: 'L4 - 业务链路层',
+    level: 4,
+    color: 'rgba(24, 144, 255, 0.1)',
+    borderColor: '#1890ff',
+    description: '业务流程和链路层面',
+    height: 120
+  },
+  {
+    id: 'L3',
+    name: 'L3 - 业务系统层',
+    level: 3,
+    color: 'rgba(82, 196, 26, 0.1)',
+    borderColor: '#52c41a',
+    description: '业务应用和系统层面',
+    height: 120
+  },
+  {
+    id: 'L2',
+    name: 'L2 - 中间件层',
+    level: 2,
+    color: 'rgba(250, 173, 20, 0.1)',
+    borderColor: '#faad14',
+    description: '中间件和服务层面',
+    height: 120
+  },
+  {
+    id: 'L1',
+    name: 'L1 - 基础设施层',
+    level: 1,
+    color: 'rgba(255, 77, 79, 0.1)',
+    borderColor: '#ff4d4f',
+    description: '基础设施和资源层面',
+    height: 120
+  }
+];
+
+const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNodeClick }) => {
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // 使用 useMemo 来稳定化依赖
+  const stableNodes = useMemo(() => nodes, [JSON.stringify(nodes)]);
+
+  // 计算层级边界
+  const calculateLayerBounds = (layer: BusinessLayer, width: number, height: number) => {
+    const padding = 20;
+    const headerHeight = 60;
+    const availableHeight = height - headerHeight - padding * 2;
+    const layerSpacing = 10;
+    
+    // 从上到下排列 L5 -> L1
+    const layerIndex = 5 - layer.level; // L5=0, L4=1, L3=2, L2=3, L1=4
+    const totalLayers = BUSINESS_LAYERS.length;
+    const layerHeight = (availableHeight - layerSpacing * (totalLayers - 1)) / totalLayers;
+    
+    const y = headerHeight + padding + layerIndex * (layerHeight + layerSpacing);
+
+    return {
+      x: padding,
+      y: y,
+      width: width - padding * 2,
+      height: layerHeight,
+      rx: 8,
+      ry: 8
+    };
+  };
+
+  // 在层级内部布局节点 - 水平居中分布
+  const layoutNodesInLayer = (layerNodes: LayeredTaskNode[], bounds: any) => {
+    if (layerNodes.length === 0) return;
+    
+    const minNodeSpacing = 80; // 最小节点间距
+    const layerPadding = 40; // 层级内边距
+    const availableWidth = bounds.width - layerPadding * 2;
+    
+    // 计算节点间距，确保节点均匀分布且不超出边界
+    let nodeSpacing = minNodeSpacing;
+    let totalNodesWidth = (layerNodes.length - 1) * nodeSpacing;
+    
+    // 如果节点总宽度超出可用宽度，调整间距
+    if (totalNodesWidth > availableWidth) {
+      nodeSpacing = Math.max(60, availableWidth / (layerNodes.length - 1));
+      totalNodesWidth = (layerNodes.length - 1) * nodeSpacing;
+    }
+    
+    // 计算起始X位置，使节点水平居中
+    const startX = bounds.x + (bounds.width - totalNodesWidth) / 2;
+    const centerY = bounds.y + bounds.height / 2;
+    
+    // 检查是否需要多行布局
+    const maxNodesPerRow = Math.floor(availableWidth / minNodeSpacing) + 1;
+    
+    if (layerNodes.length <= maxNodesPerRow) {
+      // 单行布局 - 水平居中
+      layerNodes.forEach((node, index) => {
+        node.x = startX + index * nodeSpacing;
+        node.y = centerY;
+      });
+    } else {
+      // 多行布局 - 每行都水平居中
+      const rows = Math.ceil(layerNodes.length / maxNodesPerRow);
+      const rowHeight = Math.max(80, (bounds.height - 40) / rows); // 40为标题预留空间
+      
+      layerNodes.forEach((node, index) => {
+        const row = Math.floor(index / maxNodesPerRow);
+        const col = index % maxNodesPerRow;
+        const nodesInThisRow = Math.min(maxNodesPerRow, layerNodes.length - row * maxNodesPerRow);
+        
+        // 计算当前行的起始位置，使该行节点居中
+        const rowTotalWidth = (nodesInThisRow - 1) * minNodeSpacing;
+        const rowStartX = bounds.x + (bounds.width - rowTotalWidth) / 2;
+        
+        node.x = rowStartX + col * minNodeSpacing;
+        node.y = bounds.y + 40 + row * rowHeight; // 40为标题预留空间
+      });
+    }
+  };
+
+  // 绘制分层拓扑图
+  const drawLayeredTopology = () => {
+    if (!stableNodes || stableNodes.length === 0 || !svgRef.current) return;
+
+    const svg = d3.select(svgRef.current);
+    svg.selectAll("*").remove();
+
+    const width = 1200;
+    const height = 800;
+    const nodesCopy = stableNodes.map(node => ({ ...node }));
+    
+    // 创建主容器
+    const g = svg.append("g");
+
+    // 按层级分组节点
+    const nodesByLayer = new Map<string, LayeredTaskNode[]>();
+    BUSINESS_LAYERS.forEach(layer => {
+      nodesByLayer.set(layer.id, nodesCopy.filter(node => node.layer === layer.id));
+    });
+
+    // 绘制层级背景和布局节点
+    BUSINESS_LAYERS.forEach(layer => {
+      const bounds = calculateLayerBounds(layer, width, height);
+      const layerNodes = nodesByLayer.get(layer.id) || [];
+      
+      // 布局该层级的节点
+      layoutNodesInLayer(layerNodes, bounds);
+
+      const layerGroup = g.append("g").attr("class", `layer-${layer.id}`);
+      
+      // 绘制层级背景矩形
+      layerGroup.append('rect')
+        .attr('x', bounds.x)
+        .attr('y', bounds.y)
+        .attr('width', bounds.width)
+        .attr('height', bounds.height)
+        .attr('rx', bounds.rx)
+        .attr('ry', bounds.ry)
+        .attr('fill', layer.color)
+        .attr('stroke', layer.borderColor)
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '8,4') // 添加虚线样式
+        .attr('opacity', 0.8);
+
+      // 添加层级标题
+      layerGroup.append('text')
+        .attr('x', bounds.x + 20)
+        .attr('y', bounds.y + 25)
+        .attr('font-size', '16px')
+        .attr('font-weight', 'bold')
+        .attr('fill', layer.borderColor)
+        .text(layer.name);
+
+      // 添加层级描述
+      layerGroup.append('text')
+        .attr('x', bounds.x + 20)
+        .attr('y', bounds.y + 45)
+        .attr('font-size', '12px')
+        .attr('fill', '#666')
+        .text(layer.description);
+
+      // 显示该层级的节点数量
+      layerGroup.append('text')
+        .attr('x', bounds.x + bounds.width - 100)
+        .attr('y', bounds.y + 25)
+        .attr('font-size', '12px')
+        .attr('fill', '#666')
+        .text(`节点数: ${layerNodes.length}`);
+    });
+
+    // 创建跨层级的依赖链接
+    const links: any[] = [];
+    nodesCopy.forEach(node => {
+      if (node.dependencies) {
+        node.dependencies.forEach(depId => {
+          const sourceNode = nodesCopy.find(n => n.id === depId);
+          if (sourceNode) {
+            links.push({
+              source: sourceNode,
+              target: node,
+              type: 'dependency'
+            });
+          }
+        });
+      }
+    });
+
+    // 添加箭头标记
+    const defs = svg.append("defs");
+    
+    // 依赖关系箭头
+    defs.append("marker")
+      .attr("id", "dependency-arrow")
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 35)
+      .attr("refY", 0)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", "#666");
+
+    // 绘制连接线
+    const link = g.append("g")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("stroke", "#666")
+      .attr("stroke-opacity", 0.6)
+      .attr("stroke-width", 2)
+      .attr("stroke-dasharray", "5,5")
+      .attr("marker-end", "url(#dependency-arrow)")
+      .attr("x1", (d: any) => d.source.x)
+      .attr("y1", (d: any) => d.source.y)
+      .attr("x2", (d: any) => d.target.x)
+      .attr("y2", (d: any) => d.target.y);
+
+    // 获取节点颜色
+    const getNodeColor = (status: NodeStatus) => {
+      switch (status) {
+        case NodeStatus.COMPLETED:
+          return '#52c41a';
+        case NodeStatus.RUNNING:
+          return '#1890ff';
+        case NodeStatus.FAILED:
+          return '#ff4d4f';
+        case NodeStatus.PENDING:
+          return '#d9d9d9';
+        case NodeStatus.SKIPPED:
+          return '#faad14';
+        default:
+          return '#d9d9d9';
+      }
+    };
+
+    // 获取节点图标
+    const getNodeIcon = (node: LayeredTaskNode) => {
+      switch (node.layer) {
+        case 'L5': return '🎯'; // 业务场景
+        case 'L4': return '🔗'; // 业务链路
+        case 'L3': return '💼'; // 业务系统
+        case 'L2': return '⚙️'; // 中间件
+        case 'L1': return '🏗️'; // 基础设施
+        default: return node.type === 'entity' ? '🔧' : '⚡';
+      }
+    };
+
+    // 绘制节点
+    const node = g.append("g")
+      .selectAll("g")
+      .data(nodesCopy)
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", (d: any) => `translate(${d.x},${d.y})`)
+      .style("cursor", "grab")
+      .call(d3.drag<any, any>()
+        .on("start", function(event, d: any) {
+          // 拖拽开始
+          d3.select(this).classed("dragging", true);
+          d3.select(this).style("cursor", "grabbing");
+          d3.select(this).select("circle")
+            .transition()
+            .duration(100)
+            .attr("r", 35)
+            .attr("stroke-width", 4);
+          
+          // 阻止点击事件
+          event.sourceEvent.stopPropagation();
+        })
+        .on("drag", function(event, d: any) {
+          // 拖拽过程中
+          d.x = event.x;
+          d.y = event.y;
+          
+          // 更新节点位置
+          d3.select(this).attr("transform", `translate(${d.x},${d.y})`);
+          
+          // 更新连接线
+          link
+            .attr("x1", (linkData: any) => linkData.source.x)
+            .attr("y1", (linkData: any) => linkData.source.y)
+            .attr("x2", (linkData: any) => linkData.target.x)
+            .attr("y2", (linkData: any) => linkData.target.y);
+        })
+        .on("end", function(event, d: any) {
+          // 拖拽结束，固定在当前位置
+          d3.select(this).classed("dragging", false);
+          d3.select(this).style("cursor", "grab");
+          d3.select(this).select("circle")
+            .transition()
+            .duration(200)
+            .attr("r", 30)
+            .attr("stroke-width", 3);
+          
+          // 延迟一点时间再允许点击事件，避免拖拽结束时误触发点击
+          setTimeout(() => {
+            event.sourceEvent.preventDefault = false;
+          }, 100);
+        })
+      );
+
+    // 添加节点圆圈
+    node.append("circle")
+      .attr("r", 30)
+      .attr("fill", (d: any) => getNodeColor(d.status))
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 3)
+      .attr("filter", "drop-shadow(2px 2px 4px rgba(0,0,0,0.2))");
+
+    // 添加节点图标
+    node.append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.35em")
+      .attr("font-size", "16px")
+      .text((d: any) => getNodeIcon(d));
+
+    // 添加节点标签
+    node.append("text")
+      .attr("text-anchor", "middle")
+      .attr("dy", "3.8em")
+      .attr("font-size", "12px")
+      .attr("fill", "#333")
+      .attr("font-weight", "500")
+      .text((d: any) => d.name);
+
+    // 节点点击事件（避免与拖拽冲突）
+    node.on("click", function(_event: any, d: any) {
+      // 只有在没有拖拽的情况下才触发点击
+      if (_event.defaultPrevented) return;
+      if (onNodeClick) {
+        onNodeClick(d);
+      }
+    });
+
+    // 添加节点悬停效果（只在非拖拽状态下生效）
+    node.on("mouseenter", function(event, d) {
+      if (!d3.select(this).classed("dragging")) {
+        d3.select(this).select("circle")
+          .transition()
+          .duration(200)
+          .attr("r", 35)
+          .attr("stroke-width", 4);
+      }
+    })
+    .on("mouseleave", function(event, d) {
+      if (!d3.select(this).classed("dragging")) {
+        d3.select(this).select("circle")
+          .transition()
+          .duration(200)
+          .attr("r", 30)
+          .attr("stroke-width", 3);
+      }
+    });
+  };
+
+  // 当数据更新时重新绘制拓扑图
+  useEffect(() => {
+    drawLayeredTopology();
+  }, [stableNodes]);
+
+  return (
+    <MainContainer>
+      <TipsContainer>
+        <Alert
+          message="分层拓扑视图"
+          description="按照业务层级从上到下展示节点关系：L5业务场景层 → L4业务链路层 → L3业务系统层 → L2中间件层 → L1基础设施层。可以拖拽节点调整位置，点击节点查看详细信息。"
+          type="info"
+          showIcon
+        />
+      </TipsContainer>
+      <TopologyContainer>
+        <svg ref={svgRef}></svg>
+        
+        {/* 右上角垂直排列的图例 */}
+        <RightTopLegendsContainer>
+          {/* 执行状态图例 */}
+          <LegendCard>
+            <LegendTitle>执行状态</LegendTitle>
+            <LegendList>
+              <LegendItem>
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#52c41a' }}></div>
+                <LegendText>已完成</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#1890ff' }}></div>
+                <LegendText>运行中</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#d9d9d9' }}></div>
+                <LegendText>等待中</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff4d4f' }}></div>
+                <LegendText>失败</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#faad14' }}></div>
+                <LegendText>已跳过</LegendText>
+              </LegendItem>
+            </LegendList>
+          </LegendCard>
+
+          {/* 业务层级图例 */}
+          <LegendCard>
+            <LegendTitle>业务层级</LegendTitle>
+            <LayerLegendList>
+              {BUSINESS_LAYERS.map(layer => (
+                <LayerLegendItem key={layer.id}>
+                  <div style={{ 
+                    width: 12, 
+                    height: 12, 
+                    background: layer.color,
+                    border: `1px solid ${layer.borderColor}`,
+                    borderRadius: 2
+                  }}></div>
+                  <LayerLegendText>{layer.name}</LayerLegendText>
+                </LayerLegendItem>
+              ))}
+            </LayerLegendList>
+          </LegendCard>
+
+          {/* 图标说明 */}
+          <LegendCard>
+            <LegendTitle>图标说明</LegendTitle>
+            <LegendList>
+              <LegendItem>
+                <LegendIcon>🎯</LegendIcon>
+                <LegendText>业务场景</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon>🔗</LegendIcon>
+                <LegendText>业务链路</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon>💼</LegendIcon>
+                <LegendText>业务系统</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon>⚙️</LegendIcon>
+                <LegendText>中间件</LegendText>
+              </LegendItem>
+              <LegendItem>
+                <LegendIcon>🏗️</LegendIcon>
+                <LegendText>基础设施</LegendText>
+              </LegendItem>
+            </LegendList>
+          </LegendCard>
+        </RightTopLegendsContainer>
+      </TopologyContainer>
+    </MainContainer>
+  );
+};
+
+export default LayeredTaskTopology;

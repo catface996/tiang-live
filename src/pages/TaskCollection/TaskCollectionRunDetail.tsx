@@ -28,12 +28,90 @@ import { setPageTitle } from '../../utils';
 import Breadcrumb from '../../components/Common/Breadcrumb';
 import { 
   DiagnosticReports, 
-  TaskTopology, 
+  LayeredTaskTopology,
   NodeDetailDrawer,
   type DiagnosticReport,
   type TaskNode,
   type Panel
 } from './components';
+import { loadLayeredTopologyNodes, getLayerStatistics, getLayerFullName, type LayeredTaskNode } from '../../utils/layeredTopologyUtils';
+
+// Styled Components
+const LayerStatCard = styled.div`
+  padding: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  cursor: default;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: #1890ff;
+  }
+`;
+
+const LayerTitle = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  line-height: 1.3;
+  color: #262626;
+  word-break: break-word;
+`;
+
+const LayerTotal = styled.div`
+  font-size: 14px;
+  color: #1890ff;
+  margin-bottom: 12px;
+  font-weight: 500;
+`;
+
+const StatusGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+const StatusItem = styled.div<{ $statusColor: string; $bgColor: string }>`
+  color: ${props => props.$statusColor};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  background: ${props => props.$bgColor};
+`;
+
+const StatisticsHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+const StatisticsLegend = styled.div`
+  font-size: 12px;
+  color: #8c8c8c;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+`;
+
+const LegendItem = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
 
 const { Title, Text } = Typography;
 
@@ -97,11 +175,18 @@ const TaskCollectionRunDetail: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<TaskNode | null>(null);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [layeredNodes, setLayeredNodes] = useState<LayeredTaskNode[]>([]);
 
   useEffect(() => {
     setPageTitle('任务集合运行详情');
     loadRunDetail();
   }, [runId]);
+
+  // 加载分层拓扑数据
+  useEffect(() => {
+    const nodes = loadLayeredTopologyNodes();
+    setLayeredNodes(nodes);
+  }, []);
 
   // 自动刷新逻辑
   useEffect(() => {
@@ -457,6 +542,17 @@ const TaskCollectionRunDetail: React.FC = () => {
     setDrawerVisible(true);
   };
 
+  // 处理分层节点点击
+  const handleLayeredNodeClick = (node: LayeredTaskNode) => {
+    // 转换为TaskNode格式以兼容现有的抽屉组件
+    const taskNode: TaskNode = {
+      ...node,
+      panel: node.layer // 将layer映射为panel
+    };
+    setSelectedNode(taskNode);
+    setDrawerVisible(true);
+  };
+
   return (
     <PageContainer>
       {/* 面包屑导航 */}
@@ -559,6 +655,75 @@ const TaskCollectionRunDetail: React.FC = () => {
             </Col>
           </Row>
 
+          {/* 分层统计信息 */}
+          <Card 
+            title={
+              <StatisticsHeader>
+                  <span>分层执行统计</span>
+                  <StatisticsLegend>
+                    <LegendItem>
+                      <span style={{ color: '#52c41a' }}>✓</span> 已完成
+                    </LegendItem>
+                    <LegendItem>
+                      <span style={{ color: '#1890ff' }}>●</span> 运行中
+                    </LegendItem>
+                    <LegendItem>
+                      <span style={{ color: '#ff4d4f' }}>✗</span> 失败
+                    </LegendItem>
+                    <LegendItem>
+                      <span style={{ color: '#8c8c8c' }}>○</span> 待执行
+                    </LegendItem>
+                  </StatisticsLegend>
+                </StatisticsHeader>
+              }
+              style={{ marginBottom: 24 }}
+            >
+              <Row gutter={[16, 16]}>
+                {Object.entries(getLayerStatistics(layeredNodes)).map(([layer, stats]) => (
+                  <Col xs={24} sm={12} md={8} lg={6} xl={4} key={layer}>
+                    <LayerStatCard>
+                      <LayerTitle>
+                        {getLayerFullName(layer)}
+                      </LayerTitle>
+                      <LayerTotal>
+                        总计: {stats.total}
+                      </LayerTotal>
+                      <StatusGrid>
+                        <StatusItem 
+                          $statusColor="#52c41a"
+                          $bgColor="rgba(82, 196, 26, 0.1)"
+                          title="已完成"
+                        >
+                          ✓ {stats.completed}
+                        </StatusItem>
+                        <StatusItem 
+                          $statusColor="#1890ff"
+                          $bgColor="rgba(24, 144, 255, 0.1)"
+                          title="运行中"
+                        >
+                          ● {stats.running}
+                        </StatusItem>
+                        <StatusItem 
+                          $statusColor="#ff4d4f"
+                          $bgColor="rgba(255, 77, 79, 0.1)"
+                          title="失败"
+                        >
+                          ✗ {stats.failed}
+                        </StatusItem>
+                        <StatusItem 
+                          $statusColor="#8c8c8c"
+                          $bgColor="rgba(140, 140, 140, 0.1)"
+                          title="待执行"
+                        >
+                          ○ {stats.pending}
+                        </StatusItem>
+                      </StatusGrid>
+                    </LayerStatCard>
+                  </Col>
+                ))}
+              </Row>
+            </Card>
+
           {/* 基本信息 */}
           <Card title="运行信息" style={{ marginBottom: 24 }}>
             <Descriptions column={3}>
@@ -595,11 +760,13 @@ const TaskCollectionRunDetail: React.FC = () => {
           </Card>
 
           {/* 拓扑图 */}
-          <Card title="节点拓扑关系" style={{ marginBottom: 24 }}>
-            <TaskTopology 
-              nodes={runDetail.nodes}
-              panels={runDetail.panels}
-              onNodeClick={handleNodeClick}
+          <Card 
+            title="节点拓扑关系" 
+            style={{ marginBottom: 24 }}
+          >
+            <LayeredTaskTopology 
+              nodes={layeredNodes}
+              onNodeClick={handleLayeredNodeClick}
             />
           </Card>
 

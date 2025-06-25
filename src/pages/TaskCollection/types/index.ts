@@ -1,3 +1,9 @@
+// 导出分层拓扑相关类型（包含NodeStatus）
+export * from './layeredTopologyTypes';
+
+// 导出任务相关类型
+export * from './taskTypes';
+
 export enum NodeStatus {
   PENDING = 'pending',
   RUNNING = 'running',
