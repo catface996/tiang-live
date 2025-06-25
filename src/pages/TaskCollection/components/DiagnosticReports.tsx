@@ -90,13 +90,18 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
       // 模拟API调用延迟
       await new Promise(resolve => setTimeout(resolve, 300));
       
+      // 显示所有可用的诊断报告
       let filteredReports = diagnosticData.diagnosticReports;
       
-      // 如果指定了nodeIds，则过滤报告
+      // 如果指定了nodeIds且存在匹配的报告，则过滤报告
       if (stableNodeIds && stableNodeIds.length > 0) {
-        filteredReports = diagnosticData.diagnosticReports.filter(
+        const matchedReports = diagnosticData.diagnosticReports.filter(
           report => stableNodeIds.includes(report.nodeId)
         );
+        // 如果有匹配的报告，使用过滤后的；否则显示所有报告
+        if (matchedReports.length > 0) {
+          filteredReports = matchedReports;
+        }
       }
       
       setReports(filteredReports);
@@ -114,6 +119,50 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
   // 获取健康度颜色
   const getHealthColor = (health: string) => {
     return diagnosticData.metricHealthLevels[health as keyof typeof diagnosticData.metricHealthLevels]?.color || '#d9d9d9';
+  };
+
+  // 获取节点类型颜色
+  const getNodeTypeColor = (nodeType: string) => {
+    const colorMap: Record<string, string> = {
+      '业务场景': 'purple',
+      '业务链路': 'blue', 
+      '业务系统': 'green',
+      '中间件': 'orange',
+      '基础设施': 'red',
+      // 兼容旧的类型
+      'entity': 'blue',
+      'sequence': 'green'
+    };
+    return colorMap[nodeType] || 'default';
+  };
+
+  // 计算风险项数量
+  const calculateRiskItems = (report: any) => {
+    let riskCount = 0;
+    
+    // 1. 统计健康状态异常的指标
+    report.actions.forEach((action: any) => {
+      if (action.metrics) {
+        action.metrics.forEach((metric: any) => {
+          if (metric.health === 'critical' || metric.health === 'warning') {
+            riskCount++;
+          }
+        });
+      }
+    });
+    
+    // 2. 统计失败的动作
+    const failedActions = report.actions.filter((action: any) => 
+      action.status === 'error' || action.status === 'failed'
+    );
+    riskCount += failedActions.length;
+    
+    // 3. 如果整体风险等级为high或critical，额外增加风险项
+    if (report.analysis.riskLevel === 'high' || report.analysis.riskLevel === 'critical') {
+      riskCount += 1;
+    }
+    
+    return riskCount;
   };
 
   // 获取健康度图标
@@ -358,8 +407,8 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
               }
             />
             <span style={{ fontWeight: 'bold' }}>{report.nodeName}</span>
-            <Tag color={report.nodeType === 'entity' ? 'blue' : 'green'}>
-              {report.nodeType === 'entity' ? '实体' : '时序'}
+            <Tag color={getNodeTypeColor(report.nodeType)}>
+              {report.nodeType}
             </Tag>
             <Tag color={riskConfig.color}>
               {riskConfig.label}
@@ -379,6 +428,9 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
             </span>
             <span style={{ fontSize: 12, color: '#666' }}>
               建议: {report.analysis.recommendations.length}条
+            </span>
+            <span style={{ fontSize: 12, color: calculateRiskItems(report) > 0 ? '#ff4d4f' : '#666' }}>
+              风险: {calculateRiskItems(report)}项
             </span>
           </div>
         </div>

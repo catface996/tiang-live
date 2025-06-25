@@ -1,127 +1,186 @@
 {
   "diagnosticReports": [
     {
-      "nodeId": "node_1",
-      "nodeName": "用户服务",
-      "nodeType": "entity",
-      "status": "completed",
+      "nodeId": "scenario_001",
+      "nodeName": "用户购买流程",
+      "nodeType": "业务场景",
+      "status": "running",
       "executionTime": {
-        "startTime": "2024-06-24 13:00:00",
-        "endTime": "2024-06-24 13:02:30",
-        "totalDuration": 150
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": null,
+        "totalDuration": null
       },
       "actions": [
         {
-          "id": "health_check_1",
-          "name": "健康检查",
-          "description": "检查服务基础健康状态和可用性",
-          "type": "health_check",
+          "id": "scenario_001_monitor",
+          "name": "场景监控",
+          "description": "监控用户购买流程的执行状态",
+          "type": "monitoring",
           "status": "success",
-          "startTime": "2024-06-24 13:00:00",
-          "endTime": "2024-06-24 13:01:00",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
           "duration": 60,
-          "overallScore": 95,
-          "summary": "服务运行状态良好，所有健康指标均在正常范围内",
           "metrics": [
+            {
+              "id": "conversion_rate",
+              "name": "转化率",
+              "description": "业务转化率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 15.0,
+                "max": 100.0,
+                "description": "转化率应保持在15.0-100.0%范围内"
+              },
+              "actualValue": 18.22200729415433,
+              "health": "healthy",
+              "healthScore": 90,
+              "timestamp": "2024-06-25 10:00:00"
+            },
             {
               "id": "response_time",
               "name": "响应时间",
-              "description": "API平均响应时间",
+              "description": "平均响应时间",
               "unit": "ms",
               "healthyRange": {
-                "max": 200,
-                "optimal": 100,
-                "description": "< 200ms 正常, < 100ms 优秀"
+                "min": 0,
+                "max": 500,
+                "description": "响应时间应保持在0-500ms范围内"
               },
-              "actualValue": 85,
+              "actualValue": 291.1252914653309,
               "health": "healthy",
-              "healthScore": 95,
-              "timestamp": "2024-06-24 13:01:00",
-              "trend": "stable",
-              "previousValue": 88
-            },
-            {
-              "id": "availability",
-              "name": "可用性",
-              "description": "服务可用性百分比",
-              "unit": "%",
-              "healthyRange": {
-                "min": 99,
-                "optimal": 99.9,
-                "description": "> 99% 正常, > 99.9% 优秀"
-              },
-              "actualValue": 99.8,
-              "health": "healthy",
-              "healthScore": 98,
-              "timestamp": "2024-06-24 13:01:00",
-              "trend": "up",
-              "previousValue": 99.5
-            },
-            {
-              "id": "error_rate",
-              "name": "错误率",
-              "description": "请求错误率",
-              "unit": "%",
-              "healthyRange": {
-                "max": 1,
-                "optimal": 0.1,
-                "description": "< 1% 正常, < 0.1% 优秀"
-              },
-              "actualValue": 0.2,
-              "health": "healthy",
-              "healthScore": 90,
-              "timestamp": "2024-06-24 13:01:00",
-              "trend": "down",
-              "previousValue": 0.5
+              "healthScore": 96,
+              "timestamp": "2024-06-25 10:00:00"
             }
-          ]
-        },
+          ],
+          "overallScore": 89,
+          "summary": "场景监控执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 86,
+        "riskLevel": "low",
+        "keyFindings": [
+          "用户购买流程运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "用户购买流程整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化用户购买流程性能",
+            "description": "建议对用户购买流程进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L5",
+      "category": "business_scenario"
+    },
+    {
+      "nodeId": "scenario_002",
+      "nodeName": "订单履约场景",
+      "nodeType": "业务场景",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
         {
-          "id": "performance_analysis_1",
-          "name": "性能分析",
-          "description": "分析服务性能指标和资源使用情况",
-          "type": "performance_analysis",
+          "id": "scenario_002_monitor",
+          "name": "场景监控",
+          "description": "监控订单履约场景的执行状态",
+          "type": "monitoring",
           "status": "success",
-          "startTime": "2024-06-24 13:01:30",
-          "endTime": "2024-06-24 13:02:30",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
           "duration": 60,
-          "overallScore": 88,
-          "summary": "性能表现良好，CPU和内存使用率在合理范围内",
           "metrics": [
             {
-              "id": "cpu_usage",
-              "name": "CPU使用率",
-              "description": "服务器CPU平均使用率",
+              "id": "conversion_rate",
+              "name": "转化率",
+              "description": "业务转化率",
               "unit": "%",
               "healthyRange": {
-                "max": 80,
-                "optimal": 50,
-                "description": "< 80% 正常, < 50% 优秀"
+                "min": 15.0,
+                "max": 100.0,
+                "description": "转化率应保持在15.0-100.0%范围内"
               },
-              "actualValue": 45,
+              "actualValue": 24.581853400856055,
               "health": "healthy",
               "healthScore": 85,
-              "timestamp": "2024-06-24 13:02:30",
-              "trend": "stable",
-              "previousValue": 47
+              "timestamp": "2024-06-25 10:00:00"
             },
             {
-              "id": "memory_usage",
-              "name": "内存使用率",
-              "description": "服务器内存平均使用率",
-              "unit": "%",
+              "id": "response_time",
+              "name": "响应时间",
+              "description": "平均响应时间",
+              "unit": "ms",
               "healthyRange": {
-                "max": 85,
-                "optimal": 60,
-                "description": "< 85% 正常, < 60% 优秀"
+                "min": 0,
+                "max": 500,
+                "description": "响应时间应保持在0-500ms范围内"
               },
-              "actualValue": 60,
+              "actualValue": 216.73436130720938,
               "health": "healthy",
-              "healthScore": 80,
-              "timestamp": "2024-06-24 13:02:30",
-              "trend": "up",
-              "previousValue": 55
-            },
+              "healthScore": 91,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 95,
+          "summary": "场景监控执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 87,
+        "riskLevel": "low",
+        "keyFindings": [
+          "订单履约场景运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "订单履约场景整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化订单履约场景性能",
+            "description": "建议对订单履约场景进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L5",
+      "category": "business_scenario"
+    },
+    {
+      "nodeId": "chain_001",
+      "nodeName": "用户注册链路",
+      "nodeType": "业务链路",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "chain_001_trace",
+          "name": "链路追踪",
+          "description": "追踪用户注册链路的执行路径",
+          "type": "tracing",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
             {
               "id": "throughput",
               "name": "吞吐量",
@@ -129,105 +188,13 @@
               "unit": "req/s",
               "healthyRange": {
                 "min": 100,
-                "optimal": 500,
-                "description": "> 100 req/s 正常, > 500 req/s 优秀"
+                "max": 1000,
+                "description": "吞吐量应保持在100-1000req/s范围内"
               },
-              "actualValue": 320,
+              "actualValue": 596.2446982250688,
               "health": "healthy",
-              "healthScore": 85,
-              "timestamp": "2024-06-24 13:02:30",
-              "trend": "stable",
-              "previousValue": 315
-            }
-          ]
-        }
-      ],
-      "analysis": {
-        "overallHealthScore": 92,
-        "riskLevel": "low",
-        "keyFindings": [
-          "服务响应时间优秀，平均85ms远低于200ms阈值",
-          "可用性达到99.8%，接近优秀水平",
-          "CPU和内存使用率合理，系统负载健康",
-          "吞吐量稳定在320 req/s，满足业务需求"
-        ],
-        "performanceSummary": "用户服务性能表现优秀，响应时间快，吞吐量稳定。CPU使用率45%，内存使用率60%，均在健康范围内。建议继续保持当前配置。",
-        "securitySummary": "基础健康检查通过，服务可用性高。建议定期进行安全扫描以确保系统安全性。",
-        "recommendations": [
-          {
-            "priority": "low",
-            "category": "maintenance",
-            "title": "定期清理日志文件",
-            "description": "建议每周清理一次应用日志，避免磁盘空间不足",
-            "estimatedImpact": "预防磁盘空间问题，提升系统稳定性"
-          },
-          {
-            "priority": "medium",
-            "category": "performance",
-            "title": "监控内存使用趋势",
-            "description": "内存使用率呈上升趋势，建议加强监控",
-            "estimatedImpact": "及早发现内存泄漏，避免服务异常"
-          }
-        ]
-      },
-      "lastUpdated": "2024-06-24 13:02:30"
-    },
-    {
-      "nodeId": "node_2",
-      "nodeName": "订单服务",
-      "nodeType": "entity",
-      "status": "failed",
-      "executionTime": {
-        "startTime": "2024-06-24 13:00:00",
-        "endTime": "2024-06-24 13:03:00",
-        "totalDuration": 180
-      },
-      "actions": [
-        {
-          "id": "health_check_2",
-          "name": "健康检查",
-          "description": "检查订单服务基础健康状态",
-          "type": "health_check",
-          "status": "error",
-          "startTime": "2024-06-24 13:00:00",
-          "endTime": "2024-06-24 13:01:30",
-          "duration": 90,
-          "overallScore": 25,
-          "summary": "服务健康检查失败，多项关键指标异常",
-          "metrics": [
-            {
-              "id": "response_time",
-              "name": "响应时间",
-              "description": "API平均响应时间",
-              "unit": "ms",
-              "healthyRange": {
-                "max": 200,
-                "optimal": 100,
-                "description": "< 200ms 正常, < 100ms 优秀"
-              },
-              "actualValue": 5000,
-              "health": "critical",
-              "healthScore": 10,
-              "timestamp": "2024-06-24 13:01:30",
-              "trend": "up",
-              "previousValue": 3000
-            },
-            {
-              "id": "availability",
-              "name": "可用性",
-              "description": "服务可用性百分比",
-              "unit": "%",
-              "healthyRange": {
-                "min": 99,
-                "optimal": 99.9,
-                "description": "> 99% 正常, > 99.9% 优秀"
-              },
-              "actualValue": 85,
-              "health": "critical",
-              "healthScore": 20,
-              "timestamp": "2024-06-24 13:01:30",
-              "trend": "down",
-              "previousValue": 95
+              "healthScore": 88,
+              "timestamp": "2024-06-25 10:00:00"
             },
             {
               "id": "error_rate",
@@ -235,257 +202,1356 @@
               "description": "请求错误率",
               "unit": "%",
               "healthyRange": {
-                "max": 1,
-                "optimal": 0.1,
-                "description": "< 1% 正常, < 0.1% 优秀"
-              },
-              "actualValue": 15,
-              "health": "critical",
-              "healthScore": 5,
-              "timestamp": "2024-06-24 13:01:30",
-              "trend": "up",
-              "previousValue": 8
-            }
-          ]
-        },
-        {
-          "id": "fault_analysis_2",
-          "name": "故障分析",
-          "description": "分析服务故障原因和影响范围",
-          "type": "fault_analysis",
-          "status": "warning",
-          "startTime": "2024-06-24 13:01:30",
-          "endTime": "2024-06-24 13:03:00",
-          "duration": 90,
-          "overallScore": 45,
-          "summary": "检测到内存泄漏和数据库连接池耗尽问题",
-          "metrics": [
-            {
-              "id": "memory_leak",
-              "name": "内存泄漏检测",
-              "description": "检测内存使用增长趋势",
-              "unit": "MB/h",
-              "healthyRange": {
-                "max": 10,
-                "optimal": 0,
-                "description": "< 10MB/h 正常, 0MB/h 优秀"
-              },
-              "actualValue": 150,
-              "health": "critical",
-              "healthScore": 15,
-              "timestamp": "2024-06-24 13:03:00",
-              "trend": "up",
-              "previousValue": 120
-            },
-            {
-              "id": "db_connections",
-              "name": "数据库连接数",
-              "description": "活跃数据库连接数量",
-              "unit": "个",
-              "healthyRange": {
-                "max": 100,
-                "optimal": 50,
-                "description": "< 100个 正常, < 50个 优秀"
-              },
-              "actualValue": 150,
-              "health": "warning",
-              "healthScore": 40,
-              "timestamp": "2024-06-24 13:03:00",
-              "trend": "up",
-              "previousValue": 120
-            },
-            {
-              "id": "gc_frequency",
-              "name": "GC频率",
-              "description": "垃圾回收执行频率",
-              "unit": "次/min",
-              "healthyRange": {
+                "min": 0,
                 "max": 5,
-                "optimal": 2,
-                "description": "< 5次/min 正常, < 2次/min 优秀"
+                "description": "错误率应保持在0-5%范围内"
               },
-              "actualValue": 12,
-              "health": "warning",
-              "healthScore": 30,
-              "timestamp": "2024-06-24 13:03:00",
-              "trend": "up",
-              "previousValue": 8
+              "actualValue": 1.6031479221701515,
+              "health": "healthy",
+              "healthScore": 84,
+              "timestamp": "2024-06-25 10:00:00"
             }
-          ]
+          ],
+          "overallScore": 95,
+          "summary": "链路追踪执行完成，所有指标正常"
         }
       ],
       "analysis": {
-        "overallHealthScore": 35,
-        "riskLevel": "critical",
+        "overallHealthScore": 95,
+        "riskLevel": "low",
         "keyFindings": [
-          "服务响应时间严重超标，达到5000ms",
-          "可用性下降至85%，远低于99%的标准",
-          "错误率高达15%，严重影响用户体验",
-          "检测到严重内存泄漏，增长率150MB/h",
-          "数据库连接池接近耗尽，连接数达到150个"
+          "用户注册链路运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
         ],
-        "performanceSummary": "订单服务性能严重下降，响应时间超标25倍，可用性和错误率均不达标。系统负载过高，需要立即处理。",
-        "securitySummary": "服务稳定性存在严重问题，可能影响数据一致性和业务连续性。建议立即采取应急措施。",
+        "performanceSummary": "用户注册链路整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
         "recommendations": [
           {
-            "priority": "high",
-            "category": "reliability",
-            "title": "立即重启服务实例",
-            "description": "服务状态异常，建议立即重启以恢复正常状态",
-            "estimatedImpact": "快速恢复服务可用性，减少业务影响"
-          },
-          {
-            "priority": "high",
-            "category": "performance",
-            "title": "修复内存泄漏问题",
-            "description": "检查代码中的内存泄漏点，优化内存使用",
-            "estimatedImpact": "解决根本问题，防止服务再次异常"
-          },
-          {
-            "priority": "high",
-            "category": "performance",
-            "title": "优化数据库连接池配置",
-            "description": "增加连接池大小或优化连接使用策略",
-            "estimatedImpact": "提升数据库访问性能，减少连接等待"
-          },
-          {
             "priority": "medium",
-            "category": "maintenance",
-            "title": "增加监控告警",
-            "description": "为关键指标设置告警阈值，及时发现问题",
-            "estimatedImpact": "提前预警，避免问题扩大"
+            "category": "性能优化",
+            "title": "优化用户注册链路性能",
+            "description": "建议对用户注册链路进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
           }
         ]
       },
-      "lastUpdated": "2024-06-24 13:03:00"
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L4",
+      "category": "business_chain"
     },
     {
-      "nodeId": "node_4",
-      "nodeName": "用户登录流程",
-      "nodeType": "sequence",
-      "status": "completed",
+      "nodeId": "chain_002",
+      "nodeName": "支付处理链路",
+      "nodeType": "业务链路",
+      "status": "running",
       "executionTime": {
-        "startTime": "2024-06-24 13:00:30",
-        "endTime": "2024-06-24 13:01:45",
-        "totalDuration": 75
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": null,
+        "totalDuration": null
       },
       "actions": [
         {
-          "id": "health_check_4",
-          "name": "流程健康检查",
-          "description": "检查用户登录流程的完整性和性能",
-          "type": "health_check",
+          "id": "chain_002_trace",
+          "name": "链路追踪",
+          "description": "追踪支付处理链路的执行路径",
+          "type": "tracing",
           "status": "success",
-          "startTime": "2024-06-24 13:00:30",
-          "endTime": "2024-06-24 13:01:45",
-          "duration": 75,
-          "overallScore": 88,
-          "summary": "登录流程运行正常，各环节响应时间合理",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
           "metrics": [
             {
-              "id": "login_success_rate",
-              "name": "登录成功率",
-              "description": "用户登录成功的比例",
-              "unit": "%",
+              "id": "throughput",
+              "name": "吞吐量",
+              "description": "每秒处理请求数",
+              "unit": "req/s",
               "healthyRange": {
-                "min": 95,
-                "optimal": 99,
-                "description": "> 95% 正常, > 99% 优秀"
+                "min": 100,
+                "max": 1000,
+                "description": "吞吐量应保持在100-1000req/s范围内"
               },
-              "actualValue": 98.5,
+              "actualValue": 735.0352860273437,
               "health": "healthy",
-              "healthScore": 95,
-              "timestamp": "2024-06-24 13:01:45",
-              "trend": "stable",
-              "previousValue": 98.2
+              "healthScore": 98,
+              "timestamp": "2024-06-25 10:00:00"
             },
             {
-              "id": "avg_login_time",
-              "name": "平均登录时间",
-              "description": "用户完成登录的平均时间",
-              "unit": "s",
+              "id": "error_rate",
+              "name": "错误率",
+              "description": "请求错误率",
+              "unit": "%",
               "healthyRange": {
-                "max": 3,
-                "optimal": 1.5,
-                "description": "< 3s 正常, < 1.5s 优秀"
+                "min": 0,
+                "max": 5,
+                "description": "错误率应保持在0-5%范围内"
+              },
+              "actualValue": 0.5772519002577102,
+              "health": "healthy",
+              "healthScore": 91,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 80,
+          "summary": "链路追踪执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 90,
+        "riskLevel": "low",
+        "keyFindings": [
+          "支付处理链路运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "支付处理链路整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化支付处理链路性能",
+            "description": "建议对支付处理链路进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L4",
+      "category": "business_chain"
+    },
+    {
+      "nodeId": "chain_003",
+      "nodeName": "库存管理链路",
+      "nodeType": "业务链路",
+      "status": "pending",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": null,
+        "totalDuration": null
+      },
+      "actions": [
+        {
+          "id": "chain_003_trace",
+          "name": "链路追踪",
+          "description": "追踪库存管理链路的执行路径",
+          "type": "tracing",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "throughput",
+              "name": "吞吐量",
+              "description": "每秒处理请求数",
+              "unit": "req/s",
+              "healthyRange": {
+                "min": 100,
+                "max": 1000,
+                "description": "吞吐量应保持在100-1000req/s范围内"
+              },
+              "actualValue": 682.2195172277242,
+              "health": "healthy",
+              "healthScore": 89,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "error_rate",
+              "name": "错误率",
+              "description": "请求错误率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 5,
+                "description": "错误率应保持在0-5%范围内"
+              },
+              "actualValue": 1.525790585008097,
+              "health": "healthy",
+              "healthScore": 94,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 80,
+          "summary": "链路追踪执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 94,
+        "riskLevel": "low",
+        "keyFindings": [
+          "库存管理链路运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "库存管理链路整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化库存管理链路性能",
+            "description": "建议对库存管理链路进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L4",
+      "category": "business_chain"
+    },
+    {
+      "nodeId": "system_001",
+      "nodeName": "用户管理系统",
+      "nodeType": "业务系统",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "system_001_health",
+          "name": "健康检查",
+          "description": "检查用户管理系统的健康状态",
+          "type": "health_check",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "cpu_usage",
+              "name": "CPU使用率",
+              "description": "系统CPU使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "CPU使用率应保持在0-80%范围内"
+              },
+              "actualValue": 25.026558023102965,
+              "health": "healthy",
+              "healthScore": 88,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "memory_usage",
+              "name": "内存使用率",
+              "description": "系统内存使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "内存使用率应保持在0-80%范围内"
+              },
+              "actualValue": 60.147483695284464,
+              "health": "healthy",
+              "healthScore": 98,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 89,
+          "summary": "健康检查执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 92,
+        "riskLevel": "low",
+        "keyFindings": [
+          "用户管理系统运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "用户管理系统整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化用户管理系统性能",
+            "description": "建议对用户管理系统进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L3",
+      "category": "business_system"
+    },
+    {
+      "nodeId": "system_002",
+      "nodeName": "订单管理系统",
+      "nodeType": "业务系统",
+      "status": "running",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": null,
+        "totalDuration": null
+      },
+      "actions": [
+        {
+          "id": "system_002_health",
+          "name": "健康检查",
+          "description": "检查订单管理系统的健康状态",
+          "type": "health_check",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "cpu_usage",
+              "name": "CPU使用率",
+              "description": "系统CPU使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "CPU使用率应保持在0-80%范围内"
+              },
+              "actualValue": 49.19334852220004,
+              "health": "healthy",
+              "healthScore": 81,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "memory_usage",
+              "name": "内存使用率",
+              "description": "系统内存使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "内存使用率应保持在0-80%范围内"
+              },
+              "actualValue": 47.78916265698895,
+              "health": "healthy",
+              "healthScore": 78,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 83,
+          "summary": "健康检查执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 94,
+        "riskLevel": "low",
+        "keyFindings": [
+          "订单管理系统运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "订单管理系统整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化订单管理系统性能",
+            "description": "建议对订单管理系统进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L3",
+      "category": "business_system"
+    },
+    {
+      "nodeId": "system_003",
+      "nodeName": "支付系统",
+      "nodeType": "业务系统",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "system_003_health",
+          "name": "健康检查",
+          "description": "检查支付系统的健康状态",
+          "type": "health_check",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "cpu_usage",
+              "name": "CPU使用率",
+              "description": "系统CPU使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "CPU使用率应保持在0-80%范围内"
+              },
+              "actualValue": 41.45186320036039,
+              "health": "healthy",
+              "healthScore": 85,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "memory_usage",
+              "name": "内存使用率",
+              "description": "系统内存使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "内存使用率应保持在0-80%范围内"
+              },
+              "actualValue": 69.5111379548838,
+              "health": "healthy",
+              "healthScore": 82,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 91,
+          "summary": "健康检查执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 87,
+        "riskLevel": "low",
+        "keyFindings": [
+          "支付系统运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "支付系统整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化支付系统性能",
+            "description": "建议对支付系统进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L3",
+      "category": "business_system"
+    },
+    {
+      "nodeId": "system_004",
+      "nodeName": "库存系统",
+      "nodeType": "业务系统",
+      "status": "failed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": null,
+        "totalDuration": null
+      },
+      "actions": [
+        {
+          "id": "system_004_health",
+          "name": "健康检查",
+          "description": "检查库存系统的健康状态和数据一致性",
+          "type": "health_check",
+          "status": "error",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:02:30",
+          "duration": 150,
+          "metrics": [
+            {
+              "id": "cpu_usage",
+              "name": "CPU使用率",
+              "description": "系统CPU使用率异常偏高",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "CPU使用率应保持在80%以下"
+              },
+              "actualValue": 92.5,
+              "health": "critical",
+              "healthScore": 25,
+              "timestamp": "2024-06-25 09:02:30"
+            },
+            {
+              "id": "memory_usage",
+              "name": "内存使用率",
+              "description": "系统内存使用率过高，可能存在内存泄漏",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "内存使用率应保持在80%以下"
+              },
+              "actualValue": 87.3,
+              "health": "critical",
+              "healthScore": 30,
+              "timestamp": "2024-06-25 09:02:30"
+            },
+            {
+              "id": "db_connection_pool",
+              "name": "数据库连接池",
+              "description": "数据库连接池耗尽，影响库存查询性能",
+              "unit": "个",
+              "healthyRange": {
+                "min": 5,
+                "max": 100,
+                "description": "可用连接数应保持在5个以上"
+              },
+              "actualValue": 2,
+              "health": "critical",
+              "healthScore": 15,
+              "timestamp": "2024-06-25 09:02:30"
+            }
+          ],
+          "overallScore": 23,
+          "summary": "库存系统出现严重异常，CPU和内存使用率过高，数据库连接池耗尽"
+        },
+        {
+          "id": "system_004_sync",
+          "name": "库存同步检查",
+          "description": "检查库存数据在各个系统间的同步状态",
+          "type": "data_sync",
+          "status": "error",
+          "startTime": "2024-06-25 09:03:00",
+          "endTime": "2024-06-25 09:04:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "sync_delay",
+              "name": "同步延迟",
+              "description": "库存数据同步延迟时间",
+              "unit": "秒",
+              "healthyRange": {
+                "min": 0,
+                "max": 30,
+                "description": "同步延迟应控制在30秒以内"
+              },
+              "actualValue": 125,
+              "health": "critical",
+              "healthScore": 20,
+              "timestamp": "2024-06-25 09:04:00"
+            }
+          ],
+          "overallScore": 20,
+          "summary": "库存数据同步严重滞后，可能导致超卖问题"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 22,
+        "riskLevel": "critical",
+        "keyFindings": [
+          "系统资源使用率严重超标，CPU达92.5%，内存达87.3%",
+          "数据库连接池耗尽，仅剩2个可用连接",
+          "库存数据同步延迟125秒，远超正常范围",
+          "存在内存泄漏风险，系统稳定性堪忧"
+        ],
+        "performanceSummary": "库存系统性能严重恶化，响应时间超过5秒，部分请求超时失败",
+        "securitySummary": "系统异常可能导致数据不一致，存在业务风险",
+        "recommendations": [
+          {
+            "priority": "critical",
+            "category": "紧急修复",
+            "title": "立即重启库存系统服务",
+            "description": "系统资源耗尽，建议立即重启服务并排查内存泄漏问题",
+            "estimatedImpact": "预计可恢复系统正常运行，但需要持续监控"
+          },
+          {
+            "priority": "high",
+            "category": "性能优化",
+            "title": "优化数据库连接池配置",
+            "description": "增加数据库连接池大小，优化连接复用策略",
+            "estimatedImpact": "预计可提升50%的并发处理能力"
+          },
+          {
+            "priority": "high",
+            "category": "数据一致性",
+            "title": "修复库存同步机制",
+            "description": "排查同步延迟原因，优化数据同步算法",
+            "estimatedImpact": "预计可将同步延迟降低至10秒以内"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L3",
+      "category": "business_system"
+    },
+    {
+      "nodeId": "middleware_001",
+      "nodeName": "API网关",
+      "nodeType": "中间件",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "middleware_001_monitor",
+          "name": "中间件监控",
+          "description": "监控API网关的运行状态",
+          "type": "monitoring",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "availability",
+              "name": "可用性",
+              "description": "服务可用性",
+              "unit": "%",
+              "healthyRange": {
+                "min": 99.0,
+                "max": 100.0,
+                "description": "可用性应保持在99.0-100.0%范围内"
+              },
+              "actualValue": 99.54242768910133,
+              "health": "healthy",
+              "healthScore": 86,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "connection_count",
+              "name": "连接数",
+              "description": "当前连接数",
+              "unit": "个",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "连接数应保持在0-1000个范围内"
+              },
+              "actualValue": 282,
+              "health": "healthy",
+              "healthScore": 86,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 89,
+          "summary": "中间件监控执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 95,
+        "riskLevel": "low",
+        "keyFindings": [
+          "API网关运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "API网关整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化API网关性能",
+            "description": "建议对API网关进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L2",
+      "category": "middleware"
+    },
+    {
+      "nodeId": "middleware_002",
+      "nodeName": "Redis缓存",
+      "nodeType": "中间件",
+      "status": "running",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": null,
+        "totalDuration": null
+      },
+      "actions": [
+        {
+          "id": "middleware_002_monitor",
+          "name": "缓存监控",
+          "description": "监控Redis缓存的运行状态和性能指标",
+          "type": "monitoring",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "hit_rate",
+              "name": "缓存命中率",
+              "description": "Redis缓存命中率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 85.0,
+                "max": 100.0,
+                "description": "缓存命中率应保持在85%以上"
+              },
+              "actualValue": 94.2,
+              "health": "healthy",
+              "healthScore": 94,
+              "timestamp": "2024-06-25 09:01:00"
+            },
+            {
+              "id": "memory_usage",
+              "name": "内存使用率",
+              "description": "Redis内存使用情况",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 80,
+                "description": "内存使用率应控制在80%以下"
+              },
+              "actualValue": 67.8,
+              "health": "healthy",
+              "healthScore": 85,
+              "timestamp": "2024-06-25 09:01:00"
+            },
+            {
+              "id": "connection_count",
+              "name": "连接数",
+              "description": "当前活跃连接数",
+              "unit": "个",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "连接数应控制在1000以内"
+              },
+              "actualValue": 245,
+              "health": "healthy",
+              "healthScore": 90,
+              "timestamp": "2024-06-25 09:01:00"
+            }
+          ],
+          "overallScore": 90,
+          "summary": "Redis缓存运行状态良好，命中率和性能指标均正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 90,
+        "riskLevel": "low",
+        "keyFindings": [
+          "缓存命中率94.2%，显著提升了系统响应速度",
+          "内存使用率67.8%，在安全范围内",
+          "连接数245个，负载适中",
+          "无慢查询和阻塞操作"
+        ],
+        "performanceSummary": "Redis缓存整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化Redis缓存性能",
+            "description": "建议对Redis缓存进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L2",
+      "category": "middleware"
+    },
+    {
+      "nodeId": "middleware_003",
+      "nodeName": "消息队列",
+      "nodeType": "中间件",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "middleware_003_monitor",
+          "name": "中间件监控",
+          "description": "监控消息队列的运行状态",
+          "type": "monitoring",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "availability",
+              "name": "可用性",
+              "description": "服务可用性",
+              "unit": "%",
+              "healthyRange": {
+                "min": 99.0,
+                "max": 100.0,
+                "description": "可用性应保持在99.0-100.0%范围内"
+              },
+              "actualValue": 99.7677570783947,
+              "health": "healthy",
+              "healthScore": 91,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "connection_count",
+              "name": "连接数",
+              "description": "当前连接数",
+              "unit": "个",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "连接数应保持在0-1000个范围内"
+              },
+              "actualValue": 433,
+              "health": "healthy",
+              "healthScore": 79,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 87,
+          "summary": "中间件监控执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 92,
+        "riskLevel": "low",
+        "keyFindings": [
+          "消息队列运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "消息队列整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化消息队列性能",
+            "description": "建议对消息队列进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L2",
+      "category": "middleware"
+    },
+    {
+      "nodeId": "middleware_004",
+      "nodeName": "配置中心",
+      "nodeType": "中间件",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "middleware_004_monitor",
+          "name": "中间件监控",
+          "description": "监控配置中心的运行状态",
+          "type": "monitoring",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "availability",
+              "name": "可用性",
+              "description": "服务可用性",
+              "unit": "%",
+              "healthyRange": {
+                "min": 99.0,
+                "max": 100.0,
+                "description": "可用性应保持在99.0-100.0%范围内"
+              },
+              "actualValue": 99.6778886894594,
+              "health": "healthy",
+              "healthScore": 91,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "connection_count",
+              "name": "连接数",
+              "description": "当前连接数",
+              "unit": "个",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "连接数应保持在0-1000个范围内"
+              },
+              "actualValue": 245,
+              "health": "healthy",
+              "healthScore": 77,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 95,
+          "summary": "中间件监控执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 90,
+        "riskLevel": "low",
+        "keyFindings": [
+          "配置中心运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "配置中心整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化配置中心性能",
+            "description": "建议对配置中心进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L2",
+      "category": "middleware"
+    },
+    {
+      "nodeId": "infra_001",
+      "nodeName": "Kubernetes集群",
+      "nodeType": "基础设施",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "infra_001_infra",
+          "name": "基础设施检查",
+          "description": "检查Kubernetes集群的基础设施状态",
+          "type": "infrastructure",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "disk_usage",
+              "name": "磁盘使用率",
+              "description": "磁盘空间使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 85,
+                "description": "磁盘使用率应保持在0-85%范围内"
+              },
+              "actualValue": 63.60984416856813,
+              "health": "healthy",
+              "healthScore": 94,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "network_io",
+              "name": "网络IO",
+              "description": "网络IO吞吐量",
+              "unit": "MB/s",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "网络IO应保持在0-1000MB/s范围内"
+              },
+              "actualValue": 114.45936758587031,
+              "health": "healthy",
+              "healthScore": 94,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 81,
+          "summary": "基础设施检查执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 87,
+        "riskLevel": "low",
+        "keyFindings": [
+          "Kubernetes集群运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "Kubernetes集群整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化Kubernetes集群性能",
+            "description": "建议对Kubernetes集群进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L1",
+      "category": "infrastructure"
+    },
+    {
+      "nodeId": "infra_002",
+      "nodeName": "MySQL数据库",
+      "nodeType": "基础设施",
+      "status": "running",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": null,
+        "totalDuration": null
+      },
+      "actions": [
+        {
+          "id": "infra_002_performance",
+          "name": "数据库性能检查",
+          "description": "检查MySQL数据库的性能指标和运行状态",
+          "type": "performance_check",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:02:00",
+          "duration": 120,
+          "metrics": [
+            {
+              "id": "qps",
+              "name": "每秒查询数",
+              "description": "数据库每秒处理的查询数量",
+              "unit": "queries/s",
+              "healthyRange": {
+                "min": 0,
+                "max": 5000,
+                "description": "QPS应控制在5000以内"
+              },
+              "actualValue": 1247,
+              "health": "healthy",
+              "healthScore": 88,
+              "timestamp": "2024-06-25 09:02:00"
+            },
+            {
+              "id": "slow_query_rate",
+              "name": "慢查询率",
+              "description": "执行时间超过1秒的查询比例",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 5,
+                "description": "慢查询率应控制在5%以下"
               },
               "actualValue": 2.3,
               "health": "healthy",
-              "healthScore": 80,
-              "timestamp": "2024-06-24 13:01:45",
-              "trend": "stable",
-              "previousValue": 2.4
+              "healthScore": 85,
+              "timestamp": "2024-06-25 09:02:00"
             },
             {
-              "id": "auth_failures",
-              "name": "认证失败率",
-              "description": "认证环节失败的比例",
+              "id": "connection_usage",
+              "name": "连接使用率",
+              "description": "数据库连接池使用率",
               "unit": "%",
               "healthyRange": {
-                "max": 2,
-                "optimal": 0.5,
-                "description": "< 2% 正常, < 0.5% 优秀"
+                "min": 0,
+                "max": 80,
+                "description": "连接使用率应控制在80%以下"
               },
-              "actualValue": 1.5,
+              "actualValue": 45.6,
               "health": "healthy",
-              "healthScore": 85,
-              "timestamp": "2024-06-24 13:01:45",
-              "trend": "down",
-              "previousValue": 1.8
+              "healthScore": 92,
+              "timestamp": "2024-06-25 09:02:00"
             }
-          ]
+          ],
+          "overallScore": 88,
+          "summary": "MySQL数据库运行稳定，性能指标良好"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 92,
+        "riskLevel": "low",
+        "keyFindings": [
+          "数据库QPS为1247，处理能力充足",
+          "慢查询率2.3%，在合理范围内",
+          "连接使用率45.6%，资源利用合理",
+          "主从复制延迟小于1秒"
+        ],
+        "performanceSummary": "MySQL数据库整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化MySQL数据库性能",
+            "description": "建议对MySQL数据库进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L1",
+      "category": "infrastructure"
+    },
+    {
+      "nodeId": "infra_003",
+      "nodeName": "负载均衡器",
+      "nodeType": "基础设施",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "infra_003_infra",
+          "name": "基础设施检查",
+          "description": "检查负载均衡器的基础设施状态",
+          "type": "infrastructure",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "disk_usage",
+              "name": "磁盘使用率",
+              "description": "磁盘空间使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 85,
+                "description": "磁盘使用率应保持在0-85%范围内"
+              },
+              "actualValue": 48.182034630417974,
+              "health": "healthy",
+              "healthScore": 92,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "network_io",
+              "name": "网络IO",
+              "description": "网络IO吞吐量",
+              "unit": "MB/s",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "网络IO应保持在0-1000MB/s范围内"
+              },
+              "actualValue": 140.40376593840858,
+              "health": "healthy",
+              "healthScore": 87,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 94,
+          "summary": "基础设施检查执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 95,
+        "riskLevel": "low",
+        "keyFindings": [
+          "负载均衡器运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "负载均衡器整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化负载均衡器性能",
+            "description": "建议对负载均衡器进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L1",
+      "category": "infrastructure"
+    },
+    {
+      "nodeId": "infra_004",
+      "nodeName": "存储系统",
+      "nodeType": "基础设施",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "infra_004_infra",
+          "name": "基础设施检查",
+          "description": "检查存储系统的基础设施状态",
+          "type": "infrastructure",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "disk_usage",
+              "name": "磁盘使用率",
+              "description": "磁盘空间使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 85,
+                "description": "磁盘使用率应保持在0-85%范围内"
+              },
+              "actualValue": 44.708948940532636,
+              "health": "healthy",
+              "healthScore": 77,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "network_io",
+              "name": "网络IO",
+              "description": "网络IO吞吐量",
+              "unit": "MB/s",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "网络IO应保持在0-1000MB/s范围内"
+              },
+              "actualValue": 52.851073520329365,
+              "health": "healthy",
+              "healthScore": 94,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 84,
+          "summary": "基础设施检查执行完成，所有指标正常"
+        }
+      ],
+      "analysis": {
+        "overallHealthScore": 87,
+        "riskLevel": "low",
+        "keyFindings": [
+          "存储系统运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
+        ],
+        "performanceSummary": "存储系统整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
+        "recommendations": [
+          {
+            "priority": "medium",
+            "category": "性能优化",
+            "title": "优化存储系统性能",
+            "description": "建议对存储系统进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
+          }
+        ]
+      },
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L1",
+      "category": "infrastructure"
+    },
+    {
+      "nodeId": "infra_005",
+      "nodeName": "网络设备",
+      "nodeType": "基础设施",
+      "status": "completed",
+      "executionTime": {
+        "startTime": "2024-06-25 09:00:00",
+        "endTime": "2024-06-25 09:05:00",
+        "totalDuration": 300
+      },
+      "actions": [
+        {
+          "id": "infra_005_infra",
+          "name": "基础设施检查",
+          "description": "检查网络设备的基础设施状态",
+          "type": "infrastructure",
+          "status": "success",
+          "startTime": "2024-06-25 09:00:00",
+          "endTime": "2024-06-25 09:01:00",
+          "duration": 60,
+          "metrics": [
+            {
+              "id": "disk_usage",
+              "name": "磁盘使用率",
+              "description": "磁盘空间使用率",
+              "unit": "%",
+              "healthyRange": {
+                "min": 0,
+                "max": 85,
+                "description": "磁盘使用率应保持在0-85%范围内"
+              },
+              "actualValue": 46.85077074601017,
+              "health": "healthy",
+              "healthScore": 79,
+              "timestamp": "2024-06-25 10:00:00"
+            },
+            {
+              "id": "network_io",
+              "name": "网络IO",
+              "description": "网络IO吞吐量",
+              "unit": "MB/s",
+              "healthyRange": {
+                "min": 0,
+                "max": 1000,
+                "description": "网络IO应保持在0-1000MB/s范围内"
+              },
+              "actualValue": 50.67405822897634,
+              "health": "healthy",
+              "healthScore": 79,
+              "timestamp": "2024-06-25 10:00:00"
+            }
+          ],
+          "overallScore": 82,
+          "summary": "基础设施检查执行完成，所有指标正常"
         }
       ],
       "analysis": {
         "overallHealthScore": 88,
         "riskLevel": "low",
         "keyFindings": [
-          "登录成功率达到98.5%，接近优秀水平",
-          "平均登录时间2.3秒，在合理范围内",
-          "认证失败率呈下降趋势，系统稳定性良好"
+          "网络设备运行状态良好",
+          "所有关键指标在正常范围内",
+          "性能表现稳定"
         ],
-        "performanceSummary": "用户登录流程运行稳定，成功率高，响应时间合理。整体性能表现良好。",
-        "securitySummary": "认证环节工作正常，失败率在可接受范围内。建议继续监控异常登录行为。",
+        "performanceSummary": "网络设备整体性能表现优秀",
+        "securitySummary": "安全检查通过，无安全风险",
         "recommendations": [
           {
-            "priority": "low",
-            "category": "performance",
-            "title": "优化登录响应时间",
-            "description": "可考虑优化认证流程，进一步缩短登录时间",
-            "estimatedImpact": "提升用户体验，减少登录等待时间"
-          },
-          {
             "priority": "medium",
-            "category": "security",
-            "title": "加强异常登录监控",
-            "description": "增加对异常登录行为的检测和告警",
-            "estimatedImpact": "提高系统安全性，及时发现安全威胁"
+            "category": "性能优化",
+            "title": "优化网络设备性能",
+            "description": "建议对网络设备进行性能调优",
+            "estimatedImpact": "预计可提升10-15%的性能"
           }
         ]
       },
-      "lastUpdated": "2024-06-24 13:01:45"
+      "lastUpdated": "2024-06-25 10:00:00",
+      "layer": "L1",
+      "category": "infrastructure"
     }
   ],
   "metricHealthLevels": {
     "healthy": {
       "color": "#52c41a",
       "label": "健康",
-      "description": "指标在正常范围内"
+      "description": "指标正常，运行良好"
     },
     "warning": {
       "color": "#faad14",
       "label": "警告",
-      "description": "指标接近阈值，需要关注"
+      "description": "指标异常，需要关注"
     },
     "critical": {
       "color": "#ff4d4f",
       "label": "严重",
-      "description": "指标超出阈值，需要立即处理"
+      "description": "指标严重异常，需要立即处理"
     },
     "unknown": {
       "color": "#d9d9d9",
       "label": "未知",
-      "description": "无法获取指标数据"
+      "description": "无法获取指标状态"
     }
   },
   "actionTypes": {
@@ -495,23 +1561,41 @@
       "color": "#52c41a",
       "description": "检查服务基础健康状态"
     },
-    "performance_analysis": {
-      "name": "性能分析",
+    "monitoring": {
+      "name": "监控检查",
       "icon": "bar-chart",
       "color": "#1890ff",
+      "description": "实时监控系统状态"
+    },
+    "performance_check": {
+      "name": "性能检查",
+      "icon": "dashboard",
+      "color": "#722ed1",
       "description": "分析性能指标和资源使用"
     },
-    "fault_analysis": {
-      "name": "故障分析",
-      "icon": "bug",
-      "color": "#ff4d4f",
-      "description": "分析故障原因和影响"
+    "tracing": {
+      "name": "链路追踪",
+      "icon": "node-index",
+      "color": "#13c2c2",
+      "description": "追踪请求链路和调用关系"
     },
-    "security_scan": {
-      "name": "安全扫描",
-      "icon": "safety-certificate",
-      "color": "#faad14",
-      "description": "扫描安全漏洞和风险"
+    "data_sync": {
+      "name": "数据同步",
+      "icon": "sync",
+      "color": "#fa8c16",
+      "description": "检查数据同步状态"
+    },
+    "infrastructure": {
+      "name": "基础设施",
+      "icon": "cluster",
+      "color": "#eb2f96",
+      "description": "检查基础设施状态"
+    },
+    "analysis": {
+      "name": "分析检查",
+      "icon": "line-chart",
+      "color": "#52c41a",
+      "description": "深度分析系统指标"
     }
   },
   "riskLevels": {

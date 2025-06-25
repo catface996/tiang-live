@@ -67,7 +67,7 @@ export interface NodeAnalysis {
 export interface EnhancedDiagnosticReport {
   nodeId: string;
   nodeName: string;
-  nodeType: 'entity' | 'sequence';
+  nodeType: string; // 支持层级标注：业务场景、业务链路、业务系统、中间件、基础设施
   status: NodeStatus;
   executionTime: {
     startTime: string;
@@ -77,4 +77,6 @@ export interface EnhancedDiagnosticReport {
   actions: DiagnosticAction[];
   analysis: NodeAnalysis;
   lastUpdated: string;
+  layer?: string; // 层级信息：L1-L5
+  category?: string; // 分类信息
 }
