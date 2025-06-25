@@ -285,50 +285,63 @@ const TaskExecutionHistory: React.FC = () => {
   // 获取指定日期的执行记录
   const getExecutionsForDate = (date: Dayjs) => {
     const dateStr = date.format('YYYY-MM-DD');
-    return executionHistory.filter(record => 
-      dayjs(record.startTime).format('YYYY-MM-DD') === dateStr
-    );
+    const filtered = executionHistory.filter(record => {
+      const recordDate = dayjs(record.startTime).format('YYYY-MM-DD');
+      return recordDate === dateStr;
+    });
+    
+    // 调试信息
+    if (dateStr === dayjs().format('YYYY-MM-DD')) {
+      console.log('今天的日期:', dateStr);
+      console.log('执行历史总数:', executionHistory.length);
+      console.log('今天的执行记录:', filtered);
+      console.log('所有记录的日期:', executionHistory.map(r => dayjs(r.startTime).format('YYYY-MM-DD')));
+    }
+    
+    return filtered;
   };
 
-  // 渲染日历单元格内容
-  const dateCellRender = (date: Dayjs) => {
-    const executions = getExecutionsForDate(date);
+  // 渲染日历单元格内容 - 简化版本
+  const dateCellRender = (current: Dayjs) => {
+    const executions = getExecutionsForDate(current);
     if (executions.length === 0) return null;
 
     return (
-      <div style={{ fontSize: '12px' }}>
-        {executions.slice(0, 3).map(execution => (
-          <div
+      <ul style={{ 
+        listStyle: 'none', 
+        padding: 0, 
+        margin: 0,
+        fontSize: '10px'
+      }}>
+        {executions.slice(0, 2).map(execution => (
+          <li
             key={execution.id}
             style={{ 
-              marginBottom: '2px',
+              marginBottom: '1px',
               cursor: 'pointer',
-              padding: '1px 4px',
+              padding: '1px 3px',
               borderRadius: '2px',
-              fontSize: '10px',
               backgroundColor: getExecutionBadgeColor(execution.status),
               color: 'white',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              fontSize: '9px'
             }}
             onClick={(e) => {
               e.stopPropagation();
               handleViewExecutionDetail(execution);
             }}
           >
-            {getTriggerIcon(execution.triggerType)} {execution.taskCollectionName.length > 6 
-              ? execution.taskCollectionName.substring(0, 6) + '...'
-              : execution.taskCollectionName
-            }
-          </div>
+            {getTriggerIcon(execution.triggerType)} {execution.taskCollectionName.substring(0, 4)}...
+          </li>
         ))}
-        {executions.length > 3 && (
-          <div style={{ fontSize: '9px', color: '#666', textAlign: 'center' }}>
-            +{executions.length - 3} 更多
-          </div>
+        {executions.length > 2 && (
+          <li style={{ fontSize: '8px', color: '#999', textAlign: 'center' }}>
+            +{executions.length - 2}
+          </li>
         )}
-      </div>
+      </ul>
     );
   };
 
@@ -565,11 +578,18 @@ const TaskExecutionHistory: React.FC = () => {
           </Select>
         </div>
         
+        {/* 调试信息 */}
+        <Alert 
+          message={`当前加载了 ${executionHistory.length} 条执行记录`}
+          type="info" 
+          style={{ marginBottom: 16 }}
+          showIcon
+        />
+        
         <Calendar
           value={selectedDate}
           onSelect={setSelectedDate}
           dateCellRender={dateCellRender}
-          mode={viewMode === 'week' ? undefined : 'month'}
         />
         
         {/* 选中日期的执行记录 */}
