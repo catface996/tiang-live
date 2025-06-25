@@ -45,7 +45,8 @@ import {
   BarChartOutlined,
   SafetyCertificateOutlined,
   MonitorOutlined,
-  LineChartOutlined
+  LineChartOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -590,6 +591,10 @@ const TaskCollectionManagement: React.FC = () => {
     navigate(`/task-management/task-collections/run/${runId}`);
   };
 
+  const handleViewExecutionHistory = (taskId: string) => {
+    navigate(`/task-management/task-collections/history/${taskId}`);
+  };
+
   const handleStartTask = (taskId: string) => {
     message.success(t('tasks:collections.messages.startSuccess'));
   };
@@ -774,6 +779,17 @@ const TaskCollectionManagement: React.FC = () => {
               {/* 操作按钮区域 - 单独一行 */}
               <div className="card-actions">
                 <Space>
+                  <Tooltip title={t('tasks:collections.card.viewExecutionHistory')}>
+                    <Button 
+                      type="text" 
+                      icon={<CalendarOutlined />} 
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewExecutionHistory(task.id);
+                      }}
+                    />
+                  </Tooltip>
                   <Tooltip title="查看运行详情">
                     <Button 
                       type="text" 

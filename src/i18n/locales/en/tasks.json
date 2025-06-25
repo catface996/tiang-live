@@ -39,6 +39,7 @@
     "card": {
       "viewDetails": "View Details",
       "edit": "Edit",
+      "viewExecutionHistory": "View Execution History",
       "creator": "Creator",
       "schedule": "Schedule",
       "nextExecution": "Next Execution",

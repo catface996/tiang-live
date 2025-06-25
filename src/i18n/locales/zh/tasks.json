@@ -39,6 +39,7 @@
     "card": {
       "viewDetails": "查看详情",
       "edit": "编辑",
+      "viewExecutionHistory": "查看执行历史记录",
       "creator": "创建者",
       "schedule": "调度",
       "nextExecution": "下次执行",

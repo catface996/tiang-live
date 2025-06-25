@@ -11,6 +11,7 @@ const SequenceManagement = React.lazy(() => import('../pages/Sequence'));
 const IndustrySolutionManagement = React.lazy(() => import('../pages/IndustrySolution'));
 const TaskCollectionManagement = React.lazy(() => import('../pages/TaskCollection'));
 const TaskCollectionRunDetail = React.lazy(() => import('../pages/TaskCollection/TaskCollectionRunDetail'));
+const TaskExecutionHistory = React.lazy(() => import('../pages/TaskCollection/TaskExecutionHistory'));
 const ReportManagement = React.lazy(() => import('../pages/Report'));
 const ReportDetail = React.lazy(() => import('../pages/Report/ReportDetail'));
 const TagManagement = React.lazy(() => import('../pages/SystemSettings/TagManagement'));
@@ -100,6 +101,11 @@ const AppRoutes: React.FC = () => {
         <Route path="task-management/task-collections/run/:runId" element={
           <Suspense fallback={<PageLoading />}>
             <TaskCollectionRunDetail />
+          </Suspense>
+        } />
+        <Route path="task-management/task-collections/history/:taskId" element={
+          <Suspense fallback={<PageLoading />}>
+            <TaskExecutionHistory />
           </Suspense>
         } />
         <Route path="task-management/inspection-tasks" element={
