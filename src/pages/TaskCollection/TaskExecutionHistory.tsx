@@ -15,7 +15,8 @@ import {
   Select,
   Tooltip,
   Alert,
-  Divider
+  Divider,
+  Breadcrumb
 } from 'antd';
 import { 
   CalendarOutlined,
@@ -23,11 +24,12 @@ import {
   PlayCircleOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  ArrowLeftOutlined,
+  HomeOutlined,
   ScheduleOutlined,
   ApiOutlined,
   ThunderboltOutlined,
-  HistoryOutlined
+  HistoryOutlined,
+  UnorderedListOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -110,16 +112,17 @@ interface ExecutionRecord {
   };
 }
 
-// 模拟执行历史数据
+// 模拟执行历史数据 - 增加更多数据覆盖不同日期
 const mockExecutionHistory: ExecutionRecord[] = [
+  // 今天的记录
   {
     id: 'exec_001',
     taskCollectionId: 'task_001',
     taskCollectionName: '核心业务系统健康检查',
     status: 'completed',
     triggerType: 'cron',
-    startTime: '2025-06-25 09:00:00',
-    endTime: '2025-06-25 09:15:30',
+    startTime: dayjs().format('YYYY-MM-DD 09:00:00'),
+    endTime: dayjs().format('YYYY-MM-DD 09:15:30'),
     duration: 930,
     executedTargets: 8,
     totalTargets: 8,
@@ -146,35 +149,38 @@ const mockExecutionHistory: ExecutionRecord[] = [
     status: 'running',
     triggerType: 'hook',
     triggerSource: 'API调用',
-    startTime: '2025-06-25 14:30:00',
+    startTime: dayjs().format('YYYY-MM-DD 14:30:00'),
     executedTargets: 3,
     totalTargets: 8,
     successRate: 75
   },
+  // 明天的计划任务
   {
     id: 'exec_003',
     taskCollectionId: 'task_002',
     taskCollectionName: '数据库性能监控',
     status: 'scheduled',
     triggerType: 'cron',
-    startTime: '2025-06-25 18:00:00',
+    startTime: dayjs().add(1, 'day').format('YYYY-MM-DD 18:00:00'),
     executedTargets: 0,
     totalTargets: 5,
     successRate: 0
   },
+  // 昨天的记录
   {
     id: 'exec_004',
     taskCollectionId: 'task_001',
     taskCollectionName: '核心业务系统健康检查',
     status: 'failed',
     triggerType: 'cron',
-    startTime: '2025-06-24 15:00:00',
-    endTime: '2025-06-24 15:08:45',
+    startTime: dayjs().subtract(1, 'day').format('YYYY-MM-DD 15:00:00'),
+    endTime: dayjs().subtract(1, 'day').format('YYYY-MM-DD 15:08:45'),
     duration: 525,
     executedTargets: 5,
     totalTargets: 8,
     successRate: 62.5
   },
+  // 前天的记录
   {
     id: 'exec_005',
     taskCollectionId: 'task_003',
@@ -182,25 +188,77 @@ const mockExecutionHistory: ExecutionRecord[] = [
     status: 'completed',
     triggerType: 'hook',
     triggerSource: 'Webhook触发',
-    startTime: '2025-06-24 10:30:00',
-    endTime: '2025-06-24 11:45:20',
+    startTime: dayjs().subtract(2, 'day').format('YYYY-MM-DD 10:30:00'),
+    endTime: dayjs().subtract(2, 'day').format('YYYY-MM-DD 11:45:20'),
     duration: 4520,
     executedTargets: 12,
     totalTargets: 12,
     successRate: 100
   },
+  // 3天前的记录
   {
     id: 'exec_006',
     taskCollectionId: 'task_002',
     taskCollectionName: '数据库性能监控',
     status: 'completed',
     triggerType: 'cron',
-    startTime: '2025-06-23 18:00:00',
-    endTime: '2025-06-23 18:25:15',
+    startTime: dayjs().subtract(3, 'day').format('YYYY-MM-DD 18:00:00'),
+    endTime: dayjs().subtract(3, 'day').format('YYYY-MM-DD 18:25:15'),
     duration: 1515,
     executedTargets: 5,
     totalTargets: 5,
     successRate: 100
+  },
+  // 本周其他日期的记录
+  {
+    id: 'exec_007',
+    taskCollectionId: 'task_001',
+    taskCollectionName: '核心业务系统健康检查',
+    status: 'completed',
+    triggerType: 'cron',
+    startTime: dayjs().subtract(4, 'day').format('YYYY-MM-DD 09:00:00'),
+    endTime: dayjs().subtract(4, 'day').format('YYYY-MM-DD 09:12:30'),
+    duration: 750,
+    executedTargets: 8,
+    totalTargets: 8,
+    successRate: 100
+  },
+  {
+    id: 'exec_008',
+    taskCollectionId: 'task_004',
+    taskCollectionName: '网络安全巡检',
+    status: 'failed',
+    triggerType: 'hook',
+    triggerSource: '监控告警触发',
+    startTime: dayjs().subtract(5, 'day').format('YYYY-MM-DD 16:20:00'),
+    endTime: dayjs().subtract(5, 'day').format('YYYY-MM-DD 16:35:15'),
+    duration: 915,
+    executedTargets: 3,
+    totalTargets: 6,
+    successRate: 50
+  },
+  // 下周的计划任务
+  {
+    id: 'exec_009',
+    taskCollectionId: 'task_001',
+    taskCollectionName: '核心业务系统健康检查',
+    status: 'scheduled',
+    triggerType: 'cron',
+    startTime: dayjs().add(2, 'day').format('YYYY-MM-DD 09:00:00'),
+    executedTargets: 0,
+    totalTargets: 8,
+    successRate: 0
+  },
+  {
+    id: 'exec_010',
+    taskCollectionId: 'task_005',
+    taskCollectionName: '备份验证任务',
+    status: 'scheduled',
+    triggerType: 'cron',
+    startTime: dayjs().add(3, 'day').format('YYYY-MM-DD 02:00:00'),
+    executedTargets: 0,
+    totalTargets: 3,
+    successRate: 0
   }
 ];
 
@@ -239,26 +297,55 @@ const TaskExecutionHistory: React.FC = () => {
 
     return (
       <div style={{ fontSize: '12px' }}>
-        {executions.map(execution => (
-          <ExecutionBadge
+        {executions.slice(0, 3).map(execution => (
+          <div
             key={execution.id}
-            status={getExecutionBadgeStatus(execution.status)}
-            text={
-              <span style={{ fontSize: '10px', cursor: 'pointer' }}>
-                {execution.taskCollectionName.length > 8 
-                  ? execution.taskCollectionName.substring(0, 8) + '...'
-                  : execution.taskCollectionName
-                }
-              </span>
-            }
+            style={{ 
+              marginBottom: '2px',
+              cursor: 'pointer',
+              padding: '1px 4px',
+              borderRadius: '2px',
+              fontSize: '10px',
+              backgroundColor: getExecutionBadgeColor(execution.status),
+              color: 'white',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
             onClick={(e) => {
               e.stopPropagation();
               handleViewExecutionDetail(execution);
             }}
-          />
+          >
+            {getTriggerIcon(execution.triggerType)} {execution.taskCollectionName.length > 6 
+              ? execution.taskCollectionName.substring(0, 6) + '...'
+              : execution.taskCollectionName
+            }
+          </div>
         ))}
+        {executions.length > 3 && (
+          <div style={{ fontSize: '9px', color: '#666', textAlign: 'center' }}>
+            +{executions.length - 3} 更多
+          </div>
+        )}
       </div>
     );
+  };
+
+  // 获取执行状态对应的颜色
+  const getExecutionBadgeColor = (status: string) => {
+    switch (status) {
+      case 'completed': return '#52c41a';
+      case 'running': return '#1890ff';
+      case 'scheduled': return '#faad14';
+      case 'failed': return '#ff4d4f';
+      default: return '#d9d9d9';
+    }
+  };
+
+  // 获取触发类型图标
+  const getTriggerIcon = (triggerType: string) => {
+    return triggerType === 'cron' ? '⏰' : '🔗';
   };
 
   // 获取执行状态对应的Badge状态
@@ -386,20 +473,38 @@ const TaskExecutionHistory: React.FC = () => {
 
   return (
     <PageContainer>
+      {/* 面包屑导航 */}
+      <Breadcrumb style={{ marginBottom: 24 }}>
+        <Breadcrumb.Item>
+          <HomeOutlined />
+          <span 
+            style={{ cursor: 'pointer', marginLeft: 4 }}
+            onClick={() => navigate('/')}
+          >
+            首页
+          </span>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <UnorderedListOutlined />
+          <span 
+            style={{ cursor: 'pointer', marginLeft: 4 }}
+            onClick={() => navigate('/task-management/task-collections')}
+          >
+            任务集合管理
+          </span>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <CalendarOutlined />
+          执行历史记录
+        </Breadcrumb.Item>
+      </Breadcrumb>
+
       {/* 页面头部 */}
       <div style={{ marginBottom: 24 }}>
-        <Space>
-          <Button 
-            icon={<ArrowLeftOutlined />} 
-            onClick={() => navigate('/task-collections')}
-          >
-            返回任务集合
-          </Button>
-          <Title level={2} style={{ margin: 0 }}>
-            <CalendarOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-            任务执行历史记录
-          </Title>
-        </Space>
+        <Title level={2} style={{ margin: 0 }}>
+          <CalendarOutlined style={{ marginRight: 8, color: '#1890ff' }} />
+          任务执行历史记录
+        </Title>
       </div>
 
       {/* 统计信息 */}
