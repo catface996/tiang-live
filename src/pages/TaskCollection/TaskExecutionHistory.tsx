@@ -511,7 +511,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
 ];
 
 const TaskExecutionHistory: React.FC = () => {
-  const { t } = useTranslation(['tasks', 'common']);
+  const { t } = useTranslation(['taskExecutionHistory', 'common']);
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   
@@ -526,7 +526,7 @@ const TaskExecutionHistory: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
-    setPageTitle(t('tasks:executionHistory.title'));
+    setPageTitle(t('taskExecutionHistory:title'));
     // 根据taskId过滤执行记录
     const filteredHistory = taskId 
       ? mockExecutionHistoryData.filter(record => record.taskCollectionId === taskId)
@@ -628,13 +628,13 @@ const TaskExecutionHistory: React.FC = () => {
     if (triggerType === 'cron') {
       return {
         icon: <ScheduleOutlined style={{ color: '#1890ff' }} />,
-        text: t('tasks:executionHistory.triggerType.cron'),
+        text: t('taskExecutionHistory:triggerType.cron'),
         color: 'blue'
       };
     } else {
       return {
         icon: <ApiOutlined style={{ color: '#52c41a' }} />,
-        text: triggerSource || t('tasks:executionHistory.triggerType.hook'),
+        text: triggerSource || t('taskExecutionHistory:triggerType.hook'),
         color: 'green'
       };
     }
@@ -642,25 +642,25 @@ const TaskExecutionHistory: React.FC = () => {
 
   // 获取状态文本
   const getStatusText = (status: string) => {
-    return t(`tasks:executionHistory.status.${status}`);
+    return t(`taskExecutionHistory:status.${status}`);
   };
 
   // 格式化持续时间
   const formatDuration = (seconds: number) => {
     if (seconds < 60) {
-      return t('tasks:executionHistory.time.formatDuration.seconds', { count: seconds });
+      return t('taskExecutionHistory:time.formatDuration.seconds', { count: seconds });
     }
     if (seconds < 3600) {
       const minutes = Math.floor(seconds / 60);
       const remainingSeconds = seconds % 60;
-      return t('tasks:executionHistory.time.formatDuration.minutes', { 
+      return t('taskExecutionHistory:time.formatDuration.minutes', { 
         minutes, 
         seconds: remainingSeconds 
       });
     }
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    return t('tasks:executionHistory.time.formatDuration.hours', { 
+    return t('taskExecutionHistory:time.formatDuration.hours', { 
       hours, 
       minutes 
     });
@@ -676,7 +676,7 @@ const TaskExecutionHistory: React.FC = () => {
             style={{ cursor: 'pointer', marginLeft: 4 }}
             onClick={() => navigate('/')}
           >
-            首页
+            {t('taskExecutionHistory:breadcrumb.home')}
           </span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
@@ -685,12 +685,12 @@ const TaskExecutionHistory: React.FC = () => {
             style={{ cursor: 'pointer', marginLeft: 4 }}
             onClick={() => navigate('/task-management/task-collections')}
           >
-            任务集合管理
+            {t('taskExecutionHistory:breadcrumb.taskCollections')}
           </span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
           <UnorderedListOutlined />
-          执行历史记录
+          {t('taskExecutionHistory:breadcrumb.executionHistory')}
         </Breadcrumb.Item>
       </Breadcrumb>
 
@@ -698,7 +698,7 @@ const TaskExecutionHistory: React.FC = () => {
       <div style={{ marginBottom: 24 }}>
         <Title level={2} style={{ margin: 0 }}>
           <UnorderedListOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-          {t('tasks:executionHistory.title')}
+          {t('taskExecutionHistory:title')}
         </Title>
       </div>
 
@@ -710,7 +710,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>
                 {executionHistory.length}
               </div>
-              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.totalExecutions')}</div>
+              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.totalExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -720,7 +720,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#52c41a' }}>
                 {executionHistory.filter(e => e.status === 'completed').length}
               </div>
-              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.successfulExecutions')}</div>
+              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.successfulExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -730,7 +730,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>
                 {executionHistory.filter(e => e.status === 'running').length}
               </div>
-              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.runningExecutions')}</div>
+              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.runningExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -740,7 +740,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#faad14' }}>
                 {executionHistory.filter(e => e.status === 'scheduled').length}
               </div>
-              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.scheduledExecutions')}</div>
+              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.scheduledExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -766,20 +766,20 @@ const TaskExecutionHistory: React.FC = () => {
       <SearchFilterBar
         searchValue={searchKeyword}
         onSearchChange={setSearchKeyword}
-        searchPlaceholder={t('tasks:executionHistory.search.placeholder')}
+        searchPlaceholder={t('taskExecutionHistory:search.placeholder')}
         filters={[
           {
             key: 'status',
             value: statusFilter,
             onChange: setStatusFilter,
             options: [
-              { value: 'all', label: t('tasks:executionHistory.status.all') },
-              { value: 'completed', label: t('tasks:executionHistory.status.completed') },
-              { value: 'running', label: t('tasks:executionHistory.status.running') },
-              { value: 'scheduled', label: t('tasks:executionHistory.status.scheduled') },
-              { value: 'failed', label: t('tasks:executionHistory.status.failed') }
+              { value: 'all', label: t('taskExecutionHistory:status.all') },
+              { value: 'completed', label: t('taskExecutionHistory:status.completed') },
+              { value: 'running', label: t('taskExecutionHistory:status.running') },
+              { value: 'scheduled', label: t('taskExecutionHistory:status.scheduled') },
+              { value: 'failed', label: t('taskExecutionHistory:status.failed') }
             ],
-            placeholder: t('tasks:executionHistory.filter.status'),
+            placeholder: t('taskExecutionHistory:filter.status'),
             width: 120
           },
           {
@@ -787,11 +787,11 @@ const TaskExecutionHistory: React.FC = () => {
             value: triggerFilter,
             onChange: setTriggerFilter,
             options: [
-              { value: 'all', label: t('tasks:executionHistory.triggerType.all') },
-              { value: 'cron', label: t('tasks:executionHistory.triggerType.cron') },
-              { value: 'hook', label: t('tasks:executionHistory.triggerType.hook') }
+              { value: 'all', label: t('taskExecutionHistory:triggerType.all') },
+              { value: 'cron', label: t('taskExecutionHistory:triggerType.cron') },
+              { value: 'hook', label: t('taskExecutionHistory:triggerType.hook') }
             ],
-            placeholder: t('tasks:executionHistory.filter.triggerType'),
+            placeholder: t('taskExecutionHistory:filter.triggerType'),
             width: 120
           },
           {
@@ -799,10 +799,10 @@ const TaskExecutionHistory: React.FC = () => {
             value: sortOrder,
             onChange: setSortOrder,
             options: [
-              { value: 'desc', label: t('tasks:executionHistory.sort.newest') },
-              { value: 'asc', label: t('tasks:executionHistory.sort.oldest') }
+              { value: 'desc', label: t('taskExecutionHistory:sort.newest') },
+              { value: 'asc', label: t('taskExecutionHistory:sort.oldest') }
             ],
-            placeholder: t('tasks:executionHistory.filter.sort'),
+            placeholder: t('taskExecutionHistory:filter.sort'),
             width: 120
           }
         ]}
@@ -813,8 +813,8 @@ const TaskExecutionHistory: React.FC = () => {
             value={dateRange}
             onChange={setDateRange}
             placeholder={[
-              t('tasks:executionHistory.filter.startDate'), 
-              t('tasks:executionHistory.filter.endDate')
+              t('taskExecutionHistory:filter.startDate'), 
+              t('taskExecutionHistory:filter.endDate')
             ]}
             style={{ width: 240 }}
           />
@@ -825,7 +825,7 @@ const TaskExecutionHistory: React.FC = () => {
       <ListContainer>
         <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Title level={4} style={{ margin: 0 }}>
-            {t('tasks:executionHistory.list.title')} ({filteredHistory.length}{t('tasks:executionHistory.list.count')})
+            {t('taskExecutionHistory:list.title')} ({filteredHistory.length}{t('taskExecutionHistory:list.count')})
           </Title>
         </div>
         
@@ -865,10 +865,10 @@ const TaskExecutionHistory: React.FC = () => {
                             </Text>
                           )}
                           <Text type="secondary">
-                            {t('tasks:executionHistory.card.successRate')}: {execution.successRate}%
+                            {t('taskExecutionHistory:card.successRate')}: {execution.successRate}%
                           </Text>
                           <Text type="secondary">
-                            {t('tasks:executionHistory.card.progress')}: {execution.executedTargets}/{execution.totalTargets}
+                            {t('taskExecutionHistory:card.progress')}: {execution.executedTargets}/{execution.totalTargets}
                           </Text>
                         </Space>
                       </Space>
@@ -888,7 +888,7 @@ const TaskExecutionHistory: React.FC = () => {
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => 
-              t('tasks:executionHistory.pagination.showTotal', {
+              t('taskExecutionHistory:pagination.showTotal', {
                 start: range[0],
                 end: range[1],
                 total: total

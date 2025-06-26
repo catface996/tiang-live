@@ -168,7 +168,7 @@ interface TaskCollectionRun {
 
 const TaskCollectionRunDetail: React.FC = () => {
   const { runId } = useParams<{ runId: string }>();
-  const { t } = useTranslation(['tasks', 'common']);
+  const { t } = useTranslation(['taskCollectionRunDetail', 'common']);
   
   const [loading, setLoading] = useState(false);
   const [runDetail, setRunDetail] = useState<TaskCollectionRun | null>(null);
@@ -178,9 +178,9 @@ const TaskCollectionRunDetail: React.FC = () => {
   const [layeredNodes, setLayeredNodes] = useState<LayeredTaskNode[]>([]);
 
   useEffect(() => {
-    setPageTitle('任务集合运行详情');
+    setPageTitle(t('taskCollectionRunDetail:title'));
     loadRunDetail();
-  }, [runId]);
+  }, [runId, t]);
 
   // 加载分层拓扑数据
   useEffect(() => {
@@ -213,38 +213,38 @@ const TaskCollectionRunDetail: React.FC = () => {
       const mockRunDetail: TaskCollectionRun = {
         id: runId || '1',
         collectionId: '1',
-        collectionName: '核心服务监控任务',
+        collectionName: t('taskCollectionRunDetail:actions.healthCheck'),
         status: 'running',
         startTime: '2024-06-24 13:00:00',
         totalNodes: 8,
         completedNodes: 5,
         failedNodes: 1,
         successRate: 75,
-        createdBy: '运维工程师',
+        createdBy: t('taskCollectionRunDetail:creator'),
         panels: [
           {
             id: 'application_layer',
-            name: '应用层',
+            name: t('taskCollectionRunDetail:layerStats.applicationLayer'),
             level: 1,
             color: 'rgba(24, 144, 255, 0.1)',
             borderColor: '#1890ff',
-            description: '应用服务和业务逻辑层'
+            description: t('taskCollectionRunDetail:layerStats.description.applicationLayer')
           },
           {
             id: 'service_layer',
-            name: '服务层',
+            name: t('taskCollectionRunDetail:layerStats.serviceLayer'),
             level: 2,
             color: 'rgba(82, 196, 26, 0.1)',
             borderColor: '#52c41a',
-            description: '微服务和API层'
+            description: t('taskCollectionRunDetail:layerStats.description.serviceLayer')
           },
           {
             id: 'data_layer',
-            name: '数据层',
+            name: t('taskCollectionRunDetail:layerStats.dataLayer'),
             level: 3,
             color: 'rgba(250, 173, 20, 0.1)',
             borderColor: '#faad14',
-            description: '数据存储和缓存层'
+            description: t('taskCollectionRunDetail:layerStats.description.dataLayer')
           }
         ],
         nodes: [
@@ -559,17 +559,17 @@ const TaskCollectionRunDetail: React.FC = () => {
       <Breadcrumb
         items={[
           {
-            title: '首页',
+            title: t('taskCollectionRunDetail:breadcrumb.home'),
             path: '/dashboard',
             icon: <HomeOutlined />
           },
           {
-            title: '任务集合',
+            title: t('taskCollectionRunDetail:breadcrumb.taskCollections'),
             path: '/task-management/task-collections',
             icon: <UnorderedListOutlined />
           },
           {
-            title: `${runDetail?.collectionName || '运行详情'}`,
+            title: `${runDetail?.collectionName || t('taskCollectionRunDetail:breadcrumb.runDetail')}`,
             icon: <FileTextOutlined />
           }
         ]}
@@ -579,15 +579,15 @@ const TaskCollectionRunDetail: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
           <Title level={2} style={{ margin: 0 }}>
-            {runDetail?.collectionName} - 运行详情
+            {runDetail?.collectionName} - {t('taskCollectionRunDetail:header.runDetail')}
           </Title>
           <div style={{ marginTop: 8 }}>
             <Space>
               <Badge 
                 status={runDetail?.status === 'running' ? 'processing' : 'success'} 
-                text={runDetail?.status === 'running' ? '运行中' : '已完成'} 
+                text={runDetail?.status === 'running' ? t('taskCollectionRunDetail:status.running') : t('taskCollectionRunDetail:status.completed')} 
               />
-              <Text type="secondary">运行ID: {runId}</Text>
+              <Text type="secondary">{t('taskCollectionRunDetail:header.runId')}: {runId}</Text>
             </Space>
           </div>
         </div>
@@ -597,13 +597,13 @@ const TaskCollectionRunDetail: React.FC = () => {
             onClick={loadRunDetail}
             loading={loading}
           >
-            刷新
+            {t('taskCollectionRunDetail:header.refresh')}
           </Button>
           <Button 
             type={autoRefresh ? 'primary' : 'default'}
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            {autoRefresh ? '停止自动刷新' : '开启自动刷新'}
+            {autoRefresh ? t('taskCollectionRunDetail:header.stopAutoRefresh') : t('taskCollectionRunDetail:header.autoRefresh')}
           </Button>
         </Space>
       </div>
@@ -615,7 +615,7 @@ const TaskCollectionRunDetail: React.FC = () => {
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
               <StatsCard>
                 <Statistic
-                  title="总节点数"
+                  title={t('taskCollectionRunDetail:statistics.totalNodes')}
                   value={runDetail.totalNodes}
                   prefix={<NodeIndexOutlined />}
                   valueStyle={{ color: '#1890ff' }}
@@ -625,7 +625,7 @@ const TaskCollectionRunDetail: React.FC = () => {
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
               <StatsCard>
                 <Statistic
-                  title="已完成"
+                  title={t('taskCollectionRunDetail:statistics.completedNodes')}
                   value={runDetail.completedNodes}
                   prefix={<CheckCircleOutlined />}
                   valueStyle={{ color: '#52c41a' }}
@@ -635,7 +635,7 @@ const TaskCollectionRunDetail: React.FC = () => {
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
               <StatsCard>
                 <Statistic
-                  title="失败节点"
+                  title={t('taskCollectionRunDetail:statistics.failedNodes')}
                   value={runDetail.failedNodes}
                   prefix={<ExclamationCircleOutlined />}
                   valueStyle={{ color: '#ff4d4f' }}
@@ -645,7 +645,7 @@ const TaskCollectionRunDetail: React.FC = () => {
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
               <StatsCard>
                 <Statistic
-                  title="成功率"
+                  title={t('taskCollectionRunDetail:statistics.successRate')}
                   value={runDetail.successRate}
                   suffix="%"
                   prefix={<CheckCircleOutlined />}
@@ -659,19 +659,19 @@ const TaskCollectionRunDetail: React.FC = () => {
           <Card 
             title={
               <StatisticsHeader>
-                  <span>分层执行统计</span>
+                  <span>{t('taskCollectionRunDetail:statistics.layeredStatistics')}</span>
                   <StatisticsLegend>
                     <LegendItem>
-                      <span style={{ color: '#52c41a' }}>✓</span> 已完成
+                      <span style={{ color: '#52c41a' }}>✓</span> {t('taskCollectionRunDetail:legend.completed')}
                     </LegendItem>
                     <LegendItem>
-                      <span style={{ color: '#1890ff' }}>●</span> 运行中
+                      <span style={{ color: '#1890ff' }}>●</span> {t('taskCollectionRunDetail:legend.running')}
                     </LegendItem>
                     <LegendItem>
-                      <span style={{ color: '#ff4d4f' }}>✗</span> 失败
+                      <span style={{ color: '#ff4d4f' }}>✗</span> {t('taskCollectionRunDetail:legend.failed')}
                     </LegendItem>
                     <LegendItem>
-                      <span style={{ color: '#8c8c8c' }}>○</span> 待执行
+                      <span style={{ color: '#8c8c8c' }}>○</span> {t('taskCollectionRunDetail:legend.pending')}
                     </LegendItem>
                   </StatisticsLegend>
                 </StatisticsHeader>
@@ -692,28 +692,28 @@ const TaskCollectionRunDetail: React.FC = () => {
                         <StatusItem 
                           $statusColor="#52c41a"
                           $bgColor="rgba(82, 196, 26, 0.1)"
-                          title="已完成"
+                          title={t('taskCollectionRunDetail:legend.completed')}
                         >
                           ✓ {stats.completed}
                         </StatusItem>
                         <StatusItem 
                           $statusColor="#1890ff"
                           $bgColor="rgba(24, 144, 255, 0.1)"
-                          title="运行中"
+                          title={t('taskCollectionRunDetail:legend.running')}
                         >
                           ● {stats.running}
                         </StatusItem>
                         <StatusItem 
                           $statusColor="#ff4d4f"
                           $bgColor="rgba(255, 77, 79, 0.1)"
-                          title="失败"
+                          title={t('taskCollectionRunDetail:legend.failed')}
                         >
                           ✗ {stats.failed}
                         </StatusItem>
                         <StatusItem 
                           $statusColor="#8c8c8c"
                           $bgColor="rgba(140, 140, 140, 0.1)"
-                          title="待执行"
+                          title={t('taskCollectionRunDetail:legend.pending')}
                         >
                           ○ {stats.pending}
                         </StatusItem>
@@ -725,27 +725,27 @@ const TaskCollectionRunDetail: React.FC = () => {
             </Card>
 
           {/* 基本信息 */}
-          <Card title="运行信息" style={{ marginBottom: 24 }}>
+          <Card title={t('taskCollectionRunDetail:header.runDetail')} style={{ marginBottom: 24 }}>
             <Descriptions column={3}>
-              <Descriptions.Item label="开始时间">
+              <Descriptions.Item label={t('taskCollectionRunDetail:time.startTime')}>
                 {runDetail.startTime}
               </Descriptions.Item>
-              <Descriptions.Item label="结束时间">
-                {runDetail.endTime || '运行中...'}
+              <Descriptions.Item label={t('taskCollectionRunDetail:time.endTime')}>
+                {runDetail.endTime || t('taskCollectionRunDetail:status.running') + '...'}
               </Descriptions.Item>
-              <Descriptions.Item label="运行时长">
-                {runDetail.duration ? `${runDetail.duration}秒` : '计算中...'}
+              <Descriptions.Item label={t('taskCollectionRunDetail:time.duration')}>
+                {runDetail.duration ? `${runDetail.duration}${t('common:unit.seconds')}` : t('common:loading')}
               </Descriptions.Item>
-              <Descriptions.Item label="创建者">
+              <Descriptions.Item label={t('taskCollectionRunDetail:creator')}>
                 {runDetail.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label="运行状态">
+              <Descriptions.Item label={t('common:status')}>
                 <Badge 
                   status={runDetail.status === 'running' ? 'processing' : 'success'} 
-                  text={runDetail.status === 'running' ? '运行中' : '已完成'} 
+                  text={runDetail.status === 'running' ? t('taskCollectionRunDetail:status.running') : t('taskCollectionRunDetail:status.completed')} 
                 />
               </Descriptions.Item>
-              <Descriptions.Item label="进度">
+              <Descriptions.Item label={t('common:progress')}>
                 <Progress 
                   percent={Math.round((runDetail.completedNodes / runDetail.totalNodes) * 100)}
                   size="small"
@@ -755,13 +755,13 @@ const TaskCollectionRunDetail: React.FC = () => {
           </Card>
 
           {/* 诊断报告清单 */}
-          <Card title="节点诊断报告" style={{ marginBottom: 24 }}>
+          <Card title={t('taskCollectionRunDetail:diagnosticReports.title')} style={{ marginBottom: 24 }}>
             <DiagnosticReports nodeIds={runDetail.nodes.map(node => node.id)} />
           </Card>
 
           {/* 拓扑图 */}
           <Card 
-            title="节点拓扑关系" 
+            title={t('taskCollectionRunDetail:topology.title')} 
             style={{ marginBottom: 24 }}
           >
             <LayeredTaskTopology 

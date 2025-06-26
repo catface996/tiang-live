@@ -48,6 +48,14 @@
   "locale": "zh-CN",
   "reset": "重置",
   "all": "全部",
+  "status": "状态",
+  "progress": "进度",
+  "unit": {
+    "seconds": "秒",
+    "minutes": "分钟",
+    "hours": "小时",
+    "days": "天"
+  },
   "active": "活跃",
   "inactive": "非活跃",
   "deprecated": "已弃用",

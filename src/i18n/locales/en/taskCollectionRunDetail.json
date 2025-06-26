@@ -1,0 +1,89 @@
+{
+  "title": "Task Collection Run Detail",
+  "subtitle": "View detailed execution status of task collection",
+  "breadcrumb": {
+    "home": "Home",
+    "taskCollections": "Task Collection Management",
+    "runDetail": "Run Detail"
+  },
+  "header": {
+    "runDetail": "Run Detail",
+    "runId": "Run ID",
+    "refresh": "Refresh",
+    "autoRefresh": "Enable Auto Refresh",
+    "stopAutoRefresh": "Stop Auto Refresh"
+  },
+  "status": {
+    "running": "Running",
+    "completed": "Completed",
+    "failed": "Failed",
+    "pending": "Pending"
+  },
+  "statistics": {
+    "totalNodes": "Total Nodes",
+    "completedNodes": "Completed",
+    "failedNodes": "Failed Nodes",
+    "successRate": "Success Rate",
+    "layeredStatistics": "Layered Execution Statistics"
+  },
+  "legend": {
+    "completed": "Completed",
+    "running": "Running",
+    "failed": "Failed",
+    "pending": "Pending"
+  },
+  "layerStats": {
+    "title": "Layer Statistics",
+    "applicationLayer": "Application Layer",
+    "serviceLayer": "Service Layer",
+    "dataLayer": "Data Layer",
+    "description": {
+      "applicationLayer": "Application services and business logic layer",
+      "serviceLayer": "Microservices and API layer",
+      "dataLayer": "Data storage and cache layer"
+    }
+  },
+  "topology": {
+    "title": "Task Topology",
+    "subtitle": "Display execution status and dependencies of task nodes",
+    "nodeDetail": "Node Detail",
+    "executionResults": "Execution Results",
+    "dependencies": "Dependencies",
+    "actions": "Execution Actions"
+  },
+  "diagnosticReports": {
+    "title": "Diagnostic Reports",
+    "subtitle": "View detailed execution diagnostic information",
+    "noReports": "No diagnostic reports available",
+    "loadingReports": "Loading diagnostic reports..."
+  },
+  "nodeStatus": {
+    "completed": "Completed",
+    "running": "Running",
+    "failed": "Failed",
+    "pending": "Pending",
+    "skipped": "Skipped"
+  },
+  "actions": {
+    "healthCheck": "Health Check",
+    "performanceAnalysis": "Performance Analysis",
+    "securityScan": "Security Scan",
+    "faultAnalysis": "Fault Analysis"
+  },
+  "messages": {
+    "loadSuccess": "Run detail loaded successfully",
+    "loadError": "Failed to load run detail",
+    "refreshSuccess": "Refreshed successfully",
+    "autoRefreshEnabled": "Auto refresh enabled",
+    "autoRefreshDisabled": "Auto refresh disabled"
+  },
+  "time": {
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "duration": "Duration",
+    "timestamp": "Timestamp"
+  },
+  "creator": "Creator",
+  "category": "Category",
+  "type": "Type"
+}

@@ -27,6 +27,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
+import type { Report } from '../../../types/report';
 
 const { Text, Paragraph } = Typography;
 
@@ -195,19 +196,6 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
     }
   }
 `;
-
-interface Report {
-  key: string;
-  name: string;
-  type: string;
-  status: 'published' | 'draft' | 'archived';
-  author: string;
-  createdAt: string;
-  lastModified: string;
-  size: string;
-  downloads: number;
-  description?: string;
-}
 
 interface ReportCardProps {
   report: Report;

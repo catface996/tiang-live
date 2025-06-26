@@ -1,0 +1,486 @@
+{
+  "1": {
+    "id": "1",
+    "name": "系统健康度分析报告",
+    "type": "health",
+    "status": "published",
+    "author": "系统管理员",
+    "createdAt": "2024-06-15 10:30:00",
+    "lastModified": "2024-06-15 14:20:00",
+    "size": "2.5MB",
+    "downloads": 156,
+    "description": "本报告全面分析了系统的健康状况，包括服务可用性、性能指标、错误率等关键指标。通过多维度数据分析，为系统优化提供决策支持。报告涵盖了过去30天的运行数据，识别出关键问题并提供具体的改进建议。",
+    "summary": {
+      "totalServices": 45,
+      "healthyServices": 42,
+      "warningServices": 2,
+      "criticalServices": 1,
+      "overallScore": 93.3
+    },
+    "sections": [
+      {
+        "titleKey": "executiveSummary",
+        "title": "执行摘要",
+        "content": "系统整体健康状况良好，93.3%的服务运行正常。在监控的45个核心服务中，42个服务状态健康，2个服务存在性能警告，1个服务需要紧急处理。主要问题集中在通知服务的响应时间过长和支付服务的错误率偏高。建议优先处理通知服务的性能瓶颈，预计修复后系统整体评分可提升至96%以上。",
+        "type": "summary",
+        "keyMetrics": {
+          "systemUptime": "99.2%",
+          "avgResponseTime": "185ms",
+          "errorRate": "0.23%",
+          "throughput": "15.2K req/s",
+          "activeUsers": "12,450",
+          "peakConcurrency": "3,200"
+        },
+        "highlights": [
+          "系统整体可用性达到99.2%，超过SLA要求的99%",
+          "42个核心服务运行状态良好，占总数的93.3%",
+          "通知服务存在性能瓶颈，响应时间超过1秒",
+          "支付服务错误率偏高，需要紧急优化",
+          "数据库连接池使用率78%，接近预警阈值"
+        ]
+      },
+      {
+        "titleKey": "serviceStatusAnalysis",
+        "title": "服务状态详细分析",
+        "content": "以下是各核心服务的详细运行状态分析，包括响应时间、错误率、可用性等关键指标。数据基于过去30天的监控记录。",
+        "type": "analysis",
+        "data": [
+          {
+            "service": "用户认证服务",
+            "status": "healthy",
+            "responseTime": "85ms",
+            "errorRate": "0.02%",
+            "availability": "99.98%",
+            "requests": "2.3M",
+            "instances": 3,
+            "cpuUsage": "45%",
+            "memoryUsage": "62%",
+            "lastIncident": "2024-06-01",
+            "slaCompliance": "100%"
+          },
+          {
+            "service": "用户管理服务",
+            "status": "healthy",
+            "responseTime": "120ms",
+            "errorRate": "0.1%",
+            "availability": "99.95%",
+            "requests": "1.8M",
+            "instances": 2,
+            "cpuUsage": "38%",
+            "memoryUsage": "55%",
+            "lastIncident": "2024-05-28",
+            "slaCompliance": "99.8%"
+          },
+          {
+            "service": "订单处理服务",
+            "status": "healthy",
+            "responseTime": "95ms",
+            "errorRate": "0.05%",
+            "availability": "99.97%",
+            "requests": "890K",
+            "instances": 4,
+            "cpuUsage": "52%",
+            "memoryUsage": "68%",
+            "lastIncident": "2024-05-15",
+            "slaCompliance": "100%"
+          },
+          {
+            "service": "库存管理服务",
+            "status": "healthy",
+            "responseTime": "110ms",
+            "errorRate": "0.08%",
+            "availability": "99.96%",
+            "requests": "1.2M",
+            "instances": 3,
+            "cpuUsage": "41%",
+            "memoryUsage": "59%",
+            "lastIncident": "2024-06-05",
+            "slaCompliance": "99.9%"
+          },
+          {
+            "service": "支付处理服务",
+            "status": "warning",
+            "responseTime": "280ms",
+            "errorRate": "0.8%",
+            "availability": "99.2%",
+            "requests": "650K",
+            "instances": 2,
+            "cpuUsage": "75%",
+            "memoryUsage": "82%",
+            "lastIncident": "2024-06-12",
+            "slaCompliance": "95.2%",
+            "issues": [
+              "第三方支付网关响应延迟",
+              "数据库连接池耗尽",
+              "内存泄漏导致频繁重启"
+            ]
+          },
+          {
+            "service": "物流跟踪服务",
+            "status": "healthy",
+            "responseTime": "150ms",
+            "errorRate": "0.15%",
+            "availability": "99.9%",
+            "requests": "420K",
+            "instances": 2,
+            "cpuUsage": "35%",
+            "memoryUsage": "48%",
+            "lastIncident": "2024-05-20",
+            "slaCompliance": "99.5%"
+          },
+          {
+            "service": "通知推送服务",
+            "status": "critical",
+            "responseTime": "1200ms",
+            "errorRate": "5.2%",
+            "availability": "95.8%",
+            "requests": "3.1M",
+            "instances": 3,
+            "cpuUsage": "89%",
+            "memoryUsage": "91%",
+            "lastIncident": "2024-06-14",
+            "slaCompliance": "85.3%",
+            "issues": [
+              "消息队列积压严重，处理延迟超过5分钟",
+              "Redis缓存命中率下降至45%",
+              "WebSocket连接频繁断开",
+              "推送成功率仅为78%"
+            ]
+          },
+          {
+            "service": "数据分析服务",
+            "status": "healthy",
+            "responseTime": "200ms",
+            "errorRate": "0.12%",
+            "availability": "99.85%",
+            "requests": "180K",
+            "instances": 2,
+            "cpuUsage": "58%",
+            "memoryUsage": "72%",
+            "lastIncident": "2024-05-25",
+            "slaCompliance": "99.2%"
+          },
+          {
+            "service": "搜索引擎服务",
+            "status": "healthy",
+            "responseTime": "75ms",
+            "errorRate": "0.03%",
+            "availability": "99.99%",
+            "requests": "2.8M",
+            "instances": 4,
+            "cpuUsage": "42%",
+            "memoryUsage": "65%",
+            "lastIncident": "2024-04-28",
+            "slaCompliance": "100%"
+          },
+          {
+            "service": "文件存储服务",
+            "status": "healthy",
+            "responseTime": "45ms",
+            "errorRate": "0.01%",
+            "availability": "99.99%",
+            "requests": "1.5M",
+            "instances": 3,
+            "cpuUsage": "28%",
+            "memoryUsage": "35%",
+            "lastIncident": "2024-04-15",
+            "slaCompliance": "100%"
+          }
+        ]
+      },
+      {
+        "titleKey": "performanceTrendAnalysis",
+        "title": "性能指标趋势分析",
+        "content": "过去30天的关键性能指标变化趋势显示，系统整体性能稳定，但在高峰时段（每日10:00-12:00和19:00-21:00）存在性能压力。通知服务在6月10日开始出现性能下降，支付服务的错误率在6月12日有明显上升。",
+        "type": "trend",
+        "metrics": [
+          {
+            "name": "平均响应时间",
+            "current": "185ms",
+            "previous": "165ms",
+            "trend": "+12%",
+            "status": "warning",
+            "target": "150ms",
+            "description": "响应时间较上月增长12%，主要由通知服务拖累"
+          },
+          {
+            "name": "系统吞吐量",
+            "current": "15.2K req/s",
+            "previous": "14.1K req/s",
+            "trend": "+8%",
+            "status": "good",
+            "target": "12K req/s",
+            "description": "系统处理能力持续提升，超出预期目标"
+          },
+          {
+            "name": "错误率",
+            "current": "0.23%",
+            "previous": "0.08%",
+            "trend": "+0.15%",
+            "status": "warning",
+            "target": "0.1%",
+            "description": "错误率上升主要来自支付和通知服务"
+          },
+          {
+            "name": "系统可用性",
+            "current": "99.1%",
+            "previous": "99.9%",
+            "trend": "-0.8%",
+            "status": "critical",
+            "target": "99.5%",
+            "description": "可用性下降主要由通知服务故障导致"
+          }
+        ],
+        "trendData": {
+          "responseTime": [
+            { "date": "2024-05-15", "value": 158 },
+            { "date": "2024-05-20", "value": 162 },
+            { "date": "2024-05-25", "value": 165 },
+            { "date": "2024-05-30", "value": 168 },
+            { "date": "2024-06-05", "value": 172 },
+            { "date": "2024-06-10", "value": 195 },
+            { "date": "2024-06-15", "value": 185 }
+          ],
+          "throughput": [
+            { "date": "2024-05-15", "value": 13.8 },
+            { "date": "2024-05-20", "value": 14.1 },
+            { "date": "2024-05-25", "value": 14.3 },
+            { "date": "2024-05-30", "value": 14.5 },
+            { "date": "2024-06-05", "value": 14.8 },
+            { "date": "2024-06-10", "value": 15.1 },
+            { "date": "2024-06-15", "value": 15.2 }
+          ],
+          "errorRate": [
+            { "date": "2024-05-15", "value": 0.06 },
+            { "date": "2024-05-20", "value": 0.07 },
+            { "date": "2024-05-25", "value": 0.08 },
+            { "date": "2024-05-30", "value": 0.09 },
+            { "date": "2024-06-05", "value": 0.12 },
+            { "date": "2024-06-10", "value": 0.18 },
+            { "date": "2024-06-15", "value": 0.23 }
+          ]
+        }
+      },
+      {
+        "titleKey": "resourceUsage",
+        "title": "资源使用情况",
+        "content": "系统资源使用情况整体合理，但部分服务存在资源瓶颈。通知服务的CPU使用率持续偏高，内存使用量接近阈值。",
+        "type": "resources",
+        "data": [
+          {
+            "resource": "CPU使用率",
+            "usage": "68%",
+            "threshold": "80%",
+            "status": "normal",
+            "peak": "85%",
+            "average": "62%",
+            "trend": "+5%",
+            "details": {
+              "cores": 16,
+              "utilization": "10.9/16 cores",
+              "topConsumers": [
+                { "service": "通知推送服务", "usage": "22%" },
+                { "service": "搜索引擎服务", "usage": "18%" },
+                { "service": "订单处理服务", "usage": "15%" }
+              ]
+            }
+          },
+          {
+            "resource": "内存使用率",
+            "usage": "72%",
+            "threshold": "85%",
+            "status": "normal",
+            "peak": "89%",
+            "average": "68%",
+            "trend": "+8%",
+            "details": {
+              "total": "32GB",
+              "used": "23.04GB",
+              "available": "8.96GB",
+              "topConsumers": [
+                { "service": "数据分析服务", "usage": "6.2GB" },
+                { "service": "通知推送服务", "usage": "5.8GB" },
+                { "service": "搜索引擎服务", "usage": "4.1GB" }
+              ]
+            }
+          },
+          {
+            "resource": "磁盘使用率",
+            "usage": "45%",
+            "threshold": "90%",
+            "status": "good",
+            "peak": "52%",
+            "average": "42%",
+            "trend": "+2%",
+            "details": {
+              "total": "2TB",
+              "used": "900GB",
+              "available": "1.1TB",
+              "growth": "15GB/day",
+              "partitions": [
+                { "mount": "/", "usage": "35%" },
+                { "mount": "/var/log", "usage": "68%" },
+                { "mount": "/data", "usage": "42%" }
+              ]
+            }
+          },
+          {
+            "resource": "网络带宽",
+            "usage": "35%",
+            "threshold": "70%",
+            "status": "good",
+            "peak": "58%",
+            "average": "32%",
+            "trend": "+3%",
+            "details": {
+              "capacity": "10Gbps",
+              "inbound": "2.1Gbps",
+              "outbound": "1.4Gbps",
+              "peakHours": "19:00-21:00"
+            }
+          },
+          {
+            "resource": "数据库连接",
+            "usage": "156/200",
+            "threshold": "180",
+            "status": "normal",
+            "peak": "189",
+            "average": "142",
+            "trend": "+12%",
+            "details": {
+              "maxConnections": 200,
+              "activeConnections": 156,
+              "idleConnections": 23,
+              "connectionPool": {
+                "主库": "89/100",
+                "从库1": "45/50",
+                "从库2": "22/50"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "titleKey": "recommendationsAndActionPlan",
+        "title": "建议与行动计划",
+        "content": "基于分析结果，我们提出以下优化建议和具体行动计划。建议按优先级顺序执行，以最大化系统性能提升效果。",
+        "type": "recommendations",
+        "recommendations": [
+          {
+            "priority": "high",
+            "item": "立即修复通知服务的性能问题，优化消息队列处理逻辑",
+            "deadline": "2024-06-20",
+            "assignee": "后端开发团队",
+            "estimatedHours": "16小时",
+            "impact": "预计可提升系统整体可用性2.5%",
+            "steps": [
+              "分析消息队列积压原因",
+              "优化消息处理批次大小",
+              "增加消息处理线程数",
+              "实施消息优先级机制",
+              "添加消息处理监控告警"
+            ],
+            "resources": [
+              "2名高级后端工程师",
+              "1名DevOps工程师",
+              "测试环境资源"
+            ],
+            "risks": [
+              "修改过程中可能影响现有推送功能",
+              "需要协调多个业务方进行测试"
+            ]
+          },
+          {
+            "priority": "high",
+            "item": "优化支付服务的错误处理机制，增加重试逻辑",
+            "deadline": "2024-06-22",
+            "assignee": "支付团队",
+            "estimatedHours": "12小时",
+            "impact": "预计可降低支付错误率至0.2%以下",
+            "steps": [
+              "分析支付失败的根本原因",
+              "实现智能重试机制",
+              "优化第三方支付网关调用",
+              "增加支付状态监控",
+              "完善支付异常处理流程"
+            ],
+            "resources": [
+              "2名支付系统工程师",
+              "1名测试工程师"
+            ],
+            "risks": [
+              "重试逻辑可能导致重复扣款",
+              "需要与第三方支付商协调测试"
+            ]
+          },
+          {
+            "priority": "medium",
+            "item": "扩容通知服务的计算资源，增加2个实例",
+            "deadline": "2024-06-25",
+            "assignee": "运维团队",
+            "estimatedHours": "4小时",
+            "impact": "提升通知服务处理能力50%",
+            "steps": [
+              "申请额外的服务器资源",
+              "配置负载均衡策略",
+              "部署新的服务实例",
+              "验证服务扩容效果",
+              "更新监控配置"
+            ],
+            "resources": [
+              "2台云服务器实例",
+              "1名运维工程师"
+            ],
+            "risks": [
+              "扩容期间可能出现短暂服务不稳定"
+            ]
+          },
+          {
+            "priority": "medium",
+            "item": "建立更完善的监控告警机制，增加预警阈值",
+            "deadline": "2024-06-30",
+            "assignee": "监控团队",
+            "estimatedHours": "20小时",
+            "impact": "提前发现潜在问题，减少故障时间",
+            "steps": [
+              "梳理关键业务指标",
+              "设置多级告警阈值",
+              "配置告警通知渠道",
+              "建立告警处理流程",
+              "定期回顾告警有效性"
+            ],
+            "resources": [
+              "1名监控工程师",
+              "各服务负责人配合"
+            ],
+            "risks": [
+              "告警过多可能导致告警疲劳"
+            ]
+          },
+          {
+            "priority": "low",
+            "item": "优化数据库查询性能，添加必要的索引",
+            "deadline": "2024-07-05",
+            "assignee": "DBA团队",
+            "estimatedHours": "8小时",
+            "impact": "提升查询性能15-20%",
+            "steps": [
+              "分析慢查询日志",
+              "识别缺失的索引",
+              "评估索引对写入性能的影响",
+              "在低峰期添加索引",
+              "验证性能提升效果"
+            ],
+            "resources": [
+              "1名DBA",
+              "数据库维护窗口"
+            ],
+            "risks": [
+              "添加索引可能影响写入性能"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

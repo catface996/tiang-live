@@ -379,10 +379,10 @@ const InspectionTasks: React.FC = () => {
   ];
 
   const taskTypeMap = {
-    health_check: { name: t('tasks:inspection.types.healthCheck'), color: 'green', icon: <HeartOutlined /> },
-    performance_monitor: { name: t('tasks:inspection.types.performanceMonitor'), color: 'blue', icon: <BarChartOutlined /> },
-    security_scan: { name: t('tasks:inspection.types.securityScan'), color: 'orange', icon: <SafetyCertificateOutlined /> },
-    log_analysis: { name: t('tasks:inspection.types.logAnalysis'), color: 'purple', icon: <HistoryOutlined /> },
+    health_check: { name: t('tasks:inspection.types.health_check'), color: 'green', icon: <HeartOutlined /> },
+    performance_monitor: { name: t('tasks:inspection.types.performance_monitor'), color: 'blue', icon: <BarChartOutlined /> },
+    security_scan: { name: t('tasks:inspection.types.security_scan'), color: 'orange', icon: <SafetyCertificateOutlined /> },
+    log_analysis: { name: t('tasks:inspection.types.log_analysis'), color: 'purple', icon: <HistoryOutlined /> },
   };
 
   const getStatusTag = (status: string) => {
@@ -774,24 +774,24 @@ const InspectionTasks: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="type"
-                label="任务类型"
-                rules={[{ required: true, message: '请选择任务类型' }]}
+                label={t('tasks:inspection.form.type')}
+                rules={[{ required: true, message: t('tasks:inspection.form.typeRequired') }]}
               >
-                <Select placeholder="请选择巡检类型">
-                  <Option value="health_check">健康检查</Option>
-                  <Option value="performance_monitor">性能监控</Option>
-                  <Option value="security_scan">安全扫描</Option>
-                  <Option value="log_analysis">日志分析</Option>
+                <Select placeholder={t('tasks:inspection.form.typePlaceholder')}>
+                  <Option value="health_check">{t('tasks:inspection.types.health_check')}</Option>
+                  <Option value="performance_monitor">{t('tasks:inspection.types.performance_monitor')}</Option>
+                  <Option value="security_scan">{t('tasks:inspection.types.security_scan')}</Option>
+                  <Option value="log_analysis">{t('tasks:inspection.types.log_analysis')}</Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="timeout"
-                label="超时时间(秒)"
-                rules={[{ required: true, message: '请设置超时时间' }]}
+                label={t('tasks:inspection.form.timeout')}
+                rules={[{ required: true, message: t('tasks:inspection.form.timeoutRequired') }]}
               >
-                <Input type="number" placeholder="请输入超时时间" />
+                <Input type="number" placeholder={t('tasks:inspection.form.timeoutPlaceholder')} />
               </Form.Item>
             </Col>
           </Row>
@@ -800,19 +800,19 @@ const InspectionTasks: React.FC = () => {
             <Col span={12}>
               <Form.Item
                 name="retryCount"
-                label="重试次数"
-                rules={[{ required: true, message: '请设置重试次数' }]}
+                label={t('tasks:inspection.form.retryCount')}
+                rules={[{ required: true, message: t('tasks:inspection.form.retryCountRequired') }]}
               >
-                <Input type="number" placeholder="请输入重试次数" />
+                <Input type="number" placeholder={t('tasks:inspection.form.retryCountPlaceholder')} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="alertThreshold"
-                label="告警阈值(%)"
-                rules={[{ required: true, message: '请设置告警阈值' }]}
+                label={t('tasks:inspection.form.alertThreshold')}
+                rules={[{ required: true, message: t('tasks:inspection.form.alertThresholdRequired') }]}
               >
-                <Input type="number" placeholder="请输入告警阈值" />
+                <Input type="number" placeholder={t('tasks:inspection.form.alertThresholdPlaceholder')} />
               </Form.Item>
             </Col>
           </Row>

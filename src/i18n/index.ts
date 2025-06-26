@@ -23,6 +23,10 @@ import zhTags from './locales/zh/tags.json';
 import zhPrompts from './locales/zh/prompts.json';
 import zhEntityScan from './locales/zh/entityScan.json';
 import zhTheme from './locales/zh/theme.json';
+// 页面级语言包
+import zhTaskCollectionRunDetail from './locales/zh/taskCollectionRunDetail.json';
+import zhTaskExecutionHistory from './locales/zh/taskExecutionHistory.json';
+import zhHookTasks from './locales/zh/hookTasks.json';
 
 // 导入英文语言资源
 import enCommon from './locales/en/common.json';
@@ -44,6 +48,10 @@ import enTags from './locales/en/tags.json';
 import enPrompts from './locales/en/prompts.json';
 import enEntityScan from './locales/en/entityScan.json';
 import enTheme from './locales/en/theme.json';
+// 页面级语言包
+import enTaskCollectionRunDetail from './locales/en/taskCollectionRunDetail.json';
+import enTaskExecutionHistory from './locales/en/taskExecutionHistory.json';
+import enHookTasks from './locales/en/hookTasks.json';
 
 // 语言资源配置
 const resources = {
@@ -66,7 +74,11 @@ const resources = {
     tags: zhTags,
     prompts: zhPrompts,
     entityScan: zhEntityScan,
-    theme: zhTheme
+    theme: zhTheme,
+    // 页面级语言包
+    taskCollectionRunDetail: zhTaskCollectionRunDetail,
+    taskExecutionHistory: zhTaskExecutionHistory,
+    hookTasks: zhHookTasks
   },
   'en-US': {
     common: enCommon,
@@ -87,7 +99,11 @@ const resources = {
     tags: enTags,
     prompts: enPrompts,
     entityScan: enEntityScan,
-    theme: enTheme
+    theme: enTheme,
+    // 页面级语言包
+    taskCollectionRunDetail: enTaskCollectionRunDetail,
+    taskExecutionHistory: enTaskExecutionHistory,
+    hookTasks: enHookTasks
   }
 };
 
@@ -127,7 +143,13 @@ i18n
     
     // 命名空间配置
     defaultNS: 'common',
-    ns: ['common', 'layout', 'menu', 'dashboard', 'planes', 'agents', 'models', 'entities', 'sequences', 'tasks', 'messages', 'reports', 'relationships', 'aiAssistant', 'solutions', 'tags', 'prompts', 'entityScan', 'theme'],
+    ns: [
+      'common', 'layout', 'menu', 'dashboard', 'planes', 'agents', 'models', 
+      'entities', 'sequences', 'tasks', 'messages', 'reports', 'relationships', 
+      'aiAssistant', 'solutions', 'tags', 'prompts', 'entityScan', 'theme',
+      // 页面级命名空间
+      'taskCollectionRunDetail', 'taskExecutionHistory'
+    ],
     
     // 键值分隔符
     keySeparator: '.',

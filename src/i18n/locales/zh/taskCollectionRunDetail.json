@@ -1,0 +1,89 @@
+{
+  "title": "任务集合运行详情",
+  "subtitle": "查看任务集合的详细执行情况",
+  "breadcrumb": {
+    "home": "首页",
+    "taskCollections": "任务集合管理",
+    "runDetail": "运行详情"
+  },
+  "header": {
+    "runDetail": "运行详情",
+    "runId": "运行ID",
+    "refresh": "刷新",
+    "autoRefresh": "开启自动刷新",
+    "stopAutoRefresh": "停止自动刷新"
+  },
+  "status": {
+    "running": "运行中",
+    "completed": "已完成",
+    "failed": "失败",
+    "pending": "待执行"
+  },
+  "statistics": {
+    "totalNodes": "总节点数",
+    "completedNodes": "已完成",
+    "failedNodes": "失败节点",
+    "successRate": "成功率",
+    "layeredStatistics": "分层执行统计"
+  },
+  "legend": {
+    "completed": "已完成",
+    "running": "运行中",
+    "failed": "失败",
+    "pending": "待执行"
+  },
+  "layerStats": {
+    "title": "分层统计",
+    "applicationLayer": "应用层",
+    "serviceLayer": "服务层",
+    "dataLayer": "数据层",
+    "description": {
+      "applicationLayer": "应用服务和业务逻辑层",
+      "serviceLayer": "微服务和API层",
+      "dataLayer": "数据存储和缓存层"
+    }
+  },
+  "topology": {
+    "title": "任务拓扑图",
+    "subtitle": "显示任务节点的执行状态和依赖关系",
+    "nodeDetail": "节点详情",
+    "executionResults": "执行结果",
+    "dependencies": "依赖关系",
+    "actions": "执行操作"
+  },
+  "diagnosticReports": {
+    "title": "诊断报告",
+    "subtitle": "查看详细的执行诊断信息",
+    "noReports": "暂无诊断报告",
+    "loadingReports": "加载诊断报告中..."
+  },
+  "nodeStatus": {
+    "completed": "已完成",
+    "running": "运行中",
+    "failed": "失败",
+    "pending": "待执行",
+    "skipped": "已跳过"
+  },
+  "actions": {
+    "healthCheck": "健康检查",
+    "performanceAnalysis": "性能分析",
+    "securityScan": "安全扫描",
+    "faultAnalysis": "故障分析"
+  },
+  "messages": {
+    "loadSuccess": "运行详情加载成功",
+    "loadError": "运行详情加载失败",
+    "refreshSuccess": "刷新成功",
+    "autoRefreshEnabled": "自动刷新已开启",
+    "autoRefreshDisabled": "自动刷新已关闭"
+  },
+  "time": {
+    "startTime": "开始时间",
+    "endTime": "结束时间",
+    "duration": "执行时长",
+    "timestamp": "时间戳"
+  },
+  "creator": "创建者",
+  "category": "类别",
+  "type": "类型"
+}

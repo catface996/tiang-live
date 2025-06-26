@@ -103,313 +103,137 @@
       "pauseSuccess": "任务集合暂停成功"
     }
   },
-  "executionHistory": {
-    "title": "任务执行历史记录",
-    "subtitle": "查看和管理任务执行历史记录",
-    "breadcrumb": {
-      "home": "首页",
-      "taskCollections": "任务集合管理",
-      "executionHistory": "执行历史记录"
-    },
-    "stats": {
-      "totalExecutions": "总执行次数",
-      "successfulExecutions": "成功执行",
-      "runningExecutions": "正在执行",
-      "scheduledExecutions": "计划执行",
-      "failedExecutions": "失败执行"
-    },
-    "status": {
-      "completed": "已完成",
-      "running": "执行中",
-      "scheduled": "计划中",
-      "failed": "失败",
-      "all": "全部状态"
-    },
-    "triggerType": {
-      "cron": "定时任务",
-      "hook": "Hook触发",
-      "all": "全部方式"
-    },
-    "triggerSource": {
-      "cronSchedule": "定时任务触发",
-      "apiCall": "API调用",
-      "webhookTrigger": "Webhook触发",
-      "monitoringAlert": "监控告警触发",
-      "manualTrigger": "手动触发"
-    },
-    "search": {
-      "placeholder": "搜索任务名称、触发源...",
-      "taskName": "任务名称",
-      "triggerSource": "触发源"
-    },
-    "filter": {
-      "status": "执行状态",
-      "triggerType": "触发方式",
-      "dateRange": "日期范围",
-      "sort": "排序方式",
-      "refresh": "刷新",
-      "reset": "重置筛选",
-      "startDate": "开始日期",
-      "endDate": "结束日期"
-    },
-    "sort": {
-      "newest": "最新优先",
-      "oldest": "最早优先"
-    },
-    "list": {
-      "title": "执行记录列表",
-      "count": "条",
-      "empty": "暂无执行记录",
-      "loading": "加载中...",
-      "loadMore": "加载更多"
-    },
-    "card": {
-      "taskName": "任务名称",
-      "executionTime": "执行时间",
-      "duration": "执行时长",
-      "successRate": "成功率",
-      "progress": "进度",
-      "status": "状态",
-      "triggerType": "触发方式",
-      "triggerSource": "触发源",
-      "viewDetails": "查看详情",
-      "clickToView": "点击查看详情"
-    },
-    "time": {
-      "startTime": "开始时间",
-      "endTime": "结束时间",
-      "duration": "执行时长",
-      "seconds": "秒",
-      "minutes": "分钟",
-      "hours": "小时",
-      "formatDuration": {
-        "seconds": "{{count}}秒",
-        "minutes": "{{minutes}}分{{seconds}}秒",
-        "hours": "{{hours}}小时{{minutes}}分"
-      }
-    },
-    "progress": {
-      "executed": "已执行",
-      "total": "总计",
-      "targets": "目标",
-      "format": "{{executed}}/{{total}}"
-    },
-    "pagination": {
-      "pageSize": "每页条数",
-      "showTotal": "第 {{start}}-{{end}} 条，共 {{total}} 条记录",
-      "jumpTo": "跳至",
-      "page": "页"
-    },
-    "debug": {
-      "originalData": "原始数据",
-      "currentData": "当前数据",
-      "filteredData": "筛选后数据",
-      "taskId": "任务ID",
-      "filterConditions": "筛选条件",
-      "status": "状态",
-      "trigger": "触发",
-      "search": "搜索"
-    },
-    "messages": {
-      "loadSuccess": "执行历史记录加载成功",
-      "loadError": "执行历史记录加载失败",
-      "refreshSuccess": "刷新成功",
-      "noData": "暂无数据",
-      "filterNoResult": "筛选条件下暂无结果"
-    },
-    "tooltip": {
-      "viewExecutionHistory": "查看执行历史记录",
-      "refresh": "刷新数据",
-      "filter": "筛选条件",
-      "search": "搜索",
-      "sort": "排序",
-      "dateRange": "选择日期范围"
-    }
-  },
   "inspection": {
     "title": "巡检任务",
     "subtitle": "管理系统巡检任务",
     "createTask": "创建巡检任务",
+    "editTask": "编辑巡检任务",
     "createTitle": "创建巡检任务",
     "editTitle": "编辑巡检任务",
+    "viewTask": "查看巡检任务",
+    "deleteTask": "删除巡检任务",
+    "runTask": "执行巡检任务",
     "refresh": "刷新",
     "stats": {
       "totalTasks": "总任务数",
-      "runningTasks": "运行中任务"
-    },
-    "status": {
-      "active": "活跃",
-      "paused": "暂停",
-      "draft": "草稿",
-      "failed": "失败"
-    },
-    "types": {
-      "healthCheck": "健康检查",
-      "performanceMonitor": "性能监控",
-      "securityScan": "安全扫描",
-      "logAnalysis": "日志分析"
-    },
-    "search": {
-      "placeholder": "搜索巡检任务名称、描述...",
-      "status": "状态",
-      "type": "类型",
-      "allStatuses": "所有状态",
-      "allTypes": "所有类型"
-    },
-    "card": {
-      "viewDetails": "查看详情",
-      "edit": "编辑",
-      "start": "启动",
-      "pause": "暂停",
-      "schedule": "调度",
-      "nextExecution": "下次执行",
-      "lastExecution": "最后执行",
-      "executionCount": "执行次数",
-      "successRate": "成功率",
-      "taskCollections": "任务集合"
-    },
-    "form": {
-      "name": "任务名称",
-      "namePlaceholder": "请输入任务名称",
-      "nameRequired": "请输入任务名称",
-      "description": "描述",
-      "descriptionPlaceholder": "请输入任务描述",
-      "descriptionRequired": "请输入任务描述"
-    },
-    "detail": {
-      "taskName": "任务名称",
-      "taskType": "任务类型",
-      "creator": "创建者",
-      "scheduleExpression": "调度表达式",
-      "timezone": "时区",
-      "timeout": "超时时间",
-      "retryCount": "重试次数",
-      "alertThreshold": "告警阈值",
-      "configParams": "配置参数",
-      "executionHistory": "执行历史",
-      "recentResults": "最近结果",
-      "executionStatus": "执行状态",
-      "executionCount": "执行次数",
-      "successRate": "成功率",
-      "avgDuration": "平均时长",
-      "nextExecution": "下次执行",
-      "startTime": "开始时间",
-      "endTime": "结束时间",
-      "executionDuration": "执行时长",
-      "checkpoints": "检查点",
-      "taskCollections": "任务集合",
-      "triggeredCollections": "触发的集合",
-      "noCollections": "暂无关联集合",
-      "seconds": "秒"
-    },
-    "messages": {
-      "createSuccess": "巡检任务创建成功",
-      "updateSuccess": "巡检任务更新成功",
-      "deleteSuccess": "巡检任务删除成功",
-      "startSuccess": "巡检任务启动成功",
-      "pauseSuccess": "巡检任务暂停成功"
-    },
-    "tips": {
-      "createHint": "创建巡检任务来自动监控系统状态"
-    }
-  },
-  "hooks": {
-    "title": "钩子任务",
-    "subtitle": "管理系统钩子任务",
-    "createHook": "创建钩子任务",
-    "createTitle": "创建钩子任务",
-    "editTitle": "编辑钩子任务",
-    "refresh": "刷新",
-    "stats": {
-      "totalHooks": "总钩子数",
-      "activeHooks": "活跃钩子",
+      "activeTasks": "活跃任务",
+      "runningTasks": "运行中任务",
+      "completedToday": "今日完成",
       "successRate": "成功率"
     },
     "status": {
       "active": "活跃",
       "inactive": "非活跃",
-      "error": "错误"
+      "completed": "已完成",
+      "failed": "失败",
+      "running": "运行中",
+      "paused": "已暂停",
+      "draft": "草稿"
     },
-    "types": {
-      "webhook": "Webhook",
-      "apiCall": "API调用",
-      "database": "数据库",
-      "messageQueue": "消息队列",
-      "script": "脚本"
-    },
-    "search": {
-      "placeholder": "搜索钩子任务名称、描述...",
-      "status": "状态",
-      "type": "类型",
-      "allStatuses": "所有状态",
-      "allTypes": "所有类型"
-    },
-    "card": {
-      "viewDetails": "查看详情",
-      "edit": "编辑",
-      "enable": "启用",
-      "disable": "禁用",
-      "creator": "创建者",
-      "triggerEvent": "触发事件",
-      "lastTriggered": "最后触发",
-      "triggerCount": "触发次数",
-      "successRate": "成功率",
-      "taskCollections": "任务集合"
+    "frequency": {
+      "once": "单次执行",
+      "daily": "每日",
+      "weekly": "每周",
+      "monthly": "每月",
+      "custom": "自定义"
     },
     "form": {
-      "name": "钩子名称",
-      "namePlaceholder": "请输入钩子名称",
-      "nameRequired": "请输入钩子名称",
-      "description": "描述",
-      "descriptionPlaceholder": "请输入钩子描述",
-      "descriptionRequired": "请输入钩子描述",
-      "type": "钩子类型",
-      "typePlaceholder": "请选择钩子类型",
-      "typeRequired": "请选择钩子类型",
-      "timeout": "超时时间",
+      "name": "任务名称",
+      "namePlaceholder": "请输入任务名称",
+      "nameRequired": "请输入任务名称",
+      "description": "任务描述",
+      "descriptionPlaceholder": "请输入任务描述",
+      "descriptionRequired": "请输入任务描述",
+      "schedule": "执行计划",
+      "schedulePlaceholder": "请选择执行频率",
+      "targets": "巡检目标",
+      "targetsPlaceholder": "请选择巡检目标",
+      "actions": "巡检操作",
+      "actionsPlaceholder": "请选择巡检操作",
+      "type": "任务类型",
+      "typePlaceholder": "请选择巡检类型",
+      "typeRequired": "请选择任务类型",
+      "timeout": "超时时间(秒)",
       "timeoutPlaceholder": "请输入超时时间",
-      "timeoutRequired": "请输入超时时间",
-      "retryDelay": "重试延迟",
-      "retryDelayPlaceholder": "请输入重试延迟",
-      "retryDelayRequired": "请输入重试延迟"
+      "timeoutRequired": "请设置超时时间",
+      "retryCount": "重试次数",
+      "retryCountPlaceholder": "请输入重试次数",
+      "retryCountRequired": "请设置重试次数",
+      "alertThreshold": "告警阈值(%)",
+      "alertThresholdPlaceholder": "请输入告警阈值",
+      "alertThresholdRequired": "请设置告警阈值"
     },
-    "modal": {
-      "hookName": "钩子名称",
-      "hookType": "钩子类型",
-      "triggerEvent": "触发事件",
-      "triggerConditions": "触发条件",
-      "triggerConfig": "触发配置",
-      "executionConfig": "执行配置",
-      "taskCollections": "任务集合",
-      "triggeredCollections": "触发的集合",
-      "noCollections": "暂无关联集合"
-    },
-    "detail": {
-      "targetUrl": "目标URL",
-      "httpMethod": "HTTP方法",
-      "authentication": "认证方式",
-      "securityConfig": "安全配置",
-      "encryption": "加密",
-      "ipWhitelist": "IP白名单",
-      "noRestriction": "无限制",
-      "retryDelay": "重试延迟",
-      "seconds": "秒",
-      "authTypes": {
-        "none": "无",
-        "basicAuth": "基础认证",
-        "bearerToken": "Bearer Token",
-        "apiKey": "API Key",
-        "oauth2": "OAuth 2.0",
-        "databaseCredentials": "数据库凭证"
-      }
-    },
-    "messages": {
-      "createSuccess": "钩子任务创建成功",
-      "updateSuccess": "钩子任务更新成功",
-      "deleteSuccess": "钩子任务删除成功"
+    "types": {
+      "health_check": "健康检查",
+      "performance_monitor": "性能监控",
+      "security_scan": "安全扫描",
+      "log_analysis": "日志分析"
     },
     "tips": {
-      "createHint": "创建钩子任务来响应系统事件"
+      "createHint": "巡检任务将定期执行指定的任务集合，并监控执行结果。请合理设置超时时间和重试次数。"
+    },
+    "detail": {
+      "taskName": "任务名称",
+      "taskType": "任务类型",
+      "description": "任务描述",
+      "schedule": "执行计划",
+      "timeout": "超时时间",
+      "retryCount": "重试次数",
+      "alertThreshold": "告警阈值",
+      "taskCollections": "关联任务集合",
+      "lastExecution": "最后执行",
+      "nextExecution": "下次执行",
+      "statistics": "统计信息",
+      "successRate": "成功率",
+      "executionCount": "执行次数",
+      "avgDuration": "平均时长",
+      "seconds": "秒",
+      "creator": "创建者",
+      "triggeredCollections": "触发的任务集合",
+      "noCollections": "暂无关联的任务集合",
+      "configParams": "配置参数",
+      "checkpoints": "检查点",
+      "executionHistory": "执行历史",
+      "scheduleExpression": "调度表达式",
+      "timezone": "时区",
+      "recentResults": "最近执行结果",
+      "startTime": "开始时间",
+      "endTime": "结束时间",
+      "executionStatus": "执行状态",
+      "executionDuration": "执行时长"
+    },
+    "card": {
+      "successRate": "成功率",
+      "executionCount": "执行次数",
+      "lastExecution": "最后执行",
+      "schedule": "调度",
+      "nextExecution": "下次执行",
+      "duration": "执行时长",
+      "status": "状态",
+      "taskCollections": "个任务集合",
+      "checkpoints": "检查点",
+      "timeout": "超时时间",
+      "retryCount": "重试次数",
+      "alertThreshold": "告警阈值",
+      "viewDetails": "查看详情",
+      "edit": "编辑",
+      "pause": "暂停",
+      "start": "启动"
+    },
+    "search": {
+      "placeholder": "搜索巡检任务名称、描述...",
+      "type": "任务类型",
+      "status": "任务状态",
+      "allTypes": "全部类型",
+      "allStatuses": "全部状态"
+    },
+    "messages": {
+      "createSuccess": "巡检任务创建成功",
+      "updateSuccess": "巡检任务更新成功",
+      "deleteSuccess": "巡检任务删除成功",
+      "runSuccess": "巡检任务执行成功",
+      "startSuccess": "巡检任务启动成功",
+      "pauseSuccess": "巡检任务暂停成功"
     }
   }
 }

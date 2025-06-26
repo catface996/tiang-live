@@ -33,6 +33,8 @@ import { setPageTitle } from '../../utils';
 import { ReportCard } from './components';
 import { useAppSelector } from '../../store';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
+import { getAllReports } from '../../services/reportService';
+import type { Report } from '../../types/report';
 
 const { Title, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
@@ -160,6 +162,7 @@ const ReportCardsContainer = styled.div`
 
 const ReportManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const [reportData, setReportData] = useState<Report[]>([]);
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -168,6 +171,24 @@ const ReportManagement: React.FC = () => {
   const { currentTheme } = useAppSelector((state) => state.theme);
   const { token } = theme.useToken();
   const isDark = currentTheme === 'dark';
+
+  useEffect(() => {
+    setPageTitle(t('reports:title'));
+    // 加载报告数据
+    const loadReports = async () => {
+      try {
+        setLoading(true);
+        const reports = await getAllReports();
+        setReportData(reports);
+      } catch (error) {
+        console.error('Failed to load reports:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadReports();
+  }, [t]);
 
   useEffect(() => {
     setPageTitle(t('report.title'));
@@ -181,105 +202,6 @@ const ReportManagement: React.FC = () => {
     performance: { name: t('reports:types.performance'), color: 'purple', icon: <FileTextOutlined /> }
   };
 
-  // 模拟报告数据
-  const reportData = [
-    {
-      key: '1',
-      name: '系统健康度分析报告',
-      type: t('reports:types.health'),
-      status: 'published',
-      author: '系统管理员',
-      createdAt: '2024-06-15 10:30:00',
-      lastModified: '2024-06-15 14:20:00',
-      size: '2.5MB',
-      downloads: 156,
-      description: '全面分析系统健康状况，包括服务可用性、性能指标、错误率等关键指标。通过多维度数据分析，为系统优化提供决策支持。'
-    },
-    {
-      key: '2',
-      name: '平面依赖关系分析报告',
-      type: t('reports:types.dependency'),
-      status: 'published',
-      author: '架构师团队',
-      createdAt: '2024-06-10 09:15:00',
-      lastModified: '2024-06-12 16:45:00',
-      size: '3.8MB',
-      downloads: 89,
-      description: '深入分析系统各平面之间的依赖关系，识别潜在的架构风险和优化机会。发现2个循环依赖问题需要重点关注。'
-    },
-    {
-      key: '3',
-      name: '性能基准测试报告',
-      type: t('reports:types.performance'),
-      status: 'published',
-      author: '性能测试团队',
-      createdAt: '2024-06-08 14:20:00',
-      lastModified: '2024-06-09 11:30:00',
-      size: '4.2MB',
-      downloads: 234,
-      description: '全面的系统性能基准测试报告，涵盖负载测试、压力测试、容量测试等多个维度。最大支持10000并发用户。'
-    },
-    {
-      key: '4',
-      name: '安全风险评估报告',
-      type: t('reports:types.security'),
-      status: 'draft',
-      author: '安全团队',
-      createdAt: '2024-06-12 16:00:00',
-      lastModified: '2024-06-14 10:15:00',
-      size: '1.8MB',
-      downloads: 45,
-      description: '系统安全风险全面评估报告，包括漏洞扫描、渗透测试、代码安全审计等。发现23个安全问题，其中高危2个。'
-    },
-    {
-      key: '5',
-      name: '用户行为分析报告',
-      type: t('reports:types.business'),
-      status: 'published',
-      author: '数据分析师',
-      createdAt: '2024-06-05 11:45:00',
-      lastModified: '2024-06-06 09:20:00',
-      size: '2.1MB',
-      downloads: 178,
-      description: '基于用户行为数据的深度分析，包括用户画像、行为路径、转化漏斗等。分析了过去3个月的用户行为模式。'
-    },
-    {
-      key: '6',
-      name: '数据库性能优化报告',
-      type: t('reports:types.performance'),
-      status: 'published',
-      author: 'DBA团队',
-      createdAt: '2024-06-03 15:30:00',
-      lastModified: '2024-06-04 13:15:00',
-      size: '3.2MB',
-      downloads: 92,
-      description: '数据库性能深度分析报告，包括慢查询优化、索引建议、存储优化等。识别出15个性能瓶颈点。'
-    },
-    {
-      key: '7',
-      name: '微服务架构评估报告',
-      type: t('reports:types.system'),
-      status: 'archived',
-      author: '架构师团队',
-      createdAt: '2024-05-28 10:00:00',
-      lastModified: '2024-05-30 16:30:00',
-      size: '5.1MB',
-      downloads: 67,
-      description: '微服务架构的全面评估报告，包括服务拆分合理性、通信效率、治理策略等。涵盖45个微服务的详细分析。'
-    },
-    {
-      key: '8',
-      name: '容器化部署分析报告',
-      type: t('reports:types.system'),
-      status: 'published',
-      author: '运维团队',
-      createdAt: '2024-06-01 14:15:00',
-      lastModified: '2024-06-02 10:45:00',
-      size: '2.8MB',
-      downloads: 134,
-      description: '容器化部署策略分析报告，包括资源利用率、扩缩容策略、监控告警等。Docker容器数量达到200+。'
-    }
-  ];
 
   const getStatusTag = (status: string) => {
     const statusMap = {
@@ -364,26 +286,26 @@ const ReportManagement: React.FC = () => {
   };
 
   // 处理报告操作
-  const handleViewReport = (report: any) => {
-    navigate(`/reports/${report.key}`);
+  const handleViewReport = (report: Report) => {
+    navigate(`/reports/${report.id}`);
   };
 
-  const handleEditReport = (report: any) => {
+  const handleEditReport = (report: Report) => {
     message.info(`编辑报告: ${report.name}`);
   };
 
-  const handleDownloadReport = (report: any) => {
+  const handleDownloadReport = (report: Report) => {
     message.success(`开始下载: ${report.name}`);
   };
 
-  const handleDeleteReport = (report: any) => {
+  const handleDeleteReport = (report: Report) => {
     message.warning(`删除报告: ${report.name}`);
   };
 
   // 渲染卡片视图
   const renderCardView = () => (
     reportData.map(report => (
-      <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={report.key}>
+      <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={report.id}>
         <ReportCard
           report={report}
           onView={handleViewReport}
