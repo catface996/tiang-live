@@ -116,6 +116,18 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
     loadDiagnosticReports();
   }, [loadDiagnosticReports]);
 
+  // 格式化数值，最多保留3位小数
+  const formatNumber = (value: number | string): string => {
+    const num = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(num)) return String(value);
+    
+    // 如果是整数，直接返回
+    if (num % 1 === 0) return String(num);
+    
+    // 保留最多3位小数，去掉末尾的0
+    return parseFloat(num.toFixed(3)).toString();
+  };
+
   // 获取健康度颜色
   const getHealthColor = (health: string) => {
     return diagnosticData.metricHealthLevels[health as keyof typeof diagnosticData.metricHealthLevels]?.color || '#d9d9d9';
@@ -238,7 +250,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
         <Col span={4}>
           <Statistic
             title="实际值"
-            value={metric.actualValue}
+            value={formatNumber(metric.actualValue)}
             suffix={metric.unit}
             valueStyle={{ fontSize: 16 }}
           />
@@ -265,9 +277,9 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
           <Progress
             type="circle"
             size={40}
-            percent={metric.healthScore}
+            percent={Math.round(metric.healthScore)}
             strokeColor={getHealthColor(metric.health)}
-            format={() => `${metric.healthScore}`}
+            format={() => formatNumber(metric.healthScore)}
           />
         </Col>
       </Row>
@@ -279,7 +291,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
             {metric.trend === 'up' ? '上升' : metric.trend === 'down' ? '下降' : '稳定'}
           </span>
           {metric.previousValue && (
-            <span>(上次: {metric.previousValue}{metric.unit})</span>
+            <span>(上次: {formatNumber(metric.previousValue)}{metric.unit})</span>
           )}
         </div>
       )}
@@ -300,7 +312,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
         <Col span={4}>
           <Statistic
             title="执行时长"
-            value={action.duration}
+            value={formatNumber(action.duration)}
             suffix="秒"
             valueStyle={{ fontSize: 14 }}
           />
@@ -317,9 +329,9 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
           <Progress
             type="circle"
             size={50}
-            percent={action.overallScore}
+            percent={Math.round(action.overallScore)}
             strokeColor={action.overallScore >= 90 ? '#52c41a' : action.overallScore >= 70 ? '#faad14' : '#ff4d4f'}
-            format={() => `${action.overallScore}`}
+            format={() => formatNumber(action.overallScore)}
           />
         </Col>
       </Row>
@@ -419,7 +431,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <TrophyOutlined style={{ color: '#faad14' }} />
                 <span style={{ fontSize: 14, fontWeight: 'bold' }}>
-                  {report.analysis.overallHealthScore}/100
+                  {formatNumber(report.analysis.overallHealthScore)}/100
                 </span>
               </div>
             </Tooltip>
@@ -443,7 +455,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
               <Col span={8}>
                 <Statistic
                   title="整体健康评分"
-                  value={report.analysis.overallHealthScore}
+                  value={formatNumber(report.analysis.overallHealthScore)}
                   suffix="/100"
                   valueStyle={{ 
                     fontSize: 32, 
@@ -463,7 +475,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
                 </div>
                 <div style={{ marginTop: 8 }}>
                   <Text strong>执行时长: </Text>
-                  <Text>{report.executionTime.totalDuration || 0}秒</Text>
+                  <Text>{formatNumber(report.executionTime.totalDuration || 0)}秒</Text>
                 </div>
               </Col>
               <Col span={8}>

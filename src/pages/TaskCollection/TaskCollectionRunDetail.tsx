@@ -585,7 +585,7 @@ const TaskCollectionRunDetail: React.FC = () => {
             <Space>
               <Badge 
                 status={runDetail?.status === 'running' ? 'processing' : 'success'} 
-                text={runDetail?.status === 'running' ? t('taskCollectionRunDetail:status.running') : t('taskCollectionRunDetail:status.completed')} 
+                text={runDetail?.status === 'running' ? t('taskCollectionRunDetail:runStatus.running') : t('taskCollectionRunDetail:runStatus.completed')} 
               />
               <Text type="secondary">{t('taskCollectionRunDetail:header.runId')}: {runId}</Text>
             </Space>
@@ -731,7 +731,7 @@ const TaskCollectionRunDetail: React.FC = () => {
                 {runDetail.startTime}
               </Descriptions.Item>
               <Descriptions.Item label={t('taskCollectionRunDetail:time.endTime')}>
-                {runDetail.endTime || t('taskCollectionRunDetail:status.running') + '...'}
+                {runDetail.endTime || t('taskCollectionRunDetail:runStatus.running') + '...'}
               </Descriptions.Item>
               <Descriptions.Item label={t('taskCollectionRunDetail:time.duration')}>
                 {runDetail.duration ? `${runDetail.duration}${t('common:unit.seconds')}` : t('common:loading')}
@@ -739,10 +739,10 @@ const TaskCollectionRunDetail: React.FC = () => {
               <Descriptions.Item label={t('taskCollectionRunDetail:creator')}>
                 {runDetail.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common:status')}>
+              <Descriptions.Item label={t('taskCollectionRunDetail:runStatus.title')}>
                 <Badge 
                   status={runDetail.status === 'running' ? 'processing' : 'success'} 
-                  text={runDetail.status === 'running' ? t('taskCollectionRunDetail:status.running') : t('taskCollectionRunDetail:status.completed')} 
+                  text={runDetail.status === 'running' ? t('taskCollectionRunDetail:runStatus.running') : t('taskCollectionRunDetail:runStatus.completed')} 
                 />
               </Descriptions.Item>
               <Descriptions.Item label={t('common:progress')}>

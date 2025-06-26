@@ -13,7 +13,8 @@
     "autoRefresh": "开启自动刷新",
     "stopAutoRefresh": "停止自动刷新"
   },
-  "status": {
+  "runStatus": {
+    "title": "状态",
     "running": "运行中",
     "completed": "已完成",
     "failed": "失败",

@@ -13,7 +13,8 @@
     "autoRefresh": "Enable Auto Refresh",
     "stopAutoRefresh": "Stop Auto Refresh"
   },
-  "status": {
+  "runStatus": {
+    "title": "Status",
     "running": "Running",
     "completed": "Completed",
     "failed": "Failed",
