@@ -8,9 +8,6 @@ import {
   Col,
   Badge,
   Tag,
-  Modal,
-  Descriptions,
-  Timeline,
   Select,
   Tooltip,
   Alert,
@@ -518,8 +515,6 @@ const TaskExecutionHistory: React.FC = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   
-  const [selectedExecution, setSelectedExecution] = useState<ExecutionRecord | null>(null);
-  const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [executionHistory, setExecutionHistory] = useState<ExecutionRecord[]>([]);
   
   // 筛选和搜索状态
@@ -600,10 +595,10 @@ const TaskExecutionHistory: React.FC = () => {
     setExecutionHistory(filteredHistory);
   };
 
-  // 查看执行详情
+  // 查看执行详情 - 导航到详情页面而不是弹窗
   const handleViewExecutionDetail = (execution: ExecutionRecord) => {
-    setSelectedExecution(execution);
-    setDetailModalVisible(true);
+    // 使用执行记录ID作为runId导航到详情页面
+    navigate(`/task-management/task-collections/run/${execution.id}`);
   };
 
   // 获取执行状态对应的Badge状态
@@ -885,108 +880,6 @@ const TaskExecutionHistory: React.FC = () => {
           }}
         />
       </ListContainer>
-
-      {/* 执行详情弹窗 */}
-      <Modal
-        title={
-          <Space>
-            <ThunderboltOutlined />
-            执行详情
-          </Space>
-        }
-        open={detailModalVisible}
-        onCancel={() => setDetailModalVisible(false)}
-        footer={null}
-        width={800}
-      >
-        {selectedExecution && (
-          <div>
-            <Descriptions column={2} bordered>
-              <Descriptions.Item label="任务集合">
-                {selectedExecution.taskCollectionName}
-              </Descriptions.Item>
-              <Descriptions.Item label="执行状态">
-                <Space>
-                  {getExecutionIcon(selectedExecution.status)}
-                  <Tag color={getExecutionBadgeStatus(selectedExecution.status)}>
-                    {getStatusText(selectedExecution.status)}
-                  </Tag>
-                </Space>
-              </Descriptions.Item>
-              <Descriptions.Item label="触发方式">
-                {(() => {
-                  const triggerInfo = getTriggerInfo(selectedExecution.triggerType, selectedExecution.triggerSource);
-                  return (
-                    <Tag color={triggerInfo.color} icon={triggerInfo.icon}>
-                      {triggerInfo.text}
-                    </Tag>
-                  );
-                })()}
-              </Descriptions.Item>
-              <Descriptions.Item label="开始时间">
-                {dayjs(selectedExecution.startTime).format('YYYY-MM-DD HH:mm:ss')}
-              </Descriptions.Item>
-              {selectedExecution.endTime && (
-                <Descriptions.Item label="结束时间">
-                  {dayjs(selectedExecution.endTime).format('YYYY-MM-DD HH:mm:ss')}
-                </Descriptions.Item>
-              )}
-              {selectedExecution.duration && (
-                <Descriptions.Item label="执行时长">
-                  {formatDuration(selectedExecution.duration)}
-                </Descriptions.Item>
-              )}
-              <Descriptions.Item label="执行进度">
-                {selectedExecution.executedTargets} / {selectedExecution.totalTargets}
-              </Descriptions.Item>
-              <Descriptions.Item label="成功率">
-                <Text style={{ color: selectedExecution.successRate >= 80 ? '#52c41a' : '#ff4d4f' }}>
-                  {selectedExecution.successRate}%
-                </Text>
-              </Descriptions.Item>
-            </Descriptions>
-
-            {selectedExecution.details && (
-              <div style={{ marginTop: 24 }}>
-                <Title level={5}>执行详情</Title>
-                <Timeline>
-                  {selectedExecution.details.targets.map(target => (
-                    <Timeline.Item
-                      key={target.id}
-                      dot={target.status === 'success' ? 
-                        <CheckCircleOutlined style={{ color: '#52c41a' }} /> :
-                        target.status === 'failed' ?
-                        <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} /> :
-                        <PlayCircleOutlined style={{ color: '#1890ff' }} />
-                      }
-                    >
-                      <div>
-                        <Text strong>{target.name}</Text>
-                        <Tag style={{ marginLeft: 8 }}>
-                          {target.type === 'entity' ? '实体' : '时序'}
-                        </Tag>
-                        <div style={{ marginTop: 8 }}>
-                          {target.actions.map(action => (
-                            <Tag
-                              key={action.id}
-                              color={action.status === 'success' ? 'green' : 
-                                     action.status === 'failed' ? 'red' : 'blue'}
-                              style={{ marginBottom: 4 }}
-                            >
-                              {action.name}
-                              {action.duration && ` (${action.duration}s)`}
-                            </Tag>
-                          ))}
-                        </div>
-                      </div>
-                    </Timeline.Item>
-                  ))}
-                </Timeline>
-              </div>
-            )}
-          </div>
-        )}
-      </Modal>
     </PageContainer>
   );
 };
