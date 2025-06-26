@@ -542,10 +542,14 @@ const TaskExecutionHistory: React.FC = () => {
     console.log('加载的执行历史记录总数:', mockExecutionHistoryData.length);
     console.log('过滤后的执行历史记录:', filteredHistory.length);
     console.log('当前taskId:', taskId);
+    console.log('模拟数据前3条:', mockExecutionHistoryData.slice(0, 3));
   }, [taskId]);
 
   // 筛选和搜索逻辑
   useEffect(() => {
+    console.log('筛选逻辑执行 - executionHistory长度:', executionHistory.length);
+    console.log('当前筛选条件:', { searchKeyword, statusFilter, triggerFilter, dateRange, sortOrder });
+    
     let filtered = [...executionHistory];
 
     // 关键词搜索
@@ -582,6 +586,8 @@ const TaskExecutionHistory: React.FC = () => {
       return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
     });
 
+    console.log('筛选后的记录数量:', filtered.length);
+    console.log('筛选后的前3条记录:', filtered.slice(0, 3));
     setFilteredHistory(filtered);
   }, [executionHistory, searchKeyword, statusFilter, triggerFilter, dateRange, sortOrder]);
 
@@ -736,6 +742,22 @@ const TaskExecutionHistory: React.FC = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* 调试信息面板 */}
+      <Alert 
+        message={
+          <div>
+            <div>📊 原始数据: {mockExecutionHistoryData.length} 条</div>
+            <div>📋 当前executionHistory: {executionHistory.length} 条</div>
+            <div>🔍 筛选后filteredHistory: {filteredHistory.length} 条</div>
+            <div>🎯 当前taskId: {taskId || '无'}</div>
+            <div>🔧 筛选条件: 状态={statusFilter}, 触发={triggerFilter}, 搜索="{searchKeyword}"</div>
+          </div>
+        }
+        type="info" 
+        style={{ marginBottom: 16 }}
+        showIcon
+      />
 
       {/* 搜索和筛选栏 */}
       <SearchFilterBar
