@@ -295,6 +295,12 @@ const TaskExecutionHistory: React.FC = () => {
       ? mockExecutionHistory.filter(record => record.taskCollectionId === taskId)
       : mockExecutionHistory;
     setExecutionHistory(filteredHistory);
+    
+    // 调试信息
+    console.log('生成的执行历史记录总数:', mockExecutionHistory.length);
+    console.log('过滤后的执行历史记录:', filteredHistory.length);
+    console.log('今天的日期:', dayjs().format('YYYY-MM-DD'));
+    console.log('今天的记录:', filteredHistory.filter(r => dayjs(r.startTime).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD')));
   }, [taskId]);
 
   // 获取指定日期的执行记录
@@ -316,64 +322,79 @@ const TaskExecutionHistory: React.FC = () => {
     return filtered;
   };
 
-  // 渲染日历单元格内容 - 显示具体时间和状态
-  const dateCellRender = (current: Dayjs) => {
+  // 渲染日历单元格内容 - 适配cellRender API
+  const dateCellRender = (current: Dayjs, info: any) => {
+    // 只处理日期类型的单元格
+    if (info.type !== 'date') {
+      return info.originNode;
+    }
+
     const executions = getExecutionsForDate(current);
-    if (executions.length === 0) return null;
+    if (executions.length === 0) {
+      return (
+        <div className="ant-picker-cell-inner ant-picker-calendar-date">
+          <div className="ant-picker-calendar-date-value">{current.date()}</div>
+        </div>
+      );
+    }
+
+    console.log(`日期 ${current.format('YYYY-MM-DD')} 的执行记录:`, executions);
 
     return (
-      <ul style={{ 
-        listStyle: 'none', 
-        padding: 0, 
-        margin: 0,
-        fontSize: '10px'
-      }}>
-        {executions.slice(0, 3).map(execution => {
-          const time = dayjs(execution.startTime).format('HH:mm');
-          const statusText = getStatusText(execution.status);
-          const statusColor = getExecutionBadgeColor(execution.status);
-          
-          return (
-            <li
-              key={execution.id}
-              style={{ 
-                marginBottom: '2px',
-                cursor: 'pointer',
-                padding: '2px 4px',
-                borderRadius: '3px',
-                backgroundColor: statusColor,
-                color: 'white',
-                overflow: 'hidden',
-                fontSize: '9px',
-                lineHeight: '1.2',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleViewExecutionDetail(execution);
-              }}
-              title={`${time} - ${execution.taskCollectionName} (${statusText})`}
-            >
-              <span style={{ fontWeight: 'bold' }}>{time}</span>
-              <span style={{ fontSize: '8px' }}>{statusText}</span>
-            </li>
-          );
-        })}
-        {executions.length > 3 && (
-          <li style={{ 
-            fontSize: '8px', 
-            color: '#999', 
-            textAlign: 'center',
-            padding: '1px',
-            backgroundColor: '#f0f0f0',
-            borderRadius: '2px'
-          }}>
-            +{executions.length - 3}条
-          </li>
-        )}
-      </ul>
+      <div className="ant-picker-cell-inner ant-picker-calendar-date">
+        <div className="ant-picker-calendar-date-value">{current.date()}</div>
+        <div className="ant-picker-calendar-date-content" style={{ 
+          fontSize: '10px',
+          lineHeight: '1.2',
+          marginTop: '2px'
+        }}>
+          {executions.slice(0, 2).map(execution => {
+            const time = dayjs(execution.startTime).format('HH:mm');
+            const statusText = getStatusText(execution.status);
+            const statusColor = getExecutionBadgeColor(execution.status);
+            
+            return (
+              <div
+                key={execution.id}
+                style={{ 
+                  marginBottom: '1px',
+                  cursor: 'pointer',
+                  padding: '1px 2px',
+                  borderRadius: '2px',
+                  backgroundColor: statusColor,
+                  color: 'white',
+                  fontSize: '8px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  minHeight: '10px'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleViewExecutionDetail(execution);
+                }}
+                title={`${time} - ${execution.taskCollectionName} (${statusText})`}
+              >
+                <span style={{ fontWeight: 'bold' }}>{time}</span>
+                <span>{statusText}</span>
+              </div>
+            );
+          })}
+          {executions.length > 2 && (
+            <div style={{ 
+              fontSize: '7px', 
+              color: '#666', 
+              textAlign: 'center',
+              padding: '1px',
+              backgroundColor: '#f5f5f5',
+              borderRadius: '2px',
+              marginTop: '1px'
+            }}>
+              +{executions.length - 2}
+            </div>
+          )}
+        </div>
+      </div>
     );
   };
 
@@ -665,7 +686,7 @@ const TaskExecutionHistory: React.FC = () => {
         <Calendar
           value={selectedDate}
           onSelect={setSelectedDate}
-          dateCellRender={dateCellRender}
+          cellRender={dateCellRender}
         />
         
         {/* 选中日期的执行记录 */}
