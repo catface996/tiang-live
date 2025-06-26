@@ -6,7 +6,6 @@ import {
   Button, 
   Row, 
   Col,
-  Calendar,
   Badge,
   Tag,
   Modal,
@@ -16,10 +15,12 @@ import {
   Tooltip,
   Alert,
   Divider,
-  Breadcrumb
+  Breadcrumb,
+  List,
+  DatePicker,
+  Input
 } from 'antd';
 import { 
-  CalendarOutlined,
   ClockCircleOutlined,
   PlayCircleOutlined,
   CheckCircleOutlined,
@@ -29,7 +30,10 @@ import {
   ApiOutlined,
   ThunderboltOutlined,
   HistoryOutlined,
-  UnorderedListOutlined
+  UnorderedListOutlined,
+  SearchOutlined,
+  FilterOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -40,6 +44,8 @@ import { setPageTitle } from '../../utils';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+const { RangePicker } = DatePicker;
+const { Search } = Input;
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -47,18 +53,19 @@ const PageContainer = styled.div`
   min-height: 100vh;
 `;
 
-const CalendarContainer = styled.div`
+const ListContainer = styled.div`
   background: white;
   border-radius: 8px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const ExecutionBadge = styled(Badge)`
-  .ant-badge-dot {
-    width: 8px;
-    height: 8px;
-  }
+const FilterContainer = styled.div`
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const ExecutionCard = styled(Card)`
@@ -282,11 +289,17 @@ const TaskExecutionHistory: React.FC = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   
-  const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
-  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
   const [selectedExecution, setSelectedExecution] = useState<ExecutionRecord | null>(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [executionHistory, setExecutionHistory] = useState<ExecutionRecord[]>([]);
+  
+  // 筛选和搜索状态
+  const [filteredHistory, setFilteredHistory] = useState<ExecutionRecord[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [triggerFilter, setTriggerFilter] = useState<string>('all');
+  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
     setPageTitle('任务执行历史记录');
@@ -299,130 +312,53 @@ const TaskExecutionHistory: React.FC = () => {
     // 调试信息
     console.log('生成的执行历史记录总数:', mockExecutionHistory.length);
     console.log('过滤后的执行历史记录:', filteredHistory.length);
-    console.log('今天的日期:', dayjs().format('YYYY-MM-DD'));
-    console.log('今天的记录:', filteredHistory.filter(r => dayjs(r.startTime).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD')));
   }, [taskId]);
 
-  // 获取指定日期的执行记录
-  const getExecutionsForDate = (date: Dayjs) => {
-    const dateStr = date.format('YYYY-MM-DD');
-    const filtered = executionHistory.filter(record => {
-      const recordDate = dayjs(record.startTime).format('YYYY-MM-DD');
-      return recordDate === dateStr;
-    });
-    
-    // 调试信息
-    if (dateStr === dayjs().format('YYYY-MM-DD')) {
-      console.log('今天的日期:', dateStr);
-      console.log('执行历史总数:', executionHistory.length);
-      console.log('今天的执行记录:', filtered);
-      console.log('所有记录的日期:', executionHistory.map(r => dayjs(r.startTime).format('YYYY-MM-DD')));
-    }
-    
-    return filtered;
-  };
+  // 筛选和搜索逻辑
+  useEffect(() => {
+    let filtered = [...executionHistory];
 
-  // 渲染日历单元格内容 - 适配cellRender API
-  const dateCellRender = (current: Dayjs, info: any) => {
-    // 只处理日期类型的单元格
-    if (info.type !== 'date') {
-      return info.originNode;
+    // 状态筛选
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(record => record.status === statusFilter);
     }
 
-    const executions = getExecutionsForDate(current);
-    if (executions.length === 0) {
-      return (
-        <div className="ant-picker-cell-inner ant-picker-calendar-date">
-          <div className="ant-picker-calendar-date-value">{current.date()}</div>
-        </div>
+    // 触发方式筛选
+    if (triggerFilter !== 'all') {
+      filtered = filtered.filter(record => record.triggerType === triggerFilter);
+    }
+
+    // 日期范围筛选
+    if (dateRange && dateRange[0] && dateRange[1]) {
+      filtered = filtered.filter(record => {
+        const recordDate = dayjs(record.startTime);
+        return recordDate.isAfter(dateRange[0]?.startOf('day')) && 
+               recordDate.isBefore(dateRange[1]?.endOf('day'));
+      });
+    }
+
+    // 关键词搜索
+    if (searchKeyword) {
+      filtered = filtered.filter(record => 
+        record.taskCollectionName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        record.triggerSource?.toLowerCase().includes(searchKeyword.toLowerCase())
       );
     }
 
-    console.log(`日期 ${current.format('YYYY-MM-DD')} 的执行记录:`, executions);
+    // 排序
+    filtered.sort((a, b) => {
+      const timeA = dayjs(a.startTime).unix();
+      const timeB = dayjs(b.startTime).unix();
+      return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
+    });
 
-    return (
-      <div className="ant-picker-cell-inner ant-picker-calendar-date">
-        <div className="ant-picker-calendar-date-value">{current.date()}</div>
-        <div className="ant-picker-calendar-date-content" style={{ 
-          fontSize: '10px',
-          lineHeight: '1.2',
-          marginTop: '2px'
-        }}>
-          {executions.slice(0, 2).map(execution => {
-            const time = dayjs(execution.startTime).format('HH:mm');
-            const statusText = getStatusText(execution.status);
-            const statusColor = getExecutionBadgeColor(execution.status);
-            
-            return (
-              <div
-                key={execution.id}
-                style={{ 
-                  marginBottom: '1px',
-                  cursor: 'pointer',
-                  padding: '1px 2px',
-                  borderRadius: '2px',
-                  backgroundColor: statusColor,
-                  color: 'white',
-                  fontSize: '8px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  minHeight: '10px'
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleViewExecutionDetail(execution);
-                }}
-                title={`${time} - ${execution.taskCollectionName} (${statusText})`}
-              >
-                <span style={{ fontWeight: 'bold' }}>{time}</span>
-                <span>{statusText}</span>
-              </div>
-            );
-          })}
-          {executions.length > 2 && (
-            <div style={{ 
-              fontSize: '7px', 
-              color: '#666', 
-              textAlign: 'center',
-              padding: '1px',
-              backgroundColor: '#f5f5f5',
-              borderRadius: '2px',
-              marginTop: '1px'
-            }}>
-              +{executions.length - 2}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
+    setFilteredHistory(filtered);
+  }, [executionHistory, statusFilter, triggerFilter, dateRange, searchKeyword, sortOrder]);
 
-  // 获取状态文本
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed': return '已完成';
-      case 'running': return '执行中';
-      case 'scheduled': return '未执行';
-      case 'failed': return '失败';
-      default: return '未知';
-    }
-  };
-
-  // 获取执行状态对应的颜色
-  const getExecutionBadgeColor = (status: string) => {
-    switch (status) {
-      case 'completed': return '#52c41a';
-      case 'running': return '#1890ff';
-      case 'scheduled': return '#faad14';
-      case 'failed': return '#ff4d4f';
-      default: return '#d9d9d9';
-    }
-  };
-
-  // 获取触发类型图标
-  const getTriggerIcon = (triggerType: string) => {
-    return triggerType === 'cron' ? '⏰' : '🔗';
+  // 查看执行详情
+  const handleViewExecutionDetail = (execution: ExecutionRecord) => {
+    setSelectedExecution(execution);
+    setDetailModalVisible(true);
   };
 
   // 获取执行状态对应的Badge状态
@@ -464,10 +400,15 @@ const TaskExecutionHistory: React.FC = () => {
     }
   };
 
-  // 查看执行详情
-  const handleViewExecutionDetail = (execution: ExecutionRecord) => {
-    setSelectedExecution(execution);
-    setDetailModalVisible(true);
+  // 获取状态文本
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'completed': return '已完成';
+      case 'running': return '执行中';
+      case 'scheduled': return '未执行';
+      case 'failed': return '失败';
+      default: return '未知';
+    }
   };
 
   // 格式化持续时间
@@ -475,81 +416,6 @@ const TaskExecutionHistory: React.FC = () => {
     if (seconds < 60) return `${seconds}秒`;
     if (seconds < 3600) return `${Math.floor(seconds / 60)}分${seconds % 60}秒`;
     return `${Math.floor(seconds / 3600)}小时${Math.floor((seconds % 3600) / 60)}分`;
-  };
-
-  // 渲染日期选择的执行记录列表
-  const renderExecutionList = (date: Dayjs) => {
-    const executions = getExecutionsForDate(date);
-    if (executions.length === 0) {
-      return (
-        <Alert
-          message={`${date.format('YYYY年MM月DD日')} 无执行记录`}
-          type="info"
-          showIcon
-          style={{ margin: '16px 0' }}
-        />
-      );
-    }
-
-    // 按时间排序
-    const sortedExecutions = executions.sort((a, b) => 
-      dayjs(a.startTime).unix() - dayjs(b.startTime).unix()
-    );
-
-    return (
-      <div style={{ margin: '16px 0' }}>
-        <Title level={5}>
-          {date.format('YYYY年MM月DD日')} 执行记录 ({executions.length}条)
-        </Title>
-        {sortedExecutions.map(execution => {
-          const triggerInfo = getTriggerInfo(execution.triggerType, execution.triggerSource);
-          const time = dayjs(execution.startTime).format('HH:mm:ss');
-          const statusText = getStatusText(execution.status);
-          
-          return (
-            <ExecutionCard
-              key={execution.id}
-              className={execution.status}
-              size="small"
-              hoverable
-              onClick={() => handleViewExecutionDetail(execution)}
-            >
-              <Row align="middle" justify="space-between">
-                <Col flex="auto">
-                  <Space direction="vertical" size={4}>
-                    <Space>
-                      {getExecutionIcon(execution.status)}
-                      <Text strong>{execution.taskCollectionName}</Text>
-                      <Tag color={triggerInfo.color} icon={triggerInfo.icon}>
-                        {triggerInfo.text}
-                      </Tag>
-                    </Space>
-                    <Space size={16}>
-                      <Text type="secondary">
-                        <ClockCircleOutlined /> {time}
-                      </Text>
-                      {execution.duration && (
-                        <Text type="secondary">
-                          <HistoryOutlined /> {formatDuration(execution.duration)}
-                        </Text>
-                      )}
-                      <Text type="secondary">
-                        成功率: {execution.successRate}%
-                      </Text>
-                    </Space>
-                  </Space>
-                </Col>
-                <Col>
-                  <Tag color={getExecutionBadgeStatus(execution.status)}>
-                    {statusText}
-                  </Tag>
-                </Col>
-              </Row>
-            </ExecutionCard>
-          );
-        })}
-      </div>
-    );
   };
 
   return (
@@ -575,7 +441,7 @@ const TaskExecutionHistory: React.FC = () => {
           </span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <CalendarOutlined />
+          <UnorderedListOutlined />
           执行历史记录
         </Breadcrumb.Item>
       </Breadcrumb>
@@ -583,7 +449,7 @@ const TaskExecutionHistory: React.FC = () => {
       {/* 页面头部 */}
       <div style={{ marginBottom: 24 }}>
         <Title level={2} style={{ margin: 0 }}>
-          <CalendarOutlined style={{ marginRight: 8, color: '#1890ff' }} />
+          <UnorderedListOutlined style={{ marginRight: 8, color: '#1890ff' }} />
           任务执行历史记录
         </Title>
       </div>
@@ -632,66 +498,158 @@ const TaskExecutionHistory: React.FC = () => {
         </Col>
       </Row>
 
-      {/* 月度统计 */}
-      <Card style={{ marginBottom: 24 }}>
-        <Title level={5}>月度执行统计</Title>
-        <Row gutter={16}>
-          {Array.from({ length: 12 }, (_, i) => {
-            const month = i;
-            const monthName = dayjs().month(month).format('MM月');
-            const monthRecords = executionHistory.filter(r => dayjs(r.startTime).month() === month);
-            return (
-              <Col xs={12} sm={8} md={6} lg={4} xl={2} key={month}>
-                <div style={{ textAlign: 'center', padding: '8px' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 'bold', color: monthRecords.length > 0 ? '#1890ff' : '#d9d9d9' }}>
-                    {monthRecords.length}
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#666' }}>{monthName}</div>
-                </div>
-              </Col>
-            );
-          })}
+      {/* 筛选器 */}
+      <FilterContainer>
+        <Row gutter={16} align="middle">
+          <Col xs={24} sm={6}>
+            <Space>
+              <FilterOutlined />
+              <Text strong>筛选条件:</Text>
+            </Space>
+          </Col>
+          <Col xs={24} sm={4}>
+            <Select
+              value={statusFilter}
+              onChange={setStatusFilter}
+              style={{ width: '100%' }}
+              placeholder="执行状态"
+            >
+              <Option value="all">全部状态</Option>
+              <Option value="completed">已完成</Option>
+              <Option value="running">执行中</Option>
+              <Option value="scheduled">计划中</Option>
+              <Option value="failed">失败</Option>
+            </Select>
+          </Col>
+          <Col xs={24} sm={4}>
+            <Select
+              value={triggerFilter}
+              onChange={setTriggerFilter}
+              style={{ width: '100%' }}
+              placeholder="触发方式"
+            >
+              <Option value="all">全部方式</Option>
+              <Option value="cron">定时任务</Option>
+              <Option value="hook">Hook触发</Option>
+            </Select>
+          </Col>
+          <Col xs={24} sm={6}>
+            <RangePicker
+              value={dateRange}
+              onChange={setDateRange}
+              style={{ width: '100%' }}
+              placeholder={['开始日期', '结束日期']}
+            />
+          </Col>
+          <Col xs={24} sm={4}>
+            <Search
+              placeholder="搜索任务名称"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              style={{ width: '100%' }}
+            />
+          </Col>
         </Row>
-      </Card>
+        <Row style={{ marginTop: 12 }}>
+          <Col>
+            <Space>
+              <Text type="secondary">排序:</Text>
+              <Select
+                value={sortOrder}
+                onChange={setSortOrder}
+                style={{ width: 120 }}
+              >
+                <Option value="desc">最新优先</Option>
+                <Option value="asc">最早优先</Option>
+              </Select>
+              <Button 
+                type="link" 
+                size="small"
+                onClick={() => {
+                  setStatusFilter('all');
+                  setTriggerFilter('all');
+                  setDateRange(null);
+                  setSearchKeyword('');
+                  setSortOrder('desc');
+                }}
+              >
+                重置筛选
+              </Button>
+            </Space>
+          </Col>
+        </Row>
+      </FilterContainer>
 
-      {/* 日历视图 */}
-      <CalendarContainer>
+      {/* 执行记录列表 */}
+      <ListContainer>
         <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Title level={4} style={{ margin: 0 }}>执行历史日历</Title>
-          <Select
-            value={viewMode}
-            onChange={setViewMode}
-            style={{ width: 120 }}
-          >
-            <Option value="week">本周视图</Option>
-            <Option value="month">月视图</Option>
-          </Select>
+          <Title level={4} style={{ margin: 0 }}>
+            执行记录列表 ({filteredHistory.length}条)
+          </Title>
         </div>
         
-        {/* 调试信息 */}
-        <Alert 
-          message={
-            <div>
-              <div>当前加载了 {executionHistory.length} 条执行记录</div>
-              <div>今天 ({dayjs().format('YYYY-MM-DD')}) 的记录: {getExecutionsForDate(dayjs()).length} 条</div>
-              <div>今天的执行时间: {getExecutionsForDate(dayjs()).map(e => dayjs(e.startTime).format('HH:mm')).join(', ')}</div>
-              <div>本月记录总数: {executionHistory.filter(r => dayjs(r.startTime).month() === dayjs().month()).length} 条</div>
-            </div>
-          }
-          type="info" 
-          style={{ marginBottom: 16 }}
-          showIcon
+        <List
+          dataSource={filteredHistory}
+          renderItem={(execution) => {
+            const triggerInfo = getTriggerInfo(execution.triggerType, execution.triggerSource);
+            const time = dayjs(execution.startTime).format('YYYY-MM-DD HH:mm:ss');
+            const statusText = getStatusText(execution.status);
+            
+            return (
+              <List.Item style={{ padding: 0, marginBottom: 8 }}>
+                <ExecutionCard
+                  className={execution.status}
+                  size="small"
+                  hoverable
+                  onClick={() => handleViewExecutionDetail(execution)}
+                  style={{ width: '100%' }}
+                >
+                  <Row align="middle" justify="space-between">
+                    <Col flex="auto">
+                      <Space direction="vertical" size={4}>
+                        <Space>
+                          {getExecutionIcon(execution.status)}
+                          <Text strong>{execution.taskCollectionName}</Text>
+                          <Tag color={triggerInfo.color} icon={triggerInfo.icon}>
+                            {triggerInfo.text}
+                          </Tag>
+                        </Space>
+                        <Space size={16}>
+                          <Text type="secondary">
+                            <ClockCircleOutlined /> {time}
+                          </Text>
+                          {execution.duration && (
+                            <Text type="secondary">
+                              <HistoryOutlined /> {formatDuration(execution.duration)}
+                            </Text>
+                          )}
+                          <Text type="secondary">
+                            成功率: {execution.successRate}%
+                          </Text>
+                          <Text type="secondary">
+                            进度: {execution.executedTargets}/{execution.totalTargets}
+                          </Text>
+                        </Space>
+                      </Space>
+                    </Col>
+                    <Col>
+                      <Tag color={getExecutionBadgeStatus(execution.status)}>
+                        {statusText}
+                      </Tag>
+                    </Col>
+                  </Row>
+                </ExecutionCard>
+              </List.Item>
+            );
+          }}
+          pagination={{
+            pageSize: 20,
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
+          }}
         />
-        
-        <Calendar
-          value={selectedDate}
-          onSelect={setSelectedDate}
-          cellRender={dateCellRender}
-        />
-        
-        {/* 选中日期的执行记录 */}
-        {renderExecutionList(selectedDate)}
-      </CalendarContainer>
+      </ListContainer>
 
       {/* 执行详情弹窗 */}
       <Modal
@@ -716,10 +674,7 @@ const TaskExecutionHistory: React.FC = () => {
                 <Space>
                   {getExecutionIcon(selectedExecution.status)}
                   <Tag color={getExecutionBadgeStatus(selectedExecution.status)}>
-                    {selectedExecution.status === 'completed' && '已完成'}
-                    {selectedExecution.status === 'running' && '执行中'}
-                    {selectedExecution.status === 'scheduled' && '计划中'}
-                    {selectedExecution.status === 'failed' && '失败'}
+                    {getStatusText(selectedExecution.status)}
                   </Tag>
                 </Space>
               </Descriptions.Item>
