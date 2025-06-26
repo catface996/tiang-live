@@ -887,7 +887,13 @@ const TaskExecutionHistory: React.FC = () => {
             pageSize: 20,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
+            showTotal: (total, range) => 
+              t('tasks:executionHistory.pagination.showTotal', {
+                start: range[0],
+                end: range[1],
+                total: total
+              }),
+            pageSizeOptions: ['10', '20', '50', '100']
           }}
         />
       </ListContainer>
