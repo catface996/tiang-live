@@ -112,7 +112,7 @@ interface ExecutionRecord {
 const mockExecutionHistoryData: ExecutionRecord[] = [
   {
     id: "exec_001",
-    taskCollectionId: "task_001",
+    taskCollectionId: "1",
     taskCollectionName: "核心业务系统健康检查",
     status: "completed",
     triggerType: "cron",
@@ -150,7 +150,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_002",
-    taskCollectionId: "task_002",
+    taskCollectionId: "2",
     taskCollectionName: "数据库性能监控",
     status: "running",
     triggerType: "hook",
@@ -165,7 +165,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_003",
-    taskCollectionId: "task_003",
+    taskCollectionId: "3",
     taskCollectionName: "安全扫描任务",
     status: "scheduled",
     triggerType: "cron",
@@ -180,7 +180,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_004",
-    taskCollectionId: "task_001",
+    taskCollectionId: "1",
     taskCollectionName: "核心业务系统健康检查",
     status: "failed",
     triggerType: "cron",
@@ -212,7 +212,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_005",
-    taskCollectionId: "task_004",
+    taskCollectionId: "4",
     taskCollectionName: "网络安全巡检",
     status: "completed",
     triggerType: "hook",
@@ -244,7 +244,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_006",
-    taskCollectionId: "task_002",
+    taskCollectionId: "2",
     taskCollectionName: "数据库性能监控",
     status: "completed",
     triggerType: "cron",
@@ -276,7 +276,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_007",
-    taskCollectionId: "task_005",
+    taskCollectionId: "5",
     taskCollectionName: "备份验证任务",
     status: "completed",
     triggerType: "cron",
@@ -308,7 +308,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_008",
-    taskCollectionId: "task_006",
+    taskCollectionId: "6",
     taskCollectionName: "日志分析任务",
     status: "failed",
     triggerType: "hook",
@@ -340,7 +340,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_009",
-    taskCollectionId: "task_007",
+    taskCollectionId: "7",
     taskCollectionName: "容器健康检查",
     status: "completed",
     triggerType: "cron",
@@ -372,7 +372,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_010",
-    taskCollectionId: "task_008",
+    taskCollectionId: "8",
     taskCollectionName: "API接口监控",
     status: "running",
     triggerType: "hook",
@@ -387,7 +387,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_011",
-    taskCollectionId: "task_001",
+    taskCollectionId: "1",
     taskCollectionName: "核心业务系统健康检查",
     status: "scheduled",
     triggerType: "cron",
@@ -402,7 +402,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_012",
-    taskCollectionId: "task_003",
+    taskCollectionId: "3",
     taskCollectionName: "安全扫描任务",
     status: "completed",
     triggerType: "hook",
@@ -434,7 +434,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_013",
-    taskCollectionId: "task_004",
+    taskCollectionId: "4",
     taskCollectionName: "网络安全巡检",
     status: "failed",
     triggerType: "cron",
@@ -466,7 +466,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_014",
-    taskCollectionId: "task_005",
+    taskCollectionId: "5",
     taskCollectionName: "备份验证任务",
     status: "scheduled",
     triggerType: "cron",
@@ -481,7 +481,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
   },
   {
     id: "exec_015",
-    taskCollectionId: "task_006",
+    taskCollectionId: "6",
     taskCollectionName: "日志分析任务",
     status: "completed",
     triggerType: "hook",

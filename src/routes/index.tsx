@@ -108,6 +108,11 @@ const AppRoutes: React.FC = () => {
             <TaskExecutionHistory />
           </Suspense>
         } />
+        <Route path="task-management/task-collections/history" element={
+          <Suspense fallback={<PageLoading />}>
+            <TaskExecutionHistory />
+          </Suspense>
+        } />
         <Route path="task-management/inspection-tasks" element={
           <Suspense fallback={<PageLoading />}>
             <InspectionTasks />
