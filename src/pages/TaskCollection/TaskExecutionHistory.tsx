@@ -17,8 +17,7 @@ import {
   Divider,
   Breadcrumb,
   List,
-  DatePicker,
-  Input
+  DatePicker
 } from 'antd';
 import { 
   ClockCircleOutlined,
@@ -31,9 +30,7 @@ import {
   ThunderboltOutlined,
   HistoryOutlined,
   UnorderedListOutlined,
-  SearchOutlined,
-  FilterOutlined,
-  CalendarOutlined
+  ReloadOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -41,11 +38,12 @@ import styled from 'styled-components';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import { setPageTitle } from '../../utils';
+import { SearchFilterBar } from '../../components/Common';
+import executionHistoryData from '../../data/executionHistory.json';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const { Search } = Input;
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -57,14 +55,6 @@ const ListContainer = styled.div`
   background: white;
   border-radius: 8px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const FilterContainer = styled.div`
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
@@ -96,10 +86,10 @@ interface ExecutionRecord {
   taskCollectionName: string;
   status: 'completed' | 'running' | 'scheduled' | 'failed';
   triggerType: 'cron' | 'hook';
-  triggerSource?: string;
+  triggerSource?: string | null;
   startTime: string;
-  endTime?: string;
-  duration?: number;
+  endTime?: string | null;
+  duration?: number | null;
   executedTargets: number;
   totalTargets: number;
   successRate: number;
@@ -116,173 +106,8 @@ interface ExecutionRecord {
         duration?: number;
       }>;
     }>;
-  };
+  } | null;
 }
-
-// 生成全年12个月的模拟执行历史数据
-const generateYearlyExecutionHistory = (): ExecutionRecord[] => {
-  const records: ExecutionRecord[] = [];
-  const currentYear = dayjs().year();
-  
-  // 任务集合模板
-  const taskTemplates = [
-    { id: 'task_001', name: '核心业务系统健康检查' },
-    { id: 'task_002', name: '数据库性能监控' },
-    { id: 'task_003', name: '安全扫描任务' },
-    { id: 'task_004', name: '网络安全巡检' },
-    { id: 'task_005', name: '备份验证任务' },
-    { id: 'task_006', name: '日志分析任务' },
-    { id: 'task_007', name: '容器健康检查' },
-    { id: 'task_008', name: 'API接口监控' }
-  ];
-
-  const statuses: Array<'completed' | 'running' | 'scheduled' | 'failed'> = ['completed', 'running', 'scheduled', 'failed'];
-  const triggerTypes: Array<'cron' | 'hook'> = ['cron', 'hook'];
-  const triggerSources = ['API调用', 'Webhook触发', '监控告警触发', '手动触发'];
-
-  let recordId = 1;
-
-  // 为每个月生成数据
-  for (let month = 0; month < 12; month++) {
-    const daysInMonth = dayjs().year(currentYear).month(month).daysInMonth();
-    
-    // 为每个月的每一天生成1-3条记录
-    for (let day = 1; day <= daysInMonth; day++) {
-      // 30%的天数有执行记录
-      if (Math.random() > 0.7) continue;
-      
-      const recordsPerDay = Math.floor(Math.random() * 3) + 1; // 1-3条记录
-      
-      for (let i = 0; i < recordsPerDay; i++) {
-        const task = taskTemplates[Math.floor(Math.random() * taskTemplates.length)];
-        const triggerType = triggerTypes[Math.floor(Math.random() * triggerTypes.length)];
-        
-        // 生成具体的执行时间
-        const hour = Math.floor(Math.random() * 24);
-        const minute = Math.floor(Math.random() * 60);
-        
-        const startTime = dayjs().year(currentYear).month(month).date(day).hour(hour).minute(minute).second(0);
-        const now = dayjs();
-        
-        // 根据时间确定状态
-        let status: 'completed' | 'running' | 'scheduled' | 'failed';
-        if (startTime.isAfter(now)) {
-          status = 'scheduled'; // 未来时间为计划任务
-        } else if (startTime.isSame(now, 'day') && startTime.isAfter(now.subtract(2, 'hour'))) {
-          status = Math.random() > 0.5 ? 'running' : 'completed'; // 最近2小时可能正在执行
-        } else {
-          status = Math.random() > 0.8 ? 'failed' : 'completed'; // 历史任务80%成功
-        }
-        
-        // 根据状态生成不同的数据
-        let endTime: string | undefined;
-        let duration: number | undefined;
-        let executedTargets = Math.floor(Math.random() * 8) + 1;
-        let totalTargets = Math.floor(Math.random() * 4) + executedTargets;
-        let successRate = Math.floor(Math.random() * 40) + 60; // 60-100%
-
-        if (status === 'completed') {
-          duration = Math.floor(Math.random() * 3600) + 300; // 5分钟到1小时
-          endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
-          successRate = Math.floor(Math.random() * 30) + 70; // 70-100%
-        } else if (status === 'failed') {
-          duration = Math.floor(Math.random() * 1800) + 180; // 3分钟到30分钟
-          endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
-          successRate = Math.floor(Math.random() * 50) + 10; // 10-60%
-          executedTargets = Math.floor(totalTargets * 0.3); // 只执行了30%
-        } else if (status === 'running') {
-          executedTargets = Math.floor(totalTargets * 0.6); // 执行了60%
-          successRate = Math.floor(Math.random() * 20) + 70; // 70-90%
-        } else if (status === 'scheduled') {
-          executedTargets = 0;
-          successRate = 0;
-        }
-
-        const record: ExecutionRecord = {
-          id: `exec_${String(recordId).padStart(3, '0')}`,
-          taskCollectionId: task.id,
-          taskCollectionName: task.name,
-          status,
-          triggerType,
-          triggerSource: triggerType === 'hook' ? triggerSources[Math.floor(Math.random() * triggerSources.length)] : undefined,
-          startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-          endTime,
-          duration,
-          executedTargets,
-          totalTargets,
-          successRate,
-          details: status === 'completed' ? {
-            targets: [
-              {
-                id: 'entity_001',
-                name: '用户管理系统',
-                type: 'entity',
-                status: 'success',
-                actions: [
-                  { id: 'health_check', name: '健康检查', status: 'success', duration: 120 },
-                  { id: 'performance_analysis', name: '性能分析', status: 'success', duration: 180 }
-                ]
-              }
-            ]
-          } : undefined
-        };
-
-        records.push(record);
-        recordId++;
-      }
-    }
-  }
-
-  // 确保今天有明确的执行记录示例
-  const today = dayjs();
-  
-  // 今天10:00已完成的任务
-  records.push({
-    id: `exec_today_001`,
-    taskCollectionId: 'task_001',
-    taskCollectionName: '核心业务系统健康检查',
-    status: 'completed',
-    triggerType: 'cron',
-    startTime: today.hour(10).minute(0).second(0).format('YYYY-MM-DD HH:mm:ss'),
-    endTime: today.hour(10).minute(15).second(0).format('YYYY-MM-DD HH:mm:ss'),
-    duration: 900,
-    executedTargets: 8,
-    totalTargets: 8,
-    successRate: 100
-  });
-
-  // 今天23:00未执行的计划任务
-  records.push({
-    id: `exec_today_002`,
-    taskCollectionId: 'task_002',
-    taskCollectionName: '数据库性能监控',
-    status: 'scheduled',
-    triggerType: 'cron',
-    startTime: today.hour(23).minute(0).second(0).format('YYYY-MM-DD HH:mm:ss'),
-    executedTargets: 0,
-    totalTargets: 5,
-    successRate: 0
-  });
-
-  // 今天14:30正在执行的任务
-  records.push({
-    id: `exec_today_003`,
-    taskCollectionId: 'task_003',
-    taskCollectionName: '安全扫描任务',
-    status: 'running',
-    triggerType: 'hook',
-    triggerSource: 'API调用',
-    startTime: today.hour(14).minute(30).second(0).format('YYYY-MM-DD HH:mm:ss'),
-    executedTargets: 3,
-    totalTargets: 6,
-    successRate: 75
-  });
-
-  return records.sort((a, b) => dayjs(b.startTime).unix() - dayjs(a.startTime).unix());
-};
-
-// 生成模拟执行历史数据
-const mockExecutionHistory: ExecutionRecord[] = generateYearlyExecutionHistory();
 
 const TaskExecutionHistory: React.FC = () => {
   const { t } = useTranslation();
@@ -295,28 +120,36 @@ const TaskExecutionHistory: React.FC = () => {
   
   // 筛选和搜索状态
   const [filteredHistory, setFilteredHistory] = useState<ExecutionRecord[]>([]);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [triggerFilter, setTriggerFilter] = useState<string>('all');
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
     setPageTitle('任务执行历史记录');
     // 根据taskId过滤执行记录
     const filteredHistory = taskId 
-      ? mockExecutionHistory.filter(record => record.taskCollectionId === taskId)
-      : mockExecutionHistory;
+      ? (executionHistoryData as ExecutionRecord[]).filter(record => record.taskCollectionId === taskId)
+      : (executionHistoryData as ExecutionRecord[]);
     setExecutionHistory(filteredHistory);
     
     // 调试信息
-    console.log('生成的执行历史记录总数:', mockExecutionHistory.length);
+    console.log('加载的执行历史记录总数:', executionHistoryData.length);
     console.log('过滤后的执行历史记录:', filteredHistory.length);
   }, [taskId]);
 
   // 筛选和搜索逻辑
   useEffect(() => {
     let filtered = [...executionHistory];
+
+    // 关键词搜索
+    if (searchKeyword) {
+      filtered = filtered.filter(record => 
+        record.taskCollectionName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        record.triggerSource?.toLowerCase().includes(searchKeyword.toLowerCase())
+      );
+    }
 
     // 状态筛选
     if (statusFilter !== 'all') {
@@ -337,14 +170,6 @@ const TaskExecutionHistory: React.FC = () => {
       });
     }
 
-    // 关键词搜索
-    if (searchKeyword) {
-      filtered = filtered.filter(record => 
-        record.taskCollectionName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        record.triggerSource?.toLowerCase().includes(searchKeyword.toLowerCase())
-      );
-    }
-
     // 排序
     filtered.sort((a, b) => {
       const timeA = dayjs(a.startTime).unix();
@@ -353,7 +178,16 @@ const TaskExecutionHistory: React.FC = () => {
     });
 
     setFilteredHistory(filtered);
-  }, [executionHistory, statusFilter, triggerFilter, dateRange, searchKeyword, sortOrder]);
+  }, [executionHistory, searchKeyword, statusFilter, triggerFilter, dateRange, sortOrder]);
+
+  // 刷新数据
+  const handleRefresh = () => {
+    // 重新加载数据
+    const filteredHistory = taskId 
+      ? (executionHistoryData as ExecutionRecord[]).filter(record => record.taskCollectionId === taskId)
+      : (executionHistoryData as ExecutionRecord[]);
+    setExecutionHistory(filteredHistory);
+  };
 
   // 查看执行详情
   const handleViewExecutionDetail = (execution: ExecutionRecord) => {
@@ -498,87 +332,61 @@ const TaskExecutionHistory: React.FC = () => {
         </Col>
       </Row>
 
-      {/* 筛选器 */}
-      <FilterContainer>
-        <Row gutter={16} align="middle">
-          <Col xs={24} sm={6}>
-            <Space>
-              <FilterOutlined />
-              <Text strong>筛选条件:</Text>
-            </Space>
-          </Col>
-          <Col xs={24} sm={4}>
-            <Select
-              value={statusFilter}
-              onChange={setStatusFilter}
-              style={{ width: '100%' }}
-              placeholder="执行状态"
-            >
-              <Option value="all">全部状态</Option>
-              <Option value="completed">已完成</Option>
-              <Option value="running">执行中</Option>
-              <Option value="scheduled">计划中</Option>
-              <Option value="failed">失败</Option>
-            </Select>
-          </Col>
-          <Col xs={24} sm={4}>
-            <Select
-              value={triggerFilter}
-              onChange={setTriggerFilter}
-              style={{ width: '100%' }}
-              placeholder="触发方式"
-            >
-              <Option value="all">全部方式</Option>
-              <Option value="cron">定时任务</Option>
-              <Option value="hook">Hook触发</Option>
-            </Select>
-          </Col>
-          <Col xs={24} sm={6}>
-            <RangePicker
-              value={dateRange}
-              onChange={setDateRange}
-              style={{ width: '100%' }}
-              placeholder={['开始日期', '结束日期']}
-            />
-          </Col>
-          <Col xs={24} sm={4}>
-            <Search
-              placeholder="搜索任务名称"
-              value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
-              style={{ width: '100%' }}
-            />
-          </Col>
-        </Row>
-        <Row style={{ marginTop: 12 }}>
-          <Col>
-            <Space>
-              <Text type="secondary">排序:</Text>
-              <Select
-                value={sortOrder}
-                onChange={setSortOrder}
-                style={{ width: 120 }}
-              >
-                <Option value="desc">最新优先</Option>
-                <Option value="asc">最早优先</Option>
-              </Select>
-              <Button 
-                type="link" 
-                size="small"
-                onClick={() => {
-                  setStatusFilter('all');
-                  setTriggerFilter('all');
-                  setDateRange(null);
-                  setSearchKeyword('');
-                  setSortOrder('desc');
-                }}
-              >
-                重置筛选
-              </Button>
-            </Space>
-          </Col>
-        </Row>
-      </FilterContainer>
+      {/* 搜索和筛选栏 */}
+      <SearchFilterBar
+        searchValue={searchKeyword}
+        onSearchChange={setSearchKeyword}
+        searchPlaceholder="搜索任务名称、触发源..."
+        filters={[
+          {
+            key: 'status',
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: 'all', label: '全部状态' },
+              { value: 'completed', label: '已完成' },
+              { value: 'running', label: '执行中' },
+              { value: 'scheduled', label: '计划中' },
+              { value: 'failed', label: '失败' }
+            ],
+            placeholder: '执行状态',
+            width: 120
+          },
+          {
+            key: 'trigger',
+            value: triggerFilter,
+            onChange: setTriggerFilter,
+            options: [
+              { value: 'all', label: '全部方式' },
+              { value: 'cron', label: '定时任务' },
+              { value: 'hook', label: 'Hook触发' }
+            ],
+            placeholder: '触发方式',
+            width: 120
+          },
+          {
+            key: 'sort',
+            value: sortOrder,
+            onChange: setSortOrder,
+            options: [
+              { value: 'desc', label: '最新优先' },
+              { value: 'asc', label: '最早优先' }
+            ],
+            placeholder: '排序方式',
+            width: 120
+          }
+        ]}
+        showRefresh={true}
+        onRefresh={handleRefresh}
+        extraActions={
+          <RangePicker
+            value={dateRange}
+            onChange={setDateRange}
+            placeholder={['开始日期', '结束日期']}
+            style={{ width: 240 }}
+          />
+        }
+      />
 
       {/* 执行记录列表 */}
       <ListContainer>
