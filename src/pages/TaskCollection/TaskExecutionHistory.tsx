@@ -112,155 +112,158 @@ interface ExecutionRecord {
   };
 }
 
-// 模拟执行历史数据 - 增加更多数据覆盖不同日期
-const mockExecutionHistory: ExecutionRecord[] = [
-  // 今天的记录
-  {
-    id: 'exec_001',
+// 生成全年12个月的模拟执行历史数据
+const generateYearlyExecutionHistory = (): ExecutionRecord[] => {
+  const records: ExecutionRecord[] = [];
+  const currentYear = dayjs().year();
+  
+  // 任务集合模板
+  const taskTemplates = [
+    { id: 'task_001', name: '核心业务系统健康检查' },
+    { id: 'task_002', name: '数据库性能监控' },
+    { id: 'task_003', name: '安全扫描任务' },
+    { id: 'task_004', name: '网络安全巡检' },
+    { id: 'task_005', name: '备份验证任务' },
+    { id: 'task_006', name: '日志分析任务' },
+    { id: 'task_007', name: '容器健康检查' },
+    { id: 'task_008', name: 'API接口监控' }
+  ];
+
+  const statuses: Array<'completed' | 'running' | 'scheduled' | 'failed'> = ['completed', 'running', 'scheduled', 'failed'];
+  const triggerTypes: Array<'cron' | 'hook'> = ['cron', 'hook'];
+  const triggerSources = ['API调用', 'Webhook触发', '监控告警触发', '手动触发'];
+
+  let recordId = 1;
+
+  // 为每个月生成数据
+  for (let month = 0; month < 12; month++) {
+    // 每个月生成8-15条记录
+    const recordsPerMonth = Math.floor(Math.random() * 8) + 8;
+    
+    for (let i = 0; i < recordsPerMonth; i++) {
+      const task = taskTemplates[Math.floor(Math.random() * taskTemplates.length)];
+      const status = statuses[Math.floor(Math.random() * statuses.length)];
+      const triggerType = triggerTypes[Math.floor(Math.random() * triggerTypes.length)];
+      
+      // 随机选择月份中的某一天
+      const day = Math.floor(Math.random() * 28) + 1; // 1-28确保所有月份都有效
+      const hour = Math.floor(Math.random() * 24);
+      const minute = Math.floor(Math.random() * 60);
+      
+      const startTime = dayjs().year(currentYear).month(month).date(day).hour(hour).minute(minute).second(0);
+      
+      // 根据状态生成不同的数据
+      let endTime: string | undefined;
+      let duration: number | undefined;
+      let executedTargets = Math.floor(Math.random() * 8) + 1;
+      let totalTargets = Math.floor(Math.random() * 4) + executedTargets;
+      let successRate = Math.floor(Math.random() * 40) + 60; // 60-100%
+
+      if (status === 'completed') {
+        duration = Math.floor(Math.random() * 3600) + 300; // 5分钟到1小时
+        endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
+        successRate = Math.floor(Math.random() * 30) + 70; // 70-100%
+      } else if (status === 'failed') {
+        duration = Math.floor(Math.random() * 1800) + 180; // 3分钟到30分钟
+        endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
+        successRate = Math.floor(Math.random() * 50) + 10; // 10-60%
+        executedTargets = Math.floor(totalTargets * 0.3); // 只执行了30%
+      } else if (status === 'running') {
+        // 正在执行的任务，只有当前月份才有
+        if (month !== dayjs().month()) continue;
+        executedTargets = Math.floor(totalTargets * 0.6); // 执行了60%
+        successRate = Math.floor(Math.random() * 20) + 70; // 70-90%
+      } else if (status === 'scheduled') {
+        // 计划任务，只在未来时间
+        if (startTime.isBefore(dayjs())) continue;
+        executedTargets = 0;
+        successRate = 0;
+      }
+
+      const record: ExecutionRecord = {
+        id: `exec_${String(recordId).padStart(3, '0')}`,
+        taskCollectionId: task.id,
+        taskCollectionName: task.name,
+        status,
+        triggerType,
+        triggerSource: triggerType === 'hook' ? triggerSources[Math.floor(Math.random() * triggerSources.length)] : undefined,
+        startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
+        endTime,
+        duration,
+        executedTargets,
+        totalTargets,
+        successRate,
+        details: status === 'completed' ? {
+          targets: [
+            {
+              id: 'entity_001',
+              name: '用户管理系统',
+              type: 'entity',
+              status: 'success',
+              actions: [
+                { id: 'health_check', name: '健康检查', status: 'success', duration: 120 },
+                { id: 'performance_analysis', name: '性能分析', status: 'success', duration: 180 }
+              ]
+            }
+          ]
+        } : undefined
+      };
+
+      records.push(record);
+      recordId++;
+    }
+  }
+
+  // 添加一些今天的特定记录确保能看到
+  const today = dayjs();
+  
+  // 今天已完成的任务
+  records.push({
+    id: `exec_today_001`,
     taskCollectionId: 'task_001',
     taskCollectionName: '核心业务系统健康检查',
     status: 'completed',
     triggerType: 'cron',
-    startTime: dayjs().format('YYYY-MM-DD 09:00:00'),
-    endTime: dayjs().format('YYYY-MM-DD 09:15:30'),
-    duration: 930,
+    startTime: today.hour(9).minute(0).format('YYYY-MM-DD HH:mm:ss'),
+    endTime: today.hour(9).minute(15).format('YYYY-MM-DD HH:mm:ss'),
+    duration: 900,
     executedTargets: 8,
     totalTargets: 8,
-    successRate: 100,
-    details: {
-      targets: [
-        {
-          id: 'entity_001',
-          name: '用户管理系统',
-          type: 'entity',
-          status: 'success',
-          actions: [
-            { id: 'health_check', name: '健康检查', status: 'success', duration: 120 },
-            { id: 'performance_analysis', name: '性能分析', status: 'success', duration: 180 }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    id: 'exec_002',
-    taskCollectionId: 'task_001',
-    taskCollectionName: '核心业务系统健康检查',
+    successRate: 100
+  });
+
+  // 今天正在执行的任务
+  records.push({
+    id: `exec_today_002`,
+    taskCollectionId: 'task_002',
+    taskCollectionName: '数据库性能监控',
     status: 'running',
     triggerType: 'hook',
     triggerSource: 'API调用',
-    startTime: dayjs().format('YYYY-MM-DD 14:30:00'),
+    startTime: today.hour(14).minute(30).format('YYYY-MM-DD HH:mm:ss'),
     executedTargets: 3,
-    totalTargets: 8,
-    successRate: 75
-  },
-  // 明天的计划任务
-  {
-    id: 'exec_003',
-    taskCollectionId: 'task_002',
-    taskCollectionName: '数据库性能监控',
-    status: 'scheduled',
-    triggerType: 'cron',
-    startTime: dayjs().add(1, 'day').format('YYYY-MM-DD 18:00:00'),
-    executedTargets: 0,
     totalTargets: 5,
-    successRate: 0
-  },
-  // 昨天的记录
-  {
-    id: 'exec_004',
-    taskCollectionId: 'task_001',
-    taskCollectionName: '核心业务系统健康检查',
-    status: 'failed',
-    triggerType: 'cron',
-    startTime: dayjs().subtract(1, 'day').format('YYYY-MM-DD 15:00:00'),
-    endTime: dayjs().subtract(1, 'day').format('YYYY-MM-DD 15:08:45'),
-    duration: 525,
-    executedTargets: 5,
-    totalTargets: 8,
-    successRate: 62.5
-  },
-  // 前天的记录
-  {
-    id: 'exec_005',
+    successRate: 80
+  });
+
+  // 明天的计划任务
+  records.push({
+    id: `exec_tomorrow_001`,
     taskCollectionId: 'task_003',
     taskCollectionName: '安全扫描任务',
-    status: 'completed',
-    triggerType: 'hook',
-    triggerSource: 'Webhook触发',
-    startTime: dayjs().subtract(2, 'day').format('YYYY-MM-DD 10:30:00'),
-    endTime: dayjs().subtract(2, 'day').format('YYYY-MM-DD 11:45:20'),
-    duration: 4520,
-    executedTargets: 12,
-    totalTargets: 12,
-    successRate: 100
-  },
-  // 3天前的记录
-  {
-    id: 'exec_006',
-    taskCollectionId: 'task_002',
-    taskCollectionName: '数据库性能监控',
-    status: 'completed',
+    status: 'scheduled',
     triggerType: 'cron',
-    startTime: dayjs().subtract(3, 'day').format('YYYY-MM-DD 18:00:00'),
-    endTime: dayjs().subtract(3, 'day').format('YYYY-MM-DD 18:25:15'),
-    duration: 1515,
-    executedTargets: 5,
-    totalTargets: 5,
-    successRate: 100
-  },
-  // 本周其他日期的记录
-  {
-    id: 'exec_007',
-    taskCollectionId: 'task_001',
-    taskCollectionName: '核心业务系统健康检查',
-    status: 'completed',
-    triggerType: 'cron',
-    startTime: dayjs().subtract(4, 'day').format('YYYY-MM-DD 09:00:00'),
-    endTime: dayjs().subtract(4, 'day').format('YYYY-MM-DD 09:12:30'),
-    duration: 750,
-    executedTargets: 8,
-    totalTargets: 8,
-    successRate: 100
-  },
-  {
-    id: 'exec_008',
-    taskCollectionId: 'task_004',
-    taskCollectionName: '网络安全巡检',
-    status: 'failed',
-    triggerType: 'hook',
-    triggerSource: '监控告警触发',
-    startTime: dayjs().subtract(5, 'day').format('YYYY-MM-DD 16:20:00'),
-    endTime: dayjs().subtract(5, 'day').format('YYYY-MM-DD 16:35:15'),
-    duration: 915,
-    executedTargets: 3,
+    startTime: today.add(1, 'day').hour(18).minute(0).format('YYYY-MM-DD HH:mm:ss'),
+    executedTargets: 0,
     totalTargets: 6,
-    successRate: 50
-  },
-  // 下周的计划任务
-  {
-    id: 'exec_009',
-    taskCollectionId: 'task_001',
-    taskCollectionName: '核心业务系统健康检查',
-    status: 'scheduled',
-    triggerType: 'cron',
-    startTime: dayjs().add(2, 'day').format('YYYY-MM-DD 09:00:00'),
-    executedTargets: 0,
-    totalTargets: 8,
     successRate: 0
-  },
-  {
-    id: 'exec_010',
-    taskCollectionId: 'task_005',
-    taskCollectionName: '备份验证任务',
-    status: 'scheduled',
-    triggerType: 'cron',
-    startTime: dayjs().add(3, 'day').format('YYYY-MM-DD 02:00:00'),
-    executedTargets: 0,
-    totalTargets: 3,
-    successRate: 0
-  }
-];
+  });
+
+  return records.sort((a, b) => dayjs(b.startTime).unix() - dayjs(a.startTime).unix());
+};
+
+// 生成模拟执行历史数据
+const mockExecutionHistory: ExecutionRecord[] = generateYearlyExecutionHistory();
 
 const TaskExecutionHistory: React.FC = () => {
   const { t } = useTranslation();
@@ -564,6 +567,28 @@ const TaskExecutionHistory: React.FC = () => {
         </Col>
       </Row>
 
+      {/* 月度统计 */}
+      <Card style={{ marginBottom: 24 }}>
+        <Title level={5}>月度执行统计</Title>
+        <Row gutter={16}>
+          {Array.from({ length: 12 }, (_, i) => {
+            const month = i;
+            const monthName = dayjs().month(month).format('MM月');
+            const monthRecords = executionHistory.filter(r => dayjs(r.startTime).month() === month);
+            return (
+              <Col xs={12} sm={8} md={6} lg={4} xl={2} key={month}>
+                <div style={{ textAlign: 'center', padding: '8px' }}>
+                  <div style={{ fontSize: '16px', fontWeight: 'bold', color: monthRecords.length > 0 ? '#1890ff' : '#d9d9d9' }}>
+                    {monthRecords.length}
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#666' }}>{monthName}</div>
+                </div>
+              </Col>
+            );
+          })}
+        </Row>
+      </Card>
+
       {/* 日历视图 */}
       <CalendarContainer>
         <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -580,7 +605,13 @@ const TaskExecutionHistory: React.FC = () => {
         
         {/* 调试信息 */}
         <Alert 
-          message={`当前加载了 ${executionHistory.length} 条执行记录`}
+          message={
+            <div>
+              <div>当前加载了 {executionHistory.length} 条执行记录</div>
+              <div>今天 ({dayjs().format('YYYY-MM-DD')}) 的记录: {getExecutionsForDate(dayjs()).length} 条</div>
+              <div>本月记录总数: {executionHistory.filter(r => dayjs(r.startTime).month() === dayjs().month()).length} 条</div>
+            </div>
+          }
           type="info" 
           style={{ marginBottom: 16 }}
           showIcon
