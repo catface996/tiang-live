@@ -137,126 +137,138 @@ const generateYearlyExecutionHistory = (): ExecutionRecord[] => {
 
   // 为每个月生成数据
   for (let month = 0; month < 12; month++) {
-    // 每个月生成8-15条记录
-    const recordsPerMonth = Math.floor(Math.random() * 8) + 8;
+    const daysInMonth = dayjs().year(currentYear).month(month).daysInMonth();
     
-    for (let i = 0; i < recordsPerMonth; i++) {
-      const task = taskTemplates[Math.floor(Math.random() * taskTemplates.length)];
-      const status = statuses[Math.floor(Math.random() * statuses.length)];
-      const triggerType = triggerTypes[Math.floor(Math.random() * triggerTypes.length)];
+    // 为每个月的每一天生成1-3条记录
+    for (let day = 1; day <= daysInMonth; day++) {
+      // 30%的天数有执行记录
+      if (Math.random() > 0.7) continue;
       
-      // 随机选择月份中的某一天
-      const day = Math.floor(Math.random() * 28) + 1; // 1-28确保所有月份都有效
-      const hour = Math.floor(Math.random() * 24);
-      const minute = Math.floor(Math.random() * 60);
+      const recordsPerDay = Math.floor(Math.random() * 3) + 1; // 1-3条记录
       
-      const startTime = dayjs().year(currentYear).month(month).date(day).hour(hour).minute(minute).second(0);
-      
-      // 根据状态生成不同的数据
-      let endTime: string | undefined;
-      let duration: number | undefined;
-      let executedTargets = Math.floor(Math.random() * 8) + 1;
-      let totalTargets = Math.floor(Math.random() * 4) + executedTargets;
-      let successRate = Math.floor(Math.random() * 40) + 60; // 60-100%
+      for (let i = 0; i < recordsPerDay; i++) {
+        const task = taskTemplates[Math.floor(Math.random() * taskTemplates.length)];
+        const triggerType = triggerTypes[Math.floor(Math.random() * triggerTypes.length)];
+        
+        // 生成具体的执行时间
+        const hour = Math.floor(Math.random() * 24);
+        const minute = Math.floor(Math.random() * 60);
+        
+        const startTime = dayjs().year(currentYear).month(month).date(day).hour(hour).minute(minute).second(0);
+        const now = dayjs();
+        
+        // 根据时间确定状态
+        let status: 'completed' | 'running' | 'scheduled' | 'failed';
+        if (startTime.isAfter(now)) {
+          status = 'scheduled'; // 未来时间为计划任务
+        } else if (startTime.isSame(now, 'day') && startTime.isAfter(now.subtract(2, 'hour'))) {
+          status = Math.random() > 0.5 ? 'running' : 'completed'; // 最近2小时可能正在执行
+        } else {
+          status = Math.random() > 0.8 ? 'failed' : 'completed'; // 历史任务80%成功
+        }
+        
+        // 根据状态生成不同的数据
+        let endTime: string | undefined;
+        let duration: number | undefined;
+        let executedTargets = Math.floor(Math.random() * 8) + 1;
+        let totalTargets = Math.floor(Math.random() * 4) + executedTargets;
+        let successRate = Math.floor(Math.random() * 40) + 60; // 60-100%
 
-      if (status === 'completed') {
-        duration = Math.floor(Math.random() * 3600) + 300; // 5分钟到1小时
-        endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
-        successRate = Math.floor(Math.random() * 30) + 70; // 70-100%
-      } else if (status === 'failed') {
-        duration = Math.floor(Math.random() * 1800) + 180; // 3分钟到30分钟
-        endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
-        successRate = Math.floor(Math.random() * 50) + 10; // 10-60%
-        executedTargets = Math.floor(totalTargets * 0.3); // 只执行了30%
-      } else if (status === 'running') {
-        // 正在执行的任务，只有当前月份才有
-        if (month !== dayjs().month()) continue;
-        executedTargets = Math.floor(totalTargets * 0.6); // 执行了60%
-        successRate = Math.floor(Math.random() * 20) + 70; // 70-90%
-      } else if (status === 'scheduled') {
-        // 计划任务，只在未来时间
-        if (startTime.isBefore(dayjs())) continue;
-        executedTargets = 0;
-        successRate = 0;
+        if (status === 'completed') {
+          duration = Math.floor(Math.random() * 3600) + 300; // 5分钟到1小时
+          endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
+          successRate = Math.floor(Math.random() * 30) + 70; // 70-100%
+        } else if (status === 'failed') {
+          duration = Math.floor(Math.random() * 1800) + 180; // 3分钟到30分钟
+          endTime = startTime.add(duration, 'second').format('YYYY-MM-DD HH:mm:ss');
+          successRate = Math.floor(Math.random() * 50) + 10; // 10-60%
+          executedTargets = Math.floor(totalTargets * 0.3); // 只执行了30%
+        } else if (status === 'running') {
+          executedTargets = Math.floor(totalTargets * 0.6); // 执行了60%
+          successRate = Math.floor(Math.random() * 20) + 70; // 70-90%
+        } else if (status === 'scheduled') {
+          executedTargets = 0;
+          successRate = 0;
+        }
+
+        const record: ExecutionRecord = {
+          id: `exec_${String(recordId).padStart(3, '0')}`,
+          taskCollectionId: task.id,
+          taskCollectionName: task.name,
+          status,
+          triggerType,
+          triggerSource: triggerType === 'hook' ? triggerSources[Math.floor(Math.random() * triggerSources.length)] : undefined,
+          startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
+          endTime,
+          duration,
+          executedTargets,
+          totalTargets,
+          successRate,
+          details: status === 'completed' ? {
+            targets: [
+              {
+                id: 'entity_001',
+                name: '用户管理系统',
+                type: 'entity',
+                status: 'success',
+                actions: [
+                  { id: 'health_check', name: '健康检查', status: 'success', duration: 120 },
+                  { id: 'performance_analysis', name: '性能分析', status: 'success', duration: 180 }
+                ]
+              }
+            ]
+          } : undefined
+        };
+
+        records.push(record);
+        recordId++;
       }
-
-      const record: ExecutionRecord = {
-        id: `exec_${String(recordId).padStart(3, '0')}`,
-        taskCollectionId: task.id,
-        taskCollectionName: task.name,
-        status,
-        triggerType,
-        triggerSource: triggerType === 'hook' ? triggerSources[Math.floor(Math.random() * triggerSources.length)] : undefined,
-        startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-        endTime,
-        duration,
-        executedTargets,
-        totalTargets,
-        successRate,
-        details: status === 'completed' ? {
-          targets: [
-            {
-              id: 'entity_001',
-              name: '用户管理系统',
-              type: 'entity',
-              status: 'success',
-              actions: [
-                { id: 'health_check', name: '健康检查', status: 'success', duration: 120 },
-                { id: 'performance_analysis', name: '性能分析', status: 'success', duration: 180 }
-              ]
-            }
-          ]
-        } : undefined
-      };
-
-      records.push(record);
-      recordId++;
     }
   }
 
-  // 添加一些今天的特定记录确保能看到
+  // 确保今天有明确的执行记录示例
   const today = dayjs();
   
-  // 今天已完成的任务
+  // 今天10:00已完成的任务
   records.push({
     id: `exec_today_001`,
     taskCollectionId: 'task_001',
     taskCollectionName: '核心业务系统健康检查',
     status: 'completed',
     triggerType: 'cron',
-    startTime: today.hour(9).minute(0).format('YYYY-MM-DD HH:mm:ss'),
-    endTime: today.hour(9).minute(15).format('YYYY-MM-DD HH:mm:ss'),
+    startTime: today.hour(10).minute(0).second(0).format('YYYY-MM-DD HH:mm:ss'),
+    endTime: today.hour(10).minute(15).second(0).format('YYYY-MM-DD HH:mm:ss'),
     duration: 900,
     executedTargets: 8,
     totalTargets: 8,
     successRate: 100
   });
 
-  // 今天正在执行的任务
+  // 今天23:00未执行的计划任务
   records.push({
     id: `exec_today_002`,
     taskCollectionId: 'task_002',
     taskCollectionName: '数据库性能监控',
+    status: 'scheduled',
+    triggerType: 'cron',
+    startTime: today.hour(23).minute(0).second(0).format('YYYY-MM-DD HH:mm:ss'),
+    executedTargets: 0,
+    totalTargets: 5,
+    successRate: 0
+  });
+
+  // 今天14:30正在执行的任务
+  records.push({
+    id: `exec_today_003`,
+    taskCollectionId: 'task_003',
+    taskCollectionName: '安全扫描任务',
     status: 'running',
     triggerType: 'hook',
     triggerSource: 'API调用',
-    startTime: today.hour(14).minute(30).format('YYYY-MM-DD HH:mm:ss'),
+    startTime: today.hour(14).minute(30).second(0).format('YYYY-MM-DD HH:mm:ss'),
     executedTargets: 3,
-    totalTargets: 5,
-    successRate: 80
-  });
-
-  // 明天的计划任务
-  records.push({
-    id: `exec_tomorrow_001`,
-    taskCollectionId: 'task_003',
-    taskCollectionName: '安全扫描任务',
-    status: 'scheduled',
-    triggerType: 'cron',
-    startTime: today.add(1, 'day').hour(18).minute(0).format('YYYY-MM-DD HH:mm:ss'),
-    executedTargets: 0,
     totalTargets: 6,
-    successRate: 0
+    successRate: 75
   });
 
   return records.sort((a, b) => dayjs(b.startTime).unix() - dayjs(a.startTime).unix());
@@ -304,7 +316,7 @@ const TaskExecutionHistory: React.FC = () => {
     return filtered;
   };
 
-  // 渲染日历单元格内容 - 简化版本
+  // 渲染日历单元格内容 - 显示具体时间和状态
   const dateCellRender = (current: Dayjs) => {
     const executions = getExecutionsForDate(current);
     if (executions.length === 0) return null;
@@ -316,36 +328,64 @@ const TaskExecutionHistory: React.FC = () => {
         margin: 0,
         fontSize: '10px'
       }}>
-        {executions.slice(0, 2).map(execution => (
-          <li
-            key={execution.id}
-            style={{ 
-              marginBottom: '1px',
-              cursor: 'pointer',
-              padding: '1px 3px',
-              borderRadius: '2px',
-              backgroundColor: getExecutionBadgeColor(execution.status),
-              color: 'white',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              fontSize: '9px'
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleViewExecutionDetail(execution);
-            }}
-          >
-            {getTriggerIcon(execution.triggerType)} {execution.taskCollectionName.substring(0, 4)}...
-          </li>
-        ))}
-        {executions.length > 2 && (
-          <li style={{ fontSize: '8px', color: '#999', textAlign: 'center' }}>
-            +{executions.length - 2}
+        {executions.slice(0, 3).map(execution => {
+          const time = dayjs(execution.startTime).format('HH:mm');
+          const statusText = getStatusText(execution.status);
+          const statusColor = getExecutionBadgeColor(execution.status);
+          
+          return (
+            <li
+              key={execution.id}
+              style={{ 
+                marginBottom: '2px',
+                cursor: 'pointer',
+                padding: '2px 4px',
+                borderRadius: '3px',
+                backgroundColor: statusColor,
+                color: 'white',
+                overflow: 'hidden',
+                fontSize: '9px',
+                lineHeight: '1.2',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleViewExecutionDetail(execution);
+              }}
+              title={`${time} - ${execution.taskCollectionName} (${statusText})`}
+            >
+              <span style={{ fontWeight: 'bold' }}>{time}</span>
+              <span style={{ fontSize: '8px' }}>{statusText}</span>
+            </li>
+          );
+        })}
+        {executions.length > 3 && (
+          <li style={{ 
+            fontSize: '8px', 
+            color: '#999', 
+            textAlign: 'center',
+            padding: '1px',
+            backgroundColor: '#f0f0f0',
+            borderRadius: '2px'
+          }}>
+            +{executions.length - 3}条
           </li>
         )}
       </ul>
     );
+  };
+
+  // 获取状态文本
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'completed': return '已完成';
+      case 'running': return '执行中';
+      case 'scheduled': return '未执行';
+      case 'failed': return '失败';
+      default: return '未知';
+    }
   };
 
   // 获取执行状态对应的颜色
@@ -422,7 +462,7 @@ const TaskExecutionHistory: React.FC = () => {
     if (executions.length === 0) {
       return (
         <Alert
-          message="该日期无执行记录"
+          message={`${date.format('YYYY年MM月DD日')} 无执行记录`}
           type="info"
           showIcon
           style={{ margin: '16px 0' }}
@@ -430,13 +470,20 @@ const TaskExecutionHistory: React.FC = () => {
       );
     }
 
+    // 按时间排序
+    const sortedExecutions = executions.sort((a, b) => 
+      dayjs(a.startTime).unix() - dayjs(b.startTime).unix()
+    );
+
     return (
       <div style={{ margin: '16px 0' }}>
         <Title level={5}>
           {date.format('YYYY年MM月DD日')} 执行记录 ({executions.length}条)
         </Title>
-        {executions.map(execution => {
+        {sortedExecutions.map(execution => {
           const triggerInfo = getTriggerInfo(execution.triggerType, execution.triggerSource);
+          const time = dayjs(execution.startTime).format('HH:mm:ss');
+          const statusText = getStatusText(execution.status);
           
           return (
             <ExecutionCard
@@ -458,7 +505,7 @@ const TaskExecutionHistory: React.FC = () => {
                     </Space>
                     <Space size={16}>
                       <Text type="secondary">
-                        <ClockCircleOutlined /> {dayjs(execution.startTime).format('HH:mm:ss')}
+                        <ClockCircleOutlined /> {time}
                       </Text>
                       {execution.duration && (
                         <Text type="secondary">
@@ -473,10 +520,7 @@ const TaskExecutionHistory: React.FC = () => {
                 </Col>
                 <Col>
                   <Tag color={getExecutionBadgeStatus(execution.status)}>
-                    {execution.status === 'completed' && '已完成'}
-                    {execution.status === 'running' && '执行中'}
-                    {execution.status === 'scheduled' && '计划中'}
-                    {execution.status === 'failed' && '失败'}
+                    {statusText}
                   </Tag>
                 </Col>
               </Row>
@@ -609,6 +653,7 @@ const TaskExecutionHistory: React.FC = () => {
             <div>
               <div>当前加载了 {executionHistory.length} 条执行记录</div>
               <div>今天 ({dayjs().format('YYYY-MM-DD')}) 的记录: {getExecutionsForDate(dayjs()).length} 条</div>
+              <div>今天的执行时间: {getExecutionsForDate(dayjs()).map(e => dayjs(e.startTime).format('HH:mm')).join(', ')}</div>
               <div>本月记录总数: {executionHistory.filter(r => dayjs(r.startTime).month() === dayjs().month()).length} 条</div>
             </div>
           }
