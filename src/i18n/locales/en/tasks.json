@@ -103,6 +103,129 @@
       "pauseSuccess": "Task collection paused successfully"
     }
   },
+  "executionHistory": {
+    "title": "Task Execution History",
+    "subtitle": "View and manage task execution history records",
+    "breadcrumb": {
+      "home": "Home",
+      "taskCollections": "Task Collection Management",
+      "executionHistory": "Execution History"
+    },
+    "stats": {
+      "totalExecutions": "Total Executions",
+      "successfulExecutions": "Successful Executions",
+      "runningExecutions": "Running Executions",
+      "scheduledExecutions": "Scheduled Executions",
+      "failedExecutions": "Failed Executions"
+    },
+    "status": {
+      "completed": "Completed",
+      "running": "Running",
+      "scheduled": "Scheduled",
+      "failed": "Failed",
+      "all": "All Status"
+    },
+    "triggerType": {
+      "cron": "Scheduled Task",
+      "hook": "Hook Trigger",
+      "all": "All Types"
+    },
+    "triggerSource": {
+      "cronSchedule": "Scheduled Task Trigger",
+      "apiCall": "API Call",
+      "webhookTrigger": "Webhook Trigger",
+      "monitoringAlert": "Monitoring Alert Trigger",
+      "manualTrigger": "Manual Trigger"
+    },
+    "search": {
+      "placeholder": "Search task name, trigger source...",
+      "taskName": "Task Name",
+      "triggerSource": "Trigger Source"
+    },
+    "filter": {
+      "status": "Execution Status",
+      "triggerType": "Trigger Type",
+      "dateRange": "Date Range",
+      "sort": "Sort Order",
+      "refresh": "Refresh",
+      "reset": "Reset Filters",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First"
+    },
+    "list": {
+      "title": "Execution Records List",
+      "count": "records",
+      "empty": "No execution records",
+      "loading": "Loading...",
+      "loadMore": "Load More"
+    },
+    "card": {
+      "taskName": "Task Name",
+      "executionTime": "Execution Time",
+      "duration": "Duration",
+      "successRate": "Success Rate",
+      "progress": "Progress",
+      "status": "Status",
+      "triggerType": "Trigger Type",
+      "triggerSource": "Trigger Source",
+      "viewDetails": "View Details",
+      "clickToView": "Click to view details"
+    },
+    "time": {
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "duration": "Duration",
+      "seconds": "seconds",
+      "minutes": "minutes",
+      "hours": "hours",
+      "formatDuration": {
+        "seconds": "{{count}}s",
+        "minutes": "{{minutes}}m{{seconds}}s",
+        "hours": "{{hours}}h{{minutes}}m"
+      }
+    },
+    "progress": {
+      "executed": "Executed",
+      "total": "Total",
+      "targets": "Targets",
+      "format": "{{executed}}/{{total}}"
+    },
+    "pagination": {
+      "pageSize": "Page Size",
+      "showTotal": "{{start}}-{{end}} of {{total}} records",
+      "jumpTo": "Go to",
+      "page": "Page"
+    },
+    "debug": {
+      "originalData": "Original Data",
+      "currentData": "Current Data",
+      "filteredData": "Filtered Data",
+      "taskId": "Task ID",
+      "filterConditions": "Filter Conditions",
+      "status": "Status",
+      "trigger": "Trigger",
+      "search": "Search"
+    },
+    "messages": {
+      "loadSuccess": "Execution history loaded successfully",
+      "loadError": "Failed to load execution history",
+      "refreshSuccess": "Refreshed successfully",
+      "noData": "No data available",
+      "filterNoResult": "No results found for current filters"
+    },
+    "tooltip": {
+      "viewExecutionHistory": "View Execution History",
+      "refresh": "Refresh Data",
+      "filter": "Filter Conditions",
+      "search": "Search",
+      "sort": "Sort",
+      "dateRange": "Select Date Range"
+    }
+  },
   "inspection": {
     "title": "Inspection Tasks",
     "subtitle": "Manage system inspection tasks",

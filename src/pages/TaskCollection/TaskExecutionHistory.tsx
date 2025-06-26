@@ -511,7 +511,7 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
 ];
 
 const TaskExecutionHistory: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['tasks', 'common']);
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   
@@ -526,7 +526,7 @@ const TaskExecutionHistory: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
-    setPageTitle('任务执行历史记录');
+    setPageTitle(t('tasks:executionHistory.title'));
     // 根据taskId过滤执行记录
     const filteredHistory = taskId 
       ? mockExecutionHistoryData.filter(record => record.taskCollectionId === taskId)
@@ -538,7 +538,7 @@ const TaskExecutionHistory: React.FC = () => {
     console.log('过滤后的执行历史记录:', filteredHistory.length);
     console.log('当前taskId:', taskId);
     console.log('模拟数据前3条:', mockExecutionHistoryData.slice(0, 3));
-  }, [taskId]);
+  }, [taskId, t]);
 
   // 筛选和搜索逻辑
   useEffect(() => {
@@ -624,17 +624,17 @@ const TaskExecutionHistory: React.FC = () => {
   };
 
   // 获取触发类型图标和文本
-  const getTriggerInfo = (triggerType: string, triggerSource?: string) => {
+  const getTriggerInfo = (triggerType: string, triggerSource?: string | null) => {
     if (triggerType === 'cron') {
       return {
         icon: <ScheduleOutlined style={{ color: '#1890ff' }} />,
-        text: '定时任务触发',
+        text: t('tasks:executionHistory.triggerType.cron'),
         color: 'blue'
       };
     } else {
       return {
         icon: <ApiOutlined style={{ color: '#52c41a' }} />,
-        text: triggerSource || 'Hook触发',
+        text: triggerSource || t('tasks:executionHistory.triggerType.hook'),
         color: 'green'
       };
     }
@@ -642,20 +642,28 @@ const TaskExecutionHistory: React.FC = () => {
 
   // 获取状态文本
   const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed': return '已完成';
-      case 'running': return '执行中';
-      case 'scheduled': return '未执行';
-      case 'failed': return '失败';
-      default: return '未知';
-    }
+    return t(`tasks:executionHistory.status.${status}`);
   };
 
   // 格式化持续时间
   const formatDuration = (seconds: number) => {
-    if (seconds < 60) return `${seconds}秒`;
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}分${seconds % 60}秒`;
-    return `${Math.floor(seconds / 3600)}小时${Math.floor((seconds % 3600) / 60)}分`;
+    if (seconds < 60) {
+      return t('tasks:executionHistory.time.formatDuration.seconds', { count: seconds });
+    }
+    if (seconds < 3600) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return t('tasks:executionHistory.time.formatDuration.minutes', { 
+        minutes, 
+        seconds: remainingSeconds 
+      });
+    }
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return t('tasks:executionHistory.time.formatDuration.hours', { 
+      hours, 
+      minutes 
+    });
   };
 
   return (
@@ -690,7 +698,7 @@ const TaskExecutionHistory: React.FC = () => {
       <div style={{ marginBottom: 24 }}>
         <Title level={2} style={{ margin: 0 }}>
           <UnorderedListOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-          任务执行历史记录
+          {t('tasks:executionHistory.title')}
         </Title>
       </div>
 
@@ -702,7 +710,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>
                 {executionHistory.length}
               </div>
-              <div style={{ color: '#666' }}>总执行次数</div>
+              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.totalExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -712,7 +720,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#52c41a' }}>
                 {executionHistory.filter(e => e.status === 'completed').length}
               </div>
-              <div style={{ color: '#666' }}>成功执行</div>
+              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.successfulExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -722,7 +730,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>
                 {executionHistory.filter(e => e.status === 'running').length}
               </div>
-              <div style={{ color: '#666' }}>正在执行</div>
+              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.runningExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -732,7 +740,7 @@ const TaskExecutionHistory: React.FC = () => {
               <div style={{ fontSize: 24, fontWeight: 'bold', color: '#faad14' }}>
                 {executionHistory.filter(e => e.status === 'scheduled').length}
               </div>
-              <div style={{ color: '#666' }}>计划执行</div>
+              <div style={{ color: '#666' }}>{t('tasks:executionHistory.stats.scheduledExecutions')}</div>
             </div>
           </Card>
         </Col>
@@ -758,20 +766,20 @@ const TaskExecutionHistory: React.FC = () => {
       <SearchFilterBar
         searchValue={searchKeyword}
         onSearchChange={setSearchKeyword}
-        searchPlaceholder="搜索任务名称、触发源..."
+        searchPlaceholder={t('tasks:executionHistory.search.placeholder')}
         filters={[
           {
             key: 'status',
             value: statusFilter,
             onChange: setStatusFilter,
             options: [
-              { value: 'all', label: '全部状态' },
-              { value: 'completed', label: '已完成' },
-              { value: 'running', label: '执行中' },
-              { value: 'scheduled', label: '计划中' },
-              { value: 'failed', label: '失败' }
+              { value: 'all', label: t('tasks:executionHistory.status.all') },
+              { value: 'completed', label: t('tasks:executionHistory.status.completed') },
+              { value: 'running', label: t('tasks:executionHistory.status.running') },
+              { value: 'scheduled', label: t('tasks:executionHistory.status.scheduled') },
+              { value: 'failed', label: t('tasks:executionHistory.status.failed') }
             ],
-            placeholder: '执行状态',
+            placeholder: t('tasks:executionHistory.filter.status'),
             width: 120
           },
           {
@@ -779,11 +787,11 @@ const TaskExecutionHistory: React.FC = () => {
             value: triggerFilter,
             onChange: setTriggerFilter,
             options: [
-              { value: 'all', label: '全部方式' },
-              { value: 'cron', label: '定时任务' },
-              { value: 'hook', label: 'Hook触发' }
+              { value: 'all', label: t('tasks:executionHistory.triggerType.all') },
+              { value: 'cron', label: t('tasks:executionHistory.triggerType.cron') },
+              { value: 'hook', label: t('tasks:executionHistory.triggerType.hook') }
             ],
-            placeholder: '触发方式',
+            placeholder: t('tasks:executionHistory.filter.triggerType'),
             width: 120
           },
           {
@@ -791,10 +799,10 @@ const TaskExecutionHistory: React.FC = () => {
             value: sortOrder,
             onChange: setSortOrder,
             options: [
-              { value: 'desc', label: '最新优先' },
-              { value: 'asc', label: '最早优先' }
+              { value: 'desc', label: t('tasks:executionHistory.sort.newest') },
+              { value: 'asc', label: t('tasks:executionHistory.sort.oldest') }
             ],
-            placeholder: '排序方式',
+            placeholder: t('tasks:executionHistory.filter.sort'),
             width: 120
           }
         ]}
@@ -804,7 +812,10 @@ const TaskExecutionHistory: React.FC = () => {
           <RangePicker
             value={dateRange}
             onChange={setDateRange}
-            placeholder={['开始日期', '结束日期']}
+            placeholder={[
+              t('tasks:executionHistory.filter.startDate'), 
+              t('tasks:executionHistory.filter.endDate')
+            ]}
             style={{ width: 240 }}
           />
         }
@@ -814,7 +825,7 @@ const TaskExecutionHistory: React.FC = () => {
       <ListContainer>
         <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Title level={4} style={{ margin: 0 }}>
-            执行记录列表 ({filteredHistory.length}条)
+            {t('tasks:executionHistory.list.title')} ({filteredHistory.length}{t('tasks:executionHistory.list.count')})
           </Title>
         </div>
         
@@ -854,10 +865,10 @@ const TaskExecutionHistory: React.FC = () => {
                             </Text>
                           )}
                           <Text type="secondary">
-                            成功率: {execution.successRate}%
+                            {t('tasks:executionHistory.card.successRate')}: {execution.successRate}%
                           </Text>
                           <Text type="secondary">
-                            进度: {execution.executedTargets}/{execution.totalTargets}
+                            {t('tasks:executionHistory.card.progress')}: {execution.executedTargets}/{execution.totalTargets}
                           </Text>
                         </Space>
                       </Space>
