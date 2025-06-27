@@ -883,69 +883,71 @@ const TaskExecutionHistory: React.FC = () => {
       </Row>
 
       {/* 搜索和筛选栏 */}
-      <SearchFilterBar
-        searchValue={searchKeyword}
-        onSearchChange={setSearchKeyword}
-        searchPlaceholder={t('taskExecutionHistory:search.placeholder')}
-        filters={[
-          {
-            key: 'status',
-            value: statusFilter,
-            onChange: setStatusFilter,
-            options: [
-              { value: 'all', label: t('taskExecutionHistory:status.all') },
-              { value: 'completed', label: t('taskExecutionHistory:status.completed') },
-              { value: 'running', label: t('taskExecutionHistory:status.running') },
-              { value: 'scheduled', label: t('taskExecutionHistory:status.scheduled') },
-              { value: 'failed', label: t('taskExecutionHistory:status.failed') }
-            ],
-            placeholder: t('taskExecutionHistory:filter.status'),
-            width: 120
-          },
-          {
-            key: 'trigger',
-            value: triggerFilter,
-            onChange: setTriggerFilter,
-            options: [
-              { value: 'all', label: t('taskExecutionHistory:triggerType.all') },
-              { value: 'cron', label: t('taskExecutionHistory:triggerType.cron') },
-              { value: 'hook', label: t('taskExecutionHistory:triggerType.hook') }
-            ],
-            placeholder: t('taskExecutionHistory:filter.triggerType'),
-            width: 120
-          },
-          {
-            key: 'sort',
-            value: sortOrder,
-            onChange: setSortOrder,
-            options: [
-              { value: 'desc', label: t('taskExecutionHistory:sort.newest') },
-              { value: 'asc', label: t('taskExecutionHistory:sort.oldest') }
-            ],
-            placeholder: t('taskExecutionHistory:filter.sort'),
-            width: 120
+      <div className="search-filter-responsive">
+        <SearchFilterBar
+          searchValue={searchKeyword}
+          onSearchChange={setSearchKeyword}
+          searchPlaceholder={t('taskExecutionHistory:search.placeholder')}
+          filters={[
+            {
+              key: 'status',
+              value: statusFilter,
+              onChange: setStatusFilter,
+              options: [
+                { value: 'all', label: t('taskExecutionHistory:status.all') },
+                { value: 'completed', label: t('taskExecutionHistory:status.completed') },
+                { value: 'running', label: t('taskExecutionHistory:status.running') },
+                { value: 'scheduled', label: t('taskExecutionHistory:status.scheduled') },
+                { value: 'failed', label: t('taskExecutionHistory:status.failed') }
+              ],
+              placeholder: t('taskExecutionHistory:filter.status'),
+              width: 120
+            },
+            {
+              key: 'trigger',
+              value: triggerFilter,
+              onChange: setTriggerFilter,
+              options: [
+                { value: 'all', label: t('taskExecutionHistory:triggerType.all') },
+                { value: 'cron', label: t('taskExecutionHistory:triggerType.cron') },
+                { value: 'hook', label: t('taskExecutionHistory:triggerType.hook') }
+              ],
+              placeholder: t('taskExecutionHistory:filter.triggerType'),
+              width: 120
+            },
+            {
+              key: 'sort',
+              value: sortOrder,
+              onChange: setSortOrder,
+              options: [
+                { value: 'desc', label: t('taskExecutionHistory:sort.newest') },
+                { value: 'asc', label: t('taskExecutionHistory:sort.oldest') }
+              ],
+              placeholder: t('taskExecutionHistory:filter.sort'),
+              width: 120
+            }
+          ]}
+          showRefresh={false}
+          extraActions={
+            <Space size="middle">
+              <RangePicker
+                value={dateRange}
+                onChange={setDateRange}
+                placeholder={[
+                  t('taskExecutionHistory:filter.startDate'), 
+                  t('taskExecutionHistory:filter.endDate')
+                ]}
+                style={{ width: 240 }}
+              />
+              <Button 
+                icon={<ReloadOutlined />}
+                onClick={handleRefresh}
+                title={t('common:refresh')}
+              />
+            </Space>
           }
-        ]}
-        showRefresh={false}
-        extraActions={
-          <Space>
-            <RangePicker
-              value={dateRange}
-              onChange={setDateRange}
-              placeholder={[
-                t('taskExecutionHistory:filter.startDate'), 
-                t('taskExecutionHistory:filter.endDate')
-              ]}
-              style={{ width: 240 }}
-            />
-            <Button 
-              icon={<ReloadOutlined />}
-              onClick={handleRefresh}
-              title={t('common:refresh')}
-            />
-          </Space>
-        }
-      />
+        />
+      </div>
 
       {/* 执行记录列表 */}
       <ListContainer>

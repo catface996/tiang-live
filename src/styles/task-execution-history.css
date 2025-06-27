@@ -1,5 +1,105 @@
 /* TaskExecutionHistory 页面主题适配样式 */
 
+/* ========== 搜索筛选栏响应式间隔 ========== */
+.search-filter-responsive {
+  margin-bottom: 16px; /* 减少下边距，与内部间隔保持一致 */
+}
+
+/* SearchFilterBar 内部组件间隔 */
+.search-filter-responsive .ant-space {
+  width: 100%;
+  flex-wrap: wrap;
+  row-gap: 16px !important; /* 统一行间距 */
+  column-gap: 16px !important;
+}
+
+.search-filter-responsive .ant-space-item {
+  margin-bottom: 0 !important; /* 移除默认下边距 */
+}
+
+/* 移除所有组件的额外边距，依赖Space组件的gap */
+.search-filter-responsive .ant-input-search,
+.search-filter-responsive .ant-select,
+.search-filter-responsive .ant-picker,
+.search-filter-responsive .ant-btn {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* 大屏幕 - 组件不换行时的间隔 */
+@media (min-width: 1200px) {
+  .search-filter-responsive {
+    margin-bottom: 24px; /* 大屏幕时恢复正常间距 */
+  }
+  
+  .search-filter-responsive .ant-space {
+    row-gap: 0 !important;
+  }
+}
+
+/* 中等屏幕 - 部分组件开始换行 */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .search-filter-responsive {
+    margin-bottom: 16px; /* 保持与row-gap一致 */
+  }
+  
+  .search-filter-responsive .ant-space {
+    row-gap: 16px !important;
+  }
+}
+
+/* 小屏幕 - 更多组件换行 */
+@media (max-width: 991px) and (min-width: 768px) {
+  .search-filter-responsive {
+    margin-bottom: 16px; /* 保持与row-gap一致 */
+  }
+  
+  .search-filter-responsive .ant-space {
+    row-gap: 16px !important;
+    column-gap: 12px !important;
+  }
+}
+
+/* 移动端 - 组件垂直排列 */
+@media (max-width: 767px) {
+  .search-filter-responsive {
+    margin-bottom: 12px; /* 保持与row-gap一致 */
+  }
+  
+  .search-filter-responsive .ant-space {
+    row-gap: 12px !important;
+    column-gap: 8px !important;
+  }
+  
+  .search-filter-responsive .ant-space-item {
+    width: 100%;
+  }
+  
+  .search-filter-responsive .ant-input-search,
+  .search-filter-responsive .ant-select {
+    width: 100% !important;
+  }
+  
+  .search-filter-responsive .ant-picker {
+    width: 100% !important;
+  }
+  
+  .search-filter-responsive .ant-btn {
+    width: 100%;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 576px) {
+  .search-filter-responsive {
+    margin-bottom: 8px; /* 保持与row-gap一致 */
+  }
+  
+  .search-filter-responsive .ant-space {
+    row-gap: 8px !important;
+  }
+}
+
 /* ========== 状态图标颜色 ========== */
 .status-icon.success {
   color: var(--success) !important;
