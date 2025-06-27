@@ -882,23 +882,6 @@ const TaskExecutionHistory: React.FC = () => {
         </Col>
       </Row>
 
-      {/* 调试信息面板 */}
-      <FilterContainer>
-        <Alert 
-          message={
-            <div>
-              <div>📊 原始数据: {mockExecutionHistoryData.length} 条</div>
-              <div>📋 当前executionHistory: {executionHistory.length} 条</div>
-              <div>🔍 筛选后filteredHistory: {filteredHistory.length} 条</div>
-              <div>🎯 当前taskId: {taskId || '无'}</div>
-              <div>🔧 筛选条件: 状态={statusFilter}, 触发={triggerFilter}, 搜索="{searchKeyword}"</div>
-            </div>
-          }
-          type="info" 
-          showIcon
-        />
-      </FilterContainer>
-
       {/* 搜索和筛选栏 */}
       <SearchFilterBar
         searchValue={searchKeyword}
