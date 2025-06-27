@@ -411,10 +411,10 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
               }
             />
             <span className="node-name">{report.nodeName}</span>
-            <Tag className={`node-type-${report.nodeType.toLowerCase()}`}>
+            <Tag color={getNodeTypeColor(report.nodeType)}>
               {report.nodeType}
             </Tag>
-            <Tag className={`risk-${report.analysis.riskLevel}`}>
+            <Tag color={riskConfig.color}>
               {riskConfig.label}
             </Tag>
           </div>

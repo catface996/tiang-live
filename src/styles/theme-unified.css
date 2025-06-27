@@ -183,13 +183,14 @@
 }
 
 /* ========== 标签主题样式 ========== */
-.theme-light .ant-tag {
+/* 只对没有预设颜色的Tag应用主题样式 */
+.theme-light .ant-tag:not([class*="ant-tag-"]) {
   background-color: var(--bg-elevated);
   border-color: var(--border-base);
   color: var(--text-primary);
 }
 
-.theme-dark .ant-tag {
+.theme-dark .ant-tag:not([class*="ant-tag-"]) {
   background-color: var(--bg-elevated);
   border-color: var(--border-base);
   color: var(--text-primary);

@@ -232,49 +232,74 @@
   height: 8px;
 }
 
+/* 基础Tag样式 */
 .diagnostic-reports-collapse .ant-tag {
-  border-color: var(--border-base);
-  background-color: var(--bg-container);
-  color: var(--text-primary);
   font-size: 12px;
 }
 
-/* 节点类型标签颜色保持语义化 */
-.diagnostic-reports-collapse .ant-tag.node-type-api {
-  background-color: var(--primary-bg);
-  border-color: var(--primary);
-  color: var(--primary);
+/* 只对没有预设颜色的普通Tag应用主题样式，不影响有color属性的Tag */
+.diagnostic-reports-collapse .ant-tag:not([class*="ant-tag-"]) {
+  border-color: var(--border-base);
+  background-color: var(--bg-container);
+  color: var(--text-primary);
 }
 
-.diagnostic-reports-collapse .ant-tag.node-type-database {
-  background-color: var(--success-bg);
-  border-color: var(--success);
-  color: var(--success);
+/* 强制确保有颜色的Tag在暗色模式下也能正确显示 - 使用!important提高优先级 */
+.theme-dark .diagnostic-reports-collapse .ant-tag[class*="ant-tag-"],
+.theme-light .diagnostic-reports-collapse .ant-tag[class*="ant-tag-"] {
+  background-color: initial !important;
+  border-color: initial !important;
+  color: initial !important;
 }
 
-.diagnostic-reports-collapse .ant-tag.node-type-cache {
-  background-color: var(--warning-bg);
-  border-color: var(--warning);
-  color: var(--warning);
+/* 特别针对风险级别Tag的颜色修复 */
+.diagnostic-reports-collapse .ant-tag-green {
+  background-color: #f6ffed !important;
+  border-color: #b7eb8f !important;
+  color: #52c41a !important;
 }
 
-/* 风险等级标签 */
-.diagnostic-reports-collapse .ant-tag.risk-high {
-  background-color: var(--error-bg);
-  border-color: var(--error);
-  color: var(--error);
+.diagnostic-reports-collapse .ant-tag-orange {
+  background-color: #fff7e6 !important;
+  border-color: #ffd591 !important;
+  color: #fa8c16 !important;
 }
 
-.diagnostic-reports-collapse .ant-tag.risk-medium {
-  background-color: var(--warning-bg);
-  border-color: var(--warning);
-  color: var(--warning);
+.diagnostic-reports-collapse .ant-tag-red {
+  background-color: #fff2f0 !important;
+  border-color: #ffccc7 !important;
+  color: #ff4d4f !important;
 }
 
-.diagnostic-reports-collapse .ant-tag.risk-low {
-  background-color: var(--success-bg);
-  border-color: var(--success);
-  color: var(--success);
+.diagnostic-reports-collapse .ant-tag-volcano {
+  background-color: #fff2e8 !important;
+  border-color: #ffbb96 !important;
+  color: #ff7a45 !important;
+}
+
+/* 暗色主题下的Tag颜色调整 */
+.theme-dark .diagnostic-reports-collapse .ant-tag-green {
+  background-color: rgba(82, 196, 26, 0.15) !important;
+  border-color: #52c41a !important;
+  color: #73d13d !important;
+}
+
+.theme-dark .diagnostic-reports-collapse .ant-tag-orange {
+  background-color: rgba(250, 140, 22, 0.15) !important;
+  border-color: #fa8c16 !important;
+  color: #ffa940 !important;
+}
+
+.theme-dark .diagnostic-reports-collapse .ant-tag-red {
+  background-color: rgba(255, 77, 79, 0.15) !important;
+  border-color: #ff4d4f !important;
+  color: #ff7875 !important;
+}
+
+.theme-dark .diagnostic-reports-collapse .ant-tag-volcano {
+  background-color: rgba(255, 122, 69, 0.15) !important;
+  border-color: #ff7a45 !important;
+  color: #ff9c6e !important;
 }
 
 /* ========== 图标颜色 ========== */
