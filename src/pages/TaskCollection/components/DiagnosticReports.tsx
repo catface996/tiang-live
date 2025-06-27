@@ -33,45 +33,37 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import diagnosticData from '../../../data/diagnosticReportsData.json';
+import '../../../styles/diagnostic-reports.css';
 
 const { Title, Text, Paragraph } = Typography;
 
-const DiagnosticCard = styled(Card)`
-  margin-bottom: 16px;
-  
-  .ant-card-head {
-    padding: 12px 16px;
-    min-height: auto;
-  }
-  
-  .ant-card-body {
-    padding: 16px;
-  }
-`;
+// 使用主题适配的样式组件
+const DiagnosticCard = styled(Card).attrs({
+  className: 'diagnostic-card'
+})``;
 
-const MetricCard = styled(Card)`
-  margin-bottom: 12px;
-  border: 1px solid #f0f0f0;
-  
-  .ant-card-body {
-    padding: 12px;
-  }
-`;
+const MetricCard = styled(Card).attrs({
+  className: 'metric-card'
+})``;
 
-const HealthScoreCard = styled.div<{ score: number }>`
-  padding: 16px;
-  border-radius: 8px;
-  background: ${props => 
-    props.score >= 90 ? 'linear-gradient(135deg, #f6ffed 0%, #d9f7be 100%)' :
-    props.score >= 70 ? 'linear-gradient(135deg, #fffbe6 0%, #fff1b8 100%)' :
-    'linear-gradient(135deg, #fff2f0 0%, #ffccc7 100%)'
-  };
-  border: 1px solid ${props => 
-    props.score >= 90 ? '#b7eb8f' :
-    props.score >= 70 ? '#ffe58f' :
-    '#ffa39e'
-  };
-`;
+const HealthScoreCard = styled.div.attrs<{ score: number }>(props => ({
+  className: `health-score-card ${
+    props.score >= 90 ? 'excellent' : 
+    props.score >= 70 ? 'good' : 'poor'
+  }`
+}))<{ score: number }>``;
+
+const SummaryCards = styled.div.attrs({
+  className: 'summary-cards'
+})``;
+
+const DiagnosticReportsContainer = styled.div.attrs({
+  className: 'diagnostic-reports'
+})``;
+
+const CollapseContainer = styled(Collapse).attrs({
+  className: 'diagnostic-reports-collapse'
+})``;
 
 interface DiagnosticReportsProps {
   nodeIds?: string[];
@@ -409,8 +401,8 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
     return {
       key: index.toString(),
       label: (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="collapse-label">
+          <div className="collapse-label-left">
             <Badge 
               status={
                 report.status === 'completed' ? 'success' :
@@ -418,30 +410,30 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
                 report.status === 'failed' ? 'error' : 'default'
               }
             />
-            <span style={{ fontWeight: 'bold' }}>{report.nodeName}</span>
-            <Tag color={getNodeTypeColor(report.nodeType)}>
+            <span className="node-name">{report.nodeName}</span>
+            <Tag className={`node-type-${report.nodeType.toLowerCase()}`}>
               {report.nodeType}
             </Tag>
-            <Tag color={riskConfig.color}>
+            <Tag className={`risk-${report.analysis.riskLevel}`}>
               {riskConfig.label}
             </Tag>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div className="collapse-label-right">
             <Tooltip title="整体健康评分">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <TrophyOutlined style={{ color: '#faad14' }} />
-                <span style={{ fontSize: 14, fontWeight: 'bold' }}>
+              <div className="health-score">
+                <TrophyOutlined className="status-warning" />
+                <span className="score-text">
                   {formatNumber(report.analysis.overallHealthScore)}/100
                 </span>
               </div>
             </Tooltip>
-            <span style={{ fontSize: 12, color: '#666' }}>
+            <span className="stat-item">
               动作: {report.actions.length}项
             </span>
-            <span style={{ fontSize: 12, color: '#666' }}>
+            <span className="stat-item">
               建议: {report.analysis.recommendations.length}条
             </span>
-            <span style={{ fontSize: 12, color: calculateRiskItems(report) > 0 ? '#ff4d4f' : '#666' }}>
+            <span className={`stat-item ${calculateRiskItems(report) > 0 ? 'risk-warning' : ''}`}>
               风险: {calculateRiskItems(report)}项
             </span>
           </div>
@@ -459,10 +451,12 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
                   suffix="/100"
                   valueStyle={{ 
                     fontSize: 32, 
-                    fontWeight: 'bold',
-                    color: report.analysis.overallHealthScore >= 90 ? '#52c41a' :
-                           report.analysis.overallHealthScore >= 70 ? '#faad14' : '#ff4d4f'
+                    fontWeight: 'bold'
                   }}
+                  className={`score-value ${
+                    report.analysis.overallHealthScore >= 90 ? 'excellent' : 
+                    report.analysis.overallHealthScore >= 70 ? 'good' : 'poor'
+                  }`}
                   prefix={<TrophyOutlined />}
                 />
               </Col>
@@ -507,22 +501,24 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
           </div>
 
           {/* 性能和安全摘要 */}
-          <Row gutter={16} style={{ marginBottom: 24 }}>
-            <Col span={12}>
-              <Card size="small" title="性能摘要">
-                <Paragraph style={{ fontSize: 13, margin: 0 }}>
-                  {report.analysis.performanceSummary}
-                </Paragraph>
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card size="small" title="安全摘要">
-                <Paragraph style={{ fontSize: 13, margin: 0 }}>
-                  {report.analysis.securitySummary}
-                </Paragraph>
-              </Card>
-            </Col>
-          </Row>
+          <SummaryCards>
+            <Row gutter={16} style={{ marginBottom: 24 }}>
+              <Col span={12}>
+                <Card size="small" title="性能摘要">
+                  <Paragraph style={{ fontSize: 13, margin: 0 }}>
+                    {report.analysis.performanceSummary}
+                  </Paragraph>
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card size="small" title="安全摘要">
+                  <Paragraph style={{ fontSize: 13, margin: 0 }}>
+                    {report.analysis.securitySummary}
+                  </Paragraph>
+                </Card>
+              </Col>
+            </Row>
+          </SummaryCards>
 
           {/* 诊断动作详情 */}
           <div style={{ marginBottom: 24 }}>
@@ -541,11 +537,13 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
   });
 
   return (
-    <Collapse 
-      defaultActiveKey={['0']} 
-      ghost 
-      items={collapseItems}
-    />
+    <DiagnosticReportsContainer>
+      <CollapseContainer 
+        defaultActiveKey={['0']} 
+        ghost 
+        items={collapseItems}
+      />
+    </DiagnosticReportsContainer>
   );
 };
 

@@ -1,0 +1,466 @@
+/* DiagnosticReports 组件主题适配样式 */
+
+/* ========== 诊断报告卡片 ========== */
+.diagnostic-card {
+  margin-bottom: 16px;
+  background-color: var(--bg-container);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-card);
+}
+
+.diagnostic-card .ant-card-head {
+  padding: 12px 16px;
+  min-height: auto;
+  background-color: var(--bg-elevated);
+  border-bottom-color: var(--border-light);
+}
+
+.diagnostic-card .ant-card-head-title {
+  color: var(--text-primary);
+}
+
+.diagnostic-card .ant-card-body {
+  padding: 16px;
+  background-color: var(--bg-container);
+  color: var(--text-primary);
+}
+
+/* ========== 健康评分卡片 ========== */
+.health-score-card {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-base);
+  background-color: var(--bg-container);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 健康评分背景渐变 - 优秀 (90+) */
+.health-score-card.excellent {
+  background: linear-gradient(135deg, 
+    var(--success-bg) 0%, 
+    rgba(var(--success-rgb), 0.1) 100%
+  );
+  border-color: var(--success);
+}
+
+.health-score-card.excellent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(var(--success-rgb), 0.05) 0%, 
+    rgba(var(--success-rgb), 0.02) 100%
+  );
+  pointer-events: none;
+}
+
+/* 健康评分背景渐变 - 良好 (70-89) */
+.health-score-card.good {
+  background: linear-gradient(135deg, 
+    var(--warning-bg) 0%, 
+    rgba(var(--warning-rgb), 0.1) 100%
+  );
+  border-color: var(--warning);
+}
+
+.health-score-card.good::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(var(--warning-rgb), 0.05) 0%, 
+    rgba(var(--warning-rgb), 0.02) 100%
+  );
+  pointer-events: none;
+}
+
+/* 健康评分背景渐变 - 需要改进 (<70) */
+.health-score-card.poor {
+  background: linear-gradient(135deg, 
+    var(--error-bg) 0%, 
+    rgba(var(--error-rgb), 0.1) 100%
+  );
+  border-color: var(--error);
+}
+
+.health-score-card.poor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(var(--error-rgb), 0.05) 0%, 
+    rgba(var(--error-rgb), 0.02) 100%
+  );
+  pointer-events: none;
+}
+
+/* 确保内容在渐变之上 */
+.health-score-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== 统计数字样式 ========== */
+.health-score-card .ant-statistic-title {
+  color: var(--text-secondary) !important;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.health-score-card .ant-statistic-content {
+  color: var(--text-primary) !important;
+}
+
+/* 健康评分数字颜色 */
+.health-score-card.excellent .score-value {
+  color: var(--success) !important;
+}
+
+.health-score-card.good .score-value {
+  color: var(--warning) !important;
+}
+
+.health-score-card.poor .score-value {
+  color: var(--error) !important;
+}
+
+/* ========== 指标卡片 ========== */
+.metric-card {
+  margin-bottom: 12px;
+  border: 1px solid var(--border-light);
+  background-color: var(--bg-container);
+  box-shadow: var(--shadow-card);
+}
+
+.metric-card .ant-card-body {
+  padding: 12px;
+  background-color: var(--bg-container);
+  color: var(--text-primary);
+}
+
+/* ========== 折叠面板样式 ========== */
+.diagnostic-reports-collapse {
+  background-color: var(--bg-container);
+  border-color: var(--border-light);
+}
+
+.diagnostic-reports-collapse .ant-collapse-item {
+  border-bottom-color: var(--border-light);
+}
+
+.diagnostic-reports-collapse .ant-collapse-header {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border-radius: 6px !important;
+  margin-bottom: 2px;
+}
+
+.diagnostic-reports-collapse .ant-collapse-header:hover {
+  background-color: var(--bg-hover);
+}
+
+.diagnostic-reports-collapse .ant-collapse-content {
+  background-color: var(--bg-container);
+  border-top-color: var(--border-light);
+}
+
+.diagnostic-reports-collapse .ant-collapse-content-box {
+  background-color: var(--bg-container);
+  color: var(--text-primary);
+}
+
+/* ========== 折叠面板标签区域 ========== */
+.collapse-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.collapse-label-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.collapse-label-left .node-name {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.collapse-label-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.collapse-label-right .health-score {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.collapse-label-right .health-score .score-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.collapse-label-right .stat-item {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.collapse-label-right .stat-item.risk-warning {
+  color: var(--error);
+}
+
+/* ========== 徽章和标签 ========== */
+.diagnostic-reports-collapse .ant-badge-status-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.diagnostic-reports-collapse .ant-tag {
+  border-color: var(--border-base);
+  background-color: var(--bg-container);
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+/* 节点类型标签颜色保持语义化 */
+.diagnostic-reports-collapse .ant-tag.node-type-api {
+  background-color: var(--primary-bg);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.diagnostic-reports-collapse .ant-tag.node-type-database {
+  background-color: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.diagnostic-reports-collapse .ant-tag.node-type-cache {
+  background-color: var(--warning-bg);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+/* 风险等级标签 */
+.diagnostic-reports-collapse .ant-tag.risk-high {
+  background-color: var(--error-bg);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.diagnostic-reports-collapse .ant-tag.risk-medium {
+  background-color: var(--warning-bg);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.diagnostic-reports-collapse .ant-tag.risk-low {
+  background-color: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+/* ========== 图标颜色 ========== */
+.diagnostic-reports .anticon {
+  color: var(--text-secondary);
+}
+
+.diagnostic-reports .anticon.status-success {
+  color: var(--success);
+}
+
+.diagnostic-reports .anticon.status-warning {
+  color: var(--warning);
+}
+
+.diagnostic-reports .anticon.status-error {
+  color: var(--error);
+}
+
+.diagnostic-reports .anticon.status-info {
+  color: var(--primary);
+}
+
+/* ========== 分割线 ========== */
+.diagnostic-reports .ant-divider {
+  border-color: var(--border-light);
+  margin: 12px 0;
+}
+
+/* ========== 列表样式 ========== */
+.diagnostic-reports .ant-list {
+  background-color: var(--bg-container);
+}
+
+.diagnostic-reports .ant-list-item {
+  border-bottom-color: var(--border-light);
+  color: var(--text-primary);
+}
+
+.diagnostic-reports .ant-list-item-meta-title {
+  color: var(--text-primary);
+}
+
+.diagnostic-reports .ant-list-item-meta-description {
+  color: var(--text-secondary);
+}
+
+/* ========== 进度条 ========== */
+.diagnostic-reports .ant-progress-text {
+  color: var(--text-primary) !important;
+}
+
+.diagnostic-reports .ant-progress-bg {
+  background-color: var(--bg-disabled) !important;
+}
+
+/* ========== 工具提示 ========== */
+.diagnostic-reports .ant-tooltip-inner {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-base);
+}
+
+.diagnostic-reports .ant-tooltip-arrow::before {
+  background-color: var(--bg-elevated);
+  border-color: var(--border-base);
+}
+
+/* ========== 摘要卡片 ========== */
+.summary-cards .ant-card {
+  background-color: var(--bg-container);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-card);
+}
+
+.summary-cards .ant-card-head {
+  background-color: var(--bg-elevated);
+  border-bottom-color: var(--border-light);
+}
+
+.summary-cards .ant-card-head-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.summary-cards .ant-card-body {
+  background-color: var(--bg-container);
+}
+
+.summary-cards .ant-typography {
+  color: var(--text-primary) !important;
+  margin: 0;
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 768px) {
+  .collapse-label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .collapse-label-right {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .health-score-card {
+    padding: 12px;
+  }
+  
+  .health-score-card .ant-statistic-content {
+    font-size: 24px !important;
+  }
+  
+  .summary-cards .ant-col {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .collapse-label-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .collapse-label-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .health-score-card .ant-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .health-score-card .ant-col {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ========== 暗色主题特殊处理 ========== */
+.theme-dark .health-score-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .health-score-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.theme-dark .diagnostic-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dark .metric-card {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== 动画效果 ========== */
+.health-score-card,
+.diagnostic-card,
+.metric-card {
+  transition: all 0.3s ease;
+}
+
+.health-score-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.diagnostic-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ========== 加载状态 ========== */
+.diagnostic-reports .ant-spin-container {
+  background-color: var(--bg-container);
+}
+
+.diagnostic-reports .ant-spin-dot {
+  color: var(--primary);
+}
+
+.diagnostic-reports .ant-spin-text {
+  color: var(--text-secondary);
+}

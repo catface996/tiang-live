@@ -35,108 +35,50 @@ import {
   type Panel
 } from './components';
 import { loadLayeredTopologyNodes, getLayerStatistics, getLayerFullName, type LayeredTaskNode } from '../../utils/layeredTopologyUtils';
+import '../../styles/task-collection-run-detail.css';
 
-// Styled Components
-const LayerStatCard = styled.div`
-  padding: 16px;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  text-align: center;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #fafafa;
-  transition: all 0.3s ease;
-  cursor: default;
+// 使用主题适配的样式组件
+const LayerStatCard = styled.div.attrs({
+  className: 'layer-stat-card'
+})``;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-color: #1890ff;
-  }
-`;
+const LayerTitle = styled.div.attrs({
+  className: 'layer-title'
+})``;
 
-const LayerTitle = styled.div`
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  line-height: 1.3;
-  color: #262626;
-  word-break: break-word;
-`;
+const LayerTotal = styled.div.attrs({
+  className: 'layer-total'
+})``;
 
-const LayerTotal = styled.div`
-  font-size: 14px;
-  color: #1890ff;
-  margin-bottom: 12px;
-  font-weight: 500;
-`;
+const StatusGrid = styled.div.attrs({
+  className: 'status-grid'
+})``;
 
-const StatusGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 500;
-`;
+const StatusItem = styled.div.attrs<{ $status: string }>(props => ({
+  className: `status-item ${props.$status}`
+}))<{ $status: string }>``;
 
-const StatusItem = styled.div<{ $statusColor: string; $bgColor: string }>`
-  color: ${props => props.$statusColor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  border-radius: 4px;
-  background: ${props => props.$bgColor};
-`;
+const StatisticsHeader = styled.div.attrs({
+  className: 'statistics-header'
+})``;
 
-const StatisticsHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-`;
+const StatisticsLegend = styled.div.attrs({
+  className: 'statistics-legend'
+})``;
 
-const StatisticsLegend = styled.div`
-  font-size: 12px;
-  color: #8c8c8c;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 4px;
-`;
-
-const LegendItem = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
+const LegendItem = styled.span.attrs({
+  className: 'legend-item'
+})``;
 
 const { Title, Text } = Typography;
 
-const PageContainer = styled.div`
-  padding: 24px;
-`;
+const PageContainer = styled.div.attrs({
+  className: 'task-run-detail-container'
+})``;
 
-const StatsCard = styled(Card)`
-  .ant-card-body {
-    padding: 16px;
-  }
-  
-  .ant-statistic {
-    .ant-statistic-title {
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-    
-    .ant-statistic-content {
-      font-size: 20px;
-      font-weight: 600;
-    }
-  }
-`;
+const StatsCard = styled(Card).attrs<{ $status?: string }>(props => ({
+  className: `stats-card ${props.$status || ''}`
+}))<{ $status?: string }>``;
 
 // 节点状态枚举
 enum NodeStatus {
@@ -576,12 +518,12 @@ const TaskCollectionRunDetail: React.FC = () => {
       />
 
       {/* 页面标题和操作 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
-        <div>
-          <Title level={2} style={{ margin: 0 }}>
+      <div className="page-header">
+        <div className="page-title-section">
+          <Title level={2}>
             {runDetail?.collectionName} - {t('taskCollectionRunDetail:header.runDetail')}
           </Title>
-          <div style={{ marginTop: 8 }}>
+          <div className="page-status-section">
             <Space>
               <Badge 
                 status={runDetail?.status === 'running' ? 'processing' : 'success'} 
@@ -611,45 +553,41 @@ const TaskCollectionRunDetail: React.FC = () => {
       {runDetail && (
         <>
           {/* 统计信息 */}
-          <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+          <Row gutter={[16, 16]} className="stats-row">
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-              <StatsCard>
+              <StatsCard $status="total">
                 <Statistic
                   title={t('taskCollectionRunDetail:statistics.totalNodes')}
                   value={runDetail.totalNodes}
                   prefix={<NodeIndexOutlined />}
-                  valueStyle={{ color: '#1890ff' }}
                 />
               </StatsCard>
             </Col>
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-              <StatsCard>
+              <StatsCard $status="completed">
                 <Statistic
                   title={t('taskCollectionRunDetail:statistics.completedNodes')}
                   value={runDetail.completedNodes}
-                  prefix={<CheckCircleOutlined />}
-                  valueStyle={{ color: '#52c41a' }}
+                  prefix={<CheckCircleOutlined className="status-completed" />}
                 />
               </StatsCard>
             </Col>
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-              <StatsCard>
+              <StatsCard $status="failed">
                 <Statistic
                   title={t('taskCollectionRunDetail:statistics.failedNodes')}
                   value={runDetail.failedNodes}
-                  prefix={<ExclamationCircleOutlined />}
-                  valueStyle={{ color: '#ff4d4f' }}
+                  prefix={<ExclamationCircleOutlined className="status-failed" />}
                 />
               </StatsCard>
             </Col>
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-              <StatsCard>
+              <StatsCard $status={runDetail.successRate > 80 ? "completed" : "pending"}>
                 <Statistic
                   title={t('taskCollectionRunDetail:statistics.successRate')}
                   value={runDetail.successRate}
                   suffix="%"
-                  prefix={<CheckCircleOutlined />}
-                  valueStyle={{ color: runDetail.successRate > 80 ? '#52c41a' : '#faad14' }}
+                  prefix={<CheckCircleOutlined className={runDetail.successRate > 80 ? "status-completed" : "status-pending"} />}
                 />
               </StatsCard>
             </Col>
@@ -662,21 +600,21 @@ const TaskCollectionRunDetail: React.FC = () => {
                   <span>{t('taskCollectionRunDetail:statistics.layeredStatistics')}</span>
                   <StatisticsLegend>
                     <LegendItem>
-                      <span style={{ color: '#52c41a' }}>✓</span> {t('taskCollectionRunDetail:legend.completed')}
+                      <span className="legend-completed">✓</span> {t('taskCollectionRunDetail:legend.completed')}
                     </LegendItem>
                     <LegendItem>
-                      <span style={{ color: '#1890ff' }}>●</span> {t('taskCollectionRunDetail:legend.running')}
+                      <span className="legend-running">●</span> {t('taskCollectionRunDetail:legend.running')}
                     </LegendItem>
                     <LegendItem>
-                      <span style={{ color: '#ff4d4f' }}>✗</span> {t('taskCollectionRunDetail:legend.failed')}
+                      <span className="legend-failed">✗</span> {t('taskCollectionRunDetail:legend.failed')}
                     </LegendItem>
                     <LegendItem>
-                      <span style={{ color: '#8c8c8c' }}>○</span> {t('taskCollectionRunDetail:legend.pending')}
+                      <span className="legend-pending">○</span> {t('taskCollectionRunDetail:legend.pending')}
                     </LegendItem>
                   </StatisticsLegend>
                 </StatisticsHeader>
               }
-              style={{ marginBottom: 24 }}
+              className="card-with-margin"
             >
               <Row gutter={[16, 16]}>
                 {Object.entries(getLayerStatistics(layeredNodes)).map(([layer, stats]) => (
@@ -690,29 +628,25 @@ const TaskCollectionRunDetail: React.FC = () => {
                       </LayerTotal>
                       <StatusGrid>
                         <StatusItem 
-                          $statusColor="#52c41a"
-                          $bgColor="rgba(82, 196, 26, 0.1)"
+                          $status="completed"
                           title={t('taskCollectionRunDetail:legend.completed')}
                         >
                           ✓ {stats.completed}
                         </StatusItem>
                         <StatusItem 
-                          $statusColor="#1890ff"
-                          $bgColor="rgba(24, 144, 255, 0.1)"
+                          $status="running"
                           title={t('taskCollectionRunDetail:legend.running')}
                         >
                           ● {stats.running}
                         </StatusItem>
                         <StatusItem 
-                          $statusColor="#ff4d4f"
-                          $bgColor="rgba(255, 77, 79, 0.1)"
+                          $status="failed"
                           title={t('taskCollectionRunDetail:legend.failed')}
                         >
                           ✗ {stats.failed}
                         </StatusItem>
                         <StatusItem 
-                          $statusColor="#8c8c8c"
-                          $bgColor="rgba(140, 140, 140, 0.1)"
+                          $status="pending"
                           title={t('taskCollectionRunDetail:legend.pending')}
                         >
                           ○ {stats.pending}
@@ -725,7 +659,7 @@ const TaskCollectionRunDetail: React.FC = () => {
             </Card>
 
           {/* 基本信息 */}
-          <Card title={t('taskCollectionRunDetail:header.runDetail')} style={{ marginBottom: 24 }}>
+          <Card title={t('taskCollectionRunDetail:header.runDetail')} className="card-with-margin">
             <Descriptions column={3}>
               <Descriptions.Item label={t('taskCollectionRunDetail:time.startTime')}>
                 {runDetail.startTime}
@@ -755,14 +689,14 @@ const TaskCollectionRunDetail: React.FC = () => {
           </Card>
 
           {/* 诊断报告清单 */}
-          <Card title={t('taskCollectionRunDetail:diagnosticReports.title')} style={{ marginBottom: 24 }}>
+          <Card title={t('taskCollectionRunDetail:diagnosticReports.title')} className="card-with-margin">
             <DiagnosticReports nodeIds={runDetail.nodes.map(node => node.id)} />
           </Card>
 
           {/* 拓扑图 */}
           <Card 
             title={t('taskCollectionRunDetail:topology.title')} 
-            style={{ marginBottom: 24 }}
+            className="card-with-margin"
           >
             <LayeredTaskTopology 
               nodes={layeredNodes}
