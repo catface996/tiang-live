@@ -391,23 +391,174 @@
   }
 }
 
-/* ========== 加载状态 ========== */
-.topology-container .loading-overlay {
+/* ========== 缩放控制按钮 ========== */
+.zoom-controls {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(var(--bg-container-rgb), 0.8);
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 20;
+}
+
+.zoom-control-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid var(--border-base);
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
+  user-select: none;
 }
 
-.topology-container .loading-text {
-  color: var(--text-secondary);
+.zoom-control-btn:hover {
+  background-color: var(--bg-hover);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.zoom-control-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-card);
+}
+
+.zoom-control-btn.reset {
   font-size: 14px;
+  font-weight: 500;
+}
+
+.zoom-level-display {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-base);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-card);
+  z-index: 20;
+}
+
+/* ========== 拓扑图交互样式 ========== */
+.topology-container svg {
+  cursor: grab;
+}
+
+.topology-container svg:active {
+  cursor: grabbing;
+}
+
+.topology-container .node {
+  cursor: pointer;
+}
+
+.topology-container .node.dragging {
+  cursor: grabbing;
+}
+
+.topology-container .node:hover circle {
+  filter: brightness(1.1);
+  stroke-width: 4;
+}
+
+/* ========== 缩放提示 ========== */
+.zoom-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-base);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-card);
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.zoom-hint.show {
+  opacity: 1;
+}
+
+/* ========== 响应式缩放控制 ========== */
+@media (max-width: 768px) {
+  .zoom-controls {
+    bottom: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+  
+  .zoom-control-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+  
+  .zoom-control-btn.reset {
+    font-size: 12px;
+  }
+  
+  .zoom-level-display {
+    bottom: 12px;
+    left: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 576px) {
+  .zoom-controls {
+    flex-direction: row;
+    bottom: 8px;
+    right: 8px;
+    left: 8px;
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  .zoom-control-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .zoom-level-display {
+    position: static;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+}
+
+/* ========== 暗色主题缩放控制 ========== */
+.theme-dark .zoom-control-btn {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dark .zoom-control-btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .zoom-level-display {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dark .zoom-hint {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* ========== 工具提示 ========== */

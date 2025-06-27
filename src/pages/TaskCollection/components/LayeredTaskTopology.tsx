@@ -143,9 +143,56 @@ const BUSINESS_LAYERS: BusinessLayer[] = [
 
 const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNodeClick }) => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   // 使用 useMemo 来稳定化依赖
   const stableNodes = useMemo(() => nodes, [JSON.stringify(nodes)]);
+
+  // 显示操作提示
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const hint = document.querySelector('.zoom-hint');
+      if (hint) {
+        hint.classList.add('show');
+        setTimeout(() => {
+          hint.classList.remove('show');
+        }, 3000);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 缩放控制函数
+  const handleZoomIn = () => {
+    if (!svgRef.current) return;
+    const svg = d3.select(svgRef.current);
+    const zoom = d3.zoom().scaleExtent([0.1, 5]);
+    svg.transition().duration(300).call(
+      zoom.transform,
+      d3.zoomTransform(svg.node()).scale(Math.min(5, zoomLevel * 1.2))
+    );
+  };
+
+  const handleZoomOut = () => {
+    if (!svgRef.current) return;
+    const svg = d3.select(svgRef.current);
+    const zoom = d3.zoom().scaleExtent([0.1, 5]);
+    svg.transition().duration(300).call(
+      zoom.transform,
+      d3.zoomTransform(svg.node()).scale(Math.max(0.1, zoomLevel / 1.2))
+    );
+  };
+
+  const handleResetZoom = () => {
+    if (!svgRef.current) return;
+    const svg = d3.select(svgRef.current);
+    const zoom = d3.zoom().scaleExtent([0.1, 5]);
+    svg.transition().duration(500).call(
+      zoom.transform,
+      d3.zoomIdentity
+    );
+  };
 
   // 计算层级边界
   const calculateLayerBounds = (layer: BusinessLayer, width: number, height: number) => {
@@ -233,8 +280,29 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     const height = 800;
     const nodesCopy = stableNodes.map(node => ({ ...node }));
     
-    // 创建主容器
-    const g = svg.append("g");
+    // 创建主容器 - 这个容器会被缩放和平移
+    const g = svg.append("g").attr("class", "main-group");
+
+    // 设置缩放行为
+    const zoom = d3.zoom<SVGSVGElement, unknown>()
+      .scaleExtent([0.1, 5]) // 缩放范围：10%到500%
+      .on("zoom", (event) => {
+        // 应用缩放和平移变换
+        g.attr("transform", event.transform);
+        // 更新缩放级别状态
+        setZoomLevel(event.transform.k);
+      });
+
+    // 应用缩放行为到SVG
+    svg.call(zoom);
+
+    // 添加缩放重置功能（双击）
+    svg.on("dblclick.zoom", () => {
+      svg.transition().duration(500).call(
+        zoom.transform,
+        d3.zoomIdentity
+      );
+    });
 
     // 按层级分组节点
     const nodesByLayer = new Map<string, LayeredTaskNode[]>();
@@ -389,11 +457,11 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
             .attr("r", 35)
             .attr("stroke-width", 4);
           
-          // 阻止点击事件
+          // 阻止缩放事件
           event.sourceEvent.stopPropagation();
         })
         .on("drag", function(event, d: any) {
-          // 拖拽过程中
+          // 直接使用事件坐标，D3会自动处理缩放变换
           d.x = event.x;
           d.y = event.y;
           
@@ -488,13 +556,51 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
       <TipsContainer>
         <Alert
           message="分层拓扑视图"
-          description="按照业务层级从上到下展示节点关系：L5业务场景层 → L4业务链路层 → L3业务系统层 → L2中间件层 → L1基础设施层。可以拖拽节点调整位置，点击节点查看详细信息。"
+          description="按照业务层级从上到下展示节点关系：L5业务场景层 → L4业务链路层 → L3业务系统层 → L2中间件层 → L1基础设施层。支持鼠标滚轮缩放、拖拽平移视图、拖拽节点调整位置，点击节点查看详细信息。"
           type="info"
           showIcon
         />
       </TipsContainer>
       <TopologyContainer>
         <svg ref={svgRef}></svg>
+        
+        {/* 缩放控制按钮 */}
+        <div className="zoom-controls">
+          <div 
+            className="zoom-control-btn" 
+            onClick={handleZoomIn}
+            title="放大 (滚轮向上)"
+          >
+            +
+          </div>
+          <div 
+            className="zoom-control-btn" 
+            onClick={handleZoomOut}
+            title="缩小 (滚轮向下)"
+          >
+            −
+          </div>
+          <div 
+            className="zoom-control-btn reset" 
+            onClick={handleResetZoom}
+            title="重置缩放 (双击图表)"
+          >
+            ⌂
+          </div>
+        </div>
+
+        {/* 缩放级别显示 */}
+        <div className="zoom-level-display">
+          缩放: {Math.round(zoomLevel * 100)}%
+        </div>
+
+        {/* 操作提示 */}
+        <div className="zoom-hint">
+          <div>• 鼠标滚轮：缩放</div>
+          <div>• 拖拽：平移视图</div>
+          <div>• 双击：重置缩放</div>
+          <div>• 拖拽节点：调整位置</div>
+        </div>
         
         {/* 右上角垂直排列的图例 */}
         <RightTopLegendsContainer>
