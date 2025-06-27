@@ -74,6 +74,14 @@ const ModalThemeTest: React.FC = () => {
               <Text>2-5 秒</Text>
             </Descriptions.Item>
             
+            <Descriptions.Item label="创建者">
+              <Text>{mockData.createdBy}</Text>
+            </Descriptions.Item>
+            
+            <Descriptions.Item label="创建时间">
+              <Text>{mockData.createdAt}</Text>
+            </Descriptions.Item>
+            
             <Descriptions.Item label="参与者" span={2}>
               <Space wrap>
                 {mockData.participants.map((participant, index) => (
@@ -82,14 +90,6 @@ const ModalThemeTest: React.FC = () => {
                   </Tag>
                 ))}
               </Space>
-            </Descriptions.Item>
-            
-            <Descriptions.Item label="创建者">
-              <Text>{mockData.createdBy}</Text>
-            </Descriptions.Item>
-            
-            <Descriptions.Item label="创建时间">
-              <Text>{mockData.createdAt}</Text>
             </Descriptions.Item>
             
             <Descriptions.Item label="描述" span={2}>

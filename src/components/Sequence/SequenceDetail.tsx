@@ -129,6 +129,14 @@ const SequenceDetail: React.FC<SequenceDetailProps> = ({ sequence }) => {
           <Text>{formatDuration(sequence.duration, t)}</Text>
         </Descriptions.Item>
         
+        <Descriptions.Item label={t('sequences:createdBy')}>
+          <Text>{sequence.createdBy}</Text>
+        </Descriptions.Item>
+        
+        <Descriptions.Item label={t('sequences:createdAt')}>
+          <Text>{sequence.createdAt}</Text>
+        </Descriptions.Item>
+        
         <Descriptions.Item label={t('sequences:participants')} span={2}>
           <Space wrap>
             {sequence.participants.map((participant, index) => (
@@ -137,14 +145,6 @@ const SequenceDetail: React.FC<SequenceDetailProps> = ({ sequence }) => {
               </Tag>
             ))}
           </Space>
-        </Descriptions.Item>
-        
-        <Descriptions.Item label={t('sequences:createdBy')}>
-          <Text>{sequence.createdBy}</Text>
-        </Descriptions.Item>
-        
-        <Descriptions.Item label={t('sequences:createdAt')}>
-          <Text>{sequence.createdAt}</Text>
         </Descriptions.Item>
         
         <Descriptions.Item label={t('sequences:lastModified')} span={2}>
