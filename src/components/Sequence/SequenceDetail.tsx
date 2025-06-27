@@ -108,7 +108,7 @@ const SequenceDetail: React.FC<SequenceDetailProps> = ({ sequence }) => {
           <Text strong>{sequence.name}</Text>
         </Descriptions.Item>
         
-        <Descriptions.Item label={t('common:type')}>
+        <Descriptions.Item label={t('sequences:sequenceType')}>
           <Tag 
             color={typeConfig?.color}
             icon={typeConfig?.icon}
@@ -117,7 +117,7 @@ const SequenceDetail: React.FC<SequenceDetailProps> = ({ sequence }) => {
           </Tag>
         </Descriptions.Item>
         
-        <Descriptions.Item label={t('common:status')}>
+        <Descriptions.Item label={t('sequences:sequenceStatus')}>
           {getStatusTag(sequence.status)}
         </Descriptions.Item>
         
@@ -151,7 +151,7 @@ const SequenceDetail: React.FC<SequenceDetailProps> = ({ sequence }) => {
           <Text>{sequence.lastModified}</Text>
         </Descriptions.Item>
         
-        <Descriptions.Item label={t('common:description')} span={2}>
+        <Descriptions.Item label={t('sequences:sequenceDescription')} span={2}>
           <Text>{sequence.description}</Text>
         </Descriptions.Item>
       </Descriptions>

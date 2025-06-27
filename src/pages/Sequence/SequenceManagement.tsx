@@ -535,7 +535,7 @@ const SequenceManagement: React.FC = () => {
             key: 'status',
             value: filterStatus,
             onChange: setFilterStatus,
-            placeholder: t('common:status'),
+            placeholder: t('sequences:statusFilter'),
             width: 100,
             options: [
               { value: 'all', label: t('sequences:allStatuses') },
