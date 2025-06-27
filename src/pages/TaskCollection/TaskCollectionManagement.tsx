@@ -1291,7 +1291,7 @@ const TaskCollectionManagement: React.FC = () => {
               <Descriptions.Item label={t('tasks:collections.modal.taskName')} span={2}>
                 {selectedTask.name}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common:status')}>
+              <Descriptions.Item label={t('tasks:collections.modal.taskStatus')}>
                 {getStatusTag(selectedTask.status)}
               </Descriptions.Item>
               <Descriptions.Item label={t('tasks:collections.modal.scheduleFrequency')}>
@@ -1312,10 +1312,10 @@ const TaskCollectionManagement: React.FC = () => {
               <Descriptions.Item label={t('tasks:collections.card.creator')}>
                 {selectedTask.createdBy}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common:createTime')}>
+              <Descriptions.Item label={t('tasks:collections.modal.taskCreatedAt')}>
                 {selectedTask.createdAt}
               </Descriptions.Item>
-              <Descriptions.Item label={t('common:description')} span={2}>
+              <Descriptions.Item label={t('tasks:collections.modal.taskDescription')} span={2}>
                 {selectedTask.description}
               </Descriptions.Item>
             </Descriptions>

@@ -52,7 +52,10 @@
     "modal": {
       "taskName": "任务名称",
       "scheduleFrequency": "调度频率",
-      "lastExecution": "最后执行"
+      "lastExecution": "最后执行",
+      "taskStatus": "任务状态",
+      "taskCreatedAt": "创建时间",
+      "taskDescription": "任务描述"
     },
     "form": {
       "name": "集合名称",

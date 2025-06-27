@@ -52,7 +52,10 @@
     "modal": {
       "taskName": "Task Name",
       "scheduleFrequency": "Schedule Frequency",
-      "lastExecution": "Last Execution"
+      "lastExecution": "Last Execution",
+      "taskStatus": "Task Status",
+      "taskCreatedAt": "Created At",
+      "taskDescription": "Task Description"
     },
     "form": {
       "name": "Collection Name",
