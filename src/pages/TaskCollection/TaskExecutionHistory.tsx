@@ -926,18 +926,24 @@ const TaskExecutionHistory: React.FC = () => {
             width: 120
           }
         ]}
-        showRefresh={true}
-        onRefresh={handleRefresh}
+        showRefresh={false}
         extraActions={
-          <RangePicker
-            value={dateRange}
-            onChange={setDateRange}
-            placeholder={[
-              t('taskExecutionHistory:filter.startDate'), 
-              t('taskExecutionHistory:filter.endDate')
-            ]}
-            style={{ width: 240 }}
-          />
+          <Space>
+            <RangePicker
+              value={dateRange}
+              onChange={setDateRange}
+              placeholder={[
+                t('taskExecutionHistory:filter.startDate'), 
+                t('taskExecutionHistory:filter.endDate')
+              ]}
+              style={{ width: 240 }}
+            />
+            <Button 
+              icon={<ReloadOutlined />}
+              onClick={handleRefresh}
+              title={t('common:refresh')}
+            />
+          </Space>
         }
       />
 
