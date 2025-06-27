@@ -23,10 +23,77 @@
 .topology-container svg {
   width: 100%;
   height: 100%;
+  display: block; /* 移除默认的inline-block间距 */
 }
 
 .topology-container:hover {
   box-shadow: var(--shadow-hover);
+}
+
+/* ========== 层级线框优化 ========== */
+.topology-container .layer-background {
+  fill: var(--bg-elevated);
+  stroke: var(--border-base);
+  stroke-width: 1.5;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.topology-container .layer-background:hover {
+  opacity: 1;
+  stroke-width: 2;
+}
+
+/* ========== 响应式层级适配 ========== */
+@media (max-width: 1400px) {
+  .topology-container {
+    height: 750px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .topology-container {
+    height: 700px;
+  }
+}
+
+@media (max-width: 992px) {
+  .topology-container {
+    height: 650px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topology-container {
+    height: 600px;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .topology-container {
+    height: 500px;
+  }
+}
+
+/* ========== 层级文字响应式 ========== */
+.topology-container .layer-text {
+  fill: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  transition: fill 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .topology-container .layer-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .topology-container .layer-text {
+    font-size: 11px;
+  }
 }
 
 /* ========== 提示信息容器 ========== */

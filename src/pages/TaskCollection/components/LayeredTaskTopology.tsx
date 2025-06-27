@@ -163,6 +163,19 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     return () => clearTimeout(timer);
   }, []);
 
+  // 监听窗口大小变化，重新绘制拓扑图
+  useEffect(() => {
+    const handleResize = () => {
+      // 延迟重绘，避免频繁触发
+      setTimeout(() => {
+        drawLayeredTopology();
+      }, 100);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [stableNodes]);
+
   // 缩放控制函数
   const handleZoomIn = () => {
     if (!svgRef.current) return;
@@ -196,22 +209,23 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
 
   // 计算层级边界
   const calculateLayerBounds = (layer: BusinessLayer, width: number, height: number) => {
-    const padding = 20;
+    // 响应式边距计算
+    const basePadding = Math.max(16, Math.min(40, width * 0.02)); // 2%的宽度作为边距，最小16px，最大40px
     const headerHeight = 60;
-    const availableHeight = height - headerHeight - padding * 2;
-    const layerSpacing = 10;
+    const availableHeight = height - headerHeight - basePadding * 2;
+    const layerSpacing = Math.max(8, Math.min(15, height * 0.015)); // 1.5%的高度作为层级间距
     
     // 从上到下排列 L5 -> L1
     const layerIndex = 5 - layer.level; // L5=0, L4=1, L3=2, L2=3, L1=4
     const totalLayers = BUSINESS_LAYERS.length;
     const layerHeight = (availableHeight - layerSpacing * (totalLayers - 1)) / totalLayers;
     
-    const y = headerHeight + padding + layerIndex * (layerHeight + layerSpacing);
+    const y = headerHeight + basePadding + layerIndex * (layerHeight + layerSpacing);
 
     return {
-      x: padding,
+      x: basePadding,
       y: y,
-      width: width - padding * 2,
+      width: width - basePadding * 2, // 完美适配父容器宽度
       height: layerHeight,
       rx: 8,
       ry: 8
@@ -222,51 +236,48 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
   const layoutNodesInLayer = (layerNodes: LayeredTaskNode[], bounds: any) => {
     if (layerNodes.length === 0) return;
     
-    const minNodeSpacing = 80; // 最小节点间距
-    const layerPadding = 40; // 层级内边距
+    // 响应式节点间距和边距
+    const layerPadding = Math.max(20, Math.min(60, bounds.width * 0.05)); // 5%的层级宽度作为内边距
+    const minNodeSpacing = Math.max(60, Math.min(120, bounds.width * 0.08)); // 8%的层级宽度作为最小节点间距
     const availableWidth = bounds.width - layerPadding * 2;
     
     // 计算节点间距，确保节点均匀分布且不超出边界
     let nodeSpacing = minNodeSpacing;
-    let totalNodesWidth = (layerNodes.length - 1) * nodeSpacing;
+    const totalNodesWidth = layerNodes.length * 60; // 假设每个节点宽度为60px
+    const totalSpacingWidth = (layerNodes.length - 1) * nodeSpacing;
     
     // 如果节点总宽度超出可用宽度，调整间距
-    if (totalNodesWidth > availableWidth) {
-      nodeSpacing = Math.max(60, availableWidth / (layerNodes.length - 1));
-      totalNodesWidth = (layerNodes.length - 1) * nodeSpacing;
+    if (totalNodesWidth + totalSpacingWidth > availableWidth) {
+      nodeSpacing = Math.max(40, (availableWidth - totalNodesWidth) / Math.max(1, layerNodes.length - 1));
     }
     
-    // 计算起始X位置，使节点水平居中
-    const startX = bounds.x + (bounds.width - totalNodesWidth) / 2;
-    const centerY = bounds.y + bounds.height / 2;
+    // 计算起始位置以居中对齐
+    const totalWidth = totalNodesWidth + (layerNodes.length - 1) * nodeSpacing;
+    const startX = bounds.x + layerPadding + (availableWidth - totalWidth) / 2;
     
-    // 检查是否需要多行布局
-    const maxNodesPerRow = Math.floor(availableWidth / minNodeSpacing) + 1;
+    // 如果节点数量较多，使用多行布局
+    const maxNodesPerRow = Math.floor(availableWidth / (60 + nodeSpacing)) || 1;
+    const rows = Math.ceil(layerNodes.length / maxNodesPerRow);
+    const rowHeight = Math.max(80, (bounds.height - 60) / Math.max(1, rows)); // 60px为标题预留空间
     
-    if (layerNodes.length <= maxNodesPerRow) {
-      // 单行布局 - 水平居中
-      layerNodes.forEach((node, index) => {
-        node.x = startX + index * nodeSpacing;
-        node.y = centerY;
-      });
-    } else {
-      // 多行布局 - 每行都水平居中
-      const rows = Math.ceil(layerNodes.length / maxNodesPerRow);
-      const rowHeight = Math.max(80, (bounds.height - 40) / rows); // 40为标题预留空间
-      
-      layerNodes.forEach((node, index) => {
+    layerNodes.forEach((node, index) => {
+      if (rows === 1) {
+        // 单行布局
+        node.x = startX + index * (60 + nodeSpacing) + 30; // +30为节点半径
+        node.y = bounds.y + bounds.height / 2;
+      } else {
+        // 多行布局
         const row = Math.floor(index / maxNodesPerRow);
         const col = index % maxNodesPerRow;
         const nodesInThisRow = Math.min(maxNodesPerRow, layerNodes.length - row * maxNodesPerRow);
+        const rowTotalWidth = nodesInThisRow * 60 + (nodesInThisRow - 1) * Math.min(nodeSpacing, 80);
+        const rowStartX = bounds.x + layerPadding + (availableWidth - rowTotalWidth) / 2;
         
-        // 计算当前行的起始位置，使该行节点居中
-        const rowTotalWidth = (nodesInThisRow - 1) * minNodeSpacing;
-        const rowStartX = bounds.x + (bounds.width - rowTotalWidth) / 2;
-        
-        node.x = rowStartX + col * minNodeSpacing;
-        node.y = bounds.y + 40 + row * rowHeight; // 40为标题预留空间
-      });
-    }
+        node.x = rowStartX + col * (60 + Math.min(nodeSpacing, 80)) + 30;
+        node.y = bounds.y + 50 + row * rowHeight; // 50为标题预留空间
+      }
+    });
+  };
   };
 
   // 绘制分层拓扑图
@@ -276,8 +287,16 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const width = 1200;
-    const height = 800;
+    // 动态获取容器的实际尺寸
+    const containerElement = svgRef.current.parentElement;
+    const containerRect = containerElement?.getBoundingClientRect();
+    const width = containerRect?.width || 1200;
+    const height = containerRect?.height || 800;
+    
+    // 设置SVG的viewBox以适应容器
+    svg.attr("viewBox", `0 0 ${width} ${height}`)
+       .attr("preserveAspectRatio", "xMidYMid meet");
+    
     const nodesCopy = stableNodes.map(node => ({ ...node }));
     
     // 创建主容器 - 这个容器会被缩放和平移
