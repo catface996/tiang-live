@@ -1,0 +1,437 @@
+/* LayeredTaskTopology 组件主题适配样式 */
+
+/* ========== 主容器 ========== */
+.layered-topology-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== 拓扑容器 ========== */
+.topology-container {
+  width: 100%;
+  height: 800px;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  background-color: var(--bg-container);
+  position: relative;
+  overflow: hidden;
+  margin-top: 16px;
+  transition: all 0.3s ease;
+}
+
+.topology-container svg {
+  width: 100%;
+  height: 100%;
+}
+
+.topology-container:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ========== 提示信息容器 ========== */
+.tips-container {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.tips-container .ant-alert {
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  border-color: var(--primary-border);
+  background-color: var(--bg-container);
+}
+
+.tips-container .ant-alert-message {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--primary);
+}
+
+.tips-container .ant-alert-description {
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.tips-container .ant-alert-icon {
+  color: var(--primary);
+}
+
+/* ========== 右上角图例容器 ========== */
+.right-top-legends-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+}
+
+/* ========== 图例卡片 ========== */
+.legend-card {
+  background-color: var(--bg-elevated);
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-card);
+  min-width: 120px;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.legend-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.legend-title {
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-primary);
+}
+
+.legend-title::before {
+  content: '⋮⋮';
+  color: var(--text-disabled);
+  font-size: 10px;
+  line-height: 1;
+}
+
+.legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-icon {
+  font-size: 14px;
+}
+
+.legend-text {
+  font-size: 11px;
+  color: var(--text-primary);
+}
+
+/* ========== 层级图例 ========== */
+.layer-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.layer-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layer-legend-text {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ========== SVG 元素样式 ========== */
+.topology-container .layer-background {
+  fill: var(--bg-elevated);
+  stroke: var(--border-base);
+  stroke-width: 1;
+  opacity: 0.8;
+}
+
+.topology-container .layer-text {
+  fill: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.topology-container .node-circle {
+  stroke-width: 2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.topology-container .node-circle:hover {
+  stroke-width: 3;
+  filter: brightness(1.1);
+}
+
+.topology-container .node-text {
+  fill: var(--text-primary);
+  font-size: 10px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.topology-container .node-status-text {
+  fill: var(--text-secondary);
+  font-size: 8px;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.topology-container .dependency-line {
+  stroke: var(--border-base);
+  stroke-width: 1;
+  stroke-dasharray: 3,3;
+  opacity: 0.6;
+  marker-end: url(#arrowhead);
+}
+
+.topology-container .dependency-line:hover {
+  stroke-width: 2;
+  opacity: 0.8;
+}
+
+/* ========== 节点状态颜色 ========== */
+.topology-container .node-completed {
+  fill: var(--success);
+  stroke: var(--success);
+}
+
+.topology-container .node-running {
+  fill: var(--primary);
+  stroke: var(--primary);
+}
+
+.topology-container .node-failed {
+  fill: var(--error);
+  stroke: var(--error);
+}
+
+.topology-container .node-pending {
+  fill: var(--warning);
+  stroke: var(--warning);
+}
+
+.topology-container .node-skipped {
+  fill: var(--text-disabled);
+  stroke: var(--text-disabled);
+}
+
+/* ========== 层级颜色适配 ========== */
+/* L5 - 业务场景层 */
+.topology-container .layer-l5 {
+  fill: rgba(var(--purple-rgb), 0.1);
+  stroke: var(--purple);
+}
+
+/* L4 - 业务链路层 */
+.topology-container .layer-l4 {
+  fill: rgba(var(--primary-rgb), 0.1);
+  stroke: var(--primary);
+}
+
+/* L3 - 业务系统层 */
+.topology-container .layer-l3 {
+  fill: rgba(var(--success-rgb), 0.1);
+  stroke: var(--success);
+}
+
+/* L2 - 中间件层 */
+.topology-container .layer-l2 {
+  fill: rgba(var(--warning-rgb), 0.1);
+  stroke: var(--warning);
+}
+
+/* L1 - 基础设施层 */
+.topology-container .layer-l1 {
+  fill: rgba(var(--cyan-rgb), 0.1);
+  stroke: var(--cyan);
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 1200px) {
+  .tips-container .ant-alert-description {
+    font-size: 13px;
+  }
+  
+  .topology-container {
+    height: 700px;
+  }
+  
+  .right-top-legends-container {
+    top: 12px;
+    right: 12px;
+    gap: 8px;
+  }
+  
+  .legend-card {
+    padding: 10px;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tips-container {
+    margin-bottom: 12px;
+  }
+  
+  .tips-container .ant-alert-message {
+    font-size: 14px;
+  }
+  
+  .tips-container .ant-alert-description {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  
+  .topology-container {
+    height: 600px;
+    margin-top: 12px;
+  }
+  
+  .right-top-legends-container {
+    top: 8px;
+    right: 8px;
+    gap: 6px;
+  }
+  
+  .legend-card {
+    padding: 8px;
+    min-width: 90px;
+  }
+  
+  .legend-title {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  
+  .legend-text,
+  .layer-legend-text {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .topology-container {
+    height: 500px;
+  }
+  
+  .right-top-legends-container {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  
+  .legend-card {
+    flex: 1;
+    min-width: auto;
+    padding: 6px;
+  }
+  
+  .legend-title {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+  
+  .legend-list,
+  .layer-legend-list {
+    gap: 2px;
+  }
+}
+
+/* ========== 暗色主题特殊处理 ========== */
+.theme-dark .topology-container {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .topology-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.theme-dark .legend-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dark .legend-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .topology-container .dependency-line {
+  stroke: var(--border-light);
+}
+
+.theme-dark .topology-container .node-text {
+  fill: var(--text-primary);
+}
+
+.theme-dark .topology-container .node-status-text {
+  fill: var(--text-secondary);
+}
+
+/* ========== 动画效果 ========== */
+.topology-container,
+.legend-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== 加载状态 ========== */
+.topology-container .loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(var(--bg-container-rgb), 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.topology-container .loading-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* ========== 工具提示 ========== */
+.topology-tooltip {
+  position: absolute;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-base);
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 12px;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-card);
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 200px;
+}
+
+.topology-tooltip .tooltip-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.topology-tooltip .tooltip-content {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}

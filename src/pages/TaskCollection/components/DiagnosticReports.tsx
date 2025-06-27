@@ -132,7 +132,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
       '业务链路': 'blue', 
       '业务系统': 'green',
       '中间件': 'orange',
-      '基础设施': 'red',
+      '基础设施': 'cyan',  // 改为青蓝色，表示技术、稳定、现代
       // 兼容旧的类型
       'entity': 'blue',
       'sequence': 'green'

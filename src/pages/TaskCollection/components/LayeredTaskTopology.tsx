@@ -3,153 +3,60 @@ import { Alert, Space } from 'antd';
 import styled from 'styled-components';
 import * as d3 from 'd3';
 import { NodeStatus } from '../types';
+import '../../../styles/layered-task-topology.css';
 
-const TopologyContainer = styled.div`
-  width: 100%;
-  height: 800px;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  background: #fafafa;
-  position: relative;
-  overflow: hidden;
-  margin-top: 16px;
-  
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-`;
+// 使用主题适配的样式组件
+const TopologyContainer = styled.div.attrs({
+  className: 'topology-container'
+})``;
 
-// 右上角图例容器
-const RightTopLegendsContainer = styled.div`
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 10;
-`;
+const RightTopLegendsContainer = styled.div.attrs({
+  className: 'right-top-legends-container'
+})``;
 
-// 图例卡片
-const LegendCard = styled.div`
-  background: white;
-  padding: 12px;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  min-width: 120px;
-`;
+const LegendCard = styled.div.attrs({
+  className: 'legend-card'
+})``;
 
-const LegendTitle = styled.div`
-  font-size: 12px;
-  margin-bottom: 8px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  
-  &::before {
-    content: '⋮⋮';
-    color: #ccc;
-    font-size: 10px;
-    line-height: 1;
-  }
-`;
+const LegendTitle = styled.div.attrs({
+  className: 'legend-title'
+})``;
 
-const LegendList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
+const LegendList = styled.div.attrs({
+  className: 'legend-list'
+})``;
 
-const LegendItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
+const LegendItem = styled.div.attrs({
+  className: 'legend-item'
+})``;
 
-const LegendIcon = styled.span`
-  font-size: 14px;
-`;
+const LegendIcon = styled.span.attrs({
+  className: 'legend-icon'
+})``;
 
-// Tips容器样式
-const TipsContainer = styled.div`
-  width: 100%;
-  margin-bottom: 16px;
-  
-  .ant-alert {
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-    border: 1px solid #d9ecff;
-    
-    .ant-alert-message {
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #1890ff;
-    }
-    
-    .ant-alert-description {
-      line-height: 1.6;
-      color: rgba(0, 0, 0, 0.65);
-      margin: 0;
-    }
-    
-    .ant-alert-icon {
-      color: #1890ff;
-    }
-  }
-  
-  @media (max-width: 1200px) {
-    .ant-alert {
-      .ant-alert-description {
-        font-size: 13px;
-      }
-    }
-  }
-  
-  @media (max-width: 768px) {
-    margin-bottom: 12px;
-    
-    .ant-alert {
-      .ant-alert-message {
-        font-size: 14px;
-      }
-      
-      .ant-alert-description {
-        font-size: 12px;
-        line-height: 1.5;
-      }
-    }
-  }
-`;
+const TipsContainer = styled.div.attrs({
+  className: 'tips-container'
+})``;
 
-// 主容器样式
-const MainContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
+const MainContainer = styled.div.attrs({
+  className: 'layered-topology-container'
+})``;
 
-const LegendText = styled.span`
-  font-size: 11px;
-`;
+const LegendText = styled.span.attrs({
+  className: 'legend-text'
+})``;
 
-const LayerLegendList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
+const LayerLegendList = styled.div.attrs({
+  className: 'layer-legend-list'
+})``;
 
-const LayerLegendItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
+const LayerLegendItem = styled.div.attrs({
+  className: 'layer-legend-item'
+})``;
 
-const LayerLegendText = styled.span`
-  font-size: 11px;
-  color: #666;
-`;
+const LayerLegendText = styled.span.attrs({
+  className: 'layer-legend-text'
+})``;
 
 // 业务层级定义（本地定义避免导入问题）
 interface BusinessLayer {
@@ -227,8 +134,8 @@ const BUSINESS_LAYERS: BusinessLayer[] = [
     id: 'L1',
     name: 'L1 - 基础设施层',
     level: 1,
-    color: 'rgba(255, 77, 79, 0.1)',
-    borderColor: '#ff4d4f',
+    color: 'rgba(19, 194, 194, 0.1)',  // 青蓝色半透明背景
+    borderColor: '#13c2c2',            // 青蓝色边框
     description: '基础设施和资源层面',
     height: 120
   }

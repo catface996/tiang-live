@@ -23,6 +23,83 @@
   --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   --card-hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   --card-hover-bg: #ffffff;
+
+  /* ========== 扩展主题变量 ========== */
+  /* 基础颜色 */
+  --primary: #1890ff;
+  --primary-hover: #40a9ff;
+  --primary-active: #096dd9;
+  --primary-bg: rgba(24, 144, 255, 0.1);
+  --primary-border: #91d5ff;
+  --primary-rgb: 24, 144, 255;
+
+  --success: #52c41a;
+  --success-hover: #73d13d;
+  --success-active: #389e0d;
+  --success-bg: rgba(82, 196, 26, 0.1);
+  --success-border: #b7eb8f;
+  --success-rgb: 82, 196, 26;
+
+  --warning: #faad14;
+  --warning-hover: #ffc53d;
+  --warning-active: #d48806;
+  --warning-bg: rgba(250, 173, 20, 0.1);
+  --warning-border: #ffe58f;
+  --warning-rgb: 250, 173, 20;
+
+  --error: #ff4d4f;
+  --error-hover: #ff7875;
+  --error-active: #d9363e;
+  --error-bg: rgba(255, 77, 79, 0.1);
+  --error-border: #ffccc7;
+  --error-rgb: 255, 77, 79;
+
+  /* 扩展颜色 */
+  --purple: #722ed1;
+  --purple-hover: #9254de;
+  --purple-active: #531dab;
+  --purple-bg: rgba(114, 46, 209, 0.1);
+  --purple-border: #d3adf7;
+  --purple-rgb: 114, 46, 209;
+
+  --cyan: #13c2c2;
+  --cyan-hover: #36cfc9;
+  --cyan-active: #08979c;
+  --cyan-bg: rgba(19, 194, 194, 0.1);
+  --cyan-border: #87e8de;
+  --cyan-rgb: 19, 194, 194;
+
+  --orange: #fa8c16;
+  --orange-hover: #ffa940;
+  --orange-active: #d46b08;
+  --orange-bg: rgba(250, 140, 22, 0.1);
+  --orange-border: #ffd591;
+  --orange-rgb: 250, 140, 22;
+
+  /* 文字颜色 */
+  --text-primary: rgba(0, 0, 0, 0.88);
+  --text-secondary: rgba(0, 0, 0, 0.65);
+  --text-tertiary: rgba(0, 0, 0, 0.45);
+  --text-disabled: rgba(0, 0, 0, 0.25);
+
+  /* 背景颜色 */
+  --bg-layout: #f5f5f5;
+  --bg-container: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.04);
+  --bg-active: rgba(0, 0, 0, 0.06);
+  --bg-disabled: rgba(0, 0, 0, 0.04);
+  --bg-container-rgb: 255, 255, 255;
+
+  /* 边框颜色 */
+  --border-base: #d9d9d9;
+  --border-light: #f0f0f0;
+  --border-bold: #b7b7b7;
+
+  /* 阴影 */
+  --shadow-card: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+  --shadow-hover: 0 2px 8px -2px rgba(0, 0, 0, 0.16), 0 6px 12px 0 rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --shadow-drawer: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);
 }
 
 /* 深色主题 */
@@ -48,6 +125,84 @@
   --card-shadow: 0 2px 8px rgba(255, 255, 255, 0.06);
   --card-hover-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
   --card-hover-bg: #1a1a1a;
+
+  /* ========== 扩展主题变量 ========== */
+  /* 基础颜色 */
+  --primary: #1890ff;
+  --primary-hover: #40a9ff;
+  --primary-active: #096dd9;
+  --primary-bg: rgba(24, 144, 255, 0.15);
+  --primary-border: #177ddc;
+  --primary-rgb: 24, 144, 255;
+
+  --success: #52c41a;
+  --success-hover: #73d13d;
+  --success-active: #389e0d;
+  --success-bg: rgba(82, 196, 26, 0.15);
+  --success-border: #49aa19;
+  --success-rgb: 82, 196, 26;
+
+  --warning: #faad14;
+  --warning-hover: #ffc53d;
+  --warning-active: #d48806;
+  --warning-bg: rgba(250, 173, 20, 0.15);
+  --warning-border: #d89614;
+  --warning-rgb: 250, 173, 20;
+
+  --error: #ff4d4f;
+  --error-hover: #ff7875;
+  --error-active: #d9363e;
+  --error-bg: rgba(255, 77, 79, 0.15);
+  --error-border: #dc4446;
+  --error-rgb: 255, 77, 79;
+
+  /* 扩展颜色 */
+  --purple: #722ed1;
+  --purple-hover: #9254de;
+  --purple-active: #531dab;
+  --purple-bg: rgba(114, 46, 209, 0.15);
+  --purple-border: #642ab5;
+  --purple-rgb: 114, 46, 209;
+
+  --cyan: #13c2c2;
+  --cyan-hover: #36cfc9;
+  --cyan-active: #08979c;
+  --cyan-bg: rgba(19, 194, 194, 0.15);
+  --cyan-border: #13a8a8;
+  --cyan-rgb: 19, 194, 194;
+
+  --orange: #fa8c16;
+  --orange-hover: #ffa940;
+  --orange-active: #d46b08;
+  --orange-bg: rgba(250, 140, 22, 0.15);
+  --orange-border: #d87a16;
+  --orange-rgb: 250, 140, 22;
+
+  /* 文字颜色 */
+  --text-primary: rgba(255, 255, 255, 0.88);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-tertiary: rgba(255, 255, 255, 0.45);
+  --text-disabled: rgba(255, 255, 255, 0.25);
+
+  /* 背景颜色 */
+  --bg-layout: #000000;
+  --bg-container: #141414;
+  --bg-elevated: #1f1f1f;
+  --bg-hover: rgba(255, 255, 255, 0.04);
+  --bg-active: rgba(255, 255, 255, 0.06);
+  --bg-disabled: rgba(255, 255, 255, 0.04);
+  --bg-container-rgb: 20, 20, 20;
+
+  /* 边框颜色 */
+  --border-base: #434343;
+  --border-light: #303030;
+  --border-bold: #595959;
+
+  /* 阴影 */
+  --shadow-card: 0 1px 2px -2px rgba(0, 0, 0, 0.32), 0 3px 6px 0 rgba(0, 0, 0, 0.24), 0 5px 12px 4px rgba(0, 0, 0, 0.18);
+  --shadow-hover: 0 2px 8px -2px rgba(0, 0, 0, 0.32), 0 6px 12px 0 rgba(0, 0, 0, 0.24), 0 9px 28px 8px rgba(0, 0, 0, 0.10);
+  --shadow-drawer: 0 8px 10px -5px rgba(0, 0, 0, 0.4), 0 16px 24px 2px rgba(0, 0, 0, 0.28), 0 6px 30px 5px rgba(0, 0, 0, 0.24);
+}
   
   /* 输入框相关变量 */
   --input-bg: #1a1a1a;
