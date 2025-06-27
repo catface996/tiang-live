@@ -480,6 +480,228 @@
             ]
           }
         ]
+      },
+      {
+        "titleKey": "planeDependencyDetails",
+        "title": "平面依赖详细分析",
+        "content": "本部分详细分析了系统各平面之间的依赖关系，包括数据流依赖、功能依赖和时序依赖。通过依赖图谱和关键指标，识别潜在风险点和优化机会。",
+        "type": "dependency",
+        "summary": {
+          "totalPlanes": 5,
+          "totalDependencies": 12,
+          "strongDependencies": 8,
+          "weakDependencies": 4,
+          "circularDependencies": 1,
+          "criticalPaths": 3,
+          "riskLevel": "medium"
+        },
+        "dependencyMatrix": [
+          {
+            "source": "控制平面",
+            "target": "数据平面",
+            "type": "api-call",
+            "strength": "strong",
+            "frequency": "high",
+            "avgResponseTime": "45ms",
+            "errorRate": "0.05%",
+            "criticality": "critical",
+            "description": "控制平面通过API调用管理数据平面的配置和状态"
+          },
+          {
+            "source": "管理平面",
+            "target": "控制平面",
+            "type": "configuration",
+            "strength": "strong",
+            "frequency": "medium",
+            "avgResponseTime": "120ms",
+            "errorRate": "0.02%",
+            "criticality": "high",
+            "description": "管理平面向控制平面下发策略和配置更新"
+          },
+          {
+            "source": "数据平面",
+            "target": "存储平面",
+            "type": "data-flow",
+            "strength": "strong",
+            "frequency": "very-high",
+            "avgResponseTime": "25ms",
+            "errorRate": "0.08%",
+            "criticality": "critical",
+            "description": "数据平面将处理后的数据持久化到存储平面"
+          },
+          {
+            "source": "监控平面",
+            "target": "控制平面",
+            "type": "metrics",
+            "strength": "medium",
+            "frequency": "high",
+            "avgResponseTime": "80ms",
+            "errorRate": "0.12%",
+            "criticality": "medium",
+            "description": "监控平面收集控制平面的运行指标和健康状态"
+          },
+          {
+            "source": "监控平面",
+            "target": "数据平面",
+            "type": "metrics",
+            "strength": "medium",
+            "frequency": "high",
+            "avgResponseTime": "65ms",
+            "errorRate": "0.10%",
+            "criticality": "medium",
+            "description": "监控平面收集数据平面的性能指标"
+          },
+          {
+            "source": "控制平面",
+            "target": "存储平面",
+            "type": "metadata",
+            "strength": "medium",
+            "frequency": "medium",
+            "avgResponseTime": "95ms",
+            "errorRate": "0.03%",
+            "criticality": "high",
+            "description": "控制平面存储和读取元数据信息"
+          }
+        ],
+        "criticalPaths": [
+          {
+            "path": "管理平面 → 控制平面 → 数据平面 → 存储平面",
+            "description": "核心业务数据处理链路",
+            "totalLatency": "290ms",
+            "bottleneck": "控制平面",
+            "riskLevel": "high",
+            "impact": "影响所有业务操作",
+            "recommendations": [
+              "优化控制平面的API响应时间",
+              "增加控制平面的冗余部署",
+              "实施熔断机制防止级联故障"
+            ]
+          },
+          {
+            "path": "监控平面 → 控制平面 → 管理平面",
+            "description": "告警和自动化响应链路",
+            "totalLatency": "200ms",
+            "bottleneck": "监控平面",
+            "riskLevel": "medium",
+            "impact": "影响故障检测和自动恢复",
+            "recommendations": [
+              "优化监控数据采集频率",
+              "实施分级告警机制",
+              "增强监控平面的处理能力"
+            ]
+          }
+        ],
+        "riskAnalysis": {
+          "singlePointFailures": [
+            {
+              "plane": "控制平面",
+              "risk": "high",
+              "impact": "系统核心功能不可用",
+              "affectedPlanes": ["数据平面", "管理平面"],
+              "mitigationStrategies": [
+                "部署多实例高可用架构",
+                "实施主备切换机制",
+                "增加健康检查和自动恢复"
+              ]
+            },
+            {
+              "plane": "存储平面",
+              "risk": "critical",
+              "impact": "数据丢失和业务中断",
+              "affectedPlanes": ["数据平面", "控制平面"],
+              "mitigationStrategies": [
+                "实施数据备份和恢复策略",
+                "部署分布式存储架构",
+                "定期进行灾难恢复演练"
+              ]
+            }
+          ],
+          "cascadeFailures": [
+            {
+              "trigger": "控制平面故障",
+              "cascade": "控制平面 → 数据平面 → 存储平面",
+              "probability": "high",
+              "impact": "全系统不可用",
+              "preventionMeasures": [
+                "实施熔断器模式",
+                "增加超时和重试机制",
+                "部署服务降级策略"
+              ]
+            }
+          ]
+        },
+        "performanceMetrics": [
+          {
+            "metric": "跨平面调用延迟",
+            "current": "85ms",
+            "target": "50ms",
+            "trend": "+15%",
+            "status": "warning",
+            "description": "平面间调用延迟较上月增长15%"
+          },
+          {
+            "metric": "依赖调��成功率",
+            "current": "99.2%",
+            "target": "99.5%",
+            "trend": "-0.3%",
+            "status": "warning",
+            "description": "依赖调用成功率略有下降"
+          },
+          {
+            "metric": "数据一致性",
+            "current": "99.8%",
+            "target": "99.9%",
+            "trend": "stable",
+            "status": "good",
+            "description": "跨平面数据一致性保持稳定"
+          }
+        ],
+        "optimizationRecommendations": [
+          {
+            "priority": "high",
+            "category": "性能优化",
+            "title": "优化控制平面API响应时间",
+            "description": "控制平面是关键瓶颈，建议优化API处理逻辑",
+            "expectedImprovement": "减少30%的跨平面调用延迟",
+            "implementation": [
+              "分析API调用热点",
+              "优化数据库查询",
+              "实施缓存策略",
+              "增加连接池大小"
+            ],
+            "timeline": "2周",
+            "effort": "中等"
+          },
+          {
+            "priority": "high",
+            "category": "可靠性提升",
+            "title": "实施平面间熔断机制",
+            "description": "防止单个平面故障导致级联失败",
+            "expectedImprovement": "降低80%的级联故障风险",
+            "implementation": [
+              "在关键调用点添加熔断器",
+              "设置合理的失败阈值",
+              "实施服务降级策略",
+              "增加监控和告警"
+            ],
+            "timeline": "3周",
+            "effort": "高"
+          },
+          {
+            "priority": "medium",
+            "category": "架构优化",
+            "title": "减少循环依赖",
+            "description": "消除监控平面和控制平面之间的循环依赖",
+            "expectedImprovement": "简化架构，提升维护性",
+            "implementation": [
+              "重新设计监控数据流",
+              "引入消息队列解耦",
+              "实施异步通信模式"
+            ],
+            "timeline": "4周",
+            "effort": "高"
+          }
+        ]
       }
     ]
   }

@@ -97,6 +97,7 @@
     "recommendationsAndActionPlan": "建议与行动计划",
     "dependencyOverview": "依赖关系概览",
     "planeDependendencyDetails": "平面依赖详情",
+    "planeDependencyDetails": "平面依赖详细分析",
     "circularDependencyAnalysis": "循环依赖分析",
     "optimizationRecommendations": "优化建议",
     "testEnvironmentAndMethods": "测试环境与方法",

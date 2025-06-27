@@ -502,6 +502,412 @@ const ReportDetail: React.FC = () => {
             </div>
           )}
 
+          {section.type === 'dependency' && (
+            <div>
+              {/* 依赖关系概览 */}
+              {section.summary && (
+                <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+                  <Col xs={12} sm={8} md={4}>
+                    <Card size="small">
+                      <Statistic
+                        title="总平面数"
+                        value={section.summary.totalPlanes}
+                        prefix={<BarChartOutlined />}
+                      />
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={8} md={4}>
+                    <Card size="small">
+                      <Statistic
+                        title="总依赖数"
+                        value={section.summary.totalDependencies}
+                        prefix={<LineChartOutlined />}
+                      />
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={8} md={4}>
+                    <Card size="small">
+                      <Statistic
+                        title="强依赖"
+                        value={section.summary.strongDependencies}
+                        valueStyle={{ color: '#cf1322' }}
+                      />
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={8} md={4}>
+                    <Card size="small">
+                      <Statistic
+                        title="弱依赖"
+                        value={section.summary.weakDependencies}
+                        valueStyle={{ color: '#52c41a' }}
+                      />
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={8} md={4}>
+                    <Card size="small">
+                      <Statistic
+                        title="循环依赖"
+                        value={section.summary.circularDependencies}
+                        valueStyle={{ color: '#fa8c16' }}
+                      />
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={8} md={4}>
+                    <Card size="small">
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '14px', color: '#8c8c8c', marginBottom: '4px' }}>风险等级</div>
+                        <Badge 
+                          status={section.summary.riskLevel === 'high' ? 'error' : 
+                                 section.summary.riskLevel === 'medium' ? 'warning' : 'success'} 
+                          text={section.summary.riskLevel === 'high' ? '高风险' : 
+                               section.summary.riskLevel === 'medium' ? '中风险' : '低风险'}
+                        />
+                      </div>
+                    </Card>
+                  </Col>
+                </Row>
+              )}
+
+              {/* 依赖关系矩阵表格 */}
+              {section.dependencyMatrix && (
+                <div style={{ marginBottom: 24 }}>
+                  <Title level={4}>依赖关系矩阵</Title>
+                  <Table
+                    columns={[
+                      {
+                        title: '源平面',
+                        dataIndex: 'source',
+                        key: 'source',
+                        width: 120,
+                        render: (text: string) => <Tag color="blue">{text}</Tag>
+                      },
+                      {
+                        title: '目标平面',
+                        dataIndex: 'target',
+                        key: 'target',
+                        width: 120,
+                        render: (text: string) => <Tag color="green">{text}</Tag>
+                      },
+                      {
+                        title: '依赖类型',
+                        dataIndex: 'type',
+                        key: 'type',
+                        width: 100,
+                        render: (text: string) => {
+                          const typeMap: Record<string, { color: string; text: string }> = {
+                            'api-call': { color: 'purple', text: 'API调用' },
+                            'configuration': { color: 'orange', text: '配置依赖' },
+                            'data-flow': { color: 'cyan', text: '数据流' },
+                            'metrics': { color: 'geekblue', text: '指标收集' },
+                            'metadata': { color: 'magenta', text: '元数据' }
+                          };
+                          const config = typeMap[text] || { color: 'default', text };
+                          return <Tag color={config.color}>{config.text}</Tag>;
+                        }
+                      },
+                      {
+                        title: '依赖强度',
+                        dataIndex: 'strength',
+                        key: 'strength',
+                        width: 100,
+                        render: (text: string) => (
+                          <Badge 
+                            status={text === 'strong' ? 'error' : text === 'medium' ? 'warning' : 'success'} 
+                            text={text === 'strong' ? '强' : text === 'medium' ? '中' : '弱'}
+                          />
+                        )
+                      },
+                      {
+                        title: '调用频率',
+                        dataIndex: 'frequency',
+                        key: 'frequency',
+                        width: 100,
+                        render: (text: string) => {
+                          const colorMap: Record<string, string> = {
+                            'very-high': '#ff4d4f',
+                            'high': '#fa8c16',
+                            'medium': '#fadb14',
+                            'low': '#52c41a'
+                          };
+                          return <span style={{ color: colorMap[text] || '#8c8c8c' }}>
+                            {text === 'very-high' ? '极高' : 
+                             text === 'high' ? '高' : 
+                             text === 'medium' ? '中' : '低'}
+                          </span>;
+                        }
+                      },
+                      {
+                        title: '平均响应时间',
+                        dataIndex: 'avgResponseTime',
+                        key: 'avgResponseTime',
+                        width: 120,
+                        render: (text: string) => <Text code>{text}</Text>
+                      },
+                      {
+                        title: '错误率',
+                        dataIndex: 'errorRate',
+                        key: 'errorRate',
+                        width: 80,
+                        render: (text: string) => {
+                          const rate = parseFloat(text.replace('%', ''));
+                          const color = rate > 0.1 ? '#ff4d4f' : rate > 0.05 ? '#fa8c16' : '#52c41a';
+                          return <span style={{ color }}>{text}</span>;
+                        }
+                      },
+                      {
+                        title: '关键程度',
+                        dataIndex: 'criticality',
+                        key: 'criticality',
+                        width: 100,
+                        render: (text: string) => (
+                          <Badge 
+                            status={text === 'critical' ? 'error' : text === 'high' ? 'warning' : 'success'} 
+                            text={text === 'critical' ? '关键' : text === 'high' ? '重要' : '一般'}
+                          />
+                        )
+                      },
+                      {
+                        title: '描述',
+                        dataIndex: 'description',
+                        key: 'description',
+                        ellipsis: true
+                      }
+                    ]}
+                    dataSource={section.dependencyMatrix.map((item: any, index: number) => ({
+                      ...item,
+                      key: index
+                    }))}
+                    pagination={false}
+                    size="middle"
+                    scroll={{ x: 1200 }}
+                  />
+                </div>
+              )}
+
+              {/* 关键路径分析 */}
+              {section.criticalPaths && (
+                <div style={{ marginBottom: 24 }}>
+                  <Title level={4}>关键路径分析</Title>
+                  <Row gutter={[16, 16]}>
+                    {section.criticalPaths.map((path: any, index: number) => (
+                      <Col xs={24} lg={12} key={index}>
+                        <Card 
+                          size="small" 
+                          title={
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <span>路径 {index + 1}</span>
+                              <Badge 
+                                status={path.riskLevel === 'high' ? 'error' : 'warning'} 
+                                text={path.riskLevel === 'high' ? '高风险' : '中风险'}
+                              />
+                            </div>
+                          }
+                        >
+                          <div style={{ marginBottom: 12 }}>
+                            <Text strong>路径：</Text>
+                            <div style={{ 
+                              background: '#f5f5f5', 
+                              padding: '8px', 
+                              borderRadius: '4px', 
+                              marginTop: '4px',
+                              fontFamily: 'monospace'
+                            }}>
+                              {path.path}
+                            </div>
+                          </div>
+                          <Descriptions size="small" column={1}>
+                            <Descriptions.Item label="描述">{path.description}</Descriptions.Item>
+                            <Descriptions.Item label="总延迟">
+                              <Text code>{path.totalLatency}</Text>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="瓶颈">
+                              <Tag color="red">{path.bottleneck}</Tag>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="影响">{path.impact}</Descriptions.Item>
+                          </Descriptions>
+                          {path.recommendations && (
+                            <div style={{ marginTop: 12 }}>
+                              <Text strong>优化建议：</Text>
+                              <ul style={{ marginTop: 4, paddingLeft: 16 }}>
+                                {path.recommendations.map((rec: string, idx: number) => (
+                                  <li key={idx} style={{ marginBottom: 4 }}>{rec}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                </div>
+              )}
+
+              {/* 性能指标 */}
+              {section.performanceMetrics && (
+                <div style={{ marginBottom: 24 }}>
+                  <Title level={4}>性能指标</Title>
+                  <Row gutter={[16, 16]}>
+                    {section.performanceMetrics.map((metric: any, index: number) => (
+                      <Col xs={24} sm={12} md={8} key={index}>
+                        <Card size="small">
+                          <Statistic
+                            title={metric.metric}
+                            value={metric.current}
+                            suffix={
+                              <div style={{ fontSize: '12px', marginTop: '4px' }}>
+                                <div>目标: {metric.target}</div>
+                                <div style={{ 
+                                  color: metric.trend.startsWith('+') ? '#ff4d4f' : 
+                                         metric.trend.startsWith('-') ? '#52c41a' : '#8c8c8c'
+                                }}>
+                                  趋势: {metric.trend}
+                                </div>
+                              </div>
+                            }
+                            prefix={
+                              metric.status === 'good' ? <CheckCircleOutlined style={{ color: '#52c41a' }} /> :
+                              metric.status === 'warning' ? <ExclamationCircleOutlined style={{ color: '#fa8c16' }} /> :
+                              <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />
+                            }
+                          />
+                          <div style={{ marginTop: 8, fontSize: '12px', color: '#8c8c8c' }}>
+                            {metric.description}
+                          </div>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                </div>
+              )}
+
+              {/* 风险分析 */}
+              {section.riskAnalysis && (
+                <div style={{ marginBottom: 24 }}>
+                  <Title level={4}>风险分析</Title>
+                  
+                  {/* 单点故障风险 */}
+                  {section.riskAnalysis.singlePointFailures && (
+                    <div style={{ marginBottom: 16 }}>
+                      <Title level={5}>单点故障风险</Title>
+                      {section.riskAnalysis.singlePointFailures.map((spf: any, index: number) => (
+                        <Alert
+                          key={index}
+                          message={`${spf.plane} - ${spf.risk === 'critical' ? '严重风险' : '高风险'}`}
+                          description={
+                            <div>
+                              <div><strong>影响：</strong>{spf.impact}</div>
+                              <div><strong>受影响平面：</strong>{spf.affectedPlanes.join(', ')}</div>
+                              <div style={{ marginTop: 8 }}>
+                                <strong>缓解策略：</strong>
+                                <ul style={{ marginTop: 4, paddingLeft: 16 }}>
+                                  {spf.mitigationStrategies.map((strategy: string, idx: number) => (
+                                    <li key={idx}>{strategy}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          }
+                          type={spf.risk === 'critical' ? 'error' : 'warning'}
+                          style={{ marginBottom: 12 }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* 级联故障风险 */}
+                  {section.riskAnalysis.cascadeFailures && (
+                    <div>
+                      <Title level={5}>级联故障风险</Title>
+                      {section.riskAnalysis.cascadeFailures.map((cf: any, index: number) => (
+                        <Alert
+                          key={index}
+                          message={`级联故障链：${cf.cascade}`}
+                          description={
+                            <div>
+                              <div><strong>触发条件：</strong>{cf.trigger}</div>
+                              <div><strong>发生概率：</strong>{cf.probability === 'high' ? '高' : '中'}</div>
+                              <div><strong>影响：</strong>{cf.impact}</div>
+                              <div style={{ marginTop: 8 }}>
+                                <strong>预防措施：</strong>
+                                <ul style={{ marginTop: 4, paddingLeft: 16 }}>
+                                  {cf.preventionMeasures.map((measure: string, idx: number) => (
+                                    <li key={idx}>{measure}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          }
+                          type="warning"
+                          style={{ marginBottom: 12 }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* 优化建议 */}
+              {section.optimizationRecommendations && (
+                <div>
+                  <Title level={4}>优化建议</Title>
+                  <Timeline>
+                    {section.optimizationRecommendations.map((rec: any, index: number) => (
+                      <Timeline.Item
+                        key={index}
+                        color={rec.priority === 'high' ? 'red' : rec.priority === 'medium' ? 'orange' : 'green'}
+                        dot={
+                          rec.priority === 'high' ? <ExclamationCircleOutlined /> :
+                          rec.priority === 'medium' ? <InfoCircleOutlined /> :
+                          <CheckCircleOutlined />
+                        }
+                      >
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+                            <Tag color={rec.priority === 'high' ? 'red' : rec.priority === 'medium' ? 'orange' : 'green'}>
+                              {rec.priority === 'high' ? '高优先级' : rec.priority === 'medium' ? '中优先级' : '低优先级'}
+                            </Tag>
+                            <Tag color="blue">{rec.category}</Tag>
+                            <Text strong>{rec.title}</Text>
+                          </div>
+                          <div style={{ marginBottom: 8 }}>
+                            <Text>{rec.description}</Text>
+                          </div>
+                          <Row gutter={[16, 8]}>
+                            <Col span={12}>
+                              <Text type="secondary">
+                                <ClockCircleOutlined /> 预期时间: {rec.timeline}
+                              </Text>
+                            </Col>
+                            <Col span={12}>
+                              <Text type="secondary">
+                                工作量: {rec.effort}
+                              </Text>
+                            </Col>
+                            <Col span={24}>
+                              <Text type="secondary" style={{ fontStyle: 'italic' }}>
+                                预期改进: {rec.expectedImprovement}
+                              </Text>
+                            </Col>
+                          </Row>
+                          {rec.implementation && (
+                            <div style={{ marginTop: 8 }}>
+                              <Text strong>实施步骤：</Text>
+                              <ol style={{ marginTop: 4, paddingLeft: 16 }}>
+                                {rec.implementation.map((step: string, idx: number) => (
+                                  <li key={idx} style={{ marginBottom: 4 }}>{step}</li>
+                                ))}
+                              </ol>
+                            </div>
+                          )}
+                        </div>
+                      </Timeline.Item>
+                    ))}
+                  </Timeline>
+                </div>
+              )}
+            </div>
+          )}
+
           {section.type === 'recommendations' && section.recommendations && (
             <Timeline style={{ marginTop: 16 }}>
               {section.recommendations.map((rec: any, idx: number) => (

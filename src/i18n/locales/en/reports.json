@@ -97,6 +97,7 @@
     "recommendationsAndActionPlan": "Recommendations and Action Plan",
     "dependencyOverview": "Dependency Overview",
     "planeDependendencyDetails": "Plane Dependency Details",
+    "planeDependencyDetails": "Plane Dependency Detailed Analysis",
     "circularDependencyAnalysis": "Circular Dependency Analysis",
     "optimizationRecommendations": "Optimization Recommendations",
     "testEnvironmentAndMethods": "Test Environment and Methods",
