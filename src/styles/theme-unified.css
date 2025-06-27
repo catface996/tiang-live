@@ -24,6 +24,7 @@
   --border-base: #d9d9d9;
   --border-light: #f0f0f0;
   --border-hover: #40a9ff;
+  --border-separator: #e8e8e8; /* 新增分隔线颜色 */
 
   /* 阴影 */
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -50,10 +51,11 @@
   --bg-elevated: #1f1f1f;
   --bg-hover: #262626;
 
-  /* 边框色彩 */
+  /* 边框色彩 - 优化对比度 */
   --border-base: #434343;
   --border-light: #303030;
   --border-hover: #40a9ff;
+  --border-separator: #595959; /* 新增分隔线颜色 */
 
   /* 阴影 */
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);

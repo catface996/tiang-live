@@ -34,15 +34,22 @@
   color: var(--text-primary) !important;
 }
 
+/* 统一的label样式 - 不使用背景色区分 */
 .theme-modal .ant-descriptions-item-label {
   color: var(--text-secondary) !important;
-  background-color: var(--bg-elevated) !important;
-  font-weight: 500 !important;
+  background-color: var(--bg-container) !important;
+  font-weight: 600 !important;
+  border-right: 2px solid var(--border-separator) !important;
+  position: relative;
+  padding-right: 12px !important;
 }
 
+/* 统一的content样式 */
 .theme-modal .ant-descriptions-item-content {
   color: var(--text-primary) !important;
   background-color: var(--bg-container) !important;
+  padding-left: 16px !important;
+  font-weight: 400 !important;
 }
 
 .theme-modal .ant-descriptions-bordered .ant-descriptions-item {
@@ -51,6 +58,62 @@
 
 .theme-modal .ant-descriptions-bordered .ant-descriptions-view {
   border-color: var(--border-light) !important;
+}
+
+/* 深色主题下的增强分隔效果 */
+.theme-dark .theme-modal .ant-descriptions-item-label {
+  border-right: 3px solid var(--border-separator) !important;
+  background-color: var(--bg-container) !important;
+}
+
+.theme-dark .theme-modal .ant-descriptions-item-label::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    var(--border-separator) 20%, 
+    var(--border-separator) 80%, 
+    transparent 100%);
+  opacity: 0.6;
+}
+
+/* 浅色主题的简洁分隔 */
+.theme-light .theme-modal .ant-descriptions-item-label {
+  border-right: 2px solid var(--border-separator) !important;
+  background-color: var(--bg-container) !important;
+}
+
+/* 增强文本对比度 */
+.theme-dark .theme-modal .ant-descriptions-item-label {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.theme-dark .theme-modal .ant-descriptions-item-content {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.theme-light .theme-modal .ant-descriptions-item-label {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.theme-light .theme-modal .ant-descriptions-item-content {
+  color: rgba(0, 0, 0, 0.88) !important;
+}
+
+/* 悬停效果增强可读性 */
+.theme-modal .ant-descriptions-item:hover .ant-descriptions-item-label {
+  color: var(--primary) !important;
+  border-right-color: var(--primary) !important;
+  transition: all 0.2s ease;
+}
+
+.theme-modal .ant-descriptions-item:hover .ant-descriptions-item-content {
+  background-color: var(--bg-hover) !important;
+  transition: all 0.2s ease;
 }
 
 /* ========== Typography 组件主题适配 ========== */
