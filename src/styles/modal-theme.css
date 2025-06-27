@@ -1,0 +1,284 @@
+/* 模态框主题适配 - 专门处理模态框内组件的主题问题 */
+
+/* ========== 模态框基础样式 ========== */
+.theme-modal {
+  /* 模态框内容区域 */
+  .ant-modal-content {
+    background-color: var(--bg-container) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  .ant-modal-header {
+    background-color: var(--bg-container) !important;
+    border-bottom: 1px solid var(--border-light) !important;
+  }
+  
+  .ant-modal-title {
+    color: var(--text-primary) !important;
+  }
+  
+  .ant-modal-body {
+    background-color: var(--bg-container) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  .ant-modal-footer {
+    background-color: var(--bg-container) !important;
+    border-top: 1px solid var(--border-light) !important;
+  }
+}
+
+/* ========== 描述列表组件主题适配 ========== */
+.theme-modal .ant-descriptions {
+  background-color: var(--bg-container) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-descriptions-item-label {
+  color: var(--text-secondary) !important;
+  background-color: var(--bg-elevated) !important;
+  font-weight: 500 !important;
+}
+
+.theme-modal .ant-descriptions-item-content {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-container) !important;
+}
+
+.theme-modal .ant-descriptions-bordered .ant-descriptions-item {
+  border-color: var(--border-light) !important;
+}
+
+.theme-modal .ant-descriptions-bordered .ant-descriptions-view {
+  border-color: var(--border-light) !important;
+}
+
+/* ========== Typography 组件主题适配 ========== */
+.theme-modal .ant-typography,
+.theme-modal .ant-typography h1,
+.theme-modal .ant-typography h2,
+.theme-modal .ant-typography h3,
+.theme-modal .ant-typography h4,
+.theme-modal .ant-typography h5,
+.theme-modal .ant-typography h6 {
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-typography p,
+.theme-modal .ant-typography span,
+.theme-modal .ant-typography div {
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-typography-title {
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-typography-paragraph {
+  color: var(--text-primary) !important;
+}
+
+/* ========== 标签组件主题适配 ========== */
+.theme-modal .ant-tag {
+  border-color: var(--border-base) !important;
+}
+
+/* 默认标签 */
+.theme-modal .ant-tag:not([class*="ant-tag-"]) {
+  background-color: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-base) !important;
+}
+
+/* 彩色标签保持原有颜色 */
+.theme-modal .ant-tag-blue {
+  background-color: #e6f7ff !important;
+  border-color: #91d5ff !important;
+  color: #1890ff !important;
+}
+
+.theme-modal .ant-tag-green {
+  background-color: #f6ffed !important;
+  border-color: #b7eb8f !important;
+  color: #52c41a !important;
+}
+
+.theme-modal .ant-tag-orange {
+  background-color: #fff7e6 !important;
+  border-color: #ffd591 !important;
+  color: #fa8c16 !important;
+}
+
+.theme-modal .ant-tag-red {
+  background-color: #fff2f0 !important;
+  border-color: #ffccc7 !important;
+  color: #ff4d4f !important;
+}
+
+.theme-modal .ant-tag-purple {
+  background-color: #f9f0ff !important;
+  border-color: #d3adf7 !important;
+  color: #722ed1 !important;
+}
+
+.theme-modal .ant-tag-cyan {
+  background-color: #e6fffb !important;
+  border-color: #87e8de !important;
+  color: #13c2c2 !important;
+}
+
+/* ========== Space 组件主题适配 ========== */
+.theme-modal .ant-space {
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-space-item {
+  color: inherit !important;
+}
+
+/* ========== 表单组件主题适配 ========== */
+.theme-modal .ant-form-item-label > label {
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-form-item-explain {
+  color: var(--text-secondary) !important;
+}
+
+.theme-modal .ant-form-item-explain-error {
+  color: var(--error) !important;
+}
+
+.theme-modal .ant-input,
+.theme-modal .ant-input-affix-wrapper,
+.theme-modal .ant-textarea,
+.theme-modal .ant-select-selector {
+  background-color: var(--bg-elevated) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-input:hover,
+.theme-modal .ant-input-affix-wrapper:hover,
+.theme-modal .ant-textarea:hover,
+.theme-modal .ant-select-selector:hover {
+  border-color: var(--border-hover) !important;
+}
+
+.theme-modal .ant-input:focus,
+.theme-modal .ant-input-affix-wrapper:focus,
+.theme-modal .ant-textarea:focus,
+.theme-modal .ant-select-focused .ant-select-selector {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+.theme-modal .ant-input::placeholder,
+.theme-modal .ant-textarea::placeholder {
+  color: var(--text-disabled) !important;
+}
+
+/* ========== 选择器下拉菜单主题适配 ========== */
+.theme-modal .ant-select-dropdown {
+  background-color: var(--bg-container) !important;
+  border: 1px solid var(--border-light) !important;
+}
+
+.theme-modal .ant-select-item {
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-select-item:hover {
+  background-color: var(--bg-hover) !important;
+}
+
+.theme-modal .ant-select-item-option-selected {
+  background-color: #e6f7ff !important;
+  color: var(--primary) !important;
+}
+
+/* 深色主题下的选择器特殊处理 */
+.theme-dark .theme-modal .ant-select-item-option-selected {
+  background-color: #111b26 !important;
+  color: var(--primary) !important;
+}
+
+/* ========== 按钮组件主题适配 ========== */
+.theme-modal .ant-btn-default {
+  background-color: var(--bg-elevated) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-btn-default:hover {
+  background-color: var(--bg-hover) !important;
+  border-color: var(--border-hover) !important;
+  color: var(--primary) !important;
+}
+
+.theme-modal .ant-btn-text {
+  color: var(--text-primary) !important;
+}
+
+.theme-modal .ant-btn-text:hover {
+  background-color: var(--bg-hover) !important;
+  color: var(--primary) !important;
+}
+
+.theme-modal .ant-btn-link {
+  color: var(--primary) !important;
+}
+
+.theme-modal .ant-btn-link:hover {
+  color: var(--primary) !important;
+  opacity: 0.8;
+}
+
+/* ========== 分割线主题适配 ========== */
+.theme-modal .ant-divider {
+  border-color: var(--border-light) !important;
+}
+
+/* ========== 图标主题适配 ========== */
+.theme-modal .anticon {
+  color: inherit !important;
+}
+
+/* ========== 滚动条主题适配 ========== */
+.theme-modal .ant-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theme-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background-color: var(--border-base);
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.theme-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
+}
+
+/* ========== 响应式适配 ========== */
+@media (max-width: 768px) {
+  .theme-modal .ant-descriptions {
+    font-size: 14px;
+  }
+  
+  .theme-modal .ant-descriptions-item-label {
+    font-size: 13px;
+  }
+  
+  .theme-modal .ant-descriptions-item-content {
+    font-size: 14px;
+  }
+  
+  .theme-modal .ant-tag {
+    font-size: 12px;
+    padding: 2px 6px;
+  }
+}

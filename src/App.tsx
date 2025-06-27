@@ -14,6 +14,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { useAppSelector } from './store';
 import './i18n'; // 初始化i18n
 import './styles/themes.css'; // 导入主题CSS
+import './styles/theme-unified.css'; // 导入统一主题CSS
+import './styles/modal-theme.css'; // 导入模态框主题CSS
 
 // Antd语言配置映射
 const antdLocaleMap = {

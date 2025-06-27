@@ -11,37 +11,26 @@ import {
   Tag,
   Modal,
   Tooltip,
-  Input,
-  Select,
-  Descriptions,
-  Form,
-  Switch,
-  message,
-  Divider
+  message
 } from 'antd';
 import { 
   ControlOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
   PlayCircleOutlined,
   ClockCircleOutlined,
   UserOutlined,
   ApiOutlined,
   DatabaseOutlined,
-  CloudOutlined,
-  MobileOutlined,
-  SaveOutlined,
-  CloseOutlined
+  CloudOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
-import SequenceDiagram from '../../components/SequenceDiagram';
+import { SequenceDetail, SequenceForm } from '../../components/Sequence';
 import sequenceDataJson from '../../data/sequenceData.json';
 
 // 时间格式化工具函数
@@ -69,40 +58,40 @@ const formatDuration = (duration: string, t: any): string => {
   }
 };
 
-const { Title, Paragraph, Text } = Typography;
-const { Option } = Select;
-const { TextArea } = Input;
+const { Title, Paragraph } = Typography;
 
 const PageContainer = styled.div`
   padding: 24px;
+  background-color: var(--bg-layout);
+  color: var(--text-primary);
+  min-height: calc(100vh - 64px);
 `;
 
 const PageHeader = styled.div`
   margin-bottom: 24px;
 `;
 
-const MermaidCodeEditor = styled(TextArea)`
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
-  font-size: 13px;
-  line-height: 1.5;
-  background-color: #f6f8fa;
-  border: 1px solid #d1d9e0;
-  
-  &:focus {
-    background-color: #ffffff;
-    border-color: #1890ff;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  }
-  
-  &::placeholder {
-    color: #8c8c8c;
-    font-size: 12px;
-  }
-`;
-
 const StatsCard = styled(Card)`
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
+  
   .ant-card-body {
     padding: 16px;
+  }
+  
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+  }
+  
+  .ant-statistic-title {
+    color: var(--text-secondary);
+  }
+  
+  .ant-statistic-content {
+    color: var(--text-primary);
   }
 `;
 
@@ -111,21 +100,26 @@ const SequenceCard = styled(Card)`
   cursor: pointer;
   transition: all 0.3s ease;
   min-height: 320px;
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-light);
   
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-hover);
     transform: translateY(-2px);
+    border-color: var(--border-hover);
   }
   
   .ant-card-head {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--border-light);
     padding: 12px 16px;
+    background-color: var(--bg-container);
     
     .ant-card-head-title {
       font-size: 14px;
       font-weight: 600;
       line-height: 1.4;
       width: 100%;
+      color: var(--text-primary);
     }
     
     .card-title {
@@ -136,12 +130,13 @@ const SequenceCard = styled(Card)`
       
       .title-left {
         flex: 1;
-        min-width: 0; /* 允许文本截断 */
+        min-width: 0;
         
         span {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          color: var(--text-primary);
         }
       }
       
@@ -157,13 +152,14 @@ const SequenceCard = styled(Card)`
     display: flex;
     flex-direction: column;
     height: calc(100% - 57px);
+    background-color: var(--bg-container);
   }
   
   .sequence-description {
     flex: 1;
     margin-bottom: 12px;
     font-size: 13px;
-    color: #666;
+    color: var(--text-secondary);
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -179,18 +175,19 @@ const SequenceCard = styled(Card)`
     .ant-statistic-title {
       font-size: 11px;
       margin-bottom: 2px;
-      color: #999;
+      color: var(--text-disabled);
     }
     
     .ant-statistic-content {
       font-size: 14px;
       font-weight: 600;
+      color: var(--text-primary);
     }
   }
   
   .sequence-meta {
     font-size: 11px;
-    color: #999;
+    color: var(--text-disabled);
     margin-bottom: 12px;
     
     > div {
@@ -204,14 +201,14 @@ const SequenceCard = styled(Card)`
   .sequence-actions {
     margin-top: auto;
     padding-top: 12px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid var(--border-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
     
     .participants-count {
       font-size: 11px;
-      color: #999;
+      color: var(--text-disabled);
       font-weight: 500;
     }
   }
@@ -283,12 +280,9 @@ const SequenceManagement: React.FC = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [formModalVisible, setFormModalVisible] = useState(false);
   const [editingSequence, setEditingSequence] = useState<SequenceData | null>(null);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewChart, setPreviewChart] = useState('');
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [form] = Form.useForm();
   const { t } = useTranslation(['sequences', 'common']);
 
   useEffect(() => {
@@ -325,21 +319,11 @@ const SequenceManagement: React.FC = () => {
 
   const handleCreateSequence = () => {
     setEditingSequence(null);
-    form.resetFields();
     setFormModalVisible(true);
   };
 
   const handleEditSequence = (sequence: SequenceData) => {
     setEditingSequence(sequence);
-    form.setFieldsValue({
-      name: sequence.name,
-      description: sequence.description,
-      type: sequence.type,
-      status: sequence.status,
-      participants: sequence.participants,
-      duration: sequence.duration,
-      mermaidChart: sequence.mermaidChart
-    });
     setFormModalVisible(true);
   };
 
@@ -353,7 +337,7 @@ const SequenceManagement: React.FC = () => {
         message.success(t('sequences:messages.createSuccess'));
       }
       setFormModalVisible(false);
-      form.resetFields();
+      setEditingSequence(null);
     } catch (error) {
       message.error(editingSequence ? t('sequences:messages.updateFailed') : t('sequences:messages.createFailed'));
     }
@@ -361,18 +345,7 @@ const SequenceManagement: React.FC = () => {
 
   const handleFormCancel = () => {
     setFormModalVisible(false);
-    form.resetFields();
     setEditingSequence(null);
-  };
-
-  const handlePreviewChart = () => {
-    const chartCode = form.getFieldValue('mermaidChart');
-    if (chartCode) {
-      setPreviewChart(chartCode);
-      setPreviewVisible(true);
-    } else {
-      message.warning(t('sequences:messages.noChartCode'));
-    }
   };
 
   const renderSequenceCards = () => {
@@ -580,7 +553,7 @@ const SequenceManagement: React.FC = () => {
         {renderSequenceCards()}
       </Row>
 
-      {/* Sequence Details Modal */}
+      {/* Sequence Details Modal - 使用通用模态框加载详情组件 */}
       <Modal
         title={selectedSequence?.name}
         open={detailModalVisible}
@@ -588,61 +561,15 @@ const SequenceManagement: React.FC = () => {
         footer={null}
         width={1200}
         style={{ top: 20 }}
+        className="theme-modal"
+        destroyOnClose
       >
         {selectedSequence && (
-          <div>
-            {/* Basic Information */}
-            <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('sequences:sequenceName')} span={2}>
-                {selectedSequence.name}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('common:type')}>
-                <Tag 
-                  color={sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.color}
-                  icon={sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.icon}
-                >
-                  {sequenceTypeMap[selectedSequence.type as keyof typeof sequenceTypeMap]?.name}
-                </Tag>
-              </Descriptions.Item>
-              <Descriptions.Item label={t('common:status')}>
-                {getStatusTag(selectedSequence.status)}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('sequences:stepCount')}>
-                {selectedSequence.steps}{t('sequences:steps')}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('sequences:executionDuration')}>
-                {formatDuration(selectedSequence.duration, t)}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('sequences:participants')} span={2}>
-                <Space wrap>
-                  {selectedSequence.participants.map((participant, index) => (
-                    <Tag key={index} icon={<UserOutlined />}>
-                      {participant}
-                    </Tag>
-                  ))}
-                </Space>
-              </Descriptions.Item>
-              <Descriptions.Item label={t('sequences:createdBy')}>
-                {selectedSequence.createdBy}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('sequences:createdAt')}>
-                {selectedSequence.createdAt}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('common:description')} span={2}>
-                {selectedSequence.description}
-              </Descriptions.Item>
-            </Descriptions>
-
-            {/* Sequence Diagram */}
-            <SequenceDiagram 
-              chart={selectedSequence.mermaidChart}
-              title={t('sequences:sequenceDiagram')}
-            />
-          </div>
+          <SequenceDetail sequence={selectedSequence} />
         )}
       </Modal>
 
-      {/* Create/Edit Sequence Form Modal */}
+      {/* Create/Edit Sequence Form Modal - 使用通用模态框加载表单组件 */}
       <Modal
         title={editingSequence ? t('sequences:editSequence') : t('sequences:createSequence')}
         open={formModalVisible}
@@ -650,204 +577,16 @@ const SequenceManagement: React.FC = () => {
         footer={null}
         width={800}
         destroyOnClose
+        className="theme-modal"
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleFormSubmit}
-          initialValues={{
-            status: 'draft',
-            type: 'business'
-          }}
-        >
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="name"
-                label={t('sequences:form.name')}
-                rules={[
-                  { required: true, message: t('sequences:form.nameRequired') },
-                  { max: 100, message: t('sequences:form.nameMaxLength') }
-                ]}
-              >
-                <Input placeholder={t('sequences:form.namePlaceholder')} />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="description"
-                label={t('sequences:form.description')}
-                rules={[
-                  { required: true, message: t('sequences:form.descriptionRequired') },
-                  { max: 500, message: t('sequences:form.descriptionMaxLength') }
-                ]}
-              >
-                <TextArea 
-                  rows={4} 
-                  placeholder={t('sequences:form.descriptionPlaceholder')}
-                  showCount
-                  maxLength={500}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="type"
-                label={t('sequences:form.type')}
-                rules={[{ required: true, message: t('sequences:form.typeRequired') }]}
-              >
-                <Select placeholder={t('sequences:form.typePlaceholder')}>
-                  <Option value="authentication">
-                    <Space>
-                      <UserOutlined />
-                      {t('sequences:types.authentication')}
-                    </Space>
-                  </Option>
-                  <Option value="business">
-                    <Space>
-                      <ApiOutlined />
-                      {t('sequences:types.business')}
-                    </Space>
-                  </Option>
-                  <Option value="monitoring">
-                    <Space>
-                      <ClockCircleOutlined />
-                      {t('sequences:types.monitoring')}
-                    </Space>
-                  </Option>
-                  <Option value="data">
-                    <Space>
-                      <DatabaseOutlined />
-                      {t('sequences:types.data')}
-                    </Space>
-                  </Option>
-                  <Option value="gateway">
-                    <Space>
-                      <CloudOutlined />
-                      {t('sequences:types.gateway')}
-                    </Space>
-                  </Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="status"
-                label={t('sequences:form.status')}
-                rules={[{ required: true, message: t('sequences:form.statusRequired') }]}
-              >
-                <Select placeholder={t('sequences:form.statusPlaceholder')}>
-                  <Option value="draft">{t('sequences:statuses.draft')}</Option>
-                  <Option value="active">{t('sequences:statuses.active')}</Option>
-                  <Option value="inactive">{t('sequences:statuses.inactive')}</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="participants"
-                label={t('sequences:form.participants')}
-                rules={[{ required: true, message: t('sequences:form.participantsRequired') }]}
-              >
-                <Select
-                  mode="tags"
-                  placeholder={t('sequences:form.participantsPlaceholder')}
-                  style={{ width: '100%' }}
-                >
-                  <Option value="User">{t('sequences:participantOptions.user')}</Option>
-                  <Option value="Frontend">{t('sequences:participantOptions.frontend')}</Option>
-                  <Option value="Backend">{t('sequences:participantOptions.backend')}</Option>
-                  <Option value="Database">{t('sequences:participantOptions.database')}</Option>
-                  <Option value="Cache">{t('sequences:participantOptions.cache')}</Option>
-                  <Option value="Queue">{t('sequences:participantOptions.queue')}</Option>
-                  <Option value="External API">{t('sequences:participantOptions.externalApi')}</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="duration"
-                label={t('sequences:form.duration')}
-                rules={[{ required: true, message: t('sequences:form.durationRequired') }]}
-              >
-                <Input 
-                  placeholder={t('sequences:form.durationPlaceholder')}
-                  addonAfter={t('sequences:form.durationUnit')}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="mermaidChart"
-                label={
-                  <Space>
-                    {t('sequences:form.mermaidChart')}
-                    <Button 
-                      type="link" 
-                      size="small" 
-                      icon={<EyeOutlined />}
-                      onClick={handlePreviewChart}
-                    >
-                      {t('sequences:form.previewChart')}
-                    </Button>
-                  </Space>
-                }
-                rules={[
-                  { required: true, message: t('sequences:form.mermaidChartRequired') }
-                ]}
-              >
-                <MermaidCodeEditor 
-                  rows={8} 
-                  placeholder={t('sequences:form.mermaidChartPlaceholder')}
-                  showCount
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Divider />
-
-          <div style={{ textAlign: 'right' }}>
-            <Space>
-              <Button onClick={handleFormCancel} icon={<CloseOutlined />}>
-                {t('common:cancel')}
-              </Button>
-              <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
-                {editingSequence ? t('common:update') : t('common:create')}
-              </Button>
-            </Space>
-          </div>
-        </Form>
+        <SequenceForm
+          sequence={editingSequence}
+          onSubmit={handleFormSubmit}
+          onCancel={handleFormCancel}
+        />
       </Modal>
 
-      {/* Chart Preview Modal */}
-      <Modal
-        title={t('sequences:form.chartPreview')}
-        open={previewVisible}
-        onCancel={() => setPreviewVisible(false)}
-        footer={null}
-        width={1000}
-        style={{ top: 20 }}
-      >
-        {previewChart && (
-          <SequenceDiagram 
-            chart={previewChart}
-            title={t('sequences:form.previewTitle')}
-          />
-        )}
-      </Modal>
+      {/* Chart Preview Modal - 移除，因为预览功能已集成到表单组件中 */}
     </PageContainer>
   );
 };
