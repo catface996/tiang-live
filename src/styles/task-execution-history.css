@@ -2,48 +2,67 @@
 
 /* ========== 搜索筛选栏响应式间隔 ========== */
 .search-filter-responsive {
-  margin-bottom: 16px; /* 减少下边距，与内部间隔保持一致 */
+  margin-bottom: 16px;
 }
 
-/* SearchFilterBar 内部组件间隔 */
-.search-filter-responsive .ant-space {
-  width: 100%;
-  flex-wrap: wrap;
-  row-gap: 16px !important; /* 统一行间距 */
-  column-gap: 16px !important;
+/* 修复SearchFilterBar内部Row组件的换行间距 */
+.search-filter-responsive .ant-row {
+  row-gap: 16px !important; /* 为Row组件添加行间距 */
 }
 
-.search-filter-responsive .ant-space-item {
-  margin-bottom: 0 !important; /* 移除默认下边距 */
+.search-filter-responsive .ant-col {
+  margin-bottom: 0 !important; /* 移除Col的默认下边距 */
 }
 
-/* 移除所有组件的额外边距，依赖Space组件的gap */
-.search-filter-responsive .ant-input-search,
+/* 确保所有输入组件高度一致，但不影响搜索框的内部结构 */
 .search-filter-responsive .ant-select,
 .search-filter-responsive .ant-picker,
 .search-filter-responsive .ant-btn {
+  height: 32px;
   margin-bottom: 0 !important;
   margin-top: 0 !important;
+}
+
+/* 搜索框保持原有样式，不强制设置高度 */
+.search-filter-responsive .ant-input-search {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+
+.search-filter-responsive .ant-select-selector {
+  height: 32px !important;
+  line-height: 30px !important;
+}
+
+.search-filter-responsive .ant-picker {
+  line-height: 30px;
+}
+
+.search-filter-responsive .ant-btn {
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 大屏幕 - 组件不换行时的间隔 */
 @media (min-width: 1200px) {
   .search-filter-responsive {
-    margin-bottom: 24px; /* 大屏幕时恢复正常间距 */
+    margin-bottom: 24px;
   }
   
-  .search-filter-responsive .ant-space {
-    row-gap: 0 !important;
+  .search-filter-responsive .ant-row {
+    row-gap: 0 !important; /* 大屏幕不换行时不需要行间距 */
   }
 }
 
 /* 中等屏幕 - 部分组件开始换行 */
 @media (max-width: 1199px) and (min-width: 992px) {
   .search-filter-responsive {
-    margin-bottom: 16px; /* 保持与row-gap一致 */
+    margin-bottom: 16px;
   }
   
-  .search-filter-responsive .ant-space {
+  .search-filter-responsive .ant-row {
     row-gap: 16px !important;
   }
 }
@@ -51,35 +70,33 @@
 /* 小屏幕 - 更多组件换行 */
 @media (max-width: 991px) and (min-width: 768px) {
   .search-filter-responsive {
-    margin-bottom: 16px; /* 保持与row-gap一致 */
+    margin-bottom: 16px;
   }
   
-  .search-filter-responsive .ant-space {
+  .search-filter-responsive .ant-row {
     row-gap: 16px !important;
-    column-gap: 12px !important;
   }
 }
 
 /* 移动端 - 组件垂直排列 */
 @media (max-width: 767px) {
   .search-filter-responsive {
-    margin-bottom: 12px; /* 保持与row-gap一致 */
+    margin-bottom: 12px;
   }
   
-  .search-filter-responsive .ant-space {
+  .search-filter-responsive .ant-row {
     row-gap: 12px !important;
-    column-gap: 8px !important;
+    flex-direction: column; /* 垂直排列 */
   }
   
-  .search-filter-responsive .ant-space-item {
-    width: 100%;
+  .search-filter-responsive .ant-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
   }
   
   .search-filter-responsive .ant-input-search,
-  .search-filter-responsive .ant-select {
-    width: 100% !important;
-  }
-  
+  .search-filter-responsive .ant-select,
   .search-filter-responsive .ant-picker {
     width: 100% !important;
   }
@@ -87,16 +104,40 @@
   .search-filter-responsive .ant-btn {
     width: 100%;
   }
+  
+  /* Space组件内的按钮组合 */
+  .search-filter-responsive .ant-space {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .search-filter-responsive .ant-space .ant-space-item {
+    flex: 1;
+  }
+  
+  .search-filter-responsive .ant-space .ant-picker {
+    width: 100% !important;
+  }
 }
 
 /* 超小屏幕优化 */
 @media (max-width: 576px) {
   .search-filter-responsive {
-    margin-bottom: 8px; /* 保持与row-gap一致 */
+    margin-bottom: 8px;
   }
   
-  .search-filter-responsive .ant-space {
+  .search-filter-responsive .ant-row {
     row-gap: 8px !important;
+  }
+  
+  /* 超小屏幕下按钮垂直排列 */
+  .search-filter-responsive .ant-space {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .search-filter-responsive .ant-space .ant-space-item {
+    width: 100%;
   }
 }
 
