@@ -36,6 +36,7 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import { setPageTitle } from '../../utils';
 import { SearchFilterBar } from '../../components/Common';
+import '../../styles/task-execution-history.css';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -43,35 +44,178 @@ const { RangePicker } = DatePicker;
 
 const PageContainer = styled.div`
   padding: 24px;
-  background: #f5f5f5;
+  background-color: var(--bg-layout);
+  color: var(--text-primary);
   min-height: 100vh;
 `;
 
 const ListContainer = styled.div`
-  background: white;
+  background-color: var(--bg-container);
   border-radius: 8px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-light);
 `;
 
 const ExecutionCard = styled(Card)`
   margin-bottom: 8px;
   border-radius: 6px;
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+  }
   
   &.completed {
-    border-left: 4px solid #52c41a;
+    border-left: 4px solid var(--success);
   }
   
   &.running {
-    border-left: 4px solid #1890ff;
+    border-left: 4px solid var(--primary);
   }
   
   &.scheduled {
-    border-left: 4px solid #faad14;
+    border-left: 4px solid var(--warning);
   }
   
   &.failed {
-    border-left: 4px solid #ff4d4f;
+    border-left: 4px solid var(--error);
+  }
+  
+  .ant-card-body {
+    background-color: var(--bg-container);
+    color: var(--text-primary);
+  }
+`;
+
+const StatsCard = styled(Card)`
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+  }
+  
+  .ant-card-body {
+    background-color: var(--bg-container);
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .stats-number {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    
+    &.primary { color: var(--primary); }
+    &.success { color: var(--success); }
+    &.warning { color: var(--warning); }
+    &.error { color: var(--error); }
+  }
+  
+  .stats-label {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+`;
+
+const PageHeader = styled.div`
+  margin-bottom: 24px;
+  
+  .ant-typography {
+    color: var(--text-primary);
+    margin: 0;
+  }
+  
+  .header-icon {
+    margin-right: 8px;
+    color: var(--primary);
+  }
+`;
+
+const BreadcrumbContainer = styled(Breadcrumb)`
+  margin-bottom: 24px;
+  
+  .ant-breadcrumb-link {
+    color: var(--text-secondary);
+    
+    &:hover {
+      color: var(--primary);
+    }
+  }
+  
+  .breadcrumb-link {
+    cursor: pointer;
+    margin-left: 4px;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: var(--primary);
+    }
+  }
+`;
+
+const FilterContainer = styled.div`
+  margin-bottom: 24px;
+  
+  .ant-alert {
+    background-color: var(--bg-elevated);
+    border-color: var(--border-light);
+    color: var(--text-primary);
+  }
+`;
+
+const ListHeader = styled.div`
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  .ant-typography {
+    color: var(--text-primary);
+    margin: 0;
+  }
+`;
+
+const ExecutionItemContent = styled.div`
+  .execution-title {
+    .ant-typography {
+      color: var(--text-primary);
+    }
+  }
+  
+  .execution-meta {
+    .ant-typography {
+      color: var(--text-secondary);
+    }
+  }
+  
+  .execution-progress {
+    margin-top: 8px;
+    
+    .progress-text {
+      color: var(--text-secondary);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+  }
+`;
+
+const ActionButton = styled(Button)`
+  &.ant-btn-text {
+    color: var(--text-primary);
+    
+    &:hover {
+      background-color: var(--bg-hover);
+      color: var(--primary);
+    }
   }
 `;
 
@@ -615,11 +759,11 @@ const TaskExecutionHistory: React.FC = () => {
   // 获取执行状态图标
   const getExecutionIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
-      case 'running': return <PlayCircleOutlined style={{ color: '#1890ff' }} />;
-      case 'scheduled': return <ClockCircleOutlined style={{ color: '#faad14' }} />;
-      case 'failed': return <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />;
-      default: return <ClockCircleOutlined />;
+      case 'completed': return <CheckCircleOutlined className="status-icon success" />;
+      case 'running': return <PlayCircleOutlined className="status-icon primary" />;
+      case 'scheduled': return <ClockCircleOutlined className="status-icon warning" />;
+      case 'failed': return <ExclamationCircleOutlined className="status-icon error" />;
+      default: return <ClockCircleOutlined className="status-icon" />;
     }
   };
 
@@ -627,13 +771,13 @@ const TaskExecutionHistory: React.FC = () => {
   const getTriggerInfo = (triggerType: string, triggerSource?: string | null) => {
     if (triggerType === 'cron') {
       return {
-        icon: <ScheduleOutlined style={{ color: '#1890ff' }} />,
+        icon: <ScheduleOutlined className="trigger-icon primary" />,
         text: t('taskExecutionHistory:triggerType.cron'),
         color: 'blue'
       };
     } else {
       return {
-        icon: <ApiOutlined style={{ color: '#52c41a' }} />,
+        icon: <ApiOutlined className="trigger-icon success" />,
         text: triggerSource || t('taskExecutionHistory:triggerType.hook'),
         color: 'green'
       };
@@ -669,11 +813,11 @@ const TaskExecutionHistory: React.FC = () => {
   return (
     <PageContainer>
       {/* 面包屑导航 */}
-      <Breadcrumb style={{ marginBottom: 24 }}>
+      <BreadcrumbContainer>
         <Breadcrumb.Item>
           <HomeOutlined />
           <span 
-            style={{ cursor: 'pointer', marginLeft: 4 }}
+            className="breadcrumb-link"
             onClick={() => navigate('/')}
           >
             {t('taskExecutionHistory:breadcrumb.home')}
@@ -682,7 +826,7 @@ const TaskExecutionHistory: React.FC = () => {
         <Breadcrumb.Item>
           <UnorderedListOutlined />
           <span 
-            style={{ cursor: 'pointer', marginLeft: 4 }}
+            className="breadcrumb-link"
             onClick={() => navigate('/task-management/task-collections')}
           >
             {t('taskExecutionHistory:breadcrumb.taskCollections')}
@@ -692,75 +836,68 @@ const TaskExecutionHistory: React.FC = () => {
           <UnorderedListOutlined />
           {t('taskExecutionHistory:breadcrumb.executionHistory')}
         </Breadcrumb.Item>
-      </Breadcrumb>
+      </BreadcrumbContainer>
 
       {/* 页面头部 */}
-      <div style={{ marginBottom: 24 }}>
-        <Title level={2} style={{ margin: 0 }}>
-          <UnorderedListOutlined style={{ marginRight: 8, color: '#1890ff' }} />
+      <PageHeader>
+        <Title level={2}>
+          <UnorderedListOutlined className="header-icon" />
           {t('taskExecutionHistory:title')}
         </Title>
-      </div>
+      </PageHeader>
 
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={6}>
-          <Card>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>
-                {executionHistory.length}
-              </div>
-              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.totalExecutions')}</div>
+          <StatsCard>
+            <div className="stats-number primary">
+              {executionHistory.length}
             </div>
-          </Card>
+            <div className="stats-label">{t('taskExecutionHistory:stats.totalExecutions')}</div>
+          </StatsCard>
         </Col>
         <Col xs={24} sm={6}>
-          <Card>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 'bold', color: '#52c41a' }}>
-                {executionHistory.filter(e => e.status === 'completed').length}
-              </div>
-              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.successfulExecutions')}</div>
+          <StatsCard>
+            <div className="stats-number success">
+              {executionHistory.filter(e => e.status === 'completed').length}
             </div>
-          </Card>
+            <div className="stats-label">{t('taskExecutionHistory:stats.successfulExecutions')}</div>
+          </StatsCard>
         </Col>
         <Col xs={24} sm={6}>
-          <Card>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>
-                {executionHistory.filter(e => e.status === 'running').length}
-              </div>
-              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.runningExecutions')}</div>
+          <StatsCard>
+            <div className="stats-number primary">
+              {executionHistory.filter(e => e.status === 'running').length}
             </div>
-          </Card>
+            <div className="stats-label">{t('taskExecutionHistory:stats.runningExecutions')}</div>
+          </StatsCard>
         </Col>
         <Col xs={24} sm={6}>
-          <Card>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 24, fontWeight: 'bold', color: '#faad14' }}>
-                {executionHistory.filter(e => e.status === 'scheduled').length}
-              </div>
-              <div style={{ color: '#666' }}>{t('taskExecutionHistory:stats.scheduledExecutions')}</div>
+          <StatsCard>
+            <div className="stats-number warning">
+              {executionHistory.filter(e => e.status === 'scheduled').length}
             </div>
-          </Card>
+            <div className="stats-label">{t('taskExecutionHistory:stats.scheduledExecutions')}</div>
+          </StatsCard>
         </Col>
       </Row>
 
       {/* 调试信息面板 */}
-      <Alert 
-        message={
-          <div>
-            <div>📊 原始数据: {mockExecutionHistoryData.length} 条</div>
-            <div>📋 当前executionHistory: {executionHistory.length} 条</div>
-            <div>🔍 筛选后filteredHistory: {filteredHistory.length} 条</div>
-            <div>🎯 当前taskId: {taskId || '无'}</div>
-            <div>🔧 筛选条件: 状态={statusFilter}, 触发={triggerFilter}, 搜索="{searchKeyword}"</div>
-          </div>
-        }
-        type="info" 
-        style={{ marginBottom: 16 }}
-        showIcon
-      />
+      <FilterContainer>
+        <Alert 
+          message={
+            <div>
+              <div>📊 原始数据: {mockExecutionHistoryData.length} 条</div>
+              <div>📋 当前executionHistory: {executionHistory.length} 条</div>
+              <div>🔍 筛选后filteredHistory: {filteredHistory.length} 条</div>
+              <div>🎯 当前taskId: {taskId || '无'}</div>
+              <div>🔧 筛选条件: 状态={statusFilter}, 触发={triggerFilter}, 搜索="{searchKeyword}"</div>
+            </div>
+          }
+          type="info" 
+          showIcon
+        />
+      </FilterContainer>
 
       {/* 搜索和筛选栏 */}
       <SearchFilterBar
@@ -823,11 +960,11 @@ const TaskExecutionHistory: React.FC = () => {
 
       {/* 执行记录列表 */}
       <ListContainer>
-        <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Title level={4} style={{ margin: 0 }}>
+        <ListHeader>
+          <Title level={4}>
             {t('taskExecutionHistory:list.title')} ({filteredHistory.length}{t('taskExecutionHistory:list.count')})
           </Title>
-        </div>
+        </ListHeader>
         
         <List
           dataSource={filteredHistory}
@@ -845,40 +982,59 @@ const TaskExecutionHistory: React.FC = () => {
                   onClick={() => handleViewExecutionDetail(execution)}
                   style={{ width: '100%' }}
                 >
-                  <Row align="middle" justify="space-between">
-                    <Col flex="auto">
-                      <Space direction="vertical" size={4}>
-                        <Space>
-                          {getExecutionIcon(execution.status)}
-                          <Text strong>{execution.taskCollectionName}</Text>
-                          <Tag color={triggerInfo.color} icon={triggerInfo.icon}>
-                            {triggerInfo.text}
-                          </Tag>
-                        </Space>
-                        <Space size={16}>
-                          <Text type="secondary">
-                            <ClockCircleOutlined /> {time}
-                          </Text>
-                          {execution.duration && (
+                  <ExecutionItemContent>
+                    <Row align="middle" justify="space-between">
+                      <Col flex="auto">
+                        <Space direction="vertical" size={4}>
+                          <Space className="execution-title">
+                            {getExecutionIcon(execution.status)}
+                            <Text strong>{execution.taskCollectionName}</Text>
+                            <Tag color={triggerInfo.color} icon={triggerInfo.icon}>
+                              {triggerInfo.text}
+                            </Tag>
+                          </Space>
+                          <Space size={16} className="execution-meta">
                             <Text type="secondary">
-                              <HistoryOutlined /> {formatDuration(execution.duration)}
+                              <ClockCircleOutlined /> {time}
                             </Text>
+                            {execution.duration && (
+                              <Text type="secondary">
+                                <HistoryOutlined /> {formatDuration(execution.duration)}
+                              </Text>
+                            )}
+                            <Text type="secondary">
+                              <ThunderboltOutlined /> {execution.executedTargets}/{execution.totalTargets} 目标
+                            </Text>
+                          </Space>
+                          {execution.totalTargets > 0 && (
+                            <div className="execution-progress">
+                              <div className="progress-text">
+                                执行进度: {execution.executedTargets}/{execution.totalTargets} ({Math.round((execution.executedTargets / execution.totalTargets) * 100)}%)
+                              </div>
+                            </div>
                           )}
-                          <Text type="secondary">
-                            {t('taskExecutionHistory:card.successRate')}: {execution.successRate}%
-                          </Text>
-                          <Text type="secondary">
-                            {t('taskExecutionHistory:card.progress')}: {execution.executedTargets}/{execution.totalTargets}
-                          </Text>
                         </Space>
-                      </Space>
-                    </Col>
-                    <Col>
-                      <Tag color={getExecutionBadgeStatus(execution.status)}>
-                        {statusText}
-                      </Tag>
-                    </Col>
-                  </Row>
+                      </Col>
+                      <Col>
+                        <Space>
+                          <Badge 
+                            status={getExecutionBadgeStatus(execution.status)} 
+                            text={statusText}
+                          />
+                          <ActionButton 
+                            type="text" 
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewExecutionDetail(execution);
+                            }}
+                          >
+                            查看详情
+                          </ActionButton>
+                        </Space>
+                      </Col>
+                    </Row>
+                  </ExecutionItemContent>
                 </ExecutionCard>
               </List.Item>
             );

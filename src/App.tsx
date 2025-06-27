@@ -16,6 +16,7 @@ import './i18n'; // 初始化i18n
 import './styles/themes.css'; // 导入主题CSS
 import './styles/theme-unified.css'; // 导入统一主题CSS
 import './styles/modal-theme.css'; // 导入模态框主题CSS
+import './styles/task-execution-history.css'; // 导入任务执行历史页面主题CSS
 
 // Antd语言配置映射
 const antdLocaleMap = {

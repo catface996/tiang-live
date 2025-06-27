@@ -1,0 +1,240 @@
+/* TaskExecutionHistory 页面主题适配样式 */
+
+/* ========== 状态图标颜色 ========== */
+.status-icon.success {
+  color: var(--success) !important;
+}
+
+.status-icon.primary {
+  color: var(--primary) !important;
+}
+
+.status-icon.warning {
+  color: var(--warning) !important;
+}
+
+.status-icon.error {
+  color: var(--error) !important;
+}
+
+.status-icon {
+  color: var(--text-secondary) !important;
+}
+
+/* ========== 触发类型图标颜色 ========== */
+.trigger-icon.success {
+  color: var(--success) !important;
+}
+
+.trigger-icon.primary {
+  color: var(--primary) !important;
+}
+
+.trigger-icon.warning {
+  color: var(--warning) !important;
+}
+
+.trigger-icon.error {
+  color: var(--error) !important;
+}
+
+/* ========== 列表项主题适配 ========== */
+.theme-light .ant-list-item,
+.theme-dark .ant-list-item {
+  border-color: var(--border-light) !important;
+}
+
+.theme-light .ant-list-empty-text,
+.theme-dark .ant-list-empty-text {
+  color: var(--text-secondary) !important;
+}
+
+/* ========== Badge 组件主题适配 ========== */
+.theme-light .ant-badge-status-text,
+.theme-dark .ant-badge-status-text {
+  color: var(--text-secondary) !important;
+}
+
+/* ========== Tag 组件主题适配 ========== */
+.theme-light .ant-tag,
+.theme-dark .ant-tag {
+  border-color: var(--border-base) !important;
+}
+
+/* 保持彩色标签的原有颜色 */
+.theme-light .ant-tag-blue,
+.theme-dark .ant-tag-blue {
+  background-color: #e6f7ff !important;
+  border-color: #91d5ff !important;
+  color: #1890ff !important;
+}
+
+.theme-light .ant-tag-green,
+.theme-dark .ant-tag-green {
+  background-color: #f6ffed !important;
+  border-color: #b7eb8f !important;
+  color: #52c41a !important;
+}
+
+.theme-light .ant-tag-orange,
+.theme-dark .ant-tag-orange {
+  background-color: #fff7e6 !important;
+  border-color: #ffd591 !important;
+  color: #fa8c16 !important;
+}
+
+.theme-light .ant-tag-red,
+.theme-dark .ant-tag-red {
+  background-color: #fff2f0 !important;
+  border-color: #ffccc7 !important;
+  color: #ff4d4f !important;
+}
+
+.theme-light .ant-tag-purple,
+.theme-dark .ant-tag-purple {
+  background-color: #f9f0ff !important;
+  border-color: #d3adf7 !important;
+  color: #722ed1 !important;
+}
+
+.theme-light .ant-tag-cyan,
+.theme-dark .ant-tag-cyan {
+  background-color: #e6fffb !important;
+  border-color: #87e8de !important;
+  color: #13c2c2 !important;
+}
+
+/* ========== 面包屑主题适配 ========== */
+.theme-light .ant-breadcrumb,
+.theme-dark .ant-breadcrumb {
+  color: var(--text-secondary) !important;
+}
+
+.theme-light .ant-breadcrumb a,
+.theme-dark .ant-breadcrumb a {
+  color: var(--text-secondary) !important;
+}
+
+.theme-light .ant-breadcrumb a:hover,
+.theme-dark .ant-breadcrumb a:hover {
+  color: var(--primary) !important;
+}
+
+.theme-light .ant-breadcrumb-separator,
+.theme-dark .ant-breadcrumb-separator {
+  color: var(--text-disabled) !important;
+}
+
+/* ========== 日期选择器主题适配 ========== */
+.theme-light .ant-picker,
+.theme-dark .ant-picker {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-light .ant-picker:hover,
+.theme-dark .ant-picker:hover {
+  border-color: var(--border-hover) !important;
+}
+
+.theme-light .ant-picker-focused,
+.theme-dark .ant-picker-focused {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+.theme-light .ant-picker-input > input,
+.theme-dark .ant-picker-input > input {
+  color: var(--text-primary) !important;
+}
+
+.theme-light .ant-picker-input > input::placeholder,
+.theme-dark .ant-picker-input > input::placeholder {
+  color: var(--text-disabled) !important;
+}
+
+/* ========== 选择器主题适配 ========== */
+.theme-light .ant-select-selector,
+.theme-dark .ant-select-selector {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-light .ant-select-selector:hover,
+.theme-dark .ant-select-selector:hover {
+  border-color: var(--border-hover) !important;
+}
+
+.theme-light .ant-select-focused .ant-select-selector,
+.theme-dark .ant-select-focused .ant-select-selector {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+.theme-light .ant-select-selection-placeholder,
+.theme-dark .ant-select-selection-placeholder {
+  color: var(--text-disabled) !important;
+}
+
+/* ========== 下拉菜单主题适配 ========== */
+.theme-light .ant-select-dropdown,
+.theme-dark .ant-select-dropdown {
+  background-color: var(--bg-container) !important;
+  border: 1px solid var(--border-light) !important;
+}
+
+.theme-light .ant-select-item,
+.theme-dark .ant-select-item {
+  color: var(--text-primary) !important;
+}
+
+.theme-light .ant-select-item:hover,
+.theme-dark .ant-select-item:hover {
+  background-color: var(--bg-hover) !important;
+}
+
+.theme-light .ant-select-item-option-selected,
+.theme-dark .ant-select-item-option-selected {
+  background-color: #e6f7ff !important;
+  color: var(--primary) !important;
+}
+
+.theme-dark .ant-select-item-option-selected {
+  background-color: #111b26 !important;
+}
+
+/* ========== 响应式适配 ========== */
+@media (max-width: 768px) {
+  .execution-meta .ant-space {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  .execution-meta .ant-space-item {
+    margin-bottom: 4px;
+  }
+  
+  .stats-number {
+    font-size: 20px !important;
+  }
+  
+  .stats-label {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .execution-title .ant-space {
+    flex-wrap: wrap;
+  }
+  
+  .execution-progress {
+    margin-top: 4px;
+  }
+  
+  .progress-text {
+    font-size: 11px !important;
+  }
+}
