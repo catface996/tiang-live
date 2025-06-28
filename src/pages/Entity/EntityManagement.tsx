@@ -31,7 +31,9 @@ import {
   ApiOutlined,
   DatabaseOutlined,
   TableOutlined,
-  EditOutlined
+  EditOutlined,
+  ExclamationCircleOutlined,
+  CloseCircleOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -40,6 +42,7 @@ import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
 import entitiesData from '../../data/entitiesMock.json';
+import '../../styles/entity-management.css';
 
 const { Title, Paragraph } = Typography;
 const { Search } = Input;
@@ -190,42 +193,42 @@ const EntityManagement: React.FC = () => {
         {/* 统计信息 */}
         <Row gutter={16} style={{ marginBottom: 24 }}>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard>
+            <StatsCard className="entity-stats-primary">
               <Statistic
                 title={t('entities:stats.totalEntities')}
                 value={stats.total}
                 suffix={t('common:unit.count')}
-                valueStyle={{ color: '#1890ff' }}
+                prefix={<DatabaseOutlined />}
               />
             </StatsCard>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard>
+            <StatsCard className="entity-stats-success">
               <Statistic
                 title={t('entities:stats.activeEntities')}
                 value={stats.active}
                 suffix={t('common:unit.count')}
-                valueStyle={{ color: '#52c41a' }}
+                prefix={<AppstoreOutlined />}
               />
             </StatsCard>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard>
+            <StatsCard className="entity-stats-warning">
               <Statistic
                 title={t('entities:stats.warningEntities')}
                 value={stats.warning}
                 suffix={t('common:unit.count')}
-                valueStyle={{ color: '#faad14' }}
+                prefix={<ExclamationCircleOutlined />}
               />
             </StatsCard>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard>
+            <StatsCard className="entity-stats-error">
               <Statistic
                 title={t('entities:stats.errorEntities')}
                 value={stats.inactive}
                 suffix={t('common:unit.count')}
-                valueStyle={{ color: '#f5222d' }}
+                prefix={<CloseCircleOutlined />}
               />
             </StatsCard>
           </Col>
@@ -455,7 +458,6 @@ const EntityManagement: React.FC = () => {
                   <Statistic
                     title={key}
                     value={value as string | number}
-                    valueStyle={{ fontSize: '14px' }}
                   />
                 </Col>
               ))}
@@ -504,42 +506,42 @@ const EntityManagement: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="entity-stats-primary">
             <Statistic
               title={t('entities:stats.totalRelations')}
               value={25}
               suffix={t('common:unitRelation')}
-              valueStyle={{ color: '#1890ff' }}
+              prefix={<LinkOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="entity-stats-success">
             <Statistic
               title={t('entities:stats.relationTypes')}
               value={5}
               suffix={t('common:unitType')}
-              valueStyle={{ color: '#52c41a' }}
+              prefix={<TableOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="entity-stats-warning">
             <Statistic
               title={t('entities:stats.graphNodes')}
               value={21}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#faad14' }}
+              prefix={<NodeIndexOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="entity-stats-purple">
             <Statistic
               title={t('entities:stats.connectedSystems')}
               value={5}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#722ed1' }}
+              prefix={<ApiOutlined />}
             />
           </StatsCard>
         </Col>
@@ -553,20 +555,12 @@ const EntityManagement: React.FC = () => {
   const typeStats = getEntityTypeStats();
 
   return (
-    <PageContainer>
+    <PageContainer className="entity-management-page">
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <Title level={2} style={{ margin: 0 }}>
               {t('entities:title')}
-              <Badge 
-                count="NEW" 
-                style={{ 
-                  backgroundColor: '#52c41a', 
-                  marginLeft: 12,
-                  fontSize: 12 
-                }} 
-              />
             </Title>
             <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
               {t('entities:description')}
@@ -587,7 +581,6 @@ const EntityManagement: React.FC = () => {
               <Space>
                 <NodeIndexOutlined />
                 {t('entities:title')}
-                <Badge count={getEntityStats().total} showZero />
               </Space>
             } 
             key="entities"

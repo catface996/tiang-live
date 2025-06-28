@@ -1,6 +1,7 @@
 {
   "title": "实体管理",
   "subtitle": "管理系统中的各类实体及其关系",
+  "description": "统一管理系统中的所有实体对象，包括实体定义、实例管理、状态监控和关系分析。支持多维度统计分析、实时状态监控、关系图谱可视化等功能，帮助您全面掌握系统实体的运行状况。",
   "createTitle": "创建实体",
   "editTitle": "编辑实体",
   "createEntity": "创建实体",
@@ -39,7 +40,6 @@
   "entityId": "实体ID",
   "entityName": "实体名称",
   "entityType": "实体类型",
-  "description": "描述",
   "category": "分类",
   "tableName": "表名",
   "belongsToDatabase": "所属数据库",

@@ -1,6 +1,7 @@
 {
   "title": "Entity Management",
   "subtitle": "Manage various entities and their relationships in the system",
+  "description": "Unified management of all entity objects in the system, including entity definition, instance management, status monitoring and relationship analysis. Supports multi-dimensional statistical analysis, real-time status monitoring, relationship graph visualization and other functions to help you fully grasp the operational status of system entities.",
   "createTitle": "Create Entity",
   "editTitle": "Edit Entity",
   "createEntity": "Create Entity",
@@ -39,7 +40,6 @@
   "entityId": "Entity ID",
   "entityName": "Entity Name",
   "entityType": "Entity Type",
-  "description": "Description",
   "category": "Category",
   "tableName": "Table Name",
   "belongsToDatabase": "Belongs to Database",
