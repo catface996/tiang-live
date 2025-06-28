@@ -30,10 +30,6 @@ const LegendItem = styled.div.attrs({
   className: 'legend-item'
 })``;
 
-const LegendIcon = styled.span.attrs({
-  className: 'legend-icon'
-})``;
-
 const TipsContainer = styled.div.attrs({
   className: 'tips-container'
 })``;
@@ -44,18 +40,6 @@ const MainContainer = styled.div.attrs({
 
 const LegendText = styled.span.attrs({
   className: 'legend-text'
-})``;
-
-const LayerLegendList = styled.div.attrs({
-  className: 'layer-legend-list'
-})``;
-
-const LayerLegendItem = styled.div.attrs({
-  className: 'layer-legend-item'
-})``;
-
-const LayerLegendText = styled.span.attrs({
-  className: 'layer-legend-text'
 })``;
 
 // 业务层级定义（本地定义避免导入问题）
@@ -277,7 +261,6 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
         node.y = bounds.y + 50 + row * rowHeight; // 50为标题预留空间
       }
     });
-  };
   };
 
   // 绘制分层拓扑图
@@ -646,52 +629,6 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
               <LegendItem>
                 <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#faad14' }}></div>
                 <LegendText>已跳过</LegendText>
-              </LegendItem>
-            </LegendList>
-          </LegendCard>
-
-          {/* 业务层级图例 */}
-          <LegendCard>
-            <LegendTitle>业务层级</LegendTitle>
-            <LayerLegendList>
-              {BUSINESS_LAYERS.map(layer => (
-                <LayerLegendItem key={layer.id}>
-                  <div style={{ 
-                    width: 12, 
-                    height: 12, 
-                    background: layer.color,
-                    border: `1px solid ${layer.borderColor}`,
-                    borderRadius: 2
-                  }}></div>
-                  <LayerLegendText>{layer.name}</LayerLegendText>
-                </LayerLegendItem>
-              ))}
-            </LayerLegendList>
-          </LegendCard>
-
-          {/* 图标说明 */}
-          <LegendCard>
-            <LegendTitle>图标说明</LegendTitle>
-            <LegendList>
-              <LegendItem>
-                <LegendIcon>🎯</LegendIcon>
-                <LegendText>业务场景</LegendText>
-              </LegendItem>
-              <LegendItem>
-                <LegendIcon>🔗</LegendIcon>
-                <LegendText>业务链路</LegendText>
-              </LegendItem>
-              <LegendItem>
-                <LegendIcon>💼</LegendIcon>
-                <LegendText>业务系统</LegendText>
-              </LegendItem>
-              <LegendItem>
-                <LegendIcon>⚙️</LegendIcon>
-                <LegendText>中间件</LegendText>
-              </LegendItem>
-              <LegendItem>
-                <LegendIcon>🏗️</LegendIcon>
-                <LegendText>基础设施</LegendText>
               </LegendItem>
             </LegendList>
           </LegendCard>
