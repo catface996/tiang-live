@@ -12,7 +12,7 @@ import {
   Tag,
   Input,
   Select,
-  Drawer,
+  Modal,
   Descriptions,
   Empty
 } from 'antd';
@@ -89,7 +89,7 @@ const EntityManagement: React.FC = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedEntity, setSelectedEntity] = useState<any>(null);
-  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [entities, setEntities] = useState<any[]>([]);
 
   useEffect(() => {
@@ -113,7 +113,7 @@ const EntityManagement: React.FC = () => {
 
   const handleEntityClick = (entity: any) => {
     setSelectedEntity(entity);
-    setDrawerVisible(true);
+    setModalVisible(true);
   };
 
   const getEntityStats = () => {
@@ -381,12 +381,19 @@ const EntityManagement: React.FC = () => {
     if (!selectedEntity) return null;
 
     return (
-      <Drawer
+      <Modal
         title={`${t('entities:entityDetail')}: ${selectedEntity.name}`}
-        placement="right"
-        width={600}
-        onClose={() => setDrawerVisible(false)}
-        open={drawerVisible}
+        open={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        width={800}
+        footer={[
+          <Button key="close" onClick={() => setModalVisible(false)}>
+            {t('common:close')}
+          </Button>,
+          <Button key="edit" type="primary" icon={<EditOutlined />}>
+            {t('common:edit')}
+          </Button>
+        ]}
       >
         <Descriptions column={1} bordered size="small">
           <Descriptions.Item label={t('entities:entityId')}>{selectedEntity.id}</Descriptions.Item>
@@ -477,7 +484,7 @@ const EntityManagement: React.FC = () => {
             </Descriptions>
           </Card>
         )}
-      </Drawer>
+      </Modal>
     );
   };
 
