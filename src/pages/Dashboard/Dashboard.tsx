@@ -38,6 +38,7 @@ import ReactECharts from 'echarts-for-react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
+import '../../styles/dashboard.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -346,7 +347,7 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
+    <PageContainer className="dashboard-page">
       {/* 页面头部 */}
       <div className="page-header">
         <Title className="page-title" level={2}>{t('dashboard:title')}</Title>
@@ -356,43 +357,39 @@ const Dashboard: React.FC = () => {
       {/* 系统概览统计 */}
       <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card-primary">
             <Statistic
               title={t('planes:stats.totalPlanes')}
               value={systemStats.totalPlanes}
               prefix={<AppstoreOutlined />}
-              valueStyle={{ color: '#1890ff' }}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card-success">
             <Statistic
               title={t('entities:stats.totalEntities')}
               value={systemStats.totalEntities}
               prefix={<DatabaseOutlined />}
-              valueStyle={{ color: '#52c41a' }}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card-purple">
             <Statistic
               title={t('sequences:stats.totalSequences')}
               value={systemStats.totalSequences}
               prefix={<ThunderboltOutlined />}
-              valueStyle={{ color: '#722ed1' }}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="stats-card-warning">
             <Statistic
               title={t('dashboard:activeUsers')}
               value={systemStats.runningTasks}
               prefix={<UserOutlined />}
-              suffix={<ArrowUpOutlined className="text-success" />}
-              valueStyle={{ color: '#faad14' }}
+              suffix={<span className="text-warning">个</span>}
             />
           </StatsCard>
         </Col>

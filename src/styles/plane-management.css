@@ -1,0 +1,292 @@
+/* 平面管理页面专用样式 - 确保彩色元素在主题切换时保持不变 */
+
+/* ========== 平面统计卡片样式 - 使用最强优先级 ========== */
+.plane-management-page {
+  /* 主色调统计卡片 - 蓝色 (总平面数) */
+  .plane-stats-primary {
+    /* 图标颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #1890ff !important;
+    }
+    
+    /* 数值颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #1890ff !important;
+    }
+    
+    /* 后缀颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #1890ff !important;
+    }
+  }
+  
+  /* 成功色统计卡片 - 绿色 (活跃平面、健康实体) */
+  .plane-stats-success {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #52c41a !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #52c41a !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #52c41a !important;
+    }
+  }
+  
+  /* 警告色统计卡片 - 橙色 (警告平面、警告实体) */
+  .plane-stats-warning {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #faad14 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #faad14 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #faad14 !important;
+    }
+  }
+  
+  /* 错误色统计卡片 - 红色 (错误平面、错误实体) */
+  .plane-stats-error {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #ff4d4f !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #ff4d4f !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #ff4d4f !important;
+    }
+  }
+  
+  /* 紫色统计卡片 - 紫色 (总实例数) */
+  .plane-stats-purple {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #722ed1 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #722ed1 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #722ed1 !important;
+    }
+  }
+  
+  /* 信息色统计卡片 - 青色 */
+  .plane-stats-info {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #13c2c2 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #13c2c2 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #13c2c2 !important;
+    }
+  }
+  
+  /* 通用彩色图标样式 */
+  .text-primary,
+  .anticon.text-primary,
+  span.text-primary {
+    color: #1890ff !important;
+  }
+  
+  .text-success,
+  .anticon.text-success,
+  span.text-success {
+    color: #52c41a !important;
+  }
+  
+  .text-warning,
+  .anticon.text-warning,
+  span.text-warning {
+    color: #faad14 !important;
+  }
+  
+  .text-error,
+  .anticon.text-error,
+  span.text-error {
+    color: #ff4d4f !important;
+  }
+  
+  .text-info,
+  .anticon.text-info,
+  span.text-info {
+    color: #13c2c2 !important;
+  }
+  
+  .text-purple,
+  .anticon.text-purple,
+  span.text-purple {
+    color: #722ed1 !important;
+  }
+  
+  /* 操作说明中的彩色文字 */
+  .level-warning {
+    color: #faad14 !important;
+  }
+  
+  .level-error {
+    color: #ff4d4f !important;
+  }
+  
+  /* 错误提示卡片样式 */
+  .error-card {
+    border-color: #ff4d4f !important;
+    
+    .error-text {
+      color: #ff4d4f !important;
+    }
+  }
+  
+  /* 禁用过渡效果 */
+  .plane-stats-primary,
+  .plane-stats-success,
+  .plane-stats-warning,
+  .plane-stats-error,
+  .plane-stats-purple,
+  .plane-stats-info {
+    * {
+      transition: none !important;
+    }
+  }
+}
+
+/* ========== 全局强制覆盖 - 最高优先级 ========== */
+.plane-management-page .plane-stats-primary [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.plane-management-page .plane-stats-primary [class*="ant-statistic"] [class*="prefix"],
+.plane-management-page .plane-stats-primary [class*="ant-statistic"] [class*="value"] {
+  color: #1890ff !important;
+}
+
+.plane-management-page .plane-stats-success [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.plane-management-page .plane-stats-success [class*="ant-statistic"] [class*="prefix"],
+.plane-management-page .plane-stats-success [class*="ant-statistic"] [class*="value"] {
+  color: #52c41a !important;
+}
+
+.plane-management-page .plane-stats-warning [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.plane-management-page .plane-stats-warning [class*="ant-statistic"] [class*="prefix"],
+.plane-management-page .plane-stats-warning [class*="ant-statistic"] [class*="value"] {
+  color: #faad14 !important;
+}
+
+.plane-management-page .plane-stats-error [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.plane-management-page .plane-stats-error [class*="ant-statistic"] [class*="prefix"],
+.plane-management-page .plane-stats-error [class*="ant-statistic"] [class*="value"] {
+  color: #ff4d4f !important;
+}
+
+.plane-management-page .plane-stats-purple [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.plane-management-page .plane-stats-purple [class*="ant-statistic"] [class*="prefix"],
+.plane-management-page .plane-stats-purple [class*="ant-statistic"] [class*="value"] {
+  color: #722ed1 !important;
+}
+
+.plane-management-page .plane-stats-info [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.plane-management-page .plane-stats-info [class*="ant-statistic"] [class*="prefix"],
+.plane-management-page .plane-stats-info [class*="ant-statistic"] [class*="value"] {
+  color: #13c2c2 !important;
+}
+
+/* ========== 深色主题下的强制覆盖 ========== */
+.theme-dark .plane-management-page .plane-stats-primary,
+.theme-dark .plane-management-page .plane-stats-success,
+.theme-dark .plane-management-page .plane-stats-warning,
+.theme-dark .plane-management-page .plane-stats-error,
+.theme-dark .plane-management-page .plane-stats-purple,
+.theme-dark .plane-management-page .plane-stats-info {
+  * {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+}

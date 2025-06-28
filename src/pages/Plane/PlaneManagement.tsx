@@ -16,6 +16,7 @@ import {
 import { planeService } from '../../services/planeService';
 import { PlaneTopology, PlaneStats, PlaneDependencyAnalysis } from '../../components/Plane';
 import styled from 'styled-components';
+import '../../styles/plane-management.css';
 
 const { Title, Paragraph } = Typography;
 
@@ -109,7 +110,7 @@ const PlaneManagement: React.FC = () => {
   };
 
   return (
-    <PlaneContainer>
+    <PlaneContainer className="plane-management-page">
       {/* 页面头部 */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -140,8 +141,8 @@ const PlaneManagement: React.FC = () => {
 
       {/* 错误提示 */}
       {(error.definitions || error.topology || error.metrics) && (
-        <Card style={{ marginBottom: 24, borderColor: '#ff4d4f' }}>
-          <div style={{ color: '#ff4d4f' }}>
+        <Card className="error-card" style={{ marginBottom: 24 }}>
+          <div className="error-text">
             {error.definitions && <div>{t('planes:errors.planeDefinitionLoadFailed')}: {error.definitions}</div>}
             {error.topology && <div>{t('planes:errors.topologyLoadFailed')}: {error.topology}</div>}
             {error.metrics && <div>{t('planes:errors.metricsLoadFailed')}: {error.metrics}</div>}
@@ -178,9 +179,9 @@ const PlaneManagement: React.FC = () => {
             <ul>
               <li><strong>{t('planes:operations.levelDetails.l1')}</strong>: {t('planes:operations.levelDetails.l1Desc')}</li>
               <li><strong>{t('planes:operations.levelDetails.l2')}</strong>: {t('planes:operations.levelDetails.l2Desc')}</li>
-              <li><strong>{t('planes:operations.levelDetails.l3')}</strong>: {t('planes:operations.levelDetails.l3Desc')} <span style={{color: '#fa8c16'}}>({t('planes:operations.levelDetails.multipleDependency')})</span></li>
-              <li><strong>{t('planes:operations.levelDetails.l4')}</strong>: {t('planes:operations.levelDetails.l4Desc')} <span style={{color: '#fa8c16'}}>({t('planes:operations.levelDetails.multipleDependency')})</span></li>
-              <li><strong>{t('planes:operations.levelDetails.l5')}</strong>: {t('planes:operations.levelDetails.l5Desc')} <span style={{color: '#ff4d4f'}}>({t('planes:operations.levelDetails.complexDependency')})</span></li>
+              <li><strong>{t('planes:operations.levelDetails.l3')}</strong>: {t('planes:operations.levelDetails.l3Desc')} <span className="level-warning">({t('planes:operations.levelDetails.multipleDependency')})</span></li>
+              <li><strong>{t('planes:operations.levelDetails.l4')}</strong>: {t('planes:operations.levelDetails.l4Desc')} <span className="level-warning">({t('planes:operations.levelDetails.multipleDependency')})</span></li>
+              <li><strong>{t('planes:operations.levelDetails.l5')}</strong>: {t('planes:operations.levelDetails.l5Desc')} <span className="level-error">({t('planes:operations.levelDetails.complexDependency')})</span></li>
             </ul>
           </Col>
           <Col xs={24} md={12}>

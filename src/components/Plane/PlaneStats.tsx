@@ -45,49 +45,49 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
       title: t('planes:stats.totalPlanes'),
       value: totalPlanes,
       icon: <AppstoreOutlined />,
-      color: '#1890ff',
+      className: 'plane-stats-primary',
     },
     {
       title: t('planes:stats.activePlanes'),
       value: activePlanes,
       icon: <CheckCircleOutlined />,
-      color: '#52c41a',
+      className: 'plane-stats-success',
     },
     {
       title: t('planes:stats.warningPlanes'),
       value: warningPlanes,
       icon: <ExclamationCircleOutlined />,
-      color: '#faad14',
+      className: 'plane-stats-warning',
     },
     {
       title: t('planes:stats.errorPlanes'),
       value: errorPlanes,
       icon: <CloseCircleOutlined />,
-      color: '#ff4d4f',
+      className: 'plane-stats-error',
     },
     {
       title: t('planes:stats.totalInstances'),
       value: totalInstances,
       icon: <NodeIndexOutlined />,
-      color: '#722ed1',
+      className: 'plane-stats-purple',
     },
     {
       title: t('planes:stats.healthyEntities'),
       value: totalHealthyEntities,
       icon: <CheckCircleOutlined />,
-      color: '#52c41a',
+      className: 'plane-stats-success',
     },
     {
       title: t('planes:stats.warningEntities'),
       value: totalWarningEntities,
       icon: <ExclamationCircleOutlined />,
-      color: '#faad14',
+      className: 'plane-stats-warning',
     },
     {
       title: t('planes:stats.errorEntities'),
       value: totalErrorEntities,
       icon: <CloseCircleOutlined />,
-      color: '#ff4d4f',
+      className: 'plane-stats-error',
     },
   ];
 
@@ -95,12 +95,11 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
     <Row gutter={[16, 16]} style={{ marginBottom: 32 }}>
       {statsData.map((stat, index) => (
         <Col xs={24} sm={12} md={6} lg={3} key={index}>
-          <Card loading={loading}>
+          <Card loading={loading} className={stat.className}>
             <Statistic
               title={stat.title}
               value={stat.value}
               prefix={stat.icon}
-              valueStyle={{ color: stat.color }}
             />
           </Card>
         </Col>
