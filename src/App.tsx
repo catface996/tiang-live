@@ -28,6 +28,7 @@ import './styles/hook-tasks.css'; // 导入钩子任务页面专用样式
 import './styles/report-management.css'; // 导入报告管理页面专用样式
 import './styles/ai-agent-management.css'; // 导入AI智能体管理页面专用样式
 import './styles/prompt-templates.css'; // 导入提示词模板页面专用样式
+import './styles/tag-management.css'; // 导入标签管理页面专用样式
 import './styles/task-execution-history.css'; // 导入任务执行历史页面主题CSS
 import './styles/task-collection-run-detail.css'; // 导入任务集合执行详情页面主题CSS
 import './styles/diagnostic-reports.css'; // 导入诊断报告组件主题CSS

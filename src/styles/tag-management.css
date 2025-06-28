@@ -1,0 +1,308 @@
+/* 标签管理页面专用样式 - 确保彩色元素在主题切换时保持不变 */
+
+/* ========== 标签管理统计卡片样式 - 使用最强优先级 ========== */
+.tag-management-page {
+  /* 主色调统计卡片 - 蓝色 (总标签数) */
+  .tag-stats-primary {
+    /* 图标颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #1890ff !important;
+    }
+    
+    /* 数值颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #1890ff !important;
+    }
+    
+    /* 后缀颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #1890ff !important;
+    }
+  }
+  
+  /* 成功色统计卡片 - 绿色 (分类数量) */
+  .tag-stats-success {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #52c41a !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #52c41a !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #52c41a !important;
+    }
+  }
+  
+  /* 警告色统计卡片 - 橙色 (总使用次数) */
+  .tag-stats-warning {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #faad14 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #faad14 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #faad14 !important;
+    }
+  }
+  
+  /* 紫色统计卡片 - 紫色 (平均使用次数) */
+  .tag-stats-purple {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #722ed1 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #722ed1 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #722ed1 !important;
+    }
+  }
+  
+  /* 禁用过渡效果 */
+  .tag-stats-primary,
+  .tag-stats-success,
+  .tag-stats-warning,
+  .tag-stats-purple {
+    * {
+      transition: none !important;
+    }
+  }
+}
+
+/* ========== Category Display 彩色保持 ========== */
+.tag-management-page {
+  /* 分类卡片中的Badge颜色保持 */
+  .ant-badge .ant-badge-count {
+    color: #ffffff !important; /* 确保Badge中的数字始终为白色，保持可读性 */
+  }
+  
+  /* 分类标题图标颜色保持 */
+  .category-icon {
+    color: var(--icon-color) !important;
+  }
+  
+  /* 特定分类的颜色定义 - 根据实际的categoryMap */
+  .category-environment .category-icon {
+    color: #1890ff !important;
+  }
+  
+  .category-business .category-icon {
+    color: #52c41a !important;
+  }
+  
+  .category-feature .category-icon {
+    color: #faad14 !important;
+  }
+  
+  .category-architecture .category-icon {
+    color: #722ed1 !important;
+  }
+  
+  .category-component .category-icon {
+    color: #13c2c2 !important;
+  }
+  
+  /* Badge颜色保持 - 背景色和文字色都要设置 */
+  .category-environment .ant-badge .ant-badge-count {
+    background-color: #1890ff !important;
+    color: #ffffff !important;
+  }
+  
+  .category-business .ant-badge .ant-badge-count {
+    background-color: #52c41a !important;
+    color: #ffffff !important;
+  }
+  
+  .category-feature .ant-badge .ant-badge-count {
+    background-color: #faad14 !important;
+    color: #ffffff !important;
+  }
+  
+  .category-architecture .ant-badge .ant-badge-count {
+    background-color: #722ed1 !important;
+    color: #ffffff !important;
+  }
+  
+  .category-component .ant-badge .ant-badge-count {
+    background-color: #13c2c2 !important;
+    color: #ffffff !important;
+  }
+  
+  /* 额外的强制覆盖，确保在所有情况下都生效 */
+  .ant-badge-count {
+    color: #ffffff !important;
+  }
+  
+  /* 针对可能的嵌套结构进行额外处理 */
+  .category-environment .ant-badge .ant-badge-count,
+  .category-environment .ant-badge-count {
+    background-color: #1890ff !important;
+    color: #ffffff !important;
+    border-color: #1890ff !important;
+  }
+  
+  .category-business .ant-badge .ant-badge-count,
+  .category-business .ant-badge-count {
+    background-color: #52c41a !important;
+    color: #ffffff !important;
+    border-color: #52c41a !important;
+  }
+  
+  .category-feature .ant-badge .ant-badge-count,
+  .category-feature .ant-badge-count {
+    background-color: #faad14 !important;
+    color: #ffffff !important;
+    border-color: #faad14 !important;
+  }
+  
+  .category-architecture .ant-badge .ant-badge-count,
+  .category-architecture .ant-badge-count {
+    background-color: #722ed1 !important;
+    color: #ffffff !important;
+    border-color: #722ed1 !important;
+  }
+  
+  .category-component .ant-badge .ant-badge-count,
+  .category-component .ant-badge-count {
+    background-color: #13c2c2 !important;
+    color: #ffffff !important;
+    border-color: #13c2c2 !important;
+  }
+}
+
+/* ========== Tag颜色动态渲染支持 ========== */
+.tag-management-page {
+  /* 让Tag完全使用动态设置的颜色，不被主题干预 */
+  .ant-tag {
+    /* 不设置任何颜色相关的样式，让Antd Tag组件使用其color属性 */
+    /* Tag的颜色完全由TSX中的color={tag.color}属性控制 */
+  }
+  
+  /* 强制移除可能影响Tag颜色的全局样式 */
+  .ant-tag,
+  .ant-tag.ant-tag-has-color {
+    /* 确保Tag能够使用其color属性设置的颜色 */
+    background-color: unset !important;
+    border-color: unset !important;
+    color: unset !important;
+    
+    /* 让Tag组件重新计算颜色 */
+    background: unset !important;
+    border: unset !important;
+  }
+  
+  /* 在暗色主题下也强制移除干扰 */
+  [data-theme="dark"] .ant-tag,
+  [data-theme="dark"] .ant-tag.ant-tag-has-color {
+    /* 不设置任何颜色相关的样式，让Tag保持其原有的动态颜色 */
+    background-color: unset !important;
+    border-color: unset !important;
+    color: unset !important;
+    background: unset !important;
+    border: unset !important;
+    
+    /* 移除可能的滤镜效果 */
+    filter: none !important;
+  }
+  
+  /* 确保hover状态不改变颜色，只改变透明度 */
+  .ant-tag:hover {
+    opacity: 0.8 !important;
+  }
+  
+  /* 可点击Tag的交互效果 */
+  .ant-tag[style*="cursor: pointer"]:hover {
+    opacity: 0.8 !important;
+    transform: scale(1.02) !important;
+    transition: all 0.2s ease !important;
+  }
+}
+
+/* ========== 全局强制覆盖 - 最高优先级 ========== */
+/* 针对StatsCard组件的特殊处理 */
+.tag-management-page .tag-stats-primary[class*="ant-card"] .ant-statistic-content-value,
+.tag-management-page .tag-stats-primary[class*="ant-card"] .ant-statistic-content-prefix,
+.tag-management-page .tag-stats-primary[class*="ant-card"] .ant-statistic-content-suffix,
+.tag-management-page .tag-stats-primary[class*="ant-card"] .anticon {
+  color: #1890ff !important;
+}
+
+.tag-management-page .tag-stats-success[class*="ant-card"] .ant-statistic-content-value,
+.tag-management-page .tag-stats-success[class*="ant-card"] .ant-statistic-content-prefix,
+.tag-management-page .tag-stats-success[class*="ant-card"] .ant-statistic-content-suffix,
+.tag-management-page .tag-stats-success[class*="ant-card"] .anticon {
+  color: #52c41a !important;
+}
+
+.tag-management-page .tag-stats-warning[class*="ant-card"] .ant-statistic-content-value,
+.tag-management-page .tag-stats-warning[class*="ant-card"] .ant-statistic-content-prefix,
+.tag-management-page .tag-stats-warning[class*="ant-card"] .ant-statistic-content-suffix,
+.tag-management-page .tag-stats-warning[class*="ant-card"] .anticon {
+  color: #faad14 !important;
+}
+
+.tag-management-page .tag-stats-purple[class*="ant-card"] .ant-statistic-content-value,
+.tag-management-page .tag-stats-purple[class*="ant-card"] .ant-statistic-content-prefix,
+.tag-management-page .tag-stats-purple[class*="ant-card"] .ant-statistic-content-suffix,
+.tag-management-page .tag-stats-purple[class*="ant-card"] .anticon {
+  color: #722ed1 !important;
+}

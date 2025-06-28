@@ -274,26 +274,9 @@ const MetaItem = styled.div<{ $isDark: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 12px;
+  padding: 4px 0;
   margin: 2px 0;
-  border-radius: 4px;
   font-size: 12px;
-  background: ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.03)' 
-    : 'rgba(0, 0, 0, 0.02)'
-  };
-  border: 1px solid ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.05)' 
-    : 'rgba(0, 0, 0, 0.04)'
-  };
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background: ${props => props.$isDark 
-      ? 'rgba(255, 255, 255, 0.05)' 
-      : 'rgba(0, 0, 0, 0.04)'
-    };
-  }
 `;
 
 const MetaLabel = styled.span<{ $isDark: boolean }>`
@@ -883,55 +866,46 @@ const EntityScan: React.FC = () => {
             <Divider style={{ margin: '12px 0' }} />
 
             <DataSourceActions>
-              <div className="scan-btn-row">
-                <Button 
-                  type="primary" 
-                  size="small" 
-                  icon={<ScanOutlined />}
-                  onClick={() => handleStartScanForDataSource(dataSource)}
-                  disabled={dataSource.status !== 'connected'}
-                  loading={isScanning && selectedDataSource === dataSource.id}
-                  block
-                >
-                  {isScanning && selectedDataSource === dataSource.id ? t('entityScan:status.running') : t('entityScan:scanConfig.startScan')}
-                </Button>
-              </div>
-              
               <div className="action-btn-row">
                 <Button 
                   type="text" 
                   size="small" 
                   icon={<EyeOutlined />}
                   onClick={() => handleViewDataSource(dataSource)}
-                >
-                  {t('common:view')}
-                </Button>
+                  title={t('common:view')}
+                />
                 <Button 
                   type="text" 
                   size="small" 
                   icon={<EditOutlined />}
                   onClick={() => handleEditDataSource(dataSource)}
-                >
-                  {t('common:edit')}
-                </Button>
+                  title={t('common:edit')}
+                />
                 <Button 
                   type="text" 
                   size="small" 
                   icon={<ReloadOutlined />}
                   onClick={() => handleTestConnection(dataSource)}
                   loading={dataSource.status === 'connecting'}
-                >
-                  {t('entityScan:dataSources.testConnection')}
-                </Button>
+                  title={t('entityScan:dataSources.testConnection')}
+                />
                 <Button 
                   type="text" 
                   size="small" 
                   danger
                   icon={<DeleteOutlined />}
                   onClick={() => handleDeleteDataSource(dataSource)}
-                >
-                  {t('common:delete')}
-                </Button>
+                  title={t('common:delete')}
+                />
+                <Button 
+                  type="text" 
+                  size="small" 
+                  icon={<ScanOutlined />}
+                  onClick={() => handleStartScanForDataSource(dataSource)}
+                  disabled={dataSource.status !== 'connected'}
+                  loading={isScanning && selectedDataSource === dataSource.id}
+                  title={isScanning && selectedDataSource === dataSource.id ? t('entityScan:status.running') : t('entityScan:scanConfig.startScan')}
+                />
               </div>
             </DataSourceActions>
           </DataSourceCard>
@@ -1446,74 +1420,76 @@ const EntityScan: React.FC = () => {
   return (
     <ScanContainer>
       {/* 页面头部 */}
-      <PageHeader>
-        <PageHeaderContent>
+      <PageHeader style={{ display: 'block' }}>
+        {/* Title和按钮在同一行 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <Title level={2} style={{ margin: 0 }}>
             <ScanOutlined /> {t('entityScan:title', '实体扫描')}
           </Title>
-          <Paragraph style={{ margin: '8px 0 0 0', color: isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)' }}>
-            {t('entityScan:description', '从外部数据源扫描和生成实体定义，支持数据库、API、云服务等多种数据源类型。')}
-          </Paragraph>
-        </PageHeaderContent>
-        <PageHeaderActions>
-          <Button
-            icon={<ReloadOutlined />}
-            onClick={handleRefreshDataSources}
-            title={t('entityScan:dataSources.refreshDataSources')}
-          >
-            {t('common:refresh')}
-          </Button>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleCreateDataSource}
-          >
-            {t('entityScan:dataSources.addDataSource')}
-          </Button>
-        </PageHeaderActions>
+          <div>
+            <Button
+              icon={<ReloadOutlined />}
+              onClick={handleRefreshDataSources}
+              title={t('entityScan:dataSources.refreshDataSources')}
+              style={{ marginRight: 8 }}
+            >
+              {t('common:refresh')}
+            </Button>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={handleCreateDataSource}
+            >
+              {t('entityScan:dataSources.addDataSource')}
+            </Button>
+          </div>
+        </div>
+        
+        {/* Paragraph单独一行，充满宽度 */}
+        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
+          {t('entityScan:description', '从外部数据源扫描和生成实体定义，支持数据库、API、云服务等多种数据源类型。')}
+        </Paragraph>
       </PageHeader>
 
       {/* 统计数据 */}
-      <StatsCard $isDark={isDark} title={t('entityScan:stats.title')}>
-        <Row gutter={[16, 16]}>
-          <Col xs={12} sm={8} lg={4}>
-            <StatItem $isDark={isDark}>
-              <StatValue color="#1890ff">{getStatistics().totalDataSources}</StatValue>
-              <StatLabel $isDark={isDark}>{t('entityScan:stats.totalDataSources')}</StatLabel>
-            </StatItem>
-          </Col>
-          <Col xs={12} sm={8} lg={4}>
-            <StatItem $isDark={isDark}>
-              <StatValue color="#52c41a">{getStatistics().connectedDataSources}</StatValue>
-              <StatLabel $isDark={isDark}>{t('entityScan:stats.connectedSources')}</StatLabel>
-            </StatItem>
-          </Col>
-          <Col xs={12} sm={8} lg={4}>
-            <StatItem $isDark={isDark}>
-              <StatValue color="#722ed1">{getStatistics().totalEntities}</StatValue>
-              <StatLabel $isDark={isDark}>{t('entityScan:stats.totalEntities')}</StatLabel>
-            </StatItem>
-          </Col>
-          <Col xs={12} sm={8} lg={4}>
-            <StatItem $isDark={isDark}>
-              <StatValue color="#fa8c16">{getStatistics().selectedEntities}</StatValue>
-              <StatLabel $isDark={isDark}>{t('entityScan:stats.selectedEntities')}</StatLabel>
-            </StatItem>
-          </Col>
-          <Col xs={12} sm={8} lg={4}>
-            <StatItem $isDark={isDark}>
-              <StatValue color="#13c2c2">{getStatistics().completedScans}</StatValue>
-              <StatLabel $isDark={isDark}>{t('entityScan:stats.completedScans')}</StatLabel>
-            </StatItem>
-          </Col>
-          <Col xs={12} sm={8} lg={4}>
-            <StatItem $isDark={isDark}>
-              <StatValue color="#eb2f96">{getStatistics().runningScans}</StatValue>
-              <StatLabel $isDark={isDark}>{t('entityScan:stats.runningScans')}</StatLabel>
-            </StatItem>
-          </Col>
-        </Row>
-      </StatsCard>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={12} sm={8} lg={4}>
+          <StatItem $isDark={isDark}>
+            <StatValue color="#1890ff">{getStatistics().totalDataSources}</StatValue>
+            <StatLabel $isDark={isDark}>{t('entityScan:stats.totalDataSources')}</StatLabel>
+          </StatItem>
+        </Col>
+        <Col xs={12} sm={8} lg={4}>
+          <StatItem $isDark={isDark}>
+            <StatValue color="#52c41a">{getStatistics().connectedDataSources}</StatValue>
+            <StatLabel $isDark={isDark}>{t('entityScan:stats.connectedSources')}</StatLabel>
+          </StatItem>
+        </Col>
+        <Col xs={12} sm={8} lg={4}>
+          <StatItem $isDark={isDark}>
+            <StatValue color="#722ed1">{getStatistics().totalEntities}</StatValue>
+            <StatLabel $isDark={isDark}>{t('entityScan:stats.totalEntities')}</StatLabel>
+          </StatItem>
+        </Col>
+        <Col xs={12} sm={8} lg={4}>
+          <StatItem $isDark={isDark}>
+            <StatValue color="#fa8c16">{getStatistics().selectedEntities}</StatValue>
+            <StatLabel $isDark={isDark}>{t('entityScan:stats.selectedEntities')}</StatLabel>
+          </StatItem>
+        </Col>
+        <Col xs={12} sm={8} lg={4}>
+          <StatItem $isDark={isDark}>
+            <StatValue color="#13c2c2">{getStatistics().completedScans}</StatValue>
+            <StatLabel $isDark={isDark}>{t('entityScan:stats.completedScans')}</StatLabel>
+          </StatItem>
+        </Col>
+        <Col xs={12} sm={8} lg={4}>
+          <StatItem $isDark={isDark}>
+            <StatValue color="#eb2f96">{getStatistics().runningScans}</StatValue>
+            <StatLabel $isDark={isDark}>{t('entityScan:stats.runningScans')}</StatLabel>
+          </StatItem>
+        </Col>
+      </Row>
 
       {/* 搜索筛选 */}
       <SearchFilterBar

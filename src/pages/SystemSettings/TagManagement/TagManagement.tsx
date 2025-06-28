@@ -36,6 +36,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
+import '../../../styles/tag-management.css';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -219,7 +220,7 @@ const TagManagement: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       render: (text: string, record: any) => (
-        <Tag color={record.color} style={{ fontSize: 14, padding: '4px 8px' }}>
+        <Tag color={record.color}>
           {text}
         </Tag>
       ),
@@ -249,7 +250,7 @@ const TagManagement: React.FC = () => {
       dataIndex: 'usageCount',
       key: 'usageCount',
       render: (count: number) => (
-        <Badge count={count} style={{ backgroundColor: '#52c41a' }} />
+        <span>{count}</span>
       ),
     },
     {
@@ -304,15 +305,15 @@ const TagManagement: React.FC = () => {
       const config = categoryMap[category as keyof typeof categoryMap];
       return (
         <Col xs={24} md={12} lg={8} key={category}>
-          <TagCard>
+          <TagCard className={`category-${category.toLowerCase()}`}>
             <TagCardHeader>
               <Space>
-                {config?.icon}
+                <span className="category-icon">{config?.icon}</span>
                 <Title level={4} style={{ margin: 0 }}>
                   {config?.name || category}
                 </Title>
               </Space>
-              <Badge count={tags.length} style={{ backgroundColor: config?.color }} />
+              <Badge count={tags.length} />
             </TagCardHeader>
             <TagCardContent>
               {tags.map(tag => (
@@ -333,20 +334,16 @@ const TagManagement: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer className="tag-management-page">
       <PageHeader>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <Title level={2} style={{ margin: 0 }}>
-              <Space>
-                <TagsOutlined style={{ color: iconColor }} />
-                {t('tags:title')}
-              </Space>
-            </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('tags:subtitle')}
-            </Paragraph>
-          </div>
+        {/* Title和按钮在同一行 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Title level={2} style={{ margin: 0 }}>
+            <Space>
+              <TagsOutlined />
+              {t('tags:title')}
+            </Space>
+          </Title>
           <Space>
             <Button icon={<ReloadOutlined />}>
               {t('common:refresh')}
@@ -356,50 +353,47 @@ const TagManagement: React.FC = () => {
             </Button>
           </Space>
         </div>
+        
+        {/* Paragraph单独一行，充满宽度 */}
+        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
+          {t('tags:subtitle')}
+        </Paragraph>
       </PageHeader>
 
       {/* 统计信息 */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="tag-stats-primary">
             <Statistic
               title={t('tags:stats.totalTags')}
               value={tagData.length}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<TagsOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="tag-stats-success">
             <Statistic
               title={t('tags:stats.categoryCount')}
               value={Object.keys(categoryMap).length}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<AppstoreOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="tag-stats-warning">
             <Statistic
               title={t('tags:stats.totalUsage')}
               value={tagData.reduce((sum, tag) => sum + tag.usageCount, 0)}
-              suffix={t('common:unit.times')}
-              valueStyle={{ color: '#faad14' }}
               prefix={<BgColorsOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="tag-stats-purple">
             <Statistic
               title={t('tags:stats.averageUsage')}
               value={Math.round(tagData.reduce((sum, tag) => sum + tag.usageCount, 0) / tagData.length)}
-              suffix={t('tags:stats.averageUsageSuffix')}
-              valueStyle={{ color: '#722ed1' }}
               prefix={<NodeIndexOutlined />}
             />
           </StatsCard>
