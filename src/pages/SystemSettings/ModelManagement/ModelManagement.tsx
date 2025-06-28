@@ -396,18 +396,14 @@ const ModelManagement: React.FC = () => {
   return (
     <PageContainer className="model-management-page">
       <PageHeader>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <Title className="page-title" level={2} style={{ margin: 0 }}>
-              <Space>
-                <SettingOutlined />
-                {t('models:title')}
-              </Space>
-            </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('models:subtitle')}
-            </Paragraph>
-          </div>
+        {/* Title和按钮在同一行 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Title className="page-title" level={2} style={{ margin: 0 }}>
+            <Space>
+              <SettingOutlined />
+              {t('models:title')}
+            </Space>
+          </Title>
           <Space>
             <Button icon={<ReloadOutlined />}>
               {t('common:refresh')}
@@ -417,6 +413,11 @@ const ModelManagement: React.FC = () => {
             </Button>
           </Space>
         </div>
+        
+        {/* Paragraph单独一行，充满宽度 */}
+        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
+          {t('models:subtitle')}
+        </Paragraph>
       </PageHeader>
 
       {/* 统计信息 */}

@@ -49,6 +49,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
+import '../../../styles/prompt-templates.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -435,7 +436,7 @@ API接口：{api_details}
                   </Space>
                 </div>
                 <div className="title-right">
-                  {prompt.isFavorite && <StarOutlined style={{ color: '#faad14' }} />}
+                  {prompt.isFavorite && <StarOutlined />}
                 </div>
               </div>
             }
@@ -464,15 +465,14 @@ API接口：{api_details}
               <Row gutter={16}>
                 <Col span={12}>
                   <div style={{ textAlign: 'center' }}>
-                    <Rate disabled value={prompt.rating} allowHalf style={{ fontSize: 12 }} />
-                    <div style={{ fontSize: 12, color: '#666' }}>{prompt.rating}</div>
+                    <Rate disabled value={prompt.rating} allowHalf />
+                    <div>{prompt.rating}</div>
                   </div>
                 </Col>
                 <Col span={12}>
                   <Statistic
                     title={t('prompts:stats.usageCount')}
                     value={prompt.usageCount}
-                    valueStyle={{ fontSize: 14 }}
                   />
                 </Col>
               </Row>
@@ -539,20 +539,16 @@ API接口：{api_details}
   const avgRating = promptData.reduce((sum, prompt) => sum + prompt.rating, 0) / promptData.length;
 
   return (
-    <PageContainer>
+    <PageContainer className="prompt-templates-page">
       <PageHeader>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <Title level={2} style={{ margin: 0 }}>
-              <Space>
-                <FileTextOutlined style={{ color: iconColor }} />
-                {t('prompts:title')}
-              </Space>
-            </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('prompts:subtitle')}
-            </Paragraph>
-          </div>
+        {/* Title和按钮在同一行 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Title level={2} style={{ margin: 0 }}>
+            <Space>
+              <FileTextOutlined />
+              {t('prompts:title')}
+            </Space>
+          </Title>
           <Space>
             <Button icon={<ReloadOutlined />}>
               {t('common:refresh')}
@@ -562,49 +558,47 @@ API接口：{api_details}
             </Button>
           </Space>
         </div>
+        
+        {/* Paragraph单独一行，充满宽度 */}
+        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
+          {t('prompts:subtitle')}
+        </Paragraph>
       </PageHeader>
 
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="prompt-stats-primary">
             <Statistic
               title={t('prompts:stats.totalTemplates')}
               value={promptData.length}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<FileTextOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="prompt-stats-success">
             <Statistic
               title={t('prompts:stats.publicTemplates')}
               value={publicPrompts}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="prompt-stats-warning">
             <Statistic
               title={t('prompts:stats.favoriteTemplates')}
               value={favoritePrompts}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: '#faad14' }}
               prefix={<StarOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="prompt-stats-purple">
             <Statistic
               title={t('prompts:stats.averageRating')}
               value={avgRating.toFixed(1)}
-              valueStyle={{ color: '#722ed1' }}
               prefix={<RobotOutlined />}
             />
           </StatsCard>
