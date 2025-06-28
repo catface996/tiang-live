@@ -25,8 +25,7 @@ const EntityScan = React.lazy(() => import('../pages/SystemSettings/EntityScan')
 
 // 子页面组件
 const PlaneCreateEdit = React.lazy(() => import('../pages/Plane/PlaneCreateEdit'));
-const EntityCreatePage = React.lazy(() => import('../pages/Entity/EntityCreatePage'));
-const EntityEditPage = React.lazy(() => import('../pages/Entity/EntityEditPage'));
+const EntityFormPage = React.lazy(() => import('../pages/Entity/EntityFormPage'));
 const AIAgentForm = React.lazy(() => import('../pages/AIAgent/AIAgentForm'));
 const AgentDetail = React.lazy(() => import('../pages/AIAgent/AgentDetail'));
 const ScanDetail = React.lazy(() => import('../pages/SystemSettings/EntityScan/ScanDetail'));
@@ -75,12 +74,12 @@ const AppRoutes: React.FC = () => {
         } />
         <Route path="entities/create" element={
           <Suspense fallback={<PageLoading />}>
-            <EntityCreatePage />
+            <EntityFormPage />
           </Suspense>
         } />
         <Route path="entities/edit/:id" element={
           <Suspense fallback={<PageLoading />}>
-            <EntityEditPage />
+            <EntityFormPage />
           </Suspense>
         } />
         <Route path="sequences" element={

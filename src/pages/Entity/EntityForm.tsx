@@ -36,81 +36,392 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector } from '../../store';
 import styled from 'styled-components';
 
 const { Title } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
 
-// 样式化组件
-const BreadcrumbContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+// Styled Components for perfect dark theme support
+const PageContainer = styled.div<{ $isDark: boolean }>`
+  min-height: 100vh;
+  background-color: ${props => props.$isDark ? '#0f0f0f' : '#f5f5f5'};
+  padding: 24px;
+  transition: background-color 0.2s ease;
+`;
+
+const ContentWrapper = styled.div<{ $isDark: boolean }>`
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: ${props => props.$isDark ? '#1a1a1a' : '#ffffff'};
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: ${props => props.$isDark 
+    ? '0 4px 20px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2)' 
+    : '0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
+  };
+  border: ${props => props.$isDark ? '1px solid #2a2a2a' : '1px solid #e8e8e8'};
+  transition: all 0.2s ease;
+`;
+
+const StyledCard = styled(Card)<{ $isDark: boolean }>`
+  margin-bottom: 24px;
+  border-radius: 12px;
+  background-color: ${props => props.$isDark ? '#1e1e1e' : '#ffffff'};
+  border: ${props => props.$isDark ? '1px solid #2a2a2a' : '1px solid #e8e8e8'};
+  overflow: hidden;
+  transition: all 0.2s ease;
   
+  &:hover {
+    box-shadow: ${props => props.$isDark 
+      ? '0 2px 12px rgba(0, 0, 0, 0.3)' 
+      : '0 2px 12px rgba(0, 0, 0, 0.06)'
+    };
+  }
+  
+  .ant-card-head {
+    background-color: ${props => props.$isDark ? '#232323' : '#fafafa'};
+    border-bottom: ${props => props.$isDark ? '1px solid #2a2a2a' : '1px solid #f0f0f0'};
+    padding: 16px 24px;
+  }
+  
+  .ant-card-head-title {
+    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .ant-card-extra {
+    color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+  }
+  
+  .ant-card-body {
+    background-color: ${props => props.$isDark ? '#1e1e1e' : '#ffffff'};
+    padding: 24px;
+  }
+`;
+
+const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
+  margin-bottom: 24px;
+  
+  /* 强制所有面包屑项目垂直居中对齐 */
   .ant-breadcrumb {
     display: flex;
     align-items: center;
     line-height: 1;
+  }
+  
+  .ant-breadcrumb ol {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .ant-breadcrumb li {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    line-height: 32px;
+  }
+  
+  .ant-breadcrumb-link {
+    color: ${props => props.$isDark ? '#e0e0e0' : '#666666'};
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    height: 32px;
+    line-height: 32px;
     
-    .ant-breadcrumb-link {
+    &:hover {
+      color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+    }
+  }
+  
+  .ant-breadcrumb-separator {
+    color: ${props => props.$isDark ? '#a0a0a0' : '#999999'};
+    display: flex;
+    align-items: center;
+    height: 32px;
+    line-height: 32px;
+    margin: 0 8px;
+  }
+  
+  /* Button组件样式 - 确保与其他元素高度一致 */
+  .ant-btn {
+    color: ${props => props.$isDark ? '#e0e0e0' : '#666666'};
+    border: none;
+    background: transparent;
+    padding: 0 8px;
+    height: 32px;
+    min-height: 32px;
+    line-height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    &:hover, &:focus {
+      color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+      background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.1)' : 'rgba(24, 144, 255, 0.06)'};
+      border-color: transparent;
+      box-shadow: none;
+    }
+    
+    /* Button内部元素对齐 */
+    .anticon {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      line-height: 1;
+    }
+    
+    span {
       display: flex;
       align-items: center;
       line-height: 1;
     }
+  }
+  
+  /* Space组件样式 - 确保与Button高度一致 */
+  .ant-space {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    line-height: 32px;
+  }
+  
+  .ant-space-item {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    line-height: 32px;
+  }
+  
+  /* 图标统一样式 */
+  .anticon {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 1;
+    height: 14px;
+  }
+  
+  /* 文字统一样式 */
+  span:not(.anticon) {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    height: auto;
+  }
+`;
+
+const StyledTitle = styled(Title)<{ $isDark: boolean }>`
+  &.ant-typography {
+    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'} !important;
+    margin-bottom: 32px !important;
+    font-weight: 700 !important;
+    font-size: 28px !important;
+    line-height: 1.2 !important;
+  }
+  
+  .anticon {
+    color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+    margin-right: 12px;
+  }
+`;
+
+const StyledSteps = styled(Steps)<{ $isDark: boolean }>`
+  .ant-steps-item-title {
+    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'} !important;
+    font-weight: 600 !important;
+  }
+  
+  .ant-steps-item-description {
+    color: ${props => props.$isDark ? '#a0a0a0' : '#666666'} !important;
+  }
+  
+  .ant-steps-item-wait {
+    .ant-steps-item-icon {
+      background-color: ${props => props.$isDark ? '#2a2a2a' : '#f5f5f5'};
+      border-color: ${props => props.$isDark ? '#3a3a3a' : '#d9d9d9'};
+    }
     
-    .ant-breadcrumb-separator {
-      display: flex;
-      align-items: center;
-      line-height: 1;
-      margin: 0 8px;
+    .ant-steps-icon {
+      color: ${props => props.$isDark ? '#6a6a6a' : '#999999'};
+    }
+  }
+  
+  .ant-steps-item-process {
+    .ant-steps-item-icon {
+      background-color: #4a9eff;
+      border-color: #4a9eff;
+    }
+  }
+  
+  .ant-steps-item-finish {
+    .ant-steps-item-icon {
+      background-color: ${props => props.$isDark ? '#1e4d3a' : '#f6ffed'};
+      border-color: #52c41a;
+    }
+    
+    .ant-steps-icon {
+      color: #52c41a;
     }
   }
 `;
 
-const PageContainer = styled.div`
-  padding: 24px;
-  background: #f5f5f5;
-  min-height: 100vh;
-`;
-
-const FormContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
-const StyledCard = styled(Card)`
-  margin-bottom: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const IconSelector = styled.div`
+const ActionButtons = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  
+  .left-buttons {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .right-buttons {
+    display: flex;
+    gap: 12px;
+  }
+`;
+
+const IconSelector = styled.div<{ $isDark: boolean }>`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+  
+  .icon-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border: 2px solid ${props => props.$isDark ? '#2a2a2a' : '#e8e8e8'};
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: ${props => props.$isDark ? '#232323' : '#fafafa'};
+    position: relative;
+    
+    &:hover {
+      border-color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+      background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.1)' : 'rgba(24, 144, 255, 0.06)'};
+      transform: translateY(-2px);
+      box-shadow: ${props => props.$isDark 
+        ? '0 4px 12px rgba(74, 158, 255, 0.2)' 
+        : '0 4px 12px rgba(24, 144, 255, 0.15)'
+      };
+    }
+    
+    &.selected {
+      border-color: #4a9eff;
+      background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.15)' : 'rgba(24, 144, 255, 0.08)'};
+      box-shadow: ${props => props.$isDark 
+        ? '0 0 0 3px rgba(74, 158, 255, 0.2)' 
+        : '0 0 0 3px rgba(24, 144, 255, 0.1)'
+      };
+    }
+    
+    .anticon {
+      font-size: 28px;
+      color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+      transition: color 0.2s ease;
+    }
+  }
+`;
+
+const TagContainer = styled.div<{ $isDark: boolean }>`
+  display: inline-flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 8px;
+  
+  .ant-tag {
+    background-color: ${props => props.$isDark ? '#232323' : '#f5f5f5'};
+    border: ${props => props.$isDark ? '1px solid #3a3a3a' : '1px solid #d9d9d9'};
+    color: ${props => props.$isDark ? '#e0e0e0' : '#333333'};
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: ${props => props.$isDark ? '#2a2a2a' : '#e6f7ff'};
+      border-color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+    }
+  }
 `;
 
-const IconOption = styled.div<{ selected: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 2px solid ${props => props.selected ? '#1890ff' : '#d9d9d9'};
-  border-radius: 6px;
-  cursor: pointer;
-  background: ${props => props.selected ? '#e6f7ff' : '#fff'};
-  transition: all 0.3s;
-
-  &:hover {
-    border-color: #1890ff;
-    background: #e6f7ff;
+const StyledAlert = styled(Alert)<{ $isDark: boolean }>`
+  &.ant-alert {
+    background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.1)' : '#e6f7ff'};
+    border: ${props => props.$isDark ? '1px solid rgba(74, 158, 255, 0.3)' : '1px solid #91d5ff'};
+    border-radius: 8px;
+    margin-bottom: 24px;
   }
+  
+  .ant-alert-message {
+    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+    font-weight: 500;
+  }
+  
+  .ant-alert-description {
+    color: ${props => props.$isDark ? '#e0e0e0' : '#666666'};
+  }
+  
+  .ant-alert-icon {
+    color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+  }
+`;
 
-  .anticon {
-    font-size: 18px;
-    color: ${props => props.selected ? '#1890ff' : '#666'};
+const FormSection = styled.div<{ $isDark: boolean }>`
+  .ant-form-item-label > label {
+    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    color: #ff4d4f;
+  }
+  
+  .ant-input,
+  .ant-input-number,
+  .ant-select-selector,
+  .ant-input-affix-wrapper {
+    background-color: ${props => props.$isDark ? '#232323' : '#ffffff'};
+    border-color: ${props => props.$isDark ? '#3a3a3a' : '#d9d9d9'};
+    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+    
+    &:hover {
+      border-color: ${props => props.$isDark ? '#4a9eff' : '#40a9ff'};
+    }
+    
+    &:focus,
+    &.ant-input-focused,
+    &.ant-select-focused .ant-select-selector {
+      border-color: #4a9eff;
+      box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+    }
+  }
+  
+  .ant-input::placeholder,
+  .ant-input-number-input::placeholder {
+    color: ${props => props.$isDark ? '#6a6a6a' : '#bfbfbf'};
+  }
+  
+  .ant-select-arrow {
+    color: ${props => props.$isDark ? '#a0a0a0' : '#999999'};
+  }
+  
+  .ant-form-item-explain-error {
+    color: #ff7875;
   }
 `;
 
@@ -118,6 +429,8 @@ const EntityForm: React.FC = () => {
   const { t } = useTranslation(['entities', 'common']);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { currentTheme } = useAppSelector((state) => state.theme);
+  const isDark = currentTheme === 'dark';
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -240,36 +553,37 @@ const EntityForm: React.FC = () => {
   ];
 
   const renderBasicInfo = () => (
-    <StyledCard title={t('entities:form.basicInfo')} extra={<InfoCircleOutlined />}>
-      <Row gutter={24}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="name"
-            label={t('entities:form.entityName')}
-            rules={[
-              { required: true, message: t('entities:form.entityNameRequired') },
-              { max: 50, message: t('entities:form.entityNameMaxLength') }
-            ]}
-          >
-            <Input placeholder={t('entities:form.entityNamePlaceholder')} />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="type"
-            label={t('entities:form.entityType')}
-            rules={[{ required: true, message: t('entities:form.entityTypeRequired') }]}
-          >
-            <Select placeholder={t('entities:form.entityTypeRequired')}>
-              {entityTypes.map(type => (
-                <Option key={type.value} value={type.value}>
-                  <Space>
-                    {type.icon}
-                    {type.label}
-                  </Space>
-                </Option>
-              ))}
-            </Select>
+    <StyledCard $isDark={isDark} title={t('entities:form.basicInfo')} extra={<InfoCircleOutlined />}>
+      <FormSection $isDark={isDark}>
+        <Row gutter={24}>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="name"
+              label={t('entities:form.entityName')}
+              rules={[
+                { required: true, message: t('entities:form.entityNameRequired') },
+                { max: 50, message: t('entities:form.entityNameMaxLength') }
+              ]}
+            >
+              <Input placeholder={t('entities:form.entityNamePlaceholder')} />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="type"
+              label={t('entities:form.entityType')}
+              rules={[{ required: true, message: t('entities:form.entityTypeRequired') }]}
+            >
+              <Select placeholder={t('entities:form.entityTypeRequired')}>
+                {entityTypes.map(type => (
+                  <Option key={type.value} value={type.value}>
+                    <Space>
+                      {type.icon}
+                      {type.label}
+                    </Space>
+                  </Option>
+                ))}
+              </Select>
           </Form.Item>
         </Col>
         <Col xs={24} md={12}>
@@ -317,55 +631,57 @@ const EntityForm: React.FC = () => {
         </Col>
         <Col xs={24}>
           <Form.Item label={t('entities:form.iconSelection')}>
-            <IconSelector>
+            <IconSelector $isDark={isDark}>
               {iconOptions.map(option => (
-                <IconOption
+                <div
                   key={option.key}
-                  selected={selectedIcon === option.key}
+                  className={`icon-option ${selectedIcon === option.key ? 'selected' : ''}`}
                   onClick={() => setSelectedIcon(option.key)}
                 >
                   {option.icon}
-                </IconOption>
+                </div>
               ))}
             </IconSelector>
           </Form.Item>
         </Col>
       </Row>
+      </FormSection>
     </StyledCard>
   );
 
   const renderConfigInfo = () => (
-    <StyledCard title={t('entities:form.configInfo')} extra={<SettingOutlined />}>
-      <Row gutter={24}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="version"
-            label={t('entities:form.version')}
-          >
-            <Input placeholder={t('entities:form.versionPlaceholder')} />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="port"
-            label={t('entities:form.port')}
-          >
-            <InputNumber 
-              placeholder={t('entities:form.portPlaceholder')} 
-              min={1} 
-              max={65535} 
-              style={{ width: '100%' }}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="healthCheckUrl"
-            label={t('entities:form.healthCheckUrl')}
-          >
-            <Input placeholder={t('entities:form.healthCheckUrlPlaceholder')} />
-          </Form.Item>
-        </Col>
+    <StyledCard $isDark={isDark} title={t('entities:form.configInfo')} extra={<SettingOutlined />}>
+      <FormSection $isDark={isDark}>
+        <Row gutter={24}>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="version"
+              label={t('entities:form.version')}
+            >
+              <Input placeholder={t('entities:form.versionPlaceholder')} />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="port"
+              label={t('entities:form.port')}
+            >
+              <InputNumber 
+                placeholder={t('entities:form.portPlaceholder')} 
+                min={1} 
+                max={65535} 
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="healthCheckUrl"
+              label={t('entities:form.healthCheckUrl')}
+            >
+              <Input placeholder={t('entities:form.healthCheckUrlPlaceholder')} />
+            </Form.Item>
+          </Col>
         <Col xs={24} md={12}>
           <Form.Item
             name="tags"
@@ -399,16 +715,17 @@ const EntityForm: React.FC = () => {
           </Form.Item>
         </Col>
       </Row>
+      </FormSection>
     </StyledCard>
   );
 
   const renderConfirmInfo = () => (
-    <StyledCard title={t('entities:form.confirmSubmit')} extra={<CheckOutlined />}>
-      <Alert
+    <StyledCard $isDark={isDark} title={t('entities:form.confirmSubmit')} extra={<CheckOutlined />}>
+      <StyledAlert
+        $isDark={isDark}
         message={t('entities:form.confirmInfoMessage')}
         type="info"
         showIcon
-        style={{ marginBottom: 24 }}
       />
       <Tabs
         items={[
@@ -416,7 +733,7 @@ const EntityForm: React.FC = () => {
             key: 'basic',
             label: t('entities:form.basicInfo'),
             children: (
-              <div>
+              <div style={{ padding: '16px 0' }}>
                 <p><strong>{t('entities:form.entityName')}：</strong>{form.getFieldValue('name')}</p>
                 <p><strong>{t('entities:form.entityType')}：</strong>{entityTypes.find(t => t.value === form.getFieldValue('type'))?.label}</p>
                 <p><strong>{t('entities:form.belongsToPlane')}：</strong>{planeOptions.find(p => p.value === form.getFieldValue('plane'))?.label}</p>
@@ -429,11 +746,17 @@ const EntityForm: React.FC = () => {
             key: 'config',
             label: t('entities:form.configInfo'),
             children: (
-              <div>
+              <div style={{ padding: '16px 0' }}>
                 <p><strong>{t('entities:form.version')}：</strong>{form.getFieldValue('version') || t('entities:form.notSet')}</p>
                 <p><strong>{t('entities:form.port')}：</strong>{form.getFieldValue('port') || t('entities:form.notSet')}</p>
                 <p><strong>{t('entities:form.healthCheckUrl')}：</strong>{form.getFieldValue('healthCheckUrl') || t('entities:form.notSet')}</p>
-                <p><strong>{t('entities:form.tags')}：</strong>{form.getFieldValue('tags')?.join(', ') || t('entities:form.none')}</p>
+                <p><strong>{t('entities:form.tags')}：</strong>
+                  <TagContainer $isDark={isDark}>
+                    {form.getFieldValue('tags')?.map((tag: string) => (
+                      <Tag key={tag}>{tag}</Tag>
+                    )) || t('entities:form.none')}
+                  </TagContainer>
+                </p>
                 <p><strong>{t('entities:form.dependencies')}：</strong>{form.getFieldValue('dependencies')?.join(', ') || t('entities:form.none')}</p>
               </div>
             )
@@ -444,51 +767,41 @@ const EntityForm: React.FC = () => {
   );
 
   return (
-    <PageContainer>
-      <FormContainer>
+    <PageContainer $isDark={isDark}>
+      <ContentWrapper $isDark={isDark}>
         {/* 面包屑导航 */}
-        <BreadcrumbContainer>
-          <Breadcrumb>
-            <Breadcrumb.Item>
-              <Button 
-                type="text" 
-                icon={<HomeOutlined />}
-                onClick={() => navigate('/entities')}
-                style={{ 
-                  padding: 0, 
-                  border: 'none', 
-                  background: 'transparent',
-                  height: 'auto'
-                }}
-              >
-                {t('menu:entities')}
-              </Button>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <span style={{ display: 'flex', alignItems: 'center' }}>
-                <NodeIndexOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-                {mode === 'create' ? t('entities:createTitle') : t('entities:editTitle')}
-              </span>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-        </BreadcrumbContainer>
-
-        {/* 页面头部 */}
-        <div style={{ marginBottom: 24 }}>
-          <Title level={2} style={{ margin: 0 }}>
+        <StyledBreadcrumb $isDark={isDark}>
+          <Breadcrumb.Item>
+            <Button 
+              type="text" 
+              icon={<HomeOutlined />}
+              onClick={() => navigate('/entities')}
+            >
+              {t('menu:entities')}
+            </Button>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
             <Space>
-              <NodeIndexOutlined style={{ color: '#1890ff' }} />
+              <NodeIndexOutlined />
               {mode === 'create' ? t('entities:createTitle') : t('entities:editTitle')}
             </Space>
-          </Title>
-        </div>
+          </Breadcrumb.Item>
+        </StyledBreadcrumb>
+
+        {/* 页面标题 */}
+        <StyledTitle $isDark={isDark} level={2}>
+          <Space>
+            <NodeIndexOutlined />
+            {mode === 'create' ? t('entities:createTitle') : t('entities:editTitle')}
+          </Space>
+        </StyledTitle>
 
         {/* 步骤条 */}
-        <StyledCard>
-          <Steps
+        <StyledCard $isDark={isDark}>
+          <StyledSteps
+            $isDark={isDark}
             current={currentStep}
             items={steps}
-            style={{ marginBottom: 24 }}
           />
         </StyledCard>
 
@@ -506,16 +819,16 @@ const EntityForm: React.FC = () => {
           {currentStep === 2 && renderConfirmInfo()}
 
           {/* 操作按钮 */}
-          <StyledCard>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div>
+          <StyledCard $isDark={isDark}>
+            <ActionButtons>
+              <div className="left-buttons">
                 {currentStep > 0 && (
                   <Button onClick={() => setCurrentStep(currentStep - 1)}>
                     {t('entities:form.previousStep')}
                   </Button>
                 )}
               </div>
-              <Space>
+              <div className="right-buttons">
                 <Button onClick={handleBack}>
                   {t('common:cancel')}
                 </Button>
@@ -536,11 +849,11 @@ const EntityForm: React.FC = () => {
                     {mode === 'create' ? t('entities:form.createEntity') : t('entities:form.updateEntity')}
                   </Button>
                 )}
-              </Space>
-            </div>
+              </div>
+            </ActionButtons>
           </StyledCard>
         </Form>
-      </FormContainer>
+      </ContentWrapper>
     </PageContainer>
   );
 };
