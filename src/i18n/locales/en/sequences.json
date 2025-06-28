@@ -12,7 +12,7 @@
   "steps": "Steps",
   "stepCount": "Step Count",
   "executionDuration": "Execution Duration",
-  "executionUnit": "Execution Unit",
+  "executionUnit": "times",
   "createdAt": "Created At",
   "createdBy": "Created By",
   "lastModified": "Last Modified",

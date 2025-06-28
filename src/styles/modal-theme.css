@@ -1,5 +1,78 @@
 /* 模态框主题适配 - 专门处理模态框内组件的主题问题 */
 
+/* ========== 全局Modal关闭按钮样式 ========== */
+/* 不依赖theme-modal类，直接应用到所有Modal */
+.ant-modal-close {
+  color: var(--text-secondary) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 2px !important;
+  transition: all 0.2s ease !important;
+  top: 16px !important;
+  right: 16px !important;
+  position: absolute !important;
+}
+
+.ant-modal-close:hover {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-hover) !important;
+}
+
+.ant-modal-close .ant-modal-close-x {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+.ant-modal-close .anticon {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
+/* ========== 暗色主题下的关闭按钮 ========== */
+.theme-dark .ant-modal-close {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.theme-dark .ant-modal-close:hover {
+  color: rgba(255, 255, 255, 0.85) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-dark .ant-modal-close .anticon {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.theme-dark .ant-modal-close:hover .anticon {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* ========== 浅色主题下的关闭按钮 ========== */
+.theme-light .ant-modal-close {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.theme-light .ant-modal-close:hover {
+  color: rgba(0, 0, 0, 0.75) !important;
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+.theme-light .ant-modal-close .anticon {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.theme-light .ant-modal-close:hover .anticon {
+  color: rgba(0, 0, 0, 0.75) !important;
+}
+
 /* ========== 模态框基础样式 ========== */
 .theme-modal {
   /* 模态框内容区域 */

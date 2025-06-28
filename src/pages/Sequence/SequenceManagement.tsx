@@ -32,6 +32,7 @@ import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import { SequenceDetail, SequenceForm } from '../../components/Sequence';
 import sequenceDataJson from '../../data/sequenceData.json';
+import '../../styles/sequence-management.css';
 
 // 时间格式化工具函数
 const formatDuration = (duration: string, t: any): string => {
@@ -438,13 +439,13 @@ const SequenceManagement: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer className="sequence-management-page">
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <Title level={2} style={{ margin: 0 }}>
               <Space>
-                <ControlOutlined style={{ color: '#1890ff' }} />
+                <ControlOutlined className="text-primary" />
                 {t('sequences:title')}
               </Space>
             </Title>
@@ -466,45 +467,37 @@ const SequenceManagement: React.FC = () => {
       {/* Statistics Cards */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="sequence-stats-primary">
             <Statistic
               title={t('sequences:stats.totalSequences')}
               value={sequenceData.length}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<ControlOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="sequence-stats-success">
             <Statistic
               title={t('sequences:stats.activeSequences')}
               value={activeSequences}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="sequence-stats-purple">
             <Statistic
               title={t('sequences:stats.executionCount')}
               value={1247}
-              suffix={t('sequences:executionUnit')}
-              valueStyle={{ color: '#722ed1' }}
               prefix={<ClockCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="sequence-stats-success">
             <Statistic
               title={t('sequences:stats.successRate')}
               value={98.5}
-              suffix="%"
-              valueStyle={{ color: '#52c41a' }}
               prefix={<Badge status="success" />}
             />
           </StatsCard>

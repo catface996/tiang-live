@@ -1,0 +1,324 @@
+/* 时序管理页面专用样式 - 确保彩色元素在主题切换时保持不变 */
+
+/* ========== 时序统计卡片样式 - 使用最强优先级 ========== */
+.sequence-management-page {
+  /* 主色调统计卡片 - 蓝色 (总时序数) */
+  .sequence-stats-primary {
+    /* 图标颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #1890ff !important;
+    }
+    
+    /* 数值颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #1890ff !important;
+    }
+    
+    /* 后缀颜色 */
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #1890ff !important;
+    }
+  }
+  
+  /* 成功色统计卡片 - 绿色 (活跃时序、成功率) */
+  .sequence-stats-success {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"],
+    .ant-badge {
+      color: #52c41a !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #52c41a !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #52c41a !important;
+    }
+  }
+  
+  /* 紫色统计卡片 - 紫色 (执行次数) */
+  .sequence-stats-purple {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #722ed1 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #722ed1 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #722ed1 !important;
+    }
+  }
+  
+  /* 警告色统计卡片 - 橙色 */
+  .sequence-stats-warning {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #faad14 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #faad14 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #faad14 !important;
+    }
+  }
+  
+  /* 错误色统计卡片 - 红色 */
+  .sequence-stats-error {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #ff4d4f !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #ff4d4f !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #ff4d4f !important;
+    }
+  }
+  
+  /* 信息色统计卡片 - 青色 */
+  .sequence-stats-info {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content-prefix,
+    .ant-statistic-content-prefix .anticon,
+    .anticon,
+    span[role="img"] {
+      color: #13c2c2 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content-value,
+    .ant-statistic-content-value,
+    .ant-statistic-content-value .ant-statistic-content-value-int,
+    .ant-statistic-content-value .ant-statistic-content-value-decimal {
+      color: #13c2c2 !important;
+    }
+    
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
+    .ant-statistic .ant-statistic-content-suffix,
+    .ant-statistic-content-suffix {
+      color: #13c2c2 !important;
+    }
+  }
+  
+  /* 通用彩色图标样式 */
+  .text-primary,
+  .anticon.text-primary,
+  span.text-primary {
+    color: #1890ff !important;
+  }
+  
+  .text-success,
+  .anticon.text-success,
+  span.text-success {
+    color: #52c41a !important;
+  }
+  
+  .text-warning,
+  .anticon.text-warning,
+  span.text-warning {
+    color: #faad14 !important;
+  }
+  
+  .text-error,
+  .anticon.text-error,
+  span.text-error {
+    color: #ff4d4f !important;
+  }
+  
+  .text-info,
+  .anticon.text-info,
+  span.text-info {
+    color: #13c2c2 !important;
+  }
+  
+  .text-purple,
+  .anticon.text-purple,
+  span.text-purple {
+    color: #722ed1 !important;
+  }
+  
+  /* 时序卡片中的状态标签颜色 */
+  .sequence-status-active {
+    background-color: #f6ffed !important;
+    border-color: #b7eb8f !important;
+    color: #52c41a !important;
+  }
+  
+  .sequence-status-inactive {
+    background-color: #f5f5f5 !important;
+    border-color: #d9d9d9 !important;
+    color: #8c8c8c !important;
+  }
+  
+  .sequence-status-error {
+    background-color: #fff2f0 !important;
+    border-color: #ffccc7 !important;
+    color: #ff4d4f !important;
+  }
+  
+  /* 执行状态徽章颜色 */
+  .execution-badge-success {
+    background-color: #52c41a !important;
+  }
+  
+  .execution-badge-processing {
+    background-color: #1890ff !important;
+  }
+  
+  .execution-badge-error {
+    background-color: #ff4d4f !important;
+  }
+  
+  .execution-badge-warning {
+    background-color: #faad14 !important;
+  }
+  
+  /* 禁用过渡效果 */
+  .sequence-stats-primary,
+  .sequence-stats-success,
+  .sequence-stats-purple,
+  .sequence-stats-warning,
+  .sequence-stats-error,
+  .sequence-stats-info {
+    * {
+      transition: none !important;
+    }
+  }
+}
+
+/* ========== 全局强制覆盖 - 最高优先级 ========== */
+.sequence-management-page .sequence-stats-primary [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.sequence-management-page .sequence-stats-primary [class*="ant-statistic"] [class*="prefix"],
+.sequence-management-page .sequence-stats-primary [class*="ant-statistic"] [class*="value"] {
+  color: #1890ff !important;
+}
+
+.sequence-management-page .sequence-stats-success [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.sequence-management-page .sequence-stats-success [class*="ant-statistic"] [class*="prefix"],
+.sequence-management-page .sequence-stats-success [class*="ant-statistic"] [class*="value"] {
+  color: #52c41a !important;
+}
+
+.sequence-management-page .sequence-stats-purple [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.sequence-management-page .sequence-stats-purple [class*="ant-statistic"] [class*="prefix"],
+.sequence-management-page .sequence-stats-purple [class*="ant-statistic"] [class*="value"] {
+  color: #722ed1 !important;
+}
+
+.sequence-management-page .sequence-stats-warning [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.sequence-management-page .sequence-stats-warning [class*="ant-statistic"] [class*="prefix"],
+.sequence-management-page .sequence-stats-warning [class*="ant-statistic"] [class*="value"] {
+  color: #faad14 !important;
+}
+
+.sequence-management-page .sequence-stats-error [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.sequence-management-page .sequence-stats-error [class*="ant-statistic"] [class*="prefix"],
+.sequence-management-page .sequence-stats-error [class*="ant-statistic"] [class*="value"] {
+  color: #ff4d4f !important;
+}
+
+.sequence-management-page .sequence-stats-info [class*="ant-statistic"] [class*="prefix"] [class*="anticon"],
+.sequence-management-page .sequence-stats-info [class*="ant-statistic"] [class*="prefix"],
+.sequence-management-page .sequence-stats-info [class*="ant-statistic"] [class*="value"] {
+  color: #13c2c2 !important;
+}
+
+/* ========== 深色主题下的强制覆盖 ========== */
+.theme-dark .sequence-management-page {
+  /* 在深色主题下，某些背景色需要调整以保持对比度 */
+  .sequence-status-active {
+    background-color: rgba(82, 196, 26, 0.1) !important;
+    border-color: rgba(82, 196, 26, 0.3) !important;
+  }
+  
+  .sequence-status-error {
+    background-color: rgba(255, 77, 79, 0.1) !important;
+    border-color: rgba(255, 77, 79, 0.3) !important;
+  }
+}
+
+.theme-dark .sequence-management-page .sequence-stats-primary,
+.theme-dark .sequence-management-page .sequence-stats-success,
+.theme-dark .sequence-management-page .sequence-stats-purple,
+.theme-dark .sequence-management-page .sequence-stats-warning,
+.theme-dark .sequence-management-page .sequence-stats-error,
+.theme-dark .sequence-management-page .sequence-stats-info {
+  * {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+}
