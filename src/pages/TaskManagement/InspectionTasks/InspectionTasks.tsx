@@ -53,6 +53,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
+import '../../../styles/inspection-tasks.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -615,7 +616,7 @@ const InspectionTasks: React.FC = () => {
   ) / inspectionTaskData.length;
 
   return (
-    <PageContainer>
+    <PageContainer className="inspection-tasks-page">
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
@@ -643,45 +644,41 @@ const InspectionTasks: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="inspection-stats-primary">
             <Statistic
               title={t('tasks:inspection.stats.totalTasks')}
               value={inspectionTaskData.length}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<SearchOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="inspection-stats-success">
             <Statistic
               title={t('tasks:inspection.stats.runningTasks')}
               value={runningTasks}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="inspection-stats-warning">
             <Statistic
               title={t('tasks:inspection.card.taskCollections')}
               value={totalCollections}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#faad14' }}
               prefix={<MonitorOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="inspection-stats-purple">
             <Statistic
               title={t('tasks:inspection.card.successRate')}
               value={avgSuccessRate.toFixed(1)}
               suffix="%"
-              valueStyle={{ color: '#722ed1' }}
               prefix={<CheckCircleOutlined />}
             />
           </StatsCard>
