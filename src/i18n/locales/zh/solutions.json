@@ -1,14 +1,14 @@
 {
-  "title": "行业模型",
-  "subtitle": "管理各行业的业务模型和解决方案",
-  "createSolution": "创建解决方案",
+  "title": "行业方案",
+  "subtitle": "管理各行业的业务方案和解决方案",
+  "createSolution": "创建方案",
   "refresh": "刷新",
   "allIndustries": "所有行业",
   "allStatuses": "所有状态",
   "allComplexities": "所有复杂度",
   "stats": {
-    "totalSolutions": "总解决方案数",
-    "activeSolutions": "活跃解决方案",
+    "totalSolutions": "总方案数",
+    "activeSolutions": "活跃方案",
     "businessEntities": "业务实体",
     "totalUsage": "总使用次数"
   },
@@ -31,7 +31,7 @@
     "complex": "复杂"
   },
   "search": {
-    "placeholder": "搜索解决方案名称、描述...",
+    "placeholder": "搜索方案名称、描述...",
     "industryType": "行业类型",
     "status": "状态",
     "complexity": "复杂度"
@@ -45,7 +45,7 @@
     "businessEntities": "业务实体"
   },
   "modal": {
-    "solutionName": "解决方案名称",
+    "solutionName": "方案名称",
     "description": "描述",
     "industryType": "行业类型",
     "complexity": "复杂度",

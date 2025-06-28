@@ -49,6 +49,7 @@ import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 import modelsData from '../../../data/models.json';
+import '../../../styles/model-management.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -393,7 +394,7 @@ const ModelManagement: React.FC = () => {
   const avgTemperature = modelData.reduce((sum, model) => sum + model.temperature, 0) / modelData.length;
 
   return (
-    <PageContainer>
+    <PageContainer className="model-management-page">
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
@@ -421,43 +422,39 @@ const ModelManagement: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="model-stats-primary">
             <Statistic
               title={t('models:stats.totalModels')}
               value={modelData.length}
               suffix={t('models:stats.unit')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<ExperimentOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="model-stats-success">
             <Statistic
               title={t('models:stats.activeModels')}
               value={activeModels}
               suffix={t('models:stats.unit')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="model-stats-warning">
             <Statistic
               title={t('models:stats.totalUsage')}
               value={totalUsage}
-              valueStyle={{ color: '#faad14' }}
               prefix={<ThunderboltOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="model-stats-purple">
             <Statistic
               title={t('models:stats.avgTemperature')}
               value={avgTemperature.toFixed(1)}
-              valueStyle={{ color: '#722ed1' }}
               prefix={<MonitorOutlined />}
             />
           </StatsCard>

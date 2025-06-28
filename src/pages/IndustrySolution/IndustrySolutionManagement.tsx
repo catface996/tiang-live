@@ -41,6 +41,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
+import '../../styles/industry-solution-management.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -772,7 +773,7 @@ const IndustrySolutionManagement: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer className="industry-solution-management-page">
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
@@ -800,45 +801,41 @@ const IndustrySolutionManagement: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="solution-stats-primary">
             <Statistic
               title={t('solutions:stats.totalSolutions')}
               value={solutionData.length}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<SolutionOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="solution-stats-success">
             <Statistic
               title={t('solutions:stats.activeSolutions')}
               value={solutionData.filter(s => s.status === 'active').length}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<DeploymentUnitOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="solution-stats-warning">
             <Statistic
               title={t('solutions:stats.businessEntities')}
               value={solutionData.reduce((sum, s) => sum + s.entities.length, 0)}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#faad14' }}
               prefix={<ApiOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="solution-stats-purple">
             <Statistic
               title={t('solutions:stats.totalUsage')}
               value={solutionData.reduce((sum, s) => sum + s.usageCount, 0)}
               suffix={t('common:unit.times')}
-              valueStyle={{ color: '#722ed1' }}
               prefix={<TeamOutlined />}
             />
           </StatsCard>
