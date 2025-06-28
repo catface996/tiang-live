@@ -1,5 +1,44 @@
 /* Dashboard页面专用样式 - 确保彩色元素在主题切换时保持不变 */
 
+/* ========== Dashboard 页面头部样式 ========== */
+.dashboard-page {
+  .page-header {
+    margin-bottom: 24px !important;
+    display: block !important;
+  }
+  
+  .page-title,
+  .page-title.ant-typography {
+    margin-bottom: 8px !important;
+    display: block !important;
+    width: 100% !important;
+  }
+  
+  .page-subtitle,
+  .page-subtitle.ant-typography {
+    margin-bottom: 0 !important;
+    display: block !important;
+    width: 100% !important;
+  }
+}
+
+/* 更强的选择器覆盖 */
+.dashboard-page .page-header .ant-typography {
+  display: block !important;
+  width: 100% !important;
+}
+
+.dashboard-page .page-header .ant-typography h2 {
+  display: block !important;
+  width: 100% !important;
+  margin-bottom: 8px !important;
+}
+
+.dashboard-page .page-header .ant-typography div {
+  display: block !important;
+  width: 100% !important;
+}
+
 /* ========== Dashboard 统计卡片样式 - 使用最强优先级 ========== */
 .dashboard-page {
   /* 主色调统计卡片 - 蓝色 */

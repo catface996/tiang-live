@@ -349,9 +349,13 @@ const Dashboard: React.FC = () => {
   return (
     <PageContainer className="dashboard-page">
       {/* 页面头部 */}
-      <div className="page-header">
-        <Title className="page-title" level={2}>{t('dashboard:title')}</Title>
-        <Paragraph className="page-subtitle">{t('dashboard:subtitle')}</Paragraph>
+      <div className="page-header" style={{ marginBottom: '24px' }}>
+        <Title className="page-title" level={2} style={{ marginBottom: '8px', display: 'block' }}>
+          {t('dashboard:title')}
+        </Title>
+        <Paragraph className="page-subtitle" style={{ marginBottom: '0', display: 'block' }}>
+          {t('dashboard:subtitle')}
+        </Paragraph>
       </div>
 
       {/* 系统概览统计 */}
@@ -389,7 +393,6 @@ const Dashboard: React.FC = () => {
               title={t('dashboard:activeUsers')}
               value={systemStats.runningTasks}
               prefix={<UserOutlined />}
-              suffix={<span className="text-warning">个</span>}
             />
           </StatsCard>
         </Col>

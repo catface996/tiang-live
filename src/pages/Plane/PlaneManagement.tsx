@@ -113,13 +113,8 @@ const PlaneManagement: React.FC = () => {
     <PlaneContainer className="plane-management-page">
       {/* 页面头部 */}
       <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <Title level={2}>{t('planes:title')}</Title>
-            <Paragraph>
-              {t('planes:subtitle')}
-            </Paragraph>
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Title level={2} style={{ margin: 0 }}>{t('planes:title')}</Title>
           <Space>
             <Button 
               icon={<ReloadOutlined />} 
@@ -133,10 +128,13 @@ const PlaneManagement: React.FC = () => {
               icon={<PlusOutlined />} 
               onClick={handleCreatePlane}
             >
-              {t('common:add')} {t('planes:title')}
+              {t('planes:createTitle')}
             </Button>
           </Space>
         </div>
+        <Paragraph style={{ margin: 0 }}>
+          {t('planes:subtitle')}
+        </Paragraph>
       </div>
 
       {/* 错误提示 */}
