@@ -22,6 +22,7 @@ import './styles/entity-management.css'; // 导入实体管理页面专用样式
 import './styles/sequence-management.css'; // 导入时序管理页面专用样式
 import './styles/model-management.css'; // 导入模型管理页面专用样式
 import './styles/industry-solution-management.css'; // 导入行业方案管理页面专用样式
+import './styles/task-collection-management.css'; // 导入任务集合管理页面专用样式
 import './styles/task-execution-history.css'; // 导入任务执行历史页面主题CSS
 import './styles/task-collection-run-detail.css'; // 导入任务集合执行详情页面主题CSS
 import './styles/diagnostic-reports.css'; // 导入诊断报告组件主题CSS

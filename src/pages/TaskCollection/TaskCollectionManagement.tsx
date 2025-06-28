@@ -53,6 +53,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
+import '../../styles/task-collection-management.css';
 // 导入mock数据
 import taskCollectionMockData from '../../data/taskCollectionData.json';
 
@@ -840,7 +841,7 @@ const TaskCollectionManagement: React.FC = () => {
   const avgSuccessRate = taskCollectionData.reduce((sum, task) => sum + task.successRate, 0) / taskCollectionData.length;
 
   return (
-    <PageContainer>
+    <PageContainer className="task-collection-management-page">
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
@@ -868,45 +869,41 @@ const TaskCollectionManagement: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="collection-stats-primary">
             <Statistic
               title={t('tasks:collections.stats.totalCollections')}
               value={taskCollectionData.length}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<UnorderedListOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="collection-stats-success">
             <Statistic
               title={t('tasks:collections.stats.activeCollections')}
               value={activeTasks}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="collection-stats-warning">
             <Statistic
               title={t('tasks:collections.stats.totalTasks')}
               value={totalTargets}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#faad14' }}
               prefix={<MonitorOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-          <StatsCard>
+          <StatsCard className="collection-stats-purple">
             <Statistic
               title={t('tasks:collections.stats.executionRate')}
               value={avgSuccessRate.toFixed(1)}
               suffix="%"
-              valueStyle={{ color: '#722ed1' }}
               prefix={<CheckCircleOutlined />}
             />
           </StatsCard>
