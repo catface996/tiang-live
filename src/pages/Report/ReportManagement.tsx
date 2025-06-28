@@ -35,6 +35,7 @@ import { useAppSelector } from '../../store';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import { getAllReports } from '../../services/reportService';
 import type { Report } from '../../types/report';
+import '../../styles/report-management.css';
 
 const { Title, Paragraph } = Typography;
 const { RangePicker } = DatePicker;
@@ -318,51 +319,21 @@ const ReportManagement: React.FC = () => {
   );
 
   return (
-    <PageContainer $isDark={isDark}>
+    <PageContainer $isDark={isDark} className="report-management-page">
       <PageHeader $isDark={isDark}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <Title level={2} style={{ 
-              margin: 0,
-              color: isDark ? '#ffffff' : '#262626'
-            }}>
-              {t('reports:title')}
-              <Badge 
-                count={t('common:inDevelopment')} 
-                style={{ 
-                  backgroundColor: '#faad14', 
-                  marginLeft: 12,
-                  fontSize: 12 
-                }} 
-              />
-            </Title>
-            <Paragraph style={{ 
-              marginTop: 8, 
-              marginBottom: 0, 
-              fontSize: 16,
-              color: isDark ? '#8c8c8c' : '#666666'
-            }}>
-              {t('reports:subtitle')}
-            </Paragraph>
-          </div>
+        {/* Title和按钮在同一行 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Title level={2} style={{ margin: 0 }}>
+            {t('reports:title')}
+          </Title>
           <Space>
             <Button 
               icon={<ExportOutlined />}
-              style={{
-                color: isDark ? '#ffffff' : undefined,
-                borderColor: isDark ? '#434343' : undefined,
-                backgroundColor: isDark ? 'transparent' : undefined
-              }}
             >
               {t('reports:batchExport')}
             </Button>
             <Button 
               icon={<ReloadOutlined />}
-              style={{
-                color: isDark ? '#ffffff' : undefined,
-                borderColor: isDark ? '#434343' : undefined,
-                backgroundColor: isDark ? 'transparent' : undefined
-              }}
             >
               {t('common:refresh')}
             </Button>
@@ -371,50 +342,50 @@ const ReportManagement: React.FC = () => {
             </Button>
           </Space>
         </div>
+        
+        {/* Paragraph单独一行，充满宽度 */}
+        <Paragraph style={{ 
+          marginTop: 0, 
+          marginBottom: 0
+        }}>
+          {t('reports:subtitle')}
+        </Paragraph>
       </PageHeader>
 
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="report-stats-primary">
             <Statistic
               title={t('reports:stats.totalReports')}
               value={reportData.length}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               prefix={<FileTextOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="report-stats-success">
             <Statistic
               title={t('reports:stats.published')}
               value={reportData.filter(r => r.status === 'published').length}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               prefix={<EyeOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="report-stats-warning">
             <Statistic
               title={t('reports:stats.draft')}
               value={reportData.filter(r => r.status === 'draft').length}
-              suffix={t('common:unit.count')}
-              valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               prefix={<EditOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="report-stats-purple">
             <Statistic
               title={t('reports:stats.totalDownloads')}
               value={reportData.reduce((sum, r) => sum + r.downloads, 0)}
-              suffix={t('common:unit.times')}
-              valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
               prefix={<DownloadOutlined />}
             />
           </StatsCard>

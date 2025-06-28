@@ -51,6 +51,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
+import '../../../styles/hook-tasks.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -458,7 +459,7 @@ const HookTasks: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer className="hook-tasks-page">
       <PageHeader>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
@@ -486,44 +487,40 @@ const HookTasks: React.FC = () => {
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="hook-stats-primary">
             <Statistic
               title={t('hookTasks:stats.totalHooks')}
               value={hookTaskData.length}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#1890ff' }}
               prefix={<ApiOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="hook-stats-success">
             <Statistic
               title={t('hookTasks:stats.activeHooks')}
               value={hookTaskData.filter(h => h.status === 'active').length}
               suffix={t('common:unit.count')}
-              valueStyle={{ color: '#52c41a' }}
               prefix={<CheckCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="hook-stats-warning">
             <Statistic
               title={t('hookTasks:card.triggerCount')}
               value={hookTaskData.reduce((sum, h) => sum + h.statistics.totalTriggers, 0)}
-              valueStyle={{ color: '#faad14' }}
               prefix={<ThunderboltOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard>
+          <StatsCard className="hook-stats-purple">
             <Statistic
               title={t('hookTasks:stats.successRate')}
               value={(hookTaskData.reduce((sum, h) => sum + h.statistics.successRate, 0) / hookTaskData.length).toFixed(1)}
               suffix="%"
-              valueStyle={{ color: '#722ed1' }}
               prefix={<MonitorOutlined />}
             />
           </StatsCard>
@@ -624,14 +621,12 @@ const HookTasks: React.FC = () => {
                         title={t('hookTasks:card.successRate')}
                         value={hook.statistics.successRate}
                         suffix="%"
-                        valueStyle={{ fontSize: 14 }}
                       />
                     </Col>
                     <Col span={12}>
                       <Statistic
                         title={t('hookTasks:card.triggerCount')}
                         value={hook.statistics.totalTriggers}
-                        valueStyle={{ fontSize: 14 }}
                       />
                     </Col>
                   </Row>
