@@ -50,6 +50,7 @@ import { useAppSelector } from '../../store';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import { AgentCard } from '../../components/AgentCard';
 import type { Agent } from '../../components/AgentCard';
+import '../../styles/ai-agent-management.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
@@ -540,36 +541,19 @@ const AIAgentManagement: React.FC = () => {
   const totalCpu = agentData.reduce((sum, agent) => sum + agent.cpu, 0);
 
   return (
-    <PageContainer $isDark={isDark}>
+    <PageContainer $isDark={isDark} className="ai-agent-management-page">
       <PageHeader $isDark={isDark}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <Title level={2} style={{ 
-              margin: 0,
-              color: isDark ? '#ffffff' : '#262626'
-            }}>
-              <Space>
-                <RobotOutlined style={{ color: isDark ? '#177ddc' : '#1890ff' }} />
-                {t('agents:title')}
-              </Space>
-            </Title>
-            <Paragraph style={{ 
-              marginTop: 8, 
-              marginBottom: 0, 
-              fontSize: 16,
-              color: isDark ? '#8c8c8c' : '#666666'
-            }}>
-              {t('agents:subtitle')}
-            </Paragraph>
-          </div>
+        {/* Title和按钮在同一行 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Title level={2} style={{ margin: 0 }}>
+            <Space>
+              <RobotOutlined />
+              {t('agents:title')}
+            </Space>
+          </Title>
           <Space>
             <Button 
               icon={<ReloadOutlined />}
-              style={{
-                color: isDark ? '#ffffff' : undefined,
-                borderColor: isDark ? '#434343' : undefined,
-                backgroundColor: isDark ? 'transparent' : undefined
-              }}
             >
               {t('common:refresh')}
             </Button>
@@ -578,68 +562,55 @@ const AIAgentManagement: React.FC = () => {
             </Button>
           </Space>
         </div>
+        
+        {/* Paragraph单独一行，充满宽度 */}
+        <Paragraph style={{ 
+          marginTop: 0, 
+          marginBottom: 0
+        }}>
+          {t('agents:subtitle')}
+        </Paragraph>
       </PageHeader>
 
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="agent-stats-primary">
             <Statistic
               title={t('agents:stats.totalAgents')}
               value={agentData.length}
-              suffix={t('agents:stats.unit')}
-              valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               prefix={<RobotOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="agent-stats-success">
             <Statistic
               title={t('agents:stats.runningAgents')}
               value={runningAgents}
-              suffix={t('agents:stats.unit')}
-              valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               prefix={<PlayCircleOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="agent-stats-warning">
             <Statistic
               title={t('agents:stats.totalTasks')}
               value={totalTasks}
-              suffix={t('agents:stats.taskUnit')}
-              valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               prefix={<ThunderboltOutlined />}
             />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
+          <StatsCard $isDark={isDark} className="agent-stats-purple">
             <Statistic
               title={t('agents:stats.avgSuccessRate')}
               value={avgSuccessRate.toFixed(1)}
-              suffix="%"
-              valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
               prefix={<CheckCircleOutlined />}
             />
           </StatsCard>
         </Col>
       </Row>
-
-      {/* 系统状态提醒 */}
-      {totalCpu > 60 && (
-        <StyledAlert
-          $isDark={isDark}
-          message={t('agents:alerts.highCpuUsage')}
-          description={t('agents:alerts.highCpuUsageDesc', { cpu: totalCpu.toFixed(1) })}
-          type="warning"
-          showIcon
-          closable
-          style={{ marginBottom: 24 }}
-        />
-      )}
 
       {/* 搜索和筛选区域 */}
       <SearchFilterBar
@@ -675,21 +646,6 @@ const AIAgentManagement: React.FC = () => {
             ]
           }
         ]}
-        extraActions={
-          <div style={{ textAlign: 'right' }}>
-            <span style={{ color: isDark ? '#8c8c8c' : '#666666', fontSize: '14px' }}>
-              {t('agents:totalFound', { 
-                count: agentData.filter(agent => {
-                  const matchesSearch = agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                                       agent.description.toLowerCase().includes(searchText.toLowerCase());
-                  const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
-                  const matchesType = filterType === 'all' || agent.type === filterType;
-                  return matchesSearch && matchesStatus && matchesType;
-                }).length 
-              })}
-            </span>
-          </div>
-        }
       />
 
       {/* 智能体卡片展示 */}
