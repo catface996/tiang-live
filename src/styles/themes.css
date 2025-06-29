@@ -1723,3 +1723,33 @@
   left: calc(100% - 20px) !important;
   top: 2px !important;
 }
+/* ========== Template选中状态暗色主题优化 - 精确控制 ========== */
+
+/* 只针对Prompt Template的选中状态 */
+.theme-dark .prompt-templates .ant-list-item.ant-list-item-selected,
+.theme-dark .template-list .ant-list-item.ant-list-item-selected,
+.theme-dark [data-testid='template-item'].selected,
+.theme-dark .template-item.selected {
+  background: rgba(24, 144, 255, 0.15) !important;
+  border-color: #177ddc !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.theme-dark .prompt-templates .ant-list-item.ant-list-item-selected:hover,
+.theme-dark .template-list .ant-list-item.ant-list-item-selected:hover,
+.theme-dark [data-testid='template-item'].selected:hover,
+.theme-dark .template-item.selected:hover {
+  background: rgba(24, 144, 255, 0.2) !important;
+  border-color: #40a9ff !important;
+}
+
+/* 确保Template选中状态下的文字清晰可见 */
+.theme-dark .prompt-templates .ant-list-item-selected .ant-list-item-meta-title,
+.theme-dark .template-list .ant-list-item-selected .ant-list-item-meta-title {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.theme-dark .prompt-templates .ant-list-item-selected .ant-list-item-meta-description,
+.theme-dark .template-list .ant-list-item-selected .ant-list-item-meta-description {
+  color: rgba(255, 255, 255, 0.65) !important;
+}

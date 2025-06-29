@@ -378,3 +378,35 @@
   transform: translateY(-50%) translateX(calc(100% + 2px)) !important;
   margin-top: 0 !important;
 }
+/* ========== Prompt Configuration Tab 优化 - 精确控制 ========== */
+
+/* 只针对Template选中状态的精确优化 */
+.ai-agent-form-page .prompt-templates .ant-list-item.ant-list-item-selected,
+.ai-agent-form-page .template-list .ant-list-item.ant-list-item-selected,
+.ai-agent-form-page [data-testid='template-item'].selected,
+.ai-agent-form-page .template-item.selected {
+  background: rgba(24, 144, 255, 0.1) !important;
+  border-color: #177ddc !important;
+  color: var(--text-color) !important;
+}
+
+/* 暗色主题下的Template选中状态 - 精确控制 */
+.theme-dark .ai-agent-form-page .prompt-templates .ant-list-item.ant-list-item-selected,
+.theme-dark .ai-agent-form-page .template-list .ant-list-item.ant-list-item-selected,
+.theme-dark .ai-agent-form-page [data-testid='template-item'].selected,
+.theme-dark .ai-agent-form-page .template-item.selected {
+  background: rgba(24, 144, 255, 0.15) !important;
+  border-color: #177ddc !important;
+  color: var(--text-color) !important;
+}
+
+/* 确保选中的template文字清晰可见 */
+.theme-dark .ai-agent-form-page .prompt-templates .ant-list-item-selected .ant-list-item-meta-title,
+.theme-dark .ai-agent-form-page .template-list .ant-list-item-selected .ant-list-item-meta-title {
+  color: var(--text-color) !important;
+}
+
+.theme-dark .ai-agent-form-page .prompt-templates .ant-list-item-selected .ant-list-item-meta-description,
+.theme-dark .ai-agent-form-page .template-list .ant-list-item-selected .ant-list-item-meta-description {
+  color: var(--text-secondary) !important;
+}
