@@ -1235,7 +1235,7 @@
   border-bottom: 1px solid var(--border-color) !important;
 }
 
-/* 导航栏折叠按钮样式 */
+/* 导航栏折叠按钮样式 - 移除所有交互样式变化 */
 .collapse-button {
   font-size: 16px !important;
   width: 64px !important;
@@ -1244,36 +1244,64 @@
   align-items: center !important;
   justify-content: center !important;
   color: var(--text-color) !important;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 0;
-  transition: all 0.2s ease;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  transition: none !important;
   flex-shrink: 0;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.collapse-button:hover {
-  background-color: var(--menu-item-hover-bg) !important;
-  color: var(--primary-color) !important;
+/* 移除所有交互状态的样式变化 */
+.collapse-button:hover,
+.collapse-button:focus,
+.collapse-button:active,
+.collapse-button:focus-visible {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
-.collapse-button:focus {
-  background-color: var(--menu-item-hover-bg) !important;
-  color: var(--primary-color) !important;
-  outline: none;
-  box-shadow: inset 0 0 0 2px var(--primary-color);
-}
-
-.collapse-button:active {
-  background-color: var(--menu-item-active-bg) !important;
-  color: var(--primary-color) !important;
-}
-
-.collapse-button .ant-btn-icon {
-  margin-left: 0 !important;
-}
-
+/* 确保按钮内部元素也不会有样式变化 */
+.collapse-button .ant-btn-icon,
 .collapse-button .anticon {
-  font-size: 16px;
+  margin-left: 0 !important;
+  color: var(--text-color) !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.collapse-button:hover .ant-btn-icon,
+.collapse-button:focus .ant-btn-icon,
+.collapse-button:active .ant-btn-icon,
+.collapse-button:hover .anticon,
+.collapse-button:focus .anticon,
+.collapse-button:active .anticon {
+  color: var(--text-color) !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 高优先级覆盖Antd默认样式 */
+.ant-layout-header .collapse-button,
+.ant-layout-header .collapse-button:hover,
+.ant-layout-header .collapse-button:focus,
+.ant-layout-header .collapse-button:active,
+.ant-layout-header .collapse-button:focus-visible {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Plane Topology 特定样式 */
