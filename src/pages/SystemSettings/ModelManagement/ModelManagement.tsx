@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Card, 
-  Space, 
-  Button, 
-  Row, 
-  Col, 
+import {
+  Typography,
+  Card,
+  Space,
+  Button,
+  Row,
+  Col,
   Statistic,
   Tag,
   Modal,
   Form,
-  Input,
-  Select,
   Tabs,
   Descriptions,
   Tooltip,
-  message,
-  Alert,
-  InputNumber,
-  Slider
+  message
 } from 'antd';
-import { 
-  SettingOutlined, 
-  PlusOutlined, 
+import {
+  SettingOutlined,
+  PlusOutlined,
   ReloadOutlined,
   EyeOutlined,
   EditOutlined,
@@ -39,12 +34,11 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
+import ModelFormModal from './components/ModelFormModal';
 import modelsData from '../../../data/models.json';
 import '../../../styles/model-management.css';
 
 const { Title, Paragraph, Text } = Typography;
-const { Option } = Select;
-const { TextArea } = Input;
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -64,61 +58,61 @@ const ModelCard = styled(Card)`
   height: 100%;
   transition: all 0.3s ease;
   cursor: pointer;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  
+
   .ant-card-head {
     padding: 12px 16px;
     min-height: 57px;
-    
+
     .ant-card-head-title {
       padding: 0;
       font-size: 14px;
       font-weight: 500;
       width: 100%;
     }
-    
+
     .ant-card-extra {
       padding: 0;
     }
-    
+
     .card-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      
+
       .title-left {
         flex: 1;
         min-width: 0; /* 允许文本截断 */
-        
+
         span {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
       }
-      
+
       .title-right {
         flex-shrink: 0;
         margin-left: 8px;
       }
     }
   }
-  
+
   .card-actions {
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid #f0f0f0;
     display: flex;
     justify-content: flex-end;
-    
+
     .ant-btn {
       color: #666;
-      
+
       &:hover {
         color: #1890ff;
         background-color: rgba(24, 144, 255, 0.1);
@@ -193,10 +187,10 @@ const ModelManagement: React.FC = () => {
   }));
 
   const providerMap = {
-    'OpenAI': { color: 'green', icon: <ExperimentOutlined /> },
-    'Anthropic': { color: 'blue', icon: <RobotOutlined /> },
-    'Google': { color: 'red', icon: <CloudOutlined /> },
-    'Azure': { color: 'cyan', icon: <DatabaseOutlined /> }
+    OpenAI: { color: 'green', icon: <ExperimentOutlined /> },
+    Anthropic: { color: 'blue', icon: <RobotOutlined /> },
+    Google: { color: 'red', icon: <CloudOutlined /> },
+    Azure: { color: 'cyan', icon: <DatabaseOutlined /> }
   };
 
   const modelTypeMap = {
@@ -281,9 +275,7 @@ const ModelManagement: React.FC = () => {
                     <span>{model.name}</span>
                   </Space>
                 </div>
-                <div className="title-right">
-                  {getStatusTag(model.status)}
-                </div>
+                <div className="title-right">{getStatusTag(model.status)}</div>
               </div>
             }
             onClick={() => handleViewModel(model)}
@@ -298,11 +290,8 @@ const ModelManagement: React.FC = () => {
                 </Tag>
               </Space>
             </div>
-            
-            <Paragraph 
-              ellipsis={{ rows: 2 }} 
-              style={{ marginBottom: 16, minHeight: 40 }}
-            >
+
+            <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 16, minHeight: 40 }}>
               {model.description}
             </Paragraph>
 
@@ -328,16 +317,18 @@ const ModelManagement: React.FC = () => {
             <div style={{ marginBottom: 12 }}>
               <Space wrap>
                 {model.capabilities.slice(0, 3).map(cap => (
-                  <Tag key={cap} size="small">{cap}</Tag>
+                  <Tag key={cap} size="small">
+                    {cap}
+                  </Tag>
                 ))}
-                {model.capabilities.length > 3 && (
-                  <Tag size="small">+{model.capabilities.length - 3}</Tag>
-                )}
+                {model.capabilities.length > 3 && <Tag size="small">+{model.capabilities.length - 3}</Tag>}
               </Space>
             </div>
 
             <div style={{ fontSize: 12, color: '#666' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}
+              >
                 <span>{t('models:stats.version')}:</span>
                 <span>{model.version}</span>
               </div>
@@ -346,27 +337,27 @@ const ModelManagement: React.FC = () => {
                 <span>{model.lastUsed}</span>
               </div>
             </div>
-            
+
             {/* 操作按钮区域 - 单独一行，右对齐 */}
             <div className="card-actions">
               <Space>
                 <Tooltip title={t('models:viewDetails')}>
-                  <Button 
-                    type="text" 
-                    icon={<EyeOutlined />} 
+                  <Button
+                    type="text"
+                    icon={<EyeOutlined />}
                     size="small"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleViewModel(model);
                     }}
                   />
                 </Tooltip>
                 <Tooltip title={t('common:edit')}>
-                  <Button 
-                    type="text" 
-                    icon={<EditOutlined />} 
+                  <Button
+                    type="text"
+                    icon={<EditOutlined />}
                     size="small"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleEditModel(model);
                     }}
@@ -396,19 +387,15 @@ const ModelManagement: React.FC = () => {
             </Space>
           </Title>
           <Space>
-            <Button icon={<ReloadOutlined />}>
-              {t('common:refresh')}
-            </Button>
+            <Button icon={<ReloadOutlined />}>{t('common:refresh')}</Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateModel}>
               {t('models:addModel')}
             </Button>
           </Space>
         </div>
-        
+
         {/* Paragraph单独一行，充满宽度 */}
-        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
-          {t('models:subtitle')}
-        </Paragraph>
+        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>{t('models:subtitle')}</Paragraph>
       </PageHeader>
 
       {/* 统计信息 */}
@@ -435,11 +422,7 @@ const ModelManagement: React.FC = () => {
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard className="model-stats-warning">
-            <Statistic
-              title={t('models:stats.totalUsage')}
-              value={totalUsage}
-              prefix={<ThunderboltOutlined />}
-            />
+            <Statistic title={t('models:stats.totalUsage')} value={totalUsage} prefix={<ThunderboltOutlined />} />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
@@ -505,142 +488,16 @@ const ModelManagement: React.FC = () => {
       />
 
       {/* 模型卡片列表 */}
-      <Row gutter={[16, 16]}>
-        {renderModelCards()}
-      </Row>
+      <Row gutter={[16, 16]}>{renderModelCards()}</Row>
 
       {/* 创建/编辑模型模态框 */}
-      <Modal
-        title={editingModel ? t('models:editModel') : t('models:createModel')}
-        open={modalVisible}
+      <ModelFormModal
+        visible={modalVisible}
+        editingModel={editingModel}
+        form={form}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
-        width={800}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          initialValues={{
-            temperature: 0.7,
-            topP: 1.0,
-            maxTokens: 4096
-          }}
-        >
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="name"
-                label={t('models:form.name')}
-                rules={[{ required: true, message: t('models:form.nameRequired') }]}
-              >
-                <Input placeholder={t('models:form.namePlaceholder')} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="provider"
-                label={t('models:form.provider')}
-                rules={[{ required: true, message: t('models:form.providerRequired') }]}
-              >
-                <Select placeholder={t('models:form.providerPlaceholder')}>
-                  <Option value="OpenAI">{t('models:providers.OpenAI')}</Option>
-                  <Option value="Anthropic">{t('models:providers.Anthropic')}</Option>
-                  <Option value="Google">{t('models:providers.Google')}</Option>
-                  <Option value="Azure">{t('models:providers.Azure')}</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="modelType"
-                label={t('models:form.modelType')}
-                rules={[{ required: true, message: t('models:form.typeRequired') }]}
-              >
-                <Select placeholder={t('models:form.typePlaceholder')}>
-                  <Option value="llm">{t('models:types.llm')}</Option>
-                  <Option value="embedding">{t('models:types.embedding')}</Option>
-                  <Option value="image">{t('models:types.image')}</Option>
-                  <Option value="audio">{t('models:types.audio')}</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="version"
-                label={t('models:form.version')}
-                rules={[{ required: true, message: t('models:form.versionRequired') }]}
-              >
-                <Input placeholder={t('models:form.versionPlaceholder')} />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Form.Item
-            name="apiEndpoint"
-            label={t('models:form.apiEndpoint')}
-            rules={[{ required: true, message: t('models:form.endpointRequired') }]}
-          >
-            <Input placeholder={t('models:form.endpointPlaceholder')} />
-          </Form.Item>
-
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="maxTokens"
-                label={t('models:form.maxTokens')}
-                rules={[{ required: true, message: t('models:form.maxTokensRequired') }]}
-              >
-                <InputNumber
-                  min={1}
-                  max={128000}
-                  style={{ width: '100%' }}
-                  placeholder={t('models:form.maxTokensPlaceholder')}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="temperature"
-                label={t('models:form.temperature')}
-                rules={[{ required: true, message: t('models:form.temperatureRequired') }]}
-              >
-                <Slider
-                  min={0}
-                  max={2}
-                  step={0.1}
-                  marks={{
-                    0: '0',
-                    1: '1',
-                    2: '2'
-                  }}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Form.Item
-            name="description"
-            label={t('models:form.description')}
-            rules={[{ required: true, message: t('models:form.descriptionRequired') }]}
-          >
-            <TextArea 
-              rows={3} 
-              placeholder={t('models:form.descriptionPlaceholder')}
-            />
-          </Form.Item>
-
-          <Alert
-            message="提示"
-            description="API密钥等敏感信息将在保存后进行加密存储，请确保API端点的正确性。"
-            type="info"
-            showIcon
-            style={{ marginTop: 16 }}
-          />
-        </Form>
-      </Modal>
+      />
 
       {/* 模型详情模态框 */}
       <Modal
@@ -659,7 +516,7 @@ const ModelManagement: React.FC = () => {
                 {selectedModel.name}
               </Descriptions.Item>
               <Descriptions.Item label={t('models:detail.provider')}>
-                <Tag 
+                <Tag
                   color={providerMap[selectedModel.provider as keyof typeof providerMap]?.color}
                   icon={providerMap[selectedModel.provider as keyof typeof providerMap]?.icon}
                 >
@@ -667,16 +524,14 @@ const ModelManagement: React.FC = () => {
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item label={t('models:detail.type')}>
-                <Tag 
+                <Tag
                   color={modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.color}
                   icon={modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.icon}
                 >
                   {modelTypeMap[selectedModel.modelType as keyof typeof modelTypeMap]?.name}
                 </Tag>
               </Descriptions.Item>
-              <Descriptions.Item label={t('models:detail.version')}>
-                {selectedModel.version}
-              </Descriptions.Item>
+              <Descriptions.Item label={t('models:detail.version')}>{selectedModel.version}</Descriptions.Item>
               <Descriptions.Item label={t('models:detail.status')}>
                 {getStatusTag(selectedModel.status)}
               </Descriptions.Item>
@@ -684,17 +539,12 @@ const ModelManagement: React.FC = () => {
                 <Text code>{selectedModel.apiEndpoint}</Text>
               </Descriptions.Item>
               <Descriptions.Item label={t('models:detail.usageCount')}>
-                {selectedModel.usageCount}{t('models:stats.requestUnit')}
+                {selectedModel.usageCount}
+                {t('models:stats.requestUnit')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('models:detail.lastUsed')}>
-                {selectedModel.lastUsed}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('models:detail.createdBy')}>
-                {selectedModel.createdBy}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('models:detail.createdAt')}>
-                {selectedModel.createdAt}
-              </Descriptions.Item>
+              <Descriptions.Item label={t('models:detail.lastUsed')}>{selectedModel.lastUsed}</Descriptions.Item>
+              <Descriptions.Item label={t('models:detail.createdBy')}>{selectedModel.createdBy}</Descriptions.Item>
+              <Descriptions.Item label={t('models:detail.createdAt')}>{selectedModel.createdAt}</Descriptions.Item>
               <Descriptions.Item label={t('models:detail.description')} span={2}>
                 {selectedModel.description}
               </Descriptions.Item>
@@ -713,9 +563,7 @@ const ModelManagement: React.FC = () => {
                         <Descriptions.Item label={t('models:detail.temperature')}>
                           {selectedModel.temperature}
                         </Descriptions.Item>
-                        <Descriptions.Item label={t('models:detail.topP')}>
-                          {selectedModel.topP}
-                        </Descriptions.Item>
+                        <Descriptions.Item label={t('models:detail.topP')}>{selectedModel.topP}</Descriptions.Item>
                         <Descriptions.Item label={t('models:detail.frequencyPenalty')}>
                           {selectedModel.frequencyPenalty}
                         </Descriptions.Item>
@@ -742,15 +590,12 @@ const ModelManagement: React.FC = () => {
                   </Col>
                 </Row>
               </Tabs.TabPane>
-              
+
               <Tabs.TabPane tab={t('models:detail.capabilities')} key="capabilities">
                 <Row gutter={16}>
                   {selectedModel.capabilities.map(capability => (
                     <Col xs={24} sm={12} lg={8} key={capability}>
-                      <Card 
-                        size="small"
-                        style={{ marginBottom: 16 }}
-                      >
+                      <Card size="small" style={{ marginBottom: 16 }}>
                         <div style={{ textAlign: 'center' }}>
                           <CheckCircleOutlined style={{ color: '#52c41a', fontSize: 24, marginBottom: 8 }} />
                           <div>{capability}</div>
