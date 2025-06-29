@@ -59,7 +59,6 @@ const ExecutionCard = styled(Card)`
   border-radius: 6px;
   background-color: var(--bg-container);
   border: 1px solid var(--border-light);
-  transition: all 0.3s ease;
   
   &:hover {
     box-shadow: var(--shadow-hover);
@@ -92,7 +91,6 @@ const StatsCard = styled(Card)`
   background-color: var(--bg-container);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-card);
-  transition: all 0.3s ease;
   
   &:hover {
     box-shadow: var(--shadow-hover);
@@ -151,7 +149,6 @@ const BreadcrumbContainer = styled(Breadcrumb)`
     cursor: pointer;
     margin-left: 4px;
     color: var(--text-secondary);
-    transition: color 0.3s ease;
     
     &:hover {
       color: var(--primary);

@@ -27,7 +27,6 @@ interface BaseEntityCardProps {
 
 const StyledCard = styled(Card)`
   margin-bottom: 16px;
-  transition: all 0.3s ease;
   border-radius: 8px;
   
   &:hover {

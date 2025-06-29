@@ -20,7 +20,6 @@ const TopologyContainer = styled.div`
   padding: 0;
   margin: 16px 0;
   min-height: 400px;
-  transition: all 0.3s ease;
 `;
 
 const PlaneLevel = styled.div`

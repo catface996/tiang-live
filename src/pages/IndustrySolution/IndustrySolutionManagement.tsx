@@ -89,7 +89,6 @@ const StatsCard = styled(Card)`
 const SolutionCard = styled(Card)`
   height: 100%;
   min-height: 420px;
-  transition: all 0.3s ease;
   cursor: pointer;
   
   &:hover {

@@ -69,7 +69,6 @@
   background-color: var(--bg-container);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-card);
-  transition: all 0.3s ease;
 }
 
 .theme-card:hover {

@@ -102,7 +102,6 @@ const ScanCard = styled(Card)<{ $isDark: boolean }>`
 
 const DataSourceCard = styled(Card)<{ $isDark: boolean }>`
   height: 100%;
-  transition: all 0.3s ease;
   cursor: pointer;
   border-radius: 8px;
   background: ${props =>

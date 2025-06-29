@@ -46,7 +46,6 @@ const PageContainer = styled.div<{ $isDark: boolean }>`
   min-height: 100vh;
   background-color: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
   padding: 24px;
-  transition: background-color 0.2s ease;
 `;
 
 const ContentWrapper = styled.div<{ $isDark: boolean }>`
@@ -61,7 +60,6 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   background-color: ${props => props.$isDark ? '#1e1e1e' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #2a2a2a' : '1px solid #e8e8e8'};
   overflow: hidden;
-  transition: all 0.2s ease;
   
   &:hover {
     box-shadow: ${props => props.$isDark 
@@ -119,7 +117,6 @@ const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
   
   .ant-breadcrumb-link {
     color: ${props => props.$isDark ? '#e0e0e0' : '#666666'};
-    transition: color 0.2s ease;
     display: flex;
     align-items: center;
     height: 32px;
@@ -295,7 +292,6 @@ const IconSelector = styled.div<{ $isDark: boolean }>`
     border: 2px solid ${props => props.$isDark ? '#2a2a2a' : '#e8e8e8'};
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
     background-color: ${props => props.$isDark ? '#232323' : '#fafafa'};
     position: relative;
     
@@ -321,7 +317,6 @@ const IconSelector = styled.div<{ $isDark: boolean }>`
     .anticon {
       font-size: 28px;
       color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
-      transition: color 0.2s ease;
     }
   }
 `;
@@ -339,7 +334,6 @@ const TagContainer = styled.div<{ $isDark: boolean }>`
     border-radius: 6px;
     padding: 4px 12px;
     font-size: 13px;
-    transition: all 0.2s ease;
     
     &:hover {
       background-color: ${props => props.$isDark ? '#2a2a2a' : '#e6f7ff'};

@@ -17,7 +17,6 @@
   position: relative;
   overflow: hidden;
   margin-top: 16px;
-  transition: all 0.3s ease;
 }
 
 .topology-container svg {
@@ -36,7 +35,6 @@
   stroke: var(--border-base);
   stroke-width: 1.5;
   opacity: 0.9;
-  transition: all 0.3s ease;
 }
 
 .topology-container .layer-background:hover {
@@ -81,7 +79,6 @@
   fill: var(--text-secondary);
   font-size: 14px;
   font-weight: 600;
-  transition: fill 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -144,7 +141,6 @@
   box-shadow: var(--shadow-card);
   min-width: 120px;
   border: 1px solid var(--border-light);
-  transition: all 0.3s ease;
 }
 
 .legend-card:hover {
@@ -225,7 +221,6 @@
 .topology-container .node-circle {
   stroke-width: 2;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .topology-container .node-circle:hover {
@@ -482,7 +477,6 @@
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
-  transition: all 0.3s ease;
   box-shadow: var(--shadow-card);
   user-select: none;
 }
@@ -555,7 +549,6 @@
   z-index: 15;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
 }
 
 .zoom-hint.show {

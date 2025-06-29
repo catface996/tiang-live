@@ -4,7 +4,6 @@
 .ai-agent-form-page {
   background: var(--content-bg);
   color: var(--text-color);
-  transition: all 0.3s ease;
 }
 
 /* 面包屑导航 */
@@ -16,7 +15,6 @@
 .ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link {
   color: var(--text-secondary);
   cursor: pointer;
-  transition: color 0.3s ease;
 }
 
 .ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link:hover {
@@ -51,7 +49,6 @@
   border: 1px solid var(--card-border);
   border-radius: 8px;
   box-shadow: var(--card-shadow);
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .action-card .ant-card-body {
@@ -112,7 +109,6 @@
 .ai-agent-form-page .page-breadcrumb a {
   color: var(--text-secondary);
   text-decoration: none;
-  transition: color 0.3s ease;
 }
 
 .ai-agent-form-page .page-breadcrumb a:hover {
@@ -142,13 +138,11 @@
 /* 单选框优化 */
 .ai-agent-form-page .ant-radio-wrapper {
   color: var(--text-color);
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .ant-radio-inner {
   background-color: var(--bg-container);
   border-color: var(--border-base);
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .ant-radio:hover .ant-radio-inner {
@@ -167,13 +161,11 @@
 /* 复选框优化 */
 .ai-agent-form-page .ant-checkbox-wrapper {
   color: var(--text-color);
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .ant-checkbox-inner {
   background-color: var(--bg-container);
   border-color: var(--border-base);
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .ant-checkbox:hover .ant-checkbox-inner {
@@ -196,7 +188,6 @@
   height: 22px !important;
   min-width: 44px !important;
   line-height: 22px !important;
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .ant-switch:hover:not(.ant-switch-disabled) {
@@ -221,7 +212,6 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) !important;
   border-radius: 50% !important;
   position: absolute !important;
-  transition: all 0.3s ease !important;
 }
 
 .ai-agent-form-page .ant-switch-checked::after {
@@ -279,7 +269,6 @@
   background-color: var(--bg-container);
   border-color: var(--border-base);
   color: var(--text-color);
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .ant-radio-button-wrapper:hover {
@@ -385,7 +374,6 @@
   background-color: var(--bg-container);
   border-color: var(--border-base);
   color: var(--text-primary);
-  transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .prompt-template-item:hover {
@@ -440,7 +428,6 @@
   font-weight: 500 !important;
   padding: 2px 8px !important;
   border-radius: 4px !important;
-  transition: all 0.3s ease !important;
 }
 
 /* 选中状态下的标签颜色保护 - 确保不受选中状态影响 */
@@ -569,7 +556,6 @@
   background-color: var(--bg-container) !important;
   border-color: var(--border-base) !important;
   color: var(--text-primary) !important;
-  transition: all 0.3s ease !important;
 }
 
 .ai-agent-form-page .model-item:hover {
@@ -625,7 +611,6 @@
   background-color: var(--bg-container) !important;
   border-color: var(--border-base) !important;
   color: var(--text-primary) !important;
-  transition: all 0.3s ease !important;
 }
 
 .ai-agent-form-page .ant-card:hover {
@@ -650,7 +635,6 @@
   border-radius: 4px !important;
   font-size: 12px !important;
   font-weight: 500 !important;
-  transition: all 0.3s ease !important;
 }
 
 /* 运行中状态 - 绿色 */
@@ -708,13 +692,11 @@
 /* MCP Server 复选框优化 */
 .ai-agent-form-page .ant-checkbox-wrapper {
   color: var(--text-primary) !important;
-  transition: all 0.3s ease !important;
 }
 
 .ai-agent-form-page .ant-checkbox-inner {
   background-color: var(--bg-container) !important;
   border-color: var(--border-base) !important;
-  transition: all 0.3s ease !important;
 }
 
 .ai-agent-form-page .ant-checkbox:hover .ant-checkbox-inner {
@@ -789,7 +771,6 @@
 
 .ai-agent-form-page .mcp-server-item {
   margin-bottom: 8px !important;
-  transition: all 0.3s ease !important;
 }
 
 .ai-agent-form-page .mcp-server-item:hover {
@@ -866,7 +847,6 @@
 /* MCP Server 卡片选中状态优化 */
 .ai-agent-form-page .mcp-server-item {
   border: 1px solid var(--border-base) !important;
-  transition: all 0.3s ease !important;
 }
 
 .ai-agent-form-page .mcp-server-item:hover {
@@ -954,7 +934,6 @@
   font-weight: 500 !important;
   padding: 2px 8px !important;
   line-height: 1.4 !important;
-  transition: all 0.3s ease !important;
   border-width: 1px !important;
   border-style: solid !important;
 }

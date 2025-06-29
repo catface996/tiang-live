@@ -92,7 +92,6 @@ const StyledStatistic = styled(Statistic)<{ $isDark: boolean }>`
 
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
   height: 100%;
-  transition: all 0.3s ease;
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   border-radius: 8px !important;

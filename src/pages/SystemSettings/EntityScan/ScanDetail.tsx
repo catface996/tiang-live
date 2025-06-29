@@ -70,7 +70,6 @@ const EntityGrid = styled.div`
 `;
 
 const EntityCard = styled(Card)`
-  transition: all 0.3s ease;
   border-radius: 8px;
   cursor: pointer;
 

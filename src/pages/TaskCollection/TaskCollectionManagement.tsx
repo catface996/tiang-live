@@ -101,7 +101,6 @@ const StatsCard = styled(Card)`
 const TaskCard = styled(Card)`
   height: 100%;
   min-height: 450px;
-  transition: all 0.3s ease;
   cursor: pointer;
   
   &:hover {

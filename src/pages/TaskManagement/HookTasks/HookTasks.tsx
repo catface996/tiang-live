@@ -62,7 +62,6 @@ const StatsCard = styled(Card)`
 const HookCard = styled(Card)`
   height: 100%;
   min-height: 340px;
-  transition: all 0.3s ease;
   cursor: pointer;
   
   &:hover {

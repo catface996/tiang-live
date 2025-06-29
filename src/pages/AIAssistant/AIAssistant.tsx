@@ -41,7 +41,6 @@ const PageContainer = styled.div<{ $isDark: boolean }>`
   display: flex;
   flex-direction: column;
   background: ${props => (props.$isDark ? '#000000' : '#f5f5f5')};
-  transition: all 0.3s ease;
 `;
 
 const ChatContainer = styled.div`
@@ -59,7 +58,6 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   border: ${props => (props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0')};
   border-radius: 8px;
   box-shadow: ${props => (props.$isDark ? '0 2px 8px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.06)')};
-  transition: all 0.3s ease;
 
   .ant-card-body {
     flex: 1;
@@ -77,7 +75,6 @@ const MessagesContainer = styled.div<{ $isDark: boolean }>`
   border: ${props => (props.$isDark ? '1px solid #262626' : '1px solid #f0f0f0')};
   border-radius: 8px;
   margin-bottom: 16px;
-  transition: all 0.3s ease;
 
   /* 自定义滚动条 */
   &::-webkit-scrollbar {
@@ -133,7 +130,6 @@ const MessageBubble = styled.div<{ isUser: boolean; $isDark: boolean }>`
   box-shadow: ${props => (props.$isDark ? '0 2px 8px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.1)')};
   border: ${props => (props.$isDark && !props.isUser ? '1px solid #434343' : 'none')};
   position: relative;
-  transition: all 0.3s ease;
 
   &::before {
     content: '';
@@ -188,13 +184,11 @@ const SuggestionContainer = styled.div<{ $isDark: boolean }>`
   background: ${props => (props.$isDark ? '#1f1f1f' : '#f8f9fa')};
   border: ${props => (props.$isDark ? '1px solid #303030' : '1px solid #e8e8e8')};
   border-radius: 8px;
-  transition: all 0.3s ease;
 `;
 
 const SuggestionTag = styled(Tag)<{ $isDark: boolean }>`
   margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
   background: ${props => (props.$isDark ? 'rgba(24, 144, 255, 0.1)' : undefined)};
   border-color: ${props => (props.$isDark ? '#177ddc' : undefined)};
   color: ${props => (props.$isDark ? '#177ddc' : undefined)};

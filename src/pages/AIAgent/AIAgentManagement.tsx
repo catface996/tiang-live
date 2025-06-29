@@ -48,7 +48,6 @@ const PageContainer = styled.div<{ $isDark: boolean }>`
   padding: 24px;
   min-height: calc(100vh - 64px);
   background: ${props => (props.$isDark ? '#000000' : '#f5f5f5')};
-  transition: all 0.3s ease;
 `;
 
 const StatsCard = styled(Card)<{ $isDark: boolean }>`
@@ -56,7 +55,6 @@ const StatsCard = styled(Card)<{ $isDark: boolean }>`
   box-shadow: ${props => (props.$isDark ? '0 2px 8px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.06)')};
   border: ${props => (props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0')};
   background: ${props => (props.$isDark ? '#141414' : '#ffffff')};
-  transition: all 0.3s ease;
 
   .ant-card-body {
     padding: 16px;

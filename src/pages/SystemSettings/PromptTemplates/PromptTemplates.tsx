@@ -42,7 +42,6 @@ const StatsCard = styled(Card)`
 
 const PromptCard = styled(Card)`
   height: 100%;
-  transition: all 0.3s ease;
   cursor: pointer;
 
   &:hover {

@@ -31,7 +31,6 @@
   border-radius: 8px;
   border: 1px solid var(--border-base);
   background-color: var(--bg-container);
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -472,7 +471,6 @@
 .health-score-card,
 .diagnostic-card,
 .metric-card {
-  transition: all 0.3s ease;
 }
 
 .health-score-card:hover {

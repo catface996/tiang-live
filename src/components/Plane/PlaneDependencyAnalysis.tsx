@@ -27,7 +27,6 @@ const PlaneTag = styled.div<{ $planeId: string; $isDark: boolean }>`
 };
   border: 1px solid ${props => getPrimaryColorById(props.$planeId)};
   margin-right: 8px;
-  transition: all 0.2s ease;
   
   &:hover {
     background: ${props => props.$isDark 
@@ -44,7 +43,6 @@ const StatsOverview = styled.div<{ $isDark: boolean }>`
   background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
   border: 1px solid ${props => props.$isDark ? '#303030' : '#f0f0f0'};
   border-radius: 8px;
-  transition: all 0.3s ease;
   
   &:hover {
     border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};

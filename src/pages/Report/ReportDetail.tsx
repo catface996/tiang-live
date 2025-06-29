@@ -45,7 +45,6 @@ const PageContainer = styled.div`
   padding: 24px;
   min-height: 100vh;
   background: var(--bg-layout);
-  transition: all 0.3s ease;
 `;
 
 const StyledBreadcrumb = styled(Breadcrumb)`
@@ -54,7 +53,6 @@ const StyledBreadcrumb = styled(Breadcrumb)`
   .ant-breadcrumb-link {
     color: var(--text-secondary);
     cursor: pointer;
-    transition: color 0.2s ease;
 
     &:hover {
       color: var(--primary-color);
@@ -71,7 +69,6 @@ const ContentCard = styled(Card)`
   border-radius: 8px;
   background: var(--bg-container);
   border: 1px solid var(--border-primary);
-  transition: all 0.3s ease;
 
   .ant-card-body {
     padding: 24px;
@@ -219,7 +216,6 @@ const StatsCard = styled(Card)`
   border-radius: 8px;
   background: var(--bg-container);
   border: 1px solid var(--border-primary);
-  transition: all 0.3s ease;
 
   .ant-statistic-title {
     color: var(--text-secondary);

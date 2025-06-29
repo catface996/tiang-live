@@ -248,7 +248,6 @@
 
 /* ========== 主题过渡动画 ========== */
 * {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* 禁用某些元素的过渡效果以避免闪烁 */
@@ -258,5 +257,4 @@
 .ant-layout-content,
 .ant-menu,
 .ant-card {
-  transition: background-color 0.2s ease, border-color 0.2s ease;
 }

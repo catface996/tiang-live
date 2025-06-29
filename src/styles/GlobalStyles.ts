@@ -17,7 +17,6 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.colors.text.primary};
     background-color: ${({ theme }) => theme.colors.background.layout};
   }
-  }
 
   #root {
     height: 100%;
@@ -49,61 +48,49 @@ const GlobalStyles = createGlobalStyle`
     list-style: none;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    font-weight: 600;
-    color: ${({ theme }) => theme.colors.text.primary};
+  /* 精确移除主题切换相关的过渡效果 - 保留交互功能 */
+  
+  /* 移除背景色和颜色的过渡效果 */
+  * {
+    transition-property: none !important;
+  }
+  
+  *[style*="background"],
+  *[style*="color"],
+  *[class*="theme"] {
+    transition: none !important;
   }
 
-  p {
-    margin: 0;
+  /* 移除Antd组件主题相关的过渡效果，保留交互动画 */
+  .ant-input,
+  .ant-input-affix-wrapper,
+  .ant-input-search,
+  .ant-select-selector,
+  .ant-btn,
+  .ant-card,
+  .ant-layout,
+  .ant-layout-sider,
+  .ant-layout-header,
+  .ant-layout-content,
+  .ant-menu,
+  .ant-menu-item {
+    transition-property: none !important;
   }
 
-  a {
-    color: ${({ theme }) => theme.colors.primary};
-    text-decoration: none;
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.primary};
-      opacity: 0.8;
-    }
+  /* 保留下拉框的交互动画，只移除颜色过渡 */
+  .ant-select-dropdown,
+  .ant-select-item,
+  .ant-select-item-option {
+    transition-property: none !important;
   }
-
-  /* 工具类 */
-  .text-center {
-    text-align: center;
+  
+  /* 移除统计卡片的过渡效果 */
+  [class*="stats-card"] {
+    transition: none !important;
   }
-
-  .text-left {
-    text-align: left;
-  }
-
-  .text-right {
-    text-align: right;
-  }
-
-  .flex {
-    display: flex;
-  }
-
-  .flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .flex-between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .full-height {
-    height: 100%;
-  }
-
-  .full-width {
-    width: 100%;
+  
+  [class*="stats-card"] * {
+    transition: none !important;
   }
 `;
 

@@ -10,7 +10,6 @@
   width: 22px !important;
   height: 22px !important;
   border-radius: 2px !important;
-  transition: all 0.2s ease !important;
   top: 16px !important;
   right: 16px !important;
   position: absolute !important;
@@ -181,12 +180,10 @@
 .theme-modal .ant-descriptions-item:hover .ant-descriptions-item-label {
   color: var(--primary) !important;
   border-right-color: var(--primary) !important;
-  transition: all 0.2s ease;
 }
 
 .theme-modal .ant-descriptions-item:hover .ant-descriptions-item-content {
   background-color: var(--bg-hover) !important;
-  transition: all 0.2s ease;
 }
 
 /* ========== Typography 组件主题适配 ========== */
@@ -392,7 +389,6 @@
 .theme-modal .ant-modal-body::-webkit-scrollbar-thumb {
   background-color: var(--border-base);
   border-radius: 3px;
-  transition: background-color 0.3s;
 }
 
 .theme-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {

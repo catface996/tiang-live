@@ -70,7 +70,6 @@ export interface AgentCardProps {
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
   height: 100%;
   min-height: 420px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   border-radius: 12px !important;
@@ -115,7 +114,6 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
       color: ${props => props.$isDark ? '#8c8c8c' : '#666666'};
       border: none;
       background: transparent;
-      transition: all 0.2s ease;
       
       &:hover {
         color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
@@ -136,7 +134,6 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
       color: ${props => props.$isDark ? '#8c8c8c' : '#666'};
       border: none;
       background: transparent;
-      transition: all 0.2s ease;
       
       &:hover {
         color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};

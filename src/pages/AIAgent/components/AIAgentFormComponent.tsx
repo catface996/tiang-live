@@ -46,7 +46,6 @@ const PromptEditor = styled.div`
     border-radius: 6px;
     margin-bottom: 8px;
     cursor: pointer;
-    transition: all 0.3s;
     background-color: var(--bg-container, #ffffff);
     color: var(--text-primary, rgba(0, 0, 0, 0.88));
 
@@ -87,7 +86,6 @@ const ModelSelector = styled.div`
     border-radius: 6px;
     margin-bottom: 8px;
     cursor: pointer;
-    transition: all 0.3s;
     background-color: var(--bg-container, #ffffff);
     color: var(--text-primary, rgba(0, 0, 0, 0.88));
 
@@ -452,6 +450,14 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
     </ModelSelector>
   );
 
+  const handleMcpServerToggle = (serverId: string) => {
+    if (selectedMcpServers.includes(serverId)) {
+      setSelectedMcpServers(prev => prev.filter(id => id !== serverId));
+    } else {
+      setSelectedMcpServers(prev => [...prev, serverId]);
+    }
+  };
+
   const renderMcpServerSelector = () => (
     <div>
       <Text strong>{t('agents:form.mcpServers.selectServers')}：</Text>
@@ -460,18 +466,30 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
       </Paragraph>
       <div style={{ marginTop: 12 }}>
         {mcpServers.map(server => (
-          <Card key={server.id} size="small" style={{ marginBottom: 8 }} bodyStyle={{ padding: 12 }}>
+          <Card 
+            key={server.id} 
+            size="small" 
+            style={{ 
+              marginBottom: 8,
+              cursor: 'pointer',
+            }} 
+            bodyStyle={{ padding: 12 }}
+            onClick={() => handleMcpServerToggle(server.id)}
+            className={`mcp-server-item ${selectedMcpServers.includes(server.id) ? 'selected' : ''}`}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                   <Checkbox
                     checked={selectedMcpServers.includes(server.id)}
-                    onChange={e => {
-                      if (e.target.checked) {
-                        setSelectedMcpServers(prev => [...prev, server.id]);
-                      } else {
-                        setSelectedMcpServers(prev => prev.filter(id => id !== server.id));
-                      }
+                    onChange={(e) => {
+                      // 阻止事件冒泡，因为我们已经在Card的onClick中处理了
+                      e.stopPropagation();
+                      handleMcpServerToggle(server.id);
+                    }}
+                    onClick={(e) => {
+                      // 阻止点击复选框时触发Card的onClick
+                      e.stopPropagation();
                     }}
                   >
                     <Text strong>{server.name}</Text>

@@ -19,7 +19,6 @@ const StyledPlaneCard = styled(Card)<{ $level: number }>`
   margin-bottom: 16px;
   border: 2px solid var(--border-color);
   background-color: var(--card-bg);
-  transition: all 0.3s ease;
   
   &:hover {
     border-color: var(--primary-color);

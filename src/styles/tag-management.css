@@ -273,7 +273,6 @@
   .ant-tag[style*="cursor: pointer"]:hover {
     opacity: 0.8 !important;
     transform: scale(1.02) !important;
-    transition: all 0.2s ease !important;
   }
 }
 

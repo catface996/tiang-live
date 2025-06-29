@@ -76,7 +76,6 @@ const StatsCard = styled(Card)`
   background-color: var(--bg-container);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-card);
-  transition: all 0.3s ease;
   
   .ant-card-body {
     padding: 16px;
@@ -99,7 +98,6 @@ const StatsCard = styled(Card)`
 const SequenceCard = styled(Card)`
   height: 100%;
   cursor: pointer;
-  transition: all 0.3s ease;
   min-height: 320px;
   background-color: var(--bg-container);
   border: 1px solid var(--border-light);

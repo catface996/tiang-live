@@ -56,7 +56,6 @@ const StatsCard = styled(Card)`
 
 const TagCard = styled(Card)`
   height: 100%;
-  transition: all 0.3s ease;
   cursor: pointer;
   
   .ant-card-body {

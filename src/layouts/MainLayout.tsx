@@ -216,8 +216,7 @@ const MainLayout: React.FC = () => {
             height: '100vh',
             zIndex: isMobile ? 1000 : 100,
             overflow: 'auto',
-            transform: isMobile && collapsed ? 'translateX(-100%)' : 'translateX(0)',
-            transition: 'transform 0.3s ease'
+            transform: isMobile && collapsed ? 'translateX(-100%)' : 'translateX(0)'
           }}
         >
           {/* Logo区域 */}
@@ -227,7 +226,6 @@ const MainLayout: React.FC = () => {
             alignItems: 'center', 
             justifyContent: collapsed ? 'center' : 'flex-start',
             padding: collapsed ? '0' : '0 16px',
-            transition: 'all 0.2s',
             borderBottom: '1px solid var(--border-color)',
             position: 'sticky',
             top: 0,
@@ -239,8 +237,7 @@ const MainLayout: React.FC = () => {
               alignItems: 'center',
               fontSize: '18px',
               fontWeight: 600, 
-              gap: '8px',
-              transition: 'all 0.2s'
+              gap: '8px'
             }}>
               <img 
                 src={ASSETS.LOGO} 
@@ -248,8 +245,7 @@ const MainLayout: React.FC = () => {
                 style={{ 
                   width: '32px', 
                   height: '32px',
-                  objectFit: 'contain',
-                  transition: 'all 0.2s'
+                  objectFit: 'contain'
                 }} 
               />
               {!collapsed && (
@@ -288,7 +284,6 @@ const MainLayout: React.FC = () => {
 
         <Layout style={{ 
           marginLeft: isMobile ? 0 : (collapsed ? 80 : 200),
-          transition: 'margin-left 0.2s',
           height: '100vh',
           display: 'flex',
           flexDirection: 'column'
@@ -302,7 +297,6 @@ const MainLayout: React.FC = () => {
               right: 0,
               left: isMobile ? 0 : (collapsed ? 80 : 200),
               zIndex: 99,
-              transition: 'left 0.2s',
               height: '64px',
               lineHeight: '64px'
             }}

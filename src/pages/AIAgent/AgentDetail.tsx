@@ -43,7 +43,6 @@ const PageContainer = styled.div<{ $isDark: boolean }>`
   padding: 24px;
   min-height: calc(100vh - 64px);
   background: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
-  transition: all 0.3s ease;
 `;
 
 const HeaderCard = styled(Card)<{ $isDark: boolean }>`
