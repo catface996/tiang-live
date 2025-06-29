@@ -597,9 +597,9 @@ const AIAgentManagement: React.FC = () => {
       {/* 智能体卡片展示 */}
       <Row gutter={[16, 16]}>{renderAgentCards()}</Row>
 
-      {/* 创建/编辑智能体模态框 */}
+      {/* 创建智能体模态框 */}
       <Modal
-        title={editingAgent ? t('agents:editAgent') : t('agents:createAgent')}
+        title={t('agents:createAgent')}
         open={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
