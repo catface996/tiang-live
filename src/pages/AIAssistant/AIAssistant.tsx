@@ -206,16 +206,6 @@ const SuggestionTag = styled(Tag)<{ $isDark: boolean }>`
   }
 `;
 
-const PageHeader = styled.div<{ $isDark: boolean }>`
-  margin-bottom: 24px;
-  padding: 24px;
-  background: ${props => (props.$isDark ? '#141414' : '#ffffff')};
-  border: ${props => (props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0')};
-  border-radius: 8px;
-  box-shadow: ${props => (props.$isDark ? '0 2px 8px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.06)')};
-  transition: all 0.3s ease;
-`;
-
 interface Message {
   id: string;
   content: string;
@@ -381,71 +371,68 @@ const AIAssistant: React.FC = () => {
 
   return (
     <PageContainer $isDark={isDark}>
-      {/* 页面头部 */}
-      <PageHeader $isDark={isDark}>
-        {/* 标题和按钮行 */}
-        <Row justify="space-between" align="middle" style={{ marginBottom: 12 }}>
-          <Col>
-            <Title
-              level={2}
-              style={{
-                margin: 0,
-                color: isDark ? '#ffffff' : '#262626'
-              }}
-            >
-              <Space>
-                <MessageOutlined style={{ color: isDark ? '#177ddc' : '#1890ff' }} />
-                {t('aiAssistant:title')}
-              </Space>
-            </Title>
-          </Col>
-          <Col>
+      {/* 标题和按钮行 */}
+      <Row justify="space-between" align="middle" style={{ marginBottom: 12 }}>
+        <Col>
+          <Title
+            level={2}
+            style={{
+              margin: 0,
+              color: isDark ? '#ffffff' : '#262626'
+            }}
+          >
             <Space>
-              <Tooltip title={t('aiAssistant:clear')}>
-                <Button
-                  icon={<DeleteOutlined />}
-                  onClick={handleClearChat}
-                  style={{
-                    color: isDark ? '#ffffff' : undefined,
-                    borderColor: isDark ? '#434343' : undefined,
-                    backgroundColor: isDark ? 'transparent' : undefined
-                  }}
-                >
-                  {t('aiAssistant:clear')}
-                </Button>
-              </Tooltip>
-              <Tooltip title={t('common:refresh')}>
-                <Button
-                  icon={<ReloadOutlined />}
-                  onClick={() => window.location.reload()}
-                  style={{
-                    color: isDark ? '#ffffff' : undefined,
-                    borderColor: isDark ? '#434343' : undefined,
-                    backgroundColor: isDark ? 'transparent' : undefined
-                  }}
-                >
-                  {t('common:refresh')}
-                </Button>
-              </Tooltip>
+              <MessageOutlined style={{ color: isDark ? '#177ddc' : '#1890ff' }} />
+              {t('aiAssistant:title')}
             </Space>
-          </Col>
-        </Row>
+          </Title>
+        </Col>
+        <Col>
+          <Space>
+            <Tooltip title={t('aiAssistant:clear')}>
+              <Button
+                icon={<DeleteOutlined />}
+                onClick={handleClearChat}
+                style={{
+                  color: isDark ? '#ffffff' : undefined,
+                  borderColor: isDark ? '#434343' : undefined,
+                  backgroundColor: isDark ? 'transparent' : undefined
+                }}
+              >
+                {t('aiAssistant:clear')}
+              </Button>
+            </Tooltip>
+            <Tooltip title={t('common:refresh')}>
+              <Button
+                icon={<ReloadOutlined />}
+                onClick={() => window.location.reload()}
+                style={{
+                  color: isDark ? '#ffffff' : undefined,
+                  borderColor: isDark ? '#434343' : undefined,
+                  backgroundColor: isDark ? 'transparent' : undefined
+                }}
+              >
+                {t('common:refresh')}
+              </Button>
+            </Tooltip>
+          </Space>
+        </Col>
+      </Row>
 
-        {/* 描述行 */}
-        <Row>
-          <Col span={24}>
-            <Paragraph
-              style={{
-                marginBottom: 0,
-                fontSize: 16,
-                color: isDark ? '#8c8c8c' : '#666666'
-              }}
-            >
-              {t('aiAssistant:subtitle')}
-            </Paragraph>
-          </Col>
-        </Row>
-      </PageHeader>
+      {/* 描述行 */}
+      <Row style={{ marginBottom: 24 }}>
+        <Col span={24}>
+          <Paragraph
+            style={{
+              marginBottom: 0,
+              fontSize: 16,
+              color: isDark ? '#8c8c8c' : '#666666'
+            }}
+          >
+            {t('aiAssistant:subtitle')}
+          </Paragraph>
+        </Col>
+      </Row>
 
       <ChatContainer>
         <StyledCard $isDark={isDark}>
