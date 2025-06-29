@@ -55,12 +55,6 @@ const PageHeader = styled.div`
   margin-bottom: 24px;
 `;
 
-const StatsCard = styled(Card)`
-  .ant-card-body {
-    padding: 16px;
-  }
-`;
-
 const FilterBar = styled.div`
   margin-bottom: 24px;
   padding: 16px;
@@ -802,44 +796,44 @@ const ScanDetail: React.FC = () => {
       {/* 统计数据 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-primary">
+          <Card className="stats-card-primary">
             <Statistic
               title={t('entityScan:scanDetail.statistics.foundEntities')}
               value={stats.totalEntities}
               suffix="个"
               prefix={<AppstoreOutlined />}
             />
-          </StatsCard>
+          </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-success">
+          <Card className="stats-card-success">
             <Statistic
               title={t('entityScan:scanDetail.statistics.selected')}
               value={stats.selectedEntities}
               suffix="个"
               prefix={<CheckCircleOutlined />}
             />
-          </StatsCard>
+          </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-warning">
+          <Card className="stats-card-warning">
             <Statistic
               title={t('entityScan:scanDetail.statistics.dataTables')}
               value={stats.tableCount}
               suffix="个"
               prefix={<TableOutlined />}
             />
-          </StatsCard>
+          </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-info">
+          <Card className="stats-card-purple">
             <Statistic
               title={t('entityScan:scanDetail.statistics.views')}
               value={stats.viewCount}
               suffix="个"
               prefix={<EyeOutlined />}
             />
-          </StatsCard>
+          </Card>
         </Col>
       </Row>
 

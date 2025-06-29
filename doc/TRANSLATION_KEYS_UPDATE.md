@@ -1,9 +1,11 @@
 # 翻译Key更新说明
 
 ## 问题描述
+
 时序详情页面中使用了 `common:status`、`common:type`、`common:description` 等翻译key，与common命名空间中的key发生冲突，导致返回对象而不是字符串。
 
 ## 解决方案
+
 将时序相关的翻译key重命名为更具体的命名，避免与common命名空间冲突。
 
 ## 需要添加的新翻译Key
@@ -13,7 +15,7 @@
 ```json
 {
   "sequenceStatus": "状态",
-  "sequenceType": "类型", 
+  "sequenceType": "类型",
   "sequenceDescription": "描述",
   "statusFilter": "状态筛选"
 }
@@ -25,7 +27,7 @@
 {
   "sequenceStatus": "Status",
   "sequenceType": "Type",
-  "sequenceDescription": "Description", 
+  "sequenceDescription": "Description",
   "statusFilter": "Status Filter"
 }
 ```

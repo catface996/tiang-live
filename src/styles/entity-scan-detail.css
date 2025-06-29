@@ -1,6 +1,116 @@
 /* 实体扫描详情页面专用样式 - 参考实体管理页面设计 */
 
-/* ========== 实体扫描统计卡片样式 - 使用最强优先级 ========== */
+/* ========== 标准统计卡片样式 ========== */
+.entity-scan-detail-page {
+  /* 主色调统计卡片 - 蓝色 */
+  .stats-card-primary {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #1890ff !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 成功色统计卡片 - 绿色 */
+  .stats-card-success {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #52c41a !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 紫色统计卡片 */
+  .stats-card-purple {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #722ed1 !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 警告色统计卡片 - 橙色 */
+  .stats-card-warning {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #faad14 !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 禁用过渡效果 */
+  .stats-card-primary,
+  .stats-card-success,
+  .stats-card-purple,
+  .stats-card-warning {
+    * {
+      transition: none !important;
+    }
+  }
+}
+
+/* ========== 高优先级强制覆盖样式 ========== */
+.entity-scan-detail-page .stats-card-primary [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-detail-page .stats-card-primary [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-detail-page .stats-card-primary [class*='ant-statistic'] [class*='value'] {
+  color: #1890ff !important;
+}
+
+.entity-scan-detail-page .stats-card-success [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-detail-page .stats-card-success [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-detail-page .stats-card-success [class*='ant-statistic'] [class*='value'] {
+  color: #52c41a !important;
+}
+
+.entity-scan-detail-page .stats-card-purple [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-detail-page .stats-card-purple [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-detail-page .stats-card-purple [class*='ant-statistic'] [class*='value'] {
+  color: #722ed1 !important;
+}
+
+.entity-scan-detail-page .stats-card-warning [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-detail-page .stats-card-warning [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-detail-page .stats-card-warning [class*='ant-statistic'] [class*='value'] {
+  color: #faad14 !important;
+}
+
+/* ========== 实体扫描统计卡片样式 - 使用最强优先级 (保留备用) ========== */
 .entity-scan-detail-page {
   /* 主色调统计卡片 - 蓝色 (发现实体) */
   .entity-stats-primary {

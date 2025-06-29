@@ -1,0 +1,161 @@
+/* 实体扫描页面样式 */
+
+/* ========== 统计卡片样式 ========== */
+.entity-scan-page {
+  /* 主色调统计卡片 - 蓝色 */
+  .stats-card-primary {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #1890ff !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 成功色统计卡片 - 绿色 */
+  .stats-card-success {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #52c41a !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 紫色统计卡片 */
+  .stats-card-purple {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #722ed1 !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 警告色统计卡片 - 橙色 */
+  .stats-card-warning {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #faad14 !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 信息色统计卡片 - 青色 */
+  .stats-card-info {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #13c2c2 !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 错误色统计卡片 - 红色 */
+  .stats-card-error {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #ff4d4f !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+  }
+
+  /* 禁用过渡效果 */
+  .stats-card-primary,
+  .stats-card-success,
+  .stats-card-purple,
+  .stats-card-warning,
+  .stats-card-info,
+  .stats-card-error {
+    * {
+      transition: none !important;
+    }
+  }
+}
+
+/* ========== 高优先级强制覆盖样式 ========== */
+.entity-scan-page .stats-card-primary [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-page .stats-card-primary [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-page .stats-card-primary [class*='ant-statistic'] [class*='value'] {
+  color: #1890ff !important;
+}
+
+.entity-scan-page .stats-card-success [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-page .stats-card-success [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-page .stats-card-success [class*='ant-statistic'] [class*='value'] {
+  color: #52c41a !important;
+}
+
+.entity-scan-page .stats-card-purple [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-page .stats-card-purple [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-page .stats-card-purple [class*='ant-statistic'] [class*='value'] {
+  color: #722ed1 !important;
+}
+
+.entity-scan-page .stats-card-warning [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-page .stats-card-warning [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-page .stats-card-warning [class*='ant-statistic'] [class*='value'] {
+  color: #faad14 !important;
+}
+
+.entity-scan-page .stats-card-info [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-page .stats-card-info [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-page .stats-card-info [class*='ant-statistic'] [class*='value'] {
+  color: #13c2c2 !important;
+}
+
+.entity-scan-page .stats-card-error [class*='ant-statistic'] [class*='prefix'] [class*='anticon'],
+.entity-scan-page .stats-card-error [class*='ant-statistic'] [class*='prefix'],
+.entity-scan-page .stats-card-error [class*='ant-statistic'] [class*='value'] {
+  color: #ff4d4f !important;
+}

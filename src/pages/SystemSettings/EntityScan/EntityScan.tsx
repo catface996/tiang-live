@@ -17,7 +17,8 @@ import {
   message,
   Divider,
   Switch,
-  Badge
+  Badge,
+  Statistic
 } from 'antd';
 import {
   ScanOutlined,
@@ -36,12 +37,17 @@ import {
   EditOutlined,
   DeleteOutlined,
   EyeOutlined,
-  PlusOutlined
+  PlusOutlined,
+  AppstoreOutlined,
+  LinkOutlined,
+  PlayCircleOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../store';
+import '../../../styles/entity-scan.css';
 import { entityScanService } from '../../../services/entityScanService';
 import MonitoringDataSourceConfig from './MonitoringDataSourceConfig';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
@@ -75,69 +81,22 @@ const PageHeaderActions = styled.div`
 const StatsCard = styled(Card)<{ $isDark: boolean }>`
   margin-bottom: 24px;
   border-radius: 8px;
-  background: ${props => props.$isDark 
-    ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
-    : 'linear-gradient(145deg, #ffffff, #fafafa)'
-};
-  border: 1px solid ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.08)' 
-    : 'rgba(0, 0, 0, 0.06)'
-};
-  
+  background: ${props =>
+    props.$isDark ? 'linear-gradient(145deg, #1a1a1a, #141414)' : 'linear-gradient(145deg, #ffffff, #fafafa)'};
+  border: 1px solid ${props => (props.$isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)')};
+
   .ant-card-body {
     padding: 20px;
   }
 `;
 
-const StatItem = styled.div<{ $isDark: boolean }>`
-  text-align: center;
-  padding: 16px;
-  border-radius: 8px;
-  background: ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.03)' 
-    : 'rgba(0, 0, 0, 0.02)'
-};
-  border: 1px solid ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.05)' 
-    : 'rgba(0, 0, 0, 0.04)'
-};
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.05)' 
-    : 'rgba(0, 0, 0, 0.04)'
-};
-    transform: translateY(-2px);
-  }
-`;
-
-const StatValue = styled.div<{ color?: string }>`
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: ${props => props.color || '#1890ff'};
-`;
-
-const StatLabel = styled.div<{ $isDark: boolean }>`
-  font-size: 14px;
-  color: ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.65)' 
-    : 'rgba(0, 0, 0, 0.65)'
-};
-  font-weight: 500;
-`;
-
 const ScanCard = styled(Card)<{ $isDark: boolean }>`
   margin-bottom: 24px;
   border-radius: 8px;
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.06)'
-};
-  
+  box-shadow: ${props => (props.$isDark ? '0 2px 8px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.06)')};
+
   .ant-card-head {
-    border-bottom: 1px solid ${props => props.$isDark ? '#303030' : '#f0f0f0'};
+    border-bottom: 1px solid ${props => (props.$isDark ? '#303030' : '#f0f0f0')};
   }
 `;
 
@@ -146,35 +105,25 @@ const DataSourceCard = styled(Card)<{ $isDark: boolean }>`
   transition: all 0.3s ease;
   cursor: pointer;
   border-radius: 8px;
-  background: ${props => props.$isDark 
-    ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
-    : 'linear-gradient(145deg, #ffffff, #fafafa)'
-};
-  border: 1px solid ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.08)' 
-    : 'rgba(0, 0, 0, 0.06)'
-};
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255, 255, 255, 0.05)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.02)'
-};
-  
+  background: ${props =>
+    props.$isDark ? 'linear-gradient(145deg, #1a1a1a, #141414)' : 'linear-gradient(145deg, #ffffff, #fafafa)'};
+  border: 1px solid ${props => (props.$isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)')};
+  box-shadow: ${props =>
+    props.$isDark
+      ? '0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255, 255, 255, 0.05)'
+      : '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.02)'};
+
   &:hover {
     transform: translateY(-3px);
-    background: ${props => props.$isDark 
-    ? 'linear-gradient(145deg, #1f1f1f, #1a1a1a)' 
-    : 'linear-gradient(145deg, #ffffff, #f8f9fa)'
-};
-    border-color: ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.15)' 
-    : 'rgba(24, 144, 255, 0.3)'
-};
-    box-shadow: ${props => props.$isDark 
-    ? '0 6px 20px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(255, 255, 255, 0.08)' 
-    : '0 6px 20px rgba(24, 144, 255, 0.15), 0 3px 6px rgba(0, 0, 0, 0.08)'
-};
+    background: ${props =>
+      props.$isDark ? 'linear-gradient(145deg, #1f1f1f, #1a1a1a)' : 'linear-gradient(145deg, #ffffff, #f8f9fa)'};
+    border-color: ${props => (props.$isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(24, 144, 255, 0.3)')};
+    box-shadow: ${props =>
+      props.$isDark
+        ? '0 6px 20px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(255, 255, 255, 0.08)'
+        : '0 6px 20px rgba(24, 144, 255, 0.15), 0 3px 6px rgba(0, 0, 0, 0.08)'};
   }
-  
+
   .ant-card-body {
     padding: 20px;
     background: transparent;
@@ -206,21 +155,29 @@ const DataSourceIcon = styled.div<{ type: string; $isDark: boolean }>`
   position: relative;
   background: ${props => {
     switch (props.type) {
-      case 'mysql': return 'linear-gradient(135deg, #4479A1, #336791)';
-      case 'postgresql': return 'linear-gradient(135deg, #336791, #2E5984)';
-      case 'mongodb': return 'linear-gradient(135deg, #47A248, #3E8E41)';
-      case 'redis': return 'linear-gradient(135deg, #DC382D, #B92C20)';
-      case 'elasticsearch': return 'linear-gradient(135deg, #005571, #004A5C)';
-      case 'api': return 'linear-gradient(135deg, #1890ff, #096dd9)';
-      case 'file': return 'linear-gradient(135deg, #722ed1, #531dab)';
-      default: return 'linear-gradient(135deg, #8c8c8c, #595959)';
+      case 'mysql':
+        return 'linear-gradient(135deg, #4479A1, #336791)';
+      case 'postgresql':
+        return 'linear-gradient(135deg, #336791, #2E5984)';
+      case 'mongodb':
+        return 'linear-gradient(135deg, #47A248, #3E8E41)';
+      case 'redis':
+        return 'linear-gradient(135deg, #DC382D, #B92C20)';
+      case 'elasticsearch':
+        return 'linear-gradient(135deg, #005571, #004A5C)';
+      case 'api':
+        return 'linear-gradient(135deg, #1890ff, #096dd9)';
+      case 'file':
+        return 'linear-gradient(135deg, #722ed1, #531dab)';
+      default:
+        return 'linear-gradient(135deg, #8c8c8c, #595959)';
     }
   }};
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-};
-  
+  box-shadow: ${props =>
+    props.$isDark
+      ? '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+      : '0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)'};
+
   &::after {
     content: '';
     position: absolute;
@@ -244,17 +201,17 @@ const DataSourceActions = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  
+
   .scan-btn-row {
     display: flex;
     width: 100%;
   }
-  
+
   .action-btn-row {
     display: flex;
     justify-content: space-between;
     gap: 4px;
-    
+
     .ant-btn {
       flex: 1;
       font-size: 12px;
@@ -276,23 +233,17 @@ const MetaItem = styled.div<{ $isDark: boolean }>`
 
 const MetaLabel = styled.span<{ $isDark: boolean }>`
   font-weight: 500;
-  color: ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.65)' 
-    : 'rgba(0, 0, 0, 0.65)'
-};
+  color: ${props => (props.$isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.65)')};
 `;
 
 const MetaValue = styled.span<{ $isDark: boolean }>`
-  color: ${props => props.$isDark 
-    ? 'rgba(255, 255, 255, 0.85)' 
-    : 'rgba(0, 0, 0, 0.85)'
-};
+  color: ${props => (props.$isDark ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)')};
   font-weight: 500;
 `;
 
 const StatusTag = styled(Tag)<{ status: string }>`
   font-weight: bold;
-  
+
   ${props => {
     switch (props.status) {
       case 'success':
@@ -350,7 +301,7 @@ interface ScanResult {
 const EntityScan: React.FC = () => {
   const { t } = useTranslation(['entityScan', 'common']);
   const navigate = useNavigate();
-  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { currentTheme } = useAppSelector(state => state.theme);
   const isDark = currentTheme === 'dark';
 
   const [form] = Form.useForm();
@@ -363,7 +314,7 @@ const EntityScan: React.FC = () => {
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [showDataSourceConfig, setShowDataSourceConfig] = useState(false);
-  
+
   // 搜索和筛选状态
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -454,7 +405,7 @@ const EntityScan: React.FC = () => {
       failed: { color: 'error', text: t('entityScan:status.failed') },
       paused: { color: 'warning', text: t('entityScan:status.paused') }
     };
-    
+
     const config = statusMap[status as keyof typeof statusMap] || statusMap.disconnected;
     return <StatusTag status={config.color}>{config.text}</StatusTag>;
   };
@@ -502,7 +453,7 @@ const EntityScan: React.FC = () => {
       if (progress >= 100) {
         progress = 100;
         clearInterval(interval);
-        
+
         // 完成扫描
         const completedTask = {
           ...task,
@@ -512,16 +463,10 @@ const EntityScan: React.FC = () => {
           scannedCount: 156,
           generatedCount: 142,
           errorCount: 3,
-          logs: [
-            ...task.logs,
-            '扫描表结构完成',
-            '分析字段关系',
-            '生成实体定义',
-            '扫描完成'
-          ]
+          logs: [...task.logs, '扫描表结构完成', '分析字段关系', '生成实体定义', '扫描完成']
         };
 
-        setScanTasks(prev => prev.map(t => t.id === task.id ? completedTask : t));
+        setScanTasks(prev => prev.map(t => (t.id === task.id ? completedTask : t)));
         setCurrentTask(completedTask);
         setIsScanning(false);
 
@@ -534,12 +479,9 @@ const EntityScan: React.FC = () => {
           progress: Math.round(progress),
           scannedCount: Math.round(progress * 1.56),
           generatedCount: Math.round(progress * 1.42),
-          logs: [
-            ...task.logs,
-            `扫描进度: ${Math.round(progress)}%`
-          ]
+          logs: [...task.logs, `扫描进度: ${Math.round(progress)}%`]
         };
-        setScanTasks(prev => prev.map(t => t.id === task.id ? updatedTask : t));
+        setScanTasks(prev => prev.map(t => (t.id === task.id ? updatedTask : t)));
         setCurrentTask(updatedTask);
       }
     }, 1000);
@@ -588,7 +530,7 @@ const EntityScan: React.FC = () => {
               name: '内存使用指标',
               type: 'MemoryMetric',
               source: 'memory_usage_bytes',
-              confidence: 0.90,
+              confidence: 0.9,
               attributes: {
                 instance: 'string',
                 type: 'string',
@@ -704,7 +646,7 @@ const EntityScan: React.FC = () => {
           name: '测量指标',
           type: 'Measurement',
           source: 'cpu_usage',
-          confidence: 0.90,
+          confidence: 0.9,
           attributes: {
             host: 'string',
             region: 'string',
@@ -778,7 +720,7 @@ const EntityScan: React.FC = () => {
 
   const getDataSourceSubTypeMap = () => ({
     mysql: 'MySQL',
-    postgresql: 'PostgreSQL', 
+    postgresql: 'PostgreSQL',
     mongodb: 'MongoDB',
     redis: 'Redis',
     elasticsearch: 'Elasticsearch',
@@ -794,7 +736,11 @@ const EntityScan: React.FC = () => {
   const getStatusConfig = (status: string) => {
     const statusMap = {
       connected: { text: t('entityScan:dataSources.connected'), color: 'success', icon: <CheckCircleOutlined /> },
-      disconnected: { text: t('entityScan:dataSources.disconnected'), color: 'error', icon: <ExclamationCircleOutlined /> },
+      disconnected: {
+        text: t('entityScan:dataSources.disconnected'),
+        color: 'error',
+        icon: <ExclamationCircleOutlined />
+      },
       connecting: { text: t('entityScan:dataSources.connecting'), color: 'processing', icon: <ReloadOutlined spin /> },
       error: { text: t('entityScan:dataSources.error'), color: 'error', icon: <ExclamationCircleOutlined /> }
     };
@@ -804,14 +750,15 @@ const EntityScan: React.FC = () => {
   // 过滤数据源
   const getFilteredDataSources = () => {
     return dataSources.filter(ds => {
-      const matchesSearch = !searchText || 
+      const matchesSearch =
+        !searchText ||
         ds.name.toLowerCase().includes(searchText.toLowerCase()) ||
         ds.description.toLowerCase().includes(searchText.toLowerCase()) ||
         ds.host.toLowerCase().includes(searchText.toLowerCase());
-      
+
       const matchesType = filterType === 'all' || ds.type === filterType;
       const matchesStatus = filterStatus === 'all' || ds.status === filterStatus;
-      
+
       return matchesSearch && matchesType && matchesStatus;
     });
   };
@@ -825,7 +772,7 @@ const EntityScan: React.FC = () => {
     return filteredDataSources.map(dataSource => {
       const statusConfig = getStatusConfig(dataSource.status);
       const typeConfig = typeMap[dataSource.type as keyof typeof typeMap];
-      
+
       return (
         <Col xs={24} sm={12} lg={8} key={dataSource.id}>
           <DataSourceCard $isDark={isDark}>
@@ -843,10 +790,7 @@ const EntityScan: React.FC = () => {
                   </Text>
                 </div>
               </DataSourceInfo>
-              <Badge 
-                status={statusConfig.color as any} 
-                text={statusConfig.text}
-              />
+              <Badge status={statusConfig.color as any} text={statusConfig.text} />
             </DataSourceHeader>
 
             <DataSourceMeta>
@@ -862,44 +806,48 @@ const EntityScan: React.FC = () => {
 
             <DataSourceActions>
               <div className="action-btn-row">
-                <Button 
-                  type="text" 
-                  size="small" 
+                <Button
+                  type="text"
+                  size="small"
                   icon={<EyeOutlined />}
                   onClick={() => handleViewDataSource(dataSource)}
                   title={t('common:view')}
                 />
-                <Button 
-                  type="text" 
-                  size="small" 
+                <Button
+                  type="text"
+                  size="small"
                   icon={<EditOutlined />}
                   onClick={() => handleEditDataSource(dataSource)}
                   title={t('common:edit')}
                 />
-                <Button 
-                  type="text" 
-                  size="small" 
+                <Button
+                  type="text"
+                  size="small"
                   icon={<ReloadOutlined />}
                   onClick={() => handleTestConnection(dataSource)}
                   loading={dataSource.status === 'connecting'}
                   title={t('entityScan:dataSources.testConnection')}
                 />
-                <Button 
-                  type="text" 
-                  size="small" 
+                <Button
+                  type="text"
+                  size="small"
                   danger
                   icon={<DeleteOutlined />}
                   onClick={() => handleDeleteDataSource(dataSource)}
                   title={t('common:delete')}
                 />
-                <Button 
-                  type="text" 
-                  size="small" 
+                <Button
+                  type="text"
+                  size="small"
                   icon={<ScanOutlined />}
                   onClick={() => handleStartScanForDataSource(dataSource)}
                   disabled={dataSource.status !== 'connected'}
                   loading={isScanning && selectedDataSource === dataSource.id}
-                  title={isScanning && selectedDataSource === dataSource.id ? t('entityScan:status.running') : t('entityScan:scanConfig.startScan')}
+                  title={
+                    isScanning && selectedDataSource === dataSource.id
+                      ? t('entityScan:status.running')
+                      : t('entityScan:scanConfig.startScan')
+                  }
                 />
               </div>
             </DataSourceActions>
@@ -924,7 +872,12 @@ const EntityScan: React.FC = () => {
       case 'api':
         info.push(
           { label: t('entityScan:fields.baseUrl'), value: dataSource.config?.baseUrl || '-' },
-          { label: t('entityScan:fields.endpoints'), value: dataSource.config?.endpoints?.length ? t('entityScan:units.endpoints', { count: dataSource.config.endpoints.length }) : '-' }
+          {
+            label: t('entityScan:fields.endpoints'),
+            value: dataSource.config?.endpoints?.length
+              ? t('entityScan:units.endpoints', { count: dataSource.config.endpoints.length })
+              : '-'
+          }
         );
         break;
 
@@ -951,14 +904,29 @@ const EntityScan: React.FC = () => {
             break;
           case 'elasticsearch':
             info.push(
-              { label: t('entityScan:fields.hosts'), value: dataSource.config?.hosts?.length ? t('entityScan:units.nodes', { count: dataSource.config.hosts.length }) : '-' },
-              { label: t('entityScan:fields.indices'), value: dataSource.config?.indices?.length ? t('entityScan:units.indices', { count: dataSource.config.indices.length }) : '-' }
+              {
+                label: t('entityScan:fields.hosts'),
+                value: dataSource.config?.hosts?.length
+                  ? t('entityScan:units.nodes', { count: dataSource.config.hosts.length })
+                  : '-'
+              },
+              {
+                label: t('entityScan:fields.indices'),
+                value: dataSource.config?.indices?.length
+                  ? t('entityScan:units.indices', { count: dataSource.config.indices.length })
+                  : '-'
+              }
             );
             break;
           case 'jaeger':
             info.push(
               { label: t('entityScan:fields.queryUrl'), value: dataSource.config?.queryUrl || '-' },
-              { label: t('entityScan:fields.services'), value: dataSource.config?.services?.length ? t('entityScan:units.services', { count: dataSource.config.services.length }) : '-' }
+              {
+                label: t('entityScan:fields.services'),
+                value: dataSource.config?.services?.length
+                  ? t('entityScan:units.services', { count: dataSource.config.services.length })
+                  : '-'
+              }
             );
             break;
           case 'zabbix':
@@ -974,9 +942,7 @@ const EntityScan: React.FC = () => {
             );
             break;
           default:
-            info.push(
-              { label: t('entityScan:fields.url'), value: dataSource.config?.url || '-' }
-            );
+            info.push({ label: t('entityScan:fields.url'), value: dataSource.config?.url || '-' });
         }
         break;
 
@@ -999,15 +965,19 @@ const EntityScan: React.FC = () => {
         break;
 
       default:
-        info.push(
-          { label: t('entityScan:fields.description'), value: dataSource.description || '-' }
-        );
+        info.push({ label: t('entityScan:fields.description'), value: dataSource.description || '-' });
     }
 
     // 添加通用信息
     info.push(
-      { label: t('entityScan:dataSources.lastScan'), value: dataSource.lastScan || t('entityScan:status.neverScanned') },
-      { label: t('entityScan:dataSources.entityCount'), value: t('entityScan:units.entities', { count: dataSource.entityCount || 0 }) }
+      {
+        label: t('entityScan:dataSources.lastScan'),
+        value: dataSource.lastScan || t('entityScan:status.neverScanned')
+      },
+      {
+        label: t('entityScan:dataSources.entityCount'),
+        value: t('entityScan:units.entities', { count: dataSource.entityCount || 0 })
+      }
     );
 
     return info;
@@ -1027,7 +997,11 @@ const EntityScan: React.FC = () => {
     switch (dataSource.type) {
       case 'database':
         specificFields.push(
-          { key: 'host', label: t('entityScan:fields.host'), value: `${dataSource.config?.host}:${dataSource.config?.port}` },
+          {
+            key: 'host',
+            label: t('entityScan:fields.host'),
+            value: `${dataSource.config?.host}:${dataSource.config?.port}`
+          },
           { key: 'database', label: t('entityScan:fields.database'), value: dataSource.config?.database || '-' },
           { key: 'username', label: t('entityScan:fields.username'), value: dataSource.config?.username }
         );
@@ -1036,8 +1010,17 @@ const EntityScan: React.FC = () => {
       case 'api':
         specificFields.push(
           { key: 'baseUrl', label: t('entityScan:fields.baseUrl'), value: dataSource.config?.baseUrl },
-          { key: 'endpoints', label: t('entityScan:fields.endpoints'), value: dataSource.config?.endpoints, isArray: true },
-          { key: 'apiKey', label: t('entityScan:fields.apiKey'), value: dataSource.config?.apiKey ? '***hidden***' : '-' }
+          {
+            key: 'endpoints',
+            label: t('entityScan:fields.endpoints'),
+            value: dataSource.config?.endpoints,
+            isArray: true
+          },
+          {
+            key: 'apiKey',
+            label: t('entityScan:fields.apiKey'),
+            value: dataSource.config?.apiKey ? '***hidden***' : '-'
+          }
         );
         break;
 
@@ -1045,7 +1028,11 @@ const EntityScan: React.FC = () => {
         specificFields.push(
           { key: 'endpoint', label: t('entityScan:fields.endpoint'), value: dataSource.config?.endpoint },
           { key: 'bucket', label: t('entityScan:fields.bucket'), value: dataSource.config?.bucket },
-          { key: 'accessKeyId', label: t('entityScan:fields.accessKeyId'), value: dataSource.config?.accessKeyId ? '***hidden***' : '-' }
+          {
+            key: 'accessKeyId',
+            label: t('entityScan:fields.accessKeyId'),
+            value: dataSource.config?.accessKeyId ? '***hidden***' : '-'
+          }
         );
         break;
 
@@ -1062,20 +1049,34 @@ const EntityScan: React.FC = () => {
             specificFields.push(
               { key: 'url', label: t('entityScan:fields.url'), value: dataSource.config?.url },
               { key: 'orgId', label: t('entityScan:fields.orgId'), value: dataSource.config?.orgId },
-              { key: 'includeDashboards', label: t('entityScan:fields.includeDashboards'), value: dataSource.config?.includeDashboards ? t('common:yes') : t('common:no') }
+              {
+                key: 'includeDashboards',
+                label: t('entityScan:fields.includeDashboards'),
+                value: dataSource.config?.includeDashboards ? t('common:yes') : t('common:no')
+              }
             );
             break;
           case 'elasticsearch':
             specificFields.push(
               { key: 'hosts', label: t('entityScan:fields.hosts'), value: dataSource.config?.hosts, isArray: true },
-              { key: 'indices', label: t('entityScan:fields.indices'), value: dataSource.config?.indices, isArray: true },
+              {
+                key: 'indices',
+                label: t('entityScan:fields.indices'),
+                value: dataSource.config?.indices,
+                isArray: true
+              },
               { key: 'version', label: t('entityScan:fields.version'), value: dataSource.config?.version }
             );
             break;
           case 'jaeger':
             specificFields.push(
               { key: 'queryUrl', label: t('entityScan:fields.queryUrl'), value: dataSource.config?.queryUrl },
-              { key: 'services', label: t('entityScan:fields.services'), value: dataSource.config?.services, isArray: true },
+              {
+                key: 'services',
+                label: t('entityScan:fields.services'),
+                value: dataSource.config?.services,
+                isArray: true
+              },
               { key: 'lookback', label: t('entityScan:fields.lookback'), value: dataSource.config?.lookback }
             );
             break;
@@ -1083,13 +1084,23 @@ const EntityScan: React.FC = () => {
             specificFields.push(
               { key: 'url', label: t('entityScan:fields.url'), value: dataSource.config?.url },
               { key: 'apiVersion', label: t('entityScan:fields.apiVersion'), value: dataSource.config?.apiVersion },
-              { key: 'hostGroups', label: t('entityScan:fields.hostGroups'), value: dataSource.config?.hostGroups, isArray: true }
+              {
+                key: 'hostGroups',
+                label: t('entityScan:fields.hostGroups'),
+                value: dataSource.config?.hostGroups,
+                isArray: true
+              }
             );
             break;
           case 'datadog':
             specificFields.push(
               { key: 'site', label: t('entityScan:fields.site'), value: dataSource.config?.site },
-              { key: 'services', label: t('entityScan:fields.services'), value: dataSource.config?.services, isArray: true },
+              {
+                key: 'services',
+                label: t('entityScan:fields.services'),
+                value: dataSource.config?.services,
+                isArray: true
+              },
               { key: 'env', label: t('entityScan:fields.environment'), value: dataSource.config?.env }
             );
             break;
@@ -1121,28 +1132,29 @@ const EntityScan: React.FC = () => {
   };
 
   // 渲染字段值
-  const renderFieldValue = (field: { key: string; label: string; value: any; isStatus?: boolean; isArray?: boolean }) => {
+  const renderFieldValue = (field: {
+    key: string;
+    label: string;
+    value: any;
+    isStatus?: boolean;
+    isArray?: boolean;
+  }) => {
     if (field.isStatus) {
       const statusConfig = getStatusConfig(field.value);
-      return (
-        <Badge 
-          status={statusConfig.color as any} 
-          text={statusConfig.text}
-        />
-      );
+      return <Badge status={statusConfig.color as any} text={statusConfig.text} />;
     }
-    
+
     if (field.isArray && Array.isArray(field.value)) {
       return field.value.join(', ');
     }
-    
+
     return field.value || '-';
   };
 
   // 数据源操作处理函数
   const handleViewDataSource = (dataSource: DataSource) => {
     const fields = getDataSourceFields(dataSource);
-    
+
     Modal.info({
       title: `${t('entityScan:dataSources.details')} - ${dataSource.name}`,
       width: 600,
@@ -1151,7 +1163,9 @@ const EntityScan: React.FC = () => {
           <Row gutter={[16, 8]}>
             {fields.map(field => (
               <React.Fragment key={field.key}>
-                <Col span={8}><strong>{field.label}:</strong></Col>
+                <Col span={8}>
+                  <strong>{field.label}:</strong>
+                </Col>
                 <Col span={16}>{renderFieldValue(field)}</Col>
               </React.Fragment>
             ))}
@@ -1168,32 +1182,32 @@ const EntityScan: React.FC = () => {
   const handleTestConnection = async (dataSource: DataSource) => {
     try {
       // 更新状态为连接中
-      setDataSources(prev => prev.map(ds => 
-        ds.id === dataSource.id ? { ...ds, status: 'connecting' } : ds
-      ));
+      setDataSources(prev => prev.map(ds => (ds.id === dataSource.id ? { ...ds, status: 'connecting' } : ds)));
 
       // 模拟测试连接
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // 随机成功或失败
       const isSuccess = Math.random() > 0.3;
       const newStatus = isSuccess ? 'connected' : 'error';
-      
-      setDataSources(prev => prev.map(ds => 
-        ds.id === dataSource.id ? { 
-          ...ds, 
-          status: newStatus,
-          lastConnected: isSuccess ? new Date().toLocaleString() : ds.lastConnected
-        } : ds
-      ));
+
+      setDataSources(prev =>
+        prev.map(ds =>
+          ds.id === dataSource.id
+            ? {
+                ...ds,
+                status: newStatus,
+                lastConnected: isSuccess ? new Date().toLocaleString() : ds.lastConnected
+              }
+            : ds
+        )
+      );
 
       message[isSuccess ? 'success' : 'error'](
         isSuccess ? t('entityScan:messages.connectionTestSuccess') : t('entityScan:messages.connectionTestFailed')
       );
     } catch (error) {
-      setDataSources(prev => prev.map(ds => 
-        ds.id === dataSource.id ? { ...ds, status: 'error' } : ds
-      ));
+      setDataSources(prev => prev.map(ds => (ds.id === dataSource.id ? { ...ds, status: 'error' } : ds)));
       message.error(t('entityScan:messages.connectionTestFailed'));
     }
   };
@@ -1285,7 +1299,7 @@ const EntityScan: React.FC = () => {
           metrics: '指标数据',
           file: '文件'
         };
-        
+
         const subTypeMap = {
           prometheus: 'Prometheus',
           grafana: 'Grafana',
@@ -1295,10 +1309,10 @@ const EntityScan: React.FC = () => {
           datadog: 'Datadog',
           influxdb: 'InfluxDB'
         };
-        
+
         const mainType = typeMap[type as keyof typeof typeMap] || type;
         const subTypeText = record.subType ? subTypeMap[record.subType as keyof typeof subTypeMap] : '';
-        
+
         return (
           <div>
             <div>{mainType}</div>
@@ -1334,11 +1348,7 @@ const EntityScan: React.FC = () => {
       key: 'action',
       render: (_, record: DataSource) => (
         <Space>
-          <Button
-            size="small"
-            icon={<SettingOutlined />}
-            onClick={() => setShowConfigModal(true)}
-          >
+          <Button size="small" icon={<SettingOutlined />} onClick={() => setShowConfigModal(true)}>
             配置
           </Button>
           <Button
@@ -1364,10 +1374,8 @@ const EntityScan: React.FC = () => {
       render: (selected: boolean, record: ScanResult) => (
         <Switch
           checked={selected}
-          onChange={(checked) => {
-            setScanResults(prev =>
-              prev.map(r => r.id === record.id ? { ...r, selected: checked } : r)
-            );
+          onChange={checked => {
+            setScanResults(prev => prev.map(r => (r.id === record.id ? { ...r, selected: checked } : r)));
           }}
         />
       )
@@ -1413,7 +1421,7 @@ const EntityScan: React.FC = () => {
   ];
 
   return (
-    <ScanContainer>
+    <ScanContainer className="entity-scan-page">
       {/* 页面头部 */}
       <PageHeader style={{ display: 'block' }}>
         {/* Title和按钮在同一行 */}
@@ -1430,16 +1438,12 @@ const EntityScan: React.FC = () => {
             >
               {t('common:refresh')}
             </Button>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={handleCreateDataSource}
-            >
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateDataSource}>
               {t('entityScan:dataSources.addDataSource')}
             </Button>
           </div>
         </div>
-        
+
         {/* Paragraph单独一行，充满宽度 */}
         <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
           {t('entityScan:description', '从外部数据源扫描和生成实体定义，支持数据库、API、云服务等多种数据源类型。')}
@@ -1447,42 +1451,60 @@ const EntityScan: React.FC = () => {
       </PageHeader>
 
       {/* 统计数据 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={12} sm={8} lg={4}>
-          <StatItem $isDark={isDark}>
-            <StatValue color="#1890ff">{getStatistics().totalDataSources}</StatValue>
-            <StatLabel $isDark={isDark}>{t('entityScan:stats.totalDataSources')}</StatLabel>
-          </StatItem>
+      <Row gutter={16} style={{ marginBottom: 24 }}>
+        <Col xs={24} sm={12} md={6} lg={4}>
+          <Card className="stats-card-primary">
+            <Statistic
+              title={t('entityScan:stats.totalDataSources')}
+              value={getStatistics().totalDataSources}
+              prefix={<DatabaseOutlined />}
+            />
+          </Card>
         </Col>
-        <Col xs={12} sm={8} lg={4}>
-          <StatItem $isDark={isDark}>
-            <StatValue color="#52c41a">{getStatistics().connectedDataSources}</StatValue>
-            <StatLabel $isDark={isDark}>{t('entityScan:stats.connectedSources')}</StatLabel>
-          </StatItem>
+        <Col xs={24} sm={12} md={6} lg={4}>
+          <Card className="stats-card-success">
+            <Statistic
+              title={t('entityScan:stats.connectedSources')}
+              value={getStatistics().connectedDataSources}
+              prefix={<LinkOutlined />}
+            />
+          </Card>
         </Col>
-        <Col xs={12} sm={8} lg={4}>
-          <StatItem $isDark={isDark}>
-            <StatValue color="#722ed1">{getStatistics().totalEntities}</StatValue>
-            <StatLabel $isDark={isDark}>{t('entityScan:stats.totalEntities')}</StatLabel>
-          </StatItem>
+        <Col xs={24} sm={12} md={6} lg={4}>
+          <Card className="stats-card-purple">
+            <Statistic
+              title={t('entityScan:stats.totalEntities')}
+              value={getStatistics().totalEntities}
+              prefix={<AppstoreOutlined />}
+            />
+          </Card>
         </Col>
-        <Col xs={12} sm={8} lg={4}>
-          <StatItem $isDark={isDark}>
-            <StatValue color="#fa8c16">{getStatistics().selectedEntities}</StatValue>
-            <StatLabel $isDark={isDark}>{t('entityScan:stats.selectedEntities')}</StatLabel>
-          </StatItem>
+        <Col xs={24} sm={12} md={6} lg={4}>
+          <Card className="stats-card-warning">
+            <Statistic
+              title={t('entityScan:stats.selectedEntities')}
+              value={getStatistics().selectedEntities}
+              prefix={<CheckCircleOutlined />}
+            />
+          </Card>
         </Col>
-        <Col xs={12} sm={8} lg={4}>
-          <StatItem $isDark={isDark}>
-            <StatValue color="#13c2c2">{getStatistics().completedScans}</StatValue>
-            <StatLabel $isDark={isDark}>{t('entityScan:stats.completedScans')}</StatLabel>
-          </StatItem>
+        <Col xs={24} sm={12} md={6} lg={4}>
+          <Card className="stats-card-info">
+            <Statistic
+              title={t('entityScan:stats.completedScans')}
+              value={getStatistics().completedScans}
+              prefix={<PlayCircleOutlined />}
+            />
+          </Card>
         </Col>
-        <Col xs={12} sm={8} lg={4}>
-          <StatItem $isDark={isDark}>
-            <StatValue color="#eb2f96">{getStatistics().runningScans}</StatValue>
-            <StatLabel $isDark={isDark}>{t('entityScan:stats.runningScans')}</StatLabel>
-          </StatItem>
+        <Col xs={24} sm={12} md={6} lg={4}>
+          <Card className="stats-card-error">
+            <Statistic
+              title={t('entityScan:stats.runningScans')}
+              value={getStatistics().runningScans}
+              prefix={<UserOutlined />}
+            />
+          </Card>
         </Col>
       </Row>
 
@@ -1531,25 +1553,25 @@ const EntityScan: React.FC = () => {
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         {renderDataSourceCards()}
       </Row>
-      
+
       {getFilteredDataSources().length === 0 && (
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '40px 0', 
-          color: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)',
-          marginBottom: 24
-        }}>
+        <div
+          style={{
+            textAlign: 'center',
+            padding: '40px 0',
+            color: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)',
+            marginBottom: 24
+          }}
+        >
           <DatabaseOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
           <div>{t('entityScan:dataSources.noDataSources')}</div>
           <div style={{ fontSize: '12px', marginTop: '8px' }}>
-            {searchText || filterType !== 'all' || filterStatus !== 'all' 
+            {searchText || filterType !== 'all' || filterStatus !== 'all'
               ? t('entityScan:dataSources.noMatchingDataSources')
-              : t('entityScan:dataSources.configureDataSourcesFirst')
-            }
+              : t('entityScan:dataSources.configureDataSourcesFirst')}
           </div>
         </div>
       )}
-
 
       {/* 扫描进度 */}
       {currentTask && (
@@ -1594,7 +1616,15 @@ const EntityScan: React.FC = () => {
               </Row>
             </Col>
             <Col span={12}>
-              <div style={{ height: '200px', overflow: 'auto', background: isDark ? '#1f1f1f' : '#fafafa', padding: '12px', borderRadius: '6px' }}>
+              <div
+                style={{
+                  height: '200px',
+                  overflow: 'auto',
+                  background: isDark ? '#1f1f1f' : '#fafafa',
+                  padding: '12px',
+                  borderRadius: '6px'
+                }}
+              >
                 <Text strong>扫描日志:</Text>
                 {currentTask.logs.map((log, index) => (
                   <div key={index} style={{ fontSize: '12px', marginTop: '4px' }}>
@@ -1612,30 +1642,20 @@ const EntityScan: React.FC = () => {
         <ScanCard $isDark={isDark} title="扫描结果">
           <div style={{ marginBottom: 16 }}>
             <Alert
-              message={t('entityScan:results.scanCompleted', { 
-                total: scanResults.length, 
-                selected: scanResults.filter(r => r.selected).length 
+              message={t('entityScan:results.scanCompleted', {
+                total: scanResults.length,
+                selected: scanResults.filter(r => r.selected).length
               })}
               type="success"
               showIcon
               action={
-                <Button
-                  size="small"
-                  type="primary"
-                  onClick={() => setShowResultModal(true)}
-                >
+                <Button size="small" type="primary" onClick={() => setShowResultModal(true)}>
                   生成实体
                 </Button>
               }
             />
           </div>
-          <Table
-            dataSource={scanResults}
-            columns={resultColumns}
-            rowKey="id"
-            pagination={false}
-            size="small"
-          />
+          <Table dataSource={scanResults} columns={resultColumns} rowKey="id" pagination={false} size="small" />
         </ScanCard>
       )}
 
