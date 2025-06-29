@@ -1523,12 +1523,12 @@
 }
 
 .theme-dark .ant-switch-checked {
-  background-color: var(--primary);
-  border-color: var(--primary);
+  background-color: var(--success); /* 使用绿色作为激活状态 */
+  border-color: var(--success);
 }
 
 .theme-dark .ant-switch-checked:hover:not(.ant-switch-disabled) {
-  background-color: var(--primary-hover);
+  background-color: var(--success-hover); /* 悬浮时使用更亮的绿色 */
 }
 
 .theme-dark .ant-switch::after {
@@ -1547,7 +1547,7 @@
 }
 
 .theme-dark .ant-switch-loading-icon {
-  color: var(--primary);
+  color: var(--success); /* 加载图标也使用绿色 */
 }
 
 /* Switch 文字标签 */

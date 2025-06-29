@@ -201,12 +201,12 @@
 }
 
 .ai-agent-form-page .ant-switch-checked {
-  background-color: var(--primary);
-  border-color: var(--primary);
+  background-color: var(--success); /* 使用绿色作为激活状态 */
+  border-color: var(--success);
 }
 
 .ai-agent-form-page .ant-switch-checked:hover:not(.ant-switch-disabled) {
-  background-color: var(--primary-hover);
+  background-color: var(--success-hover); /* 悬浮时使用更亮的绿色 */
 }
 
 .ai-agent-form-page .ant-switch::after {
@@ -288,5 +288,5 @@
 }
 
 .ai-agent-form-page .ant-card .ant-switch-checked {
-  background-color: var(--primary);
+  background-color: var(--success); /* 卡片中的Switch也使用绿色 */
 }
