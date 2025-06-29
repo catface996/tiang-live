@@ -46,7 +46,7 @@ const { TextArea } = Input;
 // Styled Components for perfect dark theme support
 const PageContainer = styled.div<{ $isDark: boolean }>`
   min-height: 100vh;
-  background-color: ${props => props.$isDark ? '#0f0f0f' : '#f5f5f5'};
+  background-color: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
   padding: 24px;
   transition: background-color 0.2s ease;
 `;
@@ -54,15 +54,7 @@ const PageContainer = styled.div<{ $isDark: boolean }>`
 const ContentWrapper = styled.div<{ $isDark: boolean }>`
   max-width: 1200px;
   margin: 0 auto;
-  background-color: ${props => props.$isDark ? '#1a1a1a' : '#ffffff'};
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: ${props => props.$isDark 
-    ? '0 4px 20px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2)' 
-    : '0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
-  };
-  border: ${props => props.$isDark ? '1px solid #2a2a2a' : '1px solid #e8e8e8'};
-  transition: all 0.2s ease;
+  padding: 0;
 `;
 
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
