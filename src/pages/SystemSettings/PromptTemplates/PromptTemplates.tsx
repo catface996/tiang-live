@@ -1,27 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Typography,
-  Card,
-  Space,
-  Button,
-  Row,
-  Col,
-  Statistic,
-  Tag,
-  Modal,
-  Form,
-  Descriptions,
-  Tooltip,
-  message,
-  Rate
-} from 'antd';
+import { Typography, Card, Space, Button, Row, Col, Statistic, Tag, Form, Tooltip, message, Rate } from 'antd';
 import {
   FileTextOutlined,
   PlusOutlined,
   ReloadOutlined,
   EyeOutlined,
   EditOutlined,
-  CopyOutlined,
   StarOutlined,
   BulbOutlined,
   CodeOutlined,
@@ -37,6 +21,7 @@ import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 import PromptFormModal from './components/PromptFormModal';
+import PromptDetailModal from './components/PromptDetailModal';
 import '../../../styles/prompt-templates.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -127,19 +112,6 @@ const FilterBar = styled.div`
   padding: 16px;
   border-radius: 6px;
   margin-bottom: 16px;
-`;
-
-const PromptContent = styled.div`
-  background: #f6f8fa;
-  border: 1px solid #e1e4e8;
-  border-radius: 6px;
-  padding: 12px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 13px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  max-height: 200px;
-  overflow-y: auto;
 `;
 
 interface PromptTemplate {
@@ -640,104 +612,15 @@ API接口：{api_details}
       />
 
       {/* 提示词详情模态框 */}
-      <Modal
-        title={selectedPrompt?.name}
-        open={detailModalVisible}
+      <PromptDetailModal
+        visible={detailModalVisible}
+        selectedPrompt={selectedPrompt}
         onCancel={() => setDetailModalVisible(false)}
-        footer={null}
-        width={1000}
-        style={{ top: 20 }}
-      >
-        {selectedPrompt && (
-          <div>
-            {/* 基本信息 */}
-            <Descriptions bordered column={2} style={{ marginBottom: 24 }}>
-              <Descriptions.Item label={t('prompts:detail.templateName')} span={2}>
-                {selectedPrompt.name}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.category')}>
-                <Tag
-                  color={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.color}
-                  icon={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.icon}
-                >
-                  {t(`prompts:categories.${getCategoryKey(selectedPrompt.category)}`)}
-                </Tag>
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.difficulty')}>
-                <Tag color={difficultyMap[selectedPrompt.difficulty]?.color}>
-                  {t(`prompts:difficulty.${selectedPrompt.difficulty}`)}
-                </Tag>
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.rating')}>
-                <Space>
-                  <Rate disabled value={selectedPrompt.rating} allowHalf />
-                  <Text>{selectedPrompt.rating}</Text>
-                </Space>
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.usageCount')}>
-                {selectedPrompt.usageCount}
-                {t('common:unit.times')}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.language')}>{selectedPrompt.language}</Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.version')}>{selectedPrompt.version}</Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.status')}>
-                <Space>
-                  {selectedPrompt.isPublic && <Tag color="blue">{t('prompts:status.public')}</Tag>}
-                  {selectedPrompt.isFavorite && (
-                    <Tag color="gold" icon={<StarOutlined />}>
-                      {t('prompts:status.favorite')}
-                    </Tag>
-                  )}
-                </Space>
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.creator')}>{selectedPrompt.createdBy}</Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.createdAt')}>{selectedPrompt.createdAt}</Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.lastUsed')}>{selectedPrompt.lastUsed}</Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.description')} span={2}>
-                {selectedPrompt.description}
-              </Descriptions.Item>
-            </Descriptions>
-
-            {/* 提示词内容 */}
-            <Card title={t('prompts:detail.content')} style={{ marginBottom: 16 }}>
-              <PromptContent>{selectedPrompt.content}</PromptContent>
-              <div style={{ marginTop: 12, textAlign: 'right' }}>
-                <Button icon={<CopyOutlined />} onClick={() => handleCopyPrompt(selectedPrompt)}>
-                  {t('prompts:actions.copy')}
-                </Button>
-              </div>
-            </Card>
-
-            {/* 变量和标签 */}
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card title={t('prompts:detail.variablesList')} size="small">
-                  {selectedPrompt.variables.length > 0 ? (
-                    <Space wrap>
-                      {selectedPrompt.variables.map(variable => (
-                        <Tag key={variable} color="blue">
-                          {`{${variable}}`}
-                        </Tag>
-                      ))}
-                    </Space>
-                  ) : (
-                    <Text type="secondary">{t('prompts:detail.noVariables')}</Text>
-                  )}
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card title={t('prompts:detail.tags')} size="small">
-                  <Space wrap>
-                    {selectedPrompt.tags.map(tag => (
-                      <Tag key={tag}>{tag}</Tag>
-                    ))}
-                  </Space>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-        )}
-      </Modal>
+        onCopyPrompt={handleCopyPrompt}
+        categoryMap={categoryMap}
+        difficultyMap={difficultyMap}
+        getCategoryKey={getCategoryKey}
+      />
     </PageContainer>
   );
 };
