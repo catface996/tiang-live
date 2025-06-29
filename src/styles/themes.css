@@ -1534,6 +1534,15 @@
 .theme-dark .ant-switch::after {
   background-color: #ffffff !important;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
+}
+
+.theme-dark .ant-switch-checked::after {
+  top: 50% !important;
+  transform: translateY(-50%) translateX(calc(100% + 2px)) !important;
+  margin-top: 0 !important;
 }
 
 .theme-dark .ant-switch-disabled {
@@ -1544,6 +1553,9 @@
 
 .theme-dark .ant-switch-disabled::after {
   background-color: rgba(255, 255, 255, 0.65) !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
 }
 
 .theme-dark .ant-switch-loading-icon {
@@ -1667,4 +1679,37 @@
 
 .theme-dark .ant-card .ant-switch-checked {
   background-color: var(--primary);
+}
+/* Switch 圆形滑块垂直居中 - 全局样式 */
+.ant-switch::after {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-switch-checked::after {
+  top: 50% !important;
+  transform: translateY(-50%) translateX(calc(100% + 2px)) !important;
+  margin-top: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-switch-disabled::after {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
+}
+
+/* Switch 加载状态的圆形滑块 */
+.ant-switch-loading::after {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
+}
+
+.ant-switch-loading.ant-switch-checked::after {
+  top: 50% !important;
+  transform: translateY(-50%) translateX(calc(100% + 2px)) !important;
+  margin-top: 0 !important;
 }
