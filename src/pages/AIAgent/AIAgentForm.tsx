@@ -1,27 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Space, 
-  Button, 
-  Card,
-  message
-} from 'antd';
-import { 
-  RobotOutlined, 
-  SaveOutlined,
-  ArrowLeftOutlined
-} from '@ant-design/icons';
+import { Typography, Space, Button, Card, message, Breadcrumb } from 'antd';
+import { RobotOutlined, SaveOutlined, HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import { AIAgentFormComponent } from './components';
+import '../../styles/ai-agent-form.css';
 
 const { Title, Paragraph } = Typography;
 
 const PageContainer = styled.div`
   padding: 24px;
-  background: #f5f5f5;
+  background: var(--content-bg);
+  min-height: calc(100vh - 64px);
+`;
+
+const PageHeader = styled.div`
+  margin-bottom: 24px;
+`;
+
+const TitleSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const TitleContent = styled.div`
+  flex: 1;
+`;
+
+const ActionButtons = styled.div`
+  text-align: right;
 `;
 
 interface AIAgentFormData {
@@ -64,7 +74,7 @@ const AIAgentForm: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
-  
+
   const [loading, setLoading] = useState(false);
   const [initialData, setInitialData] = useState<AIAgentFormData | undefined>();
 
@@ -100,22 +110,22 @@ const AIAgentForm: React.FC = () => {
         },
         prompts: {
           system: t('agents:form.mockData.systemPrompt'),
-          templates: ['customer-service-template'],
+          templates: [t('agents:form.mockData.template1'), t('agents:form.mockData.template2')],
           variables: {
             company_name: t('agents:form.mockData.companyName'),
-            service_hours: '9:00-18:00'
+            support_email: 'support@example.com'
           }
         },
-        mcpServers: ['database-mcp', 'email-mcp'],
-        capabilities: ['text-generation', 'question-answering', 'sentiment-analysis'],
+        mcpServers: ['database-server', 'file-server'],
+        capabilities: ['text-generation', 'conversation', 'task-automation'],
         settings: {
           autoStart: true,
-          maxConcurrency: 10,
-          timeout: 30,
+          maxConcurrency: 5,
+          timeout: 30000,
           retryCount: 3,
           logLevel: 'info'
         },
-        tags: [t('agents:form.mockData.tags.customerService'), t('agents:form.mockData.tags.dialogue'), t('agents:form.mockData.tags.assistant')]
+        tags: ['customer-service', 'chat', 'support']
       };
 
       setInitialData(agentData);
@@ -131,7 +141,7 @@ const AIAgentForm: React.FC = () => {
     try {
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       message.success(isEdit ? t('agents:form.messages.updateSuccess') : t('agents:form.messages.createSuccess'));
       navigate('/ai-agents');
     } catch (error) {
@@ -142,57 +152,48 @@ const AIAgentForm: React.FC = () => {
   };
 
   return (
-    <PageContainer>
-      {/* 页面标题和操作栏 */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <Title level={2} style={{ margin: 0 }}>
+    <PageContainer className="ai-agent-form-page">
+      {/* 面包屑导航 */}
+      <Breadcrumb className="page-breadcrumb">
+        <Breadcrumb.Item>
+          <HomeOutlined />
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a onClick={() => navigate('/ai-agents')}>{t('agents:title')}</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>{isEdit ? t('agents:form.editTitle') : t('agents:form.createTitle')}</Breadcrumb.Item>
+      </Breadcrumb>
+
+      {/* 页面标题 */}
+      <PageHeader>
+        <TitleSection>
+          <TitleContent>
+            <Title className="page-title" level={2}>
               <Space>
-                <RobotOutlined style={{ color: '#1890ff' }} />
+                <RobotOutlined className="title-icon" />
                 {isEdit ? t('agents:form.editTitle') : t('agents:form.createTitle')}
               </Space>
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16, color: '#666' }}>
+            <Paragraph className="page-subtitle">
               {isEdit ? t('agents:form.editSubtitle') : t('agents:form.createSubtitle')}
             </Paragraph>
-          </div>
-          <Space>
-            <Button 
-              icon={<ArrowLeftOutlined />} 
-              onClick={() => navigate('/ai-agents')}
-            >
-              {t('common:backToList')}
-            </Button>
-          </Space>
-        </div>
-      </div>
+          </TitleContent>
+        </TitleSection>
+      </PageHeader>
 
       {/* 表单组件 */}
-      <AIAgentFormComponent
-        initialData={initialData}
-        onSubmit={handleSubmit}
-        loading={loading}
-      />
+      <AIAgentFormComponent initialData={initialData} onSubmit={handleSubmit} loading={loading} />
 
       {/* 操作按钮 */}
-      <Card>
-        <div style={{ textAlign: 'right' }}>
+      <Card className="action-card">
+        <ActionButtons>
           <Space>
-            <Button onClick={() => navigate('/ai-agents')}>
-              {t('common:cancel')}
-            </Button>
-            <Button 
-              type="primary" 
-              loading={loading}
-              icon={<SaveOutlined />}
-              form="ai-agent-form"
-              htmlType="submit"
-            >
+            <Button onClick={() => navigate('/ai-agents')}>{t('common:cancel')}</Button>
+            <Button type="primary" loading={loading} icon={<SaveOutlined />} form="ai-agent-form" htmlType="submit">
               {isEdit ? t('agents:form.updateAgent') : t('agents:form.createAgent')}
             </Button>
           </Space>
-        </div>
+        </ActionButtons>
       </Card>
     </PageContainer>
   );

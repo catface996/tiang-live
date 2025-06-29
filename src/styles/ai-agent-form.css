@@ -1,0 +1,139 @@
+/* AI智能体表单页面样式 */
+
+/* 页面容器 */
+.ai-agent-form-page {
+  background: var(--content-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* 面包屑导航 */
+.ai-agent-form-page .page-breadcrumb {
+  margin-bottom: 24px;
+  padding: 12px 0;
+}
+
+.ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link {
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link:hover {
+  color: var(--primary-color);
+}
+
+.ai-agent-form-page .page-breadcrumb .ant-breadcrumb-separator {
+  color: var(--text-secondary);
+}
+
+/* 页面标题 */
+.ai-agent-form-page .page-title {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.ai-agent-form-page .title-icon {
+  color: var(--primary-color);
+}
+
+.ai-agent-form-page .page-subtitle {
+  margin-top: 8px;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+/* 操作按钮卡片 */
+.ai-agent-form-page .action-card {
+  margin-top: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .action-card .ant-card-body {
+  padding: 16px 24px;
+}
+
+/* 暗色主题适配 */
+.theme-dark .ai-agent-form-page {
+  background: var(--content-bg);
+}
+
+.theme-dark .ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link {
+  color: var(--text-secondary);
+}
+
+.theme-dark .ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link:hover {
+  color: var(--primary-color);
+}
+
+.theme-dark .ai-agent-form-page .page-title {
+  color: var(--text-color);
+}
+
+.theme-dark .ai-agent-form-page .title-icon {
+  color: var(--primary-color);
+}
+
+.theme-dark .ai-agent-form-page .page-subtitle {
+  color: var(--text-secondary);
+}
+
+.theme-dark .ai-agent-form-page .action-card {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  box-shadow: var(--card-shadow);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .ai-agent-form-page .page-breadcrumb {
+    margin-bottom: 16px;
+  }
+
+  .ai-agent-form-page .page-title {
+    font-size: 20px;
+  }
+
+  .ai-agent-form-page .page-subtitle {
+    font-size: 14px;
+  }
+
+  .ai-agent-form-page .action-card .ant-card-body {
+    padding: 12px 16px;
+  }
+}
+
+/* 面包屑链接样式优化 */
+.ai-agent-form-page .page-breadcrumb a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.ai-agent-form-page .page-breadcrumb a:hover {
+  color: var(--primary-color);
+}
+
+/* 确保面包屑在暗色主题下的可见性 */
+.theme-dark .ai-agent-form-page .page-breadcrumb a {
+  color: var(--text-secondary);
+}
+
+.theme-dark .ai-agent-form-page .page-breadcrumb a:hover {
+  color: var(--primary-color);
+}
+
+/* 面包屑当前项样式 */
+.ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link:last-child {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.theme-dark .ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link:last-child {
+  color: var(--text-color);
+}
