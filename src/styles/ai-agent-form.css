@@ -380,33 +380,139 @@
 }
 /* ========== Prompt Configuration Tab 优化 - 精确控制 ========== */
 
-/* 只针对Template选中状态的精确优化 */
+/* Prompt Template 选中状态的完美主题适配 */
+.ai-agent-form-page .prompt-template-item {
+  background-color: var(--bg-container);
+  border-color: var(--border-base);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .prompt-template-item:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--primary);
+}
+
+.ai-agent-form-page .prompt-template-item.selected {
+  background-color: rgba(24, 144, 255, 0.08) !important;
+  border-color: #1890ff !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 暗色主题下的Template选中状态 - 完美适配 */
+.theme-dark .ai-agent-form-page .prompt-template-item {
+  background-color: var(--bg-container);
+  border-color: var(--border-base);
+  color: var(--text-primary);
+}
+
+.theme-dark .ai-agent-form-page .prompt-template-item:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--primary);
+}
+
+.theme-dark .ai-agent-form-page .prompt-template-item.selected {
+  background-color: rgba(24, 144, 255, 0.15) !important;
+  border-color: #1890ff !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.3) !important;
+}
+
+/* 确保选中的template内部文字清晰可见 */
+.theme-dark .ai-agent-form-page .prompt-template-item.selected * {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .prompt-template-item.selected .ant-typography {
+  color: var(--text-primary) !important;
+}
+
+/* 针对其他可能的Template选择器 */
 .ai-agent-form-page .prompt-templates .ant-list-item.ant-list-item-selected,
 .ai-agent-form-page .template-list .ant-list-item.ant-list-item-selected,
 .ai-agent-form-page [data-testid='template-item'].selected,
 .ai-agent-form-page .template-item.selected {
-  background: rgba(24, 144, 255, 0.1) !important;
-  border-color: #177ddc !important;
-  color: var(--text-color) !important;
+  background: rgba(24, 144, 255, 0.08) !important;
+  border-color: #1890ff !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
 }
 
-/* 暗色主题下的Template选中状态 - 精确控制 */
+/* 暗色主题下的其他Template选择器 */
 .theme-dark .ai-agent-form-page .prompt-templates .ant-list-item.ant-list-item-selected,
 .theme-dark .ai-agent-form-page .template-list .ant-list-item.ant-list-item-selected,
 .theme-dark .ai-agent-form-page [data-testid='template-item'].selected,
 .theme-dark .ai-agent-form-page .template-item.selected {
   background: rgba(24, 144, 255, 0.15) !important;
-  border-color: #177ddc !important;
-  color: var(--text-color) !important;
+  border-color: #1890ff !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.3) !important;
 }
 
 /* 确保选中的template文字清晰可见 */
 .theme-dark .ai-agent-form-page .prompt-templates .ant-list-item-selected .ant-list-item-meta-title,
 .theme-dark .ai-agent-form-page .template-list .ant-list-item-selected .ant-list-item-meta-title {
-  color: var(--text-color) !important;
+  color: var(--text-primary) !important;
 }
 
 .theme-dark .ai-agent-form-page .prompt-templates .ant-list-item-selected .ant-list-item-meta-description,
 .theme-dark .ai-agent-form-page .template-list .ant-list-item-selected .ant-list-item-meta-description {
   color: var(--text-secondary) !important;
+}
+
+/* ========== Model Configuration Tab 优化 - 完美主题适配 ========== */
+
+/* Model Selector 基础样式 */
+.ai-agent-form-page .model-item {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease !important;
+}
+
+.ai-agent-form-page .model-item:hover {
+  background-color: var(--bg-hover) !important;
+  border-color: var(--primary) !important;
+}
+
+.ai-agent-form-page .model-item.selected {
+  background-color: rgba(24, 144, 255, 0.08) !important;
+  border-color: #1890ff !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 暗色主题下的Model Selector优化 */
+.theme-dark .ai-agent-form-page .model-item {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .model-item:hover {
+  background-color: var(--bg-hover) !important;
+  border-color: var(--primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .model-item.selected {
+  background-color: rgba(24, 144, 255, 0.15) !important;
+  border-color: #1890ff !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.3) !important;
+}
+
+/* 确保选中的模型内部文字清晰可见 */
+.theme-dark .ai-agent-form-page .model-item.selected * {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .model-item.selected .ant-typography {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .model-item.selected .ant-tag {
+  background-color: rgba(82, 196, 26, 0.2) !important;
+  border-color: #52c41a !important;
+  color: #52c41a !important;
 }

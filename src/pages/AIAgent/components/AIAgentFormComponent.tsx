@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
+import {
+  Card,
   Form,
   Input,
   Select,
@@ -18,12 +18,7 @@ import {
   Typography,
   message
 } from 'antd';
-import { 
-  BulbOutlined,
-  ApiOutlined,
-  SettingOutlined,
-  ThunderboltOutlined
-} from '@ant-design/icons';
+import { BulbOutlined, ApiOutlined, SettingOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -33,11 +28,11 @@ const { TextArea } = Input;
 
 const FormCard = styled(Card)`
   margin-bottom: 24px;
-  
+
   .ant-card-head {
     border-bottom: 2px solid #f0f0f0;
   }
-  
+
   .ant-card-head-title {
     font-size: 16px;
     font-weight: 600;
@@ -47,23 +42,33 @@ const FormCard = styled(Card)`
 const PromptEditor = styled.div`
   .prompt-template-item {
     padding: 12px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--border-base, #d9d9d9);
     border-radius: 6px;
     margin-bottom: 8px;
     cursor: pointer;
     transition: all 0.3s;
-    
+    background-color: var(--bg-container, #ffffff);
+    color: var(--text-primary, rgba(0, 0, 0, 0.88));
+
     &:hover {
       border-color: #1890ff;
       box-shadow: 0 2px 4px rgba(24, 144, 255, 0.1);
+      background-color: var(--bg-hover, #f5f5f5);
     }
-    
+
     &.selected {
       border-color: #1890ff;
-      background-color: #f6ffed;
+      background-color: rgba(24, 144, 255, 0.08);
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+
+      /* 暗色主题下的特殊处理 */
+      .theme-dark & {
+        background-color: rgba(24, 144, 255, 0.15);
+        color: var(--text-primary, rgba(255, 255, 255, 0.88));
+      }
     }
   }
-  
+
   .prompt-variables {
     background: #fafafa;
     padding: 12px;
@@ -78,26 +83,36 @@ const ModelSelector = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 12px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--border-base, #d9d9d9);
     border-radius: 6px;
     margin-bottom: 8px;
     cursor: pointer;
     transition: all 0.3s;
-    
+    background-color: var(--bg-container, #ffffff);
+    color: var(--text-primary, rgba(0, 0, 0, 0.88));
+
     &:hover {
       border-color: #1890ff;
+      background-color: var(--bg-hover, #f5f5f5);
     }
-    
+
     &.selected {
       border-color: #1890ff;
-      background-color: #f6ffed;
+      background-color: rgba(24, 144, 255, 0.08);
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+
+      /* 暗色主题下的特殊处理 */
+      .theme-dark & {
+        background-color: rgba(24, 144, 255, 0.15);
+        color: var(--text-primary, rgba(255, 255, 255, 0.88));
+      }
     }
   }
-  
+
   .model-info {
     flex: 1;
   }
-  
+
   .model-status {
     margin-left: 12px;
   }
@@ -144,11 +159,7 @@ interface AIAgentFormComponentProps {
   loading?: boolean;
 }
 
-const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
-  initialData,
-  onSubmit,
-  loading = false
-}) => {
+const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData, onSubmit, loading = false }) => {
   const { t } = useTranslation(['agents', 'common']);
   const [form] = Form.useForm();
   const [activeTab, setActiveTab] = useState('basic');
@@ -302,9 +313,10 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           version: availableModels.find(m => m.id === selectedModel)?.version || ''
         },
         prompts: {
-          system: selectedPromptType === 'template' ? 
-            promptTemplates.find(t => t.id === selectedPromptTemplate)?.content || '' : 
-            customPrompt,
+          system:
+            selectedPromptType === 'template'
+              ? promptTemplates.find(t => t.id === selectedPromptTemplate)?.content || ''
+              : customPrompt,
           templates: selectedPromptType === 'template' ? [selectedPromptTemplate] : [],
           variables: promptVariables
         },
@@ -338,9 +350,9 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
 
   const renderPromptEditor = () => (
     <PromptEditor>
-      <Radio.Group 
-        value={selectedPromptType} 
-        onChange={(e) => setSelectedPromptType(e.target.value)}
+      <Radio.Group
+        value={selectedPromptType}
+        onChange={e => setSelectedPromptType(e.target.value)}
         style={{ marginBottom: 16 }}
       >
         <Radio value="template">{t('agents:form.prompts.useTemplate')}</Radio>
@@ -360,10 +372,10 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{ flex: 1 }}>
                     <Text strong>{template.name}</Text>
-                    <Tag color="blue" style={{ marginLeft: 8 }}>{template.category}</Tag>
-                    <Paragraph style={{ margin: '4px 0', color: '#666' }}>
-                      {template.description}
-                    </Paragraph>
+                    <Tag color="blue" style={{ marginLeft: 8 }}>
+                      {template.category}
+                    </Tag>
+                    <Paragraph style={{ margin: '4px 0', color: '#666' }}>{template.description}</Paragraph>
                   </div>
                 </div>
                 {selectedPromptTemplate === template.id && template.variables.length > 0 && (
@@ -375,7 +387,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                         <Input
                           placeholder={t('agents:form.prompts.enterVariableValue', { variable })}
                           value={promptVariables[variable] || ''}
-                          onChange={(e) => handleVariableChange(variable, e.target.value)}
+                          onChange={e => handleVariableChange(variable, e.target.value)}
                           style={{ marginTop: 4 }}
                         />
                       </div>
@@ -393,7 +405,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
             rows={8}
             placeholder={t('agents:form.prompts.customPromptPlaceholder')}
             value={customPrompt}
-            onChange={(e) => setCustomPrompt(e.target.value)}
+            onChange={e => setCustomPrompt(e.target.value)}
             style={{ marginTop: 8 }}
           />
           <Alert
@@ -420,17 +432,19 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
           >
             <div className="model-info">
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
-                <Text strong>{model.provider} - {model.name}</Text>
+                <Text strong>
+                  {model.provider} - {model.name}
+                </Text>
                 <Tag color={model.status === 'available' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                  {model.status === 'available' ? t('agents:form.models.available') : t('agents:form.models.unavailable')}
+                  {model.status === 'available'
+                    ? t('agents:form.models.available')
+                    : t('agents:form.models.unavailable')}
                 </Tag>
               </div>
               <Text type="secondary" style={{ fontSize: 12 }}>
                 {t('agents:form.models.version')}: {model.version} | {t('agents:form.models.pricing')}: {model.pricing}
               </Text>
-              <Paragraph style={{ margin: '4px 0 0 0', fontSize: 12, color: '#666' }}>
-                {model.description}
-              </Paragraph>
+              <Paragraph style={{ margin: '4px 0 0 0', fontSize: 12, color: '#666' }}>{model.description}</Paragraph>
             </div>
           </div>
         ))}
@@ -446,18 +460,13 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       </Paragraph>
       <div style={{ marginTop: 12 }}>
         {mcpServers.map(server => (
-          <Card
-            key={server.id}
-            size="small"
-            style={{ marginBottom: 8 }}
-            bodyStyle={{ padding: 12 }}
-          >
+          <Card key={server.id} size="small" style={{ marginBottom: 8 }} bodyStyle={{ padding: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
                   <Checkbox
                     checked={selectedMcpServers.includes(server.id)}
-                    onChange={(e) => {
+                    onChange={e => {
                       if (e.target.checked) {
                         setSelectedMcpServers(prev => [...prev, server.id]);
                       } else {
@@ -468,7 +477,9 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                     <Text strong>{server.name}</Text>
                   </Checkbox>
                   <Tag color={server.status === 'running' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                    {server.status === 'running' ? t('agents:form.mcpServers.running') : t('agents:form.mcpServers.stopped')}
+                    {server.status === 'running'
+                      ? t('agents:form.mcpServers.running')
+                      : t('agents:form.mcpServers.stopped')}
                   </Tag>
                 </div>
                 <Text type="secondary" style={{ fontSize: 12 }}>
@@ -542,15 +553,8 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item
-              name="tags"
-              label={t('agents:form.fields.tags')}
-            >
-              <Select
-                mode="tags"
-                placeholder={t('agents:form.placeholders.tags')}
-                style={{ width: '100%' }}
-              />
+            <Form.Item name="tags" label={t('agents:form.fields.tags')}>
+              <Select mode="tags" placeholder={t('agents:form.placeholders.tags')} style={{ width: '100%' }} />
             </Form.Item>
           </Col>
         </Row>
@@ -578,12 +582,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                 label="Temperature"
                 tooltip={t('agents:form.models.temperatureTooltip')}
               >
-                <Slider
-                  min={0}
-                  max={2}
-                  step={0.1}
-                  marks={{ 0: '0', 1: '1', 2: '2' }}
-                />
+                <Slider min={0} max={2} step={0.1} marks={{ 0: '0', 1: '1', 2: '2' }} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -592,25 +591,12 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                 label="Max Tokens"
                 tooltip={t('agents:form.models.maxTokensTooltip')}
               >
-                <InputNumber
-                  min={1}
-                  max={4096}
-                  style={{ width: '100%' }}
-                />
+                <InputNumber min={1} max={4096} style={{ width: '100%' }} />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name={['model', 'config', 'topP']}
-                label="Top P"
-                tooltip={t('agents:form.models.topPTooltip')}
-              >
-                <Slider
-                  min={0}
-                  max={1}
-                  step={0.1}
-                  marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
-                />
+              <Form.Item name={['model', 'config', 'topP']} label="Top P" tooltip={t('agents:form.models.topPTooltip')}>
+                <Slider min={0} max={1} step={0.1} marks={{ 0: '0', 0.5: '0.5', 1: '1' }} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -619,12 +605,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
                 label="Frequency Penalty"
                 tooltip={t('agents:form.models.frequencyPenaltyTooltip')}
               >
-                <Slider
-                  min={-2}
-                  max={2}
-                  step={0.1}
-                  marks={{ '-2': '-2', 0: '0', 2: '2' }}
-                />
+                <Slider min={-2} max={2} step={0.1} marks={{ '-2': '-2', 0: '0', 2: '2' }} />
               </Form.Item>
             </Col>
           </Row>
@@ -653,34 +634,22 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              name={['settings', 'maxConcurrency']}
-              label={t('agents:form.settings.maxConcurrency')}
-            >
+            <Form.Item name={['settings', 'maxConcurrency']} label={t('agents:form.settings.maxConcurrency')}>
               <InputNumber min={1} max={100} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              name={['settings', 'timeout']}
-              label={t('agents:form.settings.timeout')}
-            >
+            <Form.Item name={['settings', 'timeout']} label={t('agents:form.settings.timeout')}>
               <InputNumber min={5} max={300} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              name={['settings', 'retryCount']}
-              label={t('agents:form.settings.retryCount')}
-            >
+            <Form.Item name={['settings', 'retryCount']} label={t('agents:form.settings.retryCount')}>
               <InputNumber min={0} max={10} />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item
-              name={['settings', 'logLevel']}
-              label={t('agents:form.settings.logLevel')}
-            >
+            <Form.Item name={['settings', 'logLevel']} label={t('agents:form.settings.logLevel')}>
               <Select>
                 <Option value="debug">Debug</Option>
                 <Option value="info">Info</Option>
@@ -722,11 +691,7 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({
       }}
     >
       <FormCard>
-        <Tabs
-          activeKey={activeTab}
-          onChange={setActiveTab}
-          items={tabItems}
-        />
+        <Tabs activeKey={activeTab} onChange={setActiveTab} items={tabItems} />
       </FormCard>
     </Form>
   );
