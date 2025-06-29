@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, Tag, Tooltip, Progress } from 'antd';
+import { Tag, Tooltip, Progress } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -88,7 +88,7 @@ const EntityHealthStatsComponent: React.FC<EntityHealthStatsProps> = ({
               '0%': '#ff4d4f',
               [`${errorPercent}%`]: '#ff4d4f',
               [`${errorPercent + warningPercent}%`]: '#faad14',
-              '100%': '#52c41a',
+              '100%': '#52c41a'
             }}
             showInfo={false}
             size="small"

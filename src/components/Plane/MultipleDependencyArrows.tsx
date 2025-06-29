@@ -3,7 +3,7 @@ import { ArrowDownOutlined, BranchesOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import styled from 'styled-components';
 import type { PlaneDefinition, PlaneRelationship } from '../../types';
-import { getPrimaryColorById, getLightColorById } from '../../utils/planeColors';
+import { getPrimaryColorById } from '../../utils/planeColors';
 
 interface MultipleDependencyArrowsProps {
   currentPlane: PlaneDefinition;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Input, Select, Button, Space } from 'antd';
-import { SearchOutlined, FilterOutlined, ReloadOutlined } from '@ant-design/icons';
+import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const { Search } = Input;

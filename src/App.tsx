@@ -37,7 +37,7 @@ import './styles/layered-task-topology.css'; // 导入分层任务拓扑组件�
 // Antd语言配置映射
 const antdLocaleMap = {
   'zh-CN': zhCN,
-  'en-US': enUS,
+  'en-US': enUS
 };
 
 const AppContent: React.FC = () => {

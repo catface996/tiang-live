@@ -7,23 +7,16 @@ import {
   Row, 
   Col, 
   Statistic,
-  Badge,
   Tag,
   Modal,
   Form,
   Input,
   Select,
-  Switch,
-  Table,
   Tabs,
   Descriptions,
-  Progress,
   Tooltip,
-  Popconfirm,
   message,
-  Alert,
-  DatePicker,
-  TimePicker
+  Alert
 } from 'antd';
 import { 
   ApiOutlined, 
@@ -31,20 +24,15 @@ import {
   ReloadOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
   PlayCircleOutlined,
   PauseCircleOutlined,
   CheckCircleOutlined,
-  ExclamationCircleOutlined,
-  ClockCircleOutlined,
   MonitorOutlined,
   LinkOutlined,
   ThunderboltOutlined,
   BellOutlined,
   CodeOutlined,
-  GlobalOutlined,
   DatabaseOutlined,
-  HistoryOutlined,
   UnorderedListOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
@@ -386,14 +374,14 @@ const HookTasks: React.FC = () => {
     database: { name: t('hookTasks:types.database'), color: 'green', icon: <DatabaseOutlined /> },
     message_queue: { name: t('hookTasks:types.message_queue'), color: 'orange', icon: <BellOutlined /> },
     api_call: { name: t('hookTasks:types.api_call'), color: 'purple', icon: <ApiOutlined /> },
-    script: { name: t('hookTasks:types.script'), color: 'cyan', icon: <CodeOutlined /> },
+    script: { name: t('hookTasks:types.script'), color: 'cyan', icon: <CodeOutlined /> }
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
       active: { color: 'green', text: t('hookTasks:status.active') },
       inactive: { color: 'orange', text: t('hookTasks:status.inactive') },
-      error: { color: 'red', text: t('hookTasks:status.error') },
+      error: { color: 'red', text: t('hookTasks:status.error') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -403,7 +391,7 @@ const HookTasks: React.FC = () => {
     const statusMap = {
       success: { color: 'green', text: t('common:success') },
       failed: { color: 'red', text: t('hookTasks:status.error') },
-      timeout: { color: 'orange', text: t('common:timeout') },
+      timeout: { color: 'orange', text: t('common:timeout') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -423,7 +411,7 @@ const HookTasks: React.FC = () => {
       type: hook.type,
       timeout: hook.config.timeout,
       retryCount: hook.config.retryCount,
-      retryDelay: hook.config.retryDelay,
+      retryDelay: hook.config.retryDelay
     });
     setModalVisible(true);
   };
@@ -568,138 +556,138 @@ const HookTasks: React.FC = () => {
       <HookCardsContainer>
         <Row gutter={[16, 16]}>
           {hookTaskData.map(hook => {
-          const typeConfig = hookTypeMap[hook.type];
-          const totalCollections = hook.taskCollections.length;
-          return (
-            <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={hook.id}>
-              <HookCard
-                title={
-                  <div className="card-title">
-                    <div className="title-left">
-                      <Space>
-                        {typeConfig?.icon}
-                        <span>{hook.name}</span>
-                      </Space>
+            const typeConfig = hookTypeMap[hook.type];
+            const totalCollections = hook.taskCollections.length;
+            return (
+              <Col xs={24} sm={24} md={12} lg={12} xl={8} xxl={6} key={hook.id}>
+                <HookCard
+                  title={
+                    <div className="card-title">
+                      <div className="title-left">
+                        <Space>
+                          {typeConfig?.icon}
+                          <span>{hook.name}</span>
+                        </Space>
+                      </div>
+                      <div className="title-right">
+                        {getStatusTag(hook.status)}
+                      </div>
                     </div>
-                    <div className="title-right">
-                      {getStatusTag(hook.status)}
-                    </div>
+                  }
+                  onClick={() => handleViewHook(hook)}
+                >
+                  {/* Hook类型和事件标签 */}
+                  <div style={{ marginBottom: 12 }}>
+                    <Space wrap size="small">
+                      <Tag color={typeConfig?.color} icon={typeConfig?.icon}>
+                        {typeConfig?.name}
+                      </Tag>
+                      <Tag icon={<BellOutlined />}>
+                        {hook.trigger.events.length}{t('common:unit.events')}
+                      </Tag>
+                      <Tag icon={<MonitorOutlined />}>
+                        {totalCollections}{t('hookTasks:card.taskCollections')}
+                      </Tag>
+                    </Space>
                   </div>
-                }
-                onClick={() => handleViewHook(hook)}
-              >
-                {/* Hook类型和事件标签 */}
-                <div style={{ marginBottom: 12 }}>
-                  <Space wrap size="small">
-                    <Tag color={typeConfig?.color} icon={typeConfig?.icon}>
-                      {typeConfig?.name}
-                    </Tag>
-                    <Tag icon={<BellOutlined />}>
-                      {hook.trigger.events.length}{t('common:unit.events')}
-                    </Tag>
-                    <Tag icon={<MonitorOutlined />}>
-                      {totalCollections}{t('hookTasks:card.taskCollections')}
-                    </Tag>
-                  </Space>
-                </div>
                 
-                {/* Hook描述 */}
-                <div style={{ marginBottom: 16, flex: 1 }}>
-                  <Paragraph 
-                    ellipsis={{ rows: 2, tooltip: hook.description }} 
-                    style={{ marginBottom: 0, minHeight: 44, fontSize: 13, lineHeight: '1.5' }}
-                  >
-                    {hook.description}
-                  </Paragraph>
-                </div>
+                  {/* Hook描述 */}
+                  <div style={{ marginBottom: 16, flex: 1 }}>
+                    <Paragraph 
+                      ellipsis={{ rows: 2, tooltip: hook.description }} 
+                      style={{ marginBottom: 0, minHeight: 44, fontSize: 13, lineHeight: '1.5' }}
+                    >
+                      {hook.description}
+                    </Paragraph>
+                  </div>
 
-                {/* 统计信息 */}
-                <div style={{ marginBottom: 12 }}>
-                  <Row gutter={12}>
-                    <Col span={12}>
-                      <Statistic
-                        title={t('hookTasks:card.successRate')}
-                        value={hook.statistics.successRate}
-                        suffix="%"
-                      />
-                    </Col>
-                    <Col span={12}>
-                      <Statistic
-                        title={t('hookTasks:card.triggerCount')}
-                        value={hook.statistics.totalTriggers}
-                      />
-                    </Col>
-                  </Row>
-                </div>
+                  {/* 统计信息 */}
+                  <div style={{ marginBottom: 12 }}>
+                    <Row gutter={12}>
+                      <Col span={12}>
+                        <Statistic
+                          title={t('hookTasks:card.successRate')}
+                          value={hook.statistics.successRate}
+                          suffix="%"
+                        />
+                      </Col>
+                      <Col span={12}>
+                        <Statistic
+                          title={t('hookTasks:card.triggerCount')}
+                          value={hook.statistics.totalTriggers}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
 
-                {/* 最后触发状态 - 水平排列 */}
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Text strong style={{ fontSize: 12 }}>{t('hookTasks:card.lastTriggered')}</Text>
-                      {getExecutionStatusTag(hook.lastExecution.status)}
+                  {/* 最后触发状态 - 水平排列 */}
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Text strong style={{ fontSize: 12 }}>{t('hookTasks:card.lastTriggered')}</Text>
+                        {getExecutionStatusTag(hook.lastExecution.status)}
+                      </div>
+                      <Text type="secondary" style={{ fontSize: 11 }}>
+                        {hook.lastExecution.responseTime}ms
+                      </Text>
                     </div>
-                    <Text type="secondary" style={{ fontSize: 11 }}>
-                      {hook.lastExecution.responseTime}ms
-                    </Text>
                   </div>
-                </div>
 
-                {/* 触发信息 */}
-                <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                    <Text>{t('hookTasks:card.triggerEvent')}: </Text>
-                    <Text>{hook.trigger.events.join(', ')}</Text>
+                  {/* 触发信息 */}
+                  <div style={{ fontSize: 11, color: '#666', lineHeight: '1.4', marginTop: 'auto' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+                      <Text>{t('hookTasks:card.triggerEvent')}: </Text>
+                      <Text>{hook.trigger.events.join(', ')}</Text>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Text>{t('hookTasks:card.lastTriggered')}: </Text>
+                      <Text>{hook.lastExecution.timestamp}</Text>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text>{t('hookTasks:card.lastTriggered')}: </Text>
-                    <Text>{hook.lastExecution.timestamp}</Text>
-                  </div>
-                </div>
                 
-                {/* 操作按钮区域 - 单独一行 */}
-                <div className="card-actions">
-                  <Space>
-                    <Tooltip title={t('hookTasks:card.viewDetails')}>
-                      <Button 
-                        type="text" 
-                        icon={<EyeOutlined />} 
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewHook(hook);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={t('hookTasks:card.edit')}>
-                      <Button 
-                        type="text" 
-                        icon={<EditOutlined />} 
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditHook(hook);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={hook.status === 'active' ? t('hookTasks:card.disable') : t('hookTasks:card.enable')}>
-                      <Button 
-                        type="text" 
-                        icon={hook.status === 'active' ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleToggleHook(hook.id, hook.status);
-                        }}
-                      />
-                    </Tooltip>
-                  </Space>
-                </div>
-              </HookCard>
-            </Col>
-          );
-        })}
-      </Row>
+                  {/* 操作按钮区域 - 单独一行 */}
+                  <div className="card-actions">
+                    <Space>
+                      <Tooltip title={t('hookTasks:card.viewDetails')}>
+                        <Button 
+                          type="text" 
+                          icon={<EyeOutlined />} 
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewHook(hook);
+                          }}
+                        />
+                      </Tooltip>
+                      <Tooltip title={t('hookTasks:card.edit')}>
+                        <Button 
+                          type="text" 
+                          icon={<EditOutlined />} 
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditHook(hook);
+                          }}
+                        />
+                      </Tooltip>
+                      <Tooltip title={hook.status === 'active' ? t('hookTasks:card.disable') : t('hookTasks:card.enable')}>
+                        <Button 
+                          type="text" 
+                          icon={hook.status === 'active' ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleHook(hook.id, hook.status);
+                          }}
+                        />
+                      </Tooltip>
+                    </Space>
+                  </div>
+                </HookCard>
+              </Col>
+            );
+          })}
+        </Row>
       </HookCardsContainer>
 
       {/* 创建/编辑Hook任务模态框 */}
@@ -717,7 +705,7 @@ const HookTasks: React.FC = () => {
             type: 'webhook',
             timeout: 10,
             retryCount: 3,
-            retryDelay: 5,
+            retryDelay: 5
           }}
         >
           <Form.Item

@@ -4,34 +4,22 @@ import {
   Card, 
   Row, 
   Col, 
-  Statistic, 
-  Progress,
-  Table,
-  Tag,
+  Statistic,
   Space,
   Select,
   DatePicker,
   Button,
-  Tabs,
-  Alert,
   List,
-  Avatar,
-  Badge
+  Avatar
 } from 'antd';
 import {
-  DashboardOutlined,
-  ArrowUpOutlined,
   AlertOutlined,
   CheckCircleOutlined,
-  ClockCircleOutlined,
   UserOutlined,
   DatabaseOutlined,
-  ApiOutlined,
   ThunderboltOutlined,
   SafetyCertificateOutlined,
-  BugOutlined,
   RocketOutlined,
-  HeartOutlined,
   AppstoreOutlined
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';

@@ -22,7 +22,6 @@ import {
   TagsOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
   EditOutlined,
   DeleteOutlined,
   BgColorsOutlined,
@@ -116,7 +115,7 @@ const TagManagement: React.FC = () => {
       category: 'environment',
       description: '标识生产环境相关的资源',
       usageCount: 156,
-      createdAt: '2024-06-10',
+      createdAt: '2024-06-10'
     },
     {
       key: '2',
@@ -125,7 +124,7 @@ const TagManagement: React.FC = () => {
       category: 'environment',
       description: '标识测试环境相关的资源',
       usageCount: 89,
-      createdAt: '2024-06-10',
+      createdAt: '2024-06-10'
     },
     {
       key: '3',
@@ -134,7 +133,7 @@ const TagManagement: React.FC = () => {
       category: 'business',
       description: '标识核心业务相关的组件',
       usageCount: 234,
-      createdAt: '2024-06-08',
+      createdAt: '2024-06-08'
     },
     {
       key: '4',
@@ -143,7 +142,7 @@ const TagManagement: React.FC = () => {
       category: 'feature',
       description: '标识具有高可用特性的服务',
       usageCount: 67,
-      createdAt: '2024-06-05',
+      createdAt: '2024-06-05'
     },
     {
       key: '5',
@@ -152,7 +151,7 @@ const TagManagement: React.FC = () => {
       category: 'architecture',
       description: '标识微服务架构组件',
       usageCount: 123,
-      createdAt: '2024-06-03',
+      createdAt: '2024-06-03'
     },
     {
       key: '6',
@@ -161,8 +160,8 @@ const TagManagement: React.FC = () => {
       category: 'component',
       description: '标识数据库相关组件',
       usageCount: 45,
-      createdAt: '2024-06-01',
-    },
+      createdAt: '2024-06-01'
+    }
   ];
 
   const categoryMap = {
@@ -170,7 +169,7 @@ const TagManagement: React.FC = () => {
     business: { name: '业务', icon: <NodeIndexOutlined />, color: '#52c41a' },
     feature: { name: '特性', icon: <BgColorsOutlined />, color: '#faad14' },
     architecture: { name: '架构', icon: <ControlOutlined />, color: '#722ed1' },
-    component: { name: '组件', icon: <FileTextOutlined />, color: '#13c2c2' },
+    component: { name: '组件', icon: <FileTextOutlined />, color: '#13c2c2' }
   };
 
   const handleCreateTag = () => {
@@ -185,7 +184,7 @@ const TagManagement: React.FC = () => {
       name: tag.name,
       color: tag.color,
       category: tag.category,
-      description: tag.description,
+      description: tag.description
     });
     setModalVisible(true);
   };
@@ -223,7 +222,7 @@ const TagManagement: React.FC = () => {
         <Tag color={record.color}>
           {text}
         </Tag>
-      ),
+      )
     },
     {
       title: t('tags:table.category'),
@@ -237,13 +236,13 @@ const TagManagement: React.FC = () => {
             <span>{config?.name || category}</span>
           </Space>
         );
-      },
+      }
     },
     {
       title: t('tags:table.description'),
       dataIndex: 'description',
       key: 'description',
-      ellipsis: true,
+      ellipsis: true
     },
     {
       title: t('tags:table.usageCount'),
@@ -251,12 +250,12 @@ const TagManagement: React.FC = () => {
       key: 'usageCount',
       render: (count: number) => (
         <span>{count}</span>
-      ),
+      )
     },
     {
       title: t('tags:table.createTime'),
       dataIndex: 'createdAt',
-      key: 'createdAt',
+      key: 'createdAt'
     },
     {
       title: t('tags:table.actions'),
@@ -288,8 +287,8 @@ const TagManagement: React.FC = () => {
             </Button>
           </Popconfirm>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 
   const renderTagsByCategory = () => {
@@ -444,7 +443,7 @@ const TagManagement: React.FC = () => {
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => 
-              `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
+              `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`
           }}
         />
       </Card>
@@ -462,7 +461,7 @@ const TagManagement: React.FC = () => {
           layout="vertical"
           initialValues={{
             color: '#1890ff',
-            category: 'business',
+            category: 'business'
           }}
         >
           <Form.Item

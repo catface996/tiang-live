@@ -7,39 +7,30 @@ import {
   Row, 
   Col, 
   Statistic,
-  Badge,
   Tag,
   Modal,
   Form,
   Input,
   Select,
   Switch,
-  Table,
-  Tabs,
   Descriptions,
   Tooltip,
-  Popconfirm,
   message,
   Alert,
-  Rate,
-  Divider
+  Rate
 } from 'antd';
 import { 
   FileTextOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
   CopyOutlined,
   StarOutlined,
   BulbOutlined,
   CodeOutlined,
   MessageOutlined,
-  QuestionCircleOutlined,
   CheckCircleOutlined,
-  ExclamationCircleOutlined,
   RobotOutlined,
   ThunderboltOutlined,
   SafetyCertificateOutlined
@@ -345,13 +336,13 @@ API接口：{api_details}
     '产品管理': { color: 'orange', icon: <BulbOutlined /> },
     '文档工具': { color: 'purple', icon: <FileTextOutlined /> },
     '客服助手': { color: 'cyan', icon: <MessageOutlined /> },
-    '数据分析': { color: 'red', icon: <SafetyCertificateOutlined /> },
+    '数据分析': { color: 'red', icon: <SafetyCertificateOutlined /> }
   };
 
   const difficultyMap = {
     beginner: { name: '初级', color: 'green' },
     intermediate: { name: '中级', color: 'orange' },
-    advanced: { name: '高级', color: 'red' },
+    advanced: { name: '高级', color: 'red' }
   };
 
   const getCategoryKey = (category: string) => {
@@ -381,7 +372,7 @@ API接口：{api_details}
       content: prompt.content,
       language: prompt.language,
       difficulty: prompt.difficulty,
-      isPublic: prompt.isPublic,
+      isPublic: prompt.isPublic
     });
     setModalVisible(true);
   };
@@ -676,7 +667,7 @@ API接口：{api_details}
           initialValues={{
             language: 'zh-CN',
             difficulty: 'intermediate',
-            isPublic: false,
+            isPublic: false
           }}
         >
           <Row gutter={16}>

@@ -5,8 +5,7 @@ import {
   NodeIndexOutlined, 
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  CloseCircleOutlined,
-  WarningOutlined
+  CloseCircleOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import type { PlaneDefinition, PlaneMetrics } from '../../types';
@@ -45,50 +44,50 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
       title: t('planes:stats.totalPlanes'),
       value: totalPlanes,
       icon: <AppstoreOutlined />,
-      className: 'plane-stats-primary',
+      className: 'plane-stats-primary'
     },
     {
       title: t('planes:stats.activePlanes'),
       value: activePlanes,
       icon: <CheckCircleOutlined />,
-      className: 'plane-stats-success',
+      className: 'plane-stats-success'
     },
     {
       title: t('planes:stats.warningPlanes'),
       value: warningPlanes,
       icon: <ExclamationCircleOutlined />,
-      className: 'plane-stats-warning',
+      className: 'plane-stats-warning'
     },
     {
       title: t('planes:stats.errorPlanes'),
       value: errorPlanes,
       icon: <CloseCircleOutlined />,
-      className: 'plane-stats-error',
+      className: 'plane-stats-error'
     },
     {
       title: t('planes:stats.totalInstances'),
       value: totalInstances,
       icon: <NodeIndexOutlined />,
-      className: 'plane-stats-purple',
+      className: 'plane-stats-purple'
     },
     {
       title: t('planes:stats.healthyEntities'),
       value: totalHealthyEntities,
       icon: <CheckCircleOutlined />,
-      className: 'plane-stats-success',
+      className: 'plane-stats-success'
     },
     {
       title: t('planes:stats.warningEntities'),
       value: totalWarningEntities,
       icon: <ExclamationCircleOutlined />,
-      className: 'plane-stats-warning',
+      className: 'plane-stats-warning'
     },
     {
       title: t('planes:stats.errorEntities'),
       value: totalErrorEntities,
       icon: <CloseCircleOutlined />,
-      className: 'plane-stats-error',
-    },
+      className: 'plane-stats-error'
+    }
   ];
 
   return (

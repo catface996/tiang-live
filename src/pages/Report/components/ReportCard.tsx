@@ -9,7 +9,6 @@ import {
   Dropdown, 
   Typography,
   Statistic,
-  Progress,
   theme
 } from 'antd';
 import { 
@@ -42,9 +41,9 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   
   &:hover {
     box-shadow: ${props => props.$isDark 
-      ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
-      : '0 4px 12px rgba(0, 0, 0, 0.15)'
-    };
+    ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
+    : '0 4px 12px rgba(0, 0, 0, 0.15)'
+};
     transform: translateY(-2px);
     border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
   }
@@ -236,7 +235,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
         text: t('reports:status.archived'), 
         icon: '⚪',
         bgColor: isDark ? 'rgba(140, 140, 140, 0.1)' : undefined
-      },
+      }
     };
     return statusMap[status as keyof typeof statusMap] || { 
       color: 'default', 
@@ -267,7 +266,7 @@ const ReportCard: React.FC<ReportCardProps> = ({
         color: isDark ? '#faad14' : 'gold', 
         icon: '⚡',
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
-      },
+      }
     };
     return typeMap[type as keyof typeof typeMap] || { 
       color: 'default', 
@@ -390,9 +389,9 @@ const ReportCard: React.FC<ReportCardProps> = ({
             icon={<FileTextOutlined />} 
             style={{ 
               backgroundColor: typeConfig.color === 'blue' || typeConfig.color === '#1890ff' ? '#1890ff' : 
-                              typeConfig.color === 'purple' || typeConfig.color === '#722ed1' ? '#722ed1' :
-                              typeConfig.color === 'cyan' || typeConfig.color === '#13c2c2' ? '#13c2c2' : 
-                              typeConfig.color === 'gold' || typeConfig.color === '#faad14' ? '#faad14' : '#1890ff'
+                typeConfig.color === 'purple' || typeConfig.color === '#722ed1' ? '#722ed1' :
+                  typeConfig.color === 'cyan' || typeConfig.color === '#13c2c2' ? '#13c2c2' : 
+                    typeConfig.color === 'gold' || typeConfig.color === '#faad14' ? '#faad14' : '#1890ff'
             }}
           />
         </div>

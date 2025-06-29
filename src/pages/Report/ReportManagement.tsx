@@ -7,9 +7,7 @@ import {
   Row, 
   Col, 
   Statistic,
-  Badge,
   Tag,
-  Input,
   DatePicker,
   Select,
   message,
@@ -19,8 +17,6 @@ import {
   FileTextOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
-  FilterOutlined,
   ExportOutlined,
   DownloadOutlined,
   EyeOutlined,
@@ -56,7 +52,7 @@ const PageHeader = styled.div<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   transition: all 0.3s ease;
 `;
@@ -66,7 +62,7 @@ const StatsCard = styled(Card)<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   transition: all 0.3s ease;
@@ -104,9 +100,9 @@ const FilterBar = styled.div<{ $isDark: boolean }>`
     &:focus {
       border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
       box-shadow: ${props => props.$isDark 
-        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
-        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
-      };
+    ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+    : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+};
     }
   }
   
@@ -124,9 +120,9 @@ const FilterBar = styled.div<{ $isDark: boolean }>`
     &.ant-select-focused .ant-select-selector {
       border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
       box-shadow: ${props => props.$isDark 
-        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
-        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
-      };
+    ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+    : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+};
     }
   }
   
@@ -142,9 +138,9 @@ const FilterBar = styled.div<{ $isDark: boolean }>`
     &.ant-picker-focused {
       border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
       box-shadow: ${props => props.$isDark 
-        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
-        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
-      };
+    ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+    : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+};
     }
   }
 `;
@@ -220,7 +216,7 @@ const ReportManagement: React.FC = () => {
         color: isDark ? '#8c8c8c' : 'gray', 
         text: '已归档',
         bgColor: isDark ? 'rgba(140, 140, 140, 0.1)' : undefined
-      },
+      }
     };
     const config = statusMap[status as keyof typeof statusMap] || { 
       color: 'default', 
@@ -266,7 +262,7 @@ const ReportManagement: React.FC = () => {
       '行为分析': { 
         color: isDark ? '#52c41a' : 'green',
         bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
-      },
+      }
     };
     const config = typeMap[type as keyof typeof typeMap] || { 
       color: 'default',

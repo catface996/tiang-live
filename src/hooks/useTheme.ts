@@ -3,7 +3,7 @@
  */
 
 import { useAppSelector } from '../store';
-import { getThemeStyles, getThemeClass, THEME_CLASSES, type ThemeType } from '../utils/themeUtils';
+import { getThemeStyles, getThemeClass, THEME_CLASSES } from '../utils/themeUtils';
 
 /**
  * 使用主题的Hook
@@ -30,7 +30,7 @@ export const useTheme = () => {
     classes: THEME_CLASSES,
     
     // 主题根类名
-    rootClass: `theme-${currentTheme}`,
+    rootClass: `theme-${currentTheme}`
   };
 };
 
@@ -53,6 +53,6 @@ export const useThemeClass = () => {
   return {
     getClass: (baseClass: string) => getThemeClass(baseClass, currentTheme),
     rootClass: `theme-${currentTheme}`,
-    classes: THEME_CLASSES,
+    classes: THEME_CLASSES
   };
 };

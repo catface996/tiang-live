@@ -7,19 +7,14 @@ import {
   Row, 
   Col, 
   Statistic,
-  Badge,
   Tag,
   Modal,
   Form,
   Input,
   Select,
-  Switch,
-  Table,
   Tabs,
   Descriptions,
-  Progress,
   Tooltip,
-  Popconfirm,
   message,
   Alert,
   InputNumber,
@@ -29,16 +24,12 @@ import {
   SettingOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
   CheckCircleOutlined,
-  ExclamationCircleOutlined,
   CloudOutlined,
   ApiOutlined,
   ThunderboltOutlined,
-  SafetyCertificateOutlined,
   MonitorOutlined,
   RobotOutlined,
   ExperimentOutlined,
@@ -196,30 +187,30 @@ const ModelManagement: React.FC = () => {
   // 从JSON文件获取模型数据
   const modelData: ModelConfig[] = modelsData.models.map(model => ({
     ...model,
-    description: t(model.description.replace("models.", "models:")),
-    capabilities: model.capabilities.map(cap => t(cap.replace("models.", "models:"))),
-    createdBy: t(model.createdBy.replace("models.", "models:"))
+    description: t(model.description.replace('models.', 'models:')),
+    capabilities: model.capabilities.map(cap => t(cap.replace('models.', 'models:'))),
+    createdBy: t(model.createdBy.replace('models.', 'models:'))
   }));
 
   const providerMap = {
     'OpenAI': { color: 'green', icon: <ExperimentOutlined /> },
     'Anthropic': { color: 'blue', icon: <RobotOutlined /> },
     'Google': { color: 'red', icon: <CloudOutlined /> },
-    'Azure': { color: 'cyan', icon: <DatabaseOutlined /> },
+    'Azure': { color: 'cyan', icon: <DatabaseOutlined /> }
   };
 
   const modelTypeMap = {
     llm: { name: t('models:types.llm'), color: 'blue', icon: <ExperimentOutlined /> },
     embedding: { name: t('models:types.embedding'), color: 'green', icon: <ApiOutlined /> },
     image: { name: t('models:types.image'), color: 'orange', icon: <MonitorOutlined /> },
-    audio: { name: t('models:types.audio'), color: 'purple', icon: <ThunderboltOutlined /> },
+    audio: { name: t('models:types.audio'), color: 'purple', icon: <ThunderboltOutlined /> }
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
       active: { color: 'green', text: t('models:status.active') },
       inactive: { color: 'red', text: t('models:status.inactive') },
-      testing: { color: 'orange', text: t('models:status.testing') },
+      testing: { color: 'orange', text: t('models:status.testing') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -241,7 +232,7 @@ const ModelManagement: React.FC = () => {
       apiEndpoint: model.apiEndpoint,
       maxTokens: model.maxTokens,
       temperature: model.temperature,
-      description: model.description,
+      description: model.description
     });
     setModalVisible(true);
   };
@@ -532,7 +523,7 @@ const ModelManagement: React.FC = () => {
           initialValues={{
             temperature: 0.7,
             topP: 1.0,
-            maxTokens: 4096,
+            maxTokens: 4096
           }}
         >
           <Row gutter={16}>

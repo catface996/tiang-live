@@ -27,8 +27,8 @@ class SimpleApiClient {
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
+        ...options.headers
+      }
     };
 
     try {
@@ -40,7 +40,7 @@ class SimpleApiClient {
           code: response.status.toString(),
           message: errorData.message || response.statusText || '请求失败',
           details: errorData,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         };
         throw apiError;
       }
@@ -53,7 +53,7 @@ class SimpleApiClient {
           code: 'NETWORK_ERROR',
           message: error.message || '网络请求失败',
           details: error,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         };
         throw apiError;
       }
@@ -70,21 +70,21 @@ class SimpleApiClient {
   async post<T = any>(url: string, data?: any): Promise<T> {
     return this.request<T>(url, {
       method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : undefined
     });
   }
 
   async put<T = any>(url: string, data?: any): Promise<T> {
     return this.request<T>(url, {
       method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : undefined
     });
   }
 
   async patch<T = any>(url: string, data?: any): Promise<T> {
     return this.request<T>(url, {
       method: 'PATCH',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : undefined
     });
   }
 

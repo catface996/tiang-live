@@ -88,19 +88,19 @@ const initialState: PlaneState = {
     definitions: false,
     instances: false,
     topology: false,
-    metrics: false,
+    metrics: false
   },
   error: {
     definitions: null,
     instances: null,
     topology: null,
-    metrics: null,
+    metrics: null
   },
   pagination: {
     current: 1,
     pageSize: 10,
-    total: 0,
-  },
+    total: 0
+  }
 };
 
 // Slice
@@ -116,12 +116,12 @@ const planeSlice = createSlice({
         definitions: null,
         instances: null,
         topology: null,
-        metrics: null,
+        metrics: null
       };
     },
     setPagination: (state, action) => {
       state.pagination = { ...state.pagination, ...action.payload };
-    },
+    }
   },
   extraReducers: (builder) => {
     // 获取平面定义
@@ -190,7 +190,7 @@ const planeSlice = createSlice({
       .addCase(deletePlaneDefinition.fulfilled, (state, action) => {
         state.definitions = state.definitions.filter(def => def.id !== action.payload);
       });
-  },
+  }
 });
 
 export const { setSelectedPlane, clearErrors, setPagination } = planeSlice.actions;

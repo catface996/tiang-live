@@ -64,7 +64,7 @@ class PlaneService extends BaseApiService {
         status: 'ACTIVE',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        ...data,
+        ...data
       };
       return Promise.resolve(newPlane);
     }
@@ -77,7 +77,7 @@ class PlaneService extends BaseApiService {
       const updatedPlane = {
         ...existingPlane,
         ...data,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
       return Promise.resolve(updatedPlane);
     }
@@ -138,7 +138,7 @@ class PlaneService extends BaseApiService {
           total: 12
         },
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       }
     ];
 
@@ -146,7 +146,7 @@ class PlaneService extends BaseApiService {
       data: mockInstances,
       total: mockInstances.length,
       page: params?.page || 1,
-      pageSize: params?.pageSize || 10,
+      pageSize: params?.pageSize || 10
     });
   }
 
@@ -166,7 +166,7 @@ class PlaneService extends BaseApiService {
       },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      ...data,
+      ...data
     };
     return Promise.resolve(newInstance);
   }

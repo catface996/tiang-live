@@ -16,10 +16,8 @@ import {
   Modal,
   message,
   Divider,
-  Tooltip,
   Switch,
-  Badge,
-  Statistic
+  Badge
 } from 'antd';
 import {
   ScanOutlined,
@@ -28,10 +26,7 @@ import {
   ApiOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  InfoCircleOutlined,
   SettingOutlined,
-  PlayCircleOutlined,
-  PauseCircleOutlined,
   ReloadOutlined,
   LineChartOutlined,
   BarChartOutlined,
@@ -83,11 +78,11 @@ const StatsCard = styled(Card)<{ $isDark: boolean }>`
   background: ${props => props.$isDark 
     ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
     : 'linear-gradient(145deg, #ffffff, #fafafa)'
-  };
+};
   border: 1px solid ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.08)' 
     : 'rgba(0, 0, 0, 0.06)'
-  };
+};
   
   .ant-card-body {
     padding: 20px;
@@ -101,18 +96,18 @@ const StatItem = styled.div<{ $isDark: boolean }>`
   background: ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.03)' 
     : 'rgba(0, 0, 0, 0.02)'
-  };
+};
   border: 1px solid ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.05)' 
     : 'rgba(0, 0, 0, 0.04)'
-  };
+};
   transition: all 0.3s ease;
   
   &:hover {
     background: ${props => props.$isDark 
-      ? 'rgba(255, 255, 255, 0.05)' 
-      : 'rgba(0, 0, 0, 0.04)'
-    };
+    ? 'rgba(255, 255, 255, 0.05)' 
+    : 'rgba(0, 0, 0, 0.04)'
+};
     transform: translateY(-2px);
   }
 `;
@@ -129,7 +124,7 @@ const StatLabel = styled.div<{ $isDark: boolean }>`
   color: ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.65)' 
     : 'rgba(0, 0, 0, 0.65)'
-  };
+};
   font-weight: 500;
 `;
 
@@ -139,7 +134,7 @@ const ScanCard = styled(Card)<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   
   .ant-card-head {
     border-bottom: 1px solid ${props => props.$isDark ? '#303030' : '#f0f0f0'};
@@ -154,30 +149,30 @@ const DataSourceCard = styled(Card)<{ $isDark: boolean }>`
   background: ${props => props.$isDark 
     ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
     : 'linear-gradient(145deg, #ffffff, #fafafa)'
-  };
+};
   border: 1px solid ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.08)' 
     : 'rgba(0, 0, 0, 0.06)'
-  };
+};
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.02)'
-  };
+};
   
   &:hover {
     transform: translateY(-3px);
     background: ${props => props.$isDark 
-      ? 'linear-gradient(145deg, #1f1f1f, #1a1a1a)' 
-      : 'linear-gradient(145deg, #ffffff, #f8f9fa)'
-    };
+    ? 'linear-gradient(145deg, #1f1f1f, #1a1a1a)' 
+    : 'linear-gradient(145deg, #ffffff, #f8f9fa)'
+};
     border-color: ${props => props.$isDark 
-      ? 'rgba(255, 255, 255, 0.15)' 
-      : 'rgba(24, 144, 255, 0.3)'
-    };
+    ? 'rgba(255, 255, 255, 0.15)' 
+    : 'rgba(24, 144, 255, 0.3)'
+};
     box-shadow: ${props => props.$isDark 
-      ? '0 6px 20px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(255, 255, 255, 0.08)' 
-      : '0 6px 20px rgba(24, 144, 255, 0.15), 0 3px 6px rgba(0, 0, 0, 0.08)'
-    };
+    ? '0 6px 20px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(255, 255, 255, 0.08)' 
+    : '0 6px 20px rgba(24, 144, 255, 0.15), 0 3px 6px rgba(0, 0, 0, 0.08)'
+};
   }
   
   .ant-card-body {
@@ -224,7 +219,7 @@ const DataSourceIcon = styled.div<{ type: string; $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
     : '0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-  };
+};
   
   &::after {
     content: '';
@@ -284,14 +279,14 @@ const MetaLabel = styled.span<{ $isDark: boolean }>`
   color: ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.65)' 
     : 'rgba(0, 0, 0, 0.65)'
-  };
+};
 `;
 
 const MetaValue = styled.span<{ $isDark: boolean }>`
   color: ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.85)' 
     : 'rgba(0, 0, 0, 0.85)'
-  };
+};
   font-weight: 500;
 `;
 
@@ -1275,7 +1270,7 @@ const EntityScan: React.FC = () => {
             </Text>
           </div>
         </Space>
-      ),
+      )
     },
     {
       title: '类型',
@@ -1314,25 +1309,25 @@ const EntityScan: React.FC = () => {
             )}
           </div>
         );
-      },
+      }
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => getStatusTag(status),
+      render: (status: string) => getStatusTag(status)
     },
     {
       title: '实体数量',
       dataIndex: 'entityCount',
       key: 'entityCount',
-      render: (count: number) => count || 0,
+      render: (count: number) => count || 0
     },
     {
       title: '最后扫描',
       dataIndex: 'lastScan',
       key: 'lastScan',
-      render: (time: string) => time || t('entityScan:status.neverScanned'),
+      render: (time: string) => time || t('entityScan:status.neverScanned')
     },
     {
       title: '操作',
@@ -1356,8 +1351,8 @@ const EntityScan: React.FC = () => {
             选择
           </Button>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 
   // 扫描结果表格列
@@ -1375,7 +1370,7 @@ const EntityScan: React.FC = () => {
             );
           }}
         />
-      ),
+      )
     },
     {
       title: '实体名称',
@@ -1388,12 +1383,12 @@ const EntityScan: React.FC = () => {
             来源: {record.source}
           </Text>
         </div>
-      ),
+      )
     },
     {
       title: '实体类型',
       dataIndex: 'type',
-      key: 'type',
+      key: 'type'
     },
     {
       title: '置信度',
@@ -1407,14 +1402,14 @@ const EntityScan: React.FC = () => {
             status={confidence > 0.9 ? 'success' : confidence > 0.7 ? 'normal' : 'exception'}
           />
         </div>
-      ),
+      )
     },
     {
       title: '属性数量',
       dataIndex: 'attributes',
       key: 'attributes',
-      render: (attributes: Record<string, any>) => Object.keys(attributes).length,
-    },
+      render: (attributes: Record<string, any>) => Object.keys(attributes).length
+    }
   ];
 
   return (

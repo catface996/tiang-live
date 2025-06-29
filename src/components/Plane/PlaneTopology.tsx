@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Empty, Spin } from 'antd';
+import { Empty, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import type { PlaneDefinition, PlaneRelationship } from '../../types';
@@ -40,7 +40,7 @@ const PlaneTopology: React.FC<PlaneTopologyProps> = ({
   planes,
   relationships,
   loading = false,
-  onPlaneAction,
+  onPlaneAction
 }) => {
   const { t } = useTranslation(['planes', 'common']);
   

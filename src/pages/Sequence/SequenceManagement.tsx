@@ -298,14 +298,14 @@ const SequenceManagement: React.FC = () => {
     business: { name: t('sequences:types.business'), color: 'green', icon: <ApiOutlined /> },
     monitoring: { name: t('sequences:types.monitoring'), color: 'orange', icon: <ClockCircleOutlined /> },
     data: { name: t('sequences:types.data'), color: 'purple', icon: <DatabaseOutlined /> },
-    gateway: { name: t('sequences:types.gateway'), color: 'cyan', icon: <CloudOutlined /> },
+    gateway: { name: t('sequences:types.gateway'), color: 'cyan', icon: <CloudOutlined /> }
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
       active: { color: 'green', text: t('sequences:statuses.active') },
       inactive: { color: 'red', text: t('sequences:statuses.inactive') },
-      draft: { color: 'orange', text: t('sequences:statuses.draft') },
+      draft: { color: 'orange', text: t('sequences:statuses.draft') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return config ? <Tag color={config.color}>{config.text}</Tag> : <Tag>{status}</Tag>;

@@ -5,12 +5,10 @@ import {
   Button, 
   Tag, 
   Avatar, 
-  Progress, 
   Tooltip, 
   Popconfirm, 
   Typography,
   Statistic,
-  Badge,
   theme
 } from 'antd';
 import { 
@@ -133,9 +131,9 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   &:hover {
     transform: translateY(-2px);
     box-shadow: ${props => props.$isDark 
-      ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
-      : '0 4px 12px rgba(0, 0, 0, 0.1)'
-    };
+    ? '0 4px 12px rgba(255, 255, 255, 0.1)' 
+    : '0 4px 12px rgba(0, 0, 0, 0.1)'
+};
     border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
   }
       
@@ -364,7 +362,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
       icon: <DeleteOutlined />,
       bgColor: isDark ? 'rgba(140, 140, 140, 0.1)' : undefined,
       avatarColor: isDark ? '#8c8c8c' : '#bfbfbf'
-    },
+    }
   }), [isDark, t]);
 
   const getStatusConfig = (status: string) => {
@@ -386,7 +384,7 @@ const AIAgentCard: React.FC<AIAgentCardProps> = ({
         text: t('agents:status.paused'), 
         icon: <ClockCircleOutlined />,
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
-      },
+      }
     };
     return statusMap[status as keyof typeof statusMap];
   };

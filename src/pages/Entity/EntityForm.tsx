@@ -9,9 +9,7 @@ import {
   Col,
   Space,
   Typography,
-  Divider,
   Tag,
-  Switch,
   InputNumber,
   message,
   Steps,
@@ -67,9 +65,9 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   
   &:hover {
     box-shadow: ${props => props.$isDark 
-      ? '0 2px 12px rgba(0, 0, 0, 0.3)' 
-      : '0 2px 12px rgba(0, 0, 0, 0.06)'
-    };
+    ? '0 2px 12px rgba(0, 0, 0, 0.3)' 
+    : '0 2px 12px rgba(0, 0, 0, 0.06)'
+};
   }
   
   .ant-card-head {
@@ -306,18 +304,18 @@ const IconSelector = styled.div<{ $isDark: boolean }>`
       background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.1)' : 'rgba(24, 144, 255, 0.06)'};
       transform: translateY(-2px);
       box-shadow: ${props => props.$isDark 
-        ? '0 4px 12px rgba(74, 158, 255, 0.2)' 
-        : '0 4px 12px rgba(24, 144, 255, 0.15)'
-      };
+    ? '0 4px 12px rgba(74, 158, 255, 0.2)' 
+    : '0 4px 12px rgba(24, 144, 255, 0.15)'
+};
     }
     
     &.selected {
       border-color: #4a9eff;
       background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.15)' : 'rgba(24, 144, 255, 0.08)'};
       box-shadow: ${props => props.$isDark 
-        ? '0 0 0 3px rgba(74, 158, 255, 0.2)' 
-        : '0 0 0 3px rgba(24, 144, 255, 0.1)'
-      };
+    ? '0 0 0 3px rgba(74, 158, 255, 0.2)' 
+    : '0 0 0 3px rgba(24, 144, 255, 0.1)'
+};
     }
     
     .anticon {
@@ -576,67 +574,67 @@ const EntityForm: React.FC = () => {
                   </Option>
                 ))}
               </Select>
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="plane"
-            label={t('entities:form.belongsToPlane')}
-            rules={[{ required: true, message: t('entities:form.planeRequired') }]}
-          >
-            <Select placeholder={t('entities:form.planeRequired')}>
-              {planeOptions.map(plane => (
-                <Option key={plane.value} value={plane.value}>
-                  {plane.label}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="status"
-            label={t('common:status')}
-            initialValue="active"
-          >
-            <Select>
-              <Option value="active">{t('common:active')}</Option>
-              <Option value="inactive">{t('common:inactive')}</Option>
-              <Option value="deprecated">{t('common:deprecated')}</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-        <Col xs={24}>
-          <Form.Item
-            name="description"
-            label={t('common:description')}
-            rules={[
-              { required: true, message: t('entities:form.descriptionRequired') },
-              { max: 500, message: t('entities:form.descriptionMaxLength') }
-            ]}
-          >
-            <TextArea 
-              rows={4} 
-              placeholder={t('entities:form.descriptionPlaceholder')}
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24}>
-          <Form.Item label={t('entities:form.iconSelection')}>
-            <IconSelector $isDark={isDark}>
-              {iconOptions.map(option => (
-                <div
-                  key={option.key}
-                  className={`icon-option ${selectedIcon === option.key ? 'selected' : ''}`}
-                  onClick={() => setSelectedIcon(option.key)}
-                >
-                  {option.icon}
-                </div>
-              ))}
-            </IconSelector>
-          </Form.Item>
-        </Col>
-      </Row>
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="plane"
+              label={t('entities:form.belongsToPlane')}
+              rules={[{ required: true, message: t('entities:form.planeRequired') }]}
+            >
+              <Select placeholder={t('entities:form.planeRequired')}>
+                {planeOptions.map(plane => (
+                  <Option key={plane.value} value={plane.value}>
+                    {plane.label}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="status"
+              label={t('common:status')}
+              initialValue="active"
+            >
+              <Select>
+                <Option value="active">{t('common:active')}</Option>
+                <Option value="inactive">{t('common:inactive')}</Option>
+                <Option value="deprecated">{t('common:deprecated')}</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24}>
+            <Form.Item
+              name="description"
+              label={t('common:description')}
+              rules={[
+                { required: true, message: t('entities:form.descriptionRequired') },
+                { max: 500, message: t('entities:form.descriptionMaxLength') }
+              ]}
+            >
+              <TextArea 
+                rows={4} 
+                placeholder={t('entities:form.descriptionPlaceholder')}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24}>
+            <Form.Item label={t('entities:form.iconSelection')}>
+              <IconSelector $isDark={isDark}>
+                {iconOptions.map(option => (
+                  <div
+                    key={option.key}
+                    className={`icon-option ${selectedIcon === option.key ? 'selected' : ''}`}
+                    onClick={() => setSelectedIcon(option.key)}
+                  >
+                    {option.icon}
+                  </div>
+                ))}
+              </IconSelector>
+            </Form.Item>
+          </Col>
+        </Row>
       </FormSection>
     </StyledCard>
   );
@@ -674,39 +672,39 @@ const EntityForm: React.FC = () => {
               <Input placeholder={t('entities:form.healthCheckUrlPlaceholder')} />
             </Form.Item>
           </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="tags"
-            label={t('entities:form.tags')}
-          >
-            <Select
-              mode="tags"
-              placeholder={t('entities:form.tagsPlaceholder')}
-              style={{ width: '100%' }}
+          <Col xs={24} md={12}>
+            <Form.Item
+              name="tags"
+              label={t('entities:form.tags')}
             >
-              <Option value={t('common:coreService')}>{t('common:coreService')}</Option>
-              <Option value={t('common:basicService')}>{t('common:basicService')}</Option>
-              <Option value={t('common:businessService')}>{t('common:businessService')}</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-        <Col xs={24}>
-          <Form.Item
-            name="dependencies"
-            label={t('entities:form.dependencies')}
-          >
-            <Select
-              mode="tags"
-              placeholder={t('entities:form.dependenciesPlaceholder')}
-              style={{ width: '100%' }}
+              <Select
+                mode="tags"
+                placeholder={t('entities:form.tagsPlaceholder')}
+                style={{ width: '100%' }}
+              >
+                <Option value={t('common:coreService')}>{t('common:coreService')}</Option>
+                <Option value={t('common:basicService')}>{t('common:basicService')}</Option>
+                <Option value={t('common:businessService')}>{t('common:businessService')}</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24}>
+            <Form.Item
+              name="dependencies"
+              label={t('entities:form.dependencies')}
             >
-              <Option value={t('common:database')}>{t('common:database')}</Option>
-              <Option value={t('common:redisCache')}>{t('common:redisCache')}</Option>
-              <Option value={t('common:messageQueue')}>{t('common:messageQueue')}</Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row>
+              <Select
+                mode="tags"
+                placeholder={t('entities:form.dependenciesPlaceholder')}
+                style={{ width: '100%' }}
+              >
+                <Option value={t('common:database')}>{t('common:database')}</Option>
+                <Option value={t('common:redisCache')}>{t('common:redisCache')}</Option>
+                <Option value={t('common:messageQueue')}>{t('common:messageQueue')}</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
       </FormSection>
     </StyledCard>
   );

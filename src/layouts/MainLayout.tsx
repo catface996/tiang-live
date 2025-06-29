@@ -7,7 +7,7 @@ import {
   Avatar,
   Dropdown,
   Space,
-  Typography,
+  Typography
 } from 'antd';
 import {
   DashboardOutlined,
@@ -16,16 +16,14 @@ import {
   ControlOutlined,
   RobotOutlined,
   FileTextOutlined,
-  TagsOutlined,
   MessageOutlined,
   SolutionOutlined,
-  UnorderedListOutlined,
   ProjectOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
   SettingOutlined,
-  LogoutOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { ASSETS } from '../utils/assetUtils';
@@ -71,27 +69,27 @@ const MainLayout: React.FC = () => {
     {
       key: '/dashboard',
       icon: <DashboardOutlined />,
-      label: t('menu:dashboard'),
+      label: t('menu:dashboard')
     },
     {
       key: '/planes',
       icon: <AppstoreOutlined />,
-      label: t('menu:planes'),
+      label: t('menu:planes')
     },
     {
       key: '/entities',
       icon: <NodeIndexOutlined />,
-      label: t('menu:entities'),
+      label: t('menu:entities')
     },
     {
       key: '/sequences',
       icon: <ControlOutlined />,
-      label: t('menu:sequences'),
+      label: t('menu:sequences')
     },
     {
       key: '/industry-solutions',
       icon: <SolutionOutlined />,
-      label: t('menu:solutions'),
+      label: t('menu:solutions')
     },
     {
       key: 'task-management',
@@ -100,32 +98,32 @@ const MainLayout: React.FC = () => {
       children: [
         {
           key: '/task-management/task-collections',
-          label: t('menu:collections'),
+          label: t('menu:collections')
         },
         {
           key: '/task-management/inspection-tasks',
-          label: t('menu:inspectionTasks'),
+          label: t('menu:inspectionTasks')
         },
         {
           key: '/task-management/hook-tasks',
-          label: t('menu:hookTasks'),
-        },
-      ],
+          label: t('menu:hookTasks')
+        }
+      ]
     },
     {
       key: '/reports',
       icon: <FileTextOutlined />,
-      label: t('menu:reports'),
+      label: t('menu:reports')
     },
     {
       key: '/ai-assistant',
       icon: <MessageOutlined />,
-      label: t('menu:aiAssistant'),
+      label: t('menu:aiAssistant')
     },
     {
       key: '/ai-agents',
       icon: <RobotOutlined />,
-      label: t('menu:agents'),
+      label: t('menu:agents')
     },
     {
       key: 'system-settings',
@@ -134,44 +132,44 @@ const MainLayout: React.FC = () => {
       children: [
         {
           key: '/system-settings/model-management',
-          label: t('menu:modelManagement'),
+          label: t('menu:modelManagement')
         },
         {
           key: '/system-settings/prompt-templates',
-          label: t('menu:promptTemplates'),
+          label: t('menu:promptTemplates')
         },
         {
           key: '/system-settings/tag-management',
-          label: t('menu:tagManagement'),
+          label: t('menu:tagManagement')
         },
         {
           key: '/system-settings/entity-scan',
-          label: t('menu:entityScan'),
-        },
-      ],
-    },
+          label: t('menu:entityScan')
+        }
+      ]
+    }
   ];
 
   const userMenuItems = [
     {
       key: 'profile',
       icon: <UserOutlined />,
-      label: t('layout:profile'),
+      label: t('layout:profile')
     },
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: t('layout:settings'),
+      label: t('layout:settings')
     },
     {
-      type: 'divider' as const,
+      type: 'divider' as const
     },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
       label: t('layout:logout'),
-      danger: true,
-    },
+      danger: true
+    }
   ];
 
   const handleMenuClick = ({ key }: { key: string }) => {
@@ -269,7 +267,7 @@ const MainLayout: React.FC = () => {
           {/* 菜单 */}
           <Menu
             className="app-menu"
-            theme={isDarkMode ? "dark" : "light"}
+            theme={isDarkMode ? 'dark' : 'light'}
             mode="inline"
             selectedKeys={[location.pathname]}
             items={menuItems}

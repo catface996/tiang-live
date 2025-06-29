@@ -15,8 +15,6 @@ import {
   Modal,
   message,
   Breadcrumb,
-  Statistic,
-  Tooltip,
   Badge
 } from 'antd';
 import {
@@ -25,7 +23,6 @@ import {
   DatabaseOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
-  InfoCircleOutlined,
   ReloadOutlined,
   DownloadOutlined,
   EyeOutlined,
@@ -111,11 +108,11 @@ const StatsCard = styled(Card)<{ $isDark: boolean }>`
   background: ${props => props.$isDark 
     ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
     : 'linear-gradient(145deg, #ffffff, #fafafa)'
-  };
+};
   border: 1px solid ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.08)' 
     : 'rgba(0, 0, 0, 0.06)'
-  };
+};
   
   .ant-card-body {
     padding: 20px;
@@ -129,18 +126,18 @@ const StatItem = styled.div<{ $isDark: boolean }>`
   background: ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.03)' 
     : 'rgba(0, 0, 0, 0.02)'
-  };
+};
   border: 1px solid ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.05)' 
     : 'rgba(0, 0, 0, 0.04)'
-  };
+};
   transition: all 0.3s ease;
   
   &:hover {
     background: ${props => props.$isDark 
-      ? 'rgba(255, 255, 255, 0.05)' 
-      : 'rgba(0, 0, 0, 0.04)'
-    };
+    ? 'rgba(255, 255, 255, 0.05)' 
+    : 'rgba(0, 0, 0, 0.04)'
+};
     transform: translateY(-2px);
   }
 `;
@@ -157,7 +154,7 @@ const StatLabel = styled.div<{ $isDark: boolean }>`
   color: ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.65)' 
     : 'rgba(0, 0, 0, 0.65)'
-  };
+};
   font-weight: 500;
 `;
 
@@ -167,11 +164,11 @@ const ScanCard = styled(Card)<{ $isDark: boolean }>`
   background: ${props => props.$isDark 
     ? 'linear-gradient(145deg, #1a1a1a, #141414)' 
     : 'linear-gradient(145deg, #ffffff, #fafafa)'
-  };
+};
   border: 1px solid ${props => props.$isDark 
     ? 'rgba(255, 255, 255, 0.08)' 
     : 'rgba(0, 0, 0, 0.06)'
-  };
+};
   
   .ant-card-head {
     border-bottom: 1px solid ${props => props.$isDark ? '#303030' : '#f0f0f0'};
@@ -850,7 +847,7 @@ const ScanDetail: React.FC = () => {
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => 
-              `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`,
+              `第 ${range[0]}-${range[1]} 条，共 ${total} 条记录`
           }}
         />
       </ScanCard>

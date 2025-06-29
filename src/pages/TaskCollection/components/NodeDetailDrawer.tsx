@@ -122,14 +122,14 @@ const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
               <Badge 
                 status={
                   node.status === NodeStatus.COMPLETED ? 'success' :
-                  node.status === NodeStatus.RUNNING ? 'processing' :
-                  node.status === NodeStatus.FAILED ? 'error' : 'default'
+                    node.status === NodeStatus.RUNNING ? 'processing' :
+                      node.status === NodeStatus.FAILED ? 'error' : 'default'
                 }
                 text={
                   node.status === NodeStatus.COMPLETED ? '已完成' :
-                  node.status === NodeStatus.RUNNING ? '运行中' :
-                  node.status === NodeStatus.FAILED ? '失败' :
-                  node.status === NodeStatus.PENDING ? '等待中' : '未知'
+                    node.status === NodeStatus.RUNNING ? '运行中' :
+                      node.status === NodeStatus.FAILED ? '失败' :
+                        node.status === NodeStatus.PENDING ? '等待中' : '未知'
                 }
               />
             </Descriptions.Item>
@@ -151,9 +151,9 @@ const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({
             {node.actions.map(actionId => (
               <Tag key={actionId} color="blue" icon={getActionIcon(actionId)}>
                 {actionId === 'health_check' ? '健康检查' :
-                 actionId === 'performance_analysis' ? '性能分析' :
-                 actionId === 'fault_analysis' ? '故障分析' :
-                 actionId === 'security_scan' ? '安全扫描' : actionId}
+                  actionId === 'performance_analysis' ? '性能分析' :
+                    actionId === 'fault_analysis' ? '故障分析' :
+                      actionId === 'security_scan' ? '安全扫描' : actionId}
               </Tag>
             ))}
           </Space>

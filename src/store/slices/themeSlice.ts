@@ -8,7 +8,7 @@ interface ThemeState {
 
 // 初始状态 - 从localStorage读取用户之前的选择
 const initialState: ThemeState = {
-  currentTheme: themeStorage.get(),
+  currentTheme: themeStorage.get()
 };
 
 // 创建主题切换的slice
@@ -28,8 +28,8 @@ const themeSlice = createSlice({
       state.currentTheme = action.payload;
       // 保存到localStorage
       themeStorage.set(action.payload);
-    },
-  },
+    }
+  }
 });
 
 // 导出actions

@@ -22,8 +22,8 @@ const createApiInstance = () => {
     baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1',
     timeout: 10000,
     headers: {
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   });
 
   // 请求拦截器
@@ -52,7 +52,7 @@ const createApiInstance = () => {
         code: error.response?.status?.toString() || 'UNKNOWN',
         message: error.response?.data?.message || error.message || '请求失败',
         details: error.response?.data,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
       return Promise.reject(apiError);
     }

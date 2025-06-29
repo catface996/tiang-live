@@ -7,21 +7,17 @@ import {
   Row, 
   Col, 
   Statistic,
-  Badge,
   Tag,
   Modal,
   Tabs,
   Descriptions,
-  Tree,
   Tooltip,
-  Input,
   Select
 } from 'antd';
 import { 
   SolutionOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
   EyeOutlined,
   EditOutlined,
   DeploymentUnitOutlined,
@@ -33,9 +29,7 @@ import {
   GlobalOutlined,
   TeamOutlined,
   ApiOutlined,
-  DatabaseOutlined,
-  CloudOutlined,
-  SecurityScanOutlined
+  DatabaseOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -744,14 +738,14 @@ const IndustrySolutionManagement: React.FC = () => {
     healthcare: { name: t('solutions:industry.healthcare'), color: 'red', icon: <MedicineBoxOutlined /> },
     automotive: { name: t('solutions:industry.automotive'), color: 'orange', icon: <CarOutlined /> },
     education: { name: t('solutions:industry.education'), color: 'purple', icon: <BookOutlined /> },
-    logistics: { name: t('solutions:industry.logistics'), color: 'cyan', icon: <GlobalOutlined /> },
+    logistics: { name: t('solutions:industry.logistics'), color: 'cyan', icon: <GlobalOutlined /> }
   };
 
   const getComplexityTag = (complexity: string) => {
     const complexityMap = {
       simple: { color: 'green', text: t('solutions:complexity.simple') },
       medium: { color: 'orange', text: t('solutions:complexity.medium') },
-      complex: { color: 'red', text: t('solutions:complexity.complex') },
+      complex: { color: 'red', text: t('solutions:complexity.complex') }
     };
     const config = complexityMap[complexity as keyof typeof complexityMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -761,7 +755,7 @@ const IndustrySolutionManagement: React.FC = () => {
     const statusMap = {
       active: { color: 'green', text: t('solutions:status.active') },
       draft: { color: 'orange', text: t('solutions:status.draft') },
-      deprecated: { color: 'red', text: t('solutions:status.deprecated') },
+      deprecated: { color: 'red', text: t('solutions:status.deprecated') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;

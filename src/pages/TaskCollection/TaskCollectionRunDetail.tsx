@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Typography, 
   Card, 
@@ -582,12 +582,12 @@ const TaskCollectionRunDetail: React.FC = () => {
               </StatsCard>
             </Col>
             <Col xs={12} sm={6} md={6} lg={6} xl={6}>
-              <StatsCard $status={runDetail.successRate > 80 ? "completed" : "pending"}>
+              <StatsCard $status={runDetail.successRate > 80 ? 'completed' : 'pending'}>
                 <Statistic
                   title={t('taskCollectionRunDetail:statistics.successRate')}
                   value={runDetail.successRate}
                   suffix="%"
-                  prefix={<CheckCircleOutlined className={runDetail.successRate > 80 ? "status-completed" : "status-pending"} />}
+                  prefix={<CheckCircleOutlined className={runDetail.successRate > 80 ? 'status-completed' : 'status-pending'} />}
                 />
               </StatsCard>
             </Col>
@@ -597,66 +597,66 @@ const TaskCollectionRunDetail: React.FC = () => {
           <Card 
             title={
               <StatisticsHeader>
-                  <span>{t('taskCollectionRunDetail:statistics.layeredStatistics')}</span>
-                  <StatisticsLegend>
-                    <LegendItem>
-                      <span className="legend-completed">✓</span> {t('taskCollectionRunDetail:legend.completed')}
-                    </LegendItem>
-                    <LegendItem>
-                      <span className="legend-running">●</span> {t('taskCollectionRunDetail:legend.running')}
-                    </LegendItem>
-                    <LegendItem>
-                      <span className="legend-failed">✗</span> {t('taskCollectionRunDetail:legend.failed')}
-                    </LegendItem>
-                    <LegendItem>
-                      <span className="legend-pending">○</span> {t('taskCollectionRunDetail:legend.pending')}
-                    </LegendItem>
-                  </StatisticsLegend>
-                </StatisticsHeader>
-              }
-              className="card-with-margin"
-            >
-              <Row gutter={[16, 16]}>
-                {Object.entries(getLayerStatistics(layeredNodes)).map(([layer, stats]) => (
-                  <Col xs={24} sm={12} md={8} lg={6} xl={4} key={layer}>
-                    <LayerStatCard>
-                      <LayerTitle>
-                        {getLayerFullName(layer)}
-                      </LayerTitle>
-                      <LayerTotal>
+                <span>{t('taskCollectionRunDetail:statistics.layeredStatistics')}</span>
+                <StatisticsLegend>
+                  <LegendItem>
+                    <span className="legend-completed">✓</span> {t('taskCollectionRunDetail:legend.completed')}
+                  </LegendItem>
+                  <LegendItem>
+                    <span className="legend-running">●</span> {t('taskCollectionRunDetail:legend.running')}
+                  </LegendItem>
+                  <LegendItem>
+                    <span className="legend-failed">✗</span> {t('taskCollectionRunDetail:legend.failed')}
+                  </LegendItem>
+                  <LegendItem>
+                    <span className="legend-pending">○</span> {t('taskCollectionRunDetail:legend.pending')}
+                  </LegendItem>
+                </StatisticsLegend>
+              </StatisticsHeader>
+            }
+            className="card-with-margin"
+          >
+            <Row gutter={[16, 16]}>
+              {Object.entries(getLayerStatistics(layeredNodes)).map(([layer, stats]) => (
+                <Col xs={24} sm={12} md={8} lg={6} xl={4} key={layer}>
+                  <LayerStatCard>
+                    <LayerTitle>
+                      {getLayerFullName(layer)}
+                    </LayerTitle>
+                    <LayerTotal>
                         总计: {stats.total}
-                      </LayerTotal>
-                      <StatusGrid>
-                        <StatusItem 
-                          $status="completed"
-                          title={t('taskCollectionRunDetail:legend.completed')}
-                        >
+                    </LayerTotal>
+                    <StatusGrid>
+                      <StatusItem 
+                        $status="completed"
+                        title={t('taskCollectionRunDetail:legend.completed')}
+                      >
                           ✓ {stats.completed}
-                        </StatusItem>
-                        <StatusItem 
-                          $status="running"
-                          title={t('taskCollectionRunDetail:legend.running')}
-                        >
+                      </StatusItem>
+                      <StatusItem 
+                        $status="running"
+                        title={t('taskCollectionRunDetail:legend.running')}
+                      >
                           ● {stats.running}
-                        </StatusItem>
-                        <StatusItem 
-                          $status="failed"
-                          title={t('taskCollectionRunDetail:legend.failed')}
-                        >
+                      </StatusItem>
+                      <StatusItem 
+                        $status="failed"
+                        title={t('taskCollectionRunDetail:legend.failed')}
+                      >
                           ✗ {stats.failed}
-                        </StatusItem>
-                        <StatusItem 
-                          $status="pending"
-                          title={t('taskCollectionRunDetail:legend.pending')}
-                        >
+                      </StatusItem>
+                      <StatusItem 
+                        $status="pending"
+                        title={t('taskCollectionRunDetail:legend.pending')}
+                      >
                           ○ {stats.pending}
-                        </StatusItem>
-                      </StatusGrid>
-                    </LayerStatCard>
-                  </Col>
-                ))}
-              </Row>
-            </Card>
+                      </StatusItem>
+                    </StatusGrid>
+                  </LayerStatCard>
+                </Col>
+              ))}
+            </Row>
+          </Card>
 
           {/* 基本信息 */}
           <Card title={t('taskCollectionRunDetail:header.runDetail')} className="card-with-margin">

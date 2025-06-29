@@ -9,9 +9,6 @@ import {
   Badge,
   Tag,
   Select,
-  Tooltip,
-  Alert,
-  Divider,
   Breadcrumb,
   List,
   DatePicker
@@ -252,14 +249,14 @@ interface ExecutionRecord {
 // 模拟执行历史数据
 const mockExecutionHistoryData: ExecutionRecord[] = [
   {
-    id: "exec_001",
-    taskCollectionId: "1",
-    taskCollectionName: "核心业务系统健康检查",
-    status: "completed",
-    triggerType: "cron",
+    id: 'exec_001',
+    taskCollectionId: '1',
+    taskCollectionName: '核心业务系统健康检查',
+    status: 'completed',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-26 10:00:00",
-    endTime: "2025-06-26 10:15:30",
+    startTime: '2025-06-26 10:00:00',
+    endTime: '2025-06-26 10:15:30',
     duration: 930,
     executedTargets: 8,
     totalTargets: 8,
@@ -267,21 +264,21 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_001",
-          name: "用户管理系统",
-          type: "entity",
-          status: "success",
+          id: 'entity_001',
+          name: '用户管理系统',
+          type: 'entity',
+          status: 'success',
           actions: [
             {
-              id: "health_check",
-              name: "健康检查",
-              status: "success",
+              id: 'health_check',
+              name: '健康检查',
+              status: 'success',
               duration: 120
             },
             {
-              id: "performance_analysis",
-              name: "性能分析",
-              status: "success",
+              id: 'performance_analysis',
+              name: '性能分析',
+              status: 'success',
               duration: 180
             }
           ]
@@ -290,13 +287,13 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_002",
-    taskCollectionId: "2",
-    taskCollectionName: "数据库性能监控",
-    status: "running",
-    triggerType: "hook",
-    triggerSource: "API调用",
-    startTime: "2025-06-26 14:30:00",
+    id: 'exec_002',
+    taskCollectionId: '2',
+    taskCollectionName: '数据库性能监控',
+    status: 'running',
+    triggerType: 'hook',
+    triggerSource: 'API调用',
+    startTime: '2025-06-26 14:30:00',
     endTime: null,
     duration: null,
     executedTargets: 3,
@@ -305,13 +302,13 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: null
   },
   {
-    id: "exec_003",
-    taskCollectionId: "3",
-    taskCollectionName: "安全扫描任务",
-    status: "scheduled",
-    triggerType: "cron",
+    id: 'exec_003',
+    taskCollectionId: '3',
+    taskCollectionName: '安全扫描任务',
+    status: 'scheduled',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-26 23:00:00",
+    startTime: '2025-06-26 23:00:00',
     endTime: null,
     duration: null,
     executedTargets: 0,
@@ -320,14 +317,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: null
   },
   {
-    id: "exec_004",
-    taskCollectionId: "1",
-    taskCollectionName: "核心业务系统健康检查",
-    status: "failed",
-    triggerType: "cron",
+    id: 'exec_004',
+    taskCollectionId: '1',
+    taskCollectionName: '核心业务系统健康检查',
+    status: 'failed',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-25 15:00:00",
-    endTime: "2025-06-25 15:08:45",
+    startTime: '2025-06-25 15:00:00',
+    endTime: '2025-06-25 15:08:45',
     duration: 525,
     executedTargets: 5,
     totalTargets: 8,
@@ -335,15 +332,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_002",
-          name: "订单管理系统",
-          type: "entity",
-          status: "failed",
+          id: 'entity_002',
+          name: '订单管理系统',
+          type: 'entity',
+          status: 'failed',
           actions: [
             {
-              id: "health_check",
-              name: "健康检查",
-              status: "failed",
+              id: 'health_check',
+              name: '健康检查',
+              status: 'failed',
               duration: 60
             }
           ]
@@ -352,14 +349,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_005",
-    taskCollectionId: "4",
-    taskCollectionName: "网络安全巡检",
-    status: "completed",
-    triggerType: "hook",
-    triggerSource: "Webhook触发",
-    startTime: "2025-06-24 10:30:00",
-    endTime: "2025-06-24 11:45:20",
+    id: 'exec_005',
+    taskCollectionId: '4',
+    taskCollectionName: '网络安全巡检',
+    status: 'completed',
+    triggerType: 'hook',
+    triggerSource: 'Webhook触发',
+    startTime: '2025-06-24 10:30:00',
+    endTime: '2025-06-24 11:45:20',
     duration: 4520,
     executedTargets: 12,
     totalTargets: 12,
@@ -367,15 +364,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_003",
-          name: "防火墙系统",
-          type: "entity",
-          status: "success",
+          id: 'entity_003',
+          name: '防火墙系统',
+          type: 'entity',
+          status: 'success',
           actions: [
             {
-              id: "security_scan",
-              name: "安全扫描",
-              status: "success",
+              id: 'security_scan',
+              name: '安全扫描',
+              status: 'success',
               duration: 300
             }
           ]
@@ -384,14 +381,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_006",
-    taskCollectionId: "2",
-    taskCollectionName: "数据库性能监控",
-    status: "completed",
-    triggerType: "cron",
+    id: 'exec_006',
+    taskCollectionId: '2',
+    taskCollectionName: '数据库性能监控',
+    status: 'completed',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-23 18:00:00",
-    endTime: "2025-06-23 18:25:15",
+    startTime: '2025-06-23 18:00:00',
+    endTime: '2025-06-23 18:25:15',
     duration: 1515,
     executedTargets: 5,
     totalTargets: 5,
@@ -399,15 +396,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_004",
-          name: "MySQL主库",
-          type: "entity",
-          status: "success",
+          id: 'entity_004',
+          name: 'MySQL主库',
+          type: 'entity',
+          status: 'success',
           actions: [
             {
-              id: "performance_analysis",
-              name: "性能分析",
-              status: "success",
+              id: 'performance_analysis',
+              name: '性能分析',
+              status: 'success',
               duration: 240
             }
           ]
@@ -416,14 +413,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_007",
-    taskCollectionId: "5",
-    taskCollectionName: "备份验证任务",
-    status: "completed",
-    triggerType: "cron",
+    id: 'exec_007',
+    taskCollectionId: '5',
+    taskCollectionName: '备份验证任务',
+    status: 'completed',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-22 02:00:00",
-    endTime: "2025-06-22 02:45:30",
+    startTime: '2025-06-22 02:00:00',
+    endTime: '2025-06-22 02:45:30',
     duration: 2730,
     executedTargets: 3,
     totalTargets: 3,
@@ -431,15 +428,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "sequence_001",
-          name: "数据备份流程",
-          type: "sequence",
-          status: "success",
+          id: 'sequence_001',
+          name: '数据备份流程',
+          type: 'sequence',
+          status: 'success',
           actions: [
             {
-              id: "backup_verify",
-              name: "备份验证",
-              status: "success",
+              id: 'backup_verify',
+              name: '备份验证',
+              status: 'success',
               duration: 600
             }
           ]
@@ -448,14 +445,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_008",
-    taskCollectionId: "6",
-    taskCollectionName: "日志分析任务",
-    status: "failed",
-    triggerType: "hook",
-    triggerSource: "监控告警触发",
-    startTime: "2025-06-21 16:20:00",
-    endTime: "2025-06-21 16:35:15",
+    id: 'exec_008',
+    taskCollectionId: '6',
+    taskCollectionName: '日志分析任务',
+    status: 'failed',
+    triggerType: 'hook',
+    triggerSource: '监控告警触发',
+    startTime: '2025-06-21 16:20:00',
+    endTime: '2025-06-21 16:35:15',
     duration: 915,
     executedTargets: 2,
     totalTargets: 4,
@@ -463,15 +460,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_005",
-          name: "应用日志系统",
-          type: "entity",
-          status: "failed",
+          id: 'entity_005',
+          name: '应用日志系统',
+          type: 'entity',
+          status: 'failed',
           actions: [
             {
-              id: "log_analysis",
-              name: "日志分析",
-              status: "failed",
+              id: 'log_analysis',
+              name: '日志分析',
+              status: 'failed',
               duration: 180
             }
           ]
@@ -480,14 +477,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_009",
-    taskCollectionId: "7",
-    taskCollectionName: "容器健康检查",
-    status: "completed",
-    triggerType: "cron",
+    id: 'exec_009',
+    taskCollectionId: '7',
+    taskCollectionName: '容器健康检查',
+    status: 'completed',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-20 09:00:00",
-    endTime: "2025-06-20 09:12:30",
+    startTime: '2025-06-20 09:00:00',
+    endTime: '2025-06-20 09:12:30',
     duration: 750,
     executedTargets: 15,
     totalTargets: 15,
@@ -495,15 +492,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_006",
-          name: "Kubernetes集群",
-          type: "entity",
-          status: "success",
+          id: 'entity_006',
+          name: 'Kubernetes集群',
+          type: 'entity',
+          status: 'success',
           actions: [
             {
-              id: "health_check",
-              name: "健康检查",
-              status: "success",
+              id: 'health_check',
+              name: '健康检查',
+              status: 'success',
               duration: 90
             }
           ]
@@ -512,13 +509,13 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_010",
-    taskCollectionId: "8",
-    taskCollectionName: "API接口监控",
-    status: "running",
-    triggerType: "hook",
-    triggerSource: "手动触发",
-    startTime: "2025-06-26 15:45:00",
+    id: 'exec_010',
+    taskCollectionId: '8',
+    taskCollectionName: 'API接口监控',
+    status: 'running',
+    triggerType: 'hook',
+    triggerSource: '手动触发',
+    startTime: '2025-06-26 15:45:00',
     endTime: null,
     duration: null,
     executedTargets: 6,
@@ -527,13 +524,13 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: null
   },
   {
-    id: "exec_011",
-    taskCollectionId: "1",
-    taskCollectionName: "核心业务系统健康检查",
-    status: "scheduled",
-    triggerType: "cron",
+    id: 'exec_011',
+    taskCollectionId: '1',
+    taskCollectionName: '核心业务系统健康检查',
+    status: 'scheduled',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-27 09:00:00",
+    startTime: '2025-06-27 09:00:00',
     endTime: null,
     duration: null,
     executedTargets: 0,
@@ -542,14 +539,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: null
   },
   {
-    id: "exec_012",
-    taskCollectionId: "3",
-    taskCollectionName: "安全扫描任务",
-    status: "completed",
-    triggerType: "hook",
-    triggerSource: "API调用",
-    startTime: "2025-06-19 14:15:00",
-    endTime: "2025-06-19 15:30:45",
+    id: 'exec_012',
+    taskCollectionId: '3',
+    taskCollectionName: '安全扫描任务',
+    status: 'completed',
+    triggerType: 'hook',
+    triggerSource: 'API调用',
+    startTime: '2025-06-19 14:15:00',
+    endTime: '2025-06-19 15:30:45',
     duration: 4545,
     executedTargets: 6,
     totalTargets: 6,
@@ -557,15 +554,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_007",
-          name: "Web应用防火墙",
-          type: "entity",
-          status: "success",
+          id: 'entity_007',
+          name: 'Web应用防火墙',
+          type: 'entity',
+          status: 'success',
           actions: [
             {
-              id: "security_scan",
-              name: "安全扫描",
-              status: "success",
+              id: 'security_scan',
+              name: '安全扫描',
+              status: 'success',
               duration: 450
             }
           ]
@@ -574,14 +571,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_013",
-    taskCollectionId: "4",
-    taskCollectionName: "网络安全巡检",
-    status: "failed",
-    triggerType: "cron",
+    id: 'exec_013',
+    taskCollectionId: '4',
+    taskCollectionName: '网络安全巡检',
+    status: 'failed',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-18 08:00:00",
-    endTime: "2025-06-18 08:25:30",
+    startTime: '2025-06-18 08:00:00',
+    endTime: '2025-06-18 08:25:30',
     duration: 1530,
     executedTargets: 8,
     totalTargets: 12,
@@ -589,15 +586,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "entity_008",
-          name: "入侵检测系统",
-          type: "entity",
-          status: "failed",
+          id: 'entity_008',
+          name: '入侵检测系统',
+          type: 'entity',
+          status: 'failed',
           actions: [
             {
-              id: "security_scan",
-              name: "安全扫描",
-              status: "failed",
+              id: 'security_scan',
+              name: '安全扫描',
+              status: 'failed',
               duration: 120
             }
           ]
@@ -606,13 +603,13 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     }
   },
   {
-    id: "exec_014",
-    taskCollectionId: "5",
-    taskCollectionName: "备份验证任务",
-    status: "scheduled",
-    triggerType: "cron",
+    id: 'exec_014',
+    taskCollectionId: '5',
+    taskCollectionName: '备份验证任务',
+    status: 'scheduled',
+    triggerType: 'cron',
     triggerSource: null,
-    startTime: "2025-06-27 02:00:00",
+    startTime: '2025-06-27 02:00:00',
     endTime: null,
     duration: null,
     executedTargets: 0,
@@ -621,14 +618,14 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: null
   },
   {
-    id: "exec_015",
-    taskCollectionId: "6",
-    taskCollectionName: "日志分析任务",
-    status: "completed",
-    triggerType: "hook",
-    triggerSource: "Webhook触发",
-    startTime: "2025-06-17 11:30:00",
-    endTime: "2025-06-17 12:15:20",
+    id: 'exec_015',
+    taskCollectionId: '6',
+    taskCollectionName: '日志分析任务',
+    status: 'completed',
+    triggerType: 'hook',
+    triggerSource: 'Webhook触发',
+    startTime: '2025-06-17 11:30:00',
+    endTime: '2025-06-17 12:15:20',
     duration: 2720,
     executedTargets: 4,
     totalTargets: 4,
@@ -636,15 +633,15 @@ const mockExecutionHistoryData: ExecutionRecord[] = [
     details: {
       targets: [
         {
-          id: "sequence_002",
-          name: "日志聚合流程",
-          type: "sequence",
-          status: "success",
+          id: 'sequence_002',
+          name: '日志聚合流程',
+          type: 'sequence',
+          status: 'success',
           actions: [
             {
-              id: "log_analysis",
-              name: "日志分析",
-              status: "success",
+              id: 'log_analysis',
+              name: '日志分析',
+              status: 'success',
               duration: 360
             }
           ]

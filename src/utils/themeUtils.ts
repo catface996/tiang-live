@@ -24,7 +24,7 @@ export const getThemeStyles = (theme: ThemeType) => {
     pageContainer: {
       backgroundColor: isLight ? '#f0f2f5' : '#000000',
       color: isLight ? 'rgba(0, 0, 0, 0.88)' : 'rgba(255, 255, 255, 0.88)',
-      minHeight: 'calc(100vh - 64px)',
+      minHeight: 'calc(100vh - 64px)'
     },
     
     // 卡片样式
@@ -33,7 +33,7 @@ export const getThemeStyles = (theme: ThemeType) => {
       borderColor: isLight ? '#f0f0f0' : '#303030',
       boxShadow: isLight 
         ? '0 2px 8px rgba(0, 0, 0, 0.06)' 
-        : '0 2px 8px rgba(0, 0, 0, 0.4)',
+        : '0 2px 8px rgba(0, 0, 0, 0.4)'
     },
     
     // 卡片悬停样式
@@ -42,21 +42,21 @@ export const getThemeStyles = (theme: ThemeType) => {
         ? '0 4px 16px rgba(0, 0, 0, 0.12)' 
         : '0 4px 16px rgba(0, 0, 0, 0.6)',
       transform: 'translateY(-2px)',
-      borderColor: '#40a9ff',
+      borderColor: '#40a9ff'
     },
     
     // 文本样式
     text: {
       primary: isLight ? 'rgba(0, 0, 0, 0.88)' : 'rgba(255, 255, 255, 0.88)',
       secondary: isLight ? 'rgba(0, 0, 0, 0.65)' : 'rgba(255, 255, 255, 0.65)',
-      disabled: isLight ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.25)',
+      disabled: isLight ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.25)'
     },
     
     // 输入框样式
     input: {
       backgroundColor: isLight ? '#ffffff' : '#141414',
       borderColor: isLight ? '#d9d9d9' : '#434343',
-      color: isLight ? 'rgba(0, 0, 0, 0.88)' : 'rgba(255, 255, 255, 0.88)',
+      color: isLight ? 'rgba(0, 0, 0, 0.88)' : 'rgba(255, 255, 255, 0.88)'
     },
     
     // 按钮样式
@@ -64,14 +64,14 @@ export const getThemeStyles = (theme: ThemeType) => {
       default: {
         backgroundColor: isLight ? '#ffffff' : '#141414',
         borderColor: isLight ? '#d9d9d9' : '#434343',
-        color: isLight ? 'rgba(0, 0, 0, 0.88)' : 'rgba(255, 255, 255, 0.88)',
+        color: isLight ? 'rgba(0, 0, 0, 0.88)' : 'rgba(255, 255, 255, 0.88)'
       },
       primary: {
         backgroundColor: '#1890ff',
         borderColor: '#1890ff',
-        color: '#ffffff',
-      },
-    },
+        color: '#ffffff'
+      }
+    }
   };
 };
 
@@ -109,7 +109,7 @@ export const THEME_CLASSES = {
   // 边框类
   BORDER_BASE: 'theme-border-base',
   BORDER_LIGHT: 'theme-border-light',
-  BORDER_HOVER: 'theme-border-hover',
+  BORDER_HOVER: 'theme-border-hover'
 } as const;
 
 /**
@@ -124,13 +124,13 @@ export const getResponsiveThemeStyles = (theme: ThemeType) => {
     mobile: {
       pageContainer: {
         ...baseStyles.pageContainer,
-        padding: '16px',
+        padding: '16px'
       },
       card: {
         ...baseStyles.card,
-        margin: '8px 0',
-      },
-    },
+        margin: '8px 0'
+      }
+    }
   };
 };
 

@@ -6,7 +6,6 @@ import {
   Tag, 
   Button, 
   Tooltip, 
-  Popconfirm, 
   Space, 
   Statistic, 
   Typography,
@@ -16,9 +15,6 @@ import {
   RobotOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
-  PlayCircleOutlined,
-  PauseCircleOutlined,
   MonitorOutlined,
   BarChartOutlined,
   DeploymentUnitOutlined,
@@ -82,14 +78,14 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(0, 0, 0, 0.3)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   
   &:hover {
     transform: translateY(-4px);
     box-shadow: ${props => props.$isDark 
-      ? '0 8px 24px rgba(255, 255, 255, 0.12)' 
-      : '0 8px 24px rgba(0, 0, 0, 0.12)'
-    };
+    ? '0 8px 24px rgba(255, 255, 255, 0.12)' 
+    : '0 8px 24px rgba(0, 0, 0, 0.12)'
+};
     border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
   }
   

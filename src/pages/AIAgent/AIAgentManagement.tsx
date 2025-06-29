@@ -7,18 +7,13 @@ import {
   Row, 
   Col, 
   Statistic,
-  Badge,
   Tag,
-  Avatar,
-  Progress,
   Modal,
   Form,
   Input,
   Select,
   Switch,
   Slider,
-  Tooltip,
-  Popconfirm,
   message,
   Descriptions,
   Timeline,
@@ -29,13 +24,9 @@ import {
   RobotOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  EditOutlined,
   DeleteOutlined,
   PlayCircleOutlined,
-  PauseCircleOutlined,
-  EyeOutlined,
   ThunderboltOutlined,
-  ClockCircleOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
   ApiOutlined,
@@ -71,7 +62,7 @@ const PageHeader = styled.div<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   transition: all 0.3s ease;
 `;
@@ -81,7 +72,7 @@ const StatsCard = styled(Card)<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   transition: all 0.3s ease;
@@ -188,8 +179,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 10,
         timeout: 30,
         retryCount: 3,
-        autoRestart: true,
-      },
+        autoRestart: true
+      }
     },
     {
       id: '2',
@@ -208,8 +199,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 5,
         timeout: 60,
         retryCount: 2,
-        autoRestart: true,
-      },
+        autoRestart: true
+      }
     },
     {
       id: '3',
@@ -228,8 +219,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 3,
         timeout: 120,
         retryCount: 1,
-        autoRestart: false,
-      },
+        autoRestart: false
+      }
     },
     {
       id: '4',
@@ -248,8 +239,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 2,
         timeout: 180,
         retryCount: 3,
-        autoRestart: false,
-      },
+        autoRestart: false
+      }
     },
     {
       id: '5',
@@ -268,8 +259,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 8,
         timeout: 90,
         retryCount: 2,
-        autoRestart: true,
-      },
+        autoRestart: true
+      }
     },
     {
       id: '6',
@@ -288,8 +279,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 4,
         timeout: 300,
         retryCount: 3,
-        autoRestart: true,
-      },
+        autoRestart: true
+      }
     },
     {
       id: '7',
@@ -308,8 +299,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 20,
         timeout: 15,
         retryCount: 1,
-        autoRestart: true,
-      },
+        autoRestart: true
+      }
     },
     {
       id: '8',
@@ -328,8 +319,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 2,
         timeout: 240,
         retryCount: 2,
-        autoRestart: false,
-      },
+        autoRestart: false
+      }
     },
     {
       id: '9',
@@ -348,8 +339,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 6,
         timeout: 120,
         retryCount: 3,
-        autoRestart: true,
-      },
+        autoRestart: true
+      }
     },
     {
       id: '10',
@@ -368,8 +359,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 3,
         timeout: 60,
         retryCount: 2,
-        autoRestart: false,
-      },
+        autoRestart: false
+      }
     },
     {
       id: '11',
@@ -388,8 +379,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 12,
         timeout: 45,
         retryCount: 2,
-        autoRestart: true,
-      },
+        autoRestart: true
+      }
     },
     {
       id: '12',
@@ -408,8 +399,8 @@ const AIAgentManagement: React.FC = () => {
         maxConcurrency: 1,
         timeout: 600,
         retryCount: 1,
-        autoRestart: false,
-      },
+        autoRestart: false
+      }
     }
   ];
 
@@ -425,7 +416,7 @@ const AIAgentManagement: React.FC = () => {
     diagnosis: { name: t('agents:types.diagnosis'), color: 'volcano', icon: <MonitorOutlined /> },
     config: { name: t('agents:types.config'), color: 'lime', icon: <ApiOutlined /> },
     traffic: { name: t('agents:types.traffic'), color: 'gold', icon: <BarChartOutlined /> },
-    cleanup: { name: t('agents:types.cleanup'), color: 'gray', icon: <DeleteOutlined /> },
+    cleanup: { name: t('agents:types.cleanup'), color: 'gray', icon: <DeleteOutlined /> }
   };
 
   const getStatusTag = (status: string) => {
@@ -444,7 +435,7 @@ const AIAgentManagement: React.FC = () => {
         color: isDark ? '#faad14' : 'orange', 
         text: t('agents:status.paused'),
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
-      },
+      }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return (
@@ -628,7 +619,7 @@ const AIAgentManagement: React.FC = () => {
               { value: 'all', label: t('common:all') },
               { value: 'running', label: t('agents:status.running') },
               { value: 'paused', label: t('agents:status.paused') },
-              { value: 'stopped', label: t('agents:status.stopped') },
+              { value: 'stopped', label: t('agents:status.stopped') }
             ]
           },
           {
@@ -669,7 +660,7 @@ const AIAgentManagement: React.FC = () => {
             maxConcurrency: 5,
             timeout: 60,
             retryCount: 3,
-            autoRestart: true,
+            autoRestart: true
           }}
         >
           <Row gutter={16}>

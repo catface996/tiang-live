@@ -12,7 +12,7 @@ import themeReducer from './slices/themeSlice';
 export const store = configureStore({
   reducer: {
     plane: planeReducer,
-    theme: themeReducer,
+    theme: themeReducer
     // entity: entityReducer,
     // relationship: relationshipReducer,
     // sequence: sequenceReducer,
@@ -21,9 +21,9 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
-      },
-    }),
+        ignoredActions: ['persist/PERSIST']
+      }
+    })
 });
 
 export type RootState = ReturnType<typeof store.getState>;

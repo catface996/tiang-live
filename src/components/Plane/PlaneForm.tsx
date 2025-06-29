@@ -80,7 +80,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
         displayName: initialData.displayName,
         description: initialData.description,
         level: initialData.level || 1,
-        dependencies: initialData.dependencies || [],
+        dependencies: initialData.dependencies || []
       });
       setPreviewLevel(initialData.level || 1);
       setSelectedDependencies(initialData.dependencies || []);
@@ -122,17 +122,17 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
           autoScaling: false, // 固定默认值
           monitoring: {
             enabled: true, // 固定默认值
-            alertThreshold: 80, // 固定默认值
+            alertThreshold: 80 // 固定默认值
           },
           security: {
             accessControl: true, // 固定默认值
-            encryption: false, // 固定默认值
+            encryption: false // 固定默认值
           },
           healthThresholds: {
             warningThreshold: 0.2, // 固定默认值
-            errorThreshold: 0.1, // 固定默认值
-          },
-        },
+            errorThreshold: 0.1 // 固定默认值
+          }
+        }
       };
 
       if (mode === 'edit' && initialData?.id) {
@@ -157,7 +157,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
       7: '🚀',
       8: '💎',
       9: '🎨',
-      10: '👑',
+      10: '👑'
     };
     return icons[level as keyof typeof icons] || '📋';
   };
@@ -171,7 +171,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
         displayName: initialData.displayName,
         description: initialData.description,
         level: initialData.level || 1,
-        dependencies: initialData.dependencies || [],
+        dependencies: initialData.dependencies || []
       });
       setPreviewLevel(initialData.level || 1);
       setSelectedDependencies(initialData.dependencies || []);
@@ -212,7 +212,7 @@ const PlaneForm: React.FC<PlaneFormProps> = ({
           layout="vertical"
           onFinish={handleSubmit}
           initialValues={{
-            level: 1,
+            level: 1
           }}
         >
           {/* 基本信息 */}

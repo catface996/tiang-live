@@ -12,8 +12,7 @@ import {
   Progress,
   Statistic,
   Divider,
-  Tooltip,
-  Space
+  Tooltip
 } from 'antd';
 import {
   CheckCircleOutlined,
@@ -49,7 +48,7 @@ const MetricCard = styled(Card).attrs({
 const HealthScoreCard = styled.div.attrs<{ score: number }>(props => ({
   className: `health-score-card ${
     props.score >= 90 ? 'excellent' : 
-    props.score >= 70 ? 'good' : 'poor'
+      props.score >= 70 ? 'good' : 'poor'
   }`
 }))<{ score: number }>``;
 
@@ -356,8 +355,8 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
               <Col span={3}>
                 <Tag color="purple">
                   {rec.category === 'performance' ? '性能' :
-                   rec.category === 'security' ? '安全' :
-                   rec.category === 'reliability' ? '可靠性' : '维护'}
+                    rec.category === 'security' ? '安全' :
+                      rec.category === 'reliability' ? '可靠性' : '维护'}
                 </Tag>
               </Col>
               <Col span={19}>
@@ -406,8 +405,8 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
             <Badge 
               status={
                 report.status === 'completed' ? 'success' :
-                report.status === 'running' ? 'processing' :
-                report.status === 'failed' ? 'error' : 'default'
+                  report.status === 'running' ? 'processing' :
+                    report.status === 'failed' ? 'error' : 'default'
               }
             />
             <span className="node-name">{report.nodeName}</span>
@@ -455,7 +454,7 @@ const DiagnosticReports: React.FC<DiagnosticReportsProps> = ({ nodeIds }) => {
                   }}
                   className={`score-value ${
                     report.analysis.overallHealthScore >= 90 ? 'excellent' : 
-                    report.analysis.overallHealthScore >= 70 ? 'good' : 'poor'
+                      report.analysis.overallHealthScore >= 70 ? 'good' : 'poor'
                   }`}
                   prefix={<TrophyOutlined />}
                 />

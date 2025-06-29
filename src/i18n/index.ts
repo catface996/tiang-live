@@ -127,7 +127,7 @@ i18n
       // 缓存用户选择的语言
       caches: ['localStorage'],
       // localStorage中的key名
-      lookupLocalStorage: 'preferred-language',
+      lookupLocalStorage: 'preferred-language'
     },
     
     // 设置初始语言为用户之前选择的语言
@@ -138,7 +138,7 @@ i18n
     
     // 插值配置
     interpolation: {
-      escapeValue: false, // React已经处理了XSS
+      escapeValue: false // React已经处理了XSS
     },
     
     // 命名空间配置
@@ -165,7 +165,7 @@ i18n
       if (import.meta.env.DEV) {
         console.warn(`Missing translation key: ${key} for language: ${lng}`);
       }
-    },
+    }
   });
 
 export default i18n;

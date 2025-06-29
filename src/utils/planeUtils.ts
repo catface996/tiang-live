@@ -47,7 +47,7 @@ export const calculateHealthPercentages = (entityHealth: EntityHealthStats) => {
   return {
     healthyPercent: (healthy / total) * 100,
     warningPercent: (warning / total) * 100,
-    errorPercent: (error / total) * 100,
+    errorPercent: (error / total) * 100
   };
 };
 
@@ -62,26 +62,26 @@ export const getPlaneStatusInfo = (status: PlaneStatus) => {
       text: '健康',
       color: '#52c41a',
       bgColor: '#f6ffed',
-      borderColor: '#b7eb8f',
+      borderColor: '#b7eb8f'
     },
     WARNING: {
       text: '告警',
       color: '#faad14',
       bgColor: '#fffbe6',
-      borderColor: '#ffe58f',
+      borderColor: '#ffe58f'
     },
     ERROR: {
       text: '异常',
       color: '#ff4d4f',
       bgColor: '#fff2f0',
-      borderColor: '#ffccc7',
+      borderColor: '#ffccc7'
     },
     MAINTENANCE: {
       text: '维护中',
       color: '#1890ff',
       bgColor: '#f0f5ff',
-      borderColor: '#adc6ff',
-    },
+      borderColor: '#adc6ff'
+    }
   };
   
   return statusMap[status] || statusMap.ACTIVE;
@@ -106,6 +106,6 @@ export const generateRandomEntityHealth = (
     healthy: Math.max(0, healthy),
     warning: Math.max(0, warning),
     error: Math.max(0, error),
-    total: totalEntities,
+    total: totalEntities
   };
 };

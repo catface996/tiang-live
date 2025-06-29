@@ -67,7 +67,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className }) => {
         <span>{config.nativeName}</span>
       </LanguageItem>
     ),
-    onClick: () => handleLanguageChange(code as SupportedLanguage),
+    onClick: () => handleLanguageChange(code as SupportedLanguage)
   }));
 
   return (

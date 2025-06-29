@@ -60,8 +60,8 @@ const SequenceDiagram: React.FC<SequenceDiagramProps> = ({
         bottomMarginAdj: 1,
         useMaxWidth: true,
         rightAngles: false,
-        showSequenceNumbers: false,
-      },
+        showSequenceNumbers: false
+      }
     });
   }, []);
 

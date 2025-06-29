@@ -62,7 +62,7 @@ const StyledCard = styled(Card)<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   transition: all 0.3s ease;
   
   .ant-card-body {
@@ -137,7 +137,7 @@ const MessageBubble = styled.div<{ isUser: boolean; $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.1)'
-  };
+};
   border: ${props => props.$isDark && !props.isUser ? '1px solid #434343' : 'none'};
   position: relative;
   transition: all 0.3s ease;
@@ -177,9 +177,9 @@ const InputContainer = styled.div<{ $isDark: boolean }>`
     &:focus {
       border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
       box-shadow: ${props => props.$isDark 
-        ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
-        : '0 0 0 2px rgba(24, 144, 255, 0.2)'
-      };
+    ? '0 0 0 2px rgba(23, 125, 220, 0.2)' 
+    : '0 0 0 2px rgba(24, 144, 255, 0.2)'
+};
     }
     
     &::placeholder {
@@ -208,9 +208,9 @@ const SuggestionTag = styled(Tag)<{ $isDark: boolean }>`
   &:hover {
     transform: translateY(-1px);
     box-shadow: ${props => props.$isDark 
-      ? '0 2px 8px rgba(23, 125, 220, 0.3)' 
-      : '0 2px 8px rgba(0, 0, 0, 0.1)'
-    };
+    ? '0 2px 8px rgba(23, 125, 220, 0.3)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.1)'
+};
     background: ${props => props.$isDark ? 'rgba(24, 144, 255, 0.2)' : undefined};
   }
 `;
@@ -224,7 +224,7 @@ const PageHeader = styled.div<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   transition: all 0.3s ease;
 `;
 
@@ -255,7 +255,7 @@ const AIAssistant: React.FC = () => {
       id: '1',
       content: t('dashboard:welcome'),
       isUser: false,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
     setMessages([welcomeMessage]);
     // 初始加载时不自动滚动
@@ -279,7 +279,7 @@ const AIAssistant: React.FC = () => {
     t('aiAssistant:suggestions.healthMonitor'),
     t('aiAssistant:suggestions.planeDependency'),
     t('aiAssistant:suggestions.tagManagement'),
-    t('aiAssistant:suggestions.systemReport'),
+    t('aiAssistant:suggestions.systemReport')
   ];
 
   const handleSendMessage = async (content?: string) => {
@@ -290,7 +290,7 @@ const AIAssistant: React.FC = () => {
       id: Date.now().toString(),
       content: messageContent,
       isUser: true,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -307,7 +307,7 @@ const AIAssistant: React.FC = () => {
         id: (Date.now() + 1).toString(),
         content: aiResponse,
         isUser: false,
-        timestamp: new Date(),
+        timestamp: new Date()
       };
       
       setMessages(prev => [...prev, aiMessage]);
@@ -370,7 +370,7 @@ const AIAssistant: React.FC = () => {
       id: '1',
       content: t('aiAssistant:chatCleared'),
       isUser: false,
-      timestamp: new Date(),
+      timestamp: new Date()
     }]);
     // 清空对话时不自动滚动
     setShouldAutoScroll(false);

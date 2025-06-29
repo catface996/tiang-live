@@ -43,7 +43,7 @@ const RelationshipGraph: React.FC = () => {
     if (!svgRef.current) return;
 
     const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove();
+    svg.selectAll('*').remove();
 
     const width = 800;
     const height = 600;
@@ -70,24 +70,24 @@ const RelationshipGraph: React.FC = () => {
     ];
 
     const simulation = d3.forceSimulation(nodes as any)
-      .force("link", d3.forceLink(links).id((d: any) => d.id).distance(150))
-      .force("charge", d3.forceManyBody().strength(-300))
-      .force("center", d3.forceCenter(width / 2, height / 2));
+      .force('link', d3.forceLink(links).id((d: any) => d.id).distance(150))
+      .force('charge', d3.forceManyBody().strength(-300))
+      .force('center', d3.forceCenter(width / 2, height / 2));
 
-    const link = svg.append("g")
-      .selectAll("line")
+    const link = svg.append('g')
+      .selectAll('line')
       .data(links)
-      .enter().append("line")
-      .attr("stroke", "#999")
-      .attr("stroke-opacity", 0.6)
-      .attr("stroke-width", 2);
+      .enter().append('line')
+      .attr('stroke', '#999')
+      .attr('stroke-opacity', 0.6)
+      .attr('stroke-width', 2);
 
-    const node = svg.append("g")
-      .selectAll("circle")
+    const node = svg.append('g')
+      .selectAll('circle')
       .data(nodes)
-      .enter().append("circle")
-      .attr("r", 20)
-      .attr("fill", (d: any) => {
+      .enter().append('circle')
+      .attr('r', 20)
+      .attr('fill', (d: any) => {
         switch (d.type) {
           case 'service': return '#1890ff';
           case 'database': return '#52c41a';
@@ -97,45 +97,45 @@ const RelationshipGraph: React.FC = () => {
         }
       })
       .call(d3.drag<any, any>()
-        .on("start", (event, d: any) => {
+        .on('start', (event, d: any) => {
           if (!event.active) simulation.alphaTarget(0.3).restart();
           d.fx = d.x;
           d.fy = d.y;
         })
-        .on("drag", (event, d: any) => {
+        .on('drag', (event, d: any) => {
           d.fx = event.x;
           d.fy = event.y;
         })
-        .on("end", (event, d: any) => {
+        .on('end', (event, d: any) => {
           if (!event.active) simulation.alphaTarget(0);
           d.fx = null;
           d.fy = null;
         }));
 
-    const labels = svg.append("g")
-      .selectAll("text")
+    const labels = svg.append('g')
+      .selectAll('text')
       .data(nodes)
-      .enter().append("text")
+      .enter().append('text')
       .text((d: any) => d.name)
-      .attr("font-size", 12)
-      .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .attr("fill", "white");
+      .attr('font-size', 12)
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.35em')
+      .attr('fill', 'white');
 
-    simulation.on("tick", () => {
+    simulation.on('tick', () => {
       link
-        .attr("x1", (d: any) => d.source.x)
-        .attr("y1", (d: any) => d.source.y)
-        .attr("x2", (d: any) => d.target.x)
-        .attr("y2", (d: any) => d.target.y);
+        .attr('x1', (d: any) => d.source.x)
+        .attr('y1', (d: any) => d.source.y)
+        .attr('x2', (d: any) => d.target.x)
+        .attr('y2', (d: any) => d.target.y);
 
       node
-        .attr("cx", (d: any) => d.x)
-        .attr("cy", (d: any) => d.y);
+        .attr('cx', (d: any) => d.x)
+        .attr('cy', (d: any) => d.y);
 
       labels
-        .attr("x", (d: any) => d.x)
-        .attr("y", (d: any) => d.y);
+        .attr('x', (d: any) => d.x)
+        .attr('y', (d: any) => d.y);
     });
   };
 

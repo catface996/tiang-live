@@ -14,34 +14,25 @@ import {
   Input,
   Select,
   Checkbox,
-  Table,
   Tabs,
   Descriptions,
   Progress,
   Tooltip,
-  Popconfirm,
   message,
-  Transfer,
   Alert
 } from 'antd';
 import { 
   UnorderedListOutlined, 
   PlusOutlined, 
   ReloadOutlined,
-  SearchOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
   PlayCircleOutlined,
-  PauseCircleOutlined,
   CheckCircleOutlined,
-  ExclamationCircleOutlined,
-  ClockCircleOutlined,
   NodeIndexOutlined,
   ControlOutlined,
   HeartOutlined,
   BugOutlined,
-  ThunderboltOutlined,
   BarChartOutlined,
   SafetyCertificateOutlined,
   MonitorOutlined,
@@ -457,14 +448,14 @@ const TaskCollectionManagement: React.FC = () => {
     health_check: { name: '健康检查', color: 'green', icon: <HeartOutlined /> },
     fault_analysis: { name: '故障分析', color: 'red', icon: <BugOutlined /> },
     performance_analysis: { name: '性能分析', color: 'blue', icon: <BarChartOutlined /> },
-    security_scan: { name: '安全扫描', color: 'orange', icon: <SafetyCertificateOutlined /> },
+    security_scan: { name: '安全扫描', color: 'orange', icon: <SafetyCertificateOutlined /> }
   };
 
   const getStatusTag = (status: string) => {
     const statusMap = {
       active: { color: 'green', text: t('tasks:collections.status.active') },
       paused: { color: 'orange', text: t('tasks:collections.status.paused') },
-      draft: { color: 'gray', text: t('tasks:collections.status.draft') },
+      draft: { color: 'gray', text: t('tasks:collections.status.draft') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -486,7 +477,7 @@ const TaskCollectionManagement: React.FC = () => {
     form.setFieldsValue({
       name: task.name,
       description: task.description,
-      schedule: task.schedule,
+      schedule: task.schedule
     });
     
     // 设置已选择的实体和时序
@@ -1037,7 +1028,7 @@ const TaskCollectionManagement: React.FC = () => {
             form={form}
             layout="vertical"
             initialValues={{
-              schedule: '每15分钟',
+              schedule: '每15分钟'
             }}
           >
             <Form.Item

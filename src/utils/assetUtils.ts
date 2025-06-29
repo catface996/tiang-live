@@ -34,7 +34,7 @@ export const getBasePath = (): string => {
  */
 export const ASSETS = {
   LOGO: getAssetPath('/sz-logo.png'),
-  FAVICON: getAssetPath('/vite.svg'),
+  FAVICON: getAssetPath('/vite.svg')
 } as const;
 
 /**

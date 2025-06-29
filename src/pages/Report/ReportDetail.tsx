@@ -10,8 +10,6 @@ import {
   Badge,
   Tag,
   Descriptions,
-  Divider,
-  Progress,
   Table,
   Timeline,
   Alert,
@@ -19,8 +17,7 @@ import {
   theme,
   Spin
 } from 'antd';
-import { 
-  ArrowLeftOutlined,
+import {
   ArrowUpOutlined,
   ArrowDownOutlined,
   FileTextOutlined, 
@@ -44,7 +41,6 @@ import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
 import { useAppSelector } from '../../store';
 import { getReportById } from '../../services/reportService';
-import type { Report } from '../../types/report';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -61,7 +57,7 @@ const ContentCard = styled(Card)<{ $isDark: boolean }>`
   box-shadow: ${props => props.$isDark 
     ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
     : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
+};
   border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
   background: ${props => props.$isDark ? '#141414' : '#ffffff'};
   transition: all 0.3s ease;
@@ -158,7 +154,7 @@ const ReportDetail: React.FC = () => {
       title: t('reports:detail.service'),
       dataIndex: 'service',
       key: 'service',
-      width: '25%',
+      width: '25%'
     },
     {
       title: t('reports:detail.status'),
@@ -169,35 +165,35 @@ const ReportDetail: React.FC = () => {
         <Badge 
           status={getServiceStatusColor(status)} 
           text={status === 'healthy' ? t('reports:detail.healthy') : 
-                status === 'warning' ? t('reports:detail.warning') : 
-                t('reports:detail.critical')} 
+            status === 'warning' ? t('reports:detail.warning') : 
+              t('reports:detail.critical')} 
         />
-      ),
+      )
     },
     {
       title: t('reports:detail.responseTime'),
       dataIndex: 'responseTime',
       key: 'responseTime',
-      width: '15%',
+      width: '15%'
     },
     {
       title: t('reports:detail.errorRate'),
       dataIndex: 'errorRate',
       key: 'errorRate',
-      width: '15%',
+      width: '15%'
     },
     {
       title: t('reports:detail.availability'),
       dataIndex: 'availability',
       key: 'availability',
-      width: '15%',
+      width: '15%'
     },
     {
       title: t('reports:detail.requests'),
       dataIndex: 'requests',
       key: 'requests',
-      width: '15%',
-    },
+      width: '15%'
+    }
   ];
 
   if (loading) {
@@ -380,14 +376,14 @@ const ReportDetail: React.FC = () => {
                           precision={metric.name.includes('率') ? 1 : 0}
                           valueStyle={{
                             color: metric.status === 'good' ? '#3f8600' : 
-                                   metric.status === 'warning' ? '#cf1322' : 
-                                   metric.status === 'critical' ? '#cf1322' : '#1890ff'
+                              metric.status === 'warning' ? '#cf1322' : 
+                                metric.status === 'critical' ? '#cf1322' : '#1890ff'
                           }}
                           prefix={
                             metric.trend.startsWith('+') ? 
-                            <ArrowUpOutlined /> : 
-                            metric.trend.startsWith('-') ? 
-                            <ArrowDownOutlined /> : null
+                              <ArrowUpOutlined /> : 
+                              metric.trend.startsWith('-') ? 
+                                <ArrowDownOutlined /> : null
                           }
                           suffix={
                             <span style={{ fontSize: '12px', marginLeft: '8px' }}>
@@ -422,9 +418,9 @@ const ReportDetail: React.FC = () => {
                     <div key={key} style={{ marginBottom: '24px' }}>
                       <div style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>
                         {key === 'responseTime' ? '响应时间趋势' :
-                         key === 'throughput' ? '吞吐量趋势' :
-                         key === 'errorRate' ? '错误率趋势' :
-                         key === 'availability' ? '可用性趋势' : key}
+                          key === 'throughput' ? '吞吐量趋势' :
+                            key === 'errorRate' ? '错误率趋势' :
+                              key === 'availability' ? '可用性趋势' : key}
                       </div>
                       <div style={{ 
                         display: 'flex', 
@@ -445,16 +441,16 @@ const ReportDetail: React.FC = () => {
                                 flex: 1,
                                 height: `${height}px`,
                                 background: key === 'errorRate' ? '#ff4d4f' : 
-                                          key === 'availability' && point.value < 99 ? '#faad14' : '#1890ff',
+                                  key === 'availability' && point.value < 99 ? '#faad14' : '#1890ff',
                                 borderRadius: '2px',
                                 position: 'relative',
                                 minHeight: '4px'
                               }}
                               title={`${point.date}: ${point.value}${
                                 key === 'responseTime' ? 'ms' :
-                                key === 'throughput' ? 'K req/s' :
-                                key === 'errorRate' ? '%' :
-                                key === 'availability' ? '%' : ''
+                                  key === 'throughput' ? 'K req/s' :
+                                    key === 'errorRate' ? '%' :
+                                      key === 'availability' ? '%' : ''
                               }`}
                             />
                           );
@@ -558,9 +554,9 @@ const ReportDetail: React.FC = () => {
                         <div style={{ fontSize: '14px', color: '#8c8c8c', marginBottom: '4px' }}>风险等级</div>
                         <Badge 
                           status={section.summary.riskLevel === 'high' ? 'error' : 
-                                 section.summary.riskLevel === 'medium' ? 'warning' : 'success'} 
+                            section.summary.riskLevel === 'medium' ? 'warning' : 'success'} 
                           text={section.summary.riskLevel === 'high' ? '高风险' : 
-                               section.summary.riskLevel === 'medium' ? '中风险' : '低风险'}
+                            section.summary.riskLevel === 'medium' ? '中风险' : '低风险'}
                         />
                       </div>
                     </Card>
@@ -631,8 +627,8 @@ const ReportDetail: React.FC = () => {
                           };
                           return <span style={{ color: colorMap[text] || '#8c8c8c' }}>
                             {text === 'very-high' ? '极高' : 
-                             text === 'high' ? '高' : 
-                             text === 'medium' ? '中' : '低'}
+                              text === 'high' ? '高' : 
+                                text === 'medium' ? '中' : '低'}
                           </span>;
                         }
                       },
@@ -758,7 +754,7 @@ const ReportDetail: React.FC = () => {
                                 <div>目标: {metric.target}</div>
                                 <div style={{ 
                                   color: metric.trend.startsWith('+') ? '#ff4d4f' : 
-                                         metric.trend.startsWith('-') ? '#52c41a' : '#8c8c8c'
+                                    metric.trend.startsWith('-') ? '#52c41a' : '#8c8c8c'
                                 }}>
                                   趋势: {metric.trend}
                                 </div>
@@ -766,8 +762,8 @@ const ReportDetail: React.FC = () => {
                             }
                             prefix={
                               metric.status === 'good' ? <CheckCircleOutlined style={{ color: '#52c41a' }} /> :
-                              metric.status === 'warning' ? <ExclamationCircleOutlined style={{ color: '#fa8c16' }} /> :
-                              <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />
+                                metric.status === 'warning' ? <ExclamationCircleOutlined style={{ color: '#fa8c16' }} /> :
+                                  <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />
                             }
                           />
                           <div style={{ marginTop: 8, fontSize: '12px', color: '#8c8c8c' }}>
@@ -857,8 +853,8 @@ const ReportDetail: React.FC = () => {
                         color={rec.priority === 'high' ? 'red' : rec.priority === 'medium' ? 'orange' : 'green'}
                         dot={
                           rec.priority === 'high' ? <ExclamationCircleOutlined /> :
-                          rec.priority === 'medium' ? <InfoCircleOutlined /> :
-                          <CheckCircleOutlined />
+                            rec.priority === 'medium' ? <InfoCircleOutlined /> :
+                              <CheckCircleOutlined />
                         }
                       >
                         <div>
@@ -916,16 +912,16 @@ const ReportDetail: React.FC = () => {
                   color={getPriorityColor(rec.priority)}
                   dot={
                     rec.priority === 'high' ? <ExclamationCircleOutlined /> :
-                    rec.priority === 'medium' ? <InfoCircleOutlined /> :
-                    <CheckCircleOutlined />
+                      rec.priority === 'medium' ? <InfoCircleOutlined /> :
+                        <CheckCircleOutlined />
                   }
                 >
                   <div>
                     <Space>
                       <Tag color={getPriorityColor(rec.priority)}>
                         {rec.priority === 'high' ? t('reports:detail.highPriority') :
-                         rec.priority === 'medium' ? t('reports:detail.mediumPriority') :
-                         t('reports:detail.lowPriority')}
+                          rec.priority === 'medium' ? t('reports:detail.mediumPriority') :
+                            t('reports:detail.lowPriority')}
                       </Tag>
                       <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
                         {rec.item}

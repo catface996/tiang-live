@@ -110,7 +110,7 @@ const D3RelationshipGraph: React.FC = () => {
       2: '#52c41a', // 业务链路层 - 绿色
       3: '#faad14', // 业务系统层 - 橙色
       4: '#722ed1', // 中间件层 - 紫色
-      5: '#f5222d', // 基础设施层 - 红色
+      5: '#f5222d' // 基础设施层 - 红色
     };
     return levelColors[level as keyof typeof levelColors] || '#8c8c8c';
   };
@@ -122,7 +122,7 @@ const D3RelationshipGraph: React.FC = () => {
       uses: '#faad14',
       runs_on: '#722ed1',
       stores_in: '#f5222d',
-      logs_to: '#8c8c8c',
+      logs_to: '#8c8c8c'
     };
     return linkColors[type as keyof typeof linkColors] || '#d9d9d9';
   };
@@ -133,7 +133,7 @@ const D3RelationshipGraph: React.FC = () => {
       2: 16, // 业务链路
       3: 14, // 业务系统
       4: 12, // 中间件
-      5: 10, // 基础设施 - 最小
+      5: 10 // 基础设施 - 最小
     };
     return sizes[level as keyof typeof sizes] || 12;
   };

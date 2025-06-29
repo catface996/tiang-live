@@ -24,16 +24,16 @@ const PlaneTag = styled.div<{ $planeId: string; $isDark: boolean }>`
   background: ${props => props.$isDark 
     ? `${getPrimaryColorById(props.$planeId)}20` 
     : getLightColorById(props.$planeId)
-  };
+};
   border: 1px solid ${props => getPrimaryColorById(props.$planeId)};
   margin-right: 8px;
   transition: all 0.2s ease;
   
   &:hover {
     background: ${props => props.$isDark 
-      ? `${getPrimaryColorById(props.$planeId)}30` 
-      : `${getPrimaryColorById(props.$planeId)}15`
-    };
+    ? `${getPrimaryColorById(props.$planeId)}30` 
+    : `${getPrimaryColorById(props.$planeId)}15`
+};
   }
 `;
 
@@ -49,9 +49,9 @@ const StatsOverview = styled.div<{ $isDark: boolean }>`
   &:hover {
     border-color: ${props => props.$isDark ? '#434343' : '#d9d9d9'};
     box-shadow: ${props => props.$isDark 
-      ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
-      : '0 2px 8px rgba(0, 0, 0, 0.06)'
-    };
+    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
+    : '0 2px 8px rgba(0, 0, 0, 0.06)'
+};
   }
 `;
 
@@ -177,7 +177,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         complexityScore,
         riskLevel,
         dependencies,
-        dependents,
+        dependents
       };
     });
   };
@@ -224,7 +224,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
             {text}
           </Text>
         </Space>
-      ),
+      )
     },
     {
       title: t('planes:dependency.columns.dependencyCount'),
@@ -237,8 +237,8 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         }).join(', ');
         
         const tagColor = count > 2 ? (isDark ? '#d89614' : 'orange') : 
-                        count > 0 ? (isDark ? '#177ddc' : 'blue') : 
-                        (isDark ? '#434343' : 'default');
+          count > 0 ? (isDark ? '#177ddc' : 'blue') : 
+            (isDark ? '#434343' : 'default');
         
         return (
           <Tooltip title={`${t('planes:dependency.tooltips.dependencyPlanes')}: ${dependencyNames || t('planes:dependency.tooltips.none')}`}>
@@ -247,7 +247,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
             </Tag>
           </Tooltip>
         );
-      },
+      }
     },
     {
       title: t('planes:dependency.columns.dependentCount'),
@@ -260,8 +260,8 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         }).join(', ');
         
         const tagColor = count > 2 ? (isDark ? '#d32029' : 'red') : 
-                        count > 0 ? (isDark ? '#49aa19' : 'green') : 
-                        (isDark ? '#434343' : 'default');
+          count > 0 ? (isDark ? '#49aa19' : 'green') : 
+            (isDark ? '#434343' : 'default');
         
         return (
           <Tooltip title={`${t('planes:dependency.tooltips.dependentPlanes')}: ${dependentNames || t('planes:dependency.tooltips.none')}`}>
@@ -270,7 +270,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
             </Tag>
           </Tooltip>
         );
-      },
+      }
     },
     {
       title: t('planes:dependency.columns.complexityScore'),
@@ -280,7 +280,7 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         <Text strong style={{ color: getComplexityScoreColor(score) }}>
           {score}
         </Text>
-      ),
+      )
     },
     {
       title: t('planes:dependency.columns.riskLevel'),
@@ -297,8 +297,8 @@ const PlaneDependencyAnalysis: React.FC<PlaneDependencyAnalysisProps> = ({
         >
           {t(`planes:dependency.riskLevels.${riskLevel}`)}
         </Tag>
-      ),
-    },
+      )
+    }
   ];
 
   // 统计信息

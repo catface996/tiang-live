@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Tag, Badge, Space, Typography, Button } from 'antd';
+import { Card, Badge, Space, Typography, Button } from 'antd';
 import { 
   FileTextOutlined, 
   LinkOutlined, 
@@ -11,9 +11,6 @@ import {
   DeploymentUnitOutlined,
   ScheduleOutlined,
   SettingOutlined,
-  CheckCircleOutlined,
-  ExclamationCircleOutlined,
-  ClockCircleOutlined,
   EditOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';

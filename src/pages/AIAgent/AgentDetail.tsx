@@ -14,9 +14,7 @@ import {
   Tabs,
   Avatar,
   Typography,
-  Divider,
   Alert,
-  Timeline,
   theme
 } from 'antd';
 import {
@@ -26,7 +24,6 @@ import {
   PlayCircleOutlined,
   PauseCircleOutlined,
   ReloadOutlined,
-  SettingOutlined,
   LineChartOutlined,
   FileTextOutlined,
   ClockCircleOutlined,

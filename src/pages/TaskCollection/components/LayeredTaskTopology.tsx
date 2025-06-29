@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useMemo, useState } from 'react';
-import { Alert, Space } from 'antd';
+import { Alert } from 'antd';
 import styled from 'styled-components';
 import * as d3 from 'd3';
 import { NodeStatus } from '../types';
@@ -268,7 +268,7 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     if (!stableNodes || stableNodes.length === 0 || !svgRef.current) return;
 
     const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove();
+    svg.selectAll('*').remove();
 
     // 动态获取容器的实际尺寸
     const containerElement = svgRef.current.parentElement;
@@ -277,20 +277,20 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     const height = containerRect?.height || 800;
     
     // 设置SVG的viewBox以适应容器
-    svg.attr("viewBox", `0 0 ${width} ${height}`)
-       .attr("preserveAspectRatio", "xMidYMid meet");
+    svg.attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
     
     const nodesCopy = stableNodes.map(node => ({ ...node }));
     
     // 创建主容器 - 这个容器会被缩放和平移
-    const g = svg.append("g").attr("class", "main-group");
+    const g = svg.append('g').attr('class', 'main-group');
 
     // 设置缩放行为
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.1, 5]) // 缩放范围：10%到500%
-      .on("zoom", (event) => {
+      .on('zoom', (event) => {
         // 应用缩放和平移变换
-        g.attr("transform", event.transform);
+        g.attr('transform', event.transform);
         // 更新缩放级别状态
         setZoomLevel(event.transform.k);
       });
@@ -299,7 +299,7 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     svg.call(zoom);
 
     // 添加缩放重置功能（双击）
-    svg.on("dblclick.zoom", () => {
+    svg.on('dblclick.zoom', () => {
       svg.transition().duration(500).call(
         zoom.transform,
         d3.zoomIdentity
@@ -320,7 +320,7 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
       // 布局该层级的节点
       layoutNodesInLayer(layerNodes, bounds);
 
-      const layerGroup = g.append("g").attr("class", `layer-${layer.id}`);
+      const layerGroup = g.append('g').attr('class', `layer-${layer.id}`);
       
       // 绘制层级背景矩形
       layerGroup.append('rect')
@@ -380,35 +380,35 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     });
 
     // 添加箭头标记
-    const defs = svg.append("defs");
+    const defs = svg.append('defs');
     
     // 依赖关系箭头
-    defs.append("marker")
-      .attr("id", "dependency-arrow")
-      .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 35)
-      .attr("refY", 0)
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
-      .attr("orient", "auto")
-      .append("path")
-      .attr("d", "M0,-5L10,0L0,5")
-      .attr("fill", "#666");
+    defs.append('marker')
+      .attr('id', 'dependency-arrow')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 35)
+      .attr('refY', 0)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M0,-5L10,0L0,5')
+      .attr('fill', '#666');
 
     // 绘制连接线
-    const link = g.append("g")
-      .selectAll("line")
+    const link = g.append('g')
+      .selectAll('line')
       .data(links)
-      .enter().append("line")
-      .attr("stroke", "#666")
-      .attr("stroke-opacity", 0.6)
-      .attr("stroke-width", 2)
-      .attr("stroke-dasharray", "5,5")
-      .attr("marker-end", "url(#dependency-arrow)")
-      .attr("x1", (d: any) => d.source.x)
-      .attr("y1", (d: any) => d.source.y)
-      .attr("x2", (d: any) => d.target.x)
-      .attr("y2", (d: any) => d.target.y);
+      .enter().append('line')
+      .attr('stroke', '#666')
+      .attr('stroke-opacity', 0.6)
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '5,5')
+      .attr('marker-end', 'url(#dependency-arrow)')
+      .attr('x1', (d: any) => d.source.x)
+      .attr('y1', (d: any) => d.source.y)
+      .attr('x2', (d: any) => d.target.x)
+      .attr('y2', (d: any) => d.target.y);
 
     // 获取节点颜色
     const getNodeColor = (status: NodeStatus) => {
@@ -441,51 +441,51 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     };
 
     // 绘制节点
-    const node = g.append("g")
-      .selectAll("g")
+    const node = g.append('g')
+      .selectAll('g')
       .data(nodesCopy)
-      .enter().append("g")
-      .attr("class", "node")
-      .attr("transform", (d: any) => `translate(${d.x},${d.y})`)
-      .style("cursor", "grab")
+      .enter().append('g')
+      .attr('class', 'node')
+      .attr('transform', (d: any) => `translate(${d.x},${d.y})`)
+      .style('cursor', 'grab')
       .call(d3.drag<any, any>()
-        .on("start", function(event, d: any) {
+        .on('start', function(event, d: any) {
           // 拖拽开始
-          d3.select(this).classed("dragging", true);
-          d3.select(this).style("cursor", "grabbing");
-          d3.select(this).select("circle")
+          d3.select(this).classed('dragging', true);
+          d3.select(this).style('cursor', 'grabbing');
+          d3.select(this).select('circle')
             .transition()
             .duration(100)
-            .attr("r", 35)
-            .attr("stroke-width", 4);
+            .attr('r', 35)
+            .attr('stroke-width', 4);
           
           // 阻止缩放事件
           event.sourceEvent.stopPropagation();
         })
-        .on("drag", function(event, d: any) {
+        .on('drag', function(event, d: any) {
           // 直接使用事件坐标，D3会自动处理缩放变换
           d.x = event.x;
           d.y = event.y;
           
           // 更新节点位置
-          d3.select(this).attr("transform", `translate(${d.x},${d.y})`);
+          d3.select(this).attr('transform', `translate(${d.x},${d.y})`);
           
           // 更新连接线
           link
-            .attr("x1", (linkData: any) => linkData.source.x)
-            .attr("y1", (linkData: any) => linkData.source.y)
-            .attr("x2", (linkData: any) => linkData.target.x)
-            .attr("y2", (linkData: any) => linkData.target.y);
+            .attr('x1', (linkData: any) => linkData.source.x)
+            .attr('y1', (linkData: any) => linkData.source.y)
+            .attr('x2', (linkData: any) => linkData.target.x)
+            .attr('y2', (linkData: any) => linkData.target.y);
         })
-        .on("end", function(event, d: any) {
+        .on('end', function(event, d: any) {
           // 拖拽结束，固定在当前位置
-          d3.select(this).classed("dragging", false);
-          d3.select(this).style("cursor", "grab");
-          d3.select(this).select("circle")
+          d3.select(this).classed('dragging', false);
+          d3.select(this).style('cursor', 'grab');
+          d3.select(this).select('circle')
             .transition()
             .duration(200)
-            .attr("r", 30)
-            .attr("stroke-width", 3);
+            .attr('r', 30)
+            .attr('stroke-width', 3);
           
           // 延迟一点时间再允许点击事件，避免拖拽结束时误触发点击
           setTimeout(() => {
@@ -495,31 +495,31 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
       );
 
     // 添加节点圆圈
-    node.append("circle")
-      .attr("r", 30)
-      .attr("fill", (d: any) => getNodeColor(d.status))
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 3)
-      .attr("filter", "drop-shadow(2px 2px 4px rgba(0,0,0,0.2))");
+    node.append('circle')
+      .attr('r', 30)
+      .attr('fill', (d: any) => getNodeColor(d.status))
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 3)
+      .attr('filter', 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))');
 
     // 添加节点图标
-    node.append("text")
-      .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .attr("font-size", "16px")
+    node.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.35em')
+      .attr('font-size', '16px')
       .text((d: any) => getNodeIcon(d));
 
     // 添加节点标签
-    node.append("text")
-      .attr("text-anchor", "middle")
-      .attr("dy", "3.8em")
-      .attr("font-size", "12px")
-      .attr("fill", "#333")
-      .attr("font-weight", "500")
+    node.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '3.8em')
+      .attr('font-size', '12px')
+      .attr('fill', '#333')
+      .attr('font-weight', '500')
       .text((d: any) => d.name);
 
     // 节点点击事件（避免与拖拽冲突）
-    node.on("click", function(_event: any, d: any) {
+    node.on('click', function(_event: any, d: any) {
       // 只有在没有拖拽的情况下才触发点击
       if (_event.defaultPrevented) return;
       if (onNodeClick) {
@@ -528,24 +528,24 @@ const LayeredTaskTopology: React.FC<LayeredTaskTopologyProps> = ({ nodes, onNode
     });
 
     // 添加节点悬停效果（只在非拖拽状态下生效）
-    node.on("mouseenter", function(event, d) {
-      if (!d3.select(this).classed("dragging")) {
-        d3.select(this).select("circle")
+    node.on('mouseenter', function(event, d) {
+      if (!d3.select(this).classed('dragging')) {
+        d3.select(this).select('circle')
           .transition()
           .duration(200)
-          .attr("r", 35)
-          .attr("stroke-width", 4);
+          .attr('r', 35)
+          .attr('stroke-width', 4);
       }
     })
-    .on("mouseleave", function(event, d) {
-      if (!d3.select(this).classed("dragging")) {
-        d3.select(this).select("circle")
-          .transition()
-          .duration(200)
-          .attr("r", 30)
-          .attr("stroke-width", 3);
-      }
-    });
+      .on('mouseleave', function(event, d) {
+        if (!d3.select(this).classed('dragging')) {
+          d3.select(this).select('circle')
+            .transition()
+            .duration(200)
+            .attr('r', 30)
+            .attr('stroke-width', 3);
+        }
+      });
   };
 
   // 当数据更新时重新绘制拓扑图

@@ -7,24 +7,17 @@ import {
   Row, 
   Col, 
   Statistic,
-  Badge,
   Tag,
   Modal,
   Form,
   Input,
   Select,
-  Switch,
-  Table,
   Tabs,
   Descriptions,
-  Progress,
   Tooltip,
-  Popconfirm,
   message,
   Alert,
-  DatePicker,
-  TimePicker,
-  Checkbox
+  DatePicker
 } from 'antd';
 import { 
   SearchOutlined, 
@@ -32,20 +25,13 @@ import {
   ReloadOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
   PlayCircleOutlined,
   PauseCircleOutlined,
   CheckCircleOutlined,
-  ExclamationCircleOutlined,
-  ClockCircleOutlined,
   MonitorOutlined,
   HeartOutlined,
-  BugOutlined,
-  ThunderboltOutlined,
   BarChartOutlined,
   SafetyCertificateOutlined,
-  NodeIndexOutlined,
-  ControlOutlined,
   HistoryOutlined,
   UnorderedListOutlined
 } from '@ant-design/icons';
@@ -383,7 +369,7 @@ const InspectionTasks: React.FC = () => {
     health_check: { name: t('tasks:inspection.types.health_check'), color: 'green', icon: <HeartOutlined /> },
     performance_monitor: { name: t('tasks:inspection.types.performance_monitor'), color: 'blue', icon: <BarChartOutlined /> },
     security_scan: { name: t('tasks:inspection.types.security_scan'), color: 'orange', icon: <SafetyCertificateOutlined /> },
-    log_analysis: { name: t('tasks:inspection.types.log_analysis'), color: 'purple', icon: <HistoryOutlined /> },
+    log_analysis: { name: t('tasks:inspection.types.log_analysis'), color: 'purple', icon: <HistoryOutlined /> }
   };
 
   const getStatusTag = (status: string) => {
@@ -391,7 +377,7 @@ const InspectionTasks: React.FC = () => {
       running: { color: 'green', text: t('tasks:inspection.status.active') },
       paused: { color: 'orange', text: t('tasks:inspection.status.paused') },
       stopped: { color: 'red', text: t('common:status.stopped') },
-      error: { color: 'red', text: t('common:status.error') },
+      error: { color: 'red', text: t('common:status.error') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -401,7 +387,7 @@ const InspectionTasks: React.FC = () => {
     const statusMap = {
       success: { color: 'green', text: t('common:status.success') },
       failed: { color: 'red', text: t('tasks:inspection.status.failed') },
-      timeout: { color: 'orange', text: t('common:status.timeout') },
+      timeout: { color: 'orange', text: t('common:status.timeout') }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return <Tag color={config.color}>{config.text}</Tag>;
@@ -421,7 +407,7 @@ const InspectionTasks: React.FC = () => {
       type: task.type,
       timeout: task.config.timeout,
       retryCount: task.config.retryCount,
-      alertThreshold: task.config.alertThreshold,
+      alertThreshold: task.config.alertThreshold
     });
     setModalVisible(true);
   };
@@ -745,7 +731,7 @@ const InspectionTasks: React.FC = () => {
             type: 'health_check',
             timeout: 30,
             retryCount: 3,
-            alertThreshold: 80,
+            alertThreshold: 80
           }}
         >
           <Form.Item

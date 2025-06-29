@@ -27,13 +27,13 @@ const initialState: SimplePlaneState = {
   loading: {
     definitions: false,
     topology: false,
-    metrics: false,
+    metrics: false
   },
   error: {
     definitions: null,
     topology: null,
-    metrics: null,
-  },
+    metrics: null
+  }
 };
 
 // 简化的 Slice
@@ -72,10 +72,10 @@ const simplePlaneSlice = createSlice({
       state.error = {
         definitions: null,
         topology: null,
-        metrics: null,
+        metrics: null
       };
-    },
-  },
+    }
+  }
 });
 
 export const { 

@@ -6,7 +6,7 @@
 // 存储键名常量
 export const STORAGE_KEYS = {
   THEME: 'preferred-theme',
-  LANGUAGE: 'preferred-language',
+  LANGUAGE: 'preferred-language'
 } as const;
 
 // 主题类型
@@ -48,7 +48,7 @@ export const themeStorage = {
   },
   set: (theme: ThemeType): void => {
     safeSetItem(STORAGE_KEYS.THEME, theme);
-  },
+  }
 };
 
 /**
@@ -61,7 +61,7 @@ export const languageStorage = {
   },
   set: (language: LanguageType): void => {
     safeSetItem(STORAGE_KEYS.LANGUAGE, language);
-  },
+  }
 };
 
 /**
@@ -82,6 +82,6 @@ export const clearUserPreferences = (): void => {
 export const getUserPreferences = () => {
   return {
     theme: themeStorage.get(),
-    language: languageStorage.get(),
+    language: languageStorage.get()
   };
 };
