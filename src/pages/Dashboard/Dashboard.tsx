@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Card, 
-  Row, 
-  Col, 
-  Statistic,
-  Space,
-  Select,
-  DatePicker,
-  Button,
-  List,
-  Avatar
-} from 'antd';
+import { Typography, Card, Row, Col, Statistic, Space, Select, DatePicker, Button, List, Avatar } from 'antd';
 import {
   AlertOutlined,
   CheckCircleOutlined,
@@ -42,13 +30,13 @@ const StatsCard = styled(Card)`
   .ant-card-body {
     padding: 20px;
   }
-  
+
   .ant-statistic-title {
     font-size: 14px;
     color: var(--text-secondary);
     margin-bottom: 8px;
   }
-  
+
   .ant-statistic-content {
     font-size: 24px;
     font-weight: 600;
@@ -60,7 +48,7 @@ const ChartCard = styled(Card)`
   .ant-card-body {
     padding: 20px;
   }
-  
+
   .chart-header {
     display: flex;
     justify-content: space-between;
@@ -78,7 +66,17 @@ const AlertCard = styled(Card)`
 const Dashboard: React.FC = () => {
   const [timeRange, setTimeRange] = useState<string>('7d');
   const [loading, setLoading] = useState(false);
-  const { t } = useTranslation(['dashboard', 'common', 'entities', 'planes', 'sequences', 'tasks', 'agents', 'messages', 'systemSettings']);
+  const { t } = useTranslation([
+    'dashboard',
+    'common',
+    'entities',
+    'planes',
+    'sequences',
+    'tasks',
+    'agents',
+    'messages',
+    'systemSettings'
+  ]);
 
   useEffect(() => {
     setPageTitle(t('dashboard:title'));
@@ -236,18 +234,18 @@ const Dashboard: React.FC = () => {
           show: false
         },
         data: [
-          { 
-            value: 85, 
+          {
+            value: 85,
             name: t('common:success'),
             itemStyle: { color: '#52c41a' }
           },
-          { 
-            value: 10, 
+          {
+            value: 10,
             name: t('common:failed'),
             itemStyle: { color: '#ff4d4f' }
           },
-          { 
-            value: 5, 
+          {
+            value: 5,
             name: t('common:pending'),
             itemStyle: { color: '#faad14' }
           }
@@ -338,7 +336,7 @@ const Dashboard: React.FC = () => {
     <PageContainer className="dashboard-page">
       {/* 页面头部 */}
       <div className="page-header" style={{ marginBottom: '24px' }}>
-        <Title className="page-title" level={2} style={{ marginBottom: '8px', display: 'block' }}>
+        <Title className="page-title" level={2} style={{ margin: 0 }}>
           {t('dashboard:title')}
         </Title>
         <Paragraph className="page-subtitle" style={{ marginBottom: '0', display: 'block' }}>
@@ -377,11 +375,7 @@ const Dashboard: React.FC = () => {
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard className="stats-card-warning">
-            <Statistic
-              title={t('dashboard:activeUsers')}
-              value={systemStats.runningTasks}
-              prefix={<UserOutlined />}
-            />
+            <Statistic title={t('dashboard:activeUsers')} value={systemStats.runningTasks} prefix={<UserOutlined />} />
           </StatsCard>
         </Col>
       </Row>
@@ -390,20 +384,12 @@ const Dashboard: React.FC = () => {
       <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} lg={16}>
           <ChartCard title={t('dashboard:performanceMetrics')}>
-            <ReactECharts 
-              option={getTaskTrendOption()} 
-              className="chart-container"
-              opts={{ renderer: 'svg' }}
-            />
+            <ReactECharts option={getTaskTrendOption()} className="chart-container" opts={{ renderer: 'svg' }} />
           </ChartCard>
         </Col>
         <Col xs={24} lg={8}>
           <ChartCard title={t('dashboard:systemStatus')}>
-            <ReactECharts 
-              option={getSystemHealthOption()} 
-              className="chart-container"
-              opts={{ renderer: 'svg' }}
-            />
+            <ReactECharts option={getSystemHealthOption()} className="chart-container" opts={{ renderer: 'svg' }} />
           </ChartCard>
         </Col>
       </Row>
@@ -412,20 +398,12 @@ const Dashboard: React.FC = () => {
       <Row gutter={[16, 16]} className="margin-bottom-24">
         <Col xs={24} lg={12}>
           <ChartCard title={t('dashboard:taskSuccessRate')}>
-            <ReactECharts 
-              option={getTaskCompletionOption()} 
-              className="chart-container"
-              opts={{ renderer: 'svg' }}
-            />
+            <ReactECharts option={getTaskCompletionOption()} className="chart-container" opts={{ renderer: 'svg' }} />
           </ChartCard>
         </Col>
         <Col xs={24} lg={12}>
           <ChartCard title={t('dashboard:averageResponseTime')}>
-            <ReactECharts 
-              option={getResponseTimeOption()} 
-              className="chart-container"
-              opts={{ renderer: 'svg' }}
-            />
+            <ReactECharts option={getResponseTimeOption()} className="chart-container" opts={{ renderer: 'svg' }} />
           </ChartCard>
         </Col>
       </Row>
@@ -445,7 +423,9 @@ const Dashboard: React.FC = () => {
                     description={
                       <Space direction="vertical" size={0}>
                         <Text type="secondary">{item.description}</Text>
-                        <Text type="secondary" className="font-size-12">{item.time}</Text>
+                        <Text type="secondary" className="font-size-12">
+                          {item.time}
+                        </Text>
                       </Space>
                     }
                   />
