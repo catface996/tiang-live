@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Card, 
-  Space, 
-  Button, 
-  Row, 
-  Col, 
+import {
+  Typography,
+  Card,
+  Space,
+  Button,
+  Row,
+  Col,
   Statistic,
   Tag,
   Modal,
   Form,
-  Input,
-  Select,
-  Switch,
   Descriptions,
   Tooltip,
   message,
-  Alert,
   Rate
 } from 'antd';
-import { 
-  FileTextOutlined, 
-  PlusOutlined, 
+import {
+  FileTextOutlined,
+  PlusOutlined,
   ReloadOutlined,
   EyeOutlined,
   EditOutlined,
@@ -40,11 +36,10 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
+import PromptFormModal from './components/PromptFormModal';
 import '../../../styles/prompt-templates.css';
 
 const { Title, Paragraph, Text } = Typography;
-const { Option } = Select;
-const { TextArea } = Input;
 
 const PageContainer = styled.div`
   padding: 24px;
@@ -64,61 +59,61 @@ const PromptCard = styled(Card)`
   height: 100%;
   transition: all 0.3s ease;
   cursor: pointer;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  
+
   .ant-card-head {
     padding: 12px 16px;
     min-height: 57px;
-    
+
     .ant-card-head-title {
       padding: 0;
       font-size: 14px;
       font-weight: 500;
       width: 100%;
     }
-    
+
     .ant-card-extra {
       padding: 0;
     }
-    
+
     .card-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      
+
       .title-left {
         flex: 1;
         min-width: 0; /* 允许文本截断 */
-        
+
         span {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
       }
-      
+
       .title-right {
         flex-shrink: 0;
         margin-left: 8px;
       }
     }
   }
-  
+
   .card-actions {
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid #f0f0f0;
     display: flex;
     justify-content: flex-end;
-    
+
     .ant-btn {
       color: #666;
-      
+
       &:hover {
         color: #1890ff;
         background-color: rgba(24, 144, 255, 0.1);
@@ -170,10 +165,10 @@ interface PromptTemplate {
 
 const PromptTemplates: React.FC = () => {
   const { t } = useTranslation(['prompts', 'common']);
-  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { currentTheme } = useAppSelector(state => state.theme);
   const isDarkMode = currentTheme === 'dark';
   const iconColor = isDarkMode ? '#ffffff' : '#1890ff';
-  
+
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -331,12 +326,12 @@ API接口：{api_details}
   ];
 
   const categoryMap = {
-    '开发工具': { color: 'blue', icon: <CodeOutlined /> },
-    '运维工具': { color: 'green', icon: <ThunderboltOutlined /> },
-    '产品管理': { color: 'orange', icon: <BulbOutlined /> },
-    '文档工具': { color: 'purple', icon: <FileTextOutlined /> },
-    '客服助手': { color: 'cyan', icon: <MessageOutlined /> },
-    '数据分析': { color: 'red', icon: <SafetyCertificateOutlined /> }
+    开发工具: { color: 'blue', icon: <CodeOutlined /> },
+    运维工具: { color: 'green', icon: <ThunderboltOutlined /> },
+    产品管理: { color: 'orange', icon: <BulbOutlined /> },
+    文档工具: { color: 'purple', icon: <FileTextOutlined /> },
+    客服助手: { color: 'cyan', icon: <MessageOutlined /> },
+    数据分析: { color: 'red', icon: <SafetyCertificateOutlined /> }
   };
 
   const difficultyMap = {
@@ -347,12 +342,12 @@ API接口：{api_details}
 
   const getCategoryKey = (category: string) => {
     const categoryKeyMap: { [key: string]: string } = {
-      '开发工具': 'devTools',
-      '运维工具': 'opsTools',
-      '产品管理': 'productManagement',
-      '文档工具': 'docTools',
-      '客服助手': 'customerService',
-      '数据分析': 'dataAnalysis'
+      开发工具: 'devTools',
+      运维工具: 'opsTools',
+      产品管理: 'productManagement',
+      文档工具: 'docTools',
+      客服助手: 'customerService',
+      数据分析: 'dataAnalysis'
     };
     return categoryKeyMap[category] || 'devTools';
   };
@@ -426,9 +421,7 @@ API接口：{api_details}
                     <span>{prompt.name}</span>
                   </Space>
                 </div>
-                <div className="title-right">
-                  {prompt.isFavorite && <StarOutlined />}
-                </div>
+                <div className="title-right">{prompt.isFavorite && <StarOutlined />}</div>
               </div>
             }
             onClick={() => handleViewPrompt(prompt)}
@@ -438,17 +431,12 @@ API接口：{api_details}
                 <Tag color={categoryConfig?.color} icon={categoryConfig?.icon}>
                   {t(`prompts:categories.${getCategoryKey(prompt.category)}`)}
                 </Tag>
-                <Tag color={difficultyConfig?.color}>
-                  {t(`prompts:difficulty.${prompt.difficulty}`)}
-                </Tag>
+                <Tag color={difficultyConfig?.color}>{t(`prompts:difficulty.${prompt.difficulty}`)}</Tag>
                 {prompt.isPublic && <Tag color="blue">{t('prompts:status.public')}</Tag>}
               </Space>
             </div>
-            
-            <Paragraph 
-              ellipsis={{ rows: 2 }} 
-              style={{ marginBottom: 16, minHeight: 40 }}
-            >
+
+            <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 16, minHeight: 40 }}>
               {prompt.description}
             </Paragraph>
 
@@ -461,10 +449,7 @@ API接口：{api_details}
                   </div>
                 </Col>
                 <Col span={12}>
-                  <Statistic
-                    title={t('prompts:stats.usageCount')}
-                    value={prompt.usageCount}
-                  />
+                  <Statistic title={t('prompts:stats.usageCount')} value={prompt.usageCount} />
                 </Col>
               </Row>
             </div>
@@ -472,16 +457,18 @@ API接口：{api_details}
             <div style={{ marginBottom: 12 }}>
               <Space wrap>
                 {prompt.tags.slice(0, 3).map(tag => (
-                  <Tag key={tag} size="small">{tag}</Tag>
+                  <Tag key={tag} size="small">
+                    {tag}
+                  </Tag>
                 ))}
-                {prompt.tags.length > 3 && (
-                  <Tag size="small">+{prompt.tags.length - 3}</Tag>
-                )}
+                {prompt.tags.length > 3 && <Tag size="small">+{prompt.tags.length - 3}</Tag>}
               </Space>
             </div>
 
             <div style={{ fontSize: 12, color: '#666' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}
+              >
                 <span>{t('prompts:detail.version')}:</span>
                 <span>{prompt.version}</span>
               </div>
@@ -490,27 +477,27 @@ API接口：{api_details}
                 <span>{prompt.lastUsed}</span>
               </div>
             </div>
-            
+
             {/* 操作按钮区域 - 单独一行，右对齐 */}
             <div className="card-actions">
               <Space>
                 <Tooltip title={t('prompts:actions.view')}>
-                  <Button 
-                    type="text" 
-                    icon={<EyeOutlined />} 
+                  <Button
+                    type="text"
+                    icon={<EyeOutlined />}
                     size="small"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleViewPrompt(prompt);
                     }}
                   />
                 </Tooltip>
                 <Tooltip title={t('prompts:actions.edit')}>
-                  <Button 
-                    type="text" 
-                    icon={<EditOutlined />} 
+                  <Button
+                    type="text"
+                    icon={<EditOutlined />}
                     size="small"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleEditPrompt(prompt);
                     }}
@@ -541,19 +528,15 @@ API接口：{api_details}
             </Space>
           </Title>
           <Space>
-            <Button icon={<ReloadOutlined />}>
-              {t('common:refresh')}
-            </Button>
+            <Button icon={<ReloadOutlined />}>{t('common:refresh')}</Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreatePrompt}>
               {t('prompts:createPrompt')}
             </Button>
           </Space>
         </div>
-        
+
         {/* Paragraph单独一行，充满宽度 */}
-        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
-          {t('prompts:subtitle')}
-        </Paragraph>
+        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>{t('prompts:subtitle')}</Paragraph>
       </PageHeader>
 
       {/* 统计信息 */}
@@ -578,11 +561,7 @@ API接口：{api_details}
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard className="prompt-stats-warning">
-            <Statistic
-              title={t('prompts:stats.favoriteTemplates')}
-              value={favoritePrompts}
-              prefix={<StarOutlined />}
-            />
+            <Statistic title={t('prompts:stats.favoriteTemplates')} value={favoritePrompts} prefix={<StarOutlined />} />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
@@ -649,124 +628,16 @@ API接口：{api_details}
       />
 
       {/* 提示词卡片列表 */}
-      <Row gutter={[16, 16]}>
-        {renderPromptCards()}
-      </Row>
+      <Row gutter={[16, 16]}>{renderPromptCards()}</Row>
 
       {/* 创建/编辑提示词模态框 */}
-      <Modal
-        title={editingPrompt ? '编辑提示词模板' : '创建提示词模板'}
-        open={modalVisible}
+      <PromptFormModal
+        visible={modalVisible}
+        editingPrompt={editingPrompt}
+        form={form}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
-        width={800}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          initialValues={{
-            language: 'zh-CN',
-            difficulty: 'intermediate',
-            isPublic: false
-          }}
-        >
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="name"
-                label={t('prompts:form.templateName')}
-                rules={[{ required: true, message: t('prompts:form.templateNameRequired') }]}
-              >
-                <Input placeholder={t('prompts:form.templateNamePlaceholder')} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="category"
-                label={t('prompts:form.category')}
-                rules={[{ required: true, message: t('prompts:form.categoryRequired') }]}
-              >
-                <Select placeholder={t('prompts:form.categoryPlaceholder')}>
-                  <Option value="开发工具">{t('prompts:categories.devTools')}</Option>
-                  <Option value="运维工具">{t('prompts:categories.opsTools')}</Option>
-                  <Option value="产品管理">{t('prompts:categories.productManagement')}</Option>
-                  <Option value="文档工具">{t('prompts:categories.docTools')}</Option>
-                  <Option value="客服助手">{t('prompts:categories.customerService')}</Option>
-                  <Option value="数据分析">{t('prompts:categories.dataAnalysis')}</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Form.Item
-            name="description"
-            label={t('prompts:form.description')}
-            rules={[{ required: true, message: t('prompts:form.descriptionRequired') }]}
-          >
-            <TextArea 
-              rows={2} 
-              placeholder={t('prompts:form.descriptionPlaceholder')}
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="content"
-            label={t('prompts:form.content')}
-            rules={[{ required: true, message: t('prompts:form.contentRequired') }]}
-          >
-            <TextArea 
-              rows={8} 
-              placeholder={t('prompts:form.contentPlaceholder')}
-            />
-          </Form.Item>
-
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item
-                name="language"
-                label={t('prompts:form.language')}
-                rules={[{ required: true, message: t('prompts:form.languageRequired') }]}
-              >
-                <Select placeholder={t('prompts:form.languagePlaceholder')}>
-                  <Option value="zh-CN">中文</Option>
-                  <Option value="en-US">English</Option>
-                  <Option value="ja-JP">日本語</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                name="difficulty"
-                label={t('prompts:form.difficulty')}
-                rules={[{ required: true, message: t('prompts:form.difficultyRequired') }]}
-              >
-                <Select placeholder={t('prompts:search.difficulty')}>
-                  <Option value="beginner">{t('prompts:difficulty.beginner')}</Option>
-                  <Option value="intermediate">{t('prompts:difficulty.intermediate')}</Option>
-                  <Option value="advanced">{t('prompts:difficulty.advanced')}</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                name="isPublic"
-                label={t('prompts:detail.isPublic')}
-                valuePropName="checked"
-              >
-                <Switch />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Alert
-            message={t('prompts:form.variableTip')}
-            description={t('prompts:form.variableTipDescription')}
-            type="info"
-            showIcon
-            style={{ marginTop: 16 }}
-          />
-        </Form>
-      </Modal>
+      />
 
       {/* 提示词详情模态框 */}
       <Modal
@@ -785,7 +656,7 @@ API接口：{api_details}
                 {selectedPrompt.name}
               </Descriptions.Item>
               <Descriptions.Item label={t('prompts:detail.category')}>
-                <Tag 
+                <Tag
                   color={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.color}
                   icon={categoryMap[selectedPrompt.category as keyof typeof categoryMap]?.icon}
                 >
@@ -804,29 +675,24 @@ API接口：{api_details}
                 </Space>
               </Descriptions.Item>
               <Descriptions.Item label={t('prompts:detail.usageCount')}>
-                {selectedPrompt.usageCount}{t('common:unit.times')}
+                {selectedPrompt.usageCount}
+                {t('common:unit.times')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.language')}>
-                {selectedPrompt.language}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.version')}>
-                {selectedPrompt.version}
-              </Descriptions.Item>
+              <Descriptions.Item label={t('prompts:detail.language')}>{selectedPrompt.language}</Descriptions.Item>
+              <Descriptions.Item label={t('prompts:detail.version')}>{selectedPrompt.version}</Descriptions.Item>
               <Descriptions.Item label={t('prompts:detail.status')}>
                 <Space>
                   {selectedPrompt.isPublic && <Tag color="blue">{t('prompts:status.public')}</Tag>}
-                  {selectedPrompt.isFavorite && <Tag color="gold" icon={<StarOutlined />}>{t('prompts:status.favorite')}</Tag>}
+                  {selectedPrompt.isFavorite && (
+                    <Tag color="gold" icon={<StarOutlined />}>
+                      {t('prompts:status.favorite')}
+                    </Tag>
+                  )}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.creator')}>
-                {selectedPrompt.createdBy}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.createdAt')}>
-                {selectedPrompt.createdAt}
-              </Descriptions.Item>
-              <Descriptions.Item label={t('prompts:detail.lastUsed')}>
-                {selectedPrompt.lastUsed}
-              </Descriptions.Item>
+              <Descriptions.Item label={t('prompts:detail.creator')}>{selectedPrompt.createdBy}</Descriptions.Item>
+              <Descriptions.Item label={t('prompts:detail.createdAt')}>{selectedPrompt.createdAt}</Descriptions.Item>
+              <Descriptions.Item label={t('prompts:detail.lastUsed')}>{selectedPrompt.lastUsed}</Descriptions.Item>
               <Descriptions.Item label={t('prompts:detail.description')} span={2}>
                 {selectedPrompt.description}
               </Descriptions.Item>
@@ -834,14 +700,9 @@ API接口：{api_details}
 
             {/* 提示词内容 */}
             <Card title={t('prompts:detail.content')} style={{ marginBottom: 16 }}>
-              <PromptContent>
-                {selectedPrompt.content}
-              </PromptContent>
+              <PromptContent>{selectedPrompt.content}</PromptContent>
               <div style={{ marginTop: 12, textAlign: 'right' }}>
-                <Button 
-                  icon={<CopyOutlined />} 
-                  onClick={() => handleCopyPrompt(selectedPrompt)}
-                >
+                <Button icon={<CopyOutlined />} onClick={() => handleCopyPrompt(selectedPrompt)}>
                   {t('prompts:actions.copy')}
                 </Button>
               </div>

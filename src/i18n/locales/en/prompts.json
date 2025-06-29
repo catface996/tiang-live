@@ -2,6 +2,8 @@
   "title": "Prompt Templates",
   "subtitle": "AI prompt template management and optimization",
   "createPrompt": "Create Template",
+  "createTemplate": "Create Prompt Template",
+  "editTemplate": "Edit Prompt Template",
   "stats": {
     "totalTemplates": "Total Templates",
     "publicTemplates": "Public Templates",

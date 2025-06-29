@@ -2,6 +2,8 @@
   "title": "提示词模板",
   "subtitle": "AI提示词模板管理和优化",
   "createPrompt": "创建模板",
+  "createTemplate": "创建提示词模板",
+  "editTemplate": "编辑提示词模板",
   "stats": {
     "totalTemplates": "总模板数",
     "publicTemplates": "公开模板",
