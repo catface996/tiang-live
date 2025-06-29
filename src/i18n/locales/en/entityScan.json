@@ -191,5 +191,93 @@
       "testFailed": "Connection failed, please check configuration parameters.",
       "validationFailed": "Configuration validation failed, please check required fields."
     }
+  },
+  "scanDetail": {
+    "breadcrumb": {
+      "back": "Back"
+    },
+    "actions": {
+      "refresh": "Refresh",
+      "startScan": "Start Scan",
+      "pauseScan": "Pause",
+      "stopScan": "Stop",
+      "exportEntities": "Export Entities"
+    },
+    "scanStatus": {
+      "scanning": "Scanning",
+      "completed": "Completed",
+      "failed": "Scan Failed",
+      "paused": "Paused",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "foundEntities": "Found Entities",
+      "errors": "Errors"
+    },
+    "statistics": {
+      "foundEntities": "Found Entities",
+      "selected": "Selected",
+      "dataTables": "Data Tables",
+      "views": "Views"
+    },
+    "filters": {
+      "searchPlaceholder": "Search entity name or description...",
+      "allTypes": "All Types",
+      "allStatuses": "All Statuses",
+      "table": "Table",
+      "view": "View",
+      "procedure": "Procedure",
+      "function": "Function",
+      "api": "API",
+      "file": "File",
+      "active": "Active",
+      "inactive": "Inactive",
+      "warning": "Warning"
+    },
+    "entityCard": {
+      "owner": "Owner",
+      "recordCount": "Record Count",
+      "size": "Size",
+      "activationStatus": "Activation Status",
+      "activated": "Activated",
+      "deactivated": "Deactivated",
+      "noDescription": "No description",
+      "unspecified": "Unspecified"
+    },
+    "entityDetail": {
+      "title": "Entity Details",
+      "name": "Name",
+      "type": "Type",
+      "schema": "Schema",
+      "description": "Description",
+      "recordCount": "Record Count",
+      "size": "Size",
+      "scanTime": "Scan Time"
+    },
+    "entityTypes": {
+      "table": "Table",
+      "view": "View",
+      "procedure": "Procedure",
+      "function": "Function",
+      "api": "API",
+      "file": "File"
+    },
+    "messages": {
+      "loadDataSourceFailed": "Failed to load data source information",
+      "loadScanResultsFailed": "Failed to load scan results",
+      "scanningDataSource": "Scanning data source...",
+      "scanCompleted": "Scan completed!",
+      "scanFailed": "Scan failed!",
+      "scanPaused": "Scan paused",
+      "scanStopped": "Scan stopped",
+      "selectEntitiesFirst": "Please select entities to export first",
+      "exportSuccess": "Successfully exported {{count}} entities",
+      "entityActivated": "Entity activated",
+      "entityDeactivated": "Entity deactivated",
+      "loading": "Loading...",
+      "noMatchingEntities": "No matching entities"
+    },
+    "scanResults": {
+      "title": "Scan Entities"
+    }
   }
 }

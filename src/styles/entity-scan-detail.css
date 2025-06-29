@@ -89,7 +89,21 @@
     }
   }
 
-  /* 错误色统计卡片 - 红色 (视图) */
+  /* 信息色统计卡片 - 紫色 (视图) */
+  .entity-stats-info {
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic .ant-statistic-content .ant-statistic-content-suffix {
+      color: #722ed1 !important;
+    }
+
+    .ant-statistic-title {
+      color: var(--text-color-secondary) !important;
+    }
+  }
+
+  /* 错误色统计卡片 - 红色 (保留用于其他用途) */
   .entity-stats-error {
     .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
     .ant-statistic .ant-statistic-content .ant-statistic-content-prefix .anticon,
@@ -121,7 +135,8 @@
   .entity-stats-primary,
   .entity-stats-success,
   .entity-stats-warning,
-  .entity-stats-error {
+  .entity-stats-error,
+  .entity-stats-info {
     * {
       transition: none !important;
     }
@@ -925,4 +940,27 @@ html[data-theme='dark'] .entity-scan-detail-page .ant-switch-small.ant-switch-di
     padding-top: 8px;
     margin-top: 12px;
   }
+}
+
+/* 紫色统计卡片 - Views */
+.entity-scan-detail-page
+  .entity-stats-info[class][class][class]
+  .ant-statistic[class]
+  .ant-statistic-content[class]
+  .ant-statistic-content-value[class],
+.entity-scan-detail-page
+  .entity-stats-info[class][class][class]
+  .ant-statistic[class]
+  .ant-statistic-content[class]
+  .ant-statistic-content-prefix[class],
+.entity-scan-detail-page
+  .entity-stats-info[class][class][class]
+  .ant-statistic[class]
+  .ant-statistic-content[class]
+  .ant-statistic-content-suffix[class],
+.entity-scan-detail-page .entity-stats-info[class][class][class] .ant-statistic-content-value[class],
+.entity-scan-detail-page .entity-stats-info[class][class][class] .ant-statistic-content-prefix[class],
+.entity-scan-detail-page .entity-stats-info[class][class][class] .ant-statistic-content-suffix[class],
+.entity-scan-detail-page .entity-stats-info[class][class][class] .anticon[class] {
+  color: #722ed1 !important;
 }

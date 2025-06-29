@@ -17,7 +17,6 @@ import {
   Statistic,
   Input,
   Select,
-  Checkbox,
   Switch
 } from 'antd';
 import {
@@ -195,12 +194,16 @@ const ScanDetail: React.FC = () => {
   // 获取实体类型图标和颜色
   const getEntityTypeConfig = (type: string) => {
     const typeMap = {
-      table: { icon: <TableOutlined />, color: '#1890ff', name: '表' },
-      view: { icon: <EyeOutlined />, color: '#52c41a', name: '视图' },
-      procedure: { icon: <PlayCircleOutlined />, color: '#722ed1', name: '存储过程' },
-      function: { icon: <FileTextOutlined />, color: '#fa8c16', name: '函数' },
-      api: { icon: <ApiOutlined />, color: '#13c2c2', name: 'API' },
-      file: { icon: <FileTextOutlined />, color: '#eb2f96', name: '文件' }
+      table: { icon: <TableOutlined />, color: '#1890ff', name: t('entityScan:scanDetail.entityTypes.table') },
+      view: { icon: <EyeOutlined />, color: '#52c41a', name: t('entityScan:scanDetail.entityTypes.view') },
+      procedure: {
+        icon: <PlayCircleOutlined />,
+        color: '#722ed1',
+        name: t('entityScan:scanDetail.entityTypes.procedure')
+      },
+      function: { icon: <FileTextOutlined />, color: '#fa8c16', name: t('entityScan:scanDetail.entityTypes.function') },
+      api: { icon: <ApiOutlined />, color: '#13c2c2', name: t('entityScan:scanDetail.entityTypes.api') },
+      file: { icon: <FileTextOutlined />, color: '#eb2f96', name: t('entityScan:scanDetail.entityTypes.file') }
     };
     return typeMap[type as keyof typeof typeMap] || { icon: <TableOutlined />, color: '#8c8c8c', name: type };
   };
@@ -208,10 +211,22 @@ const ScanDetail: React.FC = () => {
   // 获取状态配置
   const getStatusConfig = (status: string) => {
     const statusMap = {
-      running: { text: '扫描中', color: 'processing', icon: <ScanOutlined spin /> },
-      completed: { text: '已完成', color: 'success', icon: <CheckCircleOutlined /> },
-      failed: { text: '扫描失败', color: 'error', icon: <ExclamationCircleOutlined /> },
-      paused: { text: '已暂停', color: 'warning', icon: <PauseCircleOutlined /> }
+      running: {
+        text: t('entityScan:scanDetail.scanStatus.scanning'),
+        color: 'processing',
+        icon: <ScanOutlined spin />
+      },
+      completed: {
+        text: t('entityScan:scanDetail.scanStatus.completed'),
+        color: 'success',
+        icon: <CheckCircleOutlined />
+      },
+      failed: {
+        text: t('entityScan:scanDetail.scanStatus.failed'),
+        color: 'error',
+        icon: <ExclamationCircleOutlined />
+      },
+      paused: { text: t('entityScan:scanDetail.scanStatus.paused'), color: 'warning', icon: <PauseCircleOutlined /> }
     };
     return statusMap[status as keyof typeof statusMap] || statusMap.completed;
   };
@@ -272,7 +287,7 @@ const ScanDetail: React.FC = () => {
 
       setScanTask(mockScanTask);
     } catch (error) {
-      message.error('加载数据源信息失败');
+      message.error(t('entityScan:scanDetail.messages.loadDataSourceFailed'));
     } finally {
       setLoading(false);
     }
@@ -383,7 +398,7 @@ const ScanDetail: React.FC = () => {
       setScanEntities(mockEntities);
       setSelectedRowKeys(mockEntities.filter(e => e.selected).map(e => e.id));
     } catch (error) {
-      message.error('加载扫描结果失败');
+      message.error(t('entityScan:scanDetail.messages.loadScanResultsFailed'));
     } finally {
       setLoading(false);
     }
@@ -408,7 +423,7 @@ const ScanDetail: React.FC = () => {
           : null
       );
 
-      message.loading('正在扫描数据源...', 2);
+      message.loading(t('entityScan:scanDetail.messages.scanningDataSource'), 2);
 
       // 模拟扫描进度
       const progressInterval = setInterval(() => {
@@ -422,7 +437,7 @@ const ScanDetail: React.FC = () => {
           if (newProgress >= 100) {
             clearInterval(progressInterval);
             setIsScanning(false);
-            message.success('扫描完成！');
+            message.success(t('entityScan:scanDetail.messages.scanCompleted'));
             return {
               ...prev,
               status: 'completed',
@@ -438,7 +453,7 @@ const ScanDetail: React.FC = () => {
       }, 500);
     } catch (error) {
       setIsScanning(false);
-      message.error('扫描失败！');
+      message.error(t('entityScan:scanDetail.messages.scanFailed'));
     }
   };
 
@@ -446,7 +461,7 @@ const ScanDetail: React.FC = () => {
   const handlePauseScan = () => {
     setIsScanning(false);
     setScanTask(prev => (prev ? { ...prev, status: 'paused' } : null));
-    message.info('扫描已暂停');
+    message.info(t('entityScan:scanDetail.messages.scanPaused'));
   };
 
   // 停止扫描
@@ -461,38 +476,38 @@ const ScanDetail: React.FC = () => {
           }
         : null
     );
-    message.info('扫描已停止');
+    message.info(t('entityScan:scanDetail.messages.scanStopped'));
   };
 
   // 导出实体
   const handleExportEntities = () => {
     if (selectedRowKeys.length === 0) {
-      message.warning('请先选择要导出的实体');
+      message.warning(t('entityScan:scanDetail.messages.selectEntitiesFirst'));
       return;
     }
 
     const selectedEntities = scanEntities.filter(entity => selectedRowKeys.includes(entity.id));
 
     console.log('导出数据:', selectedEntities);
-    message.success(`成功导出 ${selectedEntities.length} 个实体`);
+    message.success(t('entityScan:scanDetail.messages.exportSuccess', { count: selectedEntities.length }));
   };
 
   // 查看实体详情
   const handleViewEntity = (entity: ScanEntity) => {
     Modal.info({
-      title: `实体详情 - ${entity.name}`,
+      title: `${t('entityScan:scanDetail.entityDetail.title')} - ${entity.name}`,
       width: 800,
       content: (
         <div className="entity-detail-modal">
           <Row gutter={[16, 8]} className="entity-detail-row">
             <Col span={6}>
-              <strong>名称:</strong>
+              <strong>{t('entityScan:scanDetail.entityDetail.name')}:</strong>
             </Col>
             <Col span={18}>{entity.name}</Col>
           </Row>
           <Row gutter={[16, 8]} className="entity-detail-row">
             <Col span={6}>
-              <strong>类型:</strong>
+              <strong>{t('entityScan:scanDetail.entityDetail.type')}:</strong>
             </Col>
             <Col span={18}>
               <Tag color={getEntityTypeConfig(entity.type).color}>{getEntityTypeConfig(entity.type).name}</Tag>
@@ -500,20 +515,20 @@ const ScanDetail: React.FC = () => {
           </Row>
           <Row gutter={[16, 8]} className="entity-detail-row">
             <Col span={6}>
-              <strong>模式:</strong>
+              <strong>{t('entityScan:scanDetail.entityDetail.schema')}:</strong>
             </Col>
             <Col span={18}>{entity.schema}</Col>
           </Row>
           <Row gutter={[16, 8]} className="entity-detail-row">
             <Col span={6}>
-              <strong>描述:</strong>
+              <strong>{t('entityScan:scanDetail.entityDetail.description')}:</strong>
             </Col>
             <Col span={18}>{entity.description}</Col>
           </Row>
           {entity.recordCount && (
             <Row gutter={[16, 8]} className="entity-detail-row">
               <Col span={6}>
-                <strong>记录数:</strong>
+                <strong>{t('entityScan:scanDetail.entityDetail.recordCount')}:</strong>
               </Col>
               <Col span={18}>{entity.recordCount.toLocaleString()}</Col>
             </Row>
@@ -521,14 +536,14 @@ const ScanDetail: React.FC = () => {
           {entity.size && (
             <Row gutter={[16, 8]} className="entity-detail-row">
               <Col span={6}>
-                <strong>大小:</strong>
+                <strong>{t('entityScan:scanDetail.entityDetail.size')}:</strong>
               </Col>
               <Col span={18}>{entity.size}</Col>
             </Row>
           )}
           <Row gutter={[16, 8]} className="entity-detail-row">
             <Col span={6}>
-              <strong>扫描时间:</strong>
+              <strong>{t('entityScan:scanDetail.entityDetail.scanTime')}:</strong>
             </Col>
             <Col span={18}>{entity.scanTime}</Col>
           </Row>
@@ -543,7 +558,11 @@ const ScanDetail: React.FC = () => {
       entities.map(entity => (entity.id === entityId ? { ...entity, status: active ? 'active' : 'inactive' } : entity))
     );
 
-    message.success(`实体已${active ? '激活' : '停用'}`);
+    message.success(
+      active
+        ? t('entityScan:scanDetail.messages.entityActivated')
+        : t('entityScan:scanDetail.messages.entityDeactivated')
+    );
   };
 
   // 切换实体选择状态
@@ -611,39 +630,26 @@ const ScanDetail: React.FC = () => {
             </div>
           </Space>
         }
-        extra={
-          <Space>
-            <Checkbox
-              checked={entity.selected}
-              onChange={e => {
-                e.stopPropagation();
-                handleToggleEntity(entity.id, e.target.checked);
-              }}
-              onClick={e => e.stopPropagation()}
-            />
-            <Badge status={getEntityStatusColor(entity.status) as any} text={entity.status} />
-          </Space>
-        }
       >
         <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 12 }}>
-          {entity.description || '暂无描述'}
+          {entity.description || t('entityScan:scanDetail.entityCard.noDescription')}
         </Paragraph>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <Text type="secondary">负责人:</Text>
-          <Text>{entity.owner || '未指定'}</Text>
+          <Text type="secondary">{t('entityScan:scanDetail.entityCard.owner')}:</Text>
+          <Text>{entity.owner || t('entityScan:scanDetail.entityCard.unspecified')}</Text>
         </div>
 
         {entity.recordCount && (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <Text type="secondary">记录数:</Text>
+            <Text type="secondary">{t('entityScan:scanDetail.entityCard.recordCount')}:</Text>
             <Text>{entity.recordCount.toLocaleString()}</Text>
           </div>
         )}
 
         {entity.size && (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <Text type="secondary">大小:</Text>
+            <Text type="secondary">{t('entityScan:scanDetail.entityCard.size')}:</Text>
             <Text>{entity.size}</Text>
           </div>
         )}
@@ -660,7 +666,7 @@ const ScanDetail: React.FC = () => {
         <div className="entity-activation-control">
           <Space>
             <Text type="secondary" style={{ fontSize: '12px' }}>
-              激活状态:
+              {t('entityScan:scanDetail.entityCard.activationStatus')}:
             </Text>
             <Switch
               size="small"
@@ -677,7 +683,9 @@ const ScanDetail: React.FC = () => {
             className={entity.status === 'active' ? 'entity-status-active' : 'entity-status-inactive'}
             style={{ fontSize: '12px' }}
           >
-            {entity.status === 'active' ? '已激活' : '已停用'}
+            {entity.status === 'active'
+              ? t('entityScan:scanDetail.entityCard.activated')
+              : t('entityScan:scanDetail.entityCard.deactivated')}
           </Text>
         </div>
       </EntityCard>
@@ -685,7 +693,7 @@ const ScanDetail: React.FC = () => {
   };
 
   if (!dataSource) {
-    return <div>加载中...</div>;
+    return <div>{t('entityScan:scanDetail.messages.loading')}</div>;
   }
 
   const filteredEntities = getFilteredEntities();
@@ -723,24 +731,24 @@ const ScanDetail: React.FC = () => {
           </Title>
           <Space>
             <Button icon={<ReloadOutlined />} onClick={loadScanResults}>
-              刷新
+              {t('entityScan:scanDetail.actions.refresh')}
             </Button>
             {scanTask?.status === 'running' ? (
               <Space>
                 <Button icon={<PauseCircleOutlined />} onClick={handlePauseScan}>
-                  暂停
+                  {t('entityScan:scanDetail.actions.pauseScan')}
                 </Button>
                 <Button danger icon={<StopOutlined />} onClick={handleStopScan}>
-                  停止
+                  {t('entityScan:scanDetail.actions.stopScan')}
                 </Button>
               </Space>
             ) : (
               <Button type="primary" icon={<ScanOutlined />} onClick={handleStartScan} loading={isScanning}>
-                开始扫描
+                {t('entityScan:scanDetail.actions.startScan')}
               </Button>
             )}
             <Button icon={<DownloadOutlined />} onClick={handleExportEntities} disabled={selectedRowKeys.length === 0}>
-              导出实体
+              {t('entityScan:scanDetail.actions.exportEntities')}
             </Button>
           </Space>
         </div>
@@ -761,19 +769,27 @@ const ScanDetail: React.FC = () => {
           }
           description={
             <div>
-              <Text>开始时间: {scanTask.startTime}</Text>
+              <Text>
+                {t('entityScan:scanDetail.scanStatus.startTime')}: {scanTask.startTime}
+              </Text>
               {scanTask.endTime && (
                 <>
                   <Divider type="vertical" />
-                  <Text>结束时间: {scanTask.endTime}</Text>
+                  <Text>
+                    {t('entityScan:scanDetail.scanStatus.endTime')}: {scanTask.endTime}
+                  </Text>
                 </>
               )}
               <Divider type="vertical" />
-              <Text>发现实体: {scanTask.entityCount} 个</Text>
+              <Text>
+                {t('entityScan:scanDetail.scanStatus.foundEntities')}: {scanTask.entityCount} 个
+              </Text>
               {scanTask.errorCount > 0 && (
                 <>
                   <Divider type="vertical" />
-                  <Text type="danger">错误: {scanTask.errorCount} 个</Text>
+                  <Text type="danger">
+                    {t('entityScan:scanDetail.scanStatus.errors')}: {scanTask.errorCount} 个
+                  </Text>
                 </>
               )}
             </div>
@@ -787,22 +803,42 @@ const ScanDetail: React.FC = () => {
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
           <StatsCard className="entity-stats-primary">
-            <Statistic title="发现实体" value={stats.totalEntities} suffix="个" prefix={<AppstoreOutlined />} />
+            <Statistic
+              title={t('entityScan:scanDetail.statistics.foundEntities')}
+              value={stats.totalEntities}
+              suffix="个"
+              prefix={<AppstoreOutlined />}
+            />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard className="entity-stats-success">
-            <Statistic title="已选择" value={stats.selectedEntities} suffix="个" prefix={<CheckCircleOutlined />} />
+            <Statistic
+              title={t('entityScan:scanDetail.statistics.selected')}
+              value={stats.selectedEntities}
+              suffix="个"
+              prefix={<CheckCircleOutlined />}
+            />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard className="entity-stats-warning">
-            <Statistic title="数据表" value={stats.tableCount} suffix="个" prefix={<TableOutlined />} />
+            <Statistic
+              title={t('entityScan:scanDetail.statistics.dataTables')}
+              value={stats.tableCount}
+              suffix="个"
+              prefix={<TableOutlined />}
+            />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-error">
-            <Statistic title="视图" value={stats.viewCount} suffix="个" prefix={<EyeOutlined />} />
+          <StatsCard className="entity-stats-info">
+            <Statistic
+              title={t('entityScan:scanDetail.statistics.views')}
+              value={stats.viewCount}
+              suffix="个"
+              prefix={<EyeOutlined />}
+            />
           </StatsCard>
         </Col>
       </Row>
@@ -812,7 +848,7 @@ const ScanDetail: React.FC = () => {
         <Row gutter={16} align="middle">
           <Col flex="auto">
             <Search
-              placeholder="搜索实体名称或描述..."
+              placeholder={t('entityScan:scanDetail.filters.searchPlaceholder')}
               value={searchText}
               onChange={e => setSearchText(e.target.value)}
               style={{ width: '100%' }}
@@ -820,34 +856,47 @@ const ScanDetail: React.FC = () => {
             />
           </Col>
           <Col>
-            <Select value={filterType} onChange={setFilterType} style={{ width: 120 }} placeholder="类型">
-              <Option value="all">全部类型</Option>
-              <Option value="table">表</Option>
-              <Option value="view">视图</Option>
-              <Option value="procedure">存储过程</Option>
-              <Option value="function">函数</Option>
-              <Option value="api">API</Option>
-              <Option value="file">文件</Option>
+            <Select
+              value={filterType}
+              onChange={setFilterType}
+              style={{ width: 120 }}
+              placeholder={t('entityScan:scanDetail.filters.allTypes')}
+            >
+              <Option value="all">{t('entityScan:scanDetail.filters.allTypes')}</Option>
+              <Option value="table">{t('entityScan:scanDetail.filters.table')}</Option>
+              <Option value="view">{t('entityScan:scanDetail.filters.view')}</Option>
+              <Option value="procedure">{t('entityScan:scanDetail.filters.procedure')}</Option>
+              <Option value="function">{t('entityScan:scanDetail.filters.function')}</Option>
+              <Option value="api">{t('entityScan:scanDetail.filters.api')}</Option>
+              <Option value="file">{t('entityScan:scanDetail.filters.file')}</Option>
             </Select>
           </Col>
           <Col>
-            <Select value={filterStatus} onChange={setFilterStatus} style={{ width: 100 }} placeholder="状态">
-              <Option value="all">全部状态</Option>
-              <Option value="active">活跃</Option>
-              <Option value="inactive">非活跃</Option>
-              <Option value="warning">警告</Option>
+            <Select
+              value={filterStatus}
+              onChange={setFilterStatus}
+              style={{ width: 100 }}
+              placeholder={t('entityScan:scanDetail.filters.allStatuses')}
+            >
+              <Option value="all">{t('entityScan:scanDetail.filters.allStatuses')}</Option>
+              <Option value="active">{t('entityScan:scanDetail.filters.active')}</Option>
+              <Option value="inactive">{t('entityScan:scanDetail.filters.inactive')}</Option>
+              <Option value="warning">{t('entityScan:scanDetail.filters.warning')}</Option>
             </Select>
           </Col>
         </Row>
       </FilterBar>
 
       {/* 实体卡片列表 */}
-      <Card title={`扫描实体 (${filteredEntities.length})`} className="scan-card">
+      <Card
+        title={`${t('entityScan:scanDetail.scanResults.title')} (${filteredEntities.length})`}
+        className="scan-card"
+      >
         {filteredEntities.length > 0 ? (
           <EntityGrid>{filteredEntities.map(renderEntityCard)}</EntityGrid>
         ) : (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <Text type="secondary">暂无匹配的实体</Text>
+            <Text type="secondary">{t('entityScan:scanDetail.messages.noMatchingEntities')}</Text>
           </div>
         )}
       </Card>

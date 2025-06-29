@@ -124,7 +124,7 @@
         "features": ["时序数据", "指标收集", "PromQL查询", "告警规则"]
       },
       "grafana": {
-        "name": "Grafana", 
+        "name": "Grafana",
         "description": "开源可视化和分析平台，支持多种数据源",
         "features": ["仪表板", "数据源管理", "告警配置", "用户管理"]
       },
@@ -190,6 +190,94 @@
       "testSuccess": "连接测试成功！",
       "testFailed": "连接失败，请检查配置参数。",
       "validationFailed": "配置验证失败，请检查必填项。"
+    }
+  },
+  "scanDetail": {
+    "breadcrumb": {
+      "back": "返回"
+    },
+    "actions": {
+      "refresh": "刷新",
+      "startScan": "开始扫描",
+      "pauseScan": "暂停",
+      "stopScan": "停止",
+      "exportEntities": "导出实体"
+    },
+    "scanStatus": {
+      "scanning": "扫描中",
+      "completed": "已完成",
+      "failed": "扫描失败",
+      "paused": "已暂停",
+      "startTime": "开始时间",
+      "endTime": "结束时间",
+      "foundEntities": "发现实体",
+      "errors": "错误"
+    },
+    "statistics": {
+      "foundEntities": "发现实体",
+      "selected": "已选择",
+      "dataTables": "数据表",
+      "views": "视图"
+    },
+    "filters": {
+      "searchPlaceholder": "搜索实体名称或描述...",
+      "allTypes": "全部类型",
+      "allStatuses": "全部状态",
+      "table": "表",
+      "view": "视图",
+      "procedure": "存储过程",
+      "function": "函数",
+      "api": "API",
+      "file": "文件",
+      "active": "活跃",
+      "inactive": "非活跃",
+      "warning": "警告"
+    },
+    "entityCard": {
+      "owner": "负责人",
+      "recordCount": "记录数",
+      "size": "大小",
+      "activationStatus": "激活状态",
+      "activated": "已激活",
+      "deactivated": "已停用",
+      "noDescription": "暂无描述",
+      "unspecified": "未指定"
+    },
+    "entityDetail": {
+      "title": "实体详情",
+      "name": "名称",
+      "type": "类型",
+      "schema": "模式",
+      "description": "描述",
+      "recordCount": "记录数",
+      "size": "大小",
+      "scanTime": "扫描时间"
+    },
+    "entityTypes": {
+      "table": "表",
+      "view": "视图",
+      "procedure": "存储过程",
+      "function": "函数",
+      "api": "API",
+      "file": "文件"
+    },
+    "messages": {
+      "loadDataSourceFailed": "加载数据源信息失败",
+      "loadScanResultsFailed": "加载扫描结果失败",
+      "scanningDataSource": "正在扫描数据源...",
+      "scanCompleted": "扫描完成！",
+      "scanFailed": "扫描失败！",
+      "scanPaused": "扫描已暂停",
+      "scanStopped": "扫描已停止",
+      "selectEntitiesFirst": "请先选择要导出的实体",
+      "exportSuccess": "成功导出 {{count}} 个实体",
+      "entityActivated": "实体已激活",
+      "entityDeactivated": "实体已停用",
+      "loading": "加载中...",
+      "noMatchingEntities": "暂无匹配的实体"
+    },
+    "scanResults": {
+      "title": "扫描实体"
     }
   }
 }
