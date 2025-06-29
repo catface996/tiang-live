@@ -44,17 +44,17 @@ const StyledForm = styled(Form)<{ $isDark: boolean }>`
   .ant-input-focused {
     background: ${props => (props.$isDark ? '#141414' : '#ffffff')};
     border-color: ${props => (props.$isDark ? '#434343' : '#d9d9d9')};
-    color: ${props => (props.$isDark ? '#ffffff' : '#000000')};
+    color: ${props => (props.$isDark ? '#ffffff' : '#000000d9')};
 
     &:hover {
-      border-color: ${props => (props.$isDark ? '#177ddc' : '#40a9ff')};
+      border-color: ${props => (props.$isDark ? '#177ddc' : '#4096ff')};
     }
 
     &:focus,
     &.ant-input-focused {
-      border-color: ${props => (props.$isDark ? '#177ddc' : '#40a9ff')};
+      border-color: ${props => (props.$isDark ? '#177ddc' : '#4096ff')};
       box-shadow: ${props =>
-        props.$isDark ? '0 0 0 2px rgba(23, 125, 220, 0.2)' : '0 0 0 2px rgba(24, 144, 255, 0.2)'};
+        props.$isDark ? '0 0 0 2px rgba(23, 125, 220, 0.2)' : '0 0 0 2px rgba(5, 145, 255, 0.1)'};
     }
 
     &::placeholder {
@@ -66,17 +66,17 @@ const StyledForm = styled(Form)<{ $isDark: boolean }>`
     .ant-select-selector {
       background: ${props => (props.$isDark ? '#141414' : '#ffffff')};
       border-color: ${props => (props.$isDark ? '#434343' : '#d9d9d9')};
-      color: ${props => (props.$isDark ? '#ffffff' : '#000000')};
+      color: ${props => (props.$isDark ? '#ffffff' : '#000000d9')};
 
       &:hover {
-        border-color: ${props => (props.$isDark ? '#177ddc' : '#40a9ff')};
+        border-color: ${props => (props.$isDark ? '#177ddc' : '#4096ff')};
       }
     }
 
     &.ant-select-focused .ant-select-selector {
-      border-color: ${props => (props.$isDark ? '#177ddc' : '#40a9ff')};
+      border-color: ${props => (props.$isDark ? '#177ddc' : '#4096ff')};
       box-shadow: ${props =>
-        props.$isDark ? '0 0 0 2px rgba(23, 125, 220, 0.2)' : '0 0 0 2px rgba(24, 144, 255, 0.2)'};
+        props.$isDark ? '0 0 0 2px rgba(23, 125, 220, 0.2)' : '0 0 0 2px rgba(5, 145, 255, 0.1)'};
     }
 
     .ant-select-selection-placeholder {
@@ -84,11 +84,11 @@ const StyledForm = styled(Form)<{ $isDark: boolean }>`
     }
 
     .ant-select-selection-item {
-      color: ${props => (props.$isDark ? '#ffffff' : '#000000')};
+      color: ${props => (props.$isDark ? '#ffffff' : '#000000d9')};
     }
 
     .ant-select-arrow {
-      color: ${props => (props.$isDark ? '#8c8c8c' : '#bfbfbf')};
+      color: ${props => (props.$isDark ? '#8c8c8c' : '#00000073')};
     }
   }
 

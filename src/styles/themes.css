@@ -202,7 +202,6 @@
   --shadow-card: 0 1px 2px -2px rgba(0, 0, 0, 0.32), 0 3px 6px 0 rgba(0, 0, 0, 0.24), 0 5px 12px 4px rgba(0, 0, 0, 0.18);
   --shadow-hover: 0 2px 8px -2px rgba(0, 0, 0, 0.32), 0 6px 12px 0 rgba(0, 0, 0, 0.24), 0 9px 28px 8px rgba(0, 0, 0, 0.10);
   --shadow-drawer: 0 8px 10px -5px rgba(0, 0, 0, 0.4), 0 16px 24px 2px rgba(0, 0, 0, 0.28), 0 6px 30px 5px rgba(0, 0, 0, 0.24);
-}
   
   /* 输入框相关变量 */
   --input-bg: #1a1a1a;
@@ -279,7 +278,6 @@
 .app-sider .ant-menu::-webkit-scrollbar-thumb {
   background-color: var(--border-color);
   border-radius: 3px;
-  transition: background-color 0.3s;
 }
 
 .app-sider .ant-menu::-webkit-scrollbar-thumb:hover {
@@ -298,7 +296,6 @@
 .app-content::-webkit-scrollbar-thumb {
   background-color: var(--border-color);
   border-radius: 4px;
-  transition: background-color 0.3s;
 }
 
 .app-content::-webkit-scrollbar-thumb:hover {
@@ -318,7 +315,7 @@
     bottom: 0 !important;
     z-index: 1000 !important;
     transform: translateX(-100%);
-    transition: transform 0.3s ease;
+  }
   }
   
   .app-sider.ant-layout-sider-collapsed {
@@ -478,7 +475,7 @@
   background-color: var(--card-bg) !important;
   border: 1px solid var(--card-border) !important;
   box-shadow: var(--card-shadow) !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
 }
 
 .ant-card:hover {
@@ -932,17 +929,17 @@
   box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);
 }
 
-/* 过渡动画类 */
+/* 过渡动画类 - 已移除过渡效果 */
 .transition-all {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 过渡效果已移除 */
 }
 
 .transition-colors {
-  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  /* 过渡效果已移除 */
 }
 
 .transition-transform {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 过渡效果已移除 */
 }
 
 /* 悬停效果类 */
@@ -1129,7 +1126,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  transition: all 0.2s !important;
+}
 }
 
 .collapse-button:hover {

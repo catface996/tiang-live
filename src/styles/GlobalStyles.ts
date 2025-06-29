@@ -16,7 +16,7 @@ const GlobalStyles = createGlobalStyle`
     line-height: 1.5715;
     color: ${({ theme }) => theme.colors.text.primary};
     background-color: ${({ theme }) => theme.colors.background.layout};
-    transition: background-color 0.3s, color 0.3s;
+  }
   }
 
   #root {
@@ -62,7 +62,6 @@ const GlobalStyles = createGlobalStyle`
   a {
     color: ${({ theme }) => theme.colors.primary};
     text-decoration: none;
-    transition: color 0.3s;
 
     &:hover {
       color: ${({ theme }) => theme.colors.primary};
