@@ -468,11 +468,65 @@
   color: var(--text-primary) !important;
 }
 
-/* 悬停效果 */
-.ai-agent-form-page .prompt-template-item .ant-tag:hover,
-.theme-dark .ai-agent-form-page .prompt-template-item .ant-tag:hover {
-  transform: translateY(-1px) !important;
-  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3) !important;
+/* ========== 提示词模板变量区域暗色主题优化 - 精确修复 ========== */
+
+/* 
+ * 修复暗色主题下选中提示词模板时模板变量区域的白色背景问题
+ * 使用更精确的选择器来确保样式生效
+ */
+
+/* 强制重置所有可能的白色背景 */
+.theme-dark .ai-agent-form-page .prompt-template-item *,
+.theme-dark .ai-agent-form-page .prompt-template-item.selected *,
+.theme-dark .ai-agent-form-page .template-item *,
+.theme-dark .ai-agent-form-page .template-item.selected * {
+  background-color: transparent !important;
+}
+
+/* 但是保持输入框有适当的背景 */
+.theme-dark .ai-agent-form-page .prompt-template-item .ant-input,
+.theme-dark .ai-agent-form-page .prompt-template-item.selected .ant-input,
+.theme-dark .ai-agent-form-page .template-item .ant-input,
+.theme-dark .ai-agent-form-page .template-item.selected .ant-input {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-color) !important;
+}
+
+/* 输入框焦点状态 */
+.theme-dark .ai-agent-form-page .prompt-template-item .ant-input:focus,
+.theme-dark .ai-agent-form-page .prompt-template-item.selected .ant-input:focus,
+.theme-dark .ai-agent-form-page .template-item .ant-input:focus,
+.theme-dark .ai-agent-form-page .template-item.selected .ant-input:focus {
+  background-color: var(--bg-container) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 确保文字颜色正确 */
+.theme-dark .ai-agent-form-page .prompt-template-item *:not(.ant-tag):not(.ant-input),
+.theme-dark .ai-agent-form-page .prompt-template-item.selected *:not(.ant-tag):not(.ant-input),
+.theme-dark .ai-agent-form-page .template-item *:not(.ant-tag):not(.ant-input),
+.theme-dark .ai-agent-form-page .template-item.selected *:not(.ant-tag):not(.ant-input) {
+  color: var(--text-color) !important;
+}
+
+/* 亮色主题下也确保一致性 */
+.ai-agent-form-page .prompt-template-item .ant-input,
+.ai-agent-form-page .prompt-template-item.selected .ant-input,
+.ai-agent-form-page .template-item .ant-input,
+.ai-agent-form-page .template-item.selected .ant-input {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-color) !important;
+}
+
+.ai-agent-form-page .prompt-template-item .ant-input:focus,
+.ai-agent-form-page .prompt-template-item.selected .ant-input:focus,
+.ai-agent-form-page .template-item .ant-input:focus,
+.ai-agent-form-page .template-item.selected .ant-input:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
 }
 
 /* 针对其他可能的Template选择器 */
