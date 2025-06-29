@@ -419,13 +419,60 @@
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.3) !important;
 }
 
-/* 确保选中的template内部文字清晰可见 */
-.theme-dark .ai-agent-form-page .prompt-template-item.selected * {
+/* ========== 提示词模板标签颜色固定方案 ========== */
+
+/* 
+ * 提示词模板中的类型标签（对话类、分析类、开发类、运维类）应该保持固定的蓝色
+ * 不受选中状态影响，确保视觉一致性
+ */
+
+/* 基础标签样式 - 提示词模板中的所有标签 */
+.ai-agent-form-page .prompt-templates .ant-tag,
+.ai-agent-form-page .template-list .ant-tag,
+.ai-agent-form-page .prompt-template-item .ant-tag,
+.theme-dark .ai-agent-form-page .prompt-templates .ant-tag,
+.theme-dark .ai-agent-form-page .template-list .ant-tag,
+.theme-dark .ai-agent-form-page .prompt-template-item .ant-tag {
+  background-color: #e3f2fd !important;
+  border-color: #2196f3 !important;
+  color: #1565c0 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 选中状态下的标签颜色保护 - 确保不受选中状态影响 */
+.ai-agent-form-page .prompt-template-item.selected .ant-tag,
+.ai-agent-form-page .prompt-templates .ant-list-item-selected .ant-tag,
+.ai-agent-form-page .template-list .ant-list-item-selected .ant-tag,
+.ai-agent-form-page [data-testid='template-item'].selected .ant-tag,
+.ai-agent-form-page .template-item.selected .ant-tag,
+.theme-dark .ai-agent-form-page .prompt-template-item.selected .ant-tag,
+.theme-dark .ai-agent-form-page .prompt-templates .ant-list-item-selected .ant-tag,
+.theme-dark .ai-agent-form-page .template-list .ant-list-item-selected .ant-tag,
+.theme-dark .ai-agent-form-page [data-testid='template-item'].selected .ant-tag,
+.theme-dark .ai-agent-form-page .template-item.selected .ant-tag {
+  background-color: #e3f2fd !important;
+  border-color: #2196f3 !important;
+  color: #1565c0 !important;
+}
+
+/* 修复选中模板项的通用文字颜色规则，排除标签 */
+.ai-agent-form-page .prompt-template-item.selected *:not(.ant-tag) {
   color: var(--text-primary) !important;
 }
 
-.theme-dark .ai-agent-form-page .prompt-template-item.selected .ant-typography {
+.theme-dark .ai-agent-form-page .prompt-template-item.selected *:not(.ant-tag) {
   color: var(--text-primary) !important;
+}
+
+/* 悬停效果 */
+.ai-agent-form-page .prompt-template-item .ant-tag:hover,
+.theme-dark .ai-agent-form-page .prompt-template-item .ant-tag:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3) !important;
 }
 
 /* 针对其他可能的Template选择器 */
