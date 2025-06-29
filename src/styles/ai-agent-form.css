@@ -516,3 +516,489 @@
   border-color: #52c41a !important;
   color: #52c41a !important;
 }
+
+/* ========== MCP Server Configuration Tab 优化 - 完美主题适配 ========== */
+
+/* MCP Server 卡片基础样式 */
+.ai-agent-form-page .ant-card {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease !important;
+}
+
+.ai-agent-form-page .ant-card:hover {
+  border-color: var(--primary) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 暗色主题下的MCP Server卡片 */
+.theme-dark .ai-agent-form-page .ant-card {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-card:hover {
+  border-color: var(--primary) !important;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* MCP Server 状态标签优化 */
+.ai-agent-form-page .ant-tag {
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 运行中状态 - 绿色 */
+.ai-agent-form-page .ant-tag:contains('运行中'),
+.ai-agent-form-page [data-status='running'] .ant-tag,
+.ai-agent-form-page .status-running {
+  background-color: rgba(82, 196, 26, 0.1) !important;
+  border-color: #52c41a !important;
+  color: #52c41a !important;
+}
+
+/* 已停止状态 - 红色 */
+.ai-agent-form-page .ant-tag:contains('已停止'),
+.ai-agent-form-page [data-status='stopped'] .ant-tag,
+.ai-agent-form-page .status-stopped {
+  background-color: rgba(255, 77, 79, 0.1) !important;
+  border-color: #ff4d4f !important;
+  color: #ff4d4f !important;
+}
+
+/* 暗色主题下的状态标签 */
+.theme-dark .ai-agent-form-page .ant-tag:contains('运行中'),
+.theme-dark .ai-agent-form-page [data-status='running'] .ant-tag,
+.theme-dark .ai-agent-form-page .status-running {
+  background-color: rgba(82, 196, 26, 0.2) !important;
+  border-color: #52c41a !important;
+  color: #73d13d !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-tag:contains('已停止'),
+.theme-dark .ai-agent-form-page [data-status='stopped'] .ant-tag,
+.theme-dark .ai-agent-form-page .status-stopped {
+  background-color: rgba(255, 77, 79, 0.2) !important;
+  border-color: #ff4d4f !important;
+  color: #ff7875 !important;
+}
+
+/* 能力标签优化 */
+.ai-agent-form-page .capability-tag,
+.ai-agent-form-page .ant-tag[data-type='capability'] {
+  background-color: rgba(24, 144, 255, 0.1) !important;
+  border-color: #1890ff !important;
+  color: #1890ff !important;
+  font-size: 11px !important;
+  margin: 2px 4px 2px 0 !important;
+}
+
+.theme-dark .ai-agent-form-page .capability-tag,
+.theme-dark .ai-agent-form-page .ant-tag[data-type='capability'] {
+  background-color: rgba(24, 144, 255, 0.15) !important;
+  border-color: #1890ff !important;
+  color: #40a9ff !important;
+}
+
+/* MCP Server 复选框优化 */
+.ai-agent-form-page .ant-checkbox-wrapper {
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease !important;
+}
+
+.ai-agent-form-page .ant-checkbox-inner {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+  transition: all 0.3s ease !important;
+}
+
+.ai-agent-form-page .ant-checkbox:hover .ant-checkbox-inner {
+  border-color: var(--primary) !important;
+}
+
+.ai-agent-form-page .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.ai-agent-form-page .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: #ffffff !important;
+}
+
+/* 暗色主题下的复选框 */
+.theme-dark .ai-agent-form-page .ant-checkbox-wrapper {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-checkbox-inner {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-base) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-checkbox:hover .ant-checkbox-inner {
+  border-color: var(--primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #1890ff !important;
+  border-color: #1890ff !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: #ffffff !important;
+}
+
+/* MCP Server 卡片内容优化 */
+.ai-agent-form-page .ant-card .ant-card-body {
+  padding: 12px !important;
+  color: var(--text-primary) !important;
+}
+
+.ai-agent-form-page .ant-card .ant-card-body strong {
+  color: var(--text-primary) !important;
+}
+
+.ai-agent-form-page .ant-card .ant-card-body p,
+.ai-agent-form-page .ant-card .ant-card-body div {
+  color: var(--text-secondary) !important;
+}
+
+/* 暗色主题下的卡片内容 */
+.theme-dark .ai-agent-form-page .ant-card .ant-card-body {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-card .ant-card-body strong {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-card .ant-card-body p,
+.theme-dark .ai-agent-form-page .ant-card .ant-card-body div {
+  color: var(--text-secondary) !important;
+}
+
+/* MCP Server 选择器整体布局优化 */
+.ai-agent-form-page .mcp-server-selector {
+  margin-top: 12px;
+}
+
+.ai-agent-form-page .mcp-server-item {
+  margin-bottom: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.ai-agent-form-page .mcp-server-item:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.theme-dark .ai-agent-form-page .mcp-server-item:hover {
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 服务器状态指示器 */
+.ai-agent-form-page .server-status-indicator {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.ai-agent-form-page .server-status-indicator::before {
+  content: '' !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}
+
+.ai-agent-form-page .server-status-indicator.running::before {
+  background-color: #52c41a !important;
+  box-shadow: 0 0 4px rgba(82, 196, 26, 0.5) !important;
+}
+
+.ai-agent-form-page .server-status-indicator.stopped::before {
+  background-color: #ff4d4f !important;
+  box-shadow: 0 0 4px rgba(255, 77, 79, 0.5) !important;
+}
+
+/* 能力标签容器 */
+.ai-agent-form-page .capabilities-container {
+  margin-top: 8px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+}
+
+/* 焦点状态优化 */
+.ai-agent-form-page .ant-checkbox-input:focus + .ant-checkbox-inner {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-checkbox-input:focus + .ant-checkbox-inner {
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.3) !important;
+}
+
+/* 禁用状态 */
+.ai-agent-form-page .ant-checkbox-disabled .ant-checkbox-inner {
+  background-color: var(--bg-disabled) !important;
+  border-color: var(--border-light) !important;
+}
+
+.ai-agent-form-page .ant-checkbox-wrapper-disabled {
+  color: var(--text-disabled) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-checkbox-disabled .ant-checkbox-inner {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-checkbox-wrapper-disabled {
+  color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* MCP Server 卡片选中状态优化 */
+.ai-agent-form-page .mcp-server-item {
+  border: 1px solid var(--border-base) !important;
+  transition: all 0.3s ease !important;
+}
+
+.ai-agent-form-page .mcp-server-item:hover {
+  border-color: var(--primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ai-agent-form-page .mcp-server-item.selected {
+  border-color: #1890ff !important;
+  background-color: rgba(24, 144, 255, 0.05) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1) !important;
+}
+
+/* 暗色主题下的MCP Server卡片选中状态 */
+.theme-dark .ai-agent-form-page .mcp-server-item {
+  border-color: var(--border-base) !important;
+}
+
+.theme-dark .ai-agent-form-page .mcp-server-item:hover {
+  border-color: var(--primary) !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-dark .ai-agent-form-page .mcp-server-item.selected {
+  border-color: #1890ff !important;
+  background-color: rgba(24, 144, 255, 0.1) !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 确保选中的MCP卡片内容清晰可见，但排除标签 */
+.ai-agent-form-page .mcp-server-item.selected *:not(.ant-tag) {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ai-agent-form-page .mcp-server-item.selected *:not(.ant-tag) {
+  color: var(--text-primary) !important;
+}
+
+/* 明确排除标签内的所有元素不受选中状态影响 */
+.ai-agent-form-page .mcp-server-item.selected .ant-tag,
+.ai-agent-form-page .mcp-server-item.selected .ant-tag *,
+.theme-dark .ai-agent-form-page .mcp-server-item.selected .ant-tag,
+.theme-dark .ai-agent-form-page .mcp-server-item.selected .ant-tag * {
+  /* 让标签及其内部元素保持原有颜色，不受选中状态影响 */
+}
+
+/* MCP卡片点击反馈 */
+.ai-agent-form-page .mcp-server-item:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.theme-dark .ai-agent-form-page .mcp-server-item:active {
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ========== 选中状态不影响标签颜色 - 确保完全一致的交互体验 ========== */
+
+/* 
+ * 重要原则：选中MCP服务器卡片时，内部的所有标签样式都不应该发生任何变化
+ * 这样可以确保用户在选择不同MCP服务器时，标签颜色保持完全一致
+ */
+
+/* 禁用选中状态对标签的任何样式覆盖 */
+.ai-agent-form-page .mcp-server-item.selected .ant-tag,
+.ai-agent-form-page .ant-card.mcp-server-item.selected .ant-tag,
+.theme-dark .ai-agent-form-page .mcp-server-item.selected .ant-tag,
+.theme-dark .ai-agent-form-page .ant-card.mcp-server-item.selected .ant-tag {
+  /* 不做任何样式覆盖，让标签保持原有的主题无关颜色 */
+}
+
+/* ========== 主题无关的MCP标签颜色方案 - 亮色暗色主题下完全一致 ========== */
+
+/* 
+ * 设计理念：使用固定的颜色值，不依赖CSS变量，确保在任何主题下都保持完全一致的视觉效果
+ * 颜色选择：选择在白色和深色背景下都有良好对比度和可读性的颜色
+ */
+
+/* 基础标签样式 - 所有MCP标签的通用样式 */
+.ai-agent-form-page .ant-tag,
+.theme-dark .ai-agent-form-page .ant-tag {
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  padding: 2px 8px !important;
+  line-height: 1.4 !important;
+  transition: all 0.3s ease !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+/* ========== 状态标签 - 运行中 ========== */
+/* 使用深绿色系，在亮色和暗色背景下都清晰可见 */
+.ai-agent-form-page .ant-tag[color='green'],
+.ai-agent-form-page .status-running,
+.ai-agent-form-page .ant-tag:contains('运行中'),
+.theme-dark .ai-agent-form-page .ant-tag[color='green'],
+.theme-dark .ai-agent-form-page .status-running,
+.theme-dark .ai-agent-form-page .ant-tag:contains('运行中') {
+  background-color: #e8f5e8 !important;
+  border-color: #4caf50 !important;
+  color: #2e7d32 !important;
+}
+
+/* ========== 状态标签 - 已停止 ========== */
+/* 使用深红色系，在亮色和暗色背景下都清晰可见 */
+.ai-agent-form-page .ant-tag[color='red'],
+.ai-agent-form-page .status-stopped,
+.ai-agent-form-page .ant-tag:contains('已停止'),
+.theme-dark .ai-agent-form-page .ant-tag[color='red'],
+.theme-dark .ai-agent-form-page .status-stopped,
+.theme-dark .ai-agent-form-page .ant-tag:contains('已停止') {
+  background-color: #ffeaea !important;
+  border-color: #f44336 !important;
+  color: #c62828 !important;
+}
+
+/* ========== 能力标签 ========== */
+/* 使用深蓝色系，在亮色和暗色背景下都清晰可见 */
+.ai-agent-form-page .ant-tag[size='small'],
+.ai-agent-form-page .capability-tag,
+.ai-agent-form-page .ant-tag[data-type='capability'],
+.theme-dark .ai-agent-form-page .ant-tag[size='small'],
+.theme-dark .ai-agent-form-page .capability-tag,
+.theme-dark .ai-agent-form-page .ant-tag[data-type='capability'] {
+  background-color: #e3f2fd !important;
+  border-color: #2196f3 !important;
+  color: #1565c0 !important;
+  font-size: 11px !important;
+  padding: 1px 6px !important;
+  margin: 2px 4px 2px 0 !important;
+}
+
+/* ========== 特殊能力标签颜色 ========== */
+/* 为不同类型的能力标签设置不同的颜色，但保持主题一致性 */
+
+/* 数据库相关能力标签 - 紫色系 */
+.ai-agent-form-page .ant-tag:contains('mysql'),
+.ai-agent-form-page .ant-tag:contains('postgresql'),
+.ai-agent-form-page .ant-tag:contains('mongodb'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('mysql'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('postgresql'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('mongodb') {
+  background-color: #f3e5f5 !important;
+  border-color: #9c27b0 !important;
+  color: #6a1b9a !important;
+}
+
+/* 通信相关能力标签 - 橙色系 */
+.ai-agent-form-page .ant-tag:contains('smtp'),
+.ai-agent-form-page .ant-tag:contains('imap'),
+.ai-agent-form-page .ant-tag:contains('templates'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('smtp'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('imap'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('templates') {
+  background-color: #fff3e0 !important;
+  border-color: #ff9800 !important;
+  color: #e65100 !important;
+}
+
+/* 文件系统相关能力标签 - 青色系 */
+.ai-agent-form-page .ant-tag:contains('read'),
+.ai-agent-form-page .ant-tag:contains('write'),
+.ai-agent-form-page .ant-tag:contains('search'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('read'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('write'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('search') {
+  background-color: #e0f2f1 !important;
+  border-color: #009688 !important;
+  color: #00695c !important;
+}
+
+/* API相关能力标签 - 深蓝色系 */
+.ai-agent-form-page .ant-tag:contains('http'),
+.ai-agent-form-page .ant-tag:contains('rest'),
+.ai-agent-form-page .ant-tag:contains('graphql'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('http'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('rest'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('graphql') {
+  background-color: #e8eaf6 !important;
+  border-color: #3f51b5 !important;
+  color: #283593 !important;
+}
+
+/* 调度相关能力标签 - 棕色系 */
+.ai-agent-form-page .ant-tag:contains('cron'),
+.ai-agent-form-page .ant-tag:contains('interval'),
+.ai-agent-form-page .ant-tag:contains('webhook'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('cron'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('interval'),
+.theme-dark .ai-agent-form-page .ant-tag:contains('webhook') {
+  background-color: #efebe9 !important;
+  border-color: #795548 !important;
+  color: #4e342e !important;
+}
+
+/* ========== 悬停效果 - 保持主题一致性 ========== */
+.ai-agent-form-page .ant-tag:hover,
+.theme-dark .ai-agent-form-page .ant-tag:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+  opacity: 0.9 !important;
+}
+
+/* ========== 焦点状态优化 ========== */
+.ai-agent-form-page .ant-tag:focus,
+.theme-dark .ai-agent-form-page .ant-tag:focus {
+  outline: 2px solid rgba(33, 150, 243, 0.5) !important;
+  outline-offset: 2px !important;
+}
+
+/* ========== 禁用状态 ========== */
+.ai-agent-form-page .ant-tag.ant-tag-disabled,
+.theme-dark .ai-agent-form-page .ant-tag.ant-tag-disabled {
+  background-color: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: #bfbfbf !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+/* ========== 响应式优化 ========== */
+@media (max-width: 768px) {
+  .ai-agent-form-page .ant-tag,
+  .theme-dark .ai-agent-form-page .ant-tag {
+    font-size: 11px !important;
+    padding: 1px 6px !important;
+  }
+
+  .ai-agent-form-page .ant-tag[size='small'],
+  .theme-dark .ai-agent-form-page .ant-tag[size='small'] {
+    font-size: 10px !important;
+    padding: 0px 4px !important;
+  }
+}
