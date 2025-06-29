@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Card, 
-  Space, 
-  Button, 
-  Row, 
-  Col, 
+import {
+  Typography,
+  Card,
+  Space,
+  Button,
+  Row,
+  Col,
   Statistic,
   Tag,
   Modal,
@@ -16,13 +16,11 @@ import {
   Slider,
   message,
   Descriptions,
-  Timeline,
-  Alert,
-  theme
+  Timeline
 } from 'antd';
-import { 
-  RobotOutlined, 
-  PlusOutlined, 
+import {
+  RobotOutlined,
+  PlusOutlined,
   ReloadOutlined,
   DeleteOutlined,
   PlayCircleOutlined,
@@ -39,8 +37,7 @@ import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import { useAppSelector } from '../../store';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
-import { AgentCard } from '../../components/AgentCard';
-import type { Agent } from '../../components/AgentCard';
+import { AgentCard, type Agent } from '../../components/AgentCard';
 import '../../styles/ai-agent-management.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -50,43 +47,27 @@ const { TextArea } = Input;
 const PageContainer = styled.div<{ $isDark: boolean }>`
   padding: 24px;
   min-height: calc(100vh - 64px);
-  background: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
-  transition: all 0.3s ease;
-`;
-
-const PageHeader = styled.div<{ $isDark: boolean }>`
-  margin-bottom: 24px;
-  padding: 24px;
-  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-  border-radius: 8px;
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.06)'
-};
-  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  background: ${props => (props.$isDark ? '#000000' : '#f5f5f5')};
   transition: all 0.3s ease;
 `;
 
 const StatsCard = styled(Card)<{ $isDark: boolean }>`
   border-radius: 8px;
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.06)'
-};
-  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  box-shadow: ${props => (props.$isDark ? '0 2px 8px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.06)')};
+  border: ${props => (props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0')};
+  background: ${props => (props.$isDark ? '#141414' : '#ffffff')};
   transition: all 0.3s ease;
-  
+
   .ant-card-body {
     padding: 16px;
   }
-  
+
   .ant-statistic-title {
-    color: ${props => props.$isDark ? '#ffffff' : '#666666'};
+    color: ${props => (props.$isDark ? '#ffffff' : '#666666')};
   }
-  
+
   .ant-statistic-content {
-    color: ${props => props.$isDark ? '#ffffff' : '#262626'};
+    color: ${props => (props.$isDark ? '#ffffff' : '#262626')};
   }
 `;
 
@@ -96,27 +77,18 @@ const StatusDot = styled.div<{ status: string }>`
   border-radius: 50%;
   background-color: ${props => {
     switch (props.status) {
-      case 'running': return '#52c41a';
-      case 'stopped': return '#f5222d';
-      case 'paused': return '#faad14';
-      default: return '#d9d9d9';
+      case 'running':
+        return '#52c41a';
+      case 'stopped':
+        return '#f5222d';
+      case 'paused':
+        return '#faad14';
+      default:
+        return '#d9d9d9';
     }
   }};
   display: inline-block;
   margin-right: 8px;
-`;
-
-const StyledAlert = styled(Alert)<{ $isDark: boolean }>`
-  background: ${props => props.$isDark ? '#2a1f00' : '#fffbe6'};
-  border: ${props => props.$isDark ? '1px solid #594214' : '1px solid #ffe58f'};
-  
-  .ant-alert-message {
-    color: ${props => props.$isDark ? '#faad14' : '#d48806'};
-  }
-  
-  .ant-alert-description {
-    color: ${props => props.$isDark ? '#d4b106' : '#d48806'};
-  }
 `;
 
 interface AIAgent {
@@ -143,17 +115,14 @@ interface AIAgent {
 const AIAgentManagement: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(['agents', 'common']);
-  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
-  const [editingAgent, setEditingAgent] = useState<AIAgent | null>(null);
   const [selectedAgent, setSelectedAgent] = useState<AIAgent | null>(null);
   const [searchText, setSearchText] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterType, setFilterType] = useState('all');
   const [form] = Form.useForm();
-  const { currentTheme } = useAppSelector((state) => state.theme);
-  const { token } = theme.useToken();
+  const { currentTheme } = useAppSelector(state => state.theme);
   const isDark = currentTheme === 'dark';
 
   useEffect(() => {
@@ -421,31 +390,35 @@ const AIAgentManagement: React.FC = () => {
 
   const getStatusTag = (status: string) => {
     const statusMap = {
-      running: { 
-        color: isDark ? '#52c41a' : 'green', 
+      running: {
+        color: isDark ? '#52c41a' : 'green',
         text: t('agents:status.running'),
         bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
       },
-      stopped: { 
-        color: isDark ? '#f5222d' : 'red', 
+      stopped: {
+        color: isDark ? '#f5222d' : 'red',
         text: t('agents:status.stopped'),
         bgColor: isDark ? 'rgba(245, 34, 45, 0.1)' : undefined
       },
-      paused: { 
-        color: isDark ? '#faad14' : 'orange', 
+      paused: {
+        color: isDark ? '#faad14' : 'orange',
         text: t('agents:status.paused'),
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
       }
     };
     const config = statusMap[status as keyof typeof statusMap];
     return (
-      <Tag 
+      <Tag
         color={config.color}
-        style={config.bgColor ? { 
-          backgroundColor: config.bgColor,
-          border: `1px solid ${config.color}`,
-          color: config.color
-        } : {}}
+        style={
+          config.bgColor
+            ? {
+                backgroundColor: config.bgColor,
+                border: `1px solid ${config.color}`,
+                color: config.color
+              }
+            : {}
+        }
       >
         <StatusDot status={status} />
         {config.text}
@@ -466,26 +439,22 @@ const AIAgentManagement: React.FC = () => {
     setDetailModalVisible(true);
   };
 
-  const handleStartAgent = (agentId: string) => {
+  const handleStartAgent = (_agentId: string) => {
     message.success('智能体启动成功');
   };
 
-  const handleStopAgent = (agentId: string) => {
+  const handleStopAgent = (_agentId: string) => {
     message.success('智能体停止成功');
   };
 
-  const handleDeleteAgent = (agentId: string) => {
+  const handleDeleteAgent = (_agentId: string) => {
     message.success('智能体删除成功');
   };
 
   const handleModalOk = async () => {
     try {
-      const values = await form.validateFields();
-      if (editingAgent) {
-        message.success('智能体更新成功');
-      } else {
-        message.success('智能体创建成功');
-      }
+      const _values = await form.validateFields();
+      message.success('智能体创建成功');
       setModalVisible(false);
       form.resetFields();
     } catch (error) {
@@ -496,26 +465,29 @@ const AIAgentManagement: React.FC = () => {
   const renderAgentCards = () => {
     // 过滤逻辑
     const filteredAgents = agentData.filter(agent => {
-      const matchesSearch = agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                           agent.description.toLowerCase().includes(searchText.toLowerCase());
+      const matchesSearch =
+        agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        agent.description.toLowerCase().includes(searchText.toLowerCase());
       const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
       const matchesType = filterType === 'all' || agent.type === filterType;
-      
+
       return matchesSearch && matchesStatus && matchesType;
     });
 
     return filteredAgents.map(agent => (
       <Col xs={24} sm={24} lg={12} xl={8} key={agent.id}>
         <AgentCard
-          agent={{
-            ...agent,
-            stats: {
-              tasksCompleted: agent.tasks,
-              successRate: agent.successRate,
-              avgResponseTime: Math.floor(Math.random() * 200) + 100,
-              uptime: '2天3小时'
-            }
-          } as Agent}
+          agent={
+            {
+              ...agent,
+              stats: {
+                tasksCompleted: agent.tasks,
+                successRate: agent.successRate,
+                avgResponseTime: Math.floor(Math.random() * 200) + 100,
+                uptime: '2天3小时'
+              }
+            } as Agent
+          }
           onEdit={handleEditAgent}
           onDelete={handleDeleteAgent}
           onStart={handleStartAgent}
@@ -529,67 +501,50 @@ const AIAgentManagement: React.FC = () => {
   const runningAgents = agentData.filter(agent => agent.status === 'running').length;
   const totalTasks = agentData.reduce((sum, agent) => sum + agent.tasks, 0);
   const avgSuccessRate = agentData.reduce((sum, agent) => sum + agent.successRate, 0) / agentData.length;
-  const totalCpu = agentData.reduce((sum, agent) => sum + agent.cpu, 0);
 
   return (
     <PageContainer $isDark={isDark} className="ai-agent-management-page">
-      <PageHeader $isDark={isDark}>
-        {/* Title和按钮在同一行 */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <Title level={2} style={{ margin: 0 }}>
-            <Space>
-              <RobotOutlined />
-              {t('agents:title')}
-            </Space>
-          </Title>
+      {/* Title和按钮在同一行 */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <Title level={2} style={{ margin: 0 }}>
           <Space>
-            <Button 
-              icon={<ReloadOutlined />}
-            >
-              {t('common:refresh')}
-            </Button>
-            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
-              {t('agents:createAgent')}
-            </Button>
+            <RobotOutlined />
+            {t('agents:title')}
           </Space>
-        </div>
-        
-        {/* Paragraph单独一行，充满宽度 */}
-        <Paragraph style={{ 
-          marginTop: 0, 
-          marginBottom: 0
-        }}>
-          {t('agents:subtitle')}
-        </Paragraph>
-      </PageHeader>
+        </Title>
+        <Space>
+          <Button icon={<ReloadOutlined />}>{t('common:refresh')}</Button>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
+            {t('agents:createAgent')}
+          </Button>
+        </Space>
+      </div>
+
+      {/* Paragraph单独一行，充满宽度 */}
+      <Paragraph
+        style={{
+          marginTop: 0,
+          marginBottom: 24
+        }}
+      >
+        {t('agents:subtitle')}
+      </Paragraph>
 
       {/* 统计信息 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark} className="agent-stats-primary">
-            <Statistic
-              title={t('agents:stats.totalAgents')}
-              value={agentData.length}
-              prefix={<RobotOutlined />}
-            />
+            <Statistic title={t('agents:stats.totalAgents')} value={agentData.length} prefix={<RobotOutlined />} />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark} className="agent-stats-success">
-            <Statistic
-              title={t('agents:stats.runningAgents')}
-              value={runningAgents}
-              prefix={<PlayCircleOutlined />}
-            />
+            <Statistic title={t('agents:stats.runningAgents')} value={runningAgents} prefix={<PlayCircleOutlined />} />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <StatsCard $isDark={isDark} className="agent-stats-warning">
-            <Statistic
-              title={t('agents:stats.totalTasks')}
-              value={totalTasks}
-              prefix={<ThunderboltOutlined />}
-            />
+            <Statistic title={t('agents:stats.totalTasks')} value={totalTasks} prefix={<ThunderboltOutlined />} />
           </StatsCard>
         </Col>
         <Col xs={24} sm={12} md={6}>
@@ -640,9 +595,7 @@ const AIAgentManagement: React.FC = () => {
       />
 
       {/* 智能体卡片展示 */}
-      <Row gutter={[16, 16]}>
-        {renderAgentCards()}
-      </Row>
+      <Row gutter={[16, 16]}>{renderAgentCards()}</Row>
 
       {/* 创建/编辑智能体模态框 */}
       <Modal
@@ -677,11 +630,7 @@ const AIAgentManagement: React.FC = () => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="type"
-                label="智能体类型"
-                rules={[{ required: true, message: '请选择智能体类型' }]}
-              >
+              <Form.Item name="type" label="智能体类型" rules={[{ required: true, message: '请选择智能体类型' }]}>
                 <Select placeholder="请选择类型">
                   {Object.entries(agentTypeMap).map(([key, config]) => (
                     <Option key={key} value={key}>
@@ -704,10 +653,7 @@ const AIAgentManagement: React.FC = () => {
               { max: 200, message: '描述不能超过200个字符' }
             ]}
           >
-            <TextArea 
-              rows={3} 
-              placeholder="请输入智能体的功能描述"
-            />
+            <TextArea rows={3} placeholder="请输入智能体的功能描述" />
           </Form.Item>
 
           <Row gutter={16}>
@@ -730,11 +676,7 @@ const AIAgentManagement: React.FC = () => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="timeout"
-                label="超时时间(秒)"
-                rules={[{ required: true, message: '请设置超时时间' }]}
-              >
+              <Form.Item name="timeout" label="超时时间(秒)" rules={[{ required: true, message: '请设置超时时间' }]}>
                 <Slider
                   min={10}
                   max={300}
@@ -751,11 +693,7 @@ const AIAgentManagement: React.FC = () => {
 
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="retryCount"
-                label="重试次数"
-                rules={[{ required: true, message: '请设置重试次数' }]}
-              >
+              <Form.Item name="retryCount" label="重试次数" rules={[{ required: true, message: '请设置重试次数' }]}>
                 <Select>
                   <Option value={0}>不重试</Option>
                   <Option value={1}>1次</Option>
@@ -766,11 +704,7 @@ const AIAgentManagement: React.FC = () => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="autoRestart"
-                label="自动重启"
-                valuePropName="checked"
-              >
+              <Form.Item name="autoRestart" label="自动重启" valuePropName="checked">
                 <Switch />
               </Form.Item>
             </Col>
@@ -794,10 +728,10 @@ const AIAgentManagement: React.FC = () => {
       >
         {selectedAgent && (
           <div>
-            <Descriptions 
-              bordered 
+            <Descriptions
+              bordered
               column={2}
-              labelStyle={{ 
+              labelStyle={{
                 backgroundColor: isDark ? '#1f1f1f' : '#fafafa',
                 color: isDark ? '#ffffff' : '#262626'
               }}
@@ -806,30 +740,16 @@ const AIAgentManagement: React.FC = () => {
                 color: isDark ? '#ffffff' : '#262626'
               }}
             >
-              <Descriptions.Item label="名称">
-                {selectedAgent.name}
-              </Descriptions.Item>
-              <Descriptions.Item label="版本">
-                {selectedAgent.version}
-              </Descriptions.Item>
+              <Descriptions.Item label="名称">{selectedAgent.name}</Descriptions.Item>
+              <Descriptions.Item label="版本">{selectedAgent.version}</Descriptions.Item>
               <Descriptions.Item label="类型">
                 {agentTypeMap[selectedAgent.type as keyof typeof agentTypeMap]?.name}
               </Descriptions.Item>
-              <Descriptions.Item label="状态">
-                {getStatusTag(selectedAgent.status)}
-              </Descriptions.Item>
-              <Descriptions.Item label="CPU使用率">
-                {selectedAgent.cpu}%
-              </Descriptions.Item>
-              <Descriptions.Item label="内存使用">
-                {selectedAgent.memory}MB
-              </Descriptions.Item>
-              <Descriptions.Item label="执行任务">
-                {selectedAgent.tasks}次
-              </Descriptions.Item>
-              <Descriptions.Item label="成功率">
-                {selectedAgent.successRate}%
-              </Descriptions.Item>
+              <Descriptions.Item label="状态">{getStatusTag(selectedAgent.status)}</Descriptions.Item>
+              <Descriptions.Item label="CPU使用率">{selectedAgent.cpu}%</Descriptions.Item>
+              <Descriptions.Item label="内存使用">{selectedAgent.memory}MB</Descriptions.Item>
+              <Descriptions.Item label="执行任务">{selectedAgent.tasks}次</Descriptions.Item>
+              <Descriptions.Item label="成功率">{selectedAgent.successRate}%</Descriptions.Item>
               <Descriptions.Item label="创建时间" span={2}>
                 {selectedAgent.createdAt}
               </Descriptions.Item>
@@ -842,10 +762,10 @@ const AIAgentManagement: React.FC = () => {
               <Title level={4} style={{ color: isDark ? '#ffffff' : '#262626' }}>
                 配置信息
               </Title>
-              <Descriptions 
-                bordered 
+              <Descriptions
+                bordered
                 column={2}
-                labelStyle={{ 
+                labelStyle={{
                   backgroundColor: isDark ? '#1f1f1f' : '#fafafa',
                   color: isDark ? '#ffffff' : '#262626'
                 }}
@@ -854,15 +774,9 @@ const AIAgentManagement: React.FC = () => {
                   color: isDark ? '#ffffff' : '#262626'
                 }}
               >
-                <Descriptions.Item label="最大并发">
-                  {selectedAgent.config.maxConcurrency}
-                </Descriptions.Item>
-                <Descriptions.Item label="超时时间">
-                  {selectedAgent.config.timeout}秒
-                </Descriptions.Item>
-                <Descriptions.Item label="重试次数">
-                  {selectedAgent.config.retryCount}次
-                </Descriptions.Item>
+                <Descriptions.Item label="最大并发">{selectedAgent.config.maxConcurrency}</Descriptions.Item>
+                <Descriptions.Item label="超时时间">{selectedAgent.config.timeout}秒</Descriptions.Item>
+                <Descriptions.Item label="重试次数">{selectedAgent.config.retryCount}次</Descriptions.Item>
                 <Descriptions.Item label="自动重启">
                   {selectedAgent.config.autoRestart ? '启用' : '禁用'}
                 </Descriptions.Item>
@@ -875,23 +789,33 @@ const AIAgentManagement: React.FC = () => {
               </Title>
               <Timeline>
                 <Timeline.Item color="green">
-                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:30:25</Text>
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                    14:30:25
+                  </Text>
                   <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 智能体启动成功</span>
                 </Timeline.Item>
                 <Timeline.Item color="blue">
-                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:28:10</Text>
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                    14:28:10
+                  </Text>
                   <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 执行监控任务 #1247</span>
                 </Timeline.Item>
                 <Timeline.Item color="blue">
-                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:25:30</Text>
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                    14:25:30
+                  </Text>
                   <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 检测到系统异常，发送告警</span>
                 </Timeline.Item>
                 <Timeline.Item color="orange">
-                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:20:15</Text>
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                    14:20:15
+                  </Text>
                   <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 任务执行超时，开始重试</span>
                 </Timeline.Item>
                 <Timeline.Item>
-                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>14:15:00</Text>
+                  <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
+                    14:15:00
+                  </Text>
                   <span style={{ color: isDark ? '#8c8c8c' : '#666666' }}> - 智能体配置更新</span>
                 </Timeline.Item>
               </Timeline>
