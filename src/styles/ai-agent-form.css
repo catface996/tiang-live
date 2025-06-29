@@ -137,3 +137,156 @@
 .theme-dark .ai-agent-form-page .page-breadcrumb .ant-breadcrumb-link:last-child {
   color: var(--text-color);
 }
+/* ========== 表单控件暗色主题优化 ========== */
+
+/* 单选框优化 */
+.ai-agent-form-page .ant-radio-wrapper {
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .ant-radio-inner {
+  background-color: var(--bg-container);
+  border-color: var(--border-base);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .ant-radio:hover .ant-radio-inner {
+  border-color: var(--primary);
+}
+
+.ai-agent-form-page .ant-radio-checked .ant-radio-inner {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.ai-agent-form-page .ant-radio-checked .ant-radio-inner::after {
+  background-color: #ffffff;
+}
+
+/* 复选框优化 */
+.ai-agent-form-page .ant-checkbox-wrapper {
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .ant-checkbox-inner {
+  background-color: var(--bg-container);
+  border-color: var(--border-base);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .ant-checkbox:hover .ant-checkbox-inner {
+  border-color: var(--primary);
+}
+
+.ai-agent-form-page .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.ai-agent-form-page .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: #ffffff;
+}
+
+/* Switch开关优化 */
+.ai-agent-form-page .ant-switch {
+  background-color: var(--bg-hover);
+  border: 1px solid var(--border-base);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .ant-switch:hover:not(.ant-switch-disabled) {
+  background-color: var(--bg-active);
+}
+
+.ai-agent-form-page .ant-switch-checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.ai-agent-form-page .ant-switch-checked:hover:not(.ant-switch-disabled) {
+  background-color: var(--primary-hover);
+}
+
+.ai-agent-form-page .ant-switch::after {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* 表单项标签 */
+.ai-agent-form-page .ant-form-item-label > label {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.ai-agent-form-page .ant-form-item-label > label.ant-form-item-required::before {
+  color: var(--error);
+}
+
+/* 表单控件组合样式 */
+.ai-agent-form-page .ant-radio-group,
+.ai-agent-form-page .ant-checkbox-group {
+  color: var(--text-color);
+}
+
+.ai-agent-form-page .ant-radio-button-wrapper {
+  background-color: var(--bg-container);
+  border-color: var(--border-base);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.ai-agent-form-page .ant-radio-button-wrapper:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.ai-agent-form-page .ant-radio-button-wrapper-checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+/* 焦点状态优化 */
+.ai-agent-form-page .ant-radio-input:focus + .ant-radio-inner,
+.ai-agent-form-page .ant-checkbox-input:focus + .ant-checkbox-inner {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+.ai-agent-form-page .ant-switch:focus {
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+/* 禁用状态 */
+.ai-agent-form-page .ant-radio-disabled .ant-radio-inner,
+.ai-agent-form-page .ant-checkbox-disabled .ant-checkbox-inner {
+  background-color: var(--bg-disabled);
+  border-color: var(--border-light);
+}
+
+.ai-agent-form-page .ant-radio-wrapper-disabled,
+.ai-agent-form-page .ant-checkbox-wrapper-disabled {
+  color: var(--text-disabled);
+}
+
+.ai-agent-form-page .ant-switch-disabled {
+  background-color: var(--bg-disabled);
+  border-color: var(--border-light);
+  opacity: 0.6;
+}
+
+/* 特殊场景优化 */
+.ai-agent-form-page .ant-card .ant-radio-wrapper,
+.ai-agent-form-page .ant-card .ant-checkbox-wrapper {
+  color: var(--text-color);
+}
+
+.ai-agent-form-page .ant-card .ant-switch {
+  background-color: var(--bg-hover);
+}
+
+.ai-agent-form-page .ant-card .ant-switch-checked {
+  background-color: var(--primary);
+}
