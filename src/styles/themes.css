@@ -1512,52 +1512,52 @@
   color: var(--text-disabled);
 }
 
-/* Switch 开关暗色主题 */
+/* Switch 开关暗色主题 - 强制应用样式 */
 .theme-dark .ant-switch {
-  background-color: rgba(255, 255, 255, 0.25);
-  border: 1px solid var(--border-base);
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid var(--border-base) !important;
 }
 
 .theme-dark .ant-switch:hover:not(.ant-switch-disabled) {
-  background-color: rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.35) !important;
 }
 
 .theme-dark .ant-switch-checked {
-  background-color: var(--success); /* 使用绿色作为激活状态 */
-  border-color: var(--success);
+  background-color: #52c41a !important; /* 直接使用绿色值 */
+  border-color: #52c41a !important;
 }
 
 .theme-dark .ant-switch-checked:hover:not(.ant-switch-disabled) {
-  background-color: var(--success-hover); /* 悬浮时使用更亮的绿色 */
+  background-color: #73d13d !important; /* 直接使用更亮的绿色值 */
 }
 
 .theme-dark .ant-switch::after {
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
 .theme-dark .ant-switch-disabled {
-  background-color: var(--bg-disabled);
-  border-color: var(--border-light);
-  opacity: 0.4;
+  background-color: var(--bg-disabled) !important;
+  border-color: var(--border-light) !important;
+  opacity: 0.4 !important;
 }
 
 .theme-dark .ant-switch-disabled::after {
-  background-color: rgba(255, 255, 255, 0.65);
+  background-color: rgba(255, 255, 255, 0.65) !important;
 }
 
 .theme-dark .ant-switch-loading-icon {
-  color: var(--success); /* 加载图标也使用绿色 */
+  color: #52c41a !important; /* 直接使用绿色值 */
 }
 
 /* Switch 文字标签 */
 .theme-dark .ant-switch-inner {
-  color: #ffffff;
+  color: #ffffff !important;
   font-size: 12px;
 }
 
 .theme-dark .ant-switch-checked .ant-switch-inner {
-  color: #ffffff;
+  color: #ffffff !important;
 }
 /* 单选框组 Radio Group 暗色主题 */
 .theme-dark .ant-radio-group {

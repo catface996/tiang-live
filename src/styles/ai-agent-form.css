@@ -189,29 +189,44 @@
   border-color: #ffffff;
 }
 
-/* Switch开关优化 */
+/* Switch开关优化 - 强制应用样式 */
 .ai-agent-form-page .ant-switch {
-  background-color: var(--bg-hover);
-  border: 1px solid var(--border-base);
+  background-color: var(--bg-hover) !important;
+  border: 1px solid var(--border-base) !important;
   transition: all 0.3s ease;
 }
 
 .ai-agent-form-page .ant-switch:hover:not(.ant-switch-disabled) {
-  background-color: var(--bg-active);
+  background-color: var(--bg-active) !important;
 }
 
 .ai-agent-form-page .ant-switch-checked {
-  background-color: var(--success); /* 使用绿色作为激活状态 */
-  border-color: var(--success);
+  background-color: #52c41a !important; /* 直接使用绿色值 */
+  border-color: #52c41a !important;
 }
 
 .ai-agent-form-page .ant-switch-checked:hover:not(.ant-switch-disabled) {
-  background-color: var(--success-hover); /* 悬浮时使用更亮的绿色 */
+  background-color: #73d13d !important; /* 直接使用更亮的绿色值 */
 }
 
 .ai-agent-form-page .ant-switch::after {
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 暗色主题下的特殊处理 */
+.theme-dark .ai-agent-form-page .ant-switch {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid #434343 !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-switch-checked {
+  background-color: #52c41a !important;
+  border-color: #52c41a !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-switch-checked:hover:not(.ant-switch-disabled) {
+  background-color: #73d13d !important;
 }
 
 /* 表单项标签 */
@@ -284,9 +299,18 @@
 }
 
 .ai-agent-form-page .ant-card .ant-switch {
-  background-color: var(--bg-hover);
+  background-color: var(--bg-hover) !important;
 }
 
 .ai-agent-form-page .ant-card .ant-switch-checked {
-  background-color: var(--success); /* 卡片中的Switch也使用绿色 */
+  background-color: #52c41a !important; /* 卡片中的Switch也使用绿色 */
+}
+
+/* 暗色主题下卡片中的Switch */
+.theme-dark .ai-agent-form-page .ant-card .ant-switch {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.theme-dark .ai-agent-form-page .ant-card .ant-switch-checked {
+  background-color: #52c41a !important;
 }
