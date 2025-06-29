@@ -6,13 +6,13 @@ import zhCN from 'antd/locale/zh_CN';
 import enUS from 'antd/locale/en_US';
 import { ThemeProvider } from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { store } from './store';
+import { store, useAppSelector } from './store';
 import { themes } from './styles/theme';
 import AppRoutes from './routes';
 import GlobalStyles from './styles/GlobalStyles';
 import ErrorBoundary from './components/ErrorBoundary';
-import { useAppSelector } from './store';
 import './i18n'; // 初始化i18n
+import './styles/theme-variables.css'; // 导入主题变量CSS - 必须在其他样式之前
 import './styles/themes.css'; // 导入主题CSS
 import './styles/theme-unified.css'; // 导入统一主题CSS
 import './styles/modal-theme.css'; // 导入模态框主题CSS
@@ -44,9 +44,9 @@ const AppContent: React.FC = () => {
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language as keyof typeof antdLocaleMap;
   const antdLocale = antdLocaleMap[currentLanguage] || zhCN;
-  
+
   // 获取当前主题
-  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { currentTheme } = useAppSelector(state => state.theme);
   const themeConfig = themes[currentTheme];
 
   // 应用主题类到body
@@ -57,21 +57,21 @@ const AppContent: React.FC = () => {
   // 根据环境设置basename
   const basename = import.meta.env.PROD ? '/tiang-live' : '';
 
-  console.log('App 启动信息:', {
-    mode: import.meta.env.MODE,
-    prod: import.meta.env.PROD,
-    basename,
-    language: currentLanguage,
-    theme: currentTheme,
-    url: window.location.href
-  });
+  // 开发环境下输出启动信息
+  if (import.meta.env.DEV) {
+    console.log('App 启动信息:', {
+      mode: import.meta.env.MODE,
+      prod: import.meta.env.PROD,
+      basename,
+      language: currentLanguage,
+      theme: currentTheme,
+      url: window.location.href
+    });
+  }
 
   return (
     <ErrorBoundary>
-      <ConfigProvider 
-        locale={antdLocale}
-        theme={themeConfig.antd}
-      >
+      <ConfigProvider locale={antdLocale} theme={themeConfig.antd}>
         <ThemeProvider theme={themeConfig.styled}>
           <GlobalStyles />
           <Router basename={basename}>

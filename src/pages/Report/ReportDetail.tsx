@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Card, 
-  Space, 
-  Button, 
-  Row, 
-  Col, 
+import {
+  Typography,
+  Card,
+  Space,
+  Button,
+  Row,
+  Col,
   Statistic,
   Badge,
   Tag,
@@ -14,13 +14,12 @@ import {
   Timeline,
   Alert,
   Breadcrumb,
-  theme,
   Spin
 } from 'antd';
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
-  FileTextOutlined, 
+  FileTextOutlined,
   DownloadOutlined,
   ShareAltOutlined,
   PrinterOutlined,
@@ -32,67 +31,414 @@ import {
   InfoCircleOutlined,
   BarChartOutlined,
   PieChartOutlined,
-  LineChartOutlined,
   HomeOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
-import { useAppSelector } from '../../store';
 import { getReportById } from '../../services/reportService';
 
 const { Title, Paragraph, Text } = Typography;
 
-const PageContainer = styled.div<{ $isDark: boolean }>`
+const PageContainer = styled.div`
   padding: 24px;
   min-height: 100vh;
-  background: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
+  background: var(--bg-layout);
   transition: all 0.3s ease;
 `;
 
-const ContentCard = styled(Card)<{ $isDark: boolean }>`
+const StyledBreadcrumb = styled(Breadcrumb)`
+  margin-bottom: 24px;
+
+  .ant-breadcrumb-link {
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
+  .ant-breadcrumb-separator {
+    color: var(--text-tertiary);
+  }
+`;
+
+const ContentCard = styled(Card)`
   margin-bottom: 24px;
   border-radius: 8px;
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(255, 255, 255, 0.05)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.06)'
-};
-  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
+  background: var(--bg-container);
+  border: 1px solid var(--border-primary);
   transition: all 0.3s ease;
-  
+
   .ant-card-body {
     padding: 24px;
   }
-  
+
   .ant-card-head {
-    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-    border-bottom: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+    background: var(--bg-container);
+    border-bottom: 1px solid var(--border-secondary);
   }
 `;
 
-const StatsCard = styled(Card)<{ $isDark: boolean }>`
+const ReportHeader = styled.div`
+  margin-bottom: 24px;
+`;
+
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+`;
+
+const ReportTitle = styled(Title)`
+  &.ant-typography {
+    margin: 0 !important;
+    color: var(--text-primary) !important;
+    display: flex;
+    align-items: center;
+
+    .anticon {
+      margin-right: 12px;
+      color: var(--primary-color);
+    }
+  }
+`;
+
+const ActionButtons = styled(Space)`
+  flex-shrink: 0;
+`;
+
+const MetaRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+`;
+
+const MetaItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+
+  .anticon {
+    color: var(--text-tertiary);
+  }
+`;
+
+const ReportDescription = styled(Paragraph)`
+  &.ant-typography {
+    color: var(--text-primary) !important;
+    font-size: 16px;
+    margin-bottom: 16px !important; /* 增加描述底部间距 */
+    line-height: 1.6;
+  }
+`;
+
+const StyledDescriptions = styled(Descriptions)`
+  margin-top: 24px;
+  background: transparent !important;
+
+  /* 移除所有可能的背景色 */
+  &.ant-descriptions {
+    background: transparent !important;
+  }
+
+  .ant-descriptions-view {
+    background: transparent !important;
+  }
+
+  .ant-descriptions-item-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  .ant-descriptions-item-content {
+    color: var(--text-primary);
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  .ant-descriptions-item {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  .ant-descriptions-row {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  .ant-descriptions-item-container {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  /* 移除可能的斑马纹效果 */
+  .ant-descriptions-row:nth-child(odd) {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  .ant-descriptions-row:nth-child(even) {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  /* 移除表格样式的背景 */
+  &.ant-descriptions-bordered {
+    background: transparent !important;
+
+    .ant-descriptions-item-label,
+    .ant-descriptions-item-content {
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+  }
+
+  /* 移除所有可能的表格单元格背景 */
+  td {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  th {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+`;
+
+const StatsCard = styled(Card)`
   text-align: center;
   border-radius: 8px;
-  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
+  background: var(--bg-container);
+  border: 1px solid var(--border-primary);
   transition: all 0.3s ease;
-  
-  .ant-statistic-content {
-    color: ${props => props.$isDark ? '#ffffff' : '#262626'};
+
+  .ant-statistic-title {
+    color: var(--text-secondary);
+  }
+`;
+
+// 专门的统计卡片组件，使用data属性来区分
+const TotalServicesCard = styled(StatsCard)`
+  .ant-statistic-content .ant-statistic-content-prefix .anticon,
+  .ant-statistic-content .ant-statistic-content-value,
+  .ant-statistic-content .ant-statistic-content-value-int,
+  .ant-statistic-content .ant-statistic-content-suffix {
+    color: #1890ff !important;
+  }
+`;
+
+const HealthyServicesCard = styled(StatsCard)`
+  .ant-statistic-content .ant-statistic-content-prefix .anticon,
+  .ant-statistic-content .ant-statistic-content-value,
+  .ant-statistic-content .ant-statistic-content-value-int,
+  .ant-statistic-content .ant-statistic-content-suffix {
+    color: #52c41a !important;
+  }
+`;
+
+const WarningServicesCard = styled(StatsCard)`
+  .ant-statistic-content .ant-statistic-content-prefix .anticon,
+  .ant-statistic-content .ant-statistic-content-value,
+  .ant-statistic-content .ant-statistic-content-value-int,
+  .ant-statistic-content .ant-statistic-content-suffix {
+    color: #faad14 !important;
+  }
+`;
+
+const OverallScoreCard = styled(StatsCard)`
+  .ant-statistic-content .ant-statistic-content-prefix .anticon,
+  .ant-statistic-content .ant-statistic-content-value,
+  .ant-statistic-content .ant-statistic-content-value-int,
+  .ant-statistic-content .ant-statistic-content-suffix {
+    color: #722ed1 !important;
+  }
+`;
+
+const LoadingContainer = styled.div`
+  text-align: center;
+  padding: 100px 0;
+
+  .loading-text {
+    margin-top: 16px;
+    color: var(--text-secondary);
+  }
+`;
+
+const StyledAlert = styled(Alert)`
+  &.ant-alert {
+    background: var(--bg-container);
+    border: 1px solid var(--border-primary);
+  }
+`;
+
+const StyledTable = styled(Table)`
+  margin-top: 24px; /* 增加表格顶部间距 */
+
+  .ant-table {
+    background: var(--bg-container);
+  }
+
+  .ant-table-thead > tr > th {
+    background: var(--table-header-bg);
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-primary);
+  }
+
+  .ant-table-tbody > tr > td {
+    border-bottom: 1px solid var(--border-secondary);
+    color: var(--text-primary);
+  }
+
+  .ant-table-tbody > tr:hover > td {
+    background: var(--table-row-hover-bg);
+  }
+`;
+
+const StyledTimeline = styled(Timeline)`
+  .ant-timeline-item-content {
+    color: var(--text-primary);
+  }
+
+  .ant-timeline-item-tail {
+    border-left-color: var(--border-primary);
+  }
+
+  /* 高优先级 - 红色 */
+  &.priority-high .ant-timeline-item-head .anticon {
+    color: #ff4d4f !important;
+  }
+
+  /* 中优先级 - 橙色 */
+  &.priority-medium .ant-timeline-item-head .anticon {
+    color: #faad14 !important;
+  }
+
+  /* 低优先级 - 绿色 */
+  &.priority-low .ant-timeline-item-head .anticon {
+    color: #52c41a !important;
+  }
+
+  /* 辅助图标颜色 */
+  .ant-typography .anticon {
+    color: var(--text-tertiary);
+  }
+`;
+
+// 状态标签样式 - 保持固定颜色，在暗色和亮色主题下一致
+const StatusTag = styled(Tag)`
+  &.status-published {
+    color: #52c41a !important;
+    background: rgba(82, 196, 26, 0.1) !important;
+    border-color: #52c41a !important;
+  }
+
+  &.status-draft {
+    color: #faad14 !important;
+    background: rgba(250, 173, 20, 0.1) !important;
+    border-color: #faad14 !important;
+  }
+
+  &.status-archived {
+    color: #8c8c8c !important;
+    background: rgba(140, 140, 140, 0.1) !important;
+    border-color: #8c8c8c !important;
+  }
+`;
+
+// 优先级标签样式 - 保持固定颜色，在暗色和亮色主题下一致
+const PriorityTag = styled(Tag)`
+  &.priority-high {
+    color: #ff4d4f !important;
+    background: rgba(255, 77, 79, 0.1) !important;
+    border-color: #ff4d4f !important;
+  }
+
+  &.priority-medium {
+    color: #faad14 !important;
+    background: rgba(250, 173, 20, 0.1) !important;
+    border-color: #faad14 !important;
+  }
+
+  &.priority-low {
+    color: #1890ff !important;
+    background: rgba(24, 144, 255, 0.1) !important;
+    border-color: #1890ff !important;
+  }
+`;
+
+const TrendSuffix = styled.span`
+  font-size: 12px;
+  margin-left: 8px;
+`;
+
+const MetricDescription = styled.div`
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+`;
+
+const StatsRow = styled(Row)`
+  margin-bottom: 24px;
+`;
+
+// 分析内容容器，确保描述和表格之间有合适间距
+const AnalysisContent = styled.div`
+  .analysis-description {
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+  }
+
+  .analysis-table {
+    margin-top: 4px;
+  }
+`;
+
+// 趋势指标样式
+const TrendStatsCard = styled(StatsCard)`
+  /* 良好状态 - 深绿色 */
+  &.trend-good {
+    .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic-content .ant-statistic-content-value-int {
+      color: #3f8600 !important;
+    }
+  }
+
+  /* 警告状态 - 深红色 */
+  &.trend-warning,
+  &.trend-critical {
+    .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic-content .ant-statistic-content-value-int {
+      color: #cf1322 !important;
+    }
+  }
+
+  /* 默认状态 - 蓝色 */
+  &.trend-default {
+    .ant-statistic-content .ant-statistic-content-prefix .anticon,
+    .ant-statistic-content .ant-statistic-content-value,
+    .ant-statistic-content .ant-statistic-content-value-int {
+      color: #1890ff !important;
+    }
   }
 `;
 
 const ReportDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [reportData, setReportData] = useState<any>(null);
+  const [reportData, setReportData] = useState<Record<string, any> | null>(null);
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation(['reports', 'common']);
-  const { currentTheme } = useAppSelector((state) => state.theme);
-  const { token } = theme.useToken();
-  const isDark = currentTheme === 'dark';
 
   useEffect(() => {
     setPageTitle(t('reports:detail.title'));
@@ -109,17 +455,17 @@ const ReportDetail: React.FC = () => {
         setLoading(false);
       }
     };
-    
+
     loadReportData();
   }, [t, id]);
 
-  const getStatusColor = (status: string) => {
-    const colors = {
-      published: 'green',
-      draft: 'orange',
-      archived: 'default'
+  const getStatusClassName = (status: string) => {
+    const classMap = {
+      published: 'status-published',
+      draft: 'status-draft',
+      archived: 'status-archived'
     };
-    return colors[status as keyof typeof colors] || 'default';
+    return classMap[status as keyof typeof classMap] || '';
   };
 
   const getStatusText = (status: string) => {
@@ -140,13 +486,13 @@ const ReportDetail: React.FC = () => {
     return colors[status as keyof typeof colors] || 'default';
   };
 
-  const getPriorityColor = (priority: string) => {
-    const colors = {
-      high: 'red',
-      medium: 'orange',
-      low: 'blue'
+  const getPriorityClassName = (priority: string) => {
+    const classMap = {
+      high: 'priority-high',
+      medium: 'priority-medium',
+      low: 'priority-low'
     };
-    return colors[priority as keyof typeof colors] || 'default';
+    return classMap[priority as keyof typeof classMap] || '';
   };
 
   const serviceColumns = [
@@ -162,11 +508,15 @@ const ReportDetail: React.FC = () => {
       key: 'status',
       width: '15%',
       render: (status: string) => (
-        <Badge 
-          status={getServiceStatusColor(status)} 
-          text={status === 'healthy' ? t('reports:detail.healthy') : 
-            status === 'warning' ? t('reports:detail.warning') : 
-              t('reports:detail.critical')} 
+        <Badge
+          status={getServiceStatusColor(status)}
+          text={
+            status === 'healthy'
+              ? t('reports:detail.healthy')
+              : status === 'warning'
+                ? t('reports:detail.warning')
+                : t('reports:detail.critical')
+          }
         />
       )
     },
@@ -198,21 +548,19 @@ const ReportDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <PageContainer $isDark={isDark}>
-        <div style={{ textAlign: 'center', padding: '100px 0' }}>
+      <PageContainer>
+        <LoadingContainer>
           <Spin size="large" />
-          <div style={{ marginTop: 16, color: isDark ? '#ffffff' : '#666666' }}>
-            {t('reports:detail.loading')}
-          </div>
-        </div>
+          <div className="loading-text">{t('reports:detail.loading')}</div>
+        </LoadingContainer>
       </PageContainer>
     );
   }
 
   if (!reportData) {
     return (
-      <PageContainer $isDark={isDark}>
-        <Alert
+      <PageContainer>
+        <StyledAlert
           message={t('reports:detail.notFound')}
           description={t('reports:detail.notFoundDesc')}
           type="error"
@@ -228,742 +576,220 @@ const ReportDetail: React.FC = () => {
   }
 
   return (
-    <PageContainer $isDark={isDark}>
+    <PageContainer>
       {/* 面包屑导航 */}
-      <Breadcrumb style={{ marginBottom: 24 }}>
+      <StyledBreadcrumb>
         <Breadcrumb.Item>
           <HomeOutlined />
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <span onClick={() => navigate('/reports')} style={{ cursor: 'pointer' }}>
-            {t('reports:title')}
-          </span>
+          <span onClick={() => navigate('/reports')}>{t('reports:title')}</span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>{reportData.name}</Breadcrumb.Item>
-      </Breadcrumb>
+      </StyledBreadcrumb>
 
       {/* 报告头部 */}
-      <ContentCard $isDark={isDark}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
-          <div style={{ flex: 1 }}>
-            <Title level={2} style={{ margin: 0, color: isDark ? '#ffffff' : '#262626' }}>
-              <FileTextOutlined style={{ marginRight: 12 }} />
+      <ContentCard>
+        <ReportHeader>
+          {/* 标题和操作按钮行 */}
+          <TitleRow>
+            <ReportTitle level={2}>
+              <FileTextOutlined />
               {reportData.name}
-            </Title>
-            <Space style={{ marginTop: 8 }}>
-              <Tag color={getStatusColor(reportData.status)}>
-                {getStatusText(reportData.status)}
-              </Tag>
-              <Text type="secondary">
-                <UserOutlined /> {reportData.author}
-              </Text>
-              <Text type="secondary">
-                <CalendarOutlined /> {reportData.createdAt}
-              </Text>
-            </Space>
-          </div>
-          <Space>
-            <Button icon={<ShareAltOutlined />}>
-              {t('reports:detail.share')}
-            </Button>
-            <Button icon={<PrinterOutlined />}>
-              {t('reports:detail.print')}
-            </Button>
-            <Button type="primary" icon={<DownloadOutlined />}>
-              {t('reports:detail.download')}
-            </Button>
-          </Space>
-        </div>
+            </ReportTitle>
+            <ActionButtons>
+              <Button icon={<ShareAltOutlined />}>{t('reports:detail.share')}</Button>
+              <Button icon={<PrinterOutlined />}>{t('reports:detail.print')}</Button>
+              <Button type="primary" icon={<DownloadOutlined />}>
+                {t('reports:detail.download')}
+              </Button>
+            </ActionButtons>
+          </TitleRow>
 
-        <Paragraph style={{ color: isDark ? '#ffffff' : '#595959', fontSize: 16 }}>
-          {reportData.description}
-        </Paragraph>
+          {/* 状态和元信息行 */}
+          <MetaRow>
+            <StatusTag className={getStatusClassName(reportData.status)}>{getStatusText(reportData.status)}</StatusTag>
+            <MetaItem>
+              <UserOutlined />
+              <span>{reportData.author}</span>
+            </MetaItem>
+            <MetaItem>
+              <CalendarOutlined />
+              <span>{reportData.createdAt}</span>
+            </MetaItem>
+          </MetaRow>
 
-        <Descriptions column={4} style={{ marginTop: 24 }}>
-          <Descriptions.Item label={t('reports:detail.fileSize')}>
-            {reportData.size}
-          </Descriptions.Item>
-          <Descriptions.Item label={t('reports:detail.downloads')}>
-            {reportData.downloads}
-          </Descriptions.Item>
-          <Descriptions.Item label={t('reports:detail.lastModified')}>
-            {reportData.lastModified}
-          </Descriptions.Item>
-          <Descriptions.Item label={t('reports:detail.reportId')}>
-            {reportData.id}
-          </Descriptions.Item>
-        </Descriptions>
+          {/* 报告描述 */}
+          <ReportDescription>{reportData.description}</ReportDescription>
+        </ReportHeader>
+
+        <StyledDescriptions column={3}>
+          <Descriptions.Item label={t('reports:detail.fileSize')}>{reportData.size}</Descriptions.Item>
+          <Descriptions.Item label={t('reports:detail.downloads')}>{reportData.downloads}</Descriptions.Item>
+          <Descriptions.Item label={t('reports:detail.lastModified')}>{reportData.lastModified}</Descriptions.Item>
+        </StyledDescriptions>
       </ContentCard>
 
       {/* 报告摘要统计 */}
       {reportData.summary && (
-        <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <StatsRow gutter={[16, 16]}>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard $isDark={isDark}>
+            <TotalServicesCard>
               <Statistic
                 title={t('reports:detail.totalServices')}
                 value={reportData.summary.totalServices}
                 prefix={<BarChartOutlined />}
-                valueStyle={{ color: isDark ? '#1890ff' : '#1890ff' }}
               />
-            </StatsCard>
+            </TotalServicesCard>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard $isDark={isDark}>
+            <HealthyServicesCard>
               <Statistic
                 title={t('reports:detail.healthyServices')}
                 value={reportData.summary.healthyServices}
                 prefix={<CheckCircleOutlined />}
-                valueStyle={{ color: isDark ? '#52c41a' : '#52c41a' }}
               />
-            </StatsCard>
+            </HealthyServicesCard>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard $isDark={isDark}>
+            <WarningServicesCard>
               <Statistic
                 title={t('reports:detail.warningServices')}
                 value={reportData.summary.warningServices}
                 prefix={<ExclamationCircleOutlined />}
-                valueStyle={{ color: isDark ? '#faad14' : '#faad14' }}
               />
-            </StatsCard>
+            </WarningServicesCard>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <StatsCard $isDark={isDark}>
+            <OverallScoreCard>
               <Statistic
                 title={t('reports:detail.overallScore')}
                 value={reportData.summary.overallScore}
                 suffix="%"
                 prefix={<PieChartOutlined />}
-                valueStyle={{ color: isDark ? '#722ed1' : '#722ed1' }}
               />
-            </StatsCard>
+            </OverallScoreCard>
           </Col>
-        </Row>
+        </StatsRow>
       )}
 
       {/* 报告内容 */}
       {reportData.sections?.map((section: any, index: number) => (
-        <ContentCard 
-          key={index} 
-          $isDark={isDark} 
-          title={section.titleKey ? t(`reports:sections.${section.titleKey}`) : section.title}
-        >
-          <Paragraph style={{ color: isDark ? '#ffffff' : '#595959' }}>
-            {section.content}
-          </Paragraph>
-
-          {section.type === 'analysis' && section.data && (
-            <Table
-              columns={serviceColumns}
-              dataSource={section.data}
-              pagination={false}
-              size="middle"
-              style={{ marginTop: 16 }}
-            />
+        <ContentCard key={index} title={section.titleKey ? t(`reports:sections.${section.titleKey}`) : section.title}>
+          {section.type === 'analysis' && section.data ? (
+            <AnalysisContent>
+              <div className="analysis-description">
+                <ReportDescription>{section.content}</ReportDescription>
+              </div>
+              <div className="analysis-table">
+                <StyledTable columns={serviceColumns} dataSource={section.data} pagination={false} size="middle" />
+              </div>
+            </AnalysisContent>
+          ) : (
+            <ReportDescription>{section.content}</ReportDescription>
           )}
 
           {section.type === 'trend' && (
             <div>
               {section.metrics && (
-                <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+                <Row gutter={[16, 16]}>
                   {section.metrics.map((metric: any, idx: number) => (
                     <Col xs={24} sm={12} md={6} key={idx}>
-                      <Card size="small">
+                      <TrendStatsCard
+                        size="small"
+                        className={`trend-${
+                          metric.status === 'good'
+                            ? 'good'
+                            : metric.status === 'warning'
+                              ? 'warning'
+                              : metric.status === 'critical'
+                                ? 'critical'
+                                : 'default'
+                        }`}
+                      >
                         <Statistic
                           title={metric.name}
                           value={metric.current}
                           precision={metric.name.includes('率') ? 1 : 0}
-                          valueStyle={{
-                            color: metric.status === 'good' ? '#3f8600' : 
-                              metric.status === 'warning' ? '#cf1322' : 
-                                metric.status === 'critical' ? '#cf1322' : '#1890ff'
-                          }}
                           prefix={
-                            metric.trend.startsWith('+') ? 
-                              <ArrowUpOutlined /> : 
-                              metric.trend.startsWith('-') ? 
-                                <ArrowDownOutlined /> : null
+                            metric.trend.startsWith('+') ? (
+                              <ArrowUpOutlined />
+                            ) : metric.trend.startsWith('-') ? (
+                              <ArrowDownOutlined />
+                            ) : null
                           }
-                          suffix={
-                            <span style={{ fontSize: '12px', marginLeft: '8px' }}>
-                              ({metric.trend})
-                            </span>
-                          }
+                          suffix={<TrendSuffix>({metric.trend})</TrendSuffix>}
                         />
-                        <div style={{ 
-                          fontSize: '12px', 
-                          color: isDark ? '#ffffff80' : '#00000073',
-                          marginTop: '8px'
-                        }}>
-                          {metric.description}
-                        </div>
-                      </Card>
+                        <MetricDescription>{metric.description}</MetricDescription>
+                      </TrendStatsCard>
                     </Col>
                   ))}
                 </Row>
               )}
-              
-              {section.trendData && (
-                <div style={{ 
-                  background: isDark ? '#1f1f1f' : '#fafafa',
-                  padding: '16px',
-                  borderRadius: '6px',
-                  marginTop: '16px'
-                }}>
-                  <div style={{ marginBottom: '16px', fontWeight: 'bold' }}>
-                    趋势图表
-                  </div>
-                  {Object.entries(section.trendData).map(([key, data]: [string, any]) => (
-                    <div key={key} style={{ marginBottom: '24px' }}>
-                      <div style={{ marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>
-                        {key === 'responseTime' ? '响应时间趋势' :
-                          key === 'throughput' ? '吞吐量趋势' :
-                            key === 'errorRate' ? '错误率趋势' :
-                              key === 'availability' ? '可用性趋势' : key}
-                      </div>
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'end', 
-                        height: '100px',
-                        gap: '4px',
-                        padding: '8px',
-                        background: isDark ? '#262626' : '#ffffff',
-                        borderRadius: '4px'
-                      }}>
-                        {data.map((point: any, idx: number) => {
-                          const maxValue = Math.max(...data.map((p: any) => p.value));
-                          const height = (point.value / maxValue) * 80;
-                          return (
-                            <div
-                              key={idx}
-                              style={{
-                                flex: 1,
-                                height: `${height}px`,
-                                background: key === 'errorRate' ? '#ff4d4f' : 
-                                  key === 'availability' && point.value < 99 ? '#faad14' : '#1890ff',
-                                borderRadius: '2px',
-                                position: 'relative',
-                                minHeight: '4px'
-                              }}
-                              title={`${point.date}: ${point.value}${
-                                key === 'responseTime' ? 'ms' :
-                                  key === 'throughput' ? 'K req/s' :
-                                    key === 'errorRate' ? '%' :
-                                      key === 'availability' ? '%' : ''
-                              }`}
-                            />
-                          );
-                        })}
-                      </div>
-                      <div style={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between',
-                        fontSize: '12px',
-                        color: isDark ? '#ffffff80' : '#00000073',
-                        marginTop: '4px'
-                      }}>
-                        <span>{data[0]?.date}</span>
-                        <span>{data[data.length - 1]?.date}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {section.analysis && (
-                <div style={{ marginTop: '24px' }}>
-                  <Row gutter={[16, 16]}>
-                    <Col xs={24} md={12}>
-                      <Card title="关键发现" size="small">
-                        <ul style={{ paddingLeft: '16px', margin: 0 }}>
-                          {section.analysis.keyFindings?.map((finding: string, idx: number) => (
-                            <li key={idx} style={{ marginBottom: '8px' }}>{finding}</li>
-                          ))}
-                        </ul>
-                      </Card>
-                    </Col>
-                    <Col xs={24} md={12}>
-                      <Card title="根本原因" size="small">
-                        <ul style={{ paddingLeft: '16px', margin: 0 }}>
-                          {section.analysis.rootCauses?.map((cause: string, idx: number) => (
-                            <li key={idx} style={{ marginBottom: '8px' }}>{cause}</li>
-                          ))}
-                        </ul>
-                      </Card>
-                    </Col>
-                  </Row>
-                </div>
-              )}
             </div>
-          )}
-
-          {section.type === 'dependency' && (
-            <div>
-              {/* 依赖关系概览 */}
-              {section.summary && (
-                <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-                  <Col xs={12} sm={8} md={4}>
-                    <Card size="small">
-                      <Statistic
-                        title="总平面数"
-                        value={section.summary.totalPlanes}
-                        prefix={<BarChartOutlined />}
-                      />
-                    </Card>
-                  </Col>
-                  <Col xs={12} sm={8} md={4}>
-                    <Card size="small">
-                      <Statistic
-                        title="总依赖数"
-                        value={section.summary.totalDependencies}
-                        prefix={<LineChartOutlined />}
-                      />
-                    </Card>
-                  </Col>
-                  <Col xs={12} sm={8} md={4}>
-                    <Card size="small">
-                      <Statistic
-                        title="强依赖"
-                        value={section.summary.strongDependencies}
-                        valueStyle={{ color: '#cf1322' }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col xs={12} sm={8} md={4}>
-                    <Card size="small">
-                      <Statistic
-                        title="弱依赖"
-                        value={section.summary.weakDependencies}
-                        valueStyle={{ color: '#52c41a' }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col xs={12} sm={8} md={4}>
-                    <Card size="small">
-                      <Statistic
-                        title="循环依赖"
-                        value={section.summary.circularDependencies}
-                        valueStyle={{ color: '#fa8c16' }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col xs={12} sm={8} md={4}>
-                    <Card size="small">
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '14px', color: '#8c8c8c', marginBottom: '4px' }}>风险等级</div>
-                        <Badge 
-                          status={section.summary.riskLevel === 'high' ? 'error' : 
-                            section.summary.riskLevel === 'medium' ? 'warning' : 'success'} 
-                          text={section.summary.riskLevel === 'high' ? '高风险' : 
-                            section.summary.riskLevel === 'medium' ? '中风险' : '低风险'}
-                        />
-                      </div>
-                    </Card>
-                  </Col>
-                </Row>
-              )}
-
-              {/* 依赖关系矩阵表格 */}
-              {section.dependencyMatrix && (
-                <div style={{ marginBottom: 24 }}>
-                  <Title level={4}>依赖关系矩阵</Title>
-                  <Table
-                    columns={[
-                      {
-                        title: '源平面',
-                        dataIndex: 'source',
-                        key: 'source',
-                        width: 120,
-                        render: (text: string) => <Tag color="blue">{text}</Tag>
-                      },
-                      {
-                        title: '目标平面',
-                        dataIndex: 'target',
-                        key: 'target',
-                        width: 120,
-                        render: (text: string) => <Tag color="green">{text}</Tag>
-                      },
-                      {
-                        title: '依赖类型',
-                        dataIndex: 'type',
-                        key: 'type',
-                        width: 100,
-                        render: (text: string) => {
-                          const typeMap: Record<string, { color: string; text: string }> = {
-                            'api-call': { color: 'purple', text: 'API调用' },
-                            'configuration': { color: 'orange', text: '配置依赖' },
-                            'data-flow': { color: 'cyan', text: '数据流' },
-                            'metrics': { color: 'geekblue', text: '指标收集' },
-                            'metadata': { color: 'magenta', text: '元数据' }
-                          };
-                          const config = typeMap[text] || { color: 'default', text };
-                          return <Tag color={config.color}>{config.text}</Tag>;
-                        }
-                      },
-                      {
-                        title: '依赖强度',
-                        dataIndex: 'strength',
-                        key: 'strength',
-                        width: 100,
-                        render: (text: string) => (
-                          <Badge 
-                            status={text === 'strong' ? 'error' : text === 'medium' ? 'warning' : 'success'} 
-                            text={text === 'strong' ? '强' : text === 'medium' ? '中' : '弱'}
-                          />
-                        )
-                      },
-                      {
-                        title: '调用频率',
-                        dataIndex: 'frequency',
-                        key: 'frequency',
-                        width: 100,
-                        render: (text: string) => {
-                          const colorMap: Record<string, string> = {
-                            'very-high': '#ff4d4f',
-                            'high': '#fa8c16',
-                            'medium': '#fadb14',
-                            'low': '#52c41a'
-                          };
-                          return <span style={{ color: colorMap[text] || '#8c8c8c' }}>
-                            {text === 'very-high' ? '极高' : 
-                              text === 'high' ? '高' : 
-                                text === 'medium' ? '中' : '低'}
-                          </span>;
-                        }
-                      },
-                      {
-                        title: '平均响应时间',
-                        dataIndex: 'avgResponseTime',
-                        key: 'avgResponseTime',
-                        width: 120,
-                        render: (text: string) => <Text code>{text}</Text>
-                      },
-                      {
-                        title: '错误率',
-                        dataIndex: 'errorRate',
-                        key: 'errorRate',
-                        width: 80,
-                        render: (text: string) => {
-                          const rate = parseFloat(text.replace('%', ''));
-                          const color = rate > 0.1 ? '#ff4d4f' : rate > 0.05 ? '#fa8c16' : '#52c41a';
-                          return <span style={{ color }}>{text}</span>;
-                        }
-                      },
-                      {
-                        title: '关键程度',
-                        dataIndex: 'criticality',
-                        key: 'criticality',
-                        width: 100,
-                        render: (text: string) => (
-                          <Badge 
-                            status={text === 'critical' ? 'error' : text === 'high' ? 'warning' : 'success'} 
-                            text={text === 'critical' ? '关键' : text === 'high' ? '重要' : '一般'}
-                          />
-                        )
-                      },
-                      {
-                        title: '描述',
-                        dataIndex: 'description',
-                        key: 'description',
-                        ellipsis: true
-                      }
-                    ]}
-                    dataSource={section.dependencyMatrix.map((item: any, index: number) => ({
-                      ...item,
-                      key: index
-                    }))}
-                    pagination={false}
-                    size="middle"
-                    scroll={{ x: 1200 }}
-                  />
-                </div>
-              )}
-
-              {/* 关键路径分析 */}
-              {section.criticalPaths && (
-                <div style={{ marginBottom: 24 }}>
-                  <Title level={4}>关键路径分析</Title>
-                  <Row gutter={[16, 16]}>
-                    {section.criticalPaths.map((path: any, index: number) => (
-                      <Col xs={24} lg={12} key={index}>
-                        <Card 
-                          size="small" 
-                          title={
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                              <span>路径 {index + 1}</span>
-                              <Badge 
-                                status={path.riskLevel === 'high' ? 'error' : 'warning'} 
-                                text={path.riskLevel === 'high' ? '高风险' : '中风险'}
-                              />
-                            </div>
-                          }
-                        >
-                          <div style={{ marginBottom: 12 }}>
-                            <Text strong>路径：</Text>
-                            <div style={{ 
-                              background: '#f5f5f5', 
-                              padding: '8px', 
-                              borderRadius: '4px', 
-                              marginTop: '4px',
-                              fontFamily: 'monospace'
-                            }}>
-                              {path.path}
-                            </div>
-                          </div>
-                          <Descriptions size="small" column={1}>
-                            <Descriptions.Item label="描述">{path.description}</Descriptions.Item>
-                            <Descriptions.Item label="总延迟">
-                              <Text code>{path.totalLatency}</Text>
-                            </Descriptions.Item>
-                            <Descriptions.Item label="瓶颈">
-                              <Tag color="red">{path.bottleneck}</Tag>
-                            </Descriptions.Item>
-                            <Descriptions.Item label="影响">{path.impact}</Descriptions.Item>
-                          </Descriptions>
-                          {path.recommendations && (
-                            <div style={{ marginTop: 12 }}>
-                              <Text strong>优化建议：</Text>
-                              <ul style={{ marginTop: 4, paddingLeft: 16 }}>
-                                {path.recommendations.map((rec: string, idx: number) => (
-                                  <li key={idx} style={{ marginBottom: 4 }}>{rec}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                </div>
-              )}
-
-              {/* 性能指标 */}
-              {section.performanceMetrics && (
-                <div style={{ marginBottom: 24 }}>
-                  <Title level={4}>性能指标</Title>
-                  <Row gutter={[16, 16]}>
-                    {section.performanceMetrics.map((metric: any, index: number) => (
-                      <Col xs={24} sm={12} md={8} key={index}>
-                        <Card size="small">
-                          <Statistic
-                            title={metric.metric}
-                            value={metric.current}
-                            suffix={
-                              <div style={{ fontSize: '12px', marginTop: '4px' }}>
-                                <div>目标: {metric.target}</div>
-                                <div style={{ 
-                                  color: metric.trend.startsWith('+') ? '#ff4d4f' : 
-                                    metric.trend.startsWith('-') ? '#52c41a' : '#8c8c8c'
-                                }}>
-                                  趋势: {metric.trend}
-                                </div>
-                              </div>
-                            }
-                            prefix={
-                              metric.status === 'good' ? <CheckCircleOutlined style={{ color: '#52c41a' }} /> :
-                                metric.status === 'warning' ? <ExclamationCircleOutlined style={{ color: '#fa8c16' }} /> :
-                                  <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />
-                            }
-                          />
-                          <div style={{ marginTop: 8, fontSize: '12px', color: '#8c8c8c' }}>
-                            {metric.description}
-                          </div>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
-                </div>
-              )}
-
-              {/* 风险分析 */}
-              {section.riskAnalysis && (
-                <div style={{ marginBottom: 24 }}>
-                  <Title level={4}>风险分析</Title>
-                  
-                  {/* 单点故障风险 */}
-                  {section.riskAnalysis.singlePointFailures && (
-                    <div style={{ marginBottom: 16 }}>
-                      <Title level={5}>单点故障风险</Title>
-                      {section.riskAnalysis.singlePointFailures.map((spf: any, index: number) => (
-                        <Alert
-                          key={index}
-                          message={`${spf.plane} - ${spf.risk === 'critical' ? '严重风险' : '高风险'}`}
-                          description={
-                            <div>
-                              <div><strong>影响：</strong>{spf.impact}</div>
-                              <div><strong>受影响平面：</strong>{spf.affectedPlanes.join(', ')}</div>
-                              <div style={{ marginTop: 8 }}>
-                                <strong>缓解策略：</strong>
-                                <ul style={{ marginTop: 4, paddingLeft: 16 }}>
-                                  {spf.mitigationStrategies.map((strategy: string, idx: number) => (
-                                    <li key={idx}>{strategy}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          }
-                          type={spf.risk === 'critical' ? 'error' : 'warning'}
-                          style={{ marginBottom: 12 }}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  {/* 级联故障风险 */}
-                  {section.riskAnalysis.cascadeFailures && (
-                    <div>
-                      <Title level={5}>级联故障风险</Title>
-                      {section.riskAnalysis.cascadeFailures.map((cf: any, index: number) => (
-                        <Alert
-                          key={index}
-                          message={`级联故障链：${cf.cascade}`}
-                          description={
-                            <div>
-                              <div><strong>触发条件：</strong>{cf.trigger}</div>
-                              <div><strong>发生概率：</strong>{cf.probability === 'high' ? '高' : '中'}</div>
-                              <div><strong>影响：</strong>{cf.impact}</div>
-                              <div style={{ marginTop: 8 }}>
-                                <strong>预防措施：</strong>
-                                <ul style={{ marginTop: 4, paddingLeft: 16 }}>
-                                  {cf.preventionMeasures.map((measure: string, idx: number) => (
-                                    <li key={idx}>{measure}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          }
-                          type="warning"
-                          style={{ marginBottom: 12 }}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* 优化建议 */}
-              {section.optimizationRecommendations && (
-                <div>
-                  <Title level={4}>优化建议</Title>
-                  <Timeline>
-                    {section.optimizationRecommendations.map((rec: any, index: number) => (
-                      <Timeline.Item
-                        key={index}
-                        color={rec.priority === 'high' ? 'red' : rec.priority === 'medium' ? 'orange' : 'green'}
-                        dot={
-                          rec.priority === 'high' ? <ExclamationCircleOutlined /> :
-                            rec.priority === 'medium' ? <InfoCircleOutlined /> :
-                              <CheckCircleOutlined />
-                        }
-                      >
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-                            <Tag color={rec.priority === 'high' ? 'red' : rec.priority === 'medium' ? 'orange' : 'green'}>
-                              {rec.priority === 'high' ? '高优先级' : rec.priority === 'medium' ? '中优先级' : '低优先级'}
-                            </Tag>
-                            <Tag color="blue">{rec.category}</Tag>
-                            <Text strong>{rec.title}</Text>
-                          </div>
-                          <div style={{ marginBottom: 8 }}>
-                            <Text>{rec.description}</Text>
-                          </div>
-                          <Row gutter={[16, 8]}>
-                            <Col span={12}>
-                              <Text type="secondary">
-                                <ClockCircleOutlined /> 预期时间: {rec.timeline}
-                              </Text>
-                            </Col>
-                            <Col span={12}>
-                              <Text type="secondary">
-                                工作量: {rec.effort}
-                              </Text>
-                            </Col>
-                            <Col span={24}>
-                              <Text type="secondary" style={{ fontStyle: 'italic' }}>
-                                预期改进: {rec.expectedImprovement}
-                              </Text>
-                            </Col>
-                          </Row>
-                          {rec.implementation && (
-                            <div style={{ marginTop: 8 }}>
-                              <Text strong>实施步骤：</Text>
-                              <ol style={{ marginTop: 4, paddingLeft: 16 }}>
-                                {rec.implementation.map((step: string, idx: number) => (
-                                  <li key={idx} style={{ marginBottom: 4 }}>{step}</li>
-                                ))}
-                              </ol>
-                            </div>
-                          )}
-                        </div>
-                      </Timeline.Item>
-                    ))}
-                  </Timeline>
-                </div>
-              )}
-            </div>
-          )}
-
-          {section.type === 'recommendations' && section.recommendations && (
-            <Timeline style={{ marginTop: 16 }}>
-              {section.recommendations.map((rec: any, idx: number) => (
-                <Timeline.Item
-                  key={idx}
-                  color={getPriorityColor(rec.priority)}
-                  dot={
-                    rec.priority === 'high' ? <ExclamationCircleOutlined /> :
-                      rec.priority === 'medium' ? <InfoCircleOutlined /> :
-                        <CheckCircleOutlined />
-                  }
-                >
-                  <div>
-                    <Space>
-                      <Tag color={getPriorityColor(rec.priority)}>
-                        {rec.priority === 'high' ? t('reports:detail.highPriority') :
-                          rec.priority === 'medium' ? t('reports:detail.mediumPriority') :
-                            t('reports:detail.lowPriority')}
-                      </Tag>
-                      <Text strong style={{ color: isDark ? '#ffffff' : '#262626' }}>
-                        {rec.item}
-                      </Text>
-                    </Space>
-                    <div style={{ marginTop: 8, paddingLeft: 0 }}>
-                      <Row gutter={[16, 8]}>
-                        <Col span={12}>
-                          <Text type="secondary">
-                            <ClockCircleOutlined /> {t('reports:detail.deadline')}: {rec.deadline}
-                          </Text>
-                        </Col>
-                        {rec.assignee && (
-                          <Col span={12}>
-                            <Text type="secondary">
-                              <UserOutlined /> {t('reports:detail.assignee')}: {rec.assignee}
-                            </Text>
-                          </Col>
-                        )}
-                        {rec.estimatedHours && (
-                          <Col span={12}>
-                            <Text type="secondary">
-                              <ClockCircleOutlined /> {t('reports:detail.estimatedHours')}: {rec.estimatedHours}
-                            </Text>
-                          </Col>
-                        )}
-                        {rec.impact && (
-                          <Col span={24}>
-                            <Text type="secondary" style={{ fontStyle: 'italic' }}>
-                              {t('reports:detail.expectedImpact')}: {rec.impact}
-                            </Text>
-                          </Col>
-                        )}
-                      </Row>
-                    </div>
-                  </div>
-                </Timeline.Item>
-              ))}
-            </Timeline>
           )}
         </ContentCard>
       ))}
+
+      {/* 报告建议时间线 */}
+      {reportData.sections?.some((section: any) => section.type === 'recommendations') && (
+        <ContentCard title={t('reports:detail.recommendations')}>
+          {reportData.sections
+            .filter((section: any) => section.type === 'recommendations')
+            .map((section: any, index: number) => (
+              <div key={index}>
+                {section.recommendations && (
+                  <StyledTimeline className={`priority-${section.recommendations[0]?.priority || 'default'}`}>
+                    {section.recommendations.map((rec: any, idx: number) => (
+                      <Timeline.Item
+                        key={idx}
+                        color={rec.priority === 'high' ? '#ff4d4f' : rec.priority === 'medium' ? '#faad14' : '#52c41a'}
+                        dot={
+                          rec.priority === 'high' ? (
+                            <ExclamationCircleOutlined />
+                          ) : rec.priority === 'medium' ? (
+                            <InfoCircleOutlined />
+                          ) : (
+                            <CheckCircleOutlined />
+                          )
+                        }
+                      >
+                        <div>
+                          <Space>
+                            <PriorityTag className={getPriorityClassName(rec.priority)}>
+                              {rec.priority === 'high'
+                                ? t('reports:detail.highPriority')
+                                : rec.priority === 'medium'
+                                  ? t('reports:detail.mediumPriority')
+                                  : t('reports:detail.lowPriority')}
+                            </PriorityTag>
+                            <Text strong>{rec.item}</Text>
+                          </Space>
+                          <div>
+                            <Row gutter={[16, 8]}>
+                              <Col span={12}>
+                                <Text type="secondary">
+                                  <ClockCircleOutlined /> {t('reports:detail.deadline')}: {rec.deadline}
+                                </Text>
+                              </Col>
+                              {rec.assignee && (
+                                <Col span={12}>
+                                  <Text type="secondary">
+                                    <UserOutlined /> {t('reports:detail.assignee')}: {rec.assignee}
+                                  </Text>
+                                </Col>
+                              )}
+                            </Row>
+                          </div>
+                        </div>
+                      </Timeline.Item>
+                    ))}
+                  </StyledTimeline>
+                )}
+              </div>
+            ))}
+        </ContentCard>
+      )}
     </PageContainer>
   );
 };
