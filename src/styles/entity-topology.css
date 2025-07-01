@@ -195,7 +195,7 @@
 }
 
 /* 内容区域 */
-.topology-content {
+.entity-topology-page .topology-content {
   min-height: 400px;
 }
 
