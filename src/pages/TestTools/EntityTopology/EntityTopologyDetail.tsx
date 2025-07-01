@@ -12,7 +12,9 @@ import {
   Descriptions,
   Spin,
   Empty,
-  Breadcrumb
+  Breadcrumb,
+  message,
+  Modal
 } from 'antd';
 import {
   NodeIndexOutlined,
@@ -23,7 +25,9 @@ import {
   ReloadOutlined,
   DownloadOutlined,
   HomeOutlined,
-  ToolOutlined
+  ToolOutlined,
+  DeleteOutlined,
+  PlusOutlined
 } from '@ant-design/icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -78,6 +82,7 @@ const EntityTopologyDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [topologyData, setTopologyData] = useState<TopologyData | null>(null);
   const [selectedEntity, setSelectedEntity] = useState<Entity | null>(null);
+  const [selectedEntityIds, setSelectedEntityIds] = useState<string[]>([]);
 
   // 模拟数据加载
   useEffect(() => {
@@ -238,6 +243,136 @@ const EntityTopologyDetail: React.FC = () => {
     }
   };
 
+  // 删除选中的实体
+  const handleDeleteEntities = () => {
+    if (!topologyData || selectedEntityIds.length === 0) return;
+
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除选中的 ${selectedEntityIds.length} 个实体吗？删除后相关的依赖关系也会被移除。`,
+      okText: '确定',
+      cancelText: '取消',
+      okType: 'danger',
+      onOk: () => {
+        const updatedEntities = topologyData.entities.filter(entity => !selectedEntityIds.includes(entity.id));
+
+        // 同时删除相关的依赖关系
+        const updatedDependencies = topologyData.dependencies.filter(
+          dep => !selectedEntityIds.includes(dep.source) && !selectedEntityIds.includes(dep.target)
+        );
+
+        setTopologyData({
+          ...topologyData,
+          entities: updatedEntities,
+          dependencies: updatedDependencies,
+          stats: {
+            ...topologyData.stats,
+            nodeCount: updatedEntities.length,
+            linkCount: updatedDependencies.length
+          }
+        });
+
+        // 清空选中状态
+        setSelectedEntityIds([]);
+
+        // 如果当前选中的实体被删除了，也清空选中状态
+        if (selectedEntity && selectedEntityIds.includes(selectedEntity.id)) {
+          setSelectedEntity(null);
+        }
+
+        message.success(`成功删除 ${selectedEntityIds.length} 个实体`);
+      }
+    });
+  };
+
+  // 处理实体选择变化
+  const handleEntitySelectionChange = (selectedRowKeys: React.Key[]) => {
+    setSelectedEntityIds(selectedRowKeys as string[]);
+  };
+
+  // 处理Agents按钮点击
+  const handleAgentsClick = (entity: Entity) => {
+    message.info(`查看实体 "${entity.name}" 的Agents功能开发中...`);
+    // TODO: 实现Agents查看功能
+  };
+
+  // 处理单个实体删除
+  const handleDeleteEntity = (entity: Entity) => {
+    if (!topologyData) return;
+
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除实体 "${entity.name}" 吗？删除后相关的依赖关系也会被移除。`,
+      okText: '确定',
+      cancelText: '取消',
+      okType: 'danger',
+      onOk: () => {
+        const updatedEntities = topologyData.entities.filter(e => e.id !== entity.id);
+
+        // 同时删除相关的依赖关系
+        const updatedDependencies = topologyData.dependencies.filter(
+          dep => dep.source !== entity.id && dep.target !== entity.id
+        );
+
+        setTopologyData({
+          ...topologyData,
+          entities: updatedEntities,
+          dependencies: updatedDependencies,
+          stats: {
+            ...topologyData.stats,
+            nodeCount: updatedEntities.length,
+            linkCount: updatedDependencies.length
+          }
+        });
+
+        // 如果当前选中的实体被删除了，清空选中状态
+        if (selectedEntity && selectedEntity.id === entity.id) {
+          setSelectedEntity(null);
+        }
+
+        message.success(`成功删除实体 "${entity.name}"`);
+      }
+    });
+  };
+
+  // 处理依赖关系删除
+  const handleDeleteDependency = (dependency: any) => {
+    if (!topologyData) return;
+
+    const sourceEntity = topologyData.entities.find(e => e.id === dependency.source);
+    const targetEntity = topologyData.entities.find(e => e.id === dependency.target);
+    const sourceName = sourceEntity ? sourceEntity.name : dependency.source;
+    const targetName = targetEntity ? targetEntity.name : dependency.target;
+
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除依赖关系 "${sourceName} → ${targetName}" 吗？`,
+      okText: '确定',
+      cancelText: '取消',
+      okType: 'danger',
+      onOk: () => {
+        const updatedDependencies = topologyData.dependencies.filter(dep => dep.id !== dependency.id);
+
+        setTopologyData({
+          ...topologyData,
+          dependencies: updatedDependencies,
+          stats: {
+            ...topologyData.stats,
+            linkCount: updatedDependencies.length
+          }
+        });
+
+        message.success(`成功删除依赖关系 "${sourceName} → ${targetName}"`);
+      }
+    });
+  };
+
+  // 处理新增依赖关系
+  const handleAddDependency = () => {
+    message.info('新增依赖关系功能开发中...');
+    // TODO: 实现新增依赖关系功能，可以打开一个模态框让用户选择源实体、目标实体和关系类型
+  };
+
   // D3.js 拓扑图渲染
   useEffect(() => {
     if (!topologyData || !svgRef.current) return;
@@ -364,6 +499,30 @@ const EntityTopologyDetail: React.FC = () => {
       dataIndex: 'type',
       key: 'type',
       render: (type: string) => <Tag color="blue">{type}</Tag>
+    },
+    {
+      title: '操作',
+      key: 'actions',
+      width: 80,
+      render: (_, record: Entity) => (
+        <Space size="small">
+          <Button
+            type="text"
+            size="small"
+            icon={<DatabaseOutlined />}
+            onClick={() => handleAgentsClick(record)}
+            title="查看Agents"
+          />
+          <Button
+            type="text"
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => handleDeleteEntity(record)}
+            title="删除实体"
+          />
+        </Space>
+      )
     }
   ];
 
@@ -399,6 +558,21 @@ const EntityTopologyDetail: React.FC = () => {
         };
         return <Tag color={colors[type as keyof typeof colors]}>{type}</Tag>;
       }
+    },
+    {
+      title: '操作',
+      key: 'actions',
+      width: 60,
+      render: (_, record: any) => (
+        <Button
+          type="text"
+          size="small"
+          danger
+          icon={<DeleteOutlined />}
+          onClick={() => handleDeleteDependency(record)}
+          title="删除依赖关系"
+        />
+      )
     }
   ];
 
@@ -536,10 +710,15 @@ const EntityTopologyDetail: React.FC = () => {
           <div className="dependencies-section">
             <Table
               title={() => (
-                <Space>
-                  <LinkOutlined />
-                  依赖关系 ({topologyData.dependencies.length})
-                </Space>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Space>
+                    <LinkOutlined />
+                    依赖关系 ({topologyData.dependencies.length})
+                  </Space>
+                  <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAddDependency}>
+                    新增
+                  </Button>
+                </div>
               )}
               columns={dependencyColumns}
               dataSource={topologyData.dependencies}
@@ -553,49 +732,46 @@ const EntityTopologyDetail: React.FC = () => {
 
         {/* 右侧D3拓扑图 */}
         <div className="content-right">
-          <Card
-            title={
-              <Space>
-                <NodeIndexOutlined />
-                拓扑关系图
-                <Button
-                  size="small"
-                  icon={<FullscreenOutlined />}
-                  onClick={() => {
-                    /* 全屏功能 */
-                  }}
-                >
-                  全屏
-                </Button>
-              </Space>
-            }
-            className="topology-card"
-          >
-            <div className="topology-canvas">
-              <svg ref={svgRef}></svg>
-            </div>
+          <div className="topology-header-bar">
+            <Space>
+              <NodeIndexOutlined />
+              拓扑关系图
+              <Button
+                size="small"
+                icon={<FullscreenOutlined />}
+                onClick={() => {
+                  /* 全屏功能 */
+                }}
+              >
+                全屏
+              </Button>
+            </Space>
+          </div>
 
-            {/* 选中实体的详细信息 */}
-            {selectedEntity && (
-              <div className="entity-details">
-                <Card size="small" title={`实体详情: ${selectedEntity.name}`}>
-                  <Descriptions size="small" column={2}>
-                    <Descriptions.Item label="ID">{selectedEntity.id}</Descriptions.Item>
-                    <Descriptions.Item label="类型">{selectedEntity.type}</Descriptions.Item>
-                    <Descriptions.Item label="状态">
-                      <Tag color={selectedEntity.status === 'active' ? 'green' : 'orange'}>{selectedEntity.status}</Tag>
+          <div className="topology-canvas">
+            <svg ref={svgRef}></svg>
+          </div>
+
+          {/* 选中实体的详细信息 */}
+          {selectedEntity && (
+            <div className="entity-details">
+              <Card size="small" title={`实体详情: ${selectedEntity.name}`}>
+                <Descriptions size="small" column={2}>
+                  <Descriptions.Item label="ID">{selectedEntity.id}</Descriptions.Item>
+                  <Descriptions.Item label="类型">{selectedEntity.type}</Descriptions.Item>
+                  <Descriptions.Item label="状态">
+                    <Tag color={selectedEntity.status === 'active' ? 'green' : 'orange'}>{selectedEntity.status}</Tag>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="连接数">{selectedEntity.connections}</Descriptions.Item>
+                  {Object.entries(selectedEntity.properties).map(([key, value]) => (
+                    <Descriptions.Item key={key} label={key}>
+                      {String(value)}
                     </Descriptions.Item>
-                    <Descriptions.Item label="连接数">{selectedEntity.connections}</Descriptions.Item>
-                    {Object.entries(selectedEntity.properties).map(([key, value]) => (
-                      <Descriptions.Item key={key} label={key}>
-                        {String(value)}
-                      </Descriptions.Item>
-                    ))}
-                  </Descriptions>
-                </Card>
-              </div>
-            )}
-          </Card>
+                  ))}
+                </Descriptions>
+              </Card>
+            </div>
+          )}
         </div>
       </div>
     </div>

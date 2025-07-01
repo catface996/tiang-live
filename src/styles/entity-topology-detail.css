@@ -129,25 +129,24 @@
 .content-right {
   width: 60%;
   overflow: hidden;
-}
-
-.topology-card {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--border-color);
+  border-radius: 8px;
   background: var(--card-bg);
 }
 
-.entity-topology-detail .topology-card .ant-card-body {
-  height: calc(100% - 57px);
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+/* 拓扑图标题栏 */
+.topology-header-bar {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--card-bg);
+  font-weight: 500;
 }
 
 .topology-canvas {
   flex: 1;
-  border: 1px solid var(--border-color);
+  background: var(--component-background);
   border-radius: 6px;
   background: var(--component-background);
   overflow: hidden;
