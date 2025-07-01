@@ -1,0 +1,291 @@
+/* Entity Topology Detail 页面样式 */
+.entity-topology-detail {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--layout-body-background);
+  overflow: hidden;
+}
+
+/* 顶部基础信息区域 - 20%高度 */
+.topology-header {
+  height: 20%;
+  min-height: 200px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-card {
+  height: 100%;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  padding: 8px 0;
+}
+
+.header-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header-description {
+  margin: 8px 0;
+}
+
+.header-tags {
+  margin-top: 8px;
+}
+
+.header-right {
+  min-width: 400px;
+  padding-left: 24px;
+}
+
+/* 底部主要内容区域 - 80%高度 */
+.topology-content {
+  height: 80%;
+  display: flex;
+  padding: 16px;
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* 左侧面板 */
+.content-left {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* 实体清单区域 - 左侧上半部分 */
+.entities-section {
+  height: 50%;
+  overflow: hidden;
+}
+
+/* 依赖关系区域 - 左侧下半部分 */
+.dependencies-section {
+  height: 50%;
+  overflow: hidden;
+}
+
+.section-card {
+  height: 100%;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+}
+
+.section-card .ant-card-body {
+  height: calc(100% - 57px);
+  padding: 12px;
+  overflow: hidden;
+}
+
+/* 右侧D3拓扑图区域 */
+.content-right {
+  width: 60%;
+  overflow: hidden;
+}
+
+.topology-card {
+  height: 100%;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+}
+
+.topology-card .ant-card-body {
+  height: calc(100% - 57px);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topology-canvas {
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--component-background);
+  overflow: hidden;
+  position: relative;
+}
+
+.topology-canvas svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 选中实体详情 */
+.entity-details {
+  margin-top: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.entity-details .ant-card {
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+}
+
+/* 加载和空状态 */
+.entity-topology-detail-loading,
+.entity-topology-detail-empty {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--layout-body-background);
+}
+
+/* 表格样式优化 */
+.section-card .ant-table-wrapper {
+  height: 100%;
+}
+
+.section-card .ant-table {
+  height: 100%;
+}
+
+.section-card .ant-table-container {
+  height: calc(100% - 39px);
+}
+
+.section-card .ant-table-tbody > tr:hover > td {
+  background: var(--table-row-hover-bg) !important;
+}
+
+.section-card .ant-table-tbody > tr.ant-table-row-selected > td {
+  background: var(--primary-color-fade) !important;
+}
+
+/* 统计卡片样式 */
+.header-right .ant-statistic {
+  text-align: center;
+}
+
+.header-right .ant-statistic-title {
+  color: var(--text-color-secondary);
+  font-size: 12px;
+}
+
+.header-right .ant-statistic-content {
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* D3图表节点样式 */
+.topology-canvas circle {
+  stroke: var(--border-color);
+  stroke-width: 2px;
+}
+
+.topology-canvas circle:hover {
+  stroke: var(--primary-color);
+  stroke-width: 3px;
+}
+
+.topology-canvas text {
+  fill: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.topology-canvas line {
+  stroke: var(--border-color-split);
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .content-left {
+    width: 45%;
+  }
+
+  .content-right {
+    width: 55%;
+  }
+
+  .header-right {
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topology-content {
+    flex-direction: column;
+    height: auto;
+    min-height: 80%;
+  }
+
+  .content-left,
+  .content-right {
+    width: 100%;
+    height: 400px;
+  }
+
+  .entities-section,
+  .dependencies-section {
+    height: 200px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .header-right {
+    width: 100%;
+    min-width: auto;
+    padding-left: 0;
+  }
+}
+
+/* 暗色主题适配 */
+[data-theme='dark'] .topology-canvas {
+  background: var(--component-background);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .topology-canvas circle {
+  stroke: var(--border-color);
+}
+
+[data-theme='dark'] .topology-canvas text {
+  fill: var(--text-color);
+}
+
+[data-theme='dark'] .topology-canvas line {
+  stroke: var(--border-color-split);
+}
+
+/* 滚动条样式 */
+.entity-details::-webkit-scrollbar,
+.section-card .ant-table-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.entity-details::-webkit-scrollbar-track,
+.section-card .ant-table-body::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+.entity-details::-webkit-scrollbar-thumb,
+.section-card .ant-table-body::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+  border-radius: 3px;
+}
+
+.entity-details::-webkit-scrollbar-thumb:hover,
+.section-card .ant-table-body::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
+}

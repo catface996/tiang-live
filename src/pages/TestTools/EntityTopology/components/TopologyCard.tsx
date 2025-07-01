@@ -41,15 +41,10 @@ type TopologyCardProps = {
   onEdit: (topology: Topology) => void;
   onDelete: (id: string) => void;
   onRefresh: (id: string) => void;
+  onClick?: (topology: Topology) => void;
 };
 
-const TopologyCard: React.FC<TopologyCardProps> = ({
-  topology,
-  onView,
-  onEdit,
-  onDelete,
-  onRefresh
-}) => {
+const TopologyCard: React.FC<TopologyCardProps> = ({ topology, onView, onEdit, onDelete, onRefresh, onClick }) => {
   const { t } = useTranslation(['entityTopology', 'common']);
 
   // 获取拓扑类型图标
@@ -116,21 +111,30 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
       <Button
         type="text"
         icon={<EyeOutlined />}
-        onClick={() => onView(topology)}
+        onClick={e => {
+          e.stopPropagation();
+          onView(topology);
+        }}
       />
     </Tooltip>,
     <Tooltip title={t('common:edit')} key="edit">
       <Button
         type="text"
         icon={<EditOutlined />}
-        onClick={() => onEdit(topology)}
+        onClick={e => {
+          e.stopPropagation();
+          onEdit(topology);
+        }}
       />
     </Tooltip>,
     <Tooltip title={t('common:refresh')} key="refresh">
       <Button
         type="text"
         icon={<PlayCircleOutlined />}
-        onClick={() => onRefresh(topology.id)}
+        onClick={e => {
+          e.stopPropagation();
+          onRefresh(topology.id);
+        }}
       />
     </Tooltip>,
     <Tooltip title={t('common:delete')} key="delete">
@@ -138,20 +142,24 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
         type="text"
         icon={<DeleteOutlined />}
         danger
-        onClick={() => onDelete(topology.id)}
+        onClick={e => {
+          e.stopPropagation();
+          onDelete(topology.id);
+        }}
       />
     </Tooltip>
   ];
 
   return (
-    <Card className="topology-card" actions={actions}>
+    <Card
+      className="topology-card"
+      actions={actions}
+      onClick={() => onClick?.(topology)}
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
+    >
       <div className="topology-card-header">
         <div className="topology-card-avatar-section">
-          <Avatar
-            size={48}
-            icon={getTypeIcon(topology.type)}
-            className="topology-card-avatar"
-          />
+          <Avatar size={48} icon={getTypeIcon(topology.type)} className="topology-card-avatar" />
           <div className="topology-card-info">
             <div className="topology-card-title-row">
               <Text strong className="topology-card-title">
@@ -173,10 +181,7 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
       </div>
 
       <div className="topology-card-description">
-        <Paragraph
-          ellipsis={{ rows: 2, tooltip: topology.description }}
-          className="topology-card-description-text"
-        >
+        <Paragraph ellipsis={{ rows: 2, tooltip: topology.description }} className="topology-card-description-text">
           {topology.description}
         </Paragraph>
       </div>
@@ -216,8 +221,7 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
             value={topology.stats.healthScore}
             suffix="%"
             className={`topology-card-statistic health-score-${
-              topology.stats.healthScore >= 80 ? 'good' : 
-              topology.stats.healthScore >= 60 ? 'warning' : 'error'
+              topology.stats.healthScore >= 80 ? 'good' : topology.stats.healthScore >= 60 ? 'warning' : 'error'
             }`}
           />
         </Space>

@@ -9,6 +9,7 @@ import {
   DatabaseOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import TopologyCard from './components/TopologyCard';
 import '../../../styles/entity-topology.css';
 
@@ -38,6 +39,7 @@ interface Topology {
 
 const EntityTopology: React.FC = () => {
   const { t } = useTranslation(['entityTopology', 'common']);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -173,7 +175,7 @@ const EntityTopology: React.FC = () => {
   });
 
   const handleView = (topology: Topology) => {
-    message.info(`${t('entityTopology:actions.view')} ${topology.name}`);
+    navigate(`/test-tools/entity-topology/${topology.id}`);
   };
 
   const handleEdit = (topology: Topology) => {
@@ -319,6 +321,7 @@ const EntityTopology: React.FC = () => {
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     onRefresh={handleRefresh}
+                    onClick={handleView}
                   />
                 </Col>
               ))}
