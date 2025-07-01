@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Card, 
-  Space, 
-  Button, 
-  Row, 
-  Col,
-  Badge,
-  Tag,
-  Select,
-  Breadcrumb,
-  List,
-  DatePicker
-} from 'antd';
-import { 
+import { Typography, Card, Space, Button, Row, Col, Badge, Tag, Select, Breadcrumb, List, DatePicker } from 'antd';
+import {
   ClockCircleOutlined,
   PlayCircleOutlined,
   CheckCircleOutlined,
@@ -30,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
 import { setPageTitle } from '../../utils';
 import { SearchFilterBar } from '../../components/Common';
 import '../../styles/task-execution-history.css';
@@ -59,28 +45,28 @@ const ExecutionCard = styled(Card)`
   border-radius: 6px;
   background-color: var(--bg-container);
   border: 1px solid var(--border-light);
-  
+
   &:hover {
     box-shadow: var(--shadow-hover);
     transform: translateY(-1px);
   }
-  
+
   &.completed {
     border-left: 4px solid var(--success);
   }
-  
+
   &.running {
     border-left: 4px solid var(--primary);
   }
-  
+
   &.scheduled {
     border-left: 4px solid var(--warning);
   }
-  
+
   &.failed {
     border-left: 4px solid var(--error);
   }
-  
+
   .ant-card-body {
     background-color: var(--bg-container);
     color: var(--text-primary);
@@ -91,29 +77,37 @@ const StatsCard = styled(Card)`
   background-color: var(--bg-container);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-card);
-  
+
   &:hover {
     box-shadow: var(--shadow-hover);
     transform: translateY(-1px);
   }
-  
+
   .ant-card-body {
     background-color: var(--bg-container);
     text-align: center;
     padding: 20px;
   }
-  
+
   .stats-number {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 8px;
-    
-    &.primary { color: var(--primary); }
-    &.success { color: var(--success); }
-    &.warning { color: var(--warning); }
-    &.error { color: var(--error); }
+
+    &.primary {
+      color: var(--primary);
+    }
+    &.success {
+      color: var(--success);
+    }
+    &.warning {
+      color: var(--warning);
+    }
+    &.error {
+      color: var(--error);
+    }
   }
-  
+
   .stats-label {
     color: var(--text-secondary);
     font-size: 14px;
@@ -122,12 +116,12 @@ const StatsCard = styled(Card)`
 
 const PageHeader = styled.div`
   margin-bottom: 24px;
-  
+
   .ant-typography {
     color: var(--text-primary);
     margin: 0;
   }
-  
+
   .header-icon {
     margin-right: 8px;
     color: var(--primary);
@@ -136,20 +130,20 @@ const PageHeader = styled.div`
 
 const BreadcrumbContainer = styled(Breadcrumb)`
   margin-bottom: 24px;
-  
+
   .ant-breadcrumb-link {
     color: var(--text-secondary);
-    
+
     &:hover {
       color: var(--primary);
     }
   }
-  
+
   .breadcrumb-link {
     cursor: pointer;
     margin-left: 4px;
     color: var(--text-secondary);
-    
+
     &:hover {
       color: var(--primary);
     }
@@ -158,7 +152,7 @@ const BreadcrumbContainer = styled(Breadcrumb)`
 
 const FilterContainer = styled.div`
   margin-bottom: 24px;
-  
+
   .ant-alert {
     background-color: var(--bg-elevated);
     border-color: var(--border-light);
@@ -171,7 +165,7 @@ const ListHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
   .ant-typography {
     color: var(--text-primary);
     margin: 0;
@@ -184,16 +178,16 @@ const ExecutionItemContent = styled.div`
       color: var(--text-primary);
     }
   }
-  
+
   .execution-meta {
     .ant-typography {
       color: var(--text-secondary);
     }
   }
-  
+
   .execution-progress {
     margin-top: 8px;
-    
+
     .progress-text {
       color: var(--text-secondary);
       font-size: 12px;
@@ -205,7 +199,7 @@ const ExecutionItemContent = styled.div`
 const ActionButton = styled(Button)`
   &.ant-btn-text {
     color: var(--text-primary);
-    
+
     &:hover {
       background-color: var(--bg-hover);
       color: var(--primary);
@@ -652,9 +646,9 @@ const TaskExecutionHistory: React.FC = () => {
   const { t } = useTranslation(['taskExecutionHistory', 'common']);
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
-  
+
   const [executionHistory, setExecutionHistory] = useState<ExecutionRecord[]>([]);
-  
+
   // 筛选和搜索状态
   const [filteredHistory, setFilteredHistory] = useState<ExecutionRecord[]>([]);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -666,11 +660,11 @@ const TaskExecutionHistory: React.FC = () => {
   useEffect(() => {
     setPageTitle(t('taskExecutionHistory:title'));
     // 根据taskId过滤执行记录
-    const filteredHistory = taskId 
+    const filteredHistory = taskId
       ? mockExecutionHistoryData.filter(record => record.taskCollectionId === taskId)
       : mockExecutionHistoryData;
     setExecutionHistory(filteredHistory);
-    
+
     // 调试信息
     console.log('加载的执行历史记录总数:', mockExecutionHistoryData.length);
     console.log('过滤后的执行历史记录:', filteredHistory.length);
@@ -682,14 +676,15 @@ const TaskExecutionHistory: React.FC = () => {
   useEffect(() => {
     console.log('筛选逻辑执行 - executionHistory长度:', executionHistory.length);
     console.log('当前筛选条件:', { searchKeyword, statusFilter, triggerFilter, dateRange, sortOrder });
-    
+
     let filtered = [...executionHistory];
 
     // 关键词搜索
     if (searchKeyword) {
-      filtered = filtered.filter(record => 
-        record.taskCollectionName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        record.triggerSource?.toLowerCase().includes(searchKeyword.toLowerCase())
+      filtered = filtered.filter(
+        record =>
+          record.taskCollectionName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+          record.triggerSource?.toLowerCase().includes(searchKeyword.toLowerCase())
       );
     }
 
@@ -707,8 +702,7 @@ const TaskExecutionHistory: React.FC = () => {
     if (dateRange && dateRange[0] && dateRange[1]) {
       filtered = filtered.filter(record => {
         const recordDate = dayjs(record.startTime);
-        return recordDate.isAfter(dateRange[0]?.startOf('day')) && 
-               recordDate.isBefore(dateRange[1]?.endOf('day'));
+        return recordDate.isAfter(dateRange[0]?.startOf('day')) && recordDate.isBefore(dateRange[1]?.endOf('day'));
       });
     }
 
@@ -727,7 +721,7 @@ const TaskExecutionHistory: React.FC = () => {
   // 刷新数据
   const handleRefresh = () => {
     // 重新加载数据
-    const filteredHistory = taskId 
+    const filteredHistory = taskId
       ? mockExecutionHistoryData.filter(record => record.taskCollectionId === taskId)
       : mockExecutionHistoryData;
     setExecutionHistory(filteredHistory);
@@ -742,22 +736,32 @@ const TaskExecutionHistory: React.FC = () => {
   // 获取执行状态对应的Badge状态
   const getExecutionBadgeStatus = (status: string) => {
     switch (status) {
-      case 'completed': return 'success';
-      case 'running': return 'processing';
-      case 'scheduled': return 'warning';
-      case 'failed': return 'error';
-      default: return 'default';
+      case 'completed':
+        return 'success';
+      case 'running':
+        return 'processing';
+      case 'scheduled':
+        return 'warning';
+      case 'failed':
+        return 'error';
+      default:
+        return 'default';
     }
   };
 
   // 获取执行状态图标
   const getExecutionIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircleOutlined className="status-icon success" />;
-      case 'running': return <PlayCircleOutlined className="status-icon primary" />;
-      case 'scheduled': return <ClockCircleOutlined className="status-icon warning" />;
-      case 'failed': return <ExclamationCircleOutlined className="status-icon error" />;
-      default: return <ClockCircleOutlined className="status-icon" />;
+      case 'completed':
+        return <CheckCircleOutlined className="status-icon success" />;
+      case 'running':
+        return <PlayCircleOutlined className="status-icon primary" />;
+      case 'scheduled':
+        return <ClockCircleOutlined className="status-icon warning" />;
+      case 'failed':
+        return <ExclamationCircleOutlined className="status-icon error" />;
+      default:
+        return <ClockCircleOutlined className="status-icon" />;
     }
   };
 
@@ -791,16 +795,16 @@ const TaskExecutionHistory: React.FC = () => {
     if (seconds < 3600) {
       const minutes = Math.floor(seconds / 60);
       const remainingSeconds = seconds % 60;
-      return t('taskExecutionHistory:time.formatDuration.minutes', { 
-        minutes, 
-        seconds: remainingSeconds 
+      return t('taskExecutionHistory:time.formatDuration.minutes', {
+        minutes,
+        seconds: remainingSeconds
       });
     }
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    return t('taskExecutionHistory:time.formatDuration.hours', { 
-      hours, 
-      minutes 
+    return t('taskExecutionHistory:time.formatDuration.hours', {
+      hours,
+      minutes
     });
   };
 
@@ -810,19 +814,13 @@ const TaskExecutionHistory: React.FC = () => {
       <BreadcrumbContainer>
         <Breadcrumb.Item>
           <HomeOutlined />
-          <span 
-            className="breadcrumb-link"
-            onClick={() => navigate('/')}
-          >
+          <span className="breadcrumb-link" onClick={() => navigate('/')}>
             {t('taskExecutionHistory:breadcrumb.home')}
           </span>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
           <UnorderedListOutlined />
-          <span 
-            className="breadcrumb-link"
-            onClick={() => navigate('/task-management/task-collections')}
-          >
+          <span className="breadcrumb-link" onClick={() => navigate('/task-management/task-collections')}>
             {t('taskExecutionHistory:breadcrumb.taskCollections')}
           </span>
         </Breadcrumb.Item>
@@ -844,33 +842,25 @@ const TaskExecutionHistory: React.FC = () => {
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={6}>
           <StatsCard>
-            <div className="stats-number primary">
-              {executionHistory.length}
-            </div>
+            <div className="stats-number primary">{executionHistory.length}</div>
             <div className="stats-label">{t('taskExecutionHistory:stats.totalExecutions')}</div>
           </StatsCard>
         </Col>
         <Col xs={24} sm={6}>
           <StatsCard>
-            <div className="stats-number success">
-              {executionHistory.filter(e => e.status === 'completed').length}
-            </div>
+            <div className="stats-number success">{executionHistory.filter(e => e.status === 'completed').length}</div>
             <div className="stats-label">{t('taskExecutionHistory:stats.successfulExecutions')}</div>
           </StatsCard>
         </Col>
         <Col xs={24} sm={6}>
           <StatsCard>
-            <div className="stats-number primary">
-              {executionHistory.filter(e => e.status === 'running').length}
-            </div>
+            <div className="stats-number primary">{executionHistory.filter(e => e.status === 'running').length}</div>
             <div className="stats-label">{t('taskExecutionHistory:stats.runningExecutions')}</div>
           </StatsCard>
         </Col>
         <Col xs={24} sm={6}>
           <StatsCard>
-            <div className="stats-number warning">
-              {executionHistory.filter(e => e.status === 'scheduled').length}
-            </div>
+            <div className="stats-number warning">{executionHistory.filter(e => e.status === 'scheduled').length}</div>
             <div className="stats-label">{t('taskExecutionHistory:stats.scheduledExecutions')}</div>
           </StatsCard>
         </Col>
@@ -927,17 +917,10 @@ const TaskExecutionHistory: React.FC = () => {
               <RangePicker
                 value={dateRange}
                 onChange={setDateRange}
-                placeholder={[
-                  t('taskExecutionHistory:filter.startDate'), 
-                  t('taskExecutionHistory:filter.endDate')
-                ]}
+                placeholder={[t('taskExecutionHistory:filter.startDate'), t('taskExecutionHistory:filter.endDate')]}
                 style={{ width: 240 }}
               />
-              <Button 
-                icon={<ReloadOutlined />}
-                onClick={handleRefresh}
-                title={t('common:refresh')}
-              />
+              <Button icon={<ReloadOutlined />} onClick={handleRefresh} title={t('common:refresh')} />
             </Space>
           }
         />
@@ -947,17 +930,18 @@ const TaskExecutionHistory: React.FC = () => {
       <ListContainer>
         <ListHeader>
           <Title level={4}>
-            {t('taskExecutionHistory:list.title')} ({filteredHistory.length}{t('taskExecutionHistory:list.count')})
+            {t('taskExecutionHistory:list.title')} ({filteredHistory.length}
+            {t('taskExecutionHistory:list.count')})
           </Title>
         </ListHeader>
-        
+
         <List
           dataSource={filteredHistory}
-          renderItem={(execution) => {
+          renderItem={execution => {
             const triggerInfo = getTriggerInfo(execution.triggerType, execution.triggerSource);
             const time = dayjs(execution.startTime).format('YYYY-MM-DD HH:mm:ss');
             const statusText = getStatusText(execution.status);
-            
+
             return (
               <List.Item style={{ padding: 0, marginBottom: 8 }}>
                 <ExecutionCard
@@ -994,7 +978,8 @@ const TaskExecutionHistory: React.FC = () => {
                           {execution.totalTargets > 0 && (
                             <div className="execution-progress">
                               <div className="progress-text">
-                                执行进度: {execution.executedTargets}/{execution.totalTargets} ({Math.round((execution.executedTargets / execution.totalTargets) * 100)}%)
+                                执行进度: {execution.executedTargets}/{execution.totalTargets} (
+                                {Math.round((execution.executedTargets / execution.totalTargets) * 100)}%)
                               </div>
                             </div>
                           )}
@@ -1002,14 +987,11 @@ const TaskExecutionHistory: React.FC = () => {
                       </Col>
                       <Col>
                         <Space>
-                          <Badge 
-                            status={getExecutionBadgeStatus(execution.status)} 
-                            text={statusText}
-                          />
-                          <ActionButton 
-                            type="text" 
+                          <Badge status={getExecutionBadgeStatus(execution.status)} text={statusText} />
+                          <ActionButton
+                            type="text"
                             size="small"
-                            onClick={(e) => {
+                            onClick={e => {
                               e.stopPropagation();
                               handleViewExecutionDetail(execution);
                             }}
@@ -1028,7 +1010,7 @@ const TaskExecutionHistory: React.FC = () => {
             pageSize: 20,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) => 
+            showTotal: (total, range) =>
               t('taskExecutionHistory:pagination.showTotal', {
                 start: range[0],
                 end: range[1],
