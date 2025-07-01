@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Space, Input, Select, message, Spin, Empty, Typography, Statistic } from 'antd';
-import { PlusOutlined, ReloadOutlined, SearchOutlined, NodeIndexOutlined, LinkOutlined, HeartOutlined, DatabaseOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  ReloadOutlined,
+  NodeIndexOutlined,
+  LinkOutlined,
+  HeartOutlined,
+  DatabaseOutlined
+} from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import TopologyCard from './components/TopologyCard';
 import '../../../styles/entity-topology.css';
@@ -156,11 +163,12 @@ const EntityTopology: React.FC = () => {
 
   // 过滤拓扑数据
   const filteredTopologies = topologies.filter(topology => {
-    const matchesSearch = topology.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                         topology.description.toLowerCase().includes(searchText.toLowerCase());
+    const matchesSearch =
+      topology.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      topology.description.toLowerCase().includes(searchText.toLowerCase());
     const matchesStatus = statusFilter === 'all' || topology.status === statusFilter;
     const matchesType = typeFilter === 'all' || topology.type === typeFilter;
-    
+
     return matchesSearch && matchesStatus && matchesType;
   });
 
@@ -184,13 +192,13 @@ const EntityTopology: React.FC = () => {
   const activeTopologies = topologies.filter(t => t.status === 'active').length;
   const totalNodes = topologies.reduce((sum, t) => sum + t.stats.nodeCount, 0);
   const totalLinks = topologies.reduce((sum, t) => sum + t.stats.linkCount, 0);
-  const avgHealthScore = topologies.length > 0 
-    ? (topologies.reduce((sum, t) => sum + t.stats.healthScore, 0) / topologies.length).toFixed(1)
-    : '0';
+  const avgHealthScore =
+    topologies.length > 0
+      ? (topologies.reduce((sum, t) => sum + t.stats.healthScore, 0) / topologies.length).toFixed(1)
+      : '0';
 
   return (
     <div className="entity-topology-page">
-      /* Title和按钮在同一行 */
       <div className="page-header">
         <Title level={2} className="page-title">
           <Space>
@@ -202,9 +210,9 @@ const EntityTopology: React.FC = () => {
           <Button icon={<ReloadOutlined />} onClick={() => loadTopologies()}>
             {t('common:refresh')}
           </Button>
-          <Button 
-            type="primary" 
-            icon={<PlusOutlined />} 
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
             onClick={() => message.info(t('entityTopology:actions.createTopology') + '功能开发中...')}
           >
             {t('entityTopology:actions.createTopology')}
@@ -213,46 +221,40 @@ const EntityTopology: React.FC = () => {
       </div>
 
       {/* Paragraph单独一行，充满宽度 */}
-      <Paragraph className="page-description">
-        {t('entityTopology:description')}
-      </Paragraph>
+      <Paragraph className="page-description">{t('entityTopology:description')}</Paragraph>
 
       {/* 统计信息 */}
       <Row gutter={16} className="stats-row">
         <Col xs={24} sm={12} md={6}>
           <Card className="stats-card stats-primary">
-            <Statistic 
-              title={t('entityTopology:stats.totalTopologies')} 
-              value={topologies.length} 
-              prefix={<NodeIndexOutlined />} 
+            <Statistic
+              title={t('entityTopology:stats.totalTopologies')}
+              value={topologies.length}
+              prefix={<NodeIndexOutlined />}
             />
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <Card className="stats-card stats-success">
-            <Statistic 
-              title={t('entityTopology:stats.activeTopologies')} 
-              value={activeTopologies} 
-              prefix={<HeartOutlined />} 
+            <Statistic
+              title={t('entityTopology:stats.activeTopologies')}
+              value={activeTopologies}
+              prefix={<HeartOutlined />}
             />
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <Card className="stats-card stats-warning">
-            <Statistic 
-              title={t('entityTopology:stats.totalNodes')} 
-              value={totalNodes} 
-              prefix={<DatabaseOutlined />} 
-            />
+            <Statistic title={t('entityTopology:stats.totalNodes')} value={totalNodes} prefix={<DatabaseOutlined />} />
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
           <Card className="stats-card stats-info">
-            <Statistic 
-              title={t('entityTopology:stats.avgHealthScore')} 
-              value={avgHealthScore} 
-              suffix="%" 
-              prefix={<LinkOutlined />} 
+            <Statistic
+              title={t('entityTopology:stats.avgHealthScore')}
+              value={avgHealthScore}
+              suffix="%"
+              prefix={<LinkOutlined />}
             />
           </Card>
         </Col>
@@ -268,7 +270,7 @@ const EntityTopology: React.FC = () => {
                 allowClear
                 className="search-input"
                 onSearch={setSearchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={e => setSearchText(e.target.value)}
               />
               <Select
                 value={statusFilter}
@@ -294,6 +296,7 @@ const EntityTopology: React.FC = () => {
                 <Option value="database">{t('entityTopology:types.database')}</Option>
                 <Option value="system">{t('entityTopology:types.system')}</Option>
               </Select>
+              <Button icon={<ReloadOutlined />} onClick={() => loadTopologies()} title={t('common:refresh')} />
             </Space>
           </Col>
         </Row>
@@ -304,10 +307,7 @@ const EntityTopology: React.FC = () => {
         <Spin spinning={loading}>
           {filteredTopologies.length === 0 ? (
             <Card className="empty-card">
-              <Empty
-                description={t('entityTopology:empty.description')}
-                className="empty-state"
-              />
+              <Empty description={t('entityTopology:empty.description')} className="empty-state" />
             </Card>
           ) : (
             <Row gutter={[24, 24]}>
