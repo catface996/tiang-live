@@ -153,8 +153,6 @@ const EntityTopology: React.FC = () => {
   const loadTopologies = async () => {
     setLoading(true);
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
       setTopologies(mockTopologies);
     } catch (error) {
       message.error(t('entityTopology:messages.loadFailed'));

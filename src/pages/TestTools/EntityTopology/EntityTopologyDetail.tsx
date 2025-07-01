@@ -57,9 +57,6 @@ const EntityTopologyDetail: React.FC = () => {
   const loadTopologyDetail = useCallback(async () => {
     setLoading(true);
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
       const mockData: TopologyData = {
         id: id || '1',
         name: '核心网络拓扑',
