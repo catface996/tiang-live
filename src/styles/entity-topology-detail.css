@@ -137,7 +137,7 @@
   background: var(--card-bg);
 }
 
-.topology-card .ant-card-body {
+.entity-topology-detail .topology-card .ant-card-body {
   height: calc(100% - 57px);
   padding: 12px;
   display: flex;
@@ -167,7 +167,7 @@
   overflow-y: auto;
 }
 
-.entity-details .ant-card {
+.entity-topology-detail .entity-details .ant-card {
   border: 1px solid var(--border-color);
   background: var(--card-bg);
 }
