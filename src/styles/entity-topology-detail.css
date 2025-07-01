@@ -113,7 +113,6 @@
   flex: 1;
   overflow: hidden;
   background: var(--component-background);
-  padding: 16px;
   position: relative;
 }
 
@@ -131,6 +130,7 @@
   border: none;
   border-radius: 6px;
   background: var(--card-bg);
+  margin: 0 16px 16px 16px;
 }
 
 .data-tabs .ant-table-container {
@@ -144,12 +144,15 @@
 /* 选项卡中的新增按钮区域 */
 .data-tabs .ant-tabs-tabpane > div:first-child {
   background: var(--card-bg);
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  border: 1px solid var(--border-color);
+  padding: 12px 0;
   border-radius: 6px;
   position: relative;
   z-index: 1;
+}
+
+/* 新增按钮的padding */
+.data-tabs .ant-tabs-tabpane > div:first-child .ant-btn {
+  margin-right: 16px;
 }
 
 /* 实体清单和依赖关系表格样式 */

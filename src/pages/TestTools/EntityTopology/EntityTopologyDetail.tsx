@@ -1,39 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  Card,
-  Row,
-  Col,
-  Typography,
-  Tag,
-  Button,
-  Space,
-  Table,
-  Statistic,
-  Descriptions,
-  Spin,
-  Empty,
-  Breadcrumb,
-  message,
-  Modal,
-  Tabs
-} from 'antd';
-import {
-  NodeIndexOutlined,
-  LinkOutlined,
-  DatabaseOutlined,
-  HeartOutlined,
-  FullscreenOutlined,
-  ReloadOutlined,
-  DownloadOutlined,
-  HomeOutlined,
-  ToolOutlined,
-  DeleteOutlined,
-  PlusOutlined
-} from '@ant-design/icons';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import * as d3 from 'd3';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Typography, Space, Spin, Empty, Breadcrumb, message, Modal } from 'antd';
+import { NodeIndexOutlined, HomeOutlined, ToolOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
 import '../../../styles/entity-topology-detail.css';
+import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
+import DataTabs from '../../../components/EntityTopology/DataTabs';
+import TopologyGraph from '../../../components/EntityTopology/TopologyGraph';
 
 const { Title, Text } = Typography;
 
@@ -43,7 +15,7 @@ interface Entity {
   name: string;
   type: string;
   status: 'active' | 'inactive' | 'warning' | 'error';
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   connections: number;
 }
 
@@ -76,21 +48,13 @@ interface TopologyData {
 
 const EntityTopologyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { t } = useTranslation(['entityTopology', 'common']);
-  const svgRef = useRef<SVGSVGElement>(null);
 
   const [loading, setLoading] = useState(true);
   const [topologyData, setTopologyData] = useState<TopologyData | null>(null);
   const [selectedEntity, setSelectedEntity] = useState<Entity | null>(null);
-  const [selectedEntityIds, setSelectedEntityIds] = useState<string[]>([]);
 
   // 模拟数据加载
-  useEffect(() => {
-    loadTopologyDetail();
-  }, [id]);
-
-  const loadTopologyDetail = async () => {
+  const loadTopologyDetail = useCallback(async () => {
     setLoading(true);
     try {
       // 模拟API调用
@@ -242,58 +206,14 @@ const EntityTopologyDetail: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  // 删除选中的实体
-  const handleDeleteEntities = () => {
-    if (!topologyData || selectedEntityIds.length === 0) return;
-
-    Modal.confirm({
-      title: '确认删除',
-      content: `确定要删除选中的 ${selectedEntityIds.length} 个实体吗？删除后相关的依赖关系也会被移除。`,
-      okText: '确定',
-      cancelText: '取消',
-      okType: 'danger',
-      onOk: () => {
-        const updatedEntities = topologyData.entities.filter(entity => !selectedEntityIds.includes(entity.id));
-
-        // 同时删除相关的依赖关系
-        const updatedDependencies = topologyData.dependencies.filter(
-          dep => !selectedEntityIds.includes(dep.source) && !selectedEntityIds.includes(dep.target)
-        );
-
-        setTopologyData({
-          ...topologyData,
-          entities: updatedEntities,
-          dependencies: updatedDependencies,
-          stats: {
-            ...topologyData.stats,
-            nodeCount: updatedEntities.length,
-            linkCount: updatedDependencies.length
-          }
-        });
-
-        // 清空选中状态
-        setSelectedEntityIds([]);
-
-        // 如果当前选中的实体被删除了，也清空选中状态
-        if (selectedEntity && selectedEntityIds.includes(selectedEntity.id)) {
-          setSelectedEntity(null);
-        }
-
-        message.success(`成功删除 ${selectedEntityIds.length} 个实体`);
-      }
-    });
-  };
-
-  // 处理实体选择变化
-  const handleEntitySelectionChange = (selectedRowKeys: React.Key[]) => {
-    setSelectedEntityIds(selectedRowKeys as string[]);
-  };
+  useEffect(() => {
+    loadTopologyDetail();
+  }, [loadTopologyDetail]);
 
   // 处理Agents按钮点击
   const handleAgentsClick = (entity: Entity) => {
-    message.info(`查看实体 "${entity.name}" 的Agents功能开发中...`);
     // TODO: 实现Agents查看功能
   };
 
@@ -337,7 +257,7 @@ const EntityTopologyDetail: React.FC = () => {
   };
 
   // 处理依赖关系删除
-  const handleDeleteDependency = (dependency: any) => {
+  const handleDeleteDependency = (dependency: Dependency) => {
     if (!topologyData) return;
 
     const sourceEntity = topologyData.entities.find(e => e.id === dependency.source);
@@ -379,214 +299,6 @@ const EntityTopologyDetail: React.FC = () => {
     message.info('新增实体功能开发中...');
     // TODO: 实现新增实体功能，可以打开一个模态框让用户输入实体信息
   };
-
-  // D3.js 拓扑图渲染
-  useEffect(() => {
-    if (!topologyData || !svgRef.current) return;
-
-    const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
-
-    const width = 600;
-    const height = 400;
-
-    svg.attr('width', width).attr('height', height);
-
-    // 创建力导向图
-    const simulation = d3
-      .forceSimulation(topologyData.entities as any)
-      .force(
-        'link',
-        d3
-          .forceLink(topologyData.dependencies)
-          .id((d: any) => d.id)
-          .distance(100)
-      )
-      .force('charge', d3.forceManyBody().strength(-300))
-      .force('center', d3.forceCenter(width / 2, height / 2));
-
-    // 绘制连接线
-    const link = svg
-      .append('g')
-      .selectAll('line')
-      .data(topologyData.dependencies)
-      .enter()
-      .append('line')
-      .attr('stroke', '#999')
-      .attr('stroke-opacity', 0.6)
-      .attr('stroke-width', (d: any) => Math.sqrt(d.strength * 10));
-
-    // 绘制节点
-    const node = svg
-      .append('g')
-      .selectAll('circle')
-      .data(topologyData.entities)
-      .enter()
-      .append('circle')
-      .attr('r', 20)
-      .attr('fill', (d: any) => {
-        switch (d.status) {
-          case 'active':
-            return '#52c41a';
-          case 'warning':
-            return '#faad14';
-          case 'error':
-            return '#ff4d4f';
-          default:
-            return '#d9d9d9';
-        }
-      })
-      .style('cursor', 'pointer')
-      .on('click', (event, d: any) => {
-        setSelectedEntity(d);
-      });
-
-    // 添加节点标签
-    const label = svg
-      .append('g')
-      .selectAll('text')
-      .data(topologyData.entities)
-      .enter()
-      .append('text')
-      .text((d: any) => d.name)
-      .attr('font-size', '12px')
-      .attr('text-anchor', 'middle')
-      .attr('dy', '0.35em')
-      .style('pointer-events', 'none');
-
-    // 更新位置
-    simulation.on('tick', () => {
-      link
-        .attr('x1', (d: any) => d.source.x)
-        .attr('y1', (d: any) => d.source.y)
-        .attr('x2', (d: any) => d.target.x)
-        .attr('y2', (d: any) => d.target.y);
-
-      node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
-
-      label.attr('x', (d: any) => d.x).attr('y', (d: any) => d.y + 30);
-    });
-
-    // 拖拽功能
-    const drag = d3
-      .drag()
-      .on('start', (event, d: any) => {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      })
-      .on('drag', (event, d: any) => {
-        d.fx = event.x;
-        d.fy = event.y;
-      })
-      .on('end', (event, d: any) => {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-      });
-
-    node.call(drag as any);
-  }, [topologyData]);
-
-  // 实体列表列定义
-  const entityColumns = [
-    {
-      title: '名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: '50%',
-      render: (text: string, record: Entity) => (
-        <Space>
-          <NodeIndexOutlined />
-          <Text strong>{text}</Text>
-        </Space>
-      )
-    },
-    {
-      title: '类型',
-      dataIndex: 'type',
-      key: 'type',
-      width: '30%',
-      render: (type: string) => <Tag color="blue">{type}</Tag>
-    },
-    {
-      title: '操作',
-      key: 'actions',
-      width: '20%',
-      render: (_, record: Entity) => (
-        <Space size="small">
-          <Button
-            type="text"
-            size="small"
-            icon={<DatabaseOutlined />}
-            onClick={() => handleAgentsClick(record)}
-            title="查看Agents"
-          />
-          <Button
-            type="text"
-            size="small"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={() => handleDeleteEntity(record)}
-            title="删除实体"
-          />
-        </Space>
-      )
-    }
-  ];
-
-  // 依赖关系列定义
-  const dependencyColumns = [
-    {
-      title: '源实体',
-      dataIndex: 'source',
-      key: 'source',
-      width: '30%',
-      render: (source: string) => {
-        const entity = topologyData?.entities.find(e => e.id === source);
-        return entity ? entity.name : source;
-      }
-    },
-    {
-      title: '目标实体',
-      dataIndex: 'target',
-      key: 'target',
-      width: '30%',
-      render: (target: string) => {
-        const entity = topologyData?.entities.find(e => e.id === target);
-        return entity ? entity.name : target;
-      }
-    },
-    {
-      title: '关系类型',
-      dataIndex: 'type',
-      key: 'type',
-      width: '25%',
-      render: (type: string) => {
-        const colors = {
-          depends_on: 'purple',
-          provides_to: 'green',
-          connects_to: 'blue'
-        };
-        return <Tag color={colors[type as keyof typeof colors]}>{type}</Tag>;
-      }
-    },
-    {
-      title: '操作',
-      key: 'actions',
-      width: '15%',
-      render: (_, record: any) => (
-        <Button
-          type="text"
-          size="small"
-          danger
-          icon={<DeleteOutlined />}
-          onClick={() => handleDeleteDependency(record)}
-          title="删除依赖关系"
-        />
-      )
-    }
-  ];
 
   if (loading) {
     return (
@@ -645,164 +357,28 @@ const EntityTopologyDetail: React.FC = () => {
       </div>
 
       {/* 顶部基础信息区域 - 20%高度 */}
-      <div className="topology-header">
-        <div className="header-content">
-          <div className="header-left">
-            <Title level={3} style={{ margin: 0 }}>
-              <Space>
-                <NodeIndexOutlined />
-                {topologyData.name}
-              </Space>
-            </Title>
-            <div className="header-description">
-              <Text type="secondary">{topologyData.description}</Text>
-            </div>
-            <div className="header-tags">
-              <Space wrap>
-                <Tag color="blue">{topologyData.type}</Tag>
-                <Tag color="green">{topologyData.plane}</Tag>
-                {topologyData.tags.map(tag => (
-                  <Tag key={tag}>{tag}</Tag>
-                ))}
-              </Space>
-            </div>
-          </div>
-          <div className="header-right">
-            <Row gutter={16}>
-              <Col span={6}>
-                <Statistic title="节点数" value={topologyData.stats.nodeCount} prefix={<NodeIndexOutlined />} />
-              </Col>
-              <Col span={6}>
-                <Statistic title="连接数" value={topologyData.stats.linkCount} prefix={<LinkOutlined />} />
-              </Col>
-              <Col span={6}>
-                <Statistic
-                  title="健康度"
-                  value={topologyData.stats.healthScore}
-                  suffix="%"
-                  prefix={<HeartOutlined />}
-                />
-              </Col>
-              <Col span={6}>
-                <Space direction="vertical">
-                  <Button icon={<ReloadOutlined />} onClick={loadTopologyDetail}>
-                    刷新
-                  </Button>
-                  <Button icon={<DownloadOutlined />}>导出</Button>
-                </Space>
-              </Col>
-            </Row>
-          </div>
-        </div>
-      </div>
+      <TopologyHeader topologyData={topologyData} onRefresh={loadTopologyDetail} />
 
       {/* 底部主要内容区域 - 80%高度 */}
       <div className="topology-content">
         {/* 左侧面板 */}
-        <div className="content-left">
-          <Tabs
-            defaultActiveKey="entities"
-            className="data-tabs"
-            items={[
-              {
-                key: 'entities',
-                label: (
-                  <Space>
-                    <DatabaseOutlined />
-                    实体清单 ({topologyData.entities.length})
-                  </Space>
-                ),
-                children: (
-                  <div>
-                    <div style={{ marginBottom: 16, textAlign: 'right' }}>
-                      <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAddEntity}>
-                        新增
-                      </Button>
-                    </div>
-                    <Table
-                      columns={entityColumns}
-                      dataSource={topologyData.entities}
-                      rowKey="id"
-                      size="small"
-                      pagination={false}
-                      scroll={{ y: 'calc(100vh - 420px)' }}
-                    />
-                  </div>
-                )
-              },
-              {
-                key: 'dependencies',
-                label: (
-                  <Space>
-                    <LinkOutlined />
-                    依赖关系 ({topologyData.dependencies.length})
-                  </Space>
-                ),
-                children: (
-                  <div>
-                    <div style={{ marginBottom: 16, textAlign: 'right' }}>
-                      <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAddDependency}>
-                        新增
-                      </Button>
-                    </div>
-                    <Table
-                      columns={dependencyColumns}
-                      dataSource={topologyData.dependencies}
-                      rowKey="id"
-                      size="small"
-                      pagination={false}
-                      scroll={{ y: 'calc(100vh - 420px)' }}
-                    />
-                  </div>
-                )
-              }
-            ]}
-          />
-        </div>
+        <DataTabs
+          entities={topologyData.entities}
+          dependencies={topologyData.dependencies}
+          onDeleteEntity={handleDeleteEntity}
+          onDeleteDependency={handleDeleteDependency}
+          onAddEntity={handleAddEntity}
+          onAddDependency={handleAddDependency}
+          onAgentsClick={handleAgentsClick}
+        />
 
         {/* 右侧D3拓扑图 */}
-        <div className="content-right">
-          <div className="topology-header-bar">
-            <Space>
-              <NodeIndexOutlined />
-              拓扑关系图
-              <Button
-                size="small"
-                icon={<FullscreenOutlined />}
-                onClick={() => {
-                  /* 全屏功能 */
-                }}
-              >
-                全屏
-              </Button>
-            </Space>
-          </div>
-
-          <div className="topology-canvas">
-            <svg ref={svgRef}></svg>
-          </div>
-
-          {/* 选中实体的详细信息 */}
-          {selectedEntity && (
-            <div className="entity-details">
-              <Card size="small" title={`实体详情: ${selectedEntity.name}`}>
-                <Descriptions size="small" column={2}>
-                  <Descriptions.Item label="ID">{selectedEntity.id}</Descriptions.Item>
-                  <Descriptions.Item label="类型">{selectedEntity.type}</Descriptions.Item>
-                  <Descriptions.Item label="状态">
-                    <Tag color={selectedEntity.status === 'active' ? 'green' : 'orange'}>{selectedEntity.status}</Tag>
-                  </Descriptions.Item>
-                  <Descriptions.Item label="连接数">{selectedEntity.connections}</Descriptions.Item>
-                  {Object.entries(selectedEntity.properties).map(([key, value]) => (
-                    <Descriptions.Item key={key} label={key}>
-                      {String(value)}
-                    </Descriptions.Item>
-                  ))}
-                </Descriptions>
-              </Card>
-            </div>
-          )}
-        </div>
+        <TopologyGraph
+          entities={topologyData.entities}
+          dependencies={topologyData.dependencies}
+          selectedEntity={selectedEntity}
+          onEntitySelect={setSelectedEntity}
+        />
       </div>
     </div>
   );
