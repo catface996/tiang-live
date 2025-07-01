@@ -69,10 +69,10 @@
     .ant-statistic-content-prefix,
     .ant-statistic-content-prefix .anticon,
     .anticon,
-    span[role="img"] {
+    span[role='img'] {
       color: #1890ff !important;
     }
-    
+
     /* 数值颜色 */
     .ant-statistic .ant-statistic-content .ant-statistic-content-value,
     .ant-statistic .ant-statistic-content-value,
@@ -81,7 +81,7 @@
     .ant-statistic-content-value .ant-statistic-content-value-decimal {
       color: #1890ff !important;
     }
-    
+
     /* 后缀颜色 */
     .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
     .ant-statistic .ant-statistic-content-suffix,
@@ -89,7 +89,7 @@
       color: #1890ff !important;
     }
   }
-  
+
   /* 成功色统计卡片 - 绿色 (活跃拓扑) */
   .stats-success {
     .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
@@ -99,10 +99,10 @@
     .ant-statistic-content-prefix,
     .ant-statistic-content-prefix .anticon,
     .anticon,
-    span[role="img"] {
+    span[role='img'] {
       color: #52c41a !important;
     }
-    
+
     .ant-statistic .ant-statistic-content .ant-statistic-content-value,
     .ant-statistic .ant-statistic-content-value,
     .ant-statistic-content-value,
@@ -110,14 +110,14 @@
     .ant-statistic-content-value .ant-statistic-content-value-decimal {
       color: #52c41a !important;
     }
-    
+
     .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
     .ant-statistic .ant-statistic-content-suffix,
     .ant-statistic-content-suffix {
       color: #52c41a !important;
     }
   }
-  
+
   /* 警告色统计卡片 - 橙色 (节点总数) */
   .stats-warning {
     .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
@@ -127,10 +127,10 @@
     .ant-statistic-content-prefix,
     .ant-statistic-content-prefix .anticon,
     .anticon,
-    span[role="img"] {
+    span[role='img'] {
       color: #faad14 !important;
     }
-    
+
     .ant-statistic .ant-statistic-content .ant-statistic-content-value,
     .ant-statistic .ant-statistic-content-value,
     .ant-statistic-content-value,
@@ -138,14 +138,14 @@
     .ant-statistic-content-value .ant-statistic-content-value-decimal {
       color: #faad14 !important;
     }
-    
+
     .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
     .ant-statistic .ant-statistic-content-suffix,
     .ant-statistic-content-suffix {
       color: #faad14 !important;
     }
   }
-  
+
   /* 信息色统计卡片 - 蓝色 (平均健康度) */
   .stats-info {
     .ant-statistic .ant-statistic-content .ant-statistic-content-prefix,
@@ -155,10 +155,10 @@
     .ant-statistic-content-prefix,
     .ant-statistic-content-prefix .anticon,
     .anticon,
-    span[role="img"] {
+    span[role='img'] {
       color: #1890ff !important;
     }
-    
+
     .ant-statistic .ant-statistic-content .ant-statistic-content-value,
     .ant-statistic .ant-statistic-content-value,
     .ant-statistic-content-value,
@@ -166,7 +166,7 @@
     .ant-statistic-content-value .ant-statistic-content-value-decimal {
       color: #1890ff !important;
     }
-    
+
     .ant-statistic .ant-statistic-content .ant-statistic-content-suffix,
     .ant-statistic .ant-statistic-content-suffix,
     .ant-statistic-content-suffix {
@@ -218,7 +218,6 @@
   border-radius: 12px !important;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
 }
 
 .topology-card:hover {
@@ -464,38 +463,38 @@
   .entity-topology-page {
     padding: 16px;
   }
-  
+
   .page-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .search-input {
     width: 100%;
     margin-bottom: 8px;
   }
-  
+
   .filter-select {
     width: 100px;
   }
-  
+
   .topology-card {
     min-height: 320px;
   }
-  
+
   .topology-card .ant-card-body {
     padding: 16px;
   }
-  
+
   .topology-card-avatar-section {
     gap: 8px;
   }
-  
+
   .topology-card-title {
     font-size: 14px;
   }
-  
+
   .topology-card-stats {
     padding-top: 12px;
   }

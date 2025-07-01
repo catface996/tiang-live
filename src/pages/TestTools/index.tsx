@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Row, Col, Typography, Button, Space } from 'antd';
-import { 
-  NodeIndexOutlined, 
-  BranchesOutlined, 
+import { Card, Row, Col, Typography } from 'antd';
+import {
+  NodeIndexOutlined,
+  BranchesOutlined,
   DatabaseOutlined,
   ApiOutlined,
   ToolOutlined,
@@ -20,7 +20,6 @@ const TestToolsContainer = styled.div`
   .tool-card {
     height: 200px;
     cursor: pointer;
-    transition: all 0.3s ease;
     border: 1px solid var(--border-color);
 
     &:hover {
@@ -164,15 +163,13 @@ const TestTools: React.FC = () => {
         <Title level={2} className="main-title">
           {t('testTools:title')}
         </Title>
-        <Paragraph className="main-description">
-          {t('testTools:description')}
-        </Paragraph>
+        <Paragraph className="main-description">{t('testTools:description')}</Paragraph>
       </div>
 
       <Row gutter={[24, 24]}>
-        {tools.map((tool) => (
+        {tools.map(tool => (
           <Col xs={24} sm={12} lg={8} xl={6} key={tool.key}>
-            <Card 
+            <Card
               className="tool-card"
               onClick={() => handleToolClick(tool)}
               hoverable={tool.status === 'available' || tool.status === 'beta'}
@@ -181,16 +178,12 @@ const TestTools: React.FC = () => {
                 cursor: tool.status === 'coming-soon' ? 'not-allowed' : 'pointer'
               }}
             >
-              <div className="tool-icon">
-                {tool.icon}
-              </div>
+              <div className="tool-icon">{tool.icon}</div>
               <Title level={4} className="tool-title">
                 {tool.title}
                 {getStatusBadge(tool.status)}
               </Title>
-              <Paragraph className="tool-description">
-                {tool.description}
-              </Paragraph>
+              <Paragraph className="tool-description">{tool.description}</Paragraph>
             </Card>
           </Col>
         ))}
