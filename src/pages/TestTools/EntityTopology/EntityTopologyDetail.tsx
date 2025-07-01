@@ -1,14 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Row, Col, Typography, Tag, Button, Space, Table, Statistic, Descriptions, Spin, Empty } from 'antd';
 import {
-  ArrowLeftOutlined,
+  Card,
+  Row,
+  Col,
+  Typography,
+  Tag,
+  Button,
+  Space,
+  Table,
+  Statistic,
+  Descriptions,
+  Spin,
+  Empty,
+  Breadcrumb
+} from 'antd';
+import {
   NodeIndexOutlined,
   LinkOutlined,
   DatabaseOutlined,
   HeartOutlined,
   FullscreenOutlined,
   ReloadOutlined,
-  DownloadOutlined
+  DownloadOutlined,
+  HomeOutlined,
+  ToolOutlined
 } from '@ant-design/icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -367,63 +382,94 @@ const EntityTopologyDetail: React.FC = () => {
 
   return (
     <div className="entity-topology-detail">
+      {/* 面包屑导航 */}
+      <div className="breadcrumb-container">
+        <Breadcrumb
+          items={[
+            {
+              href: '/dashboard',
+              title: (
+                <Space>
+                  <HomeOutlined />
+                  <span>首页</span>
+                </Space>
+              )
+            },
+            {
+              href: '/test-tools',
+              title: (
+                <Space>
+                  <ToolOutlined />
+                  <span>测试工具</span>
+                </Space>
+              )
+            },
+            {
+              href: '/test-tools/entity-topology',
+              title: (
+                <Space>
+                  <NodeIndexOutlined />
+                  <span>实体拓扑</span>
+                </Space>
+              )
+            },
+            {
+              title: topologyData.name
+            }
+          ]}
+        />
+      </div>
+
       {/* 顶部基础信息区域 - 20%高度 */}
       <div className="topology-header">
-        <Card className="header-card">
-          <div className="header-content">
-            <div className="header-left">
+        <div className="header-content">
+          <div className="header-left">
+            <Title level={3} style={{ margin: 0 }}>
               <Space>
-                <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/test-tools/entity-topology')}>
-                  返回
-                </Button>
-                <Title level={3} style={{ margin: 0 }}>
-                  <Space>
-                    <NodeIndexOutlined />
-                    {topologyData.name}
-                  </Space>
-                </Title>
+                <NodeIndexOutlined />
+                {topologyData.name}
               </Space>
-              <div className="header-description">
-                <Text type="secondary">{topologyData.description}</Text>
-              </div>
-              <div className="header-tags">
-                <Space wrap>
-                  <Tag color="blue">{topologyData.type}</Tag>
-                  <Tag color="green">{topologyData.plane}</Tag>
-                  {topologyData.tags.map(tag => (
-                    <Tag key={tag}>{tag}</Tag>
-                  ))}
-                </Space>
-              </div>
+            </Title>
+            <div className="header-description">
+              <Text type="secondary">{topologyData.description}</Text>
             </div>
-            <div className="header-right">
-              <Row gutter={16}>
-                <Col span={6}>
-                  <Statistic title="节点数" value={topologyData.stats.nodeCount} prefix={<NodeIndexOutlined />} />
-                </Col>
-                <Col span={6}>
-                  <Statistic title="连接数" value={topologyData.stats.linkCount} prefix={<LinkOutlined />} />
-                </Col>
-                <Col span={6}>
-                  <Statistic
-                    title="健康度"
-                    value={topologyData.stats.healthScore}
-                    suffix="%"
-                    prefix={<HeartOutlined />}
-                  />
-                </Col>
-                <Col span={6}>
-                  <Space direction="vertical">
-                    <Button icon={<ReloadOutlined />} onClick={loadTopologyDetail}>
-                      刷新
-                    </Button>
-                    <Button icon={<DownloadOutlined />}>导出</Button>
-                  </Space>
-                </Col>
-              </Row>
+            <div className="header-tags">
+              <Space wrap>
+                <Tag color="blue">{topologyData.type}</Tag>
+                <Tag color="green">{topologyData.plane}</Tag>
+                {topologyData.tags.map(tag => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
+              </Space>
             </div>
           </div>
-        </Card>
+          <div className="header-right">
+            <Row gutter={16}>
+              <Col span={6}>
+                <Statistic title="节点数" value={topologyData.stats.nodeCount} prefix={<NodeIndexOutlined />} />
+              </Col>
+              <Col span={6}>
+                <Statistic title="连接数" value={topologyData.stats.linkCount} prefix={<LinkOutlined />} />
+              </Col>
+              <Col span={6}>
+                <Statistic
+                  title="健康度"
+                  value={topologyData.stats.healthScore}
+                  suffix="%"
+                  prefix={<HeartOutlined />}
+                />
+              </Col>
+              <Col span={6}>
+                <Space direction="vertical">
+                  <Button icon={<ReloadOutlined />} onClick={loadTopologyDetail}>
+                    刷新
+                  </Button>
+                  <Button icon={<DownloadOutlined />}>导出</Button>
+                </Space>
+              </Col>
+            </Row>
+          </div>
+        </div>
       </div>
 
       {/* 底部主要内容区域 - 80%高度 */}

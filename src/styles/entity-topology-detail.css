@@ -7,18 +7,31 @@
   overflow: hidden;
 }
 
+/* 面包屑导航 */
+.breadcrumb-container {
+  padding: 16px 24px 8px 24px;
+  background: var(--layout-body-background);
+}
+
+.breadcrumb-container .ant-breadcrumb {
+  font-size: 14px;
+}
+
+.breadcrumb-container .ant-breadcrumb a {
+  color: var(--text-color-secondary);
+  text-decoration: none;
+}
+
+.breadcrumb-container .ant-breadcrumb a:hover {
+  color: var(--primary-color);
+}
+
 /* 顶部基础信息区域 - 20%高度 */
 .topology-header {
   height: 20%;
   min-height: 200px;
-  padding: 16px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.header-card {
-  height: 100%;
-  border: 1px solid var(--border-color);
-  background: var(--card-bg);
+  padding: 8px 24px 16px 24px;
+  background: var(--layout-body-background);
 }
 
 .header-content {
@@ -26,7 +39,10 @@
   justify-content: space-between;
   align-items: flex-start;
   height: 100%;
-  padding: 8px 0;
+  padding: 16px 24px;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
 .header-left {
@@ -53,7 +69,7 @@
 .topology-content {
   height: 80%;
   display: flex;
-  padding: 16px;
+  padding: 0 24px 24px 24px;
   gap: 16px;
   overflow: hidden;
 }
