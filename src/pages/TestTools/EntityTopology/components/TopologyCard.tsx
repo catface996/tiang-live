@@ -6,27 +6,24 @@ import {
   EditOutlined,
   DeleteOutlined,
   PlayCircleOutlined,
-  PauseCircleOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
   ClockCircleOutlined,
   StopOutlined
 } from '@ant-design/icons';
-import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../../../store';
 
 const { Text, Paragraph } = Typography;
 
-// 拓扑数据接口
-export interface TopologyStats {
+// 类型定义
+type TopologyStats = {
   nodeCount: number;
   linkCount: number;
   healthScore: number;
   lastUpdated: string;
-}
+};
 
-export interface Topology {
+type Topology = {
   id: string;
   name: string;
   type: 'network' | 'application' | 'database' | 'system';
@@ -36,115 +33,15 @@ export interface Topology {
   tags?: string[];
   stats: TopologyStats;
   createdAt: string;
-}
+};
 
-// 组件Props接口
-export interface TopologyCardProps {
+type TopologyCardProps = {
   topology: Topology;
   onView: (topology: Topology) => void;
   onEdit: (topology: Topology) => void;
   onDelete: (id: string) => void;
   onRefresh: (id: string) => void;
-}
-
-// Styled Components
-const StyledCard = styled(Card)<{ $isDark: boolean }>`
-  height: 100%;
-  min-height: 380px;
-  background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-  border: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-  border-radius: 12px !important;
-  overflow: hidden;
-  box-shadow: ${props => props.$isDark 
-    ? '0 2px 8px rgba(0, 0, 0, 0.3)' 
-    : '0 2px 8px rgba(0, 0, 0, 0.06)'
-  };
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: ${props => props.$isDark 
-      ? '0 8px 24px rgba(255, 255, 255, 0.12)' 
-      : '0 8px 24px rgba(0, 0, 0, 0.12)'
-    };
-    border-color: ${props => props.$isDark ? '#177ddc' : '#40a9ff'};
-  }
-  
-  .ant-card-body {
-    padding: 24px;
-    background: ${props => props.$isDark ? '#141414' : '#ffffff'};
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .ant-card-actions {
-    background: ${props => props.$isDark ? '#1f1f1f' : '#fafafa'};
-    border-top: ${props => props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0'};
-    
-    li {
-      margin: 0;
-      
-      .ant-btn {
-        border: none;
-        background: transparent;
-        color: ${props => props.$isDark ? '#ffffff' : '#666666'};
-        
-        &:hover {
-          color: ${props => props.$isDark ? '#40a9ff' : '#1890ff'};
-          background: ${props => props.$isDark ? '#262626' : '#f5f5f5'};
-        }
-      }
-    }
-  }
-`;
-
-const StatusDot = styled.div<{ status: string }>`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: ${props => {
-    switch (props.status) {
-      case 'active':
-        return '#52c41a';
-      case 'warning':
-        return '#faad14';
-      case 'error':
-        return '#f5222d';
-      case 'inactive':
-        return '#d9d9d9';
-      default:
-        return '#d9d9d9';
-    }
-  }};
-  display: inline-block;
-  margin-right: 8px;
-`;
-
-const HeaderSection = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 16px;
-`;
-
-const AvatarSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-`;
-
-const InfoSection = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const StatsSection = styled.div`
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid ${props => props.theme.isDark ? '#303030' : '#f0f0f0'};
-`;
+};
 
 const TopologyCard: React.FC<TopologyCardProps> = ({
   topology,
@@ -153,9 +50,7 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
   onDelete,
   onRefresh
 }) => {
-  const { t } = useTranslation(['testTools', 'common']);
-  const { currentTheme } = useAppSelector(state => state.theme);
-  const isDark = currentTheme === 'dark';
+  const { t } = useTranslation(['entityTopology', 'common']);
 
   // 获取拓扑类型图标
   const getTypeIcon = (type: string) => {
@@ -172,15 +67,15 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
-        return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
+        return <CheckCircleOutlined className="status-icon status-active" />;
       case 'warning':
-        return <ExclamationCircleOutlined style={{ color: '#faad14' }} />;
+        return <ExclamationCircleOutlined className="status-icon status-warning" />;
       case 'error':
-        return <StopOutlined style={{ color: '#f5222d' }} />;
+        return <StopOutlined className="status-icon status-error" />;
       case 'inactive':
-        return <ClockCircleOutlined style={{ color: '#d9d9d9' }} />;
+        return <ClockCircleOutlined className="status-icon status-inactive" />;
       default:
-        return <ClockCircleOutlined style={{ color: '#d9d9d9' }} />;
+        return <ClockCircleOutlined className="status-icon status-inactive" />;
     }
   };
 
@@ -249,58 +144,51 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
   ];
 
   return (
-    <StyledCard $isDark={isDark} actions={actions}>
-      <HeaderSection>
-        <AvatarSection>
+    <Card className="topology-card" actions={actions}>
+      <div className="topology-card-header">
+        <div className="topology-card-avatar-section">
           <Avatar
             size={48}
             icon={getTypeIcon(topology.type)}
-            style={{
-              backgroundColor: isDark ? '#262626' : '#f5f5f5',
-              color: isDark ? '#ffffff' : '#666666'
-            }}
+            className="topology-card-avatar"
           />
-          <InfoSection>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
-              <Text strong style={{ fontSize: '16px', marginRight: 8 }}>
+          <div className="topology-card-info">
+            <div className="topology-card-title-row">
+              <Text strong className="topology-card-title">
                 {topology.name}
               </Text>
               {getStatusIcon(topology.status)}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-              <StatusDot status={topology.status} />
+            <div className="topology-card-tags-row">
+              <div className={`status-dot status-${topology.status}`} />
               <Tag color={getStatusColor(topology.status)} size="small">
-                {t(`testTools:status.${topology.status}`)}
+                {t(`entityTopology:status.${topology.status}`)}
               </Tag>
               <Tag color={getTypeColor(topology.type)} size="small">
-                {t(`testTools:types.${topology.type}`)}
+                {t(`entityTopology:types.${topology.type}`)}
               </Tag>
             </div>
-          </InfoSection>
-        </AvatarSection>
-      </HeaderSection>
+          </div>
+        </div>
+      </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="topology-card-description">
         <Paragraph
           ellipsis={{ rows: 2, tooltip: topology.description }}
-          style={{ 
-            margin: 0, 
-            color: isDark ? '#ffffff' : '#666666',
-            fontSize: '14px'
-          }}
+          className="topology-card-description-text"
         >
           {topology.description}
         </Paragraph>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
-        <Text type="secondary" style={{ fontSize: '12px' }}>
-          {t('testTools:labels.plane')}: {topology.plane}
+      <div className="topology-card-plane">
+        <Text type="secondary" className="topology-card-plane-text">
+          {t('entityTopology:labels.plane')}: {topology.plane}
         </Text>
       </div>
 
       {topology.tags && topology.tags.length > 0 && (
-        <div style={{ marginBottom: 16 }}>
+        <div className="topology-card-custom-tags">
           <Space wrap size={[4, 4]}>
             {topology.tags.map(tag => (
               <Tag key={tag} size="small" color="default">
@@ -311,36 +199,35 @@ const TopologyCard: React.FC<TopologyCardProps> = ({
         </div>
       )}
 
-      <StatsSection>
-        <Space split={<div style={{ width: 1, height: 20, background: isDark ? '#303030' : '#f0f0f0' }} />}>
+      <div className="topology-card-stats">
+        <Space split={<div className="topology-card-stats-divider" />}>
           <Statistic
-            title={t('testTools:labels.nodeCount')}
+            title={t('entityTopology:labels.nodeCount')}
             value={topology.stats.nodeCount}
-            valueStyle={{ fontSize: '16px', color: isDark ? '#ffffff' : '#262626' }}
+            className="topology-card-statistic"
           />
           <Statistic
-            title={t('testTools:labels.linkCount')}
+            title={t('entityTopology:labels.linkCount')}
             value={topology.stats.linkCount}
-            valueStyle={{ fontSize: '16px', color: isDark ? '#ffffff' : '#262626' }}
+            className="topology-card-statistic"
           />
           <Statistic
-            title={t('testTools:labels.healthScore')}
+            title={t('entityTopology:labels.healthScore')}
             value={topology.stats.healthScore}
             suffix="%"
-            valueStyle={{ 
-              fontSize: '16px', 
-              color: topology.stats.healthScore >= 80 ? '#52c41a' : 
-                     topology.stats.healthScore >= 60 ? '#faad14' : '#f5222d'
-            }}
+            className={`topology-card-statistic health-score-${
+              topology.stats.healthScore >= 80 ? 'good' : 
+              topology.stats.healthScore >= 60 ? 'warning' : 'error'
+            }`}
           />
         </Space>
-        <div style={{ marginTop: 8 }}>
-          <Text type="secondary" style={{ fontSize: '12px' }}>
-            {t('testTools:labels.updateTime')}: {topology.stats.lastUpdated}
+        <div className="topology-card-update-time">
+          <Text type="secondary" className="topology-card-update-time-text">
+            {t('entityTopology:labels.updateTime')}: {topology.stats.lastUpdated}
           </Text>
         </div>
-      </StatsSection>
-    </StyledCard>
+      </div>
+    </Card>
   );
 };
 

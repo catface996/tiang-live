@@ -1,0 +1,60 @@
+{
+  "title": "Entity Topology",
+  "description": "Manage and monitor various entity topology structures in the system, including visualization of network, application, database, and system topologies.",
+  "stats": {
+    "totalTopologies": "Total Topologies",
+    "activeTopologies": "Active Topologies",
+    "totalNodes": "Total Nodes",
+    "avgHealthScore": "Avg Health Score"
+  },
+  "search": {
+    "placeholder": "Search topology name or description...",
+    "statusFilter": "Filter by Status",
+    "typeFilter": "Filter by Type"
+  },
+  "filters": {
+    "allStatus": "All Status",
+    "allTypes": "All Types"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "warning": "Warning",
+    "error": "Error"
+  },
+  "types": {
+    "network": "Network",
+    "application": "Application",
+    "database": "Database",
+    "system": "System"
+  },
+  "actions": {
+    "createTopology": "Create Topology",
+    "refresh": "Refresh",
+    "refreshSuccess": "Refresh Success",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "labels": {
+    "plane": "Plane",
+    "nodeCount": "Node Count",
+    "linkCount": "Link Count",
+    "healthScore": "Health Score",
+    "updateTime": "Update Time",
+    "createdAt": "Created At",
+    "tags": "Tags"
+  },
+  "empty": {
+    "title": "No Topology Data",
+    "description": "Please adjust search criteria or create new topology"
+  },
+  "messages": {
+    "loadFailed": "Failed to load topology data",
+    "loadSuccess": "Topology data loaded successfully",
+    "createSuccess": "Topology created successfully",
+    "updateSuccess": "Topology updated successfully",
+    "deleteSuccess": "Topology deleted successfully",
+    "refreshSuccess": "Refresh successful"
+  }
+}

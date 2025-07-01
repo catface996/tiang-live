@@ -1,353 +1,332 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Typography,
-  Card,
-  Space,
-  Button,
-  Row,
-  Col,
-  Statistic,
-  Tag,
-  Modal,
-  message,
-  Select,
-  Input
-} from 'antd';
-import {
-  NodeIndexOutlined,
-  PlusOutlined,
-  ReloadOutlined,
-  FullscreenOutlined,
-  DownloadOutlined,
-  SearchOutlined,
-  FilterOutlined
-} from '@ant-design/icons';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Row, Col, Card, Button, Space, Input, Select, message, Spin, Empty, Typography, Statistic } from 'antd';
+import { PlusOutlined, ReloadOutlined, SearchOutlined, NodeIndexOutlined, LinkOutlined, HeartOutlined, DatabaseOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { setPageTitle } from '../../../utils';
-import { useAppSelector } from '../../../store';
-import SearchFilterBar from '../../../components/Common/SearchFilterBar';
-import TopologyCard, { type Topology } from './components/TopologyCard';
+import TopologyCard from './components/TopologyCard';
+import '../../../styles/entity-topology.css';
 
-const { Title, Paragraph, Text } = Typography;
+const { Search } = Input;
 const { Option } = Select;
+const { Title, Paragraph } = Typography;
 
-const PageContainer = styled.div<{ $isDark: boolean }>`
-  padding: 24px;
-  min-height: calc(100vh - 64px);
-  background: ${props => (props.$isDark ? '#000000' : '#f5f5f5')};
-`;
+// 在主页面中定义类型，避免导入问题
+interface TopologyStats {
+  nodeCount: number;
+  linkCount: number;
+  healthScore: number;
+  lastUpdated: string;
+}
 
-const StatsCard = styled(Card)<{ $isDark: boolean }>`
-  border-radius: 8px;
-  box-shadow: ${props => (props.$isDark ? '0 2px 8px rgba(255, 255, 255, 0.05)' : '0 2px 8px rgba(0, 0, 0, 0.06)')};
-  border: ${props => (props.$isDark ? '1px solid #303030' : '1px solid #f0f0f0')};
-  background: ${props => (props.$isDark ? '#141414' : '#ffffff')};
-
-  .ant-card-body {
-    padding: 16px;
-  }
-
-  .ant-statistic-title {
-    color: ${props => (props.$isDark ? '#ffffff' : '#666666')};
-  }
-
-  .ant-statistic-content {
-    color: ${props => (props.$isDark ? '#ffffff' : '#262626')};
-  }
-`;
+interface Topology {
+  id: string;
+  name: string;
+  type: 'network' | 'application' | 'database' | 'system';
+  status: 'active' | 'inactive' | 'warning' | 'error';
+  description: string;
+  plane: string;
+  tags?: string[];
+  stats: TopologyStats;
+  createdAt: string;
+}
 
 const EntityTopology: React.FC = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation(['testTools', 'common']);
-  const [searchText, setSearchText] = useState('');
-  const [filterPlane, setFilterPlane] = useState('all');
-  const [filterType, setFilterType] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const { t } = useTranslation(['entityTopology', 'common']);
   const [loading, setLoading] = useState(false);
-  const { currentTheme } = useAppSelector(state => state.theme);
-  const isDark = currentTheme === 'dark';
+  const [searchText, setSearchText] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [topologies, setTopologies] = useState<Topology[]>([]);
 
-  useEffect(() => {
-    setPageTitle(t('testTools:entityTopology.title'));
-  }, [t]);
-
-  // 模拟拓扑数据
-  const topologyData: Topology[] = [
+  // 模拟数据
+  const mockTopologies: Topology[] = [
     {
       id: '1',
-      name: 'Web服务拓扑',
-      type: 'application',
+      name: '核心网络拓扑',
+      type: 'network',
       status: 'active',
-      description: 'Web应用服务器集群的拓扑结构，包含负载均衡器、应用服务器和数据库连接',
-      plane: '应用平面',
-      tags: ['生产环境', 'Web服务', '高可用'],
+      description: '企业核心网络基础设施拓扑图，包含主要路由器、交换机和防火墙设备的连接关系。',
+      plane: '网络平面',
+      tags: ['核心', '生产环境', '高可用'],
       stats: {
-        nodeCount: 12,
-        linkCount: 18,
+        nodeCount: 156,
+        linkCount: 234,
         healthScore: 95,
-        lastUpdated: '2024-06-15 14:30:25'
+        lastUpdated: '2024-01-15 14:30:25'
       },
-      createdAt: '2024-05-20'
+      createdAt: '2024-01-10 09:00:00'
     },
     {
       id: '2',
-      name: '数据库集群拓扑',
-      type: 'database',
-      status: 'active',
-      description: '数据库主从集群拓扑，包含主库、从库和缓存层的连接关系',
-      plane: '数据平面',
-      tags: ['数据库', '主从复制', '缓存'],
+      name: '应用服务拓扑',
+      type: 'application',
+      status: 'warning',
+      description: '微服务架构应用拓扑，展示各个服务之间的依赖关系和调用链路。',
+      plane: '应用平面',
+      tags: ['微服务', '容器化', 'K8s'],
       stats: {
-        nodeCount: 8,
-        linkCount: 12,
-        healthScore: 88,
-        lastUpdated: '2024-06-15 14:25:10'
+        nodeCount: 89,
+        linkCount: 145,
+        healthScore: 78,
+        lastUpdated: '2024-01-15 14:25:10'
       },
-      createdAt: '2024-04-15'
+      createdAt: '2024-01-12 10:30:00'
     },
     {
       id: '3',
-      name: '网络基础设施拓扑',
-      type: 'network',
-      status: 'warning',
-      description: '网络设备拓扑图，包含交换机、路由器和防火墙的连接关系',
-      plane: '网络平面',
-      tags: ['网络设备', '基础设施'],
+      name: '数据库集群拓扑',
+      type: 'database',
+      status: 'active',
+      description: '数据库集群架构拓扑，包含主从复制、分片和备份策略的完整视图。',
+      plane: '数据平面',
+      tags: ['MySQL', '集群', '主从复制'],
       stats: {
-        nodeCount: 15,
-        linkCount: 22,
-        healthScore: 72,
-        lastUpdated: '2024-06-15 14:20:30'
+        nodeCount: 24,
+        linkCount: 36,
+        healthScore: 92,
+        lastUpdated: '2024-01-15 14:20:45'
       },
-      createdAt: '2024-06-01'
+      createdAt: '2024-01-08 16:45:00'
     },
     {
       id: '4',
-      name: '微服务架构拓扑',
+      name: '系统监控拓扑',
       type: 'system',
-      status: 'active',
-      description: '微服务系统架构拓扑，展示各个服务之间的调用关系和依赖',
-      plane: '服务平面',
-      tags: ['微服务', '容器化', 'API网关'],
+      status: 'error',
+      description: '系统监控基础设施拓扑，展示监控代理、收集器和存储系统的部署结构。',
+      plane: '监控平面',
+      tags: ['监控', 'Prometheus', 'Grafana'],
       stats: {
-        nodeCount: 25,
-        linkCount: 35,
-        healthScore: 92,
-        lastUpdated: '2024-06-15 14:15:45'
+        nodeCount: 45,
+        linkCount: 67,
+        healthScore: 45,
+        lastUpdated: '2024-01-15 14:15:30'
       },
-      createdAt: '2024-03-10'
+      createdAt: '2024-01-14 11:20:00'
     },
     {
       id: '5',
-      name: '监控系统拓扑',
-      type: 'system',
-      status: 'error',
-      description: '监控系统的拓扑结构，包含数据采集、处理和展示组件',
-      plane: '监控平面',
-      tags: ['监控', '告警', '数据采集'],
+      name: '边缘计算拓扑',
+      type: 'network',
+      status: 'inactive',
+      description: '边缘计算节点拓扑，展示边缘设备与中心云平台的连接和数据流向。',
+      plane: '边缘平面',
+      tags: ['边缘计算', 'IoT', '5G'],
       stats: {
-        nodeCount: 10,
-        linkCount: 14,
-        healthScore: 45,
-        lastUpdated: '2024-06-15 13:50:20'
+        nodeCount: 78,
+        linkCount: 112,
+        healthScore: 0,
+        lastUpdated: '2024-01-14 18:45:20'
       },
-      createdAt: '2024-05-05'
+      createdAt: '2024-01-13 14:10:00'
     },
     {
       id: '6',
-      name: '存储系统拓扑',
+      name: '安全防护拓扑',
       type: 'system',
-      status: 'inactive',
-      description: '分布式存储系统拓扑，展示存储节点和副本分布情况',
-      plane: '存储平面',
-      tags: ['分布式存储', '副本', '容灾'],
+      status: 'active',
+      description: '网络安全防护体系拓扑，包含防火墙、入侵检测和安全审计系统的部署架构。',
+      plane: '安全平面',
+      tags: ['安全', '防火墙', 'IDS'],
       stats: {
-        nodeCount: 20,
-        linkCount: 28,
-        healthScore: 0,
-        lastUpdated: '2024-06-15 10:30:15'
+        nodeCount: 32,
+        linkCount: 48,
+        healthScore: 88,
+        lastUpdated: '2024-01-15 14:10:15'
       },
-      createdAt: '2024-02-20'
+      createdAt: '2024-01-11 13:25:00'
     }
   ];
 
+  useEffect(() => {
+    loadTopologies();
+  }, []);
+
+  const loadTopologies = async () => {
+    setLoading(true);
+    try {
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setTopologies(mockTopologies);
+    } catch (error) {
+      message.error(t('entityTopology:messages.loadFailed'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 过滤拓扑数据
+  const filteredTopologies = topologies.filter(topology => {
+    const matchesSearch = topology.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                         topology.description.toLowerCase().includes(searchText.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || topology.status === statusFilter;
+    const matchesType = typeFilter === 'all' || topology.type === typeFilter;
+    
+    return matchesSearch && matchesStatus && matchesType;
+  });
+
+  const handleView = (topology: Topology) => {
+    message.info(`${t('entityTopology:actions.view')} ${topology.name}`);
+  };
+
+  const handleEdit = (topology: Topology) => {
+    message.info(`${t('entityTopology:actions.edit')} ${topology.name}`);
+  };
+
+  const handleDelete = (id: string) => {
+    message.info(`${t('entityTopology:actions.delete')} ID: ${id}`);
+  };
+
+  const handleRefresh = (id: string) => {
+    message.success(`${t('entityTopology:actions.refreshSuccess')} ID: ${id}`);
+  };
+
+  // 计算统计数据
+  const activeTopologies = topologies.filter(t => t.status === 'active').length;
+  const totalNodes = topologies.reduce((sum, t) => sum + t.stats.nodeCount, 0);
+  const totalLinks = topologies.reduce((sum, t) => sum + t.stats.linkCount, 0);
+  const avgHealthScore = topologies.length > 0 
+    ? (topologies.reduce((sum, t) => sum + t.stats.healthScore, 0) / topologies.length).toFixed(1)
+    : '0';
+
   return (
-    <PageContainer $isDark={isDark}>
-      {/* 页面标题 */}
-      <div style={{ marginBottom: 24 }}>
-        <Title level={2} style={{ margin: 0, color: isDark ? '#ffffff' : '#262626' }}>
-          <NodeIndexOutlined style={{ marginRight: 12 }} />
-          {t('testTools:entityTopology.title')}
+    <div className="entity-topology-page">
+      /* Title和按钮在同一行 */
+      <div className="page-header">
+        <Title level={2} className="page-title">
+          <Space>
+            <NodeIndexOutlined />
+            {t('entityTopology:title')}
+          </Space>
         </Title>
-        <Paragraph style={{ margin: '8px 0 0 0', color: isDark ? '#ffffff' : '#666666' }}>
-          {t('testTools:entityTopology.description')}
-        </Paragraph>
+        <Space>
+          <Button icon={<ReloadOutlined />} onClick={() => loadTopologies()}>
+            {t('common:refresh')}
+          </Button>
+          <Button 
+            type="primary" 
+            icon={<PlusOutlined />} 
+            onClick={() => message.info(t('entityTopology:actions.createTopology') + '功能开发中...')}
+          >
+            {t('entityTopology:actions.createTopology')}
+          </Button>
+        </Space>
       </div>
 
-      {/* 统计卡片 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
+      {/* Paragraph单独一行，充满宽度 */}
+      <Paragraph className="page-description">
+        {t('entityTopology:description')}
+      </Paragraph>
+
+      {/* 统计信息 */}
+      <Row gutter={16} className="stats-row">
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
-            <Statistic
-              title={t('testTools:entityTopology.stats.totalTopologies')}
-              value={topologyData.length}
-              prefix={<NodeIndexOutlined />}
+          <Card className="stats-card stats-primary">
+            <Statistic 
+              title={t('entityTopology:stats.totalTopologies')} 
+              value={topologies.length} 
+              prefix={<NodeIndexOutlined />} 
             />
-          </StatsCard>
+          </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
-            <Statistic
-              title={t('testTools:entityTopology.stats.activeTopologies')}
-              value={topologyData.filter(t => t.status === 'active').length}
-              valueStyle={{ color: '#52c41a' }}
+          <Card className="stats-card stats-success">
+            <Statistic 
+              title={t('entityTopology:stats.activeTopologies')} 
+              value={activeTopologies} 
+              prefix={<HeartOutlined />} 
             />
-          </StatsCard>
+          </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
-            <Statistic
-              title={t('testTools:entityTopology.stats.warningTopologies')}
-              value={topologyData.filter(t => t.status === 'warning' || t.status === 'error').length}
-              valueStyle={{ color: '#faad14' }}
+          <Card className="stats-card stats-warning">
+            <Statistic 
+              title={t('entityTopology:stats.totalNodes')} 
+              value={totalNodes} 
+              prefix={<DatabaseOutlined />} 
             />
-          </StatsCard>
+          </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark}>
-            <Statistic
-              title={t('testTools:entityTopology.stats.avgHealthScore')}
-              value={Math.round(topologyData.reduce((sum, t) => sum + t.stats.healthScore, 0) / topologyData.length)}
-              suffix="%"
-              valueStyle={{ color: '#1890ff' }}
+          <Card className="stats-card stats-info">
+            <Statistic 
+              title={t('entityTopology:stats.avgHealthScore')} 
+              value={avgHealthScore} 
+              suffix="%" 
+              prefix={<LinkOutlined />} 
             />
-          </StatsCard>
+          </Card>
         </Col>
       </Row>
 
-      {/* 搜索和过滤栏 */}
-      <Card style={{ marginBottom: 24, background: isDark ? '#141414' : '#ffffff' }}>
-        <Row gutter={16} align="middle">
-          <Col xs={24} sm={8} md={6}>
-            <Input
-              placeholder={t('testTools:entityTopology.search.placeholder')}
-              prefix={<SearchOutlined />}
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              allowClear
-            />
-          </Col>
-          <Col xs={24} sm={8} md={4}>
-            <Select
-              value={filterPlane}
-              onChange={setFilterPlane}
-              style={{ width: '100%' }}
-              placeholder={t('testTools:entityTopology.search.selectPlane')}
-            >
-              <Option value="all">{t('testTools:entityTopology.search.allPlanes')}</Option>
-              <Option value="应用平面">{t('testTools:entityTopology.planes.application')}</Option>
-              <Option value="数据平面">{t('testTools:entityTopology.planes.data')}</Option>
-              <Option value="网络平面">{t('testTools:entityTopology.planes.network')}</Option>
-              <Option value="服务平面">{t('testTools:entityTopology.planes.service')}</Option>
-              <Option value="监控平面">{t('testTools:entityTopology.planes.monitor')}</Option>
-              <Option value="存储平面">{t('testTools:entityTopology.planes.storage')}</Option>
-            </Select>
-          </Col>
-          <Col xs={24} sm={8} md={4}>
-            <Select
-              value={filterType}
-              onChange={setFilterType}
-              style={{ width: '100%' }}
-              placeholder={t('testTools:entityTopology.search.selectType')}
-            >
-              <Option value="all">{t('testTools:entityTopology.search.allTypes')}</Option>
-              <Option value="network">{t('testTools:types.network')}</Option>
-              <Option value="application">{t('testTools:types.application')}</Option>
-              <Option value="database">{t('testTools:types.database')}</Option>
-              <Option value="system">{t('testTools:types.system')}</Option>
-            </Select>
-          </Col>
-          <Col xs={24} sm={8} md={4}>
-            <Select
-              value={filterStatus}
-              onChange={setFilterStatus}
-              style={{ width: '100%' }}
-              placeholder={t('testTools:entityTopology.search.selectStatus')}
-            >
-              <Option value="all">{t('testTools:entityTopology.search.allStatus')}</Option>
-              <Option value="active">{t('testTools:status.active')}</Option>
-              <Option value="warning">{t('testTools:status.warning')}</Option>
-              <Option value="error">{t('testTools:status.error')}</Option>
-              <Option value="inactive">{t('testTools:status.inactive')}</Option>
-            </Select>
-          </Col>
-          <Col xs={24} sm={8} md={6}>
-            <Space>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={() => message.info(t('testTools:entityTopology.actions.createTopology') + '功能开发中...')}
-              >
-                {t('testTools:entityTopology.actions.createTopology')}
-              </Button>
-              <Button
-                icon={<ReloadOutlined />}
-                onClick={() => message.success(t('testTools:entityTopology.actions.refreshSuccess'))}
-                loading={loading}
+      {/* 搜索和过滤器 */}
+      <Card className="filter-card">
+        <Row gutter={[16, 16]} align="middle">
+          <Col xs={24} sm={16} md={18}>
+            <Space wrap size={[8, 8]} className="filter-controls">
+              <Search
+                placeholder={t('entityTopology:search.placeholder')}
+                allowClear
+                className="search-input"
+                onSearch={setSearchText}
+                onChange={(e) => setSearchText(e.target.value)}
               />
+              <Select
+                value={statusFilter}
+                onChange={setStatusFilter}
+                className="filter-select"
+                placeholder={t('entityTopology:search.statusFilter')}
+              >
+                <Option value="all">{t('entityTopology:filters.allStatus')}</Option>
+                <Option value="active">{t('entityTopology:status.active')}</Option>
+                <Option value="inactive">{t('entityTopology:status.inactive')}</Option>
+                <Option value="warning">{t('entityTopology:status.warning')}</Option>
+                <Option value="error">{t('entityTopology:status.error')}</Option>
+              </Select>
+              <Select
+                value={typeFilter}
+                onChange={setTypeFilter}
+                className="filter-select"
+                placeholder={t('entityTopology:search.typeFilter')}
+              >
+                <Option value="all">{t('entityTopology:filters.allTypes')}</Option>
+                <Option value="network">{t('entityTopology:types.network')}</Option>
+                <Option value="application">{t('entityTopology:types.application')}</Option>
+                <Option value="database">{t('entityTopology:types.database')}</Option>
+                <Option value="system">{t('entityTopology:types.system')}</Option>
+              </Select>
             </Space>
           </Col>
         </Row>
       </Card>
 
-      {/* 拓扑卡片列表 */}
-      <Row gutter={[16, 16]}>
-        {topologyData
-          .filter(topology => {
-            const matchesSearch = topology.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                                topology.description.toLowerCase().includes(searchText.toLowerCase());
-            const matchesPlane = filterPlane === 'all' || topology.plane === filterPlane;
-            const matchesType = filterType === 'all' || topology.type === filterType;
-            const matchesStatus = filterStatus === 'all' || topology.status === filterStatus;
-            
-            return matchesSearch && matchesPlane && matchesType && matchesStatus;
-          })
-          .map(topology => (
-            <Col xs={24} sm={12} lg={8} xl={6} key={topology.id}>
-              <TopologyCard
-                topology={topology}
-                onView={(topology) => message.info(`查看拓扑: ${topology.name}`)}
-                onEdit={(topology) => message.info(`编辑拓扑: ${topology.name}`)}
-                onDelete={(id) => message.info(`删除拓扑: ${id}`)}
-                onRefresh={(id) => message.success(`刷新拓扑: ${id}`)}
+      {/* 拓扑卡片展示 */}
+      <div className="topology-content">
+        <Spin spinning={loading}>
+          {filteredTopologies.length === 0 ? (
+            <Card className="empty-card">
+              <Empty
+                description={t('entityTopology:empty.description')}
+                className="empty-state"
               />
-            </Col>
-          ))}
-      </Row>
-
-      {/* 空状态 */}
-      {topologyData.filter(topology => {
-        const matchesSearch = topology.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                            topology.description.toLowerCase().includes(searchText.toLowerCase());
-        const matchesPlane = filterPlane === 'all' || topology.plane === filterPlane;
-        const matchesType = filterType === 'all' || topology.type === filterType;
-        const matchesStatus = filterStatus === 'all' || topology.status === filterStatus;
-        
-        return matchesSearch && matchesPlane && matchesType && matchesStatus;
-      }).length === 0 && (
-        <Card style={{ textAlign: 'center', padding: '40px 0', background: isDark ? '#141414' : '#ffffff' }}>
-          <NodeIndexOutlined style={{ fontSize: '48px', color: isDark ? '#666666' : '#d9d9d9', marginBottom: 16 }} />
-          <Title level={4} style={{ color: isDark ? '#ffffff' : '#666666' }}>
-            {t('testTools:entityTopology.empty.title')}
-          </Title>
-          <Paragraph style={{ color: isDark ? '#ffffff' : '#999999' }}>
-            {t('testTools:entityTopology.empty.description')}
-          </Paragraph>
-        </Card>
-      )}
-    </PageContainer>
+            </Card>
+          ) : (
+            <Row gutter={[24, 24]}>
+              {filteredTopologies.map(topology => (
+                <Col xs={24} sm={12} lg={8} xl={6} key={topology.id}>
+                  <TopologyCard
+                    topology={topology}
+                    onView={handleView}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onRefresh={handleRefresh}
+                  />
+                </Col>
+              ))}
+            </Row>
+          )}
+        </Spin>
+      </div>
+    </div>
   );
 };
 

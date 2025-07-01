@@ -28,6 +28,7 @@ import zhTaskCollectionRunDetail from './locales/zh/taskCollectionRunDetail.json
 import zhTaskExecutionHistory from './locales/zh/taskExecutionHistory.json';
 import zhHookTasks from './locales/zh/hookTasks.json';
 import zhTestTools from './locales/zh/testTools.json';
+import zhEntityTopology from './locales/zh/entityTopology.json';
 
 // 导入英文语言资源
 import enCommon from './locales/en/common.json';
@@ -54,6 +55,7 @@ import enTaskCollectionRunDetail from './locales/en/taskCollectionRunDetail.json
 import enTaskExecutionHistory from './locales/en/taskExecutionHistory.json';
 import enHookTasks from './locales/en/hookTasks.json';
 import enTestTools from './locales/en/testTools.json';
+import enEntityTopology from './locales/en/entityTopology.json';
 
 // 语言资源配置
 const resources = {
@@ -81,7 +83,8 @@ const resources = {
     taskCollectionRunDetail: zhTaskCollectionRunDetail,
     taskExecutionHistory: zhTaskExecutionHistory,
     hookTasks: zhHookTasks,
-    testTools: zhTestTools
+    testTools: zhTestTools,
+    entityTopology: zhEntityTopology
   },
   'en-US': {
     common: enCommon,
@@ -107,7 +110,8 @@ const resources = {
     taskCollectionRunDetail: enTaskCollectionRunDetail,
     taskExecutionHistory: enTaskExecutionHistory,
     hookTasks: enHookTasks,
-    testTools: enTestTools
+    testTools: enTestTools,
+    entityTopology: enEntityTopology
   }
 };
 
@@ -152,7 +156,7 @@ i18n
       'entities', 'sequences', 'tasks', 'messages', 'reports', 'relationships', 
       'aiAssistant', 'solutions', 'tags', 'prompts', 'entityScan', 'theme',
       // 页面级命名空间
-      'taskCollectionRunDetail', 'taskExecutionHistory', 'hookTasks', 'testTools'
+      'taskCollectionRunDetail', 'taskExecutionHistory', 'hookTasks', 'testTools', 'entityTopology'
     ],
     
     // 键值分隔符
