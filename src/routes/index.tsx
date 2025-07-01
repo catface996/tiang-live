@@ -22,6 +22,8 @@ const HookTasks = React.lazy(() => import('../pages/TaskManagement/HookTasks'));
 const ModelManagement = React.lazy(() => import('../pages/SystemSettings/ModelManagement'));
 const PromptTemplates = React.lazy(() => import('../pages/SystemSettings/PromptTemplates'));
 const EntityScan = React.lazy(() => import('../pages/SystemSettings/EntityScan'));
+const TestTools = React.lazy(() => import('../pages/TestTools'));
+const EntityTopology = React.lazy(() => import('../pages/TestTools/EntityTopology'));
 
 // 子页面组件
 const PlaneCreateEdit = React.lazy(() => import('../pages/Plane/PlaneCreateEdit'));
@@ -180,6 +182,16 @@ const AppRoutes: React.FC = () => {
         <Route path="system-settings/entity-scan/:dataSourceId" element={
           <Suspense fallback={<PageLoading />}>
             <ScanDetail />
+          </Suspense>
+        } />
+        <Route path="test-tools" element={
+          <Suspense fallback={<PageLoading />}>
+            <TestTools />
+          </Suspense>
+        } />
+        <Route path="test-tools/entity-topology" element={
+          <Suspense fallback={<PageLoading />}>
+            <EntityTopology />
           </Suspense>
         } />
       </Route>

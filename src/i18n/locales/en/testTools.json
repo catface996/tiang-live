@@ -1,0 +1,123 @@
+{
+  "title": "Test Tools",
+  "description": "Provide various testing and analysis tools to help you better understand and manage your system",
+  "entityTopology": {
+    "title": "Entity Topology",
+    "description": "Visualize relationships and topology between entities",
+    "selectPlane": "Select Plane",
+    "selectEntityType": "Select Entity Type",
+    "allPlanes": "All Planes",
+    "allTypes": "All Types",
+    "refresh": "Refresh",
+    "fullscreen": "Fullscreen",
+    "export": "Export",
+    "loading": "Loading topology data...",
+    "loadSuccess": "Topology data loaded successfully",
+    "loadError": "Failed to load topology data",
+    "fullscreenTip": "Fullscreen feature is under development...",
+    "exportTip": "Export feature is under development...",
+    "stats": {
+      "totalTopologies": "Total Topologies",
+      "activeTopologies": "Active Topologies",
+      "warningTopologies": "Warning Topologies",
+      "avgHealthScore": "Avg Health Score"
+    },
+    "search": {
+      "placeholder": "Search topology name...",
+      "selectPlane": "Select Plane",
+      "selectType": "Select Type",
+      "selectStatus": "Select Status",
+      "allPlanes": "All Planes",
+      "allTypes": "All Types",
+      "allStatus": "All Status"
+    },
+    "actions": {
+      "createTopology": "Create Topology",
+      "refresh": "Refresh",
+      "refreshSuccess": "Refresh successful"
+    },
+    "empty": {
+      "title": "No topology data",
+      "description": "Please adjust search criteria or create new topology"
+    },
+    "planes": {
+      "application": "Application Plane",
+      "data": "Data Plane",
+      "network": "Network Plane",
+      "service": "Service Plane",
+      "monitor": "Monitor Plane",
+      "storage": "Storage Plane"
+    },
+    "nodeTypes": {
+      "server": "Server",
+      "database": "Database",
+      "application": "Application",
+      "network": "Network Device"
+    },
+    "nodeStatus": {
+      "active": "Active",
+      "warning": "Warning",
+      "error": "Error",
+      "inactive": "Inactive"
+    },
+    "linkTypes": {
+      "http": "HTTP Connection",
+      "api": "API Call",
+      "database": "Database Connection",
+      "replication": "Data Replication",
+      "cache": "Cache Access",
+      "message": "Message Passing",
+      "monitor": "Monitor Connection"
+    }
+  },
+  "status": {
+    "active": "Active",
+    "warning": "Warning",
+    "error": "Error",
+    "inactive": "Inactive"
+  },
+  "types": {
+    "network": "Network",
+    "application": "Application",
+    "database": "Database",
+    "system": "System"
+  },
+  "tools": {
+    "entityTopology": {
+      "title": "Entity Topology",
+      "description": "Visualize relationships and topology between entities"
+    },
+    "relationGraph": {
+      "title": "Relation Graph",
+      "description": "Analyze and display complex entity relationship networks"
+    },
+    "dataFlow": {
+      "title": "Data Flow Analysis",
+      "description": "Track and analyze data flow in the system"
+    },
+    "apiTesting": {
+      "title": "API Testing",
+      "description": "Test and validate API functionality and performance"
+    },
+    "performanceMonitor": {
+      "title": "Performance Monitor",
+      "description": "Real-time monitoring of system performance metrics and resource usage"
+    },
+    "experimentLab": {
+      "title": "Experiment Lab",
+      "description": "Conduct various technical experiments and feature validation"
+    }
+  },
+  "toolStatus": {
+    "available": "Available",
+    "beta": "Beta",
+    "comingSoon": "Coming Soon"
+  },
+  "labels": {
+    "plane": "Plane",
+    "nodeCount": "Nodes",
+    "linkCount": "Links",
+    "healthScore": "Health",
+    "updateTime": "Updated"
+  }
+}

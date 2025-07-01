@@ -413,6 +413,64 @@
   border-right-color: var(--primary-color) !important;
 }
 
+/* 子菜单样式优化 */
+.app-menu .ant-menu-submenu-title {
+  color: var(--menu-item-color) !important;
+}
+
+.app-menu .ant-menu-submenu-title:hover {
+  background-color: var(--menu-item-hover-bg) !important;
+  color: var(--menu-item-selected-color) !important;
+}
+
+.app-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: var(--menu-item-selected-color) !important;
+}
+
+.app-menu .ant-menu-submenu-open > .ant-menu-submenu-title {
+  color: var(--menu-item-selected-color) !important;
+}
+
+/* 子菜单内容区域 */
+.app-menu .ant-menu-sub {
+  background-color: var(--sider-bg) !important;
+}
+
+.app-menu .ant-menu-sub .ant-menu-item {
+  color: var(--menu-item-color) !important;
+  background-color: transparent !important;
+}
+
+.app-menu .ant-menu-sub .ant-menu-item:hover {
+  background-color: var(--menu-item-hover-bg) !important;
+  color: var(--menu-item-selected-color) !important;
+}
+
+.app-menu .ant-menu-sub .ant-menu-item-selected {
+  background-color: var(--menu-item-selected-bg) !important;
+  color: var(--menu-item-selected-color) !important;
+}
+
+
+
+/* 针对内联模式下的子菜单 */
+.app-menu .ant-menu-inline .ant-menu-submenu-title {
+  color: var(--menu-item-color) !important;
+}
+
+.app-menu .ant-menu-inline .ant-menu-submenu-title:hover {
+  background-color: var(--menu-item-hover-bg) !important;
+  color: var(--menu-item-selected-color) !important;
+}
+
+.app-menu .ant-menu-inline .ant-menu-submenu-selected > .ant-menu-submenu-title,
+.app-menu .ant-menu-inline .ant-menu-submenu-open > .ant-menu-submenu-title {
+  color: var(--menu-item-selected-color) !important;
+  background-color: var(--menu-item-hover-bg) !important;
+}
+
+
+
 /* Logo和标题样式 */
 .app-logo {
   color: var(--text-color) !important;
@@ -1749,4 +1807,24 @@
 .theme-dark .prompt-templates .ant-list-item-selected .ant-list-item-meta-description,
 .theme-dark .template-list .ant-list-item-selected .ant-list-item-meta-description {
   color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* ========== 折叠菜单弹出子菜单样式优化 ========== */
+/* 解决折叠菜单状态下，弹出的子菜单在暗色模式下背景色不协调的问题 */
+.theme-dark .ant-menu-submenu-popup .ant-menu {
+  background-color: var(--bg-container) !important;
+}
+
+.theme-dark .ant-menu-submenu-popup .ant-menu-item {
+  color: var(--text-primary) !important;
+}
+
+.theme-dark .ant-menu-submenu-popup .ant-menu-item:hover {
+  background-color: var(--menu-item-hover-bg) !important;
+}
+
+/* 关键修复：暗色模式下被选中的子菜单项背景色 - 使用浅蓝色增加区分度 */
+.theme-dark .ant-menu-submenu-popup .ant-menu-item-selected {
+  background-color: #1e3a8a !important; /* 深蓝色背景，适合暗色主题 */
+  color: #ffffff !important; /* 白色文字，增加对比度 */
 }

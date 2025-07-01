@@ -23,7 +23,8 @@ import {
   MenuUnfoldOutlined,
   UserOutlined,
   SettingOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  ExperimentOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { ASSETS } from '../utils/assetUtils';
@@ -124,6 +125,17 @@ const MainLayout: React.FC = () => {
       key: '/ai-agents',
       icon: <RobotOutlined />,
       label: t('menu:agents')
+    },
+    {
+      key: 'test-tools',
+      icon: <ExperimentOutlined />,
+      label: t('menu:testTools'),
+      children: [
+        {
+          key: '/test-tools/entity-topology',
+          label: t('menu:entityTopology')
+        }
+      ]
     },
     {
       key: 'system-settings',

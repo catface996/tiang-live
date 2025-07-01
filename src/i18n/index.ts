@@ -27,6 +27,7 @@ import zhTheme from './locales/zh/theme.json';
 import zhTaskCollectionRunDetail from './locales/zh/taskCollectionRunDetail.json';
 import zhTaskExecutionHistory from './locales/zh/taskExecutionHistory.json';
 import zhHookTasks from './locales/zh/hookTasks.json';
+import zhTestTools from './locales/zh/testTools.json';
 
 // 导入英文语言资源
 import enCommon from './locales/en/common.json';
@@ -52,6 +53,7 @@ import enTheme from './locales/en/theme.json';
 import enTaskCollectionRunDetail from './locales/en/taskCollectionRunDetail.json';
 import enTaskExecutionHistory from './locales/en/taskExecutionHistory.json';
 import enHookTasks from './locales/en/hookTasks.json';
+import enTestTools from './locales/en/testTools.json';
 
 // 语言资源配置
 const resources = {
@@ -78,7 +80,8 @@ const resources = {
     // 页面级语言包
     taskCollectionRunDetail: zhTaskCollectionRunDetail,
     taskExecutionHistory: zhTaskExecutionHistory,
-    hookTasks: zhHookTasks
+    hookTasks: zhHookTasks,
+    testTools: zhTestTools
   },
   'en-US': {
     common: enCommon,
@@ -103,7 +106,8 @@ const resources = {
     // 页面级语言包
     taskCollectionRunDetail: enTaskCollectionRunDetail,
     taskExecutionHistory: enTaskExecutionHistory,
-    hookTasks: enHookTasks
+    hookTasks: enHookTasks,
+    testTools: enTestTools
   }
 };
 
@@ -148,7 +152,7 @@ i18n
       'entities', 'sequences', 'tasks', 'messages', 'reports', 'relationships', 
       'aiAssistant', 'solutions', 'tags', 'prompts', 'entityScan', 'theme',
       // 页面级命名空间
-      'taskCollectionRunDetail', 'taskExecutionHistory'
+      'taskCollectionRunDetail', 'taskExecutionHistory', 'hookTasks', 'testTools'
     ],
     
     // 键值分隔符

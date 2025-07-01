@@ -11,6 +11,8 @@
   "hookTasks": "Hook Tasks",
   "collections": "Task Collections",
   "solutions": "Industry Solutions",
+  "testTools": "Test Tools",
+  "entityTopology": "Entity Topology",
   "systemSettings": "System Settings",
   "modelManagement": "Model Management",
   "promptTemplates": "Prompt Templates",

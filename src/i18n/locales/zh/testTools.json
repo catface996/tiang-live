@@ -1,0 +1,123 @@
+{
+  "title": "测试工具",
+  "description": "提供各种测试和分析工具，帮助您更好地理解和管理系统",
+  "entityTopology": {
+    "title": "实体拓扑",
+    "description": "可视化展示实体间的关系和拓扑结构",
+    "selectPlane": "选择平面",
+    "selectEntityType": "选择实体类型",
+    "allPlanes": "全部平面",
+    "allTypes": "全部类型",
+    "refresh": "刷新",
+    "fullscreen": "全屏",
+    "export": "导出",
+    "loading": "加载拓扑数据中...",
+    "loadSuccess": "拓扑数据加载成功",
+    "loadError": "加载拓扑数据失败",
+    "fullscreenTip": "全屏功能开发中...",
+    "exportTip": "导出功能开发中...",
+    "stats": {
+      "totalTopologies": "总拓扑数",
+      "activeTopologies": "活跃拓扑",
+      "warningTopologies": "告警拓扑",
+      "avgHealthScore": "平均健康度"
+    },
+    "search": {
+      "placeholder": "搜索拓扑名称...",
+      "selectPlane": "选择平面",
+      "selectType": "选择类型",
+      "selectStatus": "选择状态",
+      "allPlanes": "全部平面",
+      "allTypes": "全部类型",
+      "allStatus": "全部状态"
+    },
+    "actions": {
+      "createTopology": "创建拓扑",
+      "refresh": "刷新",
+      "refreshSuccess": "刷新成功"
+    },
+    "empty": {
+      "title": "暂无拓扑数据",
+      "description": "请调整搜索条件或创建新的拓扑"
+    },
+    "planes": {
+      "application": "应用平面",
+      "data": "数据平面",
+      "network": "网络平面",
+      "service": "服务平面",
+      "monitor": "监控平面",
+      "storage": "存储平面"
+    },
+    "nodeTypes": {
+      "server": "服务器",
+      "database": "数据库",
+      "application": "应用",
+      "network": "网络设备"
+    },
+    "nodeStatus": {
+      "active": "正常",
+      "warning": "警告",
+      "error": "错误",
+      "inactive": "离线"
+    },
+    "linkTypes": {
+      "http": "HTTP连接",
+      "api": "API调用",
+      "database": "数据库连接",
+      "replication": "数据复制",
+      "cache": "缓存访问",
+      "message": "消息传递",
+      "monitor": "监控连接"
+    }
+  },
+  "status": {
+    "active": "正常",
+    "warning": "警告",
+    "error": "错误",
+    "inactive": "离线"
+  },
+  "types": {
+    "network": "网络",
+    "application": "应用",
+    "database": "数据库",
+    "system": "系统"
+  },
+  "tools": {
+    "entityTopology": {
+      "title": "实体拓扑",
+      "description": "可视化展示实体间的关系和拓扑结构"
+    },
+    "relationGraph": {
+      "title": "关系图谱",
+      "description": "分析和展示复杂的实体关系网络"
+    },
+    "dataFlow": {
+      "title": "数据流分析",
+      "description": "追踪和分析系统中的数据流向"
+    },
+    "apiTesting": {
+      "title": "API测试",
+      "description": "测试和验证API接口的功能和性能"
+    },
+    "performanceMonitor": {
+      "title": "性能监控",
+      "description": "实时监控系统性能指标和资源使用情况"
+    },
+    "experimentLab": {
+      "title": "实验室",
+      "description": "进行各种技术实验和功能验证"
+    }
+  },
+  "toolStatus": {
+    "available": "可用",
+    "beta": "Beta",
+    "comingSoon": "敬请期待"
+  },
+  "labels": {
+    "plane": "平面",
+    "nodeCount": "节点数",
+    "linkCount": "连接数",
+    "healthScore": "健康度",
+    "updateTime": "更新时间"
+  }
+}

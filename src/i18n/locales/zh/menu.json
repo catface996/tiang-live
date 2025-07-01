@@ -11,6 +11,8 @@
   "hookTasks": "钩子任务",
   "collections": "任务集合",
   "solutions": "行业方案",
+  "testTools": "测试工具",
+  "entityTopology": "实体拓扑",
   "systemSettings": "系统设置",
   "modelManagement": "模型管理",
   "promptTemplates": "提示词模板",
