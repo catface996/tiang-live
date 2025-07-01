@@ -14,7 +14,8 @@ import {
   Empty,
   Breadcrumb,
   message,
-  Modal
+  Modal,
+  Tabs
 } from 'antd';
 import {
   NodeIndexOutlined,
@@ -373,6 +374,12 @@ const EntityTopologyDetail: React.FC = () => {
     // TODO: 实现新增依赖关系功能，可以打开一个模态框让用户选择源实体、目标实体和关系类型
   };
 
+  // 处理新增实体
+  const handleAddEntity = () => {
+    message.info('新增实体功能开发中...');
+    // TODO: 实现新增实体功能，可以打开一个模态框让用户输入实体信息
+  };
+
   // D3.js 拓扑图渲染
   useEffect(() => {
     if (!topologyData || !svgRef.current) return;
@@ -487,6 +494,7 @@ const EntityTopologyDetail: React.FC = () => {
       title: '名称',
       dataIndex: 'name',
       key: 'name',
+      width: '50%',
       render: (text: string, record: Entity) => (
         <Space>
           <NodeIndexOutlined />
@@ -498,12 +506,13 @@ const EntityTopologyDetail: React.FC = () => {
       title: '类型',
       dataIndex: 'type',
       key: 'type',
+      width: '30%',
       render: (type: string) => <Tag color="blue">{type}</Tag>
     },
     {
       title: '操作',
       key: 'actions',
-      width: 80,
+      width: '20%',
       render: (_, record: Entity) => (
         <Space size="small">
           <Button
@@ -532,6 +541,7 @@ const EntityTopologyDetail: React.FC = () => {
       title: '源实体',
       dataIndex: 'source',
       key: 'source',
+      width: '30%',
       render: (source: string) => {
         const entity = topologyData?.entities.find(e => e.id === source);
         return entity ? entity.name : source;
@@ -541,6 +551,7 @@ const EntityTopologyDetail: React.FC = () => {
       title: '目标实体',
       dataIndex: 'target',
       key: 'target',
+      width: '30%',
       render: (target: string) => {
         const entity = topologyData?.entities.find(e => e.id === target);
         return entity ? entity.name : target;
@@ -550,6 +561,7 @@ const EntityTopologyDetail: React.FC = () => {
       title: '关系类型',
       dataIndex: 'type',
       key: 'type',
+      width: '25%',
       render: (type: string) => {
         const colors = {
           depends_on: 'purple',
@@ -562,7 +574,7 @@ const EntityTopologyDetail: React.FC = () => {
     {
       title: '操作',
       key: 'actions',
-      width: 60,
+      width: '15%',
       render: (_, record: any) => (
         <Button
           type="text"
@@ -688,46 +700,64 @@ const EntityTopologyDetail: React.FC = () => {
       <div className="topology-content">
         {/* 左侧面板 */}
         <div className="content-left">
-          {/* 实体清单 - 上半部分 */}
-          <div className="entities-section">
-            <Table
-              title={() => (
-                <Space>
-                  <DatabaseOutlined />
-                  实体清单 ({topologyData.entities.length})
-                </Space>
-              )}
-              columns={entityColumns}
-              dataSource={topologyData.entities}
-              rowKey="id"
-              size="small"
-              pagination={false}
-              scroll={{ y: 200 }}
-            />
-          </div>
-
-          {/* 依赖关系 - 下半部分 */}
-          <div className="dependencies-section">
-            <Table
-              title={() => (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Tabs
+            defaultActiveKey="entities"
+            className="data-tabs"
+            items={[
+              {
+                key: 'entities',
+                label: (
+                  <Space>
+                    <DatabaseOutlined />
+                    实体清单 ({topologyData.entities.length})
+                  </Space>
+                ),
+                children: (
+                  <div>
+                    <div style={{ marginBottom: 16, textAlign: 'right' }}>
+                      <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAddEntity}>
+                        新增
+                      </Button>
+                    </div>
+                    <Table
+                      columns={entityColumns}
+                      dataSource={topologyData.entities}
+                      rowKey="id"
+                      size="small"
+                      pagination={false}
+                      scroll={{ y: 'calc(100vh - 420px)' }}
+                    />
+                  </div>
+                )
+              },
+              {
+                key: 'dependencies',
+                label: (
                   <Space>
                     <LinkOutlined />
                     依赖关系 ({topologyData.dependencies.length})
                   </Space>
-                  <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAddDependency}>
-                    新增
-                  </Button>
-                </div>
-              )}
-              columns={dependencyColumns}
-              dataSource={topologyData.dependencies}
-              rowKey="id"
-              size="small"
-              pagination={false}
-              scroll={{ y: 200 }}
-            />
-          </div>
+                ),
+                children: (
+                  <div>
+                    <div style={{ marginBottom: 16, textAlign: 'right' }}>
+                      <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAddDependency}>
+                        新增
+                      </Button>
+                    </div>
+                    <Table
+                      columns={dependencyColumns}
+                      dataSource={topologyData.dependencies}
+                      rowKey="id"
+                      size="small"
+                      pagination={false}
+                      scroll={{ y: 'calc(100vh - 420px)' }}
+                    />
+                  </div>
+                )
+              }
+            ]}
+          />
         </div>
 
         {/* 右侧D3拓扑图 */}
