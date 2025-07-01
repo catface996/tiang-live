@@ -81,6 +81,7 @@
   flex-direction: column;
   gap: 16px;
   overflow: hidden;
+  height: 100%;
 }
 
 /* 实体清单区域 - 左侧上半部分 */
@@ -95,37 +96,7 @@
   overflow: hidden;
 }
 
-/* 实体清单和依赖关系区域样式 */
-.entities-section,
-.dependencies-section {
-  height: 50%;
-  overflow: hidden;
-}
-
-.entities-section .ant-table,
-.dependencies-section .ant-table {
-  height: 100%;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--card-bg);
-}
-
-.entities-section .ant-table-wrapper,
-.dependencies-section .ant-table-wrapper {
-  height: 100%;
-}
-
-.entities-section .ant-table-container,
-.dependencies-section .ant-table-container {
-  height: calc(100% - 55px);
-}
-
-.entities-section .ant-table-tbody > tr:hover > td,
-.dependencies-section .ant-table-tbody > tr:hover > td {
-  background: var(--table-row-hover-bg) !important;
-}
-
-/* 右侧D3拓扑图区域 */
+/* 实体清单和依赖关系表格样式 */
 .content-right {
   width: 60%;
   overflow: hidden;
@@ -182,13 +153,16 @@
 }
 
 /* 表格样式优化 */
-.entities-section .ant-table-wrapper,
-.dependencies-section .ant-table-wrapper {
-  height: 100%;
-}
-
 .entities-section .ant-table,
 .dependencies-section .ant-table {
+  height: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+}
+
+.entities-section .ant-table-wrapper,
+.dependencies-section .ant-table-wrapper {
   height: 100%;
 }
 
