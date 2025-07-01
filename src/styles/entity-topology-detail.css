@@ -95,16 +95,34 @@
   overflow: hidden;
 }
 
-.section-card {
+/* 实体清单和依赖关系区域样式 */
+.entities-section,
+.dependencies-section {
+  height: 50%;
+  overflow: hidden;
+}
+
+.entities-section .ant-table,
+.dependencies-section .ant-table {
   height: 100%;
   border: 1px solid var(--border-color);
+  border-radius: 8px;
   background: var(--card-bg);
 }
 
-.section-card .ant-card-body {
-  height: calc(100% - 57px);
-  padding: 12px;
-  overflow: hidden;
+.entities-section .ant-table-wrapper,
+.dependencies-section .ant-table-wrapper {
+  height: 100%;
+}
+
+.entities-section .ant-table-container,
+.dependencies-section .ant-table-container {
+  height: calc(100% - 55px);
+}
+
+.entities-section .ant-table-tbody > tr:hover > td,
+.dependencies-section .ant-table-tbody > tr:hover > td {
+  background: var(--table-row-hover-bg) !important;
 }
 
 /* 右侧D3拓扑图区域 */
@@ -165,24 +183,24 @@
 }
 
 /* 表格样式优化 */
-.section-card .ant-table-wrapper {
+.entities-section .ant-table-wrapper,
+.dependencies-section .ant-table-wrapper {
   height: 100%;
 }
 
-.section-card .ant-table {
+.entities-section .ant-table,
+.dependencies-section .ant-table {
   height: 100%;
 }
 
-.section-card .ant-table-container {
-  height: calc(100% - 39px);
+.entities-section .ant-table-container,
+.dependencies-section .ant-table-container {
+  height: calc(100% - 55px);
 }
 
-.section-card .ant-table-tbody > tr:hover > td {
+.entities-section .ant-table-tbody > tr:hover > td,
+.dependencies-section .ant-table-tbody > tr:hover > td {
   background: var(--table-row-hover-bg) !important;
-}
-
-.section-card .ant-table-tbody > tr.ant-table-row-selected > td {
-  background: var(--primary-color-fade) !important;
 }
 
 /* 统计卡片样式 */
@@ -286,22 +304,26 @@
 
 /* 滚动条样式 */
 .entity-details::-webkit-scrollbar,
-.section-card .ant-table-body::-webkit-scrollbar {
+.entities-section .ant-table-body::-webkit-scrollbar,
+.dependencies-section .ant-table-body::-webkit-scrollbar {
   width: 6px;
 }
 
 .entity-details::-webkit-scrollbar-track,
-.section-card .ant-table-body::-webkit-scrollbar-track {
+.entities-section .ant-table-body::-webkit-scrollbar-track,
+.dependencies-section .ant-table-body::-webkit-scrollbar-track {
   background: var(--scrollbar-track-color);
 }
 
 .entity-details::-webkit-scrollbar-thumb,
-.section-card .ant-table-body::-webkit-scrollbar-thumb {
+.entities-section .ant-table-body::-webkit-scrollbar-thumb,
+.dependencies-section .ant-table-body::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb-color);
   border-radius: 3px;
 }
 
 .entity-details::-webkit-scrollbar-thumb:hover,
-.section-card .ant-table-body::-webkit-scrollbar-thumb:hover {
+.entities-section .ant-table-body::-webkit-scrollbar-thumb:hover,
+.dependencies-section .ant-table-body::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover-color);
 }

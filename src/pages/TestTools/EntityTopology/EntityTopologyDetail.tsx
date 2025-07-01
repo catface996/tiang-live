@@ -99,8 +99,8 @@ const EntityTopologyDetail: React.FC = () => {
         plane: '网络平面',
         tags: ['核心', '生产环境', '高可用'],
         stats: {
-          nodeCount: 12,
-          linkCount: 18,
+          nodeCount: 8,
+          linkCount: 7,
           healthScore: 95,
           lastUpdated: '2024-06-29 15:30:00'
         },
@@ -136,6 +136,38 @@ const EntityTopologyDetail: React.FC = () => {
             status: 'active',
             properties: { ip: '192.168.2.10', os: 'Ubuntu 20.04' },
             connections: 2
+          },
+          {
+            id: 'router-2',
+            name: '核心路由器-2',
+            type: 'router',
+            status: 'active',
+            properties: { ip: '192.168.1.2', model: 'Cisco ASR 1000' },
+            connections: 4
+          },
+          {
+            id: 'switch-2',
+            name: '接入交换机-1',
+            type: 'switch',
+            status: 'active',
+            properties: { ip: '192.168.1.20', model: 'Cisco Catalyst 2960' },
+            connections: 6
+          },
+          {
+            id: 'server-2',
+            name: '数据库服务器-1',
+            type: 'database',
+            status: 'active',
+            properties: { ip: '192.168.2.20', os: 'CentOS 7' },
+            connections: 3
+          },
+          {
+            id: 'lb-1',
+            name: '负载均衡器-1',
+            type: 'loadbalancer',
+            status: 'active',
+            properties: { ip: '192.168.1.200', model: 'F5 BIG-IP' },
+            connections: 5
           }
         ],
         dependencies: [
@@ -162,6 +194,38 @@ const EntityTopologyDetail: React.FC = () => {
             type: 'provides_to',
             strength: 0.7,
             description: '安全访问控制'
+          },
+          {
+            id: 'dep-4',
+            source: 'router-2',
+            target: 'switch-2',
+            type: 'connects_to',
+            strength: 0.8,
+            description: '接入网络连接'
+          },
+          {
+            id: 'dep-5',
+            source: 'lb-1',
+            target: 'server-1',
+            type: 'provides_to',
+            strength: 0.9,
+            description: '负载均衡服务'
+          },
+          {
+            id: 'dep-6',
+            source: 'lb-1',
+            target: 'server-2',
+            type: 'provides_to',
+            strength: 0.8,
+            description: '数据库负载均衡'
+          },
+          {
+            id: 'dep-7',
+            source: 'server-1',
+            target: 'server-2',
+            type: 'depends_on',
+            strength: 0.7,
+            description: '应用依赖数据库'
           }
         ]
       };
@@ -300,26 +364,6 @@ const EntityTopologyDetail: React.FC = () => {
       dataIndex: 'type',
       key: 'type',
       render: (type: string) => <Tag color="blue">{type}</Tag>
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => {
-        const colors = {
-          active: 'green',
-          warning: 'orange',
-          error: 'red',
-          inactive: 'default'
-        };
-        return <Tag color={colors[status as keyof typeof colors]}>{status}</Tag>;
-      }
-    },
-    {
-      title: '连接数',
-      dataIndex: 'connections',
-      key: 'connections',
-      render: (count: number) => <Text>{count}</Text>
     }
   ];
 
@@ -355,12 +399,6 @@ const EntityTopologyDetail: React.FC = () => {
         };
         return <Tag color={colors[type as keyof typeof colors]}>{type}</Tag>;
       }
-    },
-    {
-      title: '强度',
-      dataIndex: 'strength',
-      key: 'strength',
-      render: (strength: number) => `${Math.round(strength * 100)}%`
     }
   ];
 
@@ -478,52 +516,38 @@ const EntityTopologyDetail: React.FC = () => {
         <div className="content-left">
           {/* 实体清单 - 上半部分 */}
           <div className="entities-section">
-            <Card
-              title={
+            <Table
+              title={() => (
                 <Space>
                   <DatabaseOutlined />
                   实体清单 ({topologyData.entities.length})
                 </Space>
-              }
+              )}
+              columns={entityColumns}
+              dataSource={topologyData.entities}
+              rowKey="id"
               size="small"
-              className="section-card"
-            >
-              <Table
-                columns={entityColumns}
-                dataSource={topologyData.entities}
-                rowKey="id"
-                size="small"
-                pagination={false}
-                scroll={{ y: 200 }}
-                onRow={record => ({
-                  onClick: () => setSelectedEntity(record),
-                  style: { cursor: 'pointer' }
-                })}
-              />
-            </Card>
+              pagination={false}
+              scroll={{ y: 200 }}
+            />
           </div>
 
           {/* 依赖关系 - 下半部分 */}
           <div className="dependencies-section">
-            <Card
-              title={
+            <Table
+              title={() => (
                 <Space>
                   <LinkOutlined />
                   依赖关系 ({topologyData.dependencies.length})
                 </Space>
-              }
+              )}
+              columns={dependencyColumns}
+              dataSource={topologyData.dependencies}
+              rowKey="id"
               size="small"
-              className="section-card"
-            >
-              <Table
-                columns={dependencyColumns}
-                dataSource={topologyData.dependencies}
-                rowKey="id"
-                size="small"
-                pagination={false}
-                scroll={{ y: 200 }}
-              />
-            </Card>
+              pagination={false}
+              scroll={{ y: 200 }}
+            />
           </div>
         </div>
 
