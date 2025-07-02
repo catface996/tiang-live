@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { Card, Space, Button, Descriptions, Tag, Spin } from 'antd';
+import { Card, Space, Button, Spin } from 'antd';
 import { NodeIndexOutlined, FullscreenOutlined, ZoomInOutlined, ZoomOutOutlined, UndoOutlined, ReloadOutlined } from '@ant-design/icons';
 import * as d3 from 'd3';
 
@@ -60,15 +60,11 @@ interface Dependency {
 interface TopologyGraphProps {
   entities: Entity[];
   dependencies: Dependency[];
-  selectedEntity: Entity | null;
-  onEntitySelect: (entity: Entity | null) => void;
 }
 
 const TopologyGraph: React.FC<TopologyGraphProps> = ({ 
   entities, 
-  dependencies, 
-  selectedEntity, 
-  onEntitySelect 
+  dependencies
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -242,14 +238,6 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
 
     // 设置SVG尺寸
     svg.attr('width', width).attr('height', height);
-
-    // 添加背景点击事件来取消选择
-    svg.on('click', (event) => {
-      // 只有点击背景时才取消选择
-      if (event.target === svg.node()) {
-        onEntitySelect(null);
-      }
-    });
 
     // 创建缩放行为
     const zoom = d3.zoom<SVGSVGElement, unknown>()
@@ -476,19 +464,9 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
         // 阻止事件冒泡
         event.stopPropagation();
         
-        // 防止重复点击同一个节点
-        if (selectedEntity && selectedEntity.id === d.id) {
-          return;
-        }
-        
-        // 转换回原始实体格式
-        const originalEntity = entities.find(e => e.id === d.id);
-        if (originalEntity) {
-          // 使用 setTimeout 避免与 D3 事件处理冲突
-          setTimeout(() => {
-            onEntitySelect(originalEntity);
-          }, 0);
-        }
+        // 移除实体选择功能，不再显示详情
+        // 可以在这里添加其他点击处理逻辑，比如高亮节点等
+        console.log('Clicked node:', d.name);
       });
 
     // 更新位置
@@ -530,7 +508,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
     (svgRef.current as any).resetNodePositions = resetNodePositions;
 
     setLoading(false);
-  }, [graphData, entities, selectedEntity, onEntitySelect]);
+  }, [graphData, entities]);
 
   // 图表数据变化时重新初始化 - 添加防抖
   useEffect(() => {
@@ -542,23 +520,6 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
       return () => clearTimeout(timer);
     }
   }, [graphData, initializeGraph]);
-
-  // 选中状态变化时不重新渲染图表，只更新视觉状态
-  useEffect(() => {
-    if (svgRef.current && graphData) {
-      const svg = d3.select(svgRef.current);
-      const nodes = svg.selectAll('.node');
-      
-      // 更新节点选中状态的视觉效果
-      nodes.selectAll('circle')
-        .attr('stroke-width', (d: any) => {
-          return selectedEntity && selectedEntity.id === d.id ? 4 : 2;
-        })
-        .attr('stroke', (d: any) => {
-          return selectedEntity && selectedEntity.id === d.id ? '#ff4d4f' : '#fff';
-        });
-    }
-  }, [selectedEntity, graphData]);
 
   // 控制函数
   const handleZoomIn = () => {
@@ -633,29 +594,6 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
           {tooltip.content.description && (
             <div>描述: {tooltip.content.description}</div>
           )}
-        </div>
-      )}
-
-      {/* 选中实体的详细信息 */}
-      {selectedEntity && (
-        <div className="entity-details">
-          <Card size="small" title={`实体详情: ${selectedEntity.name}`}>
-            <Descriptions size="small" column={2}>
-              <Descriptions.Item label="ID">{selectedEntity.id}</Descriptions.Item>
-              <Descriptions.Item label="类型">{selectedEntity.type}</Descriptions.Item>
-              <Descriptions.Item label="状态">
-                <Tag color={selectedEntity.status === 'active' ? 'green' : 'orange'}>
-                  {selectedEntity.status}
-                </Tag>
-              </Descriptions.Item>
-              <Descriptions.Item label="连接数">{selectedEntity.connections}</Descriptions.Item>
-              {Object.entries(selectedEntity.properties).map(([key, value]) => (
-                <Descriptions.Item key={key} label={key}>
-                  {String(value)}
-                </Descriptions.Item>
-              ))}
-            </Descriptions>
-          </Card>
         </div>
       )}
     </div>

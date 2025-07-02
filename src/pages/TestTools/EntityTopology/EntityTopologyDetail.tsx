@@ -51,7 +51,6 @@ const EntityTopologyDetail: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [topologyData, setTopologyData] = useState<TopologyData | null>(null);
-  const [selectedEntity, setSelectedEntity] = useState<Entity | null>(null);
 
   // 模拟数据加载
   const loadTopologyDetail = useCallback(async () => {
@@ -243,11 +242,6 @@ const EntityTopologyDetail: React.FC = () => {
           }
         });
 
-        // 如果当前选中的实体被删除了，清空选中状态
-        if (selectedEntity && selectedEntity.id === entity.id) {
-          setSelectedEntity(null);
-        }
-
         message.success(`成功删除实体 "${entity.name}"`);
       }
     });
@@ -373,8 +367,6 @@ const EntityTopologyDetail: React.FC = () => {
         <TopologyGraph
           entities={topologyData.entities}
           dependencies={topologyData.dependencies}
-          selectedEntity={selectedEntity}
-          onEntitySelect={setSelectedEntity}
         />
       </div>
     </div>

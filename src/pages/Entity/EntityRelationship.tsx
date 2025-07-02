@@ -23,7 +23,35 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { setPageTitle } from '../../utils';
-import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
+import TopologyGraph from '../../components/TopologyGraph';
+
+// 临时类型定义，避免导入问题
+interface TopologyPlane {
+  id: string;
+  name: string;
+  level: number;
+  color: string;
+  borderColor: string;
+  description: string;
+}
+
+interface TopologyNode {
+  id: string;
+  name: string;
+  type: string;
+  level: number;
+  plane: string;
+  description: string;
+  status: string;
+  [key: string]: any;
+}
+
+interface TopologyLink {
+  source: string;
+  target: string;
+  type: string;
+  strength: number;
+}
 
 const { Title, Paragraph } = Typography;
 
@@ -56,6 +84,125 @@ const FeatureCard = styled(Card)`
 
 const EntityRelationship: React.FC = () => {
   const [activeTab, setActiveTab] = useState('entities');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // 模拟数据 - 实际使用时应该从props或API获取
+  const [planes] = useState<TopologyPlane[]>([
+    {
+      id: "business_scenario_plane",
+      name: "业务场景平面",
+      level: 1,
+      color: "#e6f7ff",
+      borderColor: "#1890ff",
+      description: "核心业务场景和用户旅程"
+    },
+    {
+      id: "business_link_plane",
+      name: "业务链路平面",
+      level: 2,
+      color: "#f6ffed",
+      borderColor: "#52c41a",
+      description: "业务场景的具体执行链路"
+    },
+    {
+      id: "application_plane", 
+      name: "应用平面",
+      level: 3,
+      color: "#fff7e6",
+      borderColor: "#faad14",
+      description: "业务系统和应用服务层"
+    },
+    {
+      id: "middleware_plane",
+      name: "中间件平面", 
+      level: 4,
+      color: "#f9f0ff",
+      borderColor: "#722ed1",
+      description: "中间件和基础服务层"
+    },
+    {
+      id: "infrastructure_plane",
+      name: "基础设施平面",
+      level: 5,
+      color: "#fff2f0",
+      borderColor: "#f5222d",
+      description: "基础设施和资源层"
+    }
+  ]);
+
+  const [nodes] = useState<TopologyNode[]>([
+    {
+      id: "business_scenario_1",
+      name: "电商下单场景",
+      type: "business_scenario",
+      level: 1,
+      plane: "business_scenario_plane",
+      description: "用户在电商平台完成商品购买的完整流程",
+      status: "active"
+    },
+    {
+      id: "business_scenario_2", 
+      name: "支付结算场景",
+      type: "business_scenario",
+      level: 1,
+      plane: "business_scenario_plane",
+      description: "处理用户支付和商户结算的完整业务场景",
+      status: "active"
+    },
+    {
+      id: "business_link_1",
+      name: "用户下单链路",
+      type: "business_link", 
+      level: 2,
+      plane: "business_link_plane",
+      description: "从商品选择到订单确认的业务链路",
+      status: "active"
+    },
+    {
+      id: "system_1",
+      name: "用户中心系统",
+      type: "business_system",
+      level: 3,
+      plane: "application_plane",
+      description: "管理用户信息、认证、权限的核心系统",
+      status: "running",
+      version: "v2.1.0",
+      instances: 6
+    },
+    {
+      id: "system_2", 
+      name: "商品管理系统",
+      type: "business_system",
+      level: 3,
+      plane: "application_plane",
+      description: "商品信息、价格、促销管理系统",
+      status: "running",
+      version: "v1.8.2",
+      instances: 4
+    }
+  ]);
+
+  const [links] = useState<TopologyLink[]>([
+    {
+      source: "business_scenario_1",
+      target: "business_link_1",
+      type: "contains",
+      strength: 0.8
+    },
+    {
+      source: "business_link_1",
+      target: "system_1",
+      type: "uses",
+      strength: 0.6
+    },
+    {
+      source: "business_link_1",
+      target: "system_2",
+      type: "uses",
+      strength: 0.6
+    }
+  ]);
 
   useEffect(() => {
     setPageTitle('实体关系');
@@ -63,6 +210,14 @@ const EntityRelationship: React.FC = () => {
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
+  };
+
+  const handleNodeClick = (node: TopologyNode) => {
+    console.log('Node clicked:', node);
+  };
+
+  const handleNodeHover = (node: TopologyNode | null) => {
+    console.log('Node hovered:', node);
   };
 
   const renderEntityManagement = () => (
@@ -263,8 +418,18 @@ const EntityRelationship: React.FC = () => {
         </Col>
       </Row>
 
-      {/* D3.js 关系图谱 */}
-      <D3RelationshipGraph />
+      {/* 拓扑图谱 */}
+      <TopologyGraph
+        planes={planes}
+        nodes={nodes}
+        links={links}
+        loading={loading}
+        error={error}
+        onNodeClick={handleNodeClick}
+        onNodeHover={handleNodeHover}
+        showLegend={true}
+        showControls={true}
+      />
 
       {/* 功能介绍 */}
       <Row gutter={16} style={{ marginTop: 24 }}>

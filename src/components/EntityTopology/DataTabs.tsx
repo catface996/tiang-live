@@ -67,7 +67,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       key: 'actions',
       width: '20%',
       render: (_, record: Entity) => (
-        <Space size="small">
+        <Space size={2}>
           <Button
             type="text"
             size="small"
