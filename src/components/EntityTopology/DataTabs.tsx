@@ -159,7 +159,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
               <div>
                 <div style={{ marginBottom: 16, textAlign: 'right' }}>
                   <Button type="primary" size="small" icon={<PlusOutlined />} onClick={onAddEntity}>
-                    新增
+                    选择实体
                   </Button>
                 </div>
                 <Table
@@ -185,7 +185,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
               <div>
                 <div style={{ marginBottom: 16, textAlign: 'right' }}>
                   <Button type="primary" size="small" icon={<PlusOutlined />} onClick={onAddDependency}>
-                    新增
+                    添加关系
                   </Button>
                 </div>
                 <Table

@@ -1,0 +1,339 @@
+{
+  "planes": [
+    {
+      "id": "business_plane",
+      "name": "业务应用平面",
+      "level": 1,
+      "color": "#e6f7ff",
+      "borderColor": "#1890ff",
+      "description": "业务系统和应用服务层",
+      "bounds": {
+        "minLevel": 1,
+        "maxLevel": 2
+      }
+    },
+    {
+      "id": "middleware_plane",
+      "name": "中间件平面",
+      "level": 2,
+      "color": "#f9f0ff",
+      "borderColor": "#722ed1",
+      "description": "中间件和基础服务层",
+      "bounds": {
+        "minLevel": 3,
+        "maxLevel": 3
+      }
+    },
+    {
+      "id": "infrastructure_plane",
+      "name": "基础设施平面",
+      "level": 3,
+      "color": "#fff2f0",
+      "borderColor": "#f5222d",
+      "description": "基础设施和资源层",
+      "bounds": {
+        "minLevel": 4,
+        "maxLevel": 5
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "web-app-1",
+      "name": "Web应用服务",
+      "type": "web_application",
+      "level": 1,
+      "plane": "business_plane",
+      "description": "前端Web应用服务，处理用户界面交互",
+      "status": "active",
+      "version": "v2.1.0",
+      "instances": 3,
+      "port": 8080,
+      "technology": "React + Node.js"
+    },
+    {
+      "id": "api-gateway-1",
+      "name": "API网关",
+      "type": "api_gateway",
+      "level": 2,
+      "plane": "business_plane",
+      "description": "统一API入口，处理路由和认证",
+      "status": "active",
+      "version": "v1.8.2",
+      "instances": 2,
+      "port": 8000,
+      "technology": "Kong Gateway"
+    },
+    {
+      "id": "user-service-1",
+      "name": "用户服务",
+      "type": "microservice",
+      "level": 2,
+      "plane": "business_plane",
+      "description": "用户管理和认证服务",
+      "status": "active",
+      "version": "v3.0.1",
+      "instances": 4,
+      "port": 8001,
+      "technology": "Spring Boot"
+    },
+    {
+      "id": "order-service-1",
+      "name": "订单服务",
+      "type": "microservice",
+      "level": 2,
+      "plane": "business_plane",
+      "description": "订单处理和管理服务",
+      "status": "active",
+      "version": "v2.5.3",
+      "instances": 6,
+      "port": 8002,
+      "technology": "Spring Boot"
+    },
+    {
+      "id": "redis-cluster-1",
+      "name": "Redis缓存集群",
+      "type": "cache_cluster",
+      "level": 3,
+      "plane": "middleware_plane",
+      "description": "分布式缓存集群，提供高速数据访问",
+      "status": "active",
+      "nodes": 6,
+      "config": "3主3从",
+      "technology": "Redis Cluster",
+      "region": "华东-1"
+    },
+    {
+      "id": "mq-cluster-1",
+      "name": "消息队列集群",
+      "type": "message_queue",
+      "level": 3,
+      "plane": "middleware_plane",
+      "description": "异步消息处理和服务解耦",
+      "status": "active",
+      "nodes": 3,
+      "config": "3节点集群",
+      "technology": "RabbitMQ",
+      "region": "华东-1"
+    },
+    {
+      "id": "mysql-cluster-1",
+      "name": "MySQL数据库集群",
+      "type": "database_cluster",
+      "level": 4,
+      "plane": "infrastructure_plane",
+      "description": "主从数据库集群，存储核心业务数据",
+      "status": "active",
+      "nodes": 3,
+      "config": "1主2从",
+      "technology": "MySQL 8.0",
+      "databases": ["user_db", "order_db", "product_db"],
+      "region": "华东-1"
+    },
+    {
+      "id": "k8s-cluster-1",
+      "name": "Kubernetes集群",
+      "type": "container_platform",
+      "level": 5,
+      "plane": "infrastructure_plane",
+      "description": "容器编排平台，管理应用部署和扩缩容",
+      "status": "active",
+      "nodes": 12,
+      "config": "3主9工作节点",
+      "technology": "Kubernetes 1.28",
+      "region": "华东-1"
+    },
+    {
+      "id": "monitoring-1",
+      "name": "监控告警系统",
+      "type": "monitoring_system",
+      "level": 3,
+      "plane": "middleware_plane",
+      "description": "系统监控、日志收集和告警通知",
+      "status": "active",
+      "instances": 2,
+      "technology": "Prometheus + Grafana",
+      "metrics": {
+        "dailyVolume": 1000000,
+        "successRate": 99.9
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "web-app-1",
+      "target": "api-gateway-1",
+      "type": "depends_on",
+      "strength": 0.9
+    },
+    {
+      "source": "api-gateway-1",
+      "target": "user-service-1",
+      "type": "routes_to",
+      "strength": 0.8
+    },
+    {
+      "source": "api-gateway-1",
+      "target": "order-service-1",
+      "type": "routes_to",
+      "strength": 0.8
+    },
+    {
+      "source": "user-service-1",
+      "target": "redis-cluster-1",
+      "type": "uses",
+      "strength": 0.7
+    },
+    {
+      "source": "order-service-1",
+      "target": "redis-cluster-1",
+      "type": "uses",
+      "strength": 0.7
+    },
+    {
+      "source": "user-service-1",
+      "target": "mysql-cluster-1",
+      "type": "stores_in",
+      "strength": 0.9
+    },
+    {
+      "source": "order-service-1",
+      "target": "mysql-cluster-1",
+      "type": "stores_in",
+      "strength": 0.9
+    },
+    {
+      "source": "order-service-1",
+      "target": "mq-cluster-1",
+      "type": "publishes_to",
+      "strength": 0.6
+    },
+    {
+      "source": "user-service-1",
+      "target": "mq-cluster-1",
+      "type": "subscribes_to",
+      "strength": 0.6
+    },
+    {
+      "source": "web-app-1",
+      "target": "k8s-cluster-1",
+      "type": "runs_on",
+      "strength": 0.8
+    },
+    {
+      "source": "api-gateway-1",
+      "target": "k8s-cluster-1",
+      "type": "runs_on",
+      "strength": 0.8
+    },
+    {
+      "source": "user-service-1",
+      "target": "k8s-cluster-1",
+      "type": "runs_on",
+      "strength": 0.8
+    },
+    {
+      "source": "order-service-1",
+      "target": "k8s-cluster-1",
+      "type": "runs_on",
+      "strength": 0.8
+    },
+    {
+      "source": "monitoring-1",
+      "target": "k8s-cluster-1",
+      "type": "monitors",
+      "strength": 0.5
+    },
+    {
+      "source": "monitoring-1",
+      "target": "mysql-cluster-1",
+      "type": "monitors",
+      "strength": 0.5
+    },
+    {
+      "source": "monitoring-1",
+      "target": "redis-cluster-1",
+      "type": "monitors",
+      "strength": 0.5
+    }
+  ],
+  "metadata": {
+    "levels": [
+      {
+        "level": 1,
+        "name": "前端应用层",
+        "color": "#1890ff"
+      },
+      {
+        "level": 2,
+        "name": "业务服务层",
+        "color": "#52c41a"
+      },
+      {
+        "level": 3,
+        "name": "中间件层",
+        "color": "#722ed1"
+      },
+      {
+        "level": 4,
+        "name": "数据存储层",
+        "color": "#faad14"
+      },
+      {
+        "level": 5,
+        "name": "基础设施层",
+        "color": "#f5222d"
+      }
+    ],
+    "relationTypes": [
+      {
+        "type": "depends_on",
+        "description": "依赖于",
+        "color": "#1890ff",
+        "strokeWidth": 2
+      },
+      {
+        "type": "routes_to",
+        "description": "路由到",
+        "color": "#52c41a",
+        "strokeWidth": 2
+      },
+      {
+        "type": "uses",
+        "description": "使用",
+        "color": "#722ed1",
+        "strokeWidth": 2
+      },
+      {
+        "type": "stores_in",
+        "description": "存储在",
+        "color": "#faad14",
+        "strokeWidth": 2
+      },
+      {
+        "type": "runs_on",
+        "description": "运行在",
+        "color": "#f5222d",
+        "strokeWidth": 2
+      },
+      {
+        "type": "publishes_to",
+        "description": "发布到",
+        "color": "#13c2c2",
+        "strokeWidth": 1
+      },
+      {
+        "type": "subscribes_to",
+        "description": "订阅",
+        "color": "#eb2f96",
+        "strokeWidth": 1
+      },
+      {
+        "type": "monitors",
+        "description": "监控",
+        "color": "#8c8c8c",
+        "strokeWidth": 1
+      }
+    ]
+  }
+}

@@ -5,11 +5,63 @@ import { useParams } from 'react-router-dom';
 import '../../../styles/entity-topology-detail.css';
 import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
 import DataTabs from '../../../components/EntityTopology/DataTabs';
-import TopologyGraph from '../../../components/EntityTopology/TopologyGraph';
+import EntityD3RelationshipGraph from '../../../components/EntityTopology/EntityD3RelationshipGraph';
+import entityTopologyData from '../../../data/entityTopologyMock.json';
 
 const { Title, Text } = Typography;
 
-// 类型定义
+// 类型定义 - 适配D3RelationshipGraph组件
+interface Node {
+  id: string;
+  name: string;
+  type: string;
+  level: number;
+  plane: string;
+  description: string;
+  status: string;
+  [key: string]: any;
+}
+
+interface Link {
+  source: string;
+  target: string;
+  type: string;
+  strength: number;
+}
+
+interface Plane {
+  id: string;
+  name: string;
+  level: number;
+  color: string;
+  borderColor: string;
+  description: string;
+  bounds: {
+    minLevel: number;
+    maxLevel: number;
+  };
+}
+
+interface GraphData {
+  planes: Plane[];
+  nodes: Node[];
+  links: Link[];
+  metadata: {
+    levels: Array<{
+      level: number;
+      name: string;
+      color: string;
+    }>;
+    relationTypes: Array<{
+      type: string;
+      description: string;
+      color: string;
+      strokeWidth: number;
+    }>;
+  };
+}
+
+// 保留原有的Entity和Dependency接口用于数据转换
 interface Entity {
   id: string;
   name: string;
@@ -44,6 +96,8 @@ interface TopologyData {
   };
   entities: Entity[];
   dependencies: Dependency[];
+  // 新增适配D3RelationshipGraph的数据
+  graphData?: GraphData;
 }
 
 const EntityTopologyDetail: React.FC = () => {
@@ -51,154 +105,71 @@ const EntityTopologyDetail: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [topologyData, setTopologyData] = useState<TopologyData | null>(null);
+  const [selectedEntity, setSelectedEntity] = useState<Entity | null>(null);
 
   // 模拟数据加载
   const loadTopologyDetail = useCallback(async () => {
     setLoading(true);
     try {
+      // 转换为原有的Entity和Dependency格式（用于DataTabs组件）
+      const entities: Entity[] = entityTopologyData.nodes.map(node => ({
+        id: node.id,
+        name: node.name,
+        type: node.type,
+        status: node.status as 'active' | 'inactive' | 'warning' | 'error',
+        properties: {
+          level: node.level,
+          plane: node.plane,
+          description: node.description,
+          ...Object.fromEntries(
+            Object.entries(node).filter(
+              ([key]) => !['id', 'name', 'type', 'level', 'plane', 'description', 'status'].includes(key)
+            )
+          )
+        },
+        connections: 0 // 将在下面计算
+      }));
+
+      // 计算每个实体的连接数
+      entities.forEach(entity => {
+        entity.connections = entityTopologyData.links.filter(
+          link => link.source === entity.id || link.target === entity.id
+        ).length;
+      });
+
+      const dependencies: Dependency[] = entityTopologyData.links.map((link, index) => ({
+        id: `dep-${index + 1}`,
+        source: link.source,
+        target: link.target,
+        type: link.type as 'depends_on' | 'provides_to' | 'connects_to',
+        strength: link.strength,
+        description:
+          entityTopologyData.metadata.relationTypes.find((rt: any) => rt.type === link.type)?.description ||
+          link.type.replace('_', ' ')
+      }));
+
       const mockData: TopologyData = {
         id: id || '1',
-        name: '核心网络拓扑',
-        description: '企业核心网络基础设施拓扑图，包含主要路由器、交换机和防火墙设备的连接关系。',
-        type: 'network',
+        name: '企业应用拓扑',
+        description: '企业核心应用系统拓扑图，展示前端应用、业务服务、中间件和基础设施的依赖关系。',
+        type: 'application',
         status: 'active',
-        plane: '网络平面',
-        tags: ['核心', '生产环境', '高可用'],
+        plane: '应用平面',
+        tags: ['核心', '生产环境', '微服务'],
         stats: {
-          nodeCount: 8,
-          linkCount: 7,
-          healthScore: 95,
-          lastUpdated: '2024-06-29 15:30:00'
+          nodeCount: entities.length,
+          linkCount: dependencies.length,
+          healthScore: 98,
+          lastUpdated: '2024-07-02 09:00:00'
         },
-        entities: [
-          {
-            id: 'router-1',
-            name: '核心路由器-1',
-            type: 'router',
-            status: 'active',
-            properties: { ip: '192.168.1.1', model: 'Cisco ASR 1000' },
-            connections: 5
-          },
-          {
-            id: 'switch-1',
-            name: '核心交换机-1',
-            type: 'switch',
-            status: 'active',
-            properties: { ip: '192.168.1.10', model: 'Cisco Catalyst 9500' },
-            connections: 8
-          },
-          {
-            id: 'firewall-1',
-            name: '防火墙-1',
-            type: 'firewall',
-            status: 'warning',
-            properties: { ip: '192.168.1.100', model: 'Fortinet FortiGate' },
-            connections: 3
-          },
-          {
-            id: 'server-1',
-            name: '应用服务器-1',
-            type: 'server',
-            status: 'active',
-            properties: { ip: '192.168.2.10', os: 'Ubuntu 20.04' },
-            connections: 2
-          },
-          {
-            id: 'router-2',
-            name: '核心路由器-2',
-            type: 'router',
-            status: 'active',
-            properties: { ip: '192.168.1.2', model: 'Cisco ASR 1000' },
-            connections: 4
-          },
-          {
-            id: 'switch-2',
-            name: '接入交换机-1',
-            type: 'switch',
-            status: 'active',
-            properties: { ip: '192.168.1.20', model: 'Cisco Catalyst 2960' },
-            connections: 6
-          },
-          {
-            id: 'server-2',
-            name: '数据库服务器-1',
-            type: 'database',
-            status: 'active',
-            properties: { ip: '192.168.2.20', os: 'CentOS 7' },
-            connections: 3
-          },
-          {
-            id: 'lb-1',
-            name: '负载均衡器-1',
-            type: 'loadbalancer',
-            status: 'active',
-            properties: { ip: '192.168.1.200', model: 'F5 BIG-IP' },
-            connections: 5
-          }
-        ],
-        dependencies: [
-          {
-            id: 'dep-1',
-            source: 'router-1',
-            target: 'switch-1',
-            type: 'connects_to',
-            strength: 0.9,
-            description: '主干网络连接'
-          },
-          {
-            id: 'dep-2',
-            source: 'switch-1',
-            target: 'firewall-1',
-            type: 'connects_to',
-            strength: 0.8,
-            description: '安全网关连接'
-          },
-          {
-            id: 'dep-3',
-            source: 'firewall-1',
-            target: 'server-1',
-            type: 'provides_to',
-            strength: 0.7,
-            description: '安全访问控制'
-          },
-          {
-            id: 'dep-4',
-            source: 'router-2',
-            target: 'switch-2',
-            type: 'connects_to',
-            strength: 0.8,
-            description: '接入网络连接'
-          },
-          {
-            id: 'dep-5',
-            source: 'lb-1',
-            target: 'server-1',
-            type: 'provides_to',
-            strength: 0.9,
-            description: '负载均衡服务'
-          },
-          {
-            id: 'dep-6',
-            source: 'lb-1',
-            target: 'server-2',
-            type: 'provides_to',
-            strength: 0.8,
-            description: '数据库负载均衡'
-          },
-          {
-            id: 'dep-7',
-            source: 'server-1',
-            target: 'server-2',
-            type: 'depends_on',
-            strength: 0.7,
-            description: '应用依赖数据库'
-          }
-        ]
+        entities,
+        dependencies
       };
 
       setTopologyData(mockData);
     } catch (error) {
       console.error('Failed to load topology detail:', error);
+      message.error('加载拓扑数据失败');
     } finally {
       setLoading(false);
     }
@@ -364,10 +335,19 @@ const EntityTopologyDetail: React.FC = () => {
         />
 
         {/* 右侧D3拓扑图 */}
-        <TopologyGraph
-          entities={topologyData.entities}
-          dependencies={topologyData.dependencies}
-        />
+        <div className="content-right">
+          <EntityD3RelationshipGraph
+            onNodeSelect={node => {
+              if (node) {
+                // 将D3图的节点转换为Entity格式
+                const entity = topologyData.entities.find(e => e.id === node.id);
+                setSelectedEntity(entity || null);
+              } else {
+                setSelectedEntity(null);
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   );
