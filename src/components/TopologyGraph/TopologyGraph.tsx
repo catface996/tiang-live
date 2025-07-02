@@ -126,7 +126,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
       2: '#52c41a', // 业务链路层 - 绿色
       3: '#faad14', // 业务系统层 - 橙色
       4: '#722ed1', // 中间件层 - 紫色
-      5: '#f5222d' // 基础设施层 - 红色
+      5: '#5F9EA0' // 基础设施层 - 黛青色
     };
     return levelColors[level as keyof typeof levelColors] || '#8c8c8c';
   };
@@ -163,7 +163,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
     const levelHeight = height / planes.length;
     const planeIndex = plane.level - 1;
     const baseY = planeIndex * levelHeight + 50;
-    
+
     return {
       x: 50,
       y: baseY,
@@ -190,9 +190,10 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
     svg.attr('width', containerWidth).attr('height', containerHeight);
 
     // 创建缩放行为
-    const zoom = d3.zoom<SVGSVGElement, unknown>()
+    const zoom = d3
+      .zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.1, 3])
-      .on('zoom', (event) => {
+      .on('zoom', event => {
         g.attr('transform', event.transform);
       });
 
@@ -203,21 +204,24 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
 
     // 绘制平面矩形框
     if (planes.length > 0) {
-      const planeRects = g.append('g')
+      const planeRects = g
+        .append('g')
         .attr('class', 'planes')
         .selectAll('g')
         .data(planes)
-        .enter().append('g')
+        .enter()
+        .append('g')
         .attr('class', 'plane');
 
-      planeRects.each(function(plane) {
+      planeRects.each(function (plane) {
         const bounds = calculatePlaneBounds(plane, nodes, containerWidth, containerHeight);
         if (!bounds) return;
 
         const planeGroup = d3.select(this);
-        
+
         // 绘制平面背景矩形
-        planeGroup.append('rect')
+        planeGroup
+          .append('rect')
           .attr('x', bounds.x)
           .attr('y', bounds.y)
           .attr('width', bounds.width)
@@ -231,7 +235,8 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
           .attr('opacity', 0.3);
 
         // 添加平面标题
-        planeGroup.append('text')
+        planeGroup
+          .append('text')
           .attr('x', bounds.x + 20)
           .attr('y', bounds.y + 25)
           .attr('font-size', '16px')
@@ -240,7 +245,8 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
           .text(plane.name);
 
         // 添加平面描述
-        planeGroup.append('text')
+        planeGroup
+          .append('text')
           .attr('x', bounds.x + 20)
           .attr('y', bounds.y + 45)
           .attr('font-size', '12px')
@@ -250,20 +256,27 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
     }
 
     // 创建力导向布局
-    const simulation = d3.forceSimulation<TopologyNode>(nodes)
-      .force('link', d3.forceLink<TopologyNode, TopologyLink>(links)
-        .id(d => d.id)
-        .distance(d => {
-          const sourceLevel = (d.source as TopologyNode).level;
-          const targetLevel = (d.target as TopologyNode).level;
-          const levelDiff = Math.abs(sourceLevel - targetLevel);
-          return levelDiff === 1 ? 80 : 120; // 相邻层级距离更近
-        })
-        .strength(d => d.strength)
+    const simulation = d3
+      .forceSimulation<TopologyNode>(nodes)
+      .force(
+        'link',
+        d3
+          .forceLink<TopologyNode, TopologyLink>(links)
+          .id(d => d.id)
+          .distance(d => {
+            const sourceLevel = (d.source as TopologyNode).level;
+            const targetLevel = (d.target as TopologyNode).level;
+            const levelDiff = Math.abs(sourceLevel - targetLevel);
+            return levelDiff === 1 ? 80 : 120; // 相邻层级距离更近
+          })
+          .strength(d => d.strength)
       )
       .force('charge', d3.forceManyBody().strength(-200))
       .force('center', d3.forceCenter(containerWidth / 2, containerHeight / 2))
-      .force('collision', d3.forceCollide().radius(d => getNodeSize(d.level) + 8));
+      .force(
+        'collision',
+        d3.forceCollide().radius(d => getNodeSize(d.level) + 8)
+      );
 
     // 添加平面约束力
     if (planes.length > 0) {
@@ -271,7 +284,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
         nodes.forEach(node => {
           const plane = planes.find(p => p.id === node.plane);
           if (!plane) return;
-          
+
           const bounds = calculatePlaneBounds(plane, nodes, containerWidth, containerHeight);
           if (!bounds) return;
 
@@ -292,11 +305,12 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
 
     // 创建箭头标记
     const defs = g.append('defs');
-    
+
     // 为每种关系类型创建箭头
     const relationTypes = Array.from(new Set(links.map(link => link.type)));
     relationTypes.forEach(relType => {
-      defs.append('marker')
+      defs
+        .append('marker')
         .attr('id', `arrow-${relType}`)
         .attr('viewBox', '0 -5 10 10')
         .attr('refX', 15)
@@ -310,60 +324,67 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
     });
 
     // 绘制连线
-    const linkElements = g.append('g')
+    const linkElements = g
+      .append('g')
       .attr('class', 'links')
       .selectAll('line')
       .data(links)
-      .enter().append('line')
+      .enter()
+      .append('line')
       .attr('stroke', d => getLinkColor(d.type))
       .attr('stroke-width', 2)
       .attr('stroke-opacity', 0.8)
       .attr('marker-end', d => `url(#arrow-${d.type})`);
 
     // 绘制节点
-    const nodeElements = g.append('g')
+    const nodeElements = g
+      .append('g')
       .attr('class', 'nodes')
       .selectAll('g')
       .data(nodes)
-      .enter().append('g')
+      .enter()
+      .append('g')
       .attr('class', 'node')
-      .call(d3.drag<SVGGElement, TopologyNode>()
-        .on('start', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          d.fx = d.x;
-          d.fy = d.y;
-        })
-        .on('drag', (event, d) => {
-          d.fx = event.x;
-          d.fy = event.y;
-        })
-        .on('end', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0);
-          
-          // 确保节点在平面约束范围内
-          if (planes.length > 0) {
-            const plane = planes.find(p => p.id === d.plane);
-            if (plane) {
-              const bounds = calculatePlaneBounds(plane, nodes, containerWidth, containerHeight);
-              if (bounds) {
-                const padding = 30;
-                const minX = bounds.x + padding;
-                const maxX = bounds.x + bounds.width - padding;
-                const minY = bounds.y + padding + 50;
-                const maxY = bounds.y + bounds.height - padding;
+      .call(
+        d3
+          .drag<SVGGElement, TopologyNode>()
+          .on('start', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on('drag', (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on('end', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0);
 
-                if (d.fx! < minX) d.fx = minX;
-                if (d.fx! > maxX) d.fx = maxX;
-                if (d.fy! < minY) d.fy = minY;
-                if (d.fy! > maxY) d.fy = maxY;
+            // 确保节点在平面约束范围内
+            if (planes.length > 0) {
+              const plane = planes.find(p => p.id === d.plane);
+              if (plane) {
+                const bounds = calculatePlaneBounds(plane, nodes, containerWidth, containerHeight);
+                if (bounds) {
+                  const padding = 30;
+                  const minX = bounds.x + padding;
+                  const maxX = bounds.x + bounds.width - padding;
+                  const minY = bounds.y + padding + 50;
+                  const maxY = bounds.y + bounds.height - padding;
+
+                  if (d.fx! < minX) d.fx = minX;
+                  if (d.fx! > maxX) d.fx = maxX;
+                  if (d.fy! < minY) d.fy = minY;
+                  if (d.fy! > maxY) d.fy = maxY;
+                }
               }
             }
-          }
-        })
+          })
       );
 
     // 添加节点圆圈
-    nodeElements.append('circle')
+    nodeElements
+      .append('circle')
       .attr('r', d => getNodeSize(d.level))
       .attr('fill', d => getNodeColor(d.type, d.level))
       .attr('stroke', '#fff')
@@ -371,7 +392,8 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
       .style('cursor', 'pointer');
 
     // 添加节点标签
-    nodeElements.append('text')
+    nodeElements
+      .append('text')
       .text(d => d.name)
       .attr('x', 0)
       .attr('y', d => getNodeSize(d.level) + 15)
@@ -386,21 +408,21 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
         // 高亮相关节点和连线
         const relatedNodeIds = new Set<string>();
         relatedNodeIds.add(d.id);
-        
+
         links.forEach(link => {
           const sourceId = typeof link.source === 'string' ? link.source : link.source.id;
           const targetId = typeof link.target === 'string' ? link.target : link.target.id;
-          
+
           if (sourceId === d.id) relatedNodeIds.add(targetId);
           if (targetId === d.id) relatedNodeIds.add(sourceId);
         });
 
         // 降低非相关节点的透明度
-        nodeElements.style('opacity', node => relatedNodeIds.has(node.id) ? 1 : 0.3);
+        nodeElements.style('opacity', node => (relatedNodeIds.has(node.id) ? 1 : 0.3));
         linkElements.style('opacity', link => {
           const sourceId = typeof link.source === 'string' ? link.source : link.source.id;
           const targetId = typeof link.target === 'string' ? link.target : link.target.id;
-          return (sourceId === d.id || targetId === d.id) ? 1 : 0.1;
+          return sourceId === d.id || targetId === d.id ? 1 : 0.1;
         });
 
         // 显示工具提示
@@ -518,12 +540,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
   if (error) {
     return (
       <div style={style} className={className}>
-        <Alert
-          message="Error"
-          description={error}
-          type="error"
-          showIcon
-        />
+        <Alert message="Error" description={error} type="error" showIcon />
       </div>
     );
   }
@@ -535,7 +552,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
   return (
     <GraphContainer ref={containerRef} style={{ height, ...style }} className={className}>
       <svg ref={svgRef}></svg>
-      
+
       {/* 控制面板 */}
       {showControls && (
         <ControlPanel>
@@ -552,10 +569,8 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
       {/* 图例 */}
       {showLegend && (
         <LegendContainer>
-          <div style={{ marginBottom: 12, fontWeight: 'bold', fontSize: '14px' }}>
-            图例
-          </div>
-          
+          <div style={{ marginBottom: 12, fontWeight: 'bold', fontSize: '14px' }}>图例</div>
+
           {/* 平面图例 */}
           {planes.length > 0 && (
             <div style={{ marginBottom: 12 }}>
@@ -581,7 +596,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
           {/* 节点类型图例 */}
           <div style={{ marginBottom: 8 }}>
             <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>节点层级:</div>
-            {uniqueLevels.map((level) => (
+            {uniqueLevels.map(level => (
               <div key={level} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
                   style={{
@@ -600,7 +615,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
           {/* 关系类型图例 */}
           <div>
             <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>关系类型:</div>
-            {uniqueRelationTypes.map((relType) => (
+            {uniqueRelationTypes.map(relType => (
               <div key={relType} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
                   style={{
@@ -624,23 +639,26 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
           <div style={{ marginBottom: 2 }}>类型: {tooltip.content.type}</div>
           <div style={{ marginBottom: 2 }}>层级: {tooltip.content.level}</div>
           <div style={{ marginBottom: 2 }}>平面: {tooltip.content.plane}</div>
-          <div style={{ marginBottom: 2 }}>状态: 
-            <Tag color={tooltip.content.status === 'active' || tooltip.content.status === 'running' ? 'green' : 'red'} size="small" style={{ marginLeft: 4 }}>
+          <div style={{ marginBottom: 2 }}>
+            状态:
+            <Tag
+              color={tooltip.content.status === 'active' || tooltip.content.status === 'running' ? 'green' : 'red'}
+              size="small"
+              style={{ marginLeft: 4 }}
+            >
               {tooltip.content.status}
             </Tag>
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-            {tooltip.content.description}
-          </div>
+          <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>{tooltip.content.description}</div>
         </TooltipContainer>
       )}
 
       {/* 选中节点详情 */}
       {selectedNode && (
-        <Card 
-          title={`节点详情: ${selectedNode.name}`} 
-          size="small" 
-          style={{ 
+        <Card
+          title={`节点详情: ${selectedNode.name}`}
+          size="small"
+          style={{
             position: 'absolute',
             bottom: 16,
             left: 16,
@@ -648,7 +666,11 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
             maxHeight: '200px',
             overflow: 'auto'
           }}
-          extra={<Button size="small" onClick={() => setSelectedNode(null)}>关闭</Button>}
+          extra={
+            <Button size="small" onClick={() => setSelectedNode(null)}>
+              关闭
+            </Button>
+          }
         >
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             <div>
@@ -657,23 +679,64 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({
               <div>类型: {selectedNode.type}</div>
               <div>层级: {selectedNode.level}</div>
               <div>平面: {selectedNode.plane}</div>
-              <div>状态: <Tag color={selectedNode.status === 'active' || selectedNode.status === 'running' ? 'green' : 'red'}>{selectedNode.status}</Tag></div>
+              <div>
+                状态:{' '}
+                <Tag color={selectedNode.status === 'active' || selectedNode.status === 'running' ? 'green' : 'red'}>
+                  {selectedNode.status}
+                </Tag>
+              </div>
             </div>
             <div>
               <strong>描述:</strong>
               <div>{selectedNode.description}</div>
             </div>
             {/* 显示其他自定义属性 */}
-            {Object.keys(selectedNode).filter(key => 
-              !['id', 'name', 'type', 'level', 'plane', 'description', 'status', 'x', 'y', 'fx', 'fy', 'vx', 'vy', 'index'].includes(key)
+            {Object.keys(selectedNode).filter(
+              key =>
+                ![
+                  'id',
+                  'name',
+                  'type',
+                  'level',
+                  'plane',
+                  'description',
+                  'status',
+                  'x',
+                  'y',
+                  'fx',
+                  'fy',
+                  'vx',
+                  'vy',
+                  'index'
+                ].includes(key)
             ).length > 0 && (
               <div>
                 <strong>其他信息:</strong>
-                {Object.entries(selectedNode).filter(([key]) => 
-                  !['id', 'name', 'type', 'level', 'plane', 'description', 'status', 'x', 'y', 'fx', 'fy', 'vx', 'vy', 'index'].includes(key)
-                ).map(([key, value]) => (
-                  <div key={key}>{key}: {typeof value === 'object' ? JSON.stringify(value) : String(value)}</div>
-                ))}
+                {Object.entries(selectedNode)
+                  .filter(
+                    ([key]) =>
+                      ![
+                        'id',
+                        'name',
+                        'type',
+                        'level',
+                        'plane',
+                        'description',
+                        'status',
+                        'x',
+                        'y',
+                        'fx',
+                        'fy',
+                        'vx',
+                        'vy',
+                        'index'
+                      ].includes(key)
+                  )
+                  .map(([key, value]) => (
+                    <div key={key}>
+                      {key}: {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                    </div>
+                  ))}
               </div>
             )}
           </div>

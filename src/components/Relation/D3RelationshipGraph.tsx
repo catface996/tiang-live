@@ -140,7 +140,7 @@ const D3RelationshipGraph: React.FC = () => {
       2: '#52c41a', // 业务链路层 - 绿色
       3: '#faad14', // 业务系统层 - 橙色
       4: '#722ed1', // 中间件层 - 紫色
-      5: '#f5222d' // 基础设施层 - 红色
+      5: '#5F9EA0' // 基础设施层 - 黛青色
     };
     return levelColors[level as keyof typeof levelColors] || '#8c8c8c';
   };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Typography, Space, Spin, Empty, Breadcrumb, message, Modal } from 'antd';
-import { NodeIndexOutlined, HomeOutlined, ToolOutlined } from '@ant-design/icons';
+import { Typography, Space, Spin, Empty, Breadcrumb, message, Modal, Table, Tag, Button, Select, Radio } from 'antd';
+import { NodeIndexOutlined, HomeOutlined, ToolOutlined, SwapOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import '../../../styles/entity-topology-detail.css';
@@ -8,6 +8,7 @@ import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
 import DataTabs from '../../../components/EntityTopology/DataTabs';
 import EntityD3RelationshipGraph from '../../../components/EntityTopology/EntityD3RelationshipGraph';
 import entityTopologyData from '../../../data/entityTopologyMock.json';
+import availableEntitiesData from '../../../data/availableEntitiesMock.json';
 
 const { Title, Text } = Typography;
 
@@ -55,6 +56,79 @@ const DangerText = styled.p`
   color: var(--error-color);
   font-weight: 500;
   margin: 8px 0;
+`;
+
+const SelectionHint = styled.div`
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-secondary);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+
+  p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .highlight {
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+`;
+
+const RelationshipForm = styled.div`
+  .form-item {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .entity-select {
+    width: 100%;
+  }
+
+  .relationship-preview {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-secondary);
+    padding: 16px;
+    border-radius: 6px;
+    margin: 16px 0;
+    text-align: center;
+
+    .preview-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 16px;
+    }
+
+    .entity-name {
+      font-weight: bold;
+      color: var(--text-primary);
+      padding: 4px 8px;
+      background: var(--bg-elevated);
+      border-radius: 4px;
+    }
+
+    .arrow {
+      color: var(--primary-color);
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .relationship-type {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+  }
 `;
 
 // 类型定义 - 适配D3RelationshipGraph组件
@@ -157,6 +231,13 @@ const EntityTopologyDetail: React.FC = () => {
   const [entityToDelete, setEntityToDelete] = useState<Entity | null>(null);
   const [deleteDependencyModalVisible, setDeleteDependencyModalVisible] = useState(false);
   const [dependencyToDelete, setDependencyToDelete] = useState<Dependency | null>(null);
+  const [selectEntityModalVisible, setSelectEntityModalVisible] = useState(false);
+  const [availableEntities, setAvailableEntities] = useState<Entity[]>([]);
+  const [selectedEntityIds, setSelectedEntityIds] = useState<string[]>([]);
+  const [addDependencyModalVisible, setAddDependencyModalVisible] = useState(false);
+  const [sourceEntityId, setSourceEntityId] = useState<string>('');
+  const [targetEntityId, setTargetEntityId] = useState<string>('');
+  const [relationshipType, setRelationshipType] = useState<string>('depends_on');
 
   // 模拟数据加载
   const loadTopologyDetail = useCallback(async () => {
@@ -334,14 +415,167 @@ const EntityTopologyDetail: React.FC = () => {
 
   // 处理新增依赖关系
   const handleAddDependency = () => {
-    message.info('新增依赖关系功能开发中...');
-    // TODO: 实现新增依赖关系功能，可以打开一个模态框让用户选择源实体、目标实体和关系类型
+    if (!topologyData || topologyData.entities.length < 2) {
+      message.warning('至少需要2个实体才能建立依赖关系');
+      return;
+    }
+
+    // 重置状态
+    setSourceEntityId('');
+    setTargetEntityId('');
+    setRelationshipType('depends_on');
+    setAddDependencyModalVisible(true);
+  };
+
+  // 确认创建依赖关系
+  const confirmAddDependency = () => {
+    if (!topologyData || !sourceEntityId || !targetEntityId) {
+      message.error('请选择源实体和目标实体');
+      return;
+    }
+
+    if (sourceEntityId === targetEntityId) {
+      message.error('源实体和目标实体不能相同');
+      return;
+    }
+
+    // 检查是否已存在相同的依赖关系
+    const existingDependency = topologyData.dependencies.find(
+      dep => dep.source === sourceEntityId && dep.target === targetEntityId && dep.type === relationshipType
+    );
+
+    if (existingDependency) {
+      message.error('该依赖关系已存在');
+      return;
+    }
+
+    // 创建新的依赖关系
+    const newDependency: Dependency = {
+      id: `dep-${Date.now()}`,
+      source: sourceEntityId,
+      target: targetEntityId,
+      type: relationshipType,
+      description: getRelationshipDescription(relationshipType),
+      strength: 1
+    };
+
+    // 更新拓扑数据
+    const updatedDependencies = [...topologyData.dependencies, newDependency];
+
+    // 更新实体的连接数
+    const updatedEntities = topologyData.entities.map(entity => {
+      const connectionCount = updatedDependencies.filter(
+        dep => dep.source === entity.id || dep.target === entity.id
+      ).length;
+      return { ...entity, connections: connectionCount };
+    });
+
+    setTopologyData({
+      ...topologyData,
+      entities: updatedEntities,
+      dependencies: updatedDependencies,
+      stats: {
+        ...topologyData.stats,
+        linkCount: updatedDependencies.length
+      }
+    });
+
+    const sourceEntity = topologyData.entities.find(e => e.id === sourceEntityId);
+    const targetEntity = topologyData.entities.find(e => e.id === targetEntityId);
+    const sourceName = sourceEntity ? sourceEntity.name : sourceEntityId;
+    const targetName = targetEntity ? targetEntity.name : targetEntityId;
+
+    message.success(`成功创建依赖关系：${sourceName} → ${targetName}`);
+
+    // 关闭Modal
+    setAddDependencyModalVisible(false);
+  };
+
+  // 取消创建依赖关系
+  const cancelAddDependency = () => {
+    setAddDependencyModalVisible(false);
+  };
+
+  // 获取关系类型描述
+  const getRelationshipDescription = (type: string): string => {
+    const descriptions: Record<string, string> = {
+      depends_on: '依赖于',
+      connects_to: '连接到',
+      uses: '使用',
+      routes_to: '路由到',
+      stores_in: '存储在',
+      reads_from: '读取自',
+      writes_to: '写入到',
+      monitors: '监控',
+      backs_up: '备份'
+    };
+    return descriptions[type] || type;
+  };
+
+  // 交换源和目标实体
+  const swapSourceAndTarget = () => {
+    const temp = sourceEntityId;
+    setSourceEntityId(targetEntityId);
+    setTargetEntityId(temp);
   };
 
   // 处理新增实体
   const handleAddEntity = () => {
-    message.info('新增实体功能开发中...');
-    // TODO: 实现新增实体功能，可以打开一个模态框让用户输入实体信息
+    // 获取可用的实体列表（排除已经在拓扑中的实体）
+    const currentEntityIds = topologyData?.entities.map(e => e.id) || [];
+    const available = availableEntitiesData.entities.filter(entity => !currentEntityIds.includes(entity.id));
+
+    setAvailableEntities(available);
+    setSelectedEntityIds([]);
+    setSelectEntityModalVisible(true);
+  };
+
+  // 确认添加选中的实体
+  const confirmAddEntities = () => {
+    if (!topologyData || selectedEntityIds.length === 0) return;
+
+    // 获取选中的实体
+    const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
+
+    // 添加到拓扑数据中
+    const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
+
+    setTopologyData({
+      ...topologyData,
+      entities: updatedEntities,
+      stats: {
+        ...topologyData.stats,
+        nodeCount: updatedEntities.length
+      }
+    });
+
+    message.success(`成功添加 ${entitiesToAdd.length} 个实体到拓扑图`);
+
+    // 关闭Modal
+    setSelectEntityModalVisible(false);
+    setSelectedEntityIds([]);
+  };
+
+  // 取消添加实体
+  const cancelAddEntities = () => {
+    setSelectEntityModalVisible(false);
+    setSelectedEntityIds([]);
+  };
+
+  // 处理实体选择变化
+  const handleEntitySelectionChange = (selectedRowKeys: React.Key[]) => {
+    setSelectedEntityIds(selectedRowKeys as string[]);
+  };
+
+  // 全选实体
+  const selectAllEntities = () => {
+    const allIds = availableEntities.map(entity => entity.id);
+    setSelectedEntityIds(allIds);
+  };
+
+  // 取消全选
+  const clearAllSelection = () => {
+    setSelectedEntityIds([]);
   };
 
   if (loading) {
@@ -503,6 +737,250 @@ const EntityTopologyDetail: React.FC = () => {
             })()}
           </div>
         )}
+      </Modal>
+
+      {/* 选择实体Modal */}
+      <Modal
+        title="选择实体"
+        open={selectEntityModalVisible}
+        onOk={confirmAddEntities}
+        onCancel={cancelAddEntities}
+        okText={`确定添加 (${selectedEntityIds.length})`}
+        cancelText="取消"
+        width={800}
+        okButtonProps={{ disabled: selectedEntityIds.length === 0 }}
+      >
+        <SelectionHint>
+          <p>
+            从下列可用实体中选择要添加到拓扑图的实体。
+            {availableEntities.length > 0 && (
+              <>
+                共有 <span className="highlight">{availableEntities.length}</span> 个可用实体， 已选择{' '}
+                <span className="highlight">{selectedEntityIds.length}</span> 个。
+              </>
+            )}
+          </p>
+        </SelectionHint>
+        {availableEntities.length > 0 && (
+          <div style={{ marginBottom: 16 }}>
+            <Space>
+              <Button
+                size="small"
+                onClick={selectAllEntities}
+                disabled={selectedEntityIds.length === availableEntities.length}
+              >
+                全选
+              </Button>
+              <Button size="small" onClick={clearAllSelection} disabled={selectedEntityIds.length === 0}>
+                清空
+              </Button>
+            </Space>
+          </div>
+        )}
+        {availableEntities.length === 0 ? (
+          <Empty description="暂无可添加的实体" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        ) : (
+          <Table
+            rowSelection={{
+              type: 'checkbox',
+              selectedRowKeys: selectedEntityIds,
+              onChange: handleEntitySelectionChange
+            }}
+            columns={[
+              {
+                title: '实体名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: '30%',
+                render: (name: string) => <strong>{name}</strong>
+              },
+              {
+                title: '类型',
+                dataIndex: 'type',
+                key: 'type',
+                width: '25%',
+                render: (type: string) => <Tag color="blue">{type.replace(/_/g, ' ')}</Tag>
+              },
+              {
+                title: '状态',
+                dataIndex: 'status',
+                key: 'status',
+                width: '15%',
+                render: (status: string) => {
+                  const statusConfig = {
+                    active: { color: 'green', text: '正常' },
+                    warning: { color: 'orange', text: '警告' },
+                    error: { color: 'red', text: '错误' },
+                    inactive: { color: 'gray', text: '停用' }
+                  };
+                  const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
+                  return <Tag color={config.color}>{config.text}</Tag>;
+                }
+              },
+              {
+                title: '描述',
+                dataIndex: ['properties', 'description'],
+                key: 'description',
+                width: '30%',
+                render: (description: string) => (
+                  <span style={{ color: 'var(--text-secondary)' }}>{description || '暂无描述'}</span>
+                )
+              }
+            ]}
+            dataSource={availableEntities}
+            rowKey="id"
+            size="small"
+            pagination={{
+              pageSize: 8,
+              showSizeChanger: false,
+              showQuickJumper: true,
+              showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
+            }}
+          />
+        )}
+      </Modal>
+
+      {/* 添加依赖关系Modal */}
+      <Modal
+        title="创建依赖关系"
+        open={addDependencyModalVisible}
+        onOk={confirmAddDependency}
+        onCancel={cancelAddDependency}
+        okText="建立关系"
+        cancelText="取消"
+        width={600}
+        okButtonProps={{
+          disabled:
+            !sourceEntityId ||
+            !targetEntityId ||
+            sourceEntityId === targetEntityId ||
+            topologyData?.dependencies.find(
+              dep => dep.source === sourceEntityId && dep.target === targetEntityId && dep.type === relationshipType
+            ) !== undefined
+        }}
+      >
+        <SelectionHint>
+          <p>
+            选择源实体和目标实体来建立依赖关系。 当前拓扑中有{' '}
+            <span className="highlight">{topologyData?.entities.length || 0}</span> 个实体可用。
+          </p>
+        </SelectionHint>
+
+        <RelationshipForm>
+          <div className="form-item">
+            <label className="form-label">源实体</label>
+            <Select
+              className="entity-select"
+              placeholder="请选择源实体"
+              value={sourceEntityId || undefined}
+              onChange={setSourceEntityId}
+              showSearch
+              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              options={
+                topologyData?.entities.map(entity => ({
+                  value: entity.id,
+                  label: entity.name,
+                  disabled: entity.id === targetEntityId
+                })) || []
+              }
+            />
+          </div>
+
+          <div style={{ textAlign: 'center', margin: '12px 0' }}>
+            <Button
+              type="text"
+              icon={<SwapOutlined />}
+              onClick={swapSourceAndTarget}
+              disabled={!sourceEntityId && !targetEntityId}
+              title="交换源实体和目标实体"
+            >
+              交换
+            </Button>
+          </div>
+
+          <div className="form-item">
+            <label className="form-label">目标实体</label>
+            <Select
+              className="entity-select"
+              placeholder="请选择目标实体"
+              value={targetEntityId || undefined}
+              onChange={setTargetEntityId}
+              showSearch
+              filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              options={
+                topologyData?.entities.map(entity => ({
+                  value: entity.id,
+                  label: entity.name,
+                  disabled: entity.id === sourceEntityId
+                })) || []
+              }
+            />
+          </div>
+
+          <div className="form-item">
+            <label className="form-label">关系类型</label>
+            <Radio.Group
+              value={relationshipType}
+              onChange={e => setRelationshipType(e.target.value)}
+              style={{ width: '100%' }}
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                <Radio value="depends_on">依赖于</Radio>
+                <Radio value="connects_to">连接到</Radio>
+                <Radio value="uses">使用</Radio>
+                <Radio value="routes_to">路由到</Radio>
+                <Radio value="stores_in">存储在</Radio>
+                <Radio value="reads_from">读取自</Radio>
+                <Radio value="writes_to">写入到</Radio>
+                <Radio value="monitors">监控</Radio>
+                <Radio value="backs_up">备份</Radio>
+              </div>
+            </Radio.Group>
+          </div>
+
+          {sourceEntityId && targetEntityId && (
+            <>
+              {(() => {
+                // 检查是否已存在相同的依赖关系
+                const existingDependency = topologyData?.dependencies.find(
+                  dep => dep.source === sourceEntityId && dep.target === targetEntityId && dep.type === relationshipType
+                );
+
+                if (existingDependency) {
+                  return (
+                    <div
+                      style={{
+                        background: 'var(--error-color)',
+                        color: 'white',
+                        padding: '12px',
+                        borderRadius: '6px',
+                        margin: '16px 0',
+                        textAlign: 'center'
+                      }}
+                    >
+                      ⚠️ 该依赖关系已存在
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="relationship-preview">
+                    <div className="preview-content">
+                      <span className="entity-name">
+                        {topologyData?.entities.find(e => e.id === sourceEntityId)?.name}
+                      </span>
+                      <span className="arrow">→</span>
+                      <span className="entity-name">
+                        {topologyData?.entities.find(e => e.id === targetEntityId)?.name}
+                      </span>
+                    </div>
+                    <div className="relationship-type">关系类型: {getRelationshipDescription(relationshipType)}</div>
+                  </div>
+                );
+              })()}
+            </>
+          )}
+        </RelationshipForm>
       </Modal>
     </div>
   );

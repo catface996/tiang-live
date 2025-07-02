@@ -1,0 +1,160 @@
+{
+  "entities": [
+    {
+      "id": "web-portal-1",
+      "name": "企业门户网站",
+      "type": "web_application",
+      "status": "active",
+      "properties": {
+        "description": "企业官方门户网站，提供产品展示和用户服务",
+        "technology": "React + Node.js",
+        "environment": "production",
+        "version": "2.1.0"
+      },
+      "connections": 0
+    },
+    {
+      "id": "mobile-app-1",
+      "name": "移动应用客户端",
+      "type": "mobile_application",
+      "status": "active",
+      "properties": {
+        "description": "iOS和Android移动应用",
+        "technology": "React Native",
+        "environment": "production",
+        "version": "1.8.2"
+      },
+      "connections": 0
+    },
+    {
+      "id": "payment-service-1",
+      "name": "支付服务",
+      "type": "microservice",
+      "status": "active",
+      "properties": {
+        "description": "处理支付相关业务逻辑",
+        "technology": "Spring Boot",
+        "environment": "production",
+        "version": "3.2.1"
+      },
+      "connections": 0
+    },
+    {
+      "id": "notification-service-1",
+      "name": "通知服务",
+      "type": "microservice",
+      "status": "active",
+      "properties": {
+        "description": "统一消息通知服务",
+        "technology": "Spring Boot",
+        "environment": "production",
+        "version": "2.5.0"
+      },
+      "connections": 0
+    },
+    {
+      "id": "elasticsearch-cluster-1",
+      "name": "搜索引擎集群",
+      "type": "search_engine",
+      "status": "active",
+      "properties": {
+        "description": "Elasticsearch搜索引擎集群",
+        "technology": "Elasticsearch",
+        "environment": "production",
+        "version": "8.5.0"
+      },
+      "connections": 0
+    },
+    {
+      "id": "kafka-cluster-1",
+      "name": "消息队列集群",
+      "type": "message_queue",
+      "status": "active",
+      "properties": {
+        "description": "Apache Kafka消息队列集群",
+        "technology": "Apache Kafka",
+        "environment": "production",
+        "version": "3.3.0"
+      },
+      "connections": 0
+    },
+    {
+      "id": "postgres-primary-1",
+      "name": "PostgreSQL主库",
+      "type": "database",
+      "status": "active",
+      "properties": {
+        "description": "PostgreSQL主数据库",
+        "technology": "PostgreSQL",
+        "environment": "production",
+        "version": "14.6"
+      },
+      "connections": 0
+    },
+    {
+      "id": "postgres-replica-1",
+      "name": "PostgreSQL从库",
+      "type": "database",
+      "status": "active",
+      "properties": {
+        "description": "PostgreSQL只读从库",
+        "technology": "PostgreSQL",
+        "environment": "production",
+        "version": "14.6"
+      },
+      "connections": 0
+    },
+    {
+      "id": "cdn-service-1",
+      "name": "CDN加速服务",
+      "type": "cdn",
+      "status": "active",
+      "properties": {
+        "description": "内容分发网络服务",
+        "technology": "CloudFlare",
+        "environment": "production",
+        "version": "latest"
+      },
+      "connections": 0
+    },
+    {
+      "id": "backup-service-1",
+      "name": "备份服务",
+      "type": "backup_system",
+      "status": "active",
+      "properties": {
+        "description": "数据备份和恢复服务",
+        "technology": "Custom Script",
+        "environment": "production",
+        "version": "1.0.0"
+      },
+      "connections": 0
+    },
+    {
+      "id": "log-aggregator-1",
+      "name": "日志聚合服务",
+      "type": "logging_system",
+      "status": "active",
+      "properties": {
+        "description": "ELK日志聚合和分析系统",
+        "technology": "ELK Stack",
+        "environment": "production",
+        "version": "8.5.0"
+      },
+      "connections": 0
+    },
+    {
+      "id": "security-scanner-1",
+      "name": "安全扫描服务",
+      "type": "security_system",
+      "status": "warning",
+      "properties": {
+        "description": "安全漏洞扫描和监控",
+        "technology": "OWASP ZAP",
+        "environment": "production",
+        "version": "2.12.0"
+      },
+      "connections": 0
+    }
+  ]
+}

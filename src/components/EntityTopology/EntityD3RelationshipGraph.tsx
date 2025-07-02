@@ -169,7 +169,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
       2: '#52c41a', // 业务服务层 - 绿色
       3: '#722ed1', // 中间件层 - 紫色
       4: '#faad14', // 数据存储层 - 橙色
-      5: '#f5222d' // 基础设施层 - 红色
+      5: '#5F9EA0' // 基础设施层 - 黛青色
     };
     return levelColors[level as keyof typeof levelColors] || '#8c8c8c';
   };
@@ -549,8 +549,8 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
         id: 'infrastructure_plane',
         name: '基础设施平面',
         level: 3,
-        color: '#fff2f0',
-        borderColor: '#f5222d',
+        color: '#f0f8f8',
+        borderColor: '#5F9EA0',
         description: '基础设施和资源层',
         bounds: { minLevel: 4, maxLevel: 5 }
       }
@@ -601,7 +601,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
         { level: 2, name: '业务服务层', color: '#52c41a' },
         { level: 3, name: '中间件层', color: '#722ed1' },
         { level: 4, name: '数据存储层', color: '#faad14' },
-        { level: 5, name: '基础设施层', color: '#f5222d' }
+        { level: 5, name: '基础设施层', color: '#5F9EA0' }
       ],
       relationTypes: [
         { type: 'depends_on', description: '依赖于', color: '#1890ff', strokeWidth: 2 },

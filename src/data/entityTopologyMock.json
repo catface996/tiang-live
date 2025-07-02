@@ -28,8 +28,8 @@
       "id": "infrastructure_plane",
       "name": "基础设施平面",
       "level": 3,
-      "color": "#fff2f0",
-      "borderColor": "#f5222d",
+      "color": "#f0f8f8",
+      "borderColor": "#5F9EA0",
       "description": "基础设施和资源层",
       "bounds": {
         "minLevel": 4,
@@ -282,7 +282,7 @@
       {
         "level": 5,
         "name": "基础设施层",
-        "color": "#f5222d"
+        "color": "#5F9EA0"
       }
     ],
     "relationTypes": [

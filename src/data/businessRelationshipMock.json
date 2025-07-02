@@ -17,7 +17,7 @@
       "description": "业务场景的具体执行链路"
     },
     {
-      "id": "application_plane", 
+      "id": "application_plane",
       "name": "应用平面",
       "level": 3,
       "color": "#fff7e6",
@@ -26,7 +26,7 @@
     },
     {
       "id": "middleware_plane",
-      "name": "中间件平面", 
+      "name": "中间件平面",
       "level": 4,
       "color": "#f9f0ff",
       "borderColor": "#722ed1",
@@ -36,8 +36,8 @@
       "id": "infrastructure_plane",
       "name": "基础设施平面",
       "level": 5,
-      "color": "#fff2f0",
-      "borderColor": "#f5222d",
+      "color": "#f0f8f8",
+      "borderColor": "#5F9EA0",
       "description": "基础设施和资源层"
     }
   ],
@@ -52,7 +52,7 @@
       "status": "active"
     },
     {
-      "id": "business_scenario_2", 
+      "id": "business_scenario_2",
       "name": "支付结算场景",
       "type": "business_scenario",
       "level": 1,
@@ -63,7 +63,7 @@
     {
       "id": "business_link_1",
       "name": "用户下单链路",
-      "type": "business_link", 
+      "type": "business_link",
       "level": 2,
       "plane": "business_link_plane",
       "description": "从商品选择到订单确认的业务链路",
@@ -75,7 +75,7 @@
       "type": "business_link",
       "level": 2,
       "plane": "business_link_plane",
-      "description": "支付验证、扣款、确认的业务链路", 
+      "description": "支付验证、扣款、确认的业务链路",
       "status": "active"
     },
     {
@@ -84,7 +84,7 @@
       "type": "business_link",
       "level": 2,
       "plane": "business_link_plane",
-      "description": "交易风险识别和安全审核链路", 
+      "description": "交易风险识别和安全审核链路",
       "status": "active"
     },
     {
@@ -93,7 +93,7 @@
       "type": "business_link",
       "level": 2,
       "plane": "business_link_plane",
-      "description": "商户资金结算和清分业务链路", 
+      "description": "商户资金结算和清分业务链路",
       "status": "active"
     },
     {
@@ -108,7 +108,7 @@
       "instances": 6
     },
     {
-      "id": "system_2", 
+      "id": "system_2",
       "name": "商品管理系统",
       "type": "business_system",
       "level": 3,
@@ -120,7 +120,7 @@
     },
     {
       "id": "system_3",
-      "name": "订单管理系统", 
+      "name": "订单管理系统",
       "type": "business_system",
       "level": 3,
       "plane": "application_plane",
@@ -136,7 +136,7 @@
       "level": 3,
       "plane": "application_plane",
       "description": "统一支付接入和路由系统",
-      "status": "running", 
+      "status": "running",
       "version": "v1.9.3",
       "instances": 10
     },
@@ -147,7 +147,7 @@
       "level": 3,
       "plane": "application_plane",
       "description": "用户钱包余额和虚拟账户管理系统",
-      "status": "running", 
+      "status": "running",
       "version": "v2.3.1",
       "instances": 8
     },
@@ -158,7 +158,7 @@
       "level": 3,
       "plane": "application_plane",
       "description": "交易风险识别和反欺诈系统",
-      "status": "running", 
+      "status": "running",
       "version": "v1.7.2",
       "instances": 6
     },
@@ -169,7 +169,7 @@
       "level": 3,
       "plane": "application_plane",
       "description": "资金清分和商户结算系统",
-      "status": "running", 
+      "status": "running",
       "version": "v2.0.5",
       "instances": 4
     },
@@ -180,7 +180,7 @@
       "level": 3,
       "plane": "application_plane",
       "description": "资金流水和账务记录系统",
-      "status": "running", 
+      "status": "running",
       "version": "v1.5.8",
       "instances": 6
     },
@@ -198,7 +198,7 @@
     {
       "id": "middleware_2",
       "name": "消息队列",
-      "type": "middleware", 
+      "type": "middleware",
       "level": 4,
       "plane": "middleware_plane",
       "description": "异步消息处理和事件驱动架构支撑",
@@ -209,7 +209,7 @@
     {
       "id": "middleware_3",
       "name": "规则引擎",
-      "type": "middleware", 
+      "type": "middleware",
       "level": 4,
       "plane": "middleware_plane",
       "description": "风控规则和业务规则执行引擎",
@@ -305,7 +305,7 @@
     {
       "source": "business_link_1",
       "target": "system_2",
-      "type": "depends_on", 
+      "type": "depends_on",
       "strength": 0.8
     },
     {
@@ -435,7 +435,7 @@
       },
       {
         "level": 2,
-        "name": "业务链路层", 
+        "name": "业务链路层",
         "description": "业务场景的具体执行链路",
         "color": "#52c41a"
       },
@@ -455,7 +455,7 @@
         "level": 5,
         "name": "基础设施层",
         "description": "底层计算、存储、网络基础设施",
-        "color": "#f5222d"
+        "color": "#5F9EA0"
       }
     ],
     "relationTypes": [
