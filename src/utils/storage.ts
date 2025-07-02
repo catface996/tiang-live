@@ -6,7 +6,8 @@
 // 存储键名常量
 export const STORAGE_KEYS = {
   THEME: 'preferred-theme',
-  LANGUAGE: 'preferred-language'
+  LANGUAGE: 'preferred-language',
+  MENU_COLLAPSED: 'menu-collapsed'
 } as const;
 
 // 主题类型
@@ -61,6 +62,19 @@ export const languageStorage = {
   },
   set: (language: LanguageType): void => {
     safeSetItem(STORAGE_KEYS.LANGUAGE, language);
+  }
+};
+
+/**
+ * 菜单折叠状态的存储操作
+ */
+export const menuStorage = {
+  get: (): boolean => {
+    const stored = safeGetItem(STORAGE_KEYS.MENU_COLLAPSED);
+    return stored === 'true';
+  },
+  set: (collapsed: boolean): void => {
+    safeSetItem(STORAGE_KEYS.MENU_COLLAPSED, collapsed.toString());
   }
 };
 

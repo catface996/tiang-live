@@ -28,6 +28,7 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { ASSETS } from '../utils/assetUtils';
+import { menuStorage } from '../utils/storage';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import ThemeToggle from '../components/ThemeToggle';
 import { useAppSelector } from '../store';
@@ -36,7 +37,14 @@ const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 
 const MainLayout: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  // 从存储中读取菜单折叠状态，默认为false（展开）
+  const [collapsed, setCollapsed] = useState(() => {
+    // 在移动端默认折叠，桌面端读取存储状态
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      return true;
+    }
+    return menuStorage.get();
+  });
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,9 +55,16 @@ const MainLayout: React.FC = () => {
   // 检测屏幕尺寸
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-      if (window.innerWidth <= 768) {
+      const isMobileNow = window.innerWidth <= 768;
+      setIsMobile(isMobileNow);
+      
+      if (isMobileNow) {
+        // 移动端默认折叠
         setCollapsed(true);
+      } else {
+        // 桌面端恢复存储的状态
+        const storedCollapsed = menuStorage.get();
+        setCollapsed(storedCollapsed);
       }
     };
 
@@ -62,6 +77,15 @@ const MainLayout: React.FC = () => {
   const handleMaskClick = () => {
     if (isMobile) {
       setCollapsed(true);
+    }
+  };
+
+  // 处理菜单折叠状态变化
+  const handleCollapseChange = (newCollapsed: boolean) => {
+    setCollapsed(newCollapsed);
+    // 只在非移动端时保存状态，移动端总是默认折叠
+    if (!isMobile) {
+      menuStorage.set(newCollapsed);
     }
   };
 
@@ -283,7 +307,7 @@ const MainLayout: React.FC = () => {
               handleMenuClick(item);
               // 移动端点击菜单后自动收起
               if (isMobile) {
-                setCollapsed(true);
+                setCollapsed(true); // 移动端不需要保存状态
               }
             }}
             style={{ 
@@ -317,7 +341,7 @@ const MainLayout: React.FC = () => {
               className="collapse-button"
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={() => handleCollapseChange(!collapsed)}
             />
 
             <Space size={16}>
