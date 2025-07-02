@@ -72,6 +72,7 @@
   padding: 0 24px 24px 24px;
   gap: 16px;
   overflow: hidden;
+  align-items: stretch; /* 确保子元素高度一致 */
 }
 
 /* 左侧面板 */
@@ -81,6 +82,8 @@
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  align-self: stretch; /* 确保垂直拉伸对齐 */
+  box-sizing: border-box; /* 确保边框计算一致 */
 }
 
 /* 数据选项卡样式 */
@@ -91,6 +94,8 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   background: var(--card-bg);
+  overflow: hidden; /* 确保圆角效果 */
+  box-sizing: border-box; /* 确保边框计算一致 */
 }
 
 .entity-topology-detail .data-tabs .ant-tabs-nav {
@@ -98,11 +103,27 @@
   padding: 0 16px;
   background: var(--card-bg);
   border-bottom: 1px solid var(--border-color);
+  border-radius: 8px 8px 0 0; /* 添加顶部圆角 */
 }
 
 .entity-topology-detail .data-tabs .ant-tabs-tab {
   padding: 12px 16px;
   font-weight: 500;
+}
+
+/* 第一个tab的左上角圆角 */
+.entity-topology-detail .data-tabs .ant-tabs-tab:first-child {
+  border-radius: 8px 0 0 0;
+}
+
+/* 最后一个tab的右上角圆角 */
+.entity-topology-detail .data-tabs .ant-tabs-tab:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+/* 如果只有一个tab，则左右都有圆角 */
+.entity-topology-detail .data-tabs .ant-tabs-tab:only-child {
+  border-radius: 8px 8px 0 0;
 }
 
 .entity-topology-detail .data-tabs .ant-tabs-tab-active {
@@ -114,6 +135,7 @@
   overflow: hidden;
   background: var(--component-background);
   position: relative;
+  border-radius: 0 0 8px 8px; /* 添加底部圆角 */
 }
 
 .entity-topology-detail .data-tabs .ant-tabs-tabpane {
@@ -164,6 +186,8 @@
   border: 1px solid var(--border-color);
   border-radius: 8px;
   background: var(--card-bg);
+  align-self: stretch; /* 确保垂直拉伸对齐 */
+  box-sizing: border-box; /* 确保边框计算一致 */
 }
 
 /* 拓扑图标题栏 */

@@ -1,0 +1,124 @@
+{
+  "agents": [
+    {
+      "id": "monitoring-agent-1",
+      "name": "系统监控Agent",
+      "type": "monitoring",
+      "status": "active",
+      "description": "负责系统性能监控和告警",
+      "capabilities": ["性能监控", "日志分析", "告警通知"],
+      "version": "2.1.0",
+      "lastActive": "2024-12-20T10:30:00Z"
+    },
+    {
+      "id": "security-agent-1",
+      "name": "安全扫描Agent",
+      "type": "security",
+      "status": "active",
+      "description": "执行安全漏洞扫描和威胁检测",
+      "capabilities": ["漏洞扫描", "威胁检测", "安全评估"],
+      "version": "1.5.2",
+      "lastActive": "2024-12-20T09:45:00Z"
+    },
+    {
+      "id": "backup-agent-1",
+      "name": "数据备份Agent",
+      "type": "backup",
+      "status": "active",
+      "description": "自动化数据备份和恢复管理",
+      "capabilities": ["数据备份", "增量备份", "恢复管理"],
+      "version": "3.0.1",
+      "lastActive": "2024-12-20T08:15:00Z"
+    },
+    {
+      "id": "deployment-agent-1",
+      "name": "部署管理Agent",
+      "type": "deployment",
+      "status": "active",
+      "description": "自动化应用部署和版本管理",
+      "capabilities": ["自动部署", "版本管理", "回滚操作"],
+      "version": "2.3.0",
+      "lastActive": "2024-12-20T11:20:00Z"
+    },
+    {
+      "id": "log-agent-1",
+      "name": "日志收集Agent",
+      "type": "logging",
+      "status": "active",
+      "description": "集中化日志收集和分析处理",
+      "capabilities": ["日志收集", "日志解析", "异常检测"],
+      "version": "1.8.5",
+      "lastActive": "2024-12-20T10:50:00Z"
+    },
+    {
+      "id": "performance-agent-1",
+      "name": "性能优化Agent",
+      "type": "performance",
+      "status": "active",
+      "description": "应用性能分析和优化建议",
+      "capabilities": ["性能分析", "瓶颈识别", "优化建议"],
+      "version": "2.0.3",
+      "lastActive": "2024-12-20T09:30:00Z"
+    },
+    {
+      "id": "config-agent-1",
+      "name": "配置管理Agent",
+      "type": "configuration",
+      "status": "active",
+      "description": "配置文件管理和变更追踪",
+      "capabilities": ["配置管理", "变更追踪", "配置验证"],
+      "version": "1.6.0",
+      "lastActive": "2024-12-20T08:45:00Z"
+    },
+    {
+      "id": "network-agent-1",
+      "name": "网络监控Agent",
+      "type": "network",
+      "status": "active",
+      "description": "网络连接监控和流量分析",
+      "capabilities": ["网络监控", "流量分析", "连接诊断"],
+      "version": "2.2.1",
+      "lastActive": "2024-12-20T10:15:00Z"
+    },
+    {
+      "id": "health-agent-1",
+      "name": "健康检查Agent",
+      "type": "health",
+      "status": "active",
+      "description": "服务健康状态检查和自愈",
+      "capabilities": ["健康检查", "自动恢复", "状态报告"],
+      "version": "1.9.0",
+      "lastActive": "2024-12-20T11:00:00Z"
+    },
+    {
+      "id": "scaling-agent-1",
+      "name": "弹性伸缩Agent",
+      "type": "scaling",
+      "status": "active",
+      "description": "根据负载自动调整资源规模",
+      "capabilities": ["自动伸缩", "负载监控", "资源调度"],
+      "version": "2.4.2",
+      "lastActive": "2024-12-20T09:20:00Z"
+    },
+    {
+      "id": "ai-analysis-agent-1",
+      "name": "AI分析Agent",
+      "type": "ai_analysis",
+      "status": "active",
+      "description": "基于AI的智能分析和预测",
+      "capabilities": ["智能分析", "异常预测", "趋势识别"],
+      "version": "3.1.0",
+      "lastActive": "2024-12-20T10:40:00Z"
+    },
+    {
+      "id": "compliance-agent-1",
+      "name": "合规检查Agent",
+      "type": "compliance",
+      "status": "warning",
+      "description": "合规性检查和审计报告",
+      "capabilities": ["合规检查", "审计报告", "风险评估"],
+      "version": "1.7.3",
+      "lastActive": "2024-12-20T07:30:00Z"
+    }
+  ]
+}

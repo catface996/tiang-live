@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Typography, Space, Spin, Empty, Breadcrumb, message, Modal, Table, Tag, Button, Select, Radio } from 'antd';
-import { NodeIndexOutlined, HomeOutlined, ToolOutlined, SwapOutlined } from '@ant-design/icons';
+import { NodeIndexOutlined, HomeOutlined, ToolOutlined, SwapOutlined, RobotOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import '../../../styles/entity-topology-detail.css';
@@ -9,8 +9,30 @@ import DataTabs from '../../../components/EntityTopology/DataTabs';
 import EntityD3RelationshipGraph from '../../../components/EntityTopology/EntityD3RelationshipGraph';
 import entityTopologyData from '../../../data/entityTopologyMock.json';
 import availableEntitiesData from '../../../data/availableEntitiesMock.json';
+import availableAgentsData from '../../../data/availableAgentsMock.json';
 
 const { Title, Text } = Typography;
+
+// Agent类型定义
+interface Agent {
+  id: string;
+  name: string;
+  type: string;
+  status: 'active' | 'inactive' | 'warning' | 'error';
+  description: string;
+  capabilities: string[];
+  version: string;
+  lastActive: string;
+}
+
+// 实体-Agent绑定关系
+interface EntityAgentBinding {
+  id: string;
+  entityId: string;
+  agentId: string;
+  bindingType: 'monitoring' | 'management' | 'analysis' | 'automation';
+  createdAt: string;
+}
 
 // 关系展示样式组件
 const RelationshipDisplay = styled.div`
@@ -131,6 +153,45 @@ const RelationshipForm = styled.div`
   }
 `;
 
+const AgentBindingHint = styled.div`
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-secondary);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+
+  p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .highlight {
+    color: var(--primary-color);
+    font-weight: 500;
+  }
+
+  .entity-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px;
+    background: var(--bg-elevated);
+    border-radius: 4px;
+
+    .entity-name {
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .entity-type {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+  }
+`;
+
 // 类型定义 - 适配D3RelationshipGraph组件
 interface Node {
   id: string;
@@ -238,6 +299,11 @@ const EntityTopologyDetail: React.FC = () => {
   const [sourceEntityId, setSourceEntityId] = useState<string>('');
   const [targetEntityId, setTargetEntityId] = useState<string>('');
   const [relationshipType, setRelationshipType] = useState<string>('depends_on');
+  const [selectAgentModalVisible, setSelectAgentModalVisible] = useState(false);
+  const [currentEntity, setCurrentEntity] = useState<any>(null);
+  const [availableAgents, setAvailableAgents] = useState<Agent[]>([]);
+  const [selectedAgentIds, setSelectedAgentIds] = useState<string[]>([]);
+  const [entityAgentBindings, setEntityAgentBindings] = useState<EntityAgentBinding[]>([]);
 
   // 模拟数据加载
   const loadTopologyDetail = useCallback(async () => {
@@ -299,6 +365,21 @@ const EntityTopologyDetail: React.FC = () => {
       };
 
       setTopologyData(mockData);
+
+      // 初始化Agent数据
+      setAvailableAgents(availableAgentsData.agents);
+
+      // 初始化一些示例绑定关系（实际项目中应该从后端获取）
+      const sampleBindings: EntityAgentBinding[] = [
+        {
+          id: 'binding-sample-1',
+          entityId: 'web-app-1',
+          agentId: 'monitoring-agent-1',
+          bindingType: 'monitoring',
+          createdAt: new Date().toISOString()
+        }
+      ];
+      setEntityAgentBindings(sampleBindings);
     } catch (error) {
       console.error('Failed to load topology detail:', error);
       message.error('加载拓扑数据失败');
@@ -312,8 +393,140 @@ const EntityTopologyDetail: React.FC = () => {
   }, [loadTopologyDetail]);
 
   // 处理Agents按钮点击
-  const handleAgentsClick = (entity: Entity) => {
-    // TODO: 实现Agents查看功能
+  const handleAgentsClick = (entity: any) => {
+    setCurrentEntity(entity);
+
+    // 获取已绑定的Agent ID列表
+    const boundAgentIds = entityAgentBindings
+      .filter(binding => binding.entityId === entity.id)
+      .map(binding => binding.agentId);
+
+    // 设置可用的Agent列表（包括已绑定的，用于显示状态）
+    setAvailableAgents(availableAgentsData.agents);
+    setSelectedAgentIds(boundAgentIds);
+    setSelectAgentModalVisible(true);
+  };
+
+  // 确认绑定Agent
+  const confirmBindAgents = () => {
+    if (!currentEntity || selectedAgentIds.length === 0) {
+      message.warning('请选择要绑定的Agent');
+      return;
+    }
+
+    // 获取当前实体已绑定的Agent
+    const currentBindings = entityAgentBindings.filter(binding => binding.entityId === currentEntity.id);
+    const currentBoundAgentIds = currentBindings.map(binding => binding.agentId);
+
+    // 计算需要新增和删除的绑定
+    const toAdd = selectedAgentIds.filter(agentId => !currentBoundAgentIds.includes(agentId));
+    const toRemove = currentBoundAgentIds.filter(agentId => !selectedAgentIds.includes(agentId));
+
+    // 创建新的绑定关系
+    const newBindings: EntityAgentBinding[] = toAdd.map(agentId => ({
+      id: `binding-${currentEntity.id}-${agentId}-${Date.now()}`,
+      entityId: currentEntity.id,
+      agentId: agentId,
+      bindingType: 'monitoring', // 默认类型，可以后续扩展
+      createdAt: new Date().toISOString()
+    }));
+
+    // 更新绑定关系列表
+    const updatedBindings = [
+      ...entityAgentBindings.filter(
+        binding => !(binding.entityId === currentEntity.id && toRemove.includes(binding.agentId))
+      ),
+      ...newBindings
+    ];
+
+    setEntityAgentBindings(updatedBindings);
+
+    // 更新拓扑数据，添加Agent节点和连接
+    if (topologyData) {
+      updateTopologyWithAgents(updatedBindings);
+    }
+
+    const addedCount = toAdd.length;
+    const removedCount = toRemove.length;
+    let message_text = '';
+    if (addedCount > 0 && removedCount > 0) {
+      message_text = `成功绑定 ${addedCount} 个Agent，解绑 ${removedCount} 个Agent`;
+    } else if (addedCount > 0) {
+      message_text = `成功绑定 ${addedCount} 个Agent到 ${currentEntity.name}`;
+    } else if (removedCount > 0) {
+      message_text = `成功解绑 ${removedCount} 个Agent`;
+    } else {
+      message_text = 'Agent绑定状态无变化';
+    }
+
+    message.success(message_text);
+    setSelectAgentModalVisible(false);
+  };
+
+  // 取消绑定Agent
+  const cancelBindAgents = () => {
+    setSelectAgentModalVisible(false);
+    setCurrentEntity(null);
+    setSelectedAgentIds([]);
+  };
+
+  // 处理Agent选择变化
+  const handleAgentSelectionChange = (selectedRowKeys: React.Key[]) => {
+    setSelectedAgentIds(selectedRowKeys as string[]);
+  };
+
+  // 更新拓扑数据，添加Agent节点和连接
+  const updateTopologyWithAgents = (bindings: EntityAgentBinding[]) => {
+    if (!topologyData) return;
+
+    // 获取所有绑定的Agent
+    const boundAgentIds = [...new Set(bindings.map(binding => binding.agentId))];
+    const agentNodes = availableAgentsData.agents
+      .filter(agent => boundAgentIds.includes(agent.id))
+      .map(agent => ({
+        id: agent.id,
+        name: agent.name,
+        type: 'agent',
+        level: 0, // Agent在最顶层
+        status: agent.status,
+        properties: {
+          description: agent.description,
+          agentType: agent.type,
+          capabilities: agent.capabilities.join(', '),
+          version: agent.version,
+          lastActive: agent.lastActive
+        },
+        connections: bindings.filter(binding => binding.agentId === agent.id).length
+      }));
+
+    // 创建Agent到实体的连接
+    const agentConnections = bindings.map(binding => ({
+      id: `agent-conn-${binding.id}`,
+      source: binding.agentId,
+      target: binding.entityId,
+      type: 'manages',
+      description: '管理',
+      strength: 0.8
+    }));
+
+    // 更新拓扑数据
+    const updatedEntities = [...topologyData.entities.filter(entity => entity.type !== 'agent'), ...agentNodes];
+
+    const updatedDependencies = [
+      ...topologyData.dependencies.filter(dep => !dep.id.startsWith('agent-conn-')),
+      ...agentConnections
+    ];
+
+    setTopologyData({
+      ...topologyData,
+      entities: updatedEntities,
+      dependencies: updatedDependencies,
+      stats: {
+        ...topologyData.stats,
+        nodeCount: updatedEntities.length,
+        linkCount: updatedDependencies.length
+      }
+    });
   };
 
   // 处理单个实体删除
@@ -981,6 +1194,136 @@ const EntityTopologyDetail: React.FC = () => {
             </>
           )}
         </RelationshipForm>
+      </Modal>
+
+      {/* 选择Agent Modal */}
+      <Modal
+        title="绑定Agent"
+        open={selectAgentModalVisible}
+        onOk={confirmBindAgents}
+        onCancel={cancelBindAgents}
+        okText={`确定绑定 (${selectedAgentIds.length})`}
+        cancelText="取消"
+        width={900}
+        okButtonProps={{ disabled: selectedAgentIds.length === 0 }}
+      >
+        <AgentBindingHint>
+          <p>为实体绑定AI Agent来提供智能化管理和监控能力。</p>
+          {currentEntity && (
+            <div className="entity-info">
+              <span className="entity-name">{currentEntity.name}</span>
+              <span className="entity-type">({currentEntity.type})</span>
+            </div>
+          )}
+          <p style={{ marginTop: 8 }}>
+            共有 <span className="highlight">{availableAgents.length}</span> 个可用Agent， 已选择{' '}
+            <span className="highlight">{selectedAgentIds.length}</span> 个。
+          </p>
+        </AgentBindingHint>
+
+        {availableAgents.length > 0 && (
+          <div style={{ marginBottom: 16 }}>
+            <Space>
+              <Button
+                size="small"
+                onClick={() => setSelectedAgentIds(availableAgents.map(agent => agent.id))}
+                disabled={selectedAgentIds.length === availableAgents.length}
+              >
+                全选
+              </Button>
+              <Button size="small" onClick={() => setSelectedAgentIds([])} disabled={selectedAgentIds.length === 0}>
+                清空
+              </Button>
+            </Space>
+          </div>
+        )}
+
+        {availableAgents.length === 0 ? (
+          <Empty description="暂无可用的Agent" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        ) : (
+          <Table
+            rowSelection={{
+              type: 'checkbox',
+              selectedRowKeys: selectedAgentIds,
+              onChange: handleAgentSelectionChange
+            }}
+            columns={[
+              {
+                title: 'Agent名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: '25%',
+                render: (name: string) => (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <RobotOutlined style={{ color: 'var(--primary-color)' }} />
+                    <strong>{name}</strong>
+                  </div>
+                )
+              },
+              {
+                title: '类型',
+                dataIndex: 'type',
+                key: 'type',
+                width: '15%',
+                render: (type: string) => <Tag color="cyan">{type}</Tag>
+              },
+              {
+                title: '状态',
+                dataIndex: 'status',
+                key: 'status',
+                width: '12%',
+                render: (status: string) => {
+                  const statusConfig = {
+                    active: { color: 'green', text: '运行中' },
+                    warning: { color: 'orange', text: '警告' },
+                    error: { color: 'red', text: '错误' },
+                    inactive: { color: 'gray', text: '停用' }
+                  };
+                  const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
+                  return <Tag color={config.color}>{config.text}</Tag>;
+                }
+              },
+              {
+                title: '能力',
+                dataIndex: 'capabilities',
+                key: 'capabilities',
+                width: '25%',
+                render: (capabilities: string[]) => (
+                  <div>
+                    {capabilities.slice(0, 2).map((capability, index) => (
+                      <Tag key={index} size="small" style={{ marginBottom: 2 }}>
+                        {capability}
+                      </Tag>
+                    ))}
+                    {capabilities.length > 2 && (
+                      <Tag size="small" color="default">
+                        +{capabilities.length - 2}
+                      </Tag>
+                    )}
+                  </div>
+                )
+              },
+              {
+                title: '描述',
+                dataIndex: 'description',
+                key: 'description',
+                width: '23%',
+                render: (description: string) => (
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '12px' }}>{description}</span>
+                )
+              }
+            ]}
+            dataSource={availableAgents}
+            rowKey="id"
+            size="small"
+            pagination={{
+              pageSize: 6,
+              showSizeChanger: false,
+              showQuickJumper: true,
+              showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
+            }}
+          />
+        )}
       </Modal>
     </div>
   );

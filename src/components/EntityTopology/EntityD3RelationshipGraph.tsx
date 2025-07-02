@@ -8,7 +8,8 @@ import {
   ZoomOutOutlined,
   UndoOutlined,
   UpOutlined,
-  DownOutlined
+  DownOutlined,
+  ExperimentOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -164,6 +165,11 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
 
   // 颜色映射
   const getNodeColor = (type: string, level: number) => {
+    // Agent类型使用特殊颜色
+    if (type === 'agent') {
+      return '#722ed1'; // 紫色，表示AI智能
+    }
+
     const levelColors = {
       1: '#1890ff', // 前端应用层 - 蓝色
       2: '#52c41a', // 业务服务层 - 绿色
@@ -183,12 +189,18 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
       runs_on: '#f5222d',
       publishes_to: '#13c2c2',
       subscribes_to: '#eb2f96',
-      monitors: '#8c8c8c'
+      monitors: '#8c8c8c',
+      manages: '#722ed1' // Agent管理连接使用紫色
     };
     return linkColors[type as keyof typeof linkColors] || '#d9d9d9';
   };
 
-  const getNodeSize = (level: number) => {
+  const getNodeSize = (level: number, type?: string) => {
+    // Agent节点使用特殊大小
+    if (type === 'agent') {
+      return 22; // Agent节点稍大一些，突出显示
+    }
+
     const sizes = {
       1: 20, // 前端应用 - 最大
       2: 18, // 业务服务
@@ -318,7 +330,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force(
         'collision',
-        d3.forceCollide().radius(d => getNodeSize(d.level) + 8)
+        d3.forceCollide().radius(d => getNodeSize(d.level, d.type) + 8)
       )
       // 添加平面约束力
       .force('plane', () => {
@@ -375,6 +387,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
         return relType?.strokeWidth || 1;
       })
       .attr('stroke-opacity', 0.8)
+      .attr('stroke-dasharray', d => (d.type === 'manages' ? '5,5' : null)) // Agent连接使用虚线
       .attr('marker-end', d => `url(#arrow-${d.type})`);
 
     // 绘制节点
@@ -425,18 +438,29 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
     // 添加节点圆圈
     nodes
       .append('circle')
-      .attr('r', d => getNodeSize(d.level))
+      .attr('r', d => getNodeSize(d.level, d.type))
       .attr('fill', d => getNodeColor(d.type, d.level))
       .attr('stroke', '#fff')
       .attr('stroke-width', 2)
       .style('cursor', 'pointer');
+
+    // 为Agent节点添加机器人图标
+    nodes
+      .filter(d => d.type === 'agent')
+      .append('text')
+      .text('🤖') // 使用emoji作为机器人图标
+      .attr('x', 0)
+      .attr('y', 5)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', d => getNodeSize(d.level, d.type) * 0.8)
+      .style('pointer-events', 'none');
 
     // 添加节点标签
     nodes
       .append('text')
       .text(d => d.name)
       .attr('x', 0)
-      .attr('y', d => getNodeSize(d.level) + 15)
+      .attr('y', d => getNodeSize(d.level, d.type) + 15)
       .attr('text-anchor', 'middle')
       .attr('font-size', '10px')
       .attr('fill', 'var(--text-color)')
@@ -677,6 +701,288 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
     initializeGraph();
   };
 
+  const handleAnalysisDiagnosis = async () => {
+    console.log('🔍 开始分析诊断...');
+
+    // 使用实际传入的entities和dependencies数据
+    const actualEntities = entities || [];
+    const actualDependencies = dependencies || [];
+
+    // 分离实体和Agent
+    const entityList = actualEntities.filter(entity => entity.type !== 'agent');
+    const agentList = actualEntities.filter(entity => entity.type === 'agent');
+
+    // 分离实体依赖关系和实体与Agent的关系
+    const entityDependencies = actualDependencies.filter(dep => {
+      const sourceIsAgent = agentList.some(agent => agent.id === dep.source);
+      const targetIsAgent = agentList.some(agent => agent.id === dep.target);
+      // 只有当源和目标都不是Agent时，才是实体依赖关系
+      return !sourceIsAgent && !targetIsAgent;
+    });
+
+    const entityAgentRelations = actualDependencies.filter(dep => {
+      const sourceIsAgent = agentList.some(agent => agent.id === dep.source);
+      const targetIsAgent = agentList.some(agent => agent.id === dep.target);
+      // 当源或目标有一个是Agent时，就是实体与Agent的关系
+      return sourceIsAgent || targetIsAgent;
+    });
+
+    // 构建分析数据
+    const analysisData = {
+      timestamp: new Date().toISOString(),
+      topologyId: 'topology-' + Date.now(),
+      entities: entityList.map(entity => ({
+        id: entity.id,
+        name: entity.name,
+        type: entity.type,
+        status: entity.status,
+        connections: entity.connections,
+        properties: entity.properties
+      })),
+      agents: agentList.map(agent => ({
+        id: agent.id,
+        name: agent.name,
+        type: agent.type,
+        status: agent.status,
+        agentType: agent.properties?.agentType || 'unknown',
+        capabilities: agent.properties?.capabilities || [],
+        version: agent.properties?.version || 'unknown',
+        lastActive: agent.properties?.lastActive || new Date().toISOString(),
+        description: agent.properties?.description || ''
+      })),
+      entityDependencies: entityDependencies.map(dep => ({
+        id: dep.id,
+        source: dep.source,
+        target: dep.target,
+        type: dep.type,
+        strength: dep.strength,
+        description: dep.description
+      })),
+      entityAgentRelations: entityAgentRelations.map(relation => ({
+        id: relation.id,
+        entityId: relation.type === 'manages' ? relation.target : relation.source,
+        agentId: relation.type === 'manages' ? relation.source : relation.target,
+        relationType: relation.type,
+        strength: relation.strength,
+        description: relation.description,
+        createdAt: new Date().toISOString()
+      })),
+      analysisRequest: {
+        checkHealthStatus: true,
+        detectAnomalies: true,
+        performanceAnalysis: true,
+        securityCheck: true,
+        dependencyAnalysis: true,
+        agentEfficiencyAnalysis: true
+      }
+    };
+
+    console.log('📊 准备发送的分析数据:', analysisData);
+
+    try {
+      // 模拟发送到后端API
+      console.log('🚀 模拟发送POST请求到: /api/v1/topology/analysis');
+      console.log('📤 请求头:', {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer <token>',
+        'X-Request-ID': 'req-' + Date.now()
+      });
+      console.log('📦 请求体:', JSON.stringify(analysisData, null, 2));
+
+      // 模拟网络延迟
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // 根据实际数据生成更准确的模拟响应
+      const activeEntities = entityList.filter(entity => entity.status === 'active');
+      const warningEntities = entityList.filter(entity => entity.status === 'warning');
+      const errorEntities = entityList.filter(entity => entity.status === 'error');
+      const activeAgents = agentList.filter(agent => agent.status === 'active');
+
+      // 模拟后端响应
+      const mockResponse = {
+        success: true,
+        requestId: 'req-' + Date.now(),
+        analysisId: 'analysis-' + Date.now(),
+        timestamp: new Date().toISOString(),
+        results: {
+          summary: {
+            totalEntities: entityList.length,
+            totalAgents: agentList.length,
+            totalEntityDependencies: entityDependencies.length,
+            totalEntityAgentRelations: entityAgentRelations.length,
+            overallHealth: errorEntities.length > 0 ? 'critical' : warningEntities.length > 0 ? 'warning' : 'good',
+            healthScore: Math.max(60, 100 - errorEntities.length * 20 - warningEntities.length * 10)
+          },
+          entityAnalysis: {
+            activeEntities: activeEntities.length,
+            warningEntities: warningEntities.length,
+            errorEntities: errorEntities.length,
+            orphanedEntities: entityList.filter(
+              entity =>
+                !entityDependencies.some(dep => dep.source === entity.id || dep.target === entity.id) &&
+                !entityAgentRelations.some(rel => rel.entityId === entity.id)
+            ).length,
+            criticalEntities: entityList
+              .filter(entity => {
+                const incomingDeps = entityDependencies.filter(dep => dep.target === entity.id).length;
+                const outgoingDeps = entityDependencies.filter(dep => dep.source === entity.id).length;
+                return incomingDeps + outgoingDeps > 3; // 连接数超过3的视为关键实体
+              })
+              .map(entity => ({
+                id: entity.id,
+                name: entity.name,
+                connectionCount: entityDependencies.filter(dep => dep.source === entity.id || dep.target === entity.id)
+                  .length
+              }))
+          },
+          agentAnalysis: {
+            activeAgents: activeAgents.length,
+            agentCoverage:
+              entityAgentRelations.length > 0
+                ? ((entityAgentRelations.length / Math.max(entityList.length, 1)) * 100).toFixed(1) + '%'
+                : '0%',
+            agentEfficiency: agentList.map(agent => ({
+              id: agent.id,
+              name: agent.name,
+              managedEntities: entityAgentRelations.filter(rel => rel.agentId === agent.id).length,
+              status: agent.status,
+              capabilities: agent.properties?.capabilities || []
+            })),
+            unmanagedEntities: entityList
+              .filter(entity => !entityAgentRelations.some(rel => rel.entityId === entity.id))
+              .map(entity => ({
+                id: entity.id,
+                name: entity.name,
+                type: entity.type
+              }))
+          },
+          dependencyAnalysis: {
+            totalDependencies: entityDependencies.length,
+            dependencyTypes: [...new Set(entityDependencies.map(dep => dep.type))],
+            circularDependencies: [], // 简化处理，实际应该检测环形依赖
+            strongDependencies: entityDependencies.filter(dep => dep.strength > 0.8).length,
+            weakDependencies: entityDependencies.filter(dep => dep.strength <= 0.5).length
+          },
+          relationAnalysis: {
+            totalRelations: entityAgentRelations.length,
+            relationTypes: [...new Set(entityAgentRelations.map(rel => rel.relationType))],
+            agentUtilization: agentList.map(agent => ({
+              agentId: agent.id,
+              agentName: agent.name,
+              relationCount: entityAgentRelations.filter(rel => rel.agentId === agent.id).length,
+              utilizationRate:
+                entityAgentRelations.filter(rel => rel.agentId === agent.id).length > 0 ? 'active' : 'idle'
+            }))
+          },
+          issues: [
+            ...(errorEntities.length > 0
+              ? [
+                  {
+                    type: 'error',
+                    severity: 'high',
+                    category: 'entity_health',
+                    message: `发现 ${errorEntities.length} 个实体状态异常`,
+                    affectedItems: errorEntities.map(e => e.id),
+                    recommendation: '立即检查异常实体的日志和配置'
+                  }
+                ]
+              : []),
+            ...(warningEntities.length > 0
+              ? [
+                  {
+                    type: 'warning',
+                    severity: 'medium',
+                    category: 'entity_health',
+                    message: `发现 ${warningEntities.length} 个实体状态警告`,
+                    affectedItems: warningEntities.map(e => e.id),
+                    recommendation: '检查警告实体的性能指标'
+                  }
+                ]
+              : []),
+            ...(agentList.length === 0
+              ? [
+                  {
+                    type: 'warning',
+                    severity: 'medium',
+                    category: 'agent_coverage',
+                    message: '未部署任何Agent，缺乏智能监控能力',
+                    affectedItems: ['topology'],
+                    recommendation: '建议部署监控和管理Agent'
+                  }
+                ]
+              : []),
+            ...(entityAgentRelations.length < entityList.length * 0.5
+              ? [
+                  {
+                    type: 'info',
+                    severity: 'low',
+                    category: 'agent_coverage',
+                    message: 'Agent覆盖率较低，部分实体缺乏智能管理',
+                    affectedItems: ['agent_coverage'],
+                    recommendation: '考虑为更多实体配置Agent管理'
+                  }
+                ]
+              : [])
+          ],
+          recommendations: [
+            ...(activeAgents.length > 0 ? ['Agent监控系统运行正常'] : ['建议部署Agent监控系统']),
+            ...(entityDependencies.length > entityList.length * 2 ? ['拓扑复杂度较高，建议优化依赖关系'] : []),
+            '定期检查实体健康状态',
+            '优化Agent资源分配',
+            '建立完善的监控告警机制'
+          ]
+        }
+      };
+
+      console.log('✅ 模拟后端响应:', mockResponse);
+      console.log('📈 分析结果摘要:');
+      console.log(`   - 实体数量: ${mockResponse.results.summary.totalEntities}`);
+      console.log(`   - Agent数量: ${mockResponse.results.summary.totalAgents}`);
+      console.log(`   - 实体依赖关系: ${mockResponse.results.summary.totalEntityDependencies} 个`);
+      console.log(`   - 实体-Agent关系: ${mockResponse.results.summary.totalEntityAgentRelations} 个`);
+      console.log(
+        `   - 整体健康度: ${mockResponse.results.summary.overallHealth} (${mockResponse.results.summary.healthScore}/100)`
+      );
+      console.log(`   - Agent覆盖率: ${mockResponse.results.agentAnalysis.agentCoverage}`);
+
+      // 显示Agent效率分析
+      if (mockResponse.results.agentAnalysis.agentEfficiency.length > 0) {
+        console.log('🤖 Agent效率分析:');
+        mockResponse.results.agentAnalysis.agentEfficiency.forEach((agent, index) => {
+          console.log(`   ${index + 1}. ${agent.name}`);
+          console.log(`      状态: ${agent.status}`);
+          console.log(`      管理实体: ${agent.managedEntities} 个`);
+          console.log(
+            `      能力: ${Array.isArray(agent.capabilities) ? agent.capabilities.join(', ') : agent.capabilities}`
+          );
+        });
+      }
+
+      // 显示未管理的实体
+      if (mockResponse.results.agentAnalysis.unmanagedEntities.length > 0) {
+        console.log('⚠️  未被Agent管理的实体:');
+        mockResponse.results.agentAnalysis.unmanagedEntities.forEach((entity, index) => {
+          console.log(`   ${index + 1}. ${entity.name} (${entity.type})`);
+        });
+      }
+
+      // 显示发现的问题
+      if (mockResponse.results.issues.length > 0) {
+        console.log('🚨 发现的问题:');
+        mockResponse.results.issues.forEach((issue, index) => {
+          console.log(`   ${index + 1}. [${issue.severity.toUpperCase()}] ${issue.message}`);
+          console.log(`      类别: ${issue.category}`);
+          console.log(`      建议: ${issue.recommendation}`);
+        });
+      }
+
+      console.log('🎯 分析诊断完成!');
+    } catch (error) {
+      console.error('❌ 分析诊断失败:', error);
+      console.log('🔄 建议重试或联系系统管理员');
+    }
+  };
+
   if (loading) {
     return (
       <Card>
@@ -697,7 +1003,17 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
   }
 
   return (
-    <Card title="实体拓扑关系图" style={{ marginBottom: 24 }}>
+    <Card
+      title={
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>实体拓扑关系图</span>
+          <Button type="primary" size="small" icon={<ExperimentOutlined />} onClick={handleAnalysisDiagnosis}>
+            分析诊断
+          </Button>
+        </div>
+      }
+      style={{ marginBottom: 24 }}
+    >
       <GraphContainer ref={containerRef}>
         <svg ref={svgRef}></svg>
 
@@ -742,6 +1058,26 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
 
             <div style={{ marginBottom: 8 }}>
               <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>节点类型:</div>
+              {/* Agent节点类型 */}
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                <div
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: '50%',
+                    backgroundColor: '#722ed1',
+                    marginRight: 6,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '8px'
+                  }}
+                >
+                  🤖
+                </div>
+                <span style={{ fontSize: '11px' }}>AI Agent</span>
+              </div>
+              {/* 其他节点类型 */}
               {graphData?.metadata.levels.map((level: any) => (
                 <div key={level.level} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                   <div
@@ -759,6 +1095,21 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
             </div>
             <div>
               <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>关系类型:</div>
+              {/* Agent管理关系 */}
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                <div
+                  style={{
+                    width: 16,
+                    height: 2,
+                    backgroundColor: '#722ed1',
+                    marginRight: 6,
+                    borderTop: '2px dashed #722ed1',
+                    backgroundColor: 'transparent'
+                  }}
+                />
+                <span style={{ fontSize: '11px' }}>Agent管理</span>
+              </div>
+              {/* 其他关系类型 */}
               {graphData?.metadata.relationTypes.map((relType: any) => (
                 <div key={relType.type} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                   <div
