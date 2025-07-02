@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Typography, Space, Spin, Empty, Breadcrumb, message, Modal } from 'antd';
 import { NodeIndexOutlined, HomeOutlined, ToolOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import '../../../styles/entity-topology-detail.css';
 import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
 import DataTabs from '../../../components/EntityTopology/DataTabs';
@@ -9,6 +10,52 @@ import EntityD3RelationshipGraph from '../../../components/EntityTopology/Entity
 import entityTopologyData from '../../../data/entityTopologyMock.json';
 
 const { Title, Text } = Typography;
+
+// 关系展示样式组件
+const RelationshipDisplay = styled.div`
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-secondary);
+  padding: 12px;
+  border-radius: 6px;
+  margin: 12px 0;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  .entity-name {
+    font-weight: bold;
+    color: var(--text-primary);
+  }
+
+  .arrow {
+    margin: 0 8px;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  &:hover {
+    background: var(--bg-elevated);
+    border-color: var(--border-hover);
+  }
+`;
+
+const RelationshipMeta = styled.p`
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 8px 0 0 0;
+`;
+
+const WarningText = styled.p`
+  color: var(--text-tertiary);
+  font-size: 12px;
+  margin: 8px 0 0 0;
+`;
+
+const DangerText = styled.p`
+  color: var(--error-color);
+  font-weight: 500;
+  margin: 8px 0;
+`;
 
 // 类型定义 - 适配D3RelationshipGraph组件
 interface Node {
@@ -106,6 +153,10 @@ const EntityTopologyDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [topologyData, setTopologyData] = useState<TopologyData | null>(null);
   const [selectedEntity, setSelectedEntity] = useState<Entity | null>(null);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<Entity | null>(null);
+  const [deleteDependencyModalVisible, setDeleteDependencyModalVisible] = useState(false);
+  const [dependencyToDelete, setDependencyToDelete] = useState<Dependency | null>(null);
 
   // 模拟数据加载
   const loadTopologyDetail = useCallback(async () => {
@@ -186,68 +237,99 @@ const EntityTopologyDetail: React.FC = () => {
 
   // 处理单个实体删除
   const handleDeleteEntity = (entity: Entity) => {
-    if (!topologyData) return;
+    setEntityToDelete(entity);
+    setDeleteModalVisible(true);
+  };
 
-    Modal.confirm({
-      title: '确认删除',
-      content: `确定要删除实体 "${entity.name}" 吗？删除后相关的依赖关系也会被移除。`,
-      okText: '确定',
-      cancelText: '取消',
-      okType: 'danger',
-      onOk: () => {
-        const updatedEntities = topologyData.entities.filter(e => e.id !== entity.id);
+  const confirmDeleteEntity = () => {
+    if (!topologyData || !entityToDelete) return;
 
-        // 同时删除相关的依赖关系
-        const updatedDependencies = topologyData.dependencies.filter(
-          dep => dep.source !== entity.id && dep.target !== entity.id
-        );
+    // 计算相关的依赖关系数量
+    const relatedDependencies = topologyData.dependencies.filter(
+      dep => dep.source === entityToDelete.id || dep.target === entityToDelete.id
+    );
 
-        setTopologyData({
-          ...topologyData,
-          entities: updatedEntities,
-          dependencies: updatedDependencies,
-          stats: {
-            ...topologyData.stats,
-            nodeCount: updatedEntities.length,
-            linkCount: updatedDependencies.length
-          }
-        });
+    const updatedEntities = topologyData.entities.filter(e => e.id !== entityToDelete.id);
 
-        message.success(`成功删除实体 "${entity.name}"`);
+    // 同时删除相关的依赖关系
+    const updatedDependencies = topologyData.dependencies.filter(
+      dep => dep.source !== entityToDelete.id && dep.target !== entityToDelete.id
+    );
+
+    setTopologyData({
+      ...topologyData,
+      entities: updatedEntities,
+      dependencies: updatedDependencies,
+      stats: {
+        ...topologyData.stats,
+        nodeCount: updatedEntities.length,
+        linkCount: updatedDependencies.length
       }
     });
+
+    // 如果当前选中的实体被删除了，清空选中状态
+    if (selectedEntity && selectedEntity.id === entityToDelete.id) {
+      setSelectedEntity(null);
+    }
+
+    message.success(
+      `成功删除实体 "${entityToDelete.name}"${relatedDependencies.length > 0 ? ` 及 ${relatedDependencies.length} 个相关依赖关系` : ''}`
+    );
+
+    // 关闭Modal
+    setDeleteModalVisible(false);
+    setEntityToDelete(null);
+  };
+
+  const cancelDeleteEntity = () => {
+    setDeleteModalVisible(false);
+    setEntityToDelete(null);
   };
 
   // 处理依赖关系删除
   const handleDeleteDependency = (dependency: Dependency) => {
-    if (!topologyData) return;
+    setDependencyToDelete(dependency);
+    setDeleteDependencyModalVisible(true);
+  };
 
-    const sourceEntity = topologyData.entities.find(e => e.id === dependency.source);
-    const targetEntity = topologyData.entities.find(e => e.id === dependency.target);
-    const sourceName = sourceEntity ? sourceEntity.name : dependency.source;
-    const targetName = targetEntity ? targetEntity.name : dependency.target;
+  const confirmDeleteDependency = () => {
+    if (!topologyData || !dependencyToDelete) return;
 
-    Modal.confirm({
-      title: '确认删除',
-      content: `确定要删除依赖关系 "${sourceName} → ${targetName}" 吗？`,
-      okText: '确定',
-      cancelText: '取消',
-      okType: 'danger',
-      onOk: () => {
-        const updatedDependencies = topologyData.dependencies.filter(dep => dep.id !== dependency.id);
+    const updatedDependencies = topologyData.dependencies.filter(dep => dep.id !== dependencyToDelete.id);
 
-        setTopologyData({
-          ...topologyData,
-          dependencies: updatedDependencies,
-          stats: {
-            ...topologyData.stats,
-            linkCount: updatedDependencies.length
-          }
-        });
+    // 更新实体的连接数
+    const updatedEntities = topologyData.entities.map(entity => {
+      const connectionCount = updatedDependencies.filter(
+        dep => dep.source === entity.id || dep.target === entity.id
+      ).length;
+      return { ...entity, connections: connectionCount };
+    });
 
-        message.success(`成功删除依赖关系 "${sourceName} → ${targetName}"`);
+    setTopologyData({
+      ...topologyData,
+      entities: updatedEntities,
+      dependencies: updatedDependencies,
+      stats: {
+        ...topologyData.stats,
+        linkCount: updatedDependencies.length
       }
     });
+
+    const sourceEntity = topologyData.entities.find(e => e.id === dependencyToDelete.source);
+    const targetEntity = topologyData.entities.find(e => e.id === dependencyToDelete.target);
+    const sourceName = sourceEntity ? sourceEntity.name : dependencyToDelete.source;
+    const targetName = targetEntity ? targetEntity.name : dependencyToDelete.target;
+
+    message.success(`成功删除依赖关系 "${sourceName} → ${targetName}"`);
+
+    // 关闭Modal
+    setDeleteDependencyModalVisible(false);
+    setDependencyToDelete(null);
+  };
+
+  const cancelDeleteDependency = () => {
+    setDeleteDependencyModalVisible(false);
+    setDependencyToDelete(null);
   };
 
   // 处理新增依赖关系
@@ -337,6 +419,8 @@ const EntityTopologyDetail: React.FC = () => {
         {/* 右侧D3拓扑图 */}
         <div className="content-right">
           <EntityD3RelationshipGraph
+            entities={topologyData.entities}
+            dependencies={topologyData.dependencies}
             onNodeSelect={node => {
               if (node) {
                 // 将D3图的节点转换为Entity格式
@@ -349,6 +433,77 @@ const EntityTopologyDetail: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* 删除确认Modal */}
+      <Modal
+        title="确认删除实体"
+        open={deleteModalVisible}
+        onOk={confirmDeleteEntity}
+        onCancel={cancelDeleteEntity}
+        okText="确定删除"
+        cancelText="取消"
+        okType="danger"
+        width={400}
+      >
+        {entityToDelete && topologyData && (
+          <div>
+            <p>
+              确定要删除实体 <strong>"{entityToDelete.name}"</strong> 吗？
+            </p>
+            {(() => {
+              const relatedDependencies = topologyData.dependencies.filter(
+                dep => dep.source === entityToDelete.id || dep.target === entityToDelete.id
+              );
+              return (
+                relatedDependencies.length > 0 && (
+                  <DangerText>
+                    删除后将同时移除 <strong>{relatedDependencies.length}</strong> 个相关的依赖关系。
+                  </DangerText>
+                )
+              );
+            })()}
+            <WarningText>此操作不可撤销，请谨慎操作。</WarningText>
+          </div>
+        )}
+      </Modal>
+
+      {/* 删除依赖关系确认Modal */}
+      <Modal
+        title="确认删除依赖关系"
+        open={deleteDependencyModalVisible}
+        onOk={confirmDeleteDependency}
+        onCancel={cancelDeleteDependency}
+        okText="确定删除"
+        cancelText="取消"
+        okType="danger"
+        width={400}
+      >
+        {dependencyToDelete && topologyData && (
+          <div>
+            {(() => {
+              const sourceEntity = topologyData.entities.find(e => e.id === dependencyToDelete.source);
+              const targetEntity = topologyData.entities.find(e => e.id === dependencyToDelete.target);
+              const sourceName = sourceEntity ? sourceEntity.name : dependencyToDelete.source;
+              const targetName = targetEntity ? targetEntity.name : dependencyToDelete.target;
+
+              return (
+                <>
+                  <p>确定要删除以下依赖关系吗？</p>
+                  <RelationshipDisplay>
+                    <span className="entity-name">{sourceName}</span>
+                    <span className="arrow">→</span>
+                    <span className="entity-name">{targetName}</span>
+                  </RelationshipDisplay>
+                  <RelationshipMeta>
+                    关系类型: {dependencyToDelete.description || dependencyToDelete.type}
+                  </RelationshipMeta>
+                  <WarningText>此操作不可撤销，请谨慎操作。</WarningText>
+                </>
+              );
+            })()}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

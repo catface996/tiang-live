@@ -124,9 +124,34 @@ const TooltipContainer = styled.div`
 
 interface EntityD3RelationshipGraphProps {
   onNodeSelect?: (node: Node | null) => void;
+  entities?: Entity[];
+  dependencies?: Dependency[];
 }
 
-const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({ onNodeSelect }) => {
+// 添加Entity和Dependency接口定义
+interface Entity {
+  id: string;
+  name: string;
+  type: string;
+  status: 'active' | 'inactive' | 'warning' | 'error';
+  properties: Record<string, unknown>;
+  connections: number;
+}
+
+interface Dependency {
+  id: string;
+  source: string;
+  target: string;
+  type: 'depends_on' | 'provides_to' | 'connects_to';
+  strength: number;
+  description?: string;
+}
+
+const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
+  onNodeSelect,
+  entities,
+  dependencies
+}) => {
   const { t } = useTranslation(['common']);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -498,18 +523,117 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({ o
     (svgRef.current as any).resetNodePositions = resetNodePositions;
   };
 
+  // 转换外部数据为图表数据格式
+  const convertToGraphData = (entities: Entity[], dependencies: Dependency[]): GraphData => {
+    // 定义平面数据
+    const planes: Plane[] = [
+      {
+        id: 'business_plane',
+        name: '业务应用平面',
+        level: 1,
+        color: '#e6f7ff',
+        borderColor: '#1890ff',
+        description: '业务系统和应用服务层',
+        bounds: { minLevel: 1, maxLevel: 2 }
+      },
+      {
+        id: 'middleware_plane',
+        name: '中间件平面',
+        level: 2,
+        color: '#f9f0ff',
+        borderColor: '#722ed1',
+        description: '中间件和基础服务层',
+        bounds: { minLevel: 3, maxLevel: 3 }
+      },
+      {
+        id: 'infrastructure_plane',
+        name: '基础设施平面',
+        level: 3,
+        color: '#fff2f0',
+        borderColor: '#f5222d',
+        description: '基础设施和资源层',
+        bounds: { minLevel: 4, maxLevel: 5 }
+      }
+    ];
+
+    // 转换实体为节点
+    const nodes: Node[] = entities.map(entity => {
+      // 根据实体类型确定层级和平面
+      let level = 2;
+      let plane = 'business_plane';
+
+      if (entity.type.includes('cache') || entity.type.includes('message') || entity.type.includes('monitoring')) {
+        level = 3;
+        plane = 'middleware_plane';
+      } else if (
+        entity.type.includes('database') ||
+        entity.type.includes('container') ||
+        entity.type.includes('cluster')
+      ) {
+        level = 4;
+        plane = 'infrastructure_plane';
+      }
+
+      return {
+        id: entity.id,
+        name: entity.name,
+        type: entity.type,
+        level,
+        plane,
+        description: (entity.properties.description as string) || `${entity.name} - ${entity.type}`,
+        status: entity.status,
+        ...entity.properties
+      };
+    });
+
+    // 转换依赖关系为链接
+    const links: Link[] = dependencies.map(dep => ({
+      source: dep.source,
+      target: dep.target,
+      type: dep.type,
+      strength: dep.strength
+    }));
+
+    // 元数据定义
+    const metadata = {
+      levels: [
+        { level: 1, name: '前端应用层', color: '#1890ff' },
+        { level: 2, name: '业务服务层', color: '#52c41a' },
+        { level: 3, name: '中间件层', color: '#722ed1' },
+        { level: 4, name: '数据存储层', color: '#faad14' },
+        { level: 5, name: '基础设施层', color: '#f5222d' }
+      ],
+      relationTypes: [
+        { type: 'depends_on', description: '依赖于', color: '#1890ff', strokeWidth: 2 },
+        { type: 'provides_to', description: '提供给', color: '#52c41a', strokeWidth: 2 },
+        { type: 'connects_to', description: '连接到', color: '#faad14', strokeWidth: 2 }
+      ]
+    };
+
+    return { planes, nodes, links, metadata };
+  };
+
   // 加载数据
   useEffect(() => {
     try {
       setLoading(true);
-      setGraphData(entityTopologyData as GraphData);
+
+      if (entities && dependencies) {
+        // 使用外部传入的数据
+        const convertedData = convertToGraphData(entities, dependencies);
+        setGraphData(convertedData);
+      } else {
+        // 使用默认的模拟数据
+        setGraphData(entityTopologyData as GraphData);
+      }
+
       setError(null);
     } catch (err) {
       setError('Failed to load entity topology data');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [entities, dependencies]); // 依赖于外部数据变化
 
   // 初始化图表
   useEffect(() => {
