@@ -350,12 +350,19 @@ const EntityTopologyDetail: React.FC = () => {
 
       const mockData: TopologyData = {
         id: id || '1',
-        name: '企业应用拓扑',
-        description: '企业核心应用系统拓扑图，展示前端应用、业务服务、中间件和基础设施的依赖关系。',
+        name: t('detail.mockData.name', { defaultValue: 'Enterprise Application Topology' }),
+        description: t('detail.mockData.description', {
+          defaultValue:
+            'Enterprise core application system topology diagram showing dependencies between frontend applications, business services, middleware and infrastructure.'
+        }),
         type: 'application',
         status: 'active',
-        plane: '应用平面',
-        tags: ['核心', '生产环境', '微服务'],
+        plane: t('detail.mockData.plane', { defaultValue: 'Application Plane' }),
+        tags: [
+          t('detail.mockData.tags.core', { defaultValue: 'Core' }),
+          t('detail.mockData.tags.production', { defaultValue: 'Production' }),
+          t('detail.mockData.tags.microservice', { defaultValue: 'Microservice' })
+        ],
         stats: {
           nodeCount: entities.length,
           linkCount: dependencies.length,
@@ -507,7 +514,7 @@ const EntityTopologyDetail: React.FC = () => {
       source: binding.agentId,
       target: binding.entityId,
       type: 'manages',
-      description: '管理',
+      description: t('detail.relationshipDescriptions.manages', { defaultValue: 'Manages' }),
       strength: 0.8
     }));
 
@@ -1174,7 +1181,7 @@ const EntityTopologyDetail: React.FC = () => {
                         textAlign: 'center'
                       }}
                     >
-                      ⚠️ 该依赖关系已存在
+                      ⚠️ {t('detail.modals.addDependency.existsWarning')}
                     </div>
                   );
                 }

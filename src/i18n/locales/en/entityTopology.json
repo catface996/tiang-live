@@ -187,7 +187,18 @@
       "reads_from": "Reads From",
       "writes_to": "Writes To",
       "monitors": "Monitors",
-      "backs_up": "Backs Up"
+      "backs_up": "Backs Up",
+      "manages": "Manages"
+    },
+    "mockData": {
+      "name": "Enterprise Application Topology",
+      "description": "Enterprise core application system topology diagram showing dependencies between frontend applications, business services, middleware and infrastructure.",
+      "plane": "Application Plane",
+      "tags": {
+        "core": "Core",
+        "production": "Production",
+        "microservice": "Microservice"
+      }
     }
   }
 }

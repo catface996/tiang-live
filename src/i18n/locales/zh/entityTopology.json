@@ -187,7 +187,18 @@
       "reads_from": "读取自",
       "writes_to": "写入到",
       "monitors": "监控",
-      "backs_up": "备份"
+      "backs_up": "备份",
+      "manages": "管理"
+    },
+    "mockData": {
+      "name": "企业应用拓扑",
+      "description": "企业核心应用系统拓扑图，展示前端应用、业务服务、中间件和基础设施的依赖关系。",
+      "plane": "应用平面",
+      "tags": {
+        "core": "核心",
+        "production": "生产环境",
+        "microservice": "微服务"
+      }
     }
   }
 }

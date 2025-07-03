@@ -14,6 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import entityTopologyData from '../../data/entityTopologyMock.json';
+import { type LegacyEntity, type LegacyDependency } from '../../utils/apiTypeConverter';
 
 interface Node extends d3.SimulationNodeDatum {
   id: string;
@@ -125,27 +126,8 @@ const TooltipContainer = styled.div`
 
 interface EntityD3RelationshipGraphProps {
   onNodeSelect?: (node: Node | null) => void;
-  entities?: Entity[];
-  dependencies?: Dependency[];
-}
-
-// 添加Entity和Dependency接口定义
-interface Entity {
-  id: string;
-  name: string;
-  type: string;
-  status: 'active' | 'inactive' | 'warning' | 'error';
-  properties: Record<string, unknown>;
-  connections: number;
-}
-
-interface Dependency {
-  id: string;
-  source: string;
-  target: string;
-  type: 'depends_on' | 'provides_to' | 'connects_to';
-  strength: number;
-  description?: string;
+  entities?: LegacyEntity[];
+  dependencies?: LegacyDependency[];
 }
 
 const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
