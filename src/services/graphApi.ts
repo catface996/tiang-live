@@ -2,7 +2,7 @@
  * 图操作API服务
  */
 
-import { apiClient } from './api';
+import axios from 'axios';
 
 // 图状态枚举
 export enum GraphStatus {
@@ -61,6 +61,37 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+// 创建专门的图API客户端，直接指向后端的/api/graph路径
+const graphApiClient = axios.create({
+  baseURL: '/api/graph',
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// 请求拦截器
+graphApiClient.interceptors.request.use(
+  config => {
+    // 添加认证token
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+);
+
+// 响应拦截器
+graphApiClient.interceptors.response.use(
+  response => response.data,
+  error => {
+    console.error('Graph API Error:', error);
+    return Promise.reject(error);
+  }
+);
+
 /**
  * 图操作API服务类
  */
@@ -69,28 +100,28 @@ export const graphApi = {
    * 保存图（创建或更新）
    */
   async saveGraph(request: SaveGraphRequest): Promise<ApiResponse<Graph>> {
-    return apiClient.post('/api/graph/save', request);
+    return graphApiClient.post('/save', request);
   },
 
   /**
    * 查询图列表
    */
   async listGraphs(request: QueryGraphRequest = {}): Promise<ApiResponse<Graph[]>> {
-    return apiClient.post('/api/graph/list', request);
+    return graphApiClient.post('/list', request);
   },
 
   /**
    * 删除图
    */
   async deleteGraph(request: DeleteGraphRequest): Promise<ApiResponse<void>> {
-    return apiClient.post('/api/graph/delete', request);
+    return graphApiClient.post('/delete', request);
   },
 
   /**
    * 根据ID获取图详情
    */
   async getGraphById(id: number): Promise<ApiResponse<Graph>> {
-    return apiClient.get(`/api/graph/${id}`);
+    return graphApiClient.get(`/${id}`);
   },
 
   /**
