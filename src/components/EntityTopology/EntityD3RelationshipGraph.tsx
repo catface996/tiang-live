@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Card, Spin, Alert, Space, Tag, Button } from 'antd';
+import { useTranslation } from 'react-i18next';
 import {
   FullscreenOutlined,
   ReloadOutlined,
@@ -11,7 +12,6 @@ import {
   DownOutlined,
   ExperimentOutlined
 } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import entityTopologyData from '../../data/entityTopologyMock.json';
 import { type LegacyEntity, type LegacyDependency } from '../../utils/apiTypeConverter';
@@ -135,7 +135,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
   entities,
   dependencies
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['entityTopology', 'common']);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -988,9 +988,9 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
     <Card
       title={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>实体拓扑关系图</span>
+          <span>{t('detail.graph.title')}</span>
           <Button type="primary" size="small" icon={<ExperimentOutlined />} onClick={handleAnalysisDiagnosis}>
-            分析诊断
+            {t('detail.graph.actions.analysisDiagnosis')}
           </Button>
         </div>
       }

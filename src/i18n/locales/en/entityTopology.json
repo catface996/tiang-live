@@ -211,6 +211,12 @@
         "export": "Export"
       }
     },
+    "graph": {
+      "title": "Entity Topology Relationship Graph",
+      "actions": {
+        "analysisDiagnosis": "Analysis & Diagnosis"
+      }
+    },
     "dataTabs": {
       "tabs": {
         "entities": "Entities ({{count}})",

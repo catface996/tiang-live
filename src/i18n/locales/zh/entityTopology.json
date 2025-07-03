@@ -211,6 +211,12 @@
         "export": "导出"
       }
     },
+    "graph": {
+      "title": "实体拓扑关系图",
+      "actions": {
+        "analysisDiagnosis": "分析诊断"
+      }
+    },
     "dataTabs": {
       "tabs": {
         "entities": "实体清单 ({{count}})",

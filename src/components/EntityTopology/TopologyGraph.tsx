@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { Space, Button, Spin } from 'antd';
+import { useTranslation } from 'react-i18next';
 import {
   NodeIndexOutlined,
   FullscreenOutlined,
@@ -71,6 +72,7 @@ interface TopologyGraphProps {
 }
 
 const TopologyGraph: React.FC<TopologyGraphProps> = ({ entities, dependencies }) => {
+  const { t } = useTranslation(['entityTopology', 'common']);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
@@ -873,7 +875,7 @@ const TopologyGraph: React.FC<TopologyGraphProps> = ({ entities, dependencies })
           <Button size="small" icon={<ReloadOutlined />} onClick={handleResetPositions} />
           <Button size="small" icon={<FullscreenOutlined />} onClick={handleFullscreen} />
           <Button size="small" type="primary" icon={<ExperimentOutlined />} onClick={handleAnalysisDiagnosis}>
-            分析诊断
+            {t('detail.graph.actions.analysisDiagnosis')}
           </Button>
         </Space>
       </div>
