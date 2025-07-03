@@ -426,7 +426,8 @@ export const monitoringApi = {
 
 // ==================== 导出API服务 ====================
 
-export { apiClient, entityApi, agentApi, relationApi, topologyApi, planeApi, monitoringApi };
+// 单独导出apiClient供其他服务使用
+export { apiClient };
 
 // 默认导出所有API
 export default {
