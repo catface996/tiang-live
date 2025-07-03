@@ -42,18 +42,12 @@ const DataTabs: React.FC<DataTabsProps> = ({
   onAddDependency,
   onAgentsClick
 }) => {
-  const { t, i18n } = useTranslation(['entityTopology', 'common']);
-
-  // 调试信息
-  console.log('DataTabs - i18n ready:', i18n.isInitialized);
-  console.log('DataTabs - current language:', i18n.language);
-  console.log('DataTabs - available namespaces:', Object.keys(i18n.store.data[i18n.language] || {}));
-  console.log('DataTabs - test translation:', t('dataTabs.entityColumns.name'));
+  const { t } = useTranslation(['entityTopology', 'common']);
 
   // 实体列表列定义
   const entityColumns = [
     {
-      title: t('dataTabs.entityColumns.name'),
+      title: t('detail.dataTabs.entityColumns.name'),
       dataIndex: 'name',
       key: 'name',
       width: '50%',
@@ -65,14 +59,14 @@ const DataTabs: React.FC<DataTabsProps> = ({
       )
     },
     {
-      title: t('dataTabs.entityColumns.type'),
+      title: t('detail.dataTabs.entityColumns.type'),
       dataIndex: 'type',
       key: 'type',
       width: '30%',
       render: (type: string) => <span>{type}</span>
     },
     {
-      title: t('dataTabs.entityColumns.actions'),
+      title: t('detail.dataTabs.entityColumns.actions'),
       key: 'actions',
       width: '20%',
       render: (_, record: Entity) => (
@@ -82,7 +76,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
             size="small"
             icon={<DatabaseOutlined />}
             onClick={() => onAgentsClick(record)}
-            title={t('dataTabs.entityActions.viewAgents')}
+            title={t('detail.dataTabs.entityActions.viewAgents')}
           />
           <Button
             type="text"
@@ -90,7 +84,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
             danger
             icon={<DeleteOutlined />}
             onClick={() => onDeleteEntity(record)}
-            title={t('dataTabs.entityActions.deleteEntity')}
+            title={t('detail.dataTabs.entityActions.deleteEntity')}
           />
         </Space>
       )
@@ -100,7 +94,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
   // 依赖关系列定义
   const dependencyColumns = [
     {
-      title: t('dataTabs.dependencyColumns.source'),
+      title: t('detail.dataTabs.dependencyColumns.source'),
       dataIndex: 'source',
       key: 'source',
       width: '40%',
@@ -117,7 +111,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       }
     },
     {
-      title: t('dataTabs.dependencyColumns.target'),
+      title: t('detail.dataTabs.dependencyColumns.target'),
       dataIndex: 'target',
       key: 'target',
       width: '40%',
@@ -134,7 +128,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       }
     },
     {
-      title: t('dataTabs.dependencyColumns.actions'),
+      title: t('detail.dataTabs.dependencyColumns.actions'),
       key: 'actions',
       width: '20%',
       render: (_, record: Dependency) => (
@@ -144,7 +138,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
           danger
           icon={<DeleteOutlined />}
           onClick={() => onDeleteDependency(record)}
-          title={t('dataTabs.dependencyActions.deleteDependency')}
+          title={t('detail.dataTabs.dependencyActions.deleteDependency')}
         />
       )
     }
@@ -161,14 +155,14 @@ const DataTabs: React.FC<DataTabsProps> = ({
             label: (
               <Space>
                 <DatabaseOutlined />
-                {t('dataTabs.tabs.entities', { count: entities.length })}
+                {t('detail.dataTabs.tabs.entities', { count: entities.length })}
               </Space>
             ),
             children: (
               <div>
                 <div style={{ marginBottom: 16, textAlign: 'right' }}>
                   <Button type="primary" size="small" icon={<PlusOutlined />} onClick={onAddEntity}>
-                    {t('dataTabs.actions.selectEntities')}
+                    {t('detail.dataTabs.actions.selectEntities')}
                   </Button>
                 </div>
                 <Table
@@ -187,14 +181,14 @@ const DataTabs: React.FC<DataTabsProps> = ({
             label: (
               <Space>
                 <LinkOutlined />
-                {t('dataTabs.tabs.dependencies', { count: dependencies.length })}
+                {t('detail.dataTabs.tabs.dependencies', { count: dependencies.length })}
               </Space>
             ),
             children: (
               <div>
                 <div style={{ marginBottom: 16, textAlign: 'right' }}>
                   <Button type="primary" size="small" icon={<PlusOutlined />} onClick={onAddDependency}>
-                    {t('dataTabs.actions.addRelationship')}
+                    {t('detail.dataTabs.actions.addRelationship')}
                   </Button>
                 </div>
                 <Table
