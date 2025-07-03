@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import TopologyCard from './components/TopologyCard';
 import '../../../styles/entity-topology.css';
+import { graphApi } from '../../../services/graphApi';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -191,37 +192,73 @@ const EntityTopology: React.FC = () => {
   const handleCreateSubmit = async (values: any) => {
     setCreateLoading(true);
     try {
-      // 生成新的拓扑图ID
-      const newId = `topology_${Date.now()}`;
+      console.log('🚀 开始创建拓扑图:', values);
 
-      // 创建新的拓扑图对象
-      const newTopology: Topology = {
-        id: newId,
+      // 构建保存图的请求数据
+      const saveGraphRequest = {
         name: values.name,
-        type: values.type,
-        status: 'active',
         description: values.description || '',
-        plane: values.plane || 'default',
-        tags: values.tags || [],
-        stats: {
+        labels: values.tags || [],
+        status: 'ACTIVE' as const,
+        ownerId: 1, // 假设当前用户ID为1，实际应该从用户上下文获取
+        metadata: {
+          type: values.type,
+          plane: values.plane || 'default',
           nodeCount: 0,
           linkCount: 0,
           healthScore: 100,
-          lastUpdated: new Date().toISOString()
-        },
-        createdAt: new Date().toISOString()
+          version: '1.0',
+          createdBy: 'user', // 实际应该从用户上下文获取
+          createdAt: new Date().toISOString()
+        }
       };
 
-      // 添加到拓扑列表
-      setTopologies(prev => [newTopology, ...prev]);
+      console.log('📤 发送创建图请求到后端:', saveGraphRequest);
 
-      message.success(t('entityTopology:messages.createSuccess'));
-      setCreateModalVisible(false);
-      createForm.resetFields();
+      // 调用后端API保存图到数据库
+      const response = await graphApi.saveGraph(saveGraphRequest);
 
-      // 跳转到新创建的拓扑详情页
-      navigate(`/test-tools/entity-topology/${newId}`);
+      console.log('✅ 后端响应:', response);
+
+      if (response.success) {
+        const savedGraph = response.data;
+        console.log('🎉 图已成功保存到数据库:', savedGraph);
+
+        // 创建前端显示用的拓扑对象
+        const newTopology: Topology = {
+          id: savedGraph.id?.toString() || `topology_${Date.now()}`,
+          name: savedGraph.name,
+          type: values.type,
+          status: 'active',
+          description: savedGraph.description || '',
+          plane: values.plane || 'default',
+          tags: savedGraph.labels || [],
+          stats: {
+            nodeCount: savedGraph.entityCount || 0,
+            linkCount: savedGraph.relationCount || 0,
+            healthScore: 100,
+            lastUpdated: savedGraph.updatedAt || new Date().toISOString()
+          },
+          createdAt: savedGraph.createdAt || new Date().toISOString()
+        };
+
+        // 添加到前端拓扑列表
+        setTopologies(prev => [newTopology, ...prev]);
+
+        message.success(t('entityTopology:messages.createSuccess'));
+        setCreateModalVisible(false);
+        createForm.resetFields();
+
+        // 跳转到新创建的拓扑详情页
+        navigate(`/test-tools/entity-topology/${newTopology.id}`);
+
+        console.log('🎯 跳转到拓扑详情页:', newTopology.id);
+      } else {
+        console.error('❌ 后端返回失败:', response.message);
+        message.error(response.message || t('entityTopology:messages.createFailed'));
+      }
     } catch (error) {
+      console.error('❌ 创建拓扑图失败:', error);
       message.error(t('entityTopology:messages.createFailed'));
     } finally {
       setCreateLoading(false);

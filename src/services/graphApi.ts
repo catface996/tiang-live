@@ -73,27 +73,37 @@ const graphApiClient = axios.create({
 // 请求拦截器
 graphApiClient.interceptors.request.use(
   config => {
-    console.log('🚀 Graph API Request:', {
+    const timestamp = new Date().toISOString();
+    const fullURL = `${config.baseURL}${config.url}`;
+
+    console.log(`🚀 [${timestamp}] Graph API Request:`, {
       method: config.method?.toUpperCase(),
       url: config.url,
       baseURL: config.baseURL,
-      fullURL: `${config.baseURL}${config.url}`,
+      fullURL: fullURL,
       data: config.data,
-      headers: config.headers
+      headers: {
+        'Content-Type': config.headers['Content-Type'],
+        Authorization: config.headers.Authorization ? '***Bearer Token***' : 'None'
+      }
     });
 
     // 添加认证token
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('🔑 Added auth token to request');
+      console.log(`🔑 [${timestamp}] Added auth token to request`);
     } else {
-      console.log('⚠️ No auth token found in localStorage');
+      console.log(`⚠️ [${timestamp}] No auth token found in localStorage`);
     }
+
+    console.log(`📤 [${timestamp}] Sending ${config.method?.toUpperCase()} request to: ${fullURL}`);
+    console.log(`📋 [${timestamp}] Request payload:`, JSON.stringify(config.data, null, 2));
+
     return config;
   },
   error => {
-    console.error('❌ Graph API Request Error:', error);
+    console.error(`❌ [${new Date().toISOString()}] Graph API Request Error:`, error);
     return Promise.reject(error);
   }
 );
@@ -101,27 +111,47 @@ graphApiClient.interceptors.request.use(
 // 响应拦截器
 graphApiClient.interceptors.response.use(
   response => {
-    console.log('✅ Graph API Response:', {
+    const timestamp = new Date().toISOString();
+    const fullURL = `${response.config.baseURL}${response.config.url}`;
+
+    console.log(`✅ [${timestamp}] Graph API Response SUCCESS:`, {
       status: response.status,
       statusText: response.statusText,
-      data: response.data,
-      headers: response.headers
+      url: response.config.url,
+      method: response.config.method?.toUpperCase(),
+      fullURL: fullURL,
+      dataSize: JSON.stringify(response.data).length + ' bytes'
     });
+    console.log(`📥 [${timestamp}] Response data:`, response.data);
+    console.log(`🎉 [${timestamp}] ✅ REQUEST SUCCESSFULLY REACHED BACKEND! ✅`);
+
     return response.data;
   },
   error => {
-    console.error('❌ Graph API Response Error:', {
+    const timestamp = new Date().toISOString();
+    const fullURL = error.config ? `${error.config.baseURL}${error.config.url}` : 'unknown';
+
+    console.error(`❌ [${timestamp}] Graph API Response ERROR:`, {
       status: error.response?.status,
       statusText: error.response?.statusText,
       data: error.response?.data,
       message: error.message,
-      config: {
-        method: error.config?.method,
-        url: error.config?.url,
-        baseURL: error.config?.baseURL,
-        fullURL: error.config ? `${error.config.baseURL}${error.config.url}` : 'unknown'
-      }
+      url: error.config?.url,
+      method: error.config?.method?.toUpperCase(),
+      fullURL: fullURL
     });
+
+    if (error.response?.status === 404) {
+      console.error(`🔍 [${timestamp}] 404 Error - Backend endpoint not found: ${fullURL}`);
+      console.error(`💡 [${timestamp}] Check if backend service is running on http://localhost:8080`);
+    } else if (error.response?.status >= 500) {
+      console.error(`🔥 [${timestamp}] Server Error - Backend service issue`);
+    } else if (error.code === 'ECONNREFUSED') {
+      console.error(`🚫 [${timestamp}] Connection Refused - Backend service not running`);
+    } else if (!error.response) {
+      console.error(`🌐 [${timestamp}] Network Error - Request may not have reached backend`);
+    }
+
     return Promise.reject(error);
   }
 );
