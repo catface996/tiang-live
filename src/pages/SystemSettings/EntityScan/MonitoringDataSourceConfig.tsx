@@ -9,11 +9,12 @@ import {
   Space,
   Typography,
   Alert,
-  Tabs,
   Card,
   Tag,
   Button,
-  Divider
+  Divider,
+  Row,
+  Col
 } from 'antd';
 import {
   LineChartOutlined,
@@ -26,11 +27,55 @@ import {
   ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
-const { TabPane } = Tabs;
+
+// 样式组件
+const SidebarContainer = styled.div`
+  height: 500px;
+  border-right: 1px solid #f0f0f0;
+  background: #fafafa;
+`;
+
+const SidebarItem = styled.div<{ active: boolean }>`
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  background: ${props => (props.active ? '#e6f7ff' : 'transparent')};
+  border-left: ${props => (props.active ? '3px solid #1890ff' : '3px solid transparent')};
+
+  &:hover {
+    background: ${props => (props.active ? '#e6f7ff' : '#f5f5f5')};
+  }
+
+  .sidebar-item-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sidebar-item-name {
+    font-weight: ${props => (props.active ? '600' : '400')};
+    color: ${props => (props.active ? '#1890ff' : '#333')};
+  }
+
+  .sidebar-item-desc {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+`;
+
+const ContentContainer = styled.div`
+  height: 500px;
+  overflow-y: auto;
+  padding: 16px;
+`;
 
 interface MonitoringDataSourceConfigProps {
   visible: boolean;
@@ -118,15 +163,17 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
     try {
       setTesting(true);
       const values = await form.validateFields();
-      
+
       // 模拟测试连接
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // 模拟测试结果
       const success = Math.random() > 0.3;
       setTestResult({
         success,
-        message: success ? t('entityScan:dataSourceConfig.messages.testSuccess') : t('entityScan:dataSourceConfig.messages.testFailed')
+        message: success
+          ? t('entityScan:dataSourceConfig.messages.testSuccess')
+          : t('entityScan:dataSourceConfig.messages.testFailed')
       });
     } catch (error) {
       setTestResult({
@@ -172,7 +219,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
             </Form.Item>
           </>
         );
-      
+
       case 'grafana':
         return (
           <>
@@ -193,18 +240,30 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
             <Form.Item label={t('entityScan:dataSourceConfig.fields.orgId')} name={['config', 'orgId']}>
               <InputNumber min={1} defaultValue={1} />
             </Form.Item>
-            <Form.Item label={t('entityScan:dataSourceConfig.fields.includeDashboards')} name={['config', 'includeDashboards']} valuePropName="checked">
+            <Form.Item
+              label={t('entityScan:dataSourceConfig.fields.includeDashboards')}
+              name={['config', 'includeDashboards']}
+              valuePropName="checked"
+            >
               <Switch defaultChecked />
             </Form.Item>
-            <Form.Item label={t('entityScan:dataSourceConfig.fields.includeDataSources')} name={['config', 'includeDataSources']} valuePropName="checked">
+            <Form.Item
+              label={t('entityScan:dataSourceConfig.fields.includeDataSources')}
+              name={['config', 'includeDataSources']}
+              valuePropName="checked"
+            >
               <Switch defaultChecked />
             </Form.Item>
-            <Form.Item label={t('entityScan:dataSourceConfig.fields.includeAlerts')} name={['config', 'includeAlerts']} valuePropName="checked">
+            <Form.Item
+              label={t('entityScan:dataSourceConfig.fields.includeAlerts')}
+              name={['config', 'includeAlerts']}
+              valuePropName="checked"
+            >
               <Switch />
             </Form.Item>
           </>
         );
-      
+
       case 'elasticsearch':
         return (
           <>
@@ -213,7 +272,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
               name={['config', 'hosts']}
               rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.clusterRequired') }]}
             >
-              <TextArea 
+              <TextArea
                 placeholder="http://es1.example.com:9200&#10;http://es2.example.com:9200"
                 rows={3}
               />
@@ -225,7 +284,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
               <Input.Password placeholder={t('entityScan:dataSourceConfig.fields.passwordPlaceholder')} />
             </Form.Item>
             <Form.Item label={t('entityScan:dataSourceConfig.fields.indices')} name={['config', 'indices']}>
-              <TextArea 
+              <TextArea
                 placeholder="app-logs-*&#10;access-logs-*&#10;error-logs-*"
                 rows={3}
               />
@@ -238,7 +297,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
             </Form.Item>
           </>
         );
-      
+
       case 'influxdb':
         return (
           <>
@@ -267,7 +326,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
             </Form.Item>
           </>
         );
-      
+
       default:
         return (
           <Alert
@@ -288,89 +347,100 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
       onOk={() => form.submit()}
       okText={t('common:save')}
       cancelText={t('common:cancel')}
-      width={800}
+      width={1000}
       destroyOnClose
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onOk}
-        initialValues={dataSource}
-      >
-        <Tabs activeKey={selectedType} onChange={setSelectedType}>
-          {monitoringTypes.map(type => (
-            <TabPane
-              tab={
-                <Space>
+      <Row gutter={0} style={{ height: '500px' }}>
+        {/* 左侧边栏 */}
+        <Col span={8}>
+          <SidebarContainer>
+            {monitoringTypes.map(type => (
+              <SidebarItem key={type.key} active={selectedType === type.key} onClick={() => setSelectedType(type.key)}>
+                <div className="sidebar-item-content">
                   {type.icon}
-                  {type.name}
-                </Space>
-              }
-              key={type.key}
-            >
-              <Card size="small" style={{ marginBottom: 16 }}>
-                <Space direction="vertical" style={{ width: '100%' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {type.icon}
-                    <Title level={5} style={{ margin: 0 }}>{type.name}</Title>
-                  </div>
-                  <Paragraph style={{ margin: 0, color: '#666' }}>
-                    {type.description}
-                  </Paragraph>
-                  <div>
-                    <Text strong>{t('entityScan:dataSourceConfig.mainFeatures')}: </Text>
-                    {type.features.map(feature => (
-                      <Tag key={feature} color="blue" style={{ margin: '2px' }}>
-                        {feature}
-                      </Tag>
-                    ))}
-                  </div>
-                </Space>
-              </Card>
+                  <span className="sidebar-item-name">{type.name}</span>
+                </div>
+                <div className="sidebar-item-desc">{type.description}</div>
+              </SidebarItem>
+            ))}
+          </SidebarContainer>
+        </Col>
 
-              <Form.Item
-                label={t('entityScan:dataSourceConfig.fields.name')}
-                name="name"
-                rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.nameRequired') }]}
-              >
-                <Input placeholder={`${type.name}${t('entityScan:dataSourceConfig.fields.namePlaceholder')}`} />
-              </Form.Item>
+        {/* 右侧内容区域 */}
+        <Col span={16}>
+          <ContentContainer>
+            <Form form={form} layout="vertical" onFinish={onOk} initialValues={dataSource}>
+              {/* 当前选中类型的详细信息 */}
+              {(() => {
+                const currentType = monitoringTypes.find(type => type.key === selectedType);
+                if (!currentType) return null;
 
-              <Form.Item label={t('entityScan:dataSourceConfig.fields.description')} name="description">
-                <TextArea 
-                  placeholder={`${type.name}${t('entityScan:dataSourceConfig.fields.descriptionPlaceholder')}`}
-                  rows={2}
-                />
-              </Form.Item>
+                return (
+                  <>
+                    <Card size="small" style={{ marginBottom: 16 }}>
+                      <Space direction="vertical" style={{ width: '100%' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          {currentType.icon}
+                          <Title level={5} style={{ margin: 0 }}>
+                            {currentType.name}
+                          </Title>
+                        </div>
+                        <Paragraph style={{ margin: 0, color: '#666' }}>{currentType.description}</Paragraph>
+                        <div>
+                          <Text strong>{t('entityScan:dataSourceConfig.mainFeatures')}: </Text>
+                          {currentType.features.map(feature => (
+                            <Tag key={feature} color="blue" style={{ margin: '2px' }}>
+                              {feature}
+                            </Tag>
+                          ))}
+                        </div>
+                      </Space>
+                    </Card>
 
-              <Divider />
+                    <Form.Item
+                      label={t('entityScan:dataSourceConfig.fields.name')}
+                      name="name"
+                      rules={[{ required: true, message: t('entityScan:dataSourceConfig.fields.nameRequired') }]}
+                    >
+                      <Input
+                        placeholder={`${currentType.name}${t('entityScan:dataSourceConfig.fields.namePlaceholder')}`}
+                      />
+                    </Form.Item>
 
-              {renderConfigForm()}
+                    <Form.Item label={t('entityScan:dataSourceConfig.fields.description')} name="description">
+                      <TextArea
+                        placeholder={`${currentType.name}${t('entityScan:dataSourceConfig.fields.descriptionPlaceholder')}`}
+                        rows={2}
+                      />
+                    </Form.Item>
 
-              <Divider />
+                    <Divider />
 
-              <Space>
-                <Button
-                  icon={<ExperimentOutlined />}
-                  onClick={handleTestConnection}
-                  loading={testing}
-                >
-                  {t('entityScan:dataSourceConfig.testConnection')}
-                </Button>
-                {testResult && (
-                  <Alert
-                    message={testResult.message}
-                    type={testResult.success ? 'success' : 'error'}
-                    showIcon
-                    icon={testResult.success ? <CheckCircleOutlined /> : <ExclamationCircleOutlined />}
-                    style={{ flex: 1 }}
-                  />
-                )}
-              </Space>
-            </TabPane>
-          ))}
-        </Tabs>
-      </Form>
+                    {renderConfigForm()}
+
+                    <Divider />
+
+                    <Space>
+                      <Button icon={<ExperimentOutlined />} onClick={handleTestConnection} loading={testing}>
+                        {t('entityScan:dataSourceConfig.testConnection')}
+                      </Button>
+                      {testResult && (
+                        <Alert
+                          message={testResult.message}
+                          type={testResult.success ? 'success' : 'error'}
+                          showIcon
+                          icon={testResult.success ? <CheckCircleOutlined /> : <ExclamationCircleOutlined />}
+                          style={{ flex: 1 }}
+                        />
+                      )}
+                    </Space>
+                  </>
+                );
+              })()}
+            </Form>
+          </ContentContainer>
+        </Col>
+      </Row>
     </Modal>
   );
 };
