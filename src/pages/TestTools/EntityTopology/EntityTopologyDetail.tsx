@@ -1084,10 +1084,10 @@ const EntityTopologyDetail: React.FC = () => {
 
         <RelationshipForm>
           <div className="form-item">
-            <label className="form-label">源实体</label>
+            <label className="form-label">{t('detail.modals.addDependency.sourceEntity')}</label>
             <Select
               className="entity-select"
-              placeholder="请选择源实体"
+              placeholder={t('detail.modals.addDependency.placeholders.sourceEntity')}
               value={sourceEntityId || undefined}
               onChange={setSourceEntityId}
               showSearch
@@ -1108,17 +1108,17 @@ const EntityTopologyDetail: React.FC = () => {
               icon={<SwapOutlined />}
               onClick={swapSourceAndTarget}
               disabled={!sourceEntityId && !targetEntityId}
-              title="交换源实体和目标实体"
+              title={t('detail.modals.addDependency.swapTooltip')}
             >
-              交换
+              {t('detail.modals.addDependency.swap')}
             </Button>
           </div>
 
           <div className="form-item">
-            <label className="form-label">目标实体</label>
+            <label className="form-label">{t('detail.modals.addDependency.targetEntity')}</label>
             <Select
               className="entity-select"
-              placeholder="请选择目标实体"
+              placeholder={t('detail.modals.addDependency.placeholders.targetEntity')}
               value={targetEntityId || undefined}
               onChange={setTargetEntityId}
               showSearch
@@ -1134,22 +1134,22 @@ const EntityTopologyDetail: React.FC = () => {
           </div>
 
           <div className="form-item">
-            <label className="form-label">关系类型</label>
+            <label className="form-label">{t('detail.modals.addDependency.relationshipType')}</label>
             <Radio.Group
               value={relationshipType}
               onChange={e => setRelationshipType(e.target.value)}
               style={{ width: '100%' }}
             >
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                <Radio value="depends_on">依赖于</Radio>
-                <Radio value="connects_to">连接到</Radio>
-                <Radio value="uses">使用</Radio>
-                <Radio value="routes_to">路由到</Radio>
-                <Radio value="stores_in">存储在</Radio>
-                <Radio value="reads_from">读取自</Radio>
-                <Radio value="writes_to">写入到</Radio>
-                <Radio value="monitors">监控</Radio>
-                <Radio value="backs_up">备份</Radio>
+                <Radio value="depends_on">{t('detail.modals.addDependency.relationshipTypes.depends_on')}</Radio>
+                <Radio value="connects_to">{t('detail.modals.addDependency.relationshipTypes.connects_to')}</Radio>
+                <Radio value="uses">{t('detail.modals.addDependency.relationshipTypes.uses')}</Radio>
+                <Radio value="routes_to">{t('detail.modals.addDependency.relationshipTypes.routes_to')}</Radio>
+                <Radio value="stores_in">{t('detail.modals.addDependency.relationshipTypes.stores_in')}</Radio>
+                <Radio value="reads_from">{t('detail.modals.addDependency.relationshipTypes.reads_from')}</Radio>
+                <Radio value="writes_to">{t('detail.modals.addDependency.relationshipTypes.writes_to')}</Radio>
+                <Radio value="monitors">{t('detail.modals.addDependency.relationshipTypes.monitors')}</Radio>
+                <Radio value="backs_up">{t('detail.modals.addDependency.relationshipTypes.backs_up')}</Radio>
               </div>
             </Radio.Group>
           </div>
@@ -1190,7 +1190,10 @@ const EntityTopologyDetail: React.FC = () => {
                         {topologyData?.entities.find(e => e.id === targetEntityId)?.name}
                       </span>
                     </div>
-                    <div className="relationship-type">关系类型: {getRelationshipDescription(relationshipType)}</div>
+                    <div className="relationship-type">
+                      {t('detail.modals.deleteDependency.relationshipType')}:{' '}
+                      {getRelationshipDescription(relationshipType)}
+                    </div>
                   </div>
                 );
               })()}
@@ -1201,17 +1204,17 @@ const EntityTopologyDetail: React.FC = () => {
 
       {/* 选择Agent Modal */}
       <Modal
-        title="绑定Agent"
+        title={t('detail.modals.bindAgent.title')}
         open={selectAgentModalVisible}
         onOk={confirmBindAgents}
         onCancel={cancelBindAgents}
-        okText={`确定绑定 (${selectedAgentIds.length})`}
-        cancelText="取消"
+        okText={t('detail.modals.bindAgent.confirmText', { count: selectedAgentIds.length })}
+        cancelText={t('detail.modals.bindAgent.cancelText')}
         width={900}
         okButtonProps={{ disabled: selectedAgentIds.length === 0 }}
       >
         <AgentBindingHint>
-          <p>为实体绑定AI Agent来提供智能化管理和监控能力。</p>
+          <p>{t('detail.modals.bindAgent.description')}</p>
           {currentEntity && (
             <div className="entity-info">
               <span className="entity-name">{currentEntity.name}</span>
@@ -1219,8 +1222,10 @@ const EntityTopologyDetail: React.FC = () => {
             </div>
           )}
           <p style={{ marginTop: 8 }}>
-            共有 <span className="highlight">{availableAgents.length}</span> 个可用Agent， 已选择{' '}
-            <span className="highlight">{selectedAgentIds.length}</span> 个。
+            {t('detail.modals.bindAgent.stats', {
+              total: availableAgents.length,
+              selected: selectedAgentIds.length
+            })}
           </p>
         </AgentBindingHint>
 
@@ -1232,17 +1237,17 @@ const EntityTopologyDetail: React.FC = () => {
                 onClick={() => setSelectedAgentIds(availableAgents.map(agent => agent.id))}
                 disabled={selectedAgentIds.length === availableAgents.length}
               >
-                全选
+                {t('detail.modals.bindAgent.selectAll')}
               </Button>
               <Button size="small" onClick={() => setSelectedAgentIds([])} disabled={selectedAgentIds.length === 0}>
-                清空
+                {t('detail.modals.bindAgent.clearAll')}
               </Button>
             </Space>
           </div>
         )}
 
         {availableAgents.length === 0 ? (
-          <Empty description="暂无可用的Agent" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          <Empty description={t('detail.modals.bindAgent.noAgents')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
         ) : (
           <Table
             rowSelection={{
@@ -1252,7 +1257,7 @@ const EntityTopologyDetail: React.FC = () => {
             }}
             columns={[
               {
-                title: 'Agent名称',
+                title: t('detail.modals.bindAgent.columns.name'),
                 dataIndex: 'name',
                 key: 'name',
                 width: '25%',
@@ -1264,30 +1269,30 @@ const EntityTopologyDetail: React.FC = () => {
                 )
               },
               {
-                title: '类型',
+                title: t('detail.modals.bindAgent.columns.type'),
                 dataIndex: 'type',
                 key: 'type',
                 width: '15%',
                 render: (type: string) => <Tag color="cyan">{type}</Tag>
               },
               {
-                title: '状态',
+                title: t('detail.modals.bindAgent.columns.status'),
                 dataIndex: 'status',
                 key: 'status',
                 width: '12%',
                 render: (status: string) => {
                   const statusConfig = {
-                    active: { color: 'green', text: '运行中' },
-                    warning: { color: 'orange', text: '警告' },
-                    error: { color: 'red', text: '错误' },
-                    inactive: { color: 'gray', text: '停用' }
+                    active: { color: 'green', text: t('detail.modals.bindAgent.statusLabels.active') },
+                    warning: { color: 'orange', text: t('detail.modals.bindAgent.statusLabels.warning') },
+                    error: { color: 'red', text: t('detail.modals.bindAgent.statusLabels.error') },
+                    inactive: { color: 'gray', text: t('detail.modals.bindAgent.statusLabels.inactive') }
                   };
                   const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
                   return <Tag color={config.color}>{config.text}</Tag>;
                 }
               },
               {
-                title: '能力',
+                title: t('detail.modals.bindAgent.columns.capabilities'),
                 dataIndex: 'capabilities',
                 key: 'capabilities',
                 width: '25%',
@@ -1307,7 +1312,7 @@ const EntityTopologyDetail: React.FC = () => {
                 )
               },
               {
-                title: '描述',
+                title: t('detail.modals.bindAgent.columns.description'),
                 dataIndex: 'description',
                 key: 'description',
                 width: '23%',
@@ -1323,7 +1328,12 @@ const EntityTopologyDetail: React.FC = () => {
               pageSize: 6,
               showSizeChanger: false,
               showQuickJumper: true,
-              showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
+              showTotal: (total, range) =>
+                t('detail.modals.bindAgent.pagination.total', {
+                  start: range[0],
+                  end: range[1],
+                  total
+                })
             }}
           />
         )}
