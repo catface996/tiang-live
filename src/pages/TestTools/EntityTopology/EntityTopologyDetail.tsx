@@ -20,7 +20,7 @@ import EntityD3RelationshipGraph from '../../../components/EntityTopology/Entity
 import entityTopologyData from '../../../data/entityTopologyMock.json';
 import availableEntitiesData from '../../../data/availableEntitiesMock.json';
 import availableAgentsData from '../../../data/availableAgentsMock.json';
-import { graphApi, type Graph, type GraphStatus, type SaveGraphRequest } from '../../../services/graphApi';
+import { graphApi, GraphStatus, type Graph, type SaveGraphRequest } from '../../../services/graphApi';
 
 // Agent类型定义
 interface Agent {
