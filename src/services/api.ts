@@ -2,7 +2,7 @@
  * API服务层 - 统一管理与后端的通信
  */
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import type {
   ApiResponse,
   PaginationResponse,
