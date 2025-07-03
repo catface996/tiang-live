@@ -73,21 +73,55 @@ const graphApiClient = axios.create({
 // 请求拦截器
 graphApiClient.interceptors.request.use(
   config => {
+    console.log('🚀 Graph API Request:', {
+      method: config.method?.toUpperCase(),
+      url: config.url,
+      baseURL: config.baseURL,
+      fullURL: `${config.baseURL}${config.url}`,
+      data: config.data,
+      headers: config.headers
+    });
+
     // 添加认证token
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('🔑 Added auth token to request');
+    } else {
+      console.log('⚠️ No auth token found in localStorage');
     }
     return config;
   },
-  error => Promise.reject(error)
+  error => {
+    console.error('❌ Graph API Request Error:', error);
+    return Promise.reject(error);
+  }
 );
 
 // 响应拦截器
 graphApiClient.interceptors.response.use(
-  response => response.data,
+  response => {
+    console.log('✅ Graph API Response:', {
+      status: response.status,
+      statusText: response.statusText,
+      data: response.data,
+      headers: response.headers
+    });
+    return response.data;
+  },
   error => {
-    console.error('Graph API Error:', error);
+    console.error('❌ Graph API Response Error:', {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message,
+      config: {
+        method: error.config?.method,
+        url: error.config?.url,
+        baseURL: error.config?.baseURL,
+        fullURL: error.config ? `${error.config.baseURL}${error.config.url}` : 'unknown'
+      }
+    });
     return Promise.reject(error);
   }
 );
