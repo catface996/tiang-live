@@ -115,19 +115,26 @@ const resources = {
   }
 };
 
+// 为简短语言代码添加映射
+resources['zh'] = resources['zh-CN'];
+resources['en'] = resources['en-US'];
+
 // 初始化i18n
 i18n
   .use(LanguageDetector) // 自动检测用户语言
   .use(initReactI18next) // 绑定react-i18next
   .init({
     resources,
-    
+
     // 默认语言
     fallbackLng: 'zh-CN',
-    
-    // 支持的语言列表
-    supportedLngs: ['zh-CN', 'en-US'],
-    
+
+    // 支持的语言列表 - 包含简短和完整的语言代码
+    supportedLngs: ['zh-CN', 'en-US', 'zh', 'en'],
+
+    // 语言映射 - 将简短代码映射到完整代码
+    load: 'languageOnly', // 只加载语言部分，忽略地区
+
     // 语言检测配置
     detection: {
       // 检测顺序：localStorage -> fallback
@@ -137,36 +144,56 @@ i18n
       // localStorage中的key名
       lookupLocalStorage: 'preferred-language'
     },
-    
+
     // 设置初始语言为用户之前选择的语言
     lng: languageStorage.get(),
-    
-    // 调试模式（开发环境开启）
-    debug: import.meta.env.DEV,
-    
+
+    // 调试模式（开发环境关闭以减少日志）
+    debug: false,
+
     // 插值配置
     interpolation: {
       escapeValue: false // React已经处理了XSS
     },
-    
+
     // 命名空间配置
     defaultNS: 'common',
     ns: [
-      'common', 'layout', 'menu', 'dashboard', 'planes', 'agents', 'models', 
-      'entities', 'sequences', 'tasks', 'messages', 'reports', 'relationships', 
-      'aiAssistant', 'solutions', 'tags', 'prompts', 'entityScan', 'theme',
+      'common',
+      'layout',
+      'menu',
+      'dashboard',
+      'planes',
+      'agents',
+      'models',
+      'entities',
+      'sequences',
+      'tasks',
+      'messages',
+      'reports',
+      'relationships',
+      'aiAssistant',
+      'solutions',
+      'tags',
+      'prompts',
+      'entityScan',
+      'theme',
       // 页面级命名空间
-      'taskCollectionRunDetail', 'taskExecutionHistory', 'hookTasks', 'testTools', 'entityTopology'
+      'taskCollectionRunDetail',
+      'taskExecutionHistory',
+      'hookTasks',
+      'testTools',
+      'entityTopology'
     ],
-    
+
     // 键值分隔符
     keySeparator: '.',
     nsSeparator: ':',
-    
+
     // 复数规则
     pluralSeparator: '_',
     contextSeparator: '_',
-    
+
     // 缺失键处理
     saveMissing: import.meta.env.DEV,
     missingKeyHandler: (lng, ns, key) => {
@@ -194,7 +221,7 @@ export const languageConfig = {
   'en-US': {
     name: 'English',
     nativeName: 'English',
-    flag: '🇺🇸', 
+    flag: '🇺🇸',
     code: 'en-US'
   }
 } as const;
