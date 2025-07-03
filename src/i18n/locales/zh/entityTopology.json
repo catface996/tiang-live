@@ -53,9 +53,31 @@
     "loadFailed": "加载拓扑数据失败",
     "loadSuccess": "拓扑数据加载成功",
     "createSuccess": "拓扑创建成功",
+    "createFailed": "拓扑创建失败",
     "updateSuccess": "拓扑更新成功",
     "deleteSuccess": "拓扑删除成功",
     "refreshSuccess": "刷新成功"
+  },
+  "form": {
+    "name": "拓扑名称",
+    "nameRequired": "请输入拓扑名称",
+    "nameMaxLength": "拓扑名称不能超过50个字符",
+    "namePlaceholder": "请输入拓扑名称",
+    "type": "拓扑类型",
+    "typeRequired": "请选择拓扑类型",
+    "typePlaceholder": "请选择拓扑类型",
+    "plane": "所属平面",
+    "planePlaceholder": "请选择所属平面（可选）",
+    "description": "描述",
+    "descriptionPlaceholder": "请输入拓扑描述（可选）",
+    "tags": "标签",
+    "tagsPlaceholder": "请输入标签，支持多个标签"
+  },
+  "planes": {
+    "control": "控制平面",
+    "data": "数据平面",
+    "management": "管理平面",
+    "service": "服务平面"
   },
   "detail": {
     "breadcrumb": {

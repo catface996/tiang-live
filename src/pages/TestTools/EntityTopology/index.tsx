@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Space, Input, Select, message, Spin, Empty, Typography, Statistic } from 'antd';
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  Space,
+  Input,
+  Select,
+  message,
+  Spin,
+  Empty,
+  Typography,
+  Statistic,
+  Modal,
+  Form
+} from 'antd';
 import {
   PlusOutlined,
   ReloadOutlined,
@@ -45,6 +60,11 @@ const EntityTopology: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [topologies, setTopologies] = useState<Topology[]>([]);
+
+  // 创建拓扑图相关状态
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [createForm] = Form.useForm();
+  const [createLoading, setCreateLoading] = useState(false);
 
   // 模拟数据
   const mockTopologies: Topology[] = [
@@ -161,6 +181,59 @@ const EntityTopology: React.FC = () => {
     }
   };
 
+  // 处理创建拓扑图
+  const handleCreateTopology = () => {
+    setCreateModalVisible(true);
+    createForm.resetFields();
+  };
+
+  // 提交创建拓扑图
+  const handleCreateSubmit = async (values: any) => {
+    setCreateLoading(true);
+    try {
+      // 生成新的拓扑图ID
+      const newId = `topology_${Date.now()}`;
+
+      // 创建新的拓扑图对象
+      const newTopology: Topology = {
+        id: newId,
+        name: values.name,
+        type: values.type,
+        status: 'active',
+        description: values.description || '',
+        plane: values.plane || 'default',
+        tags: values.tags || [],
+        stats: {
+          nodeCount: 0,
+          linkCount: 0,
+          healthScore: 100,
+          lastUpdated: new Date().toISOString()
+        },
+        createdAt: new Date().toISOString()
+      };
+
+      // 添加到拓扑列表
+      setTopologies(prev => [newTopology, ...prev]);
+
+      message.success(t('entityTopology:messages.createSuccess'));
+      setCreateModalVisible(false);
+      createForm.resetFields();
+
+      // 跳转到新创建的拓扑详情页
+      navigate(`/test-tools/entity-topology/${newId}`);
+    } catch (error) {
+      message.error(t('entityTopology:messages.createFailed'));
+    } finally {
+      setCreateLoading(false);
+    }
+  };
+
+  // 取消创建拓扑图
+  const handleCreateCancel = () => {
+    setCreateModalVisible(false);
+    createForm.resetFields();
+  };
+
   // 过滤拓扑数据
   const filteredTopologies = topologies.filter(topology => {
     const matchesSearch =
@@ -210,11 +283,7 @@ const EntityTopology: React.FC = () => {
           <Button icon={<ReloadOutlined />} onClick={() => loadTopologies()}>
             {t('common:refresh')}
           </Button>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => message.info(t('entityTopology:actions.createTopology') + '功能开发中...')}
-          >
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateTopology}>
             {t('entityTopology:actions.createTopology')}
           </Button>
         </Space>
@@ -327,6 +396,70 @@ const EntityTopology: React.FC = () => {
           )}
         </Spin>
       </div>
+
+      {/* 创建拓扑图Modal */}
+      <Modal
+        title={t('entityTopology:actions.createTopology')}
+        open={createModalVisible}
+        onCancel={handleCreateCancel}
+        onOk={() => createForm.submit()}
+        confirmLoading={createLoading}
+        width={600}
+        destroyOnClose
+      >
+        <Form form={createForm} layout="vertical" onFinish={handleCreateSubmit}>
+          <Form.Item
+            name="name"
+            label={t('entityTopology:form.name')}
+            rules={[
+              { required: true, message: t('entityTopology:form.nameRequired') },
+              { max: 50, message: t('entityTopology:form.nameMaxLength') }
+            ]}
+          >
+            <Input placeholder={t('entityTopology:form.namePlaceholder')} />
+          </Form.Item>
+
+          <Form.Item
+            name="type"
+            label={t('entityTopology:form.type')}
+            rules={[{ required: true, message: t('entityTopology:form.typeRequired') }]}
+          >
+            <Select placeholder={t('entityTopology:form.typePlaceholder')}>
+              <Option value="network">{t('entityTopology:types.network')}</Option>
+              <Option value="application">{t('entityTopology:types.application')}</Option>
+              <Option value="database">{t('entityTopology:types.database')}</Option>
+              <Option value="system">{t('entityTopology:types.system')}</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item name="plane" label={t('entityTopology:form.plane')}>
+            <Select placeholder={t('entityTopology:form.planePlaceholder')} allowClear>
+              <Option value="control">{t('entityTopology:planes.control')}</Option>
+              <Option value="data">{t('entityTopology:planes.data')}</Option>
+              <Option value="management">{t('entityTopology:planes.management')}</Option>
+              <Option value="service">{t('entityTopology:planes.service')}</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item name="description" label={t('entityTopology:form.description')}>
+            <Input.TextArea
+              rows={3}
+              placeholder={t('entityTopology:form.descriptionPlaceholder')}
+              maxLength={200}
+              showCount
+            />
+          </Form.Item>
+
+          <Form.Item name="tags" label={t('entityTopology:form.tags')}>
+            <Select
+              mode="tags"
+              placeholder={t('entityTopology:form.tagsPlaceholder')}
+              tokenSeparators={[',']}
+              maxTagCount={5}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

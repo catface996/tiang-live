@@ -1,6 +1,30 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Typography, Space, Spin, Empty, Breadcrumb, message, Modal, Table, Tag, Button, Select, Radio } from 'antd';
-import { NodeIndexOutlined, HomeOutlined, ToolOutlined, SwapOutlined, RobotOutlined } from '@ant-design/icons';
+import {
+  Typography,
+  Space,
+  Spin,
+  Empty,
+  Breadcrumb,
+  message,
+  Modal,
+  Table,
+  Tag,
+  Button,
+  Select,
+  Radio,
+  Input,
+  Form
+} from 'antd';
+import {
+  NodeIndexOutlined,
+  HomeOutlined,
+  ToolOutlined,
+  SwapOutlined,
+  RobotOutlined,
+  SaveOutlined,
+  FolderOpenOutlined,
+  DeleteOutlined
+} from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -11,6 +35,7 @@ import EntityD3RelationshipGraph from '../../../components/EntityTopology/Entity
 import entityTopologyData from '../../../data/entityTopologyMock.json';
 import availableEntitiesData from '../../../data/availableEntitiesMock.json';
 import availableAgentsData from '../../../data/availableAgentsMock.json';
+import { graphApi, Graph, GraphStatus, SaveGraphRequest } from '../../../services/graphApi';
 
 const { Title, Text } = Typography;
 
@@ -307,6 +332,14 @@ const EntityTopologyDetail: React.FC = () => {
   const [selectedAgentIds, setSelectedAgentIds] = useState<string[]>([]);
   const [entityAgentBindings, setEntityAgentBindings] = useState<EntityAgentBinding[]>([]);
 
+  // 图操作相关状态
+  const [currentGraph, setCurrentGraph] = useState<Graph | null>(null);
+  const [saveGraphModalVisible, setSaveGraphModalVisible] = useState(false);
+  const [loadGraphModalVisible, setLoadGraphModalVisible] = useState(false);
+  const [availableGraphs, setAvailableGraphs] = useState<Graph[]>([]);
+  const [graphForm] = Form.useForm();
+  const [graphLoading, setGraphLoading] = useState(false);
+
   // 模拟数据加载
   const loadTopologyDetail = useCallback(async () => {
     setLoading(true);
@@ -400,6 +433,182 @@ const EntityTopologyDetail: React.FC = () => {
   useEffect(() => {
     loadTopologyDetail();
   }, [loadTopologyDetail]);
+
+  // 图操作相关函数
+
+  /**
+   * 加载可用的图列表
+   */
+  const loadAvailableGraphs = useCallback(async () => {
+    try {
+      setGraphLoading(true);
+      const response = await graphApi.listGraphs({
+        ownerId: 1, // 假设当前用户ID为1，实际应该从用户上下文获取
+        status: GraphStatus.ACTIVE
+      });
+
+      if (response.success) {
+        setAvailableGraphs(response.data);
+      } else {
+        message.error(t('entityTopology:graph.loadError'));
+      }
+    } catch (error) {
+      console.error('Failed to load graphs:', error);
+      message.error(t('entityTopology:graph.loadError'));
+    } finally {
+      setGraphLoading(false);
+    }
+  }, [t]);
+
+  /**
+   * 保存当前拓扑为图
+   */
+  const handleSaveGraph = async (values: any) => {
+    try {
+      setGraphLoading(true);
+
+      // 构建图的元数据，包含当前拓扑的节点和边信息
+      const graphMetadata = {
+        nodes: topologyData?.entities || [],
+        edges: topologyData?.dependencies || [],
+        layout: 'force-directed',
+        version: '1.0',
+        entityCount: topologyData?.entities?.length || 0,
+        relationCount: topologyData?.dependencies?.length || 0
+      };
+
+      const saveRequest: SaveGraphRequest = {
+        id: currentGraph?.id, // 如果是更新现有图
+        name: values.name,
+        description: values.description,
+        labels: values.labels || [],
+        status: values.status || GraphStatus.ACTIVE,
+        ownerId: 1, // 假设当前用户ID为1
+        metadata: graphMetadata
+      };
+
+      const response = await graphApi.saveGraph(saveRequest);
+
+      if (response.success) {
+        message.success(t('entityTopology:graph.saveSuccess'));
+        setCurrentGraph(response.data);
+        setSaveGraphModalVisible(false);
+        graphForm.resetFields();
+
+        // 刷新可用图列表
+        await loadAvailableGraphs();
+      } else {
+        message.error(response.message || t('entityTopology:graph.saveError'));
+      }
+    } catch (error) {
+      console.error('Failed to save graph:', error);
+      message.error(t('entityTopology:graph.saveError'));
+    } finally {
+      setGraphLoading(false);
+    }
+  };
+
+  /**
+   * 加载选中的图
+   */
+  const handleLoadGraph = async (graphId: number) => {
+    try {
+      setGraphLoading(true);
+
+      const response = await graphApi.getGraphById(graphId);
+
+      if (response.success) {
+        const graph = response.data;
+        setCurrentGraph(graph);
+
+        // 从图的元数据中恢复拓扑数据
+        if (graph.metadata) {
+          const restoredTopologyData = {
+            id: graph.id?.toString() || '',
+            name: graph.name,
+            description: graph.description || '',
+            entities: graph.metadata.nodes || [],
+            dependencies: graph.metadata.edges || [],
+            metadata: {
+              entityCount: graph.metadata.entityCount || 0,
+              relationCount: graph.metadata.relationCount || 0,
+              version: graph.metadata.version || '1.0'
+            }
+          };
+
+          setTopologyData(restoredTopologyData);
+        }
+
+        message.success(t('entityTopology:graph.loadSuccess'));
+        setLoadGraphModalVisible(false);
+      } else {
+        message.error(response.message || t('entityTopology:graph.loadError'));
+      }
+    } catch (error) {
+      console.error('Failed to load graph:', error);
+      message.error(t('entityTopology:graph.loadError'));
+    } finally {
+      setGraphLoading(false);
+    }
+  };
+
+  /**
+   * 删除图
+   */
+  const handleDeleteGraph = async (graphId: number) => {
+    try {
+      const response = await graphApi.deleteGraph({ graphId });
+
+      if (response.success) {
+        message.success(t('entityTopology:graph.deleteSuccess'));
+
+        // 如果删除的是当前图，清空当前图状态
+        if (currentGraph?.id === graphId) {
+          setCurrentGraph(null);
+        }
+
+        // 刷新可用图列表
+        await loadAvailableGraphs();
+      } else {
+        message.error(response.message || t('entityTopology:graph.deleteError'));
+      }
+    } catch (error) {
+      console.error('Failed to delete graph:', error);
+      message.error(t('entityTopology:graph.deleteError'));
+    }
+  };
+
+  /**
+   * 打开保存图对话框
+   */
+  const handleOpenSaveGraphModal = () => {
+    if (currentGraph) {
+      // 如果有当前图，填充表单进行更新
+      graphForm.setFieldsValue({
+        name: currentGraph.name,
+        description: currentGraph.description,
+        labels: currentGraph.labels,
+        status: currentGraph.status
+      });
+    } else {
+      // 新建图，使用默认值
+      graphForm.setFieldsValue({
+        name: topologyData?.name || `拓扑图_${new Date().toLocaleDateString()}`,
+        description: topologyData?.description || '',
+        labels: [],
+        status: GraphStatus.ACTIVE
+      });
+    }
+    setSaveGraphModalVisible(true);
+  };
+
+  /**
+   * 打开加载图对话框
+   */
+  const handleOpenLoadGraphModal = async () => {
+    await loadAvailableGraphs();
+    setLoadGraphModalVisible(true);
+  };
 
   // 处理Agents按钮点击
   const handleAgentsClick = (entity: any) => {
@@ -852,7 +1061,48 @@ const EntityTopologyDetail: React.FC = () => {
       </div>
 
       {/* 顶部基础信息区域 - 20%高度 */}
-      <TopologyHeader topologyData={topologyData} onRefresh={loadTopologyDetail} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <TopologyHeader topologyData={topologyData} onRefresh={loadTopologyDetail} />
+
+        {/* 图操作按钮组 */}
+        <Space>
+          <Button
+            icon={<SaveOutlined />}
+            onClick={handleOpenSaveGraphModal}
+            disabled={!topologyData || topologyData.entities.length === 0}
+            loading={graphLoading}
+          >
+            {currentGraph ? t('entityTopology:graph.updateGraph') : t('entityTopology:graph.saveGraph')}
+          </Button>
+
+          <Button icon={<FolderOpenOutlined />} onClick={handleOpenLoadGraphModal} loading={graphLoading}>
+            {t('entityTopology:graph.loadGraph')}
+          </Button>
+
+          {currentGraph && (
+            <Button
+              icon={<DeleteOutlined />}
+              danger
+              onClick={() => {
+                Modal.confirm({
+                  title: t('entityTopology:graph.confirmDelete'),
+                  content: t('entityTopology:graph.confirmDeleteContent', { name: currentGraph.name }),
+                  onOk: () => handleDeleteGraph(currentGraph.id!)
+                });
+              }}
+              loading={graphLoading}
+            >
+              {t('entityTopology:graph.deleteGraph')}
+            </Button>
+          )}
+
+          {currentGraph && (
+            <Tag color="blue">
+              {t('entityTopology:graph.currentGraph')}: {currentGraph.name}
+            </Tag>
+          )}
+        </Space>
+      </div>
 
       {/* 底部主要内容区域 - 80%高度 */}
       <div className="topology-content">
@@ -1344,6 +1594,146 @@ const EntityTopologyDetail: React.FC = () => {
             }}
           />
         )}
+      </Modal>
+
+      {/* 保存图对话框 */}
+      <Modal
+        title={currentGraph ? t('entityTopology:graph.updateGraph') : t('entityTopology:graph.saveGraph')}
+        open={saveGraphModalVisible}
+        onCancel={() => {
+          setSaveGraphModalVisible(false);
+          graphForm.resetFields();
+        }}
+        onOk={() => graphForm.submit()}
+        confirmLoading={graphLoading}
+        width={600}
+      >
+        <Form form={graphForm} layout="vertical" onFinish={handleSaveGraph}>
+          <Form.Item
+            name="name"
+            label={t('entityTopology:graph.name')}
+            rules={[{ required: true, message: t('entityTopology:graph.nameRequired') }]}
+          >
+            <Input placeholder={t('entityTopology:graph.namePlaceholder')} />
+          </Form.Item>
+
+          <Form.Item name="description" label={t('entityTopology:graph.description')}>
+            <Input.TextArea rows={3} placeholder={t('entityTopology:graph.descriptionPlaceholder')} />
+          </Form.Item>
+
+          <Form.Item name="labels" label={t('entityTopology:graph.labels')}>
+            <Select mode="tags" placeholder={t('entityTopology:graph.labelsPlaceholder')} tokenSeparators={[',']} />
+          </Form.Item>
+
+          <Form.Item name="status" label={t('entityTopology:graph.status')} initialValue={GraphStatus.ACTIVE}>
+            <Select>
+              <Select.Option value={GraphStatus.ACTIVE}>{t('entityTopology:graph.statusActive')}</Select.Option>
+              <Select.Option value={GraphStatus.INACTIVE}>{t('entityTopology:graph.statusInactive')}</Select.Option>
+              <Select.Option value={GraphStatus.ARCHIVED}>{t('entityTopology:graph.statusArchived')}</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* 加载图对话框 */}
+      <Modal
+        title={t('entityTopology:graph.loadGraph')}
+        open={loadGraphModalVisible}
+        onCancel={() => setLoadGraphModalVisible(false)}
+        footer={null}
+        width={800}
+      >
+        <Table
+          dataSource={availableGraphs}
+          loading={graphLoading}
+          rowKey="id"
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: false,
+            showQuickJumper: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} / ${total} ${t('entityTopology:graph.items')}`
+          }}
+          columns={[
+            {
+              title: t('entityTopology:graph.name'),
+              dataIndex: 'name',
+              key: 'name',
+              render: (text: string, record: Graph) => (
+                <div>
+                  <div style={{ fontWeight: 'bold' }}>{text}</div>
+                  {record.description && <div style={{ fontSize: '12px', color: '#666' }}>{record.description}</div>}
+                </div>
+              )
+            },
+            {
+              title: t('entityTopology:graph.status'),
+              dataIndex: 'status',
+              key: 'status',
+              width: 100,
+              render: (status: GraphStatus) => {
+                const statusConfig = {
+                  [GraphStatus.ACTIVE]: { color: 'green', text: t('entityTopology:graph.statusActive') },
+                  [GraphStatus.INACTIVE]: { color: 'orange', text: t('entityTopology:graph.statusInactive') },
+                  [GraphStatus.ARCHIVED]: { color: 'gray', text: t('entityTopology:graph.statusArchived') },
+                  [GraphStatus.PROCESSING]: { color: 'blue', text: t('entityTopology:graph.statusProcessing') }
+                };
+                const config = statusConfig[status] || statusConfig[GraphStatus.ACTIVE];
+                return <Tag color={config.color}>{config.text}</Tag>;
+              }
+            },
+            {
+              title: t('entityTopology:graph.entityCount'),
+              dataIndex: 'entityCount',
+              key: 'entityCount',
+              width: 100,
+              render: (count: number) => count || 0
+            },
+            {
+              title: t('entityTopology:graph.relationCount'),
+              dataIndex: 'relationCount',
+              key: 'relationCount',
+              width: 100,
+              render: (count: number) => count || 0
+            },
+            {
+              title: t('entityTopology:graph.createdAt'),
+              dataIndex: 'createdAt',
+              key: 'createdAt',
+              width: 150,
+              render: (date: string) => (date ? new Date(date).toLocaleDateString() : '-')
+            },
+            {
+              title: t('common:actions'),
+              key: 'actions',
+              width: 150,
+              render: (_, record: Graph) => (
+                <Space>
+                  <Button
+                    type="primary"
+                    size="small"
+                    onClick={() => handleLoadGraph(record.id!)}
+                    disabled={currentGraph?.id === record.id}
+                  >
+                    {t('entityTopology:graph.load')}
+                  </Button>
+                  <Button
+                    danger
+                    size="small"
+                    onClick={() => {
+                      Modal.confirm({
+                        title: t('entityTopology:graph.confirmDelete'),
+                        content: t('entityTopology:graph.confirmDeleteContent', { name: record.name }),
+                        onOk: () => handleDeleteGraph(record.id!)
+                      });
+                    }}
+                  >
+                    {t('common:delete')}
+                  </Button>
+                </Space>
+              )
+            }
+          ]}
+        />
       </Modal>
     </div>
   );

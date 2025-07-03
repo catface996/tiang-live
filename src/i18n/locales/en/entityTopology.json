@@ -53,9 +53,31 @@
     "loadFailed": "Failed to load topology data",
     "loadSuccess": "Topology data loaded successfully",
     "createSuccess": "Topology created successfully",
+    "createFailed": "Failed to create topology",
     "updateSuccess": "Topology updated successfully",
     "deleteSuccess": "Topology deleted successfully",
     "refreshSuccess": "Refresh successful"
+  },
+  "form": {
+    "name": "Topology Name",
+    "nameRequired": "Please enter topology name",
+    "nameMaxLength": "Topology name cannot exceed 50 characters",
+    "namePlaceholder": "Please enter topology name",
+    "type": "Topology Type",
+    "typeRequired": "Please select topology type",
+    "typePlaceholder": "Please select topology type",
+    "plane": "Plane",
+    "planePlaceholder": "Please select plane (optional)",
+    "description": "Description",
+    "descriptionPlaceholder": "Please enter topology description (optional)",
+    "tags": "Tags",
+    "tagsPlaceholder": "Please enter tags, multiple tags supported"
+  },
+  "planes": {
+    "control": "Control Plane",
+    "data": "Data Plane",
+    "management": "Management Plane",
+    "service": "Service Plane"
   },
   "detail": {
     "breadcrumb": {
