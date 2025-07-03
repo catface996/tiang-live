@@ -56,5 +56,138 @@
     "updateSuccess": "拓扑更新成功",
     "deleteSuccess": "拓扑删除成功",
     "refreshSuccess": "刷新成功"
+  },
+  "detail": {
+    "breadcrumb": {
+      "home": "首页",
+      "testTools": "测试工具",
+      "entityTopology": "实体拓扑"
+    },
+    "loading": {
+      "title": "加载中..."
+    },
+    "empty": {
+      "title": "拓扑数据不存在",
+      "description": "请检查拓扑ID或联系管理员"
+    },
+    "modals": {
+      "deleteEntity": {
+        "title": "确认删除实体",
+        "content": "确定要删除实体 \"{entityName}\" 吗？",
+        "warningWithDependencies": "删除后将同时移除 {count} 个相关的依赖关系。",
+        "warning": "此操作不可撤销，请谨慎操作。",
+        "confirmText": "确定删除",
+        "cancelText": "取消"
+      },
+      "deleteDependency": {
+        "title": "确认删除依赖关系",
+        "content": "确定要删除以下依赖关系吗？",
+        "relationshipType": "关系类型",
+        "warning": "此操作不可撤销，请谨慎操作。",
+        "confirmText": "确定删除",
+        "cancelText": "取消"
+      },
+      "selectEntity": {
+        "title": "选择实体",
+        "description": "从下列可用实体中选择要添加到拓扑图的实体。",
+        "stats": "共有 {total} 个可用实体，已选择 {selected} 个。",
+        "confirmText": "确定添加 ({count})",
+        "cancelText": "取消",
+        "selectAll": "全选",
+        "clearAll": "清空",
+        "noEntities": "暂无可添加的实体",
+        "columns": {
+          "name": "实体名称",
+          "type": "类型",
+          "status": "状态",
+          "description": "描述",
+          "noDescription": "暂无描述"
+        },
+        "pagination": {
+          "total": "第 {start}-{end} 条，共 {total} 条"
+        }
+      },
+      "addDependency": {
+        "title": "创建依赖关系",
+        "description": "选择源实体和目标实体来建立依赖关系。当前拓扑中有 {count} 个实体可用。",
+        "sourceEntity": "源实体",
+        "targetEntity": "目标实体",
+        "relationshipType": "关系类型",
+        "swap": "交换",
+        "swapTooltip": "交换源实体和目标实体",
+        "confirmText": "建立关系",
+        "cancelText": "取消",
+        "existsWarning": "该依赖关系已存在",
+        "relationshipTypes": {
+          "depends_on": "依赖于",
+          "connects_to": "连接到",
+          "uses": "使用",
+          "routes_to": "路由到",
+          "stores_in": "存储在",
+          "reads_from": "读取自",
+          "writes_to": "写入到",
+          "monitors": "监控",
+          "backs_up": "备份"
+        },
+        "placeholders": {
+          "sourceEntity": "请选择源实体",
+          "targetEntity": "请选择目标实体"
+        }
+      },
+      "bindAgent": {
+        "title": "绑定Agent",
+        "description": "为实体绑定AI Agent来提供智能化管理和监控能力。",
+        "stats": "共有 {total} 个可用Agent，已选择 {selected} 个。",
+        "confirmText": "确定绑定 ({count})",
+        "cancelText": "取消",
+        "selectAll": "全选",
+        "clearAll": "清空",
+        "noAgents": "暂无可用的Agent",
+        "columns": {
+          "name": "Agent名称",
+          "type": "类型",
+          "status": "状态",
+          "capabilities": "能力",
+          "description": "描述"
+        },
+        "statusLabels": {
+          "active": "运行中",
+          "warning": "警告",
+          "error": "错误",
+          "inactive": "停用"
+        },
+        "pagination": {
+          "total": "第 {start}-{end} 条，共 {total} 条"
+        }
+      }
+    },
+    "messages": {
+      "deleteEntitySuccess": "成功删除实体 \"{entityName}\"",
+      "deleteEntityWithDependencies": "成功删除实体 \"{entityName}\" 及 {count} 个相关依赖关系",
+      "deleteDependencySuccess": "成功删除依赖关系 \"{source} → {target}\"",
+      "addDependencySuccess": "成功创建依赖关系：{source} → {target}",
+      "addEntitiesSuccess": "成功添加 {count} 个实体到拓扑图",
+      "bindAgentsSuccess": "成功绑定 {added} 个Agent，解绑 {removed} 个Agent",
+      "bindAgentsAddedOnly": "成功绑定 {count} 个Agent到 {entityName}",
+      "bindAgentsRemovedOnly": "成功解绑 {count} 个Agent",
+      "bindAgentsNoChange": "Agent绑定状态无变化",
+      "minEntitiesRequired": "至少需要2个实体才能建立依赖关系",
+      "selectSourceAndTarget": "请选择源实体和目标实体",
+      "sourceTargetSame": "源实体和目标实体不能相同",
+      "dependencyExists": "该依赖关系已存在",
+      "selectAgents": "请选择要绑定的Agent"
+    },
+    "relationshipDescriptions": {
+      "depends_on": "依赖于",
+      "provides_to": "提供给",
+      "connects_to": "连接到",
+      "uses": "使用",
+      "routes_to": "路由到",
+      "stores_in": "存储在",
+      "reads_from": "读取自",
+      "writes_to": "写入到",
+      "monitors": "监控",
+      "backs_up": "备份"
+    }
   }
 }

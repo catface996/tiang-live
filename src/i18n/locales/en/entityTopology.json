@@ -56,5 +56,138 @@
     "updateSuccess": "Topology updated successfully",
     "deleteSuccess": "Topology deleted successfully",
     "refreshSuccess": "Refresh successful"
+  },
+  "detail": {
+    "breadcrumb": {
+      "home": "Home",
+      "testTools": "Test Tools",
+      "entityTopology": "Entity Topology"
+    },
+    "loading": {
+      "title": "Loading..."
+    },
+    "empty": {
+      "title": "Topology data does not exist",
+      "description": "Please check the topology ID or contact administrator"
+    },
+    "modals": {
+      "deleteEntity": {
+        "title": "Confirm Delete Entity",
+        "content": "Are you sure you want to delete entity \"{entityName}\"?",
+        "warningWithDependencies": "Deleting will also remove {count} related dependencies.",
+        "warning": "This operation cannot be undone. Please proceed with caution.",
+        "confirmText": "Confirm Delete",
+        "cancelText": "Cancel"
+      },
+      "deleteDependency": {
+        "title": "Confirm Delete Dependency",
+        "content": "Are you sure you want to delete the following dependency?",
+        "relationshipType": "Relationship Type",
+        "warning": "This operation cannot be undone. Please proceed with caution.",
+        "confirmText": "Confirm Delete",
+        "cancelText": "Cancel"
+      },
+      "selectEntity": {
+        "title": "Select Entities",
+        "description": "Select entities from the available list to add to the topology diagram.",
+        "stats": "Total {total} available entities, {selected} selected.",
+        "confirmText": "Confirm Add ({count})",
+        "cancelText": "Cancel",
+        "selectAll": "Select All",
+        "clearAll": "Clear All",
+        "noEntities": "No entities available to add",
+        "columns": {
+          "name": "Entity Name",
+          "type": "Type",
+          "status": "Status",
+          "description": "Description",
+          "noDescription": "No description"
+        },
+        "pagination": {
+          "total": "{start}-{end} of {total} items"
+        }
+      },
+      "addDependency": {
+        "title": "Create Dependency",
+        "description": "Select source and target entities to establish dependency relationship. {count} entities available in current topology.",
+        "sourceEntity": "Source Entity",
+        "targetEntity": "Target Entity",
+        "relationshipType": "Relationship Type",
+        "swap": "Swap",
+        "swapTooltip": "Swap source and target entities",
+        "confirmText": "Create Relationship",
+        "cancelText": "Cancel",
+        "existsWarning": "This dependency already exists",
+        "relationshipTypes": {
+          "depends_on": "Depends On",
+          "connects_to": "Connects To",
+          "uses": "Uses",
+          "routes_to": "Routes To",
+          "stores_in": "Stores In",
+          "reads_from": "Reads From",
+          "writes_to": "Writes To",
+          "monitors": "Monitors",
+          "backs_up": "Backs Up"
+        },
+        "placeholders": {
+          "sourceEntity": "Please select source entity",
+          "targetEntity": "Please select target entity"
+        }
+      },
+      "bindAgent": {
+        "title": "Bind Agents",
+        "description": "Bind AI Agents to entities to provide intelligent management and monitoring capabilities.",
+        "stats": "Total {total} available agents, {selected} selected.",
+        "confirmText": "Confirm Bind ({count})",
+        "cancelText": "Cancel",
+        "selectAll": "Select All",
+        "clearAll": "Clear All",
+        "noAgents": "No agents available",
+        "columns": {
+          "name": "Agent Name",
+          "type": "Type",
+          "status": "Status",
+          "capabilities": "Capabilities",
+          "description": "Description"
+        },
+        "statusLabels": {
+          "active": "Running",
+          "warning": "Warning",
+          "error": "Error",
+          "inactive": "Inactive"
+        },
+        "pagination": {
+          "total": "{start}-{end} of {total} items"
+        }
+      }
+    },
+    "messages": {
+      "deleteEntitySuccess": "Successfully deleted entity \"{entityName}\"",
+      "deleteEntityWithDependencies": "Successfully deleted entity \"{entityName}\" and {count} related dependencies",
+      "deleteDependencySuccess": "Successfully deleted dependency \"{source} → {target}\"",
+      "addDependencySuccess": "Successfully created dependency: {source} → {target}",
+      "addEntitiesSuccess": "Successfully added {count} entities to topology",
+      "bindAgentsSuccess": "Successfully bound {added} agents and unbound {removed} agents",
+      "bindAgentsAddedOnly": "Successfully bound {count} agents to {entityName}",
+      "bindAgentsRemovedOnly": "Successfully unbound {count} agents",
+      "bindAgentsNoChange": "No changes in agent binding status",
+      "minEntitiesRequired": "At least 2 entities are required to establish dependency",
+      "selectSourceAndTarget": "Please select source and target entities",
+      "sourceTargetSame": "Source and target entities cannot be the same",
+      "dependencyExists": "This dependency already exists",
+      "selectAgents": "Please select agents to bind"
+    },
+    "relationshipDescriptions": {
+      "depends_on": "Depends On",
+      "provides_to": "Provides To",
+      "connects_to": "Connects To",
+      "uses": "Uses",
+      "routes_to": "Routes To",
+      "stores_in": "Stores In",
+      "reads_from": "Reads From",
+      "writes_to": "Writes To",
+      "monitors": "Monitors",
+      "backs_up": "Backs Up"
+    }
   }
 }

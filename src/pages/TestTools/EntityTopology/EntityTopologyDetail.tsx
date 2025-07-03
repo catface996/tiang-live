@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Typography, Space, Spin, Empty, Breadcrumb, message, Modal, Table, Tag, Button, Select, Radio } from 'antd';
 import { NodeIndexOutlined, HomeOutlined, ToolOutlined, SwapOutlined, RobotOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import '../../../styles/entity-topology-detail.css';
 import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
@@ -284,6 +285,7 @@ interface TopologyData {
 
 const EntityTopologyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation(['entityTopology', 'common']);
 
   const [loading, setLoading] = useState(true);
   const [topologyData, setTopologyData] = useState<TopologyData | null>(null);
@@ -382,7 +384,7 @@ const EntityTopologyDetail: React.FC = () => {
       setEntityAgentBindings(sampleBindings);
     } catch (error) {
       console.error('Failed to load topology detail:', error);
-      message.error('加载拓扑数据失败');
+      message.error(t('messages.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -410,7 +412,7 @@ const EntityTopologyDetail: React.FC = () => {
   // 确认绑定Agent
   const confirmBindAgents = () => {
     if (!currentEntity || selectedAgentIds.length === 0) {
-      message.warning('请选择要绑定的Agent');
+      message.warning(t('detail.messages.selectAgents'));
       return;
     }
 
@@ -450,13 +452,13 @@ const EntityTopologyDetail: React.FC = () => {
     const removedCount = toRemove.length;
     let message_text = '';
     if (addedCount > 0 && removedCount > 0) {
-      message_text = `成功绑定 ${addedCount} 个Agent，解绑 ${removedCount} 个Agent`;
+      message_text = t('detail.messages.bindAgentsSuccess', { added: addedCount, removed: removedCount });
     } else if (addedCount > 0) {
-      message_text = `成功绑定 ${addedCount} 个Agent到 ${currentEntity.name}`;
+      message_text = t('detail.messages.bindAgentsAddedOnly', { count: addedCount, entityName: currentEntity.name });
     } else if (removedCount > 0) {
-      message_text = `成功解绑 ${removedCount} 个Agent`;
+      message_text = t('detail.messages.bindAgentsRemovedOnly', { count: removedCount });
     } else {
-      message_text = 'Agent绑定状态无变化';
+      message_text = t('detail.messages.bindAgentsNoChange');
     }
 
     message.success(message_text);
@@ -566,9 +568,15 @@ const EntityTopologyDetail: React.FC = () => {
       setSelectedEntity(null);
     }
 
-    message.success(
-      `成功删除实体 "${entityToDelete.name}"${relatedDependencies.length > 0 ? ` 及 ${relatedDependencies.length} 个相关依赖关系` : ''}`
-    );
+    const successMessage =
+      relatedDependencies.length > 0
+        ? t('detail.messages.deleteEntityWithDependencies', {
+            entityName: entityToDelete.name,
+            count: relatedDependencies.length
+          })
+        : t('detail.messages.deleteEntitySuccess', { entityName: entityToDelete.name });
+
+    message.success(successMessage);
 
     // 关闭Modal
     setDeleteModalVisible(false);
@@ -614,7 +622,7 @@ const EntityTopologyDetail: React.FC = () => {
     const sourceName = sourceEntity ? sourceEntity.name : dependencyToDelete.source;
     const targetName = targetEntity ? targetEntity.name : dependencyToDelete.target;
 
-    message.success(`成功删除依赖关系 "${sourceName} → ${targetName}"`);
+    message.success(t('detail.messages.deleteDependencySuccess', { source: sourceName, target: targetName }));
 
     // 关闭Modal
     setDeleteDependencyModalVisible(false);
@@ -629,7 +637,7 @@ const EntityTopologyDetail: React.FC = () => {
   // 处理新增依赖关系
   const handleAddDependency = () => {
     if (!topologyData || topologyData.entities.length < 2) {
-      message.warning('至少需要2个实体才能建立依赖关系');
+      message.warning(t('detail.messages.minEntitiesRequired'));
       return;
     }
 
@@ -643,12 +651,12 @@ const EntityTopologyDetail: React.FC = () => {
   // 确认创建依赖关系
   const confirmAddDependency = () => {
     if (!topologyData || !sourceEntityId || !targetEntityId) {
-      message.error('请选择源实体和目标实体');
+      message.error(t('detail.messages.selectSourceAndTarget'));
       return;
     }
 
     if (sourceEntityId === targetEntityId) {
-      message.error('源实体和目标实体不能相同');
+      message.error(t('detail.messages.sourceTargetSame'));
       return;
     }
 
@@ -658,7 +666,7 @@ const EntityTopologyDetail: React.FC = () => {
     );
 
     if (existingDependency) {
-      message.error('该依赖关系已存在');
+      message.error(t('detail.messages.dependencyExists'));
       return;
     }
 
@@ -698,7 +706,7 @@ const EntityTopologyDetail: React.FC = () => {
     const sourceName = sourceEntity ? sourceEntity.name : sourceEntityId;
     const targetName = targetEntity ? targetEntity.name : targetEntityId;
 
-    message.success(`成功创建依赖关系：${sourceName} → ${targetName}`);
+    message.success(t('detail.messages.addDependencySuccess', { source: sourceName, target: targetName }));
 
     // 关闭Modal
     setAddDependencyModalVisible(false);
@@ -711,18 +719,7 @@ const EntityTopologyDetail: React.FC = () => {
 
   // 获取关系类型描述
   const getRelationshipDescription = (type: string): string => {
-    const descriptions: Record<string, string> = {
-      depends_on: '依赖于',
-      connects_to: '连接到',
-      uses: '使用',
-      routes_to: '路由到',
-      stores_in: '存储在',
-      reads_from: '读取自',
-      writes_to: '写入到',
-      monitors: '监控',
-      backs_up: '备份'
-    };
-    return descriptions[type] || type;
+    return t(`detail.relationshipDescriptions.${type}`, { defaultValue: type });
   };
 
   // 交换源和目标实体
@@ -762,7 +759,7 @@ const EntityTopologyDetail: React.FC = () => {
       }
     });
 
-    message.success(`成功添加 ${entitiesToAdd.length} 个实体到拓扑图`);
+    message.success(t('detail.messages.addEntitiesSuccess', { count: entitiesToAdd.length }));
 
     // 关闭Modal
     setSelectEntityModalVisible(false);
@@ -802,7 +799,7 @@ const EntityTopologyDetail: React.FC = () => {
   if (!topologyData) {
     return (
       <div className="entity-topology-detail-empty">
-        <Empty description="拓扑数据不存在" />
+        <Empty description={t('detail.empty.title')} />
       </div>
     );
   }
@@ -818,7 +815,7 @@ const EntityTopologyDetail: React.FC = () => {
               title: (
                 <Space>
                   <HomeOutlined />
-                  <span>首页</span>
+                  <span>{t('detail.breadcrumb.home')}</span>
                 </Space>
               )
             },
@@ -827,7 +824,7 @@ const EntityTopologyDetail: React.FC = () => {
               title: (
                 <Space>
                   <ToolOutlined />
-                  <span>测试工具</span>
+                  <span>{t('detail.breadcrumb.testTools')}</span>
                 </Space>
               )
             },
@@ -836,7 +833,7 @@ const EntityTopologyDetail: React.FC = () => {
               title: (
                 <Space>
                   <NodeIndexOutlined />
-                  <span>实体拓扑</span>
+                  <span>{t('detail.breadcrumb.entityTopology')}</span>
                 </Space>
               )
             },
@@ -883,20 +880,18 @@ const EntityTopologyDetail: React.FC = () => {
 
       {/* 删除确认Modal */}
       <Modal
-        title="确认删除实体"
+        title={t('detail.modals.deleteEntity.title')}
         open={deleteModalVisible}
         onOk={confirmDeleteEntity}
         onCancel={cancelDeleteEntity}
-        okText="确定删除"
-        cancelText="取消"
+        okText={t('detail.modals.deleteEntity.confirmText')}
+        cancelText={t('detail.modals.deleteEntity.cancelText')}
         okType="danger"
         width={400}
       >
         {entityToDelete && topologyData && (
           <div>
-            <p>
-              确定要删除实体 <strong>"{entityToDelete.name}"</strong> 吗？
-            </p>
+            <p>{t('detail.modals.deleteEntity.content', { entityName: entityToDelete.name })}</p>
             {(() => {
               const relatedDependencies = topologyData.dependencies.filter(
                 dep => dep.source === entityToDelete.id || dep.target === entityToDelete.id
@@ -904,24 +899,24 @@ const EntityTopologyDetail: React.FC = () => {
               return (
                 relatedDependencies.length > 0 && (
                   <DangerText>
-                    删除后将同时移除 <strong>{relatedDependencies.length}</strong> 个相关的依赖关系。
+                    {t('detail.modals.deleteEntity.warningWithDependencies', { count: relatedDependencies.length })}
                   </DangerText>
                 )
               );
             })()}
-            <WarningText>此操作不可撤销，请谨慎操作。</WarningText>
+            <WarningText>{t('detail.modals.deleteEntity.warning')}</WarningText>
           </div>
         )}
       </Modal>
 
       {/* 删除依赖关系确认Modal */}
       <Modal
-        title="确认删除依赖关系"
+        title={t('detail.modals.deleteDependency.title')}
         open={deleteDependencyModalVisible}
         onOk={confirmDeleteDependency}
         onCancel={cancelDeleteDependency}
-        okText="确定删除"
-        cancelText="取消"
+        okText={t('detail.modals.deleteDependency.confirmText')}
+        cancelText={t('detail.modals.deleteDependency.cancelText')}
         okType="danger"
         width={400}
       >
@@ -935,16 +930,17 @@ const EntityTopologyDetail: React.FC = () => {
 
               return (
                 <>
-                  <p>确定要删除以下依赖关系吗？</p>
+                  <p>{t('detail.modals.deleteDependency.content')}</p>
                   <RelationshipDisplay>
                     <span className="entity-name">{sourceName}</span>
                     <span className="arrow">→</span>
                     <span className="entity-name">{targetName}</span>
                   </RelationshipDisplay>
                   <RelationshipMeta>
-                    关系类型: {dependencyToDelete.description || dependencyToDelete.type}
+                    {t('detail.modals.deleteDependency.relationshipType')}:{' '}
+                    {dependencyToDelete.description || dependencyToDelete.type}
                   </RelationshipMeta>
-                  <WarningText>此操作不可撤销，请谨慎操作。</WarningText>
+                  <WarningText>{t('detail.modals.deleteDependency.warning')}</WarningText>
                 </>
               );
             })()}
@@ -954,22 +950,25 @@ const EntityTopologyDetail: React.FC = () => {
 
       {/* 选择实体Modal */}
       <Modal
-        title="选择实体"
+        title={t('detail.modals.selectEntity.title')}
         open={selectEntityModalVisible}
         onOk={confirmAddEntities}
         onCancel={cancelAddEntities}
-        okText={`确定添加 (${selectedEntityIds.length})`}
-        cancelText="取消"
+        okText={t('detail.modals.selectEntity.confirmText', { count: selectedEntityIds.length })}
+        cancelText={t('detail.modals.selectEntity.cancelText')}
         width={800}
         okButtonProps={{ disabled: selectedEntityIds.length === 0 }}
       >
         <SelectionHint>
           <p>
-            从下列可用实体中选择要添加到拓扑图的实体。
+            {t('detail.modals.selectEntity.description')}
             {availableEntities.length > 0 && (
               <>
-                共有 <span className="highlight">{availableEntities.length}</span> 个可用实体， 已选择{' '}
-                <span className="highlight">{selectedEntityIds.length}</span> 个。
+                {' '}
+                {t('detail.modals.selectEntity.stats', {
+                  total: availableEntities.length,
+                  selected: selectedEntityIds.length
+                })}
               </>
             )}
           </p>
@@ -982,16 +981,16 @@ const EntityTopologyDetail: React.FC = () => {
                 onClick={selectAllEntities}
                 disabled={selectedEntityIds.length === availableEntities.length}
               >
-                全选
+                {t('detail.modals.selectEntity.selectAll')}
               </Button>
               <Button size="small" onClick={clearAllSelection} disabled={selectedEntityIds.length === 0}>
-                清空
+                {t('detail.modals.selectEntity.clearAll')}
               </Button>
             </Space>
           </div>
         )}
         {availableEntities.length === 0 ? (
-          <Empty description="暂无可添加的实体" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          <Empty description={t('detail.modals.selectEntity.noEntities')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
         ) : (
           <Table
             rowSelection={{
@@ -1001,42 +1000,44 @@ const EntityTopologyDetail: React.FC = () => {
             }}
             columns={[
               {
-                title: '实体名称',
+                title: t('detail.modals.selectEntity.columns.name'),
                 dataIndex: 'name',
                 key: 'name',
                 width: '30%',
                 render: (name: string) => <strong>{name}</strong>
               },
               {
-                title: '类型',
+                title: t('detail.modals.selectEntity.columns.type'),
                 dataIndex: 'type',
                 key: 'type',
                 width: '25%',
                 render: (type: string) => <Tag color="blue">{type.replace(/_/g, ' ')}</Tag>
               },
               {
-                title: '状态',
+                title: t('detail.modals.selectEntity.columns.status'),
                 dataIndex: 'status',
                 key: 'status',
                 width: '15%',
                 render: (status: string) => {
                   const statusConfig = {
-                    active: { color: 'green', text: '正常' },
-                    warning: { color: 'orange', text: '警告' },
-                    error: { color: 'red', text: '错误' },
-                    inactive: { color: 'gray', text: '停用' }
+                    active: { color: 'green', text: t('status.active') },
+                    warning: { color: 'orange', text: t('status.warning') },
+                    error: { color: 'red', text: t('status.error') },
+                    inactive: { color: 'gray', text: t('status.inactive') }
                   };
                   const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
                   return <Tag color={config.color}>{config.text}</Tag>;
                 }
               },
               {
-                title: '描述',
+                title: t('detail.modals.selectEntity.columns.description'),
                 dataIndex: ['properties', 'description'],
                 key: 'description',
                 width: '30%',
                 render: (description: string) => (
-                  <span style={{ color: 'var(--text-secondary)' }}>{description || '暂无描述'}</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>
+                    {description || t('detail.modals.selectEntity.columns.noDescription')}
+                  </span>
                 )
               }
             ]}
@@ -1047,7 +1048,12 @@ const EntityTopologyDetail: React.FC = () => {
               pageSize: 8,
               showSizeChanger: false,
               showQuickJumper: true,
-              showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
+              showTotal: (total, range) =>
+                t('detail.modals.selectEntity.pagination.total', {
+                  start: range[0],
+                  end: range[1],
+                  total
+                })
             }}
           />
         )}
@@ -1055,12 +1061,12 @@ const EntityTopologyDetail: React.FC = () => {
 
       {/* 添加依赖关系Modal */}
       <Modal
-        title="创建依赖关系"
+        title={t('detail.modals.addDependency.title')}
         open={addDependencyModalVisible}
         onOk={confirmAddDependency}
         onCancel={cancelAddDependency}
-        okText="建立关系"
-        cancelText="取消"
+        okText={t('detail.modals.addDependency.confirmText')}
+        cancelText={t('detail.modals.addDependency.cancelText')}
         width={600}
         okButtonProps={{
           disabled:
@@ -1073,10 +1079,7 @@ const EntityTopologyDetail: React.FC = () => {
         }}
       >
         <SelectionHint>
-          <p>
-            选择源实体和目标实体来建立依赖关系。 当前拓扑中有{' '}
-            <span className="highlight">{topologyData?.entities.length || 0}</span> 个实体可用。
-          </p>
+          <p>{t('detail.modals.addDependency.description', { count: topologyData?.entities.length || 0 })}</p>
         </SelectionHint>
 
         <RelationshipForm>
