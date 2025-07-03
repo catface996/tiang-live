@@ -970,7 +970,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
       <Card>
         <div style={{ textAlign: 'center', padding: '100px 0' }}>
           <Spin size="large" />
-          <div style={{ marginTop: 16 }}>加载实体拓扑图...</div>
+          <div style={{ marginTop: 16 }}>{t('detail.graph.loading')}</div>
         </div>
       </Card>
     );
@@ -1005,7 +1005,12 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
             <Button size="small" icon={<ZoomInOutlined />} onClick={handleZoomIn} title="放大" />
             <Button size="small" icon={<ZoomOutOutlined />} onClick={handleZoomOut} title="缩小" />
             <Button size="small" icon={<FullscreenOutlined />} onClick={handleResetZoom} title="重置视图" />
-            <Button size="small" icon={<UndoOutlined />} onClick={handleResetNodePositions} title="重置节点位置" />
+            <Button
+              size="small"
+              icon={<UndoOutlined />}
+              onClick={handleResetNodePositions}
+              title={t('detail.graph.actions.resetNodePositions')}
+            />
             <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} title="刷新图表" />
           </Space>
         </ControlPanel>
@@ -1013,7 +1018,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
         {/* Legend */}
         <LegendContainer>
           <LegendHeader onClick={() => setLegendCollapsed(!legendCollapsed)}>
-            <div style={{ fontWeight: 'bold', fontSize: '14px' }}>图例</div>
+            <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{t('detail.graph.legend.title')}</div>
             {legendCollapsed ? <DownOutlined /> : <UpOutlined />}
           </LegendHeader>
 
@@ -1039,7 +1044,9 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
             </div>
 
             <div style={{ marginBottom: 8 }}>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>节点类型:</div>
+              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>
+                {t('detail.graph.legend.nodeTypes')}:
+              </div>
               {/* Agent节点类型 */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -1076,7 +1083,9 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
               ))}
             </div>
             <div>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>关系类型:</div>
+              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>
+                {t('detail.graph.legend.relationshipTypes')}:
+              </div>
               {/* Agent管理关系 */}
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
                 <div
@@ -1130,7 +1139,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
       {/* Selected Node Details */}
       {selectedNode && (
         <Card
-          title={`节点详情: ${selectedNode.name}`}
+          title={t('detail.graph.nodeDetails.title', { name: selectedNode.name })}
           size="small"
           style={{ marginTop: 16 }}
           extra={
@@ -1164,16 +1173,30 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
             )}
             {selectedNode.nodes && (
               <div>
-                <strong>集群信息:</strong>
-                <div>节点数: {selectedNode.nodes}</div>
-                {selectedNode.config && <div>配置: {selectedNode.config}</div>}
-                {selectedNode.technology && <div>技术: {selectedNode.technology}</div>}
-                {selectedNode.region && <div>区域: {selectedNode.region}</div>}
+                <strong>{t('detail.graph.nodeDetails.clusterInfo')}:</strong>
+                <div>
+                  {t('detail.graph.nodeDetails.nodeCount')}: {selectedNode.nodes}
+                </div>
+                {selectedNode.config && (
+                  <div>
+                    {t('detail.graph.nodeDetails.config')}: {selectedNode.config}
+                  </div>
+                )}
+                {selectedNode.technology && (
+                  <div>
+                    {t('detail.graph.nodeDetails.technology')}: {selectedNode.technology}
+                  </div>
+                )}
+                {selectedNode.region && (
+                  <div>
+                    {t('detail.graph.nodeDetails.region')}: {selectedNode.region}
+                  </div>
+                )}
               </div>
             )}
             {selectedNode.databases && (
               <div>
-                <strong>数据库:</strong>
+                <strong>{t('detail.graph.nodeDetails.databases')}:</strong>
                 <div style={{ marginTop: 4 }}>
                   {selectedNode.databases.map((db: string, index: number) => (
                     <Tag key={index} color="blue" style={{ marginBottom: 4 }}>

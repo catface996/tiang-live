@@ -213,8 +213,24 @@
     },
     "graph": {
       "title": "Entity Topology Relationship Graph",
+      "loading": "Loading entity topology graph...",
       "actions": {
-        "analysisDiagnosis": "Analysis & Diagnosis"
+        "analysisDiagnosis": "Analysis & Diagnosis",
+        "resetNodePositions": "Reset Node Positions"
+      },
+      "legend": {
+        "title": "Legend",
+        "nodeTypes": "Node Types",
+        "relationshipTypes": "Relationship Types"
+      },
+      "nodeDetails": {
+        "title": "Node Details: {{name}}",
+        "clusterInfo": "Cluster Information",
+        "nodeCount": "Node Count",
+        "config": "Configuration",
+        "technology": "Technology",
+        "region": "Region",
+        "databases": "Databases"
       }
     },
     "dataTabs": {

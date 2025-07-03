@@ -213,8 +213,24 @@
     },
     "graph": {
       "title": "实体拓扑关系图",
+      "loading": "加载实体拓扑图...",
       "actions": {
-        "analysisDiagnosis": "分析诊断"
+        "analysisDiagnosis": "分析诊断",
+        "resetNodePositions": "重置节点位置"
+      },
+      "legend": {
+        "title": "图例",
+        "nodeTypes": "节点类型",
+        "relationshipTypes": "关系类型"
+      },
+      "nodeDetails": {
+        "title": "节点详情: {{name}}",
+        "clusterInfo": "集群信息",
+        "nodeCount": "节点数",
+        "config": "配置",
+        "technology": "技术",
+        "region": "区域",
+        "databases": "数据库"
       }
     },
     "dataTabs": {
