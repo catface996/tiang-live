@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import TopologyCard from './components/TopologyCard';
 import '../../../styles/entity-topology.css';
-import { graphApi } from '../../../services/graphApi';
+import { graphApi, GraphStatus } from '../../../services/graphApi';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -174,11 +174,63 @@ const EntityTopology: React.FC = () => {
   const loadTopologies = async () => {
     setLoading(true);
     try {
-      setTopologies(mockTopologies);
+      // 调用真实的API接口获取图列表
+      const response = await graphApi.listGraphs({
+        // 可以添加查询条件，比如只查询当前用户的图
+        ownerId: 1, // 假设当前用户ID为1，实际应该从用户上下文获取
+        status: GraphStatus.ACTIVE // 只查询活跃状态的图
+      });
+
+      if (response.success && response.data) {
+        // 将API返回的Graph数据转换为Topology格式
+        const topologyList = response.data.map(graph => ({
+          id: graph.id?.toString() || '',
+          name: graph.name,
+          type: 'network' as const, // 默认类型，可以根据graph.metadata中的信息确定
+          status: mapGraphStatusToTopologyStatus(graph.status),
+          description: graph.description || '',
+          plane: 'default', // 默认平面，可以从metadata中获取
+          tags: graph.labels || [],
+          stats: {
+            nodeCount: graph.entityCount || 0,
+            linkCount: graph.relationCount || 0,
+            healthScore: 95, // 默认健康分数，可以从metadata中计算
+            lastUpdated: graph.updatedAt || graph.createdAt || new Date().toISOString()
+          },
+          createdAt: graph.createdAt || new Date().toISOString()
+        }));
+
+        setTopologies(topologyList);
+        console.log('✅ 成功加载拓扑图列表:', topologyList);
+      } else {
+        console.warn('⚠️ API返回数据格式异常:', response);
+        // 如果API调用失败，回退到mock数据
+        setTopologies(mockTopologies);
+        message.warning(t('entityTopology:messages.loadFromMock'));
+      }
     } catch (error) {
+      console.error('❌ 加载拓扑图列表失败:', error);
       message.error(t('entityTopology:messages.loadFailed'));
+      // 出错时回退到mock数据，确保页面可用
+      setTopologies(mockTopologies);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 辅助函数：将Graph状态映射为Topology状态
+  const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
+    switch (graphStatus) {
+      case GraphStatus.ACTIVE:
+        return 'active';
+      case GraphStatus.INACTIVE:
+        return 'inactive';
+      case GraphStatus.PROCESSING:
+        return 'warning';
+      case GraphStatus.ARCHIVED:
+        return 'error';
+      default:
+        return 'active';
     }
   };
 
@@ -199,7 +251,7 @@ const EntityTopology: React.FC = () => {
         name: values.name,
         description: values.description || '',
         labels: values.tags || [],
-        status: 'ACTIVE' as const,
+        status: GraphStatus.ACTIVE,
         ownerId: 1, // 假设当前用户ID为1，实际应该从用户上下文获取
         metadata: {
           type: values.type,
