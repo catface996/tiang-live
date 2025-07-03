@@ -38,6 +38,32 @@ const SidebarContainer = styled.div`
   height: 500px;
   border-right: 1px solid #f0f0f0;
   background: #fafafa;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+
+  /* 自定义滚动条样式 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
+
+  /* Firefox 滚动条样式 */
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
 `;
 
 const SidebarItem = styled.div<{ active: boolean }>`
@@ -74,7 +100,32 @@ const SidebarItem = styled.div<{ active: boolean }>`
 const ContentContainer = styled.div`
   height: 500px;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 16px;
+  scroll-behavior: smooth;
+
+  /* 自定义滚动条样式 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+
+    &:hover {
+      background: #a8a8a8;
+    }
+  }
+
+  /* Firefox 滚动条样式 */
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
 `;
 
 interface MonitoringDataSourceConfigProps {
