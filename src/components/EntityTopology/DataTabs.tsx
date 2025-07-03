@@ -42,7 +42,13 @@ const DataTabs: React.FC<DataTabsProps> = ({
   onAddDependency,
   onAgentsClick
 }) => {
-  const { t } = useTranslation(['entityTopology', 'common']);
+  const { t, i18n } = useTranslation(['entityTopology', 'common']);
+
+  // 调试信息
+  console.log('DataTabs - i18n ready:', i18n.isInitialized);
+  console.log('DataTabs - current language:', i18n.language);
+  console.log('DataTabs - available namespaces:', Object.keys(i18n.store.data[i18n.language] || {}));
+  console.log('DataTabs - test translation:', t('dataTabs.entityColumns.name'));
 
   // 实体列表列定义
   const entityColumns = [

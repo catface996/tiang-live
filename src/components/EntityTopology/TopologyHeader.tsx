@@ -27,7 +27,13 @@ interface TopologyHeaderProps {
 }
 
 const TopologyHeader: React.FC<TopologyHeaderProps> = ({ topologyData, onRefresh }) => {
-  const { t } = useTranslation(['entityTopology', 'common']);
+  const { t, i18n } = useTranslation(['entityTopology', 'common']);
+
+  // 调试信息
+  console.log('TopologyHeader - i18n ready:', i18n.isInitialized);
+  console.log('TopologyHeader - current language:', i18n.language);
+  console.log('TopologyHeader - available namespaces:', Object.keys(i18n.store.data[i18n.language] || {}));
+  console.log('TopologyHeader - test translation:', t('header.stats.nodeCount'));
 
   const handleExport = () => {
     // TODO: 实现导出功能
