@@ -1,6 +1,6 @@
 import React from 'react';
-import { Typography, Tag, Space, Row, Col, Statistic, Button } from 'antd';
-import { NodeIndexOutlined, LinkOutlined, HeartOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Typography, Tag, Space, Row, Col, Statistic } from 'antd';
+import { NodeIndexOutlined, LinkOutlined, HeartOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
@@ -29,12 +29,8 @@ interface TopologyHeaderProps {
 const TopologyHeader: React.FC<TopologyHeaderProps> = ({ topologyData, onRefresh }) => {
   const { t } = useTranslation(['entityTopology', 'common']);
 
-  const handleExport = () => {
-    // TODO: 实现导出功能
-  };
-
   return (
-    <div className="topology-header">
+    <div className="topology-header-full-width">
       <div className="header-content">
         <div className="header-left">
           <Title level={3} style={{ margin: 0 }}>
@@ -57,38 +53,28 @@ const TopologyHeader: React.FC<TopologyHeaderProps> = ({ topologyData, onRefresh
           </div>
         </div>
         <div className="header-right">
-          <Row gutter={16}>
-            <Col span={6}>
+          <Row gutter={[24, 16]}>
+            <Col span={8}>
               <Statistic
                 title={t('detail.header.stats.nodeCount')}
                 value={topologyData.stats.nodeCount}
                 prefix={<NodeIndexOutlined />}
               />
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <Statistic
                 title={t('detail.header.stats.linkCount')}
                 value={topologyData.stats.linkCount}
                 prefix={<LinkOutlined />}
               />
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <Statistic
                 title={t('detail.header.stats.healthScore')}
                 value={topologyData.stats.healthScore}
                 suffix="%"
                 prefix={<HeartOutlined />}
               />
-            </Col>
-            <Col span={6}>
-              <Space direction="vertical">
-                <Button icon={<ReloadOutlined />} onClick={onRefresh}>
-                  {t('detail.header.actions.refresh')}
-                </Button>
-                <Button icon={<DownloadOutlined />} onClick={handleExport}>
-                  {t('detail.header.actions.export')}
-                </Button>
-              </Space>
             </Col>
           </Row>
         </div>

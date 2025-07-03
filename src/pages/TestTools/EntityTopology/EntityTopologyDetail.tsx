@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Space, Spin, Empty, Breadcrumb, message, Modal, Table, Tag, Button, Select, Radio, Input, Form } from 'antd';
-import {
-  NodeIndexOutlined,
-  HomeOutlined,
-  ToolOutlined,
-  SwapOutlined,
-  RobotOutlined,
-  SaveOutlined,
-  FolderOpenOutlined,
-  DeleteOutlined
-} from '@ant-design/icons';
+import { NodeIndexOutlined, HomeOutlined, ToolOutlined, SwapOutlined, RobotOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -1043,48 +1034,15 @@ const EntityTopologyDetail: React.FC = () => {
         />
       </div>
 
-      {/* 顶部基础信息区域 - 20%高度 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+      {/* 顶部基础信息区域 */}
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          marginBottom: '16px'
+        }}
+      >
         <TopologyHeader topologyData={topologyData} onRefresh={loadTopologyDetail} />
-
-        {/* 图操作按钮组 */}
-        <Space>
-          <Button
-            icon={<SaveOutlined />}
-            onClick={handleOpenSaveGraphModal}
-            disabled={!topologyData || topologyData.entities.length === 0}
-            loading={graphLoading}
-          >
-            {currentGraph ? t('entityTopology:graph.updateGraph') : t('entityTopology:graph.saveGraph')}
-          </Button>
-
-          <Button icon={<FolderOpenOutlined />} onClick={handleOpenLoadGraphModal} loading={graphLoading}>
-            {t('entityTopology:graph.loadGraph')}
-          </Button>
-
-          {currentGraph && (
-            <Button
-              icon={<DeleteOutlined />}
-              danger
-              onClick={() => {
-                Modal.confirm({
-                  title: t('entityTopology:graph.confirmDelete'),
-                  content: t('entityTopology:graph.confirmDeleteContent', { name: currentGraph.name }),
-                  onOk: () => handleDeleteGraph(currentGraph.id!)
-                });
-              }}
-              loading={graphLoading}
-            >
-              {t('entityTopology:graph.deleteGraph')}
-            </Button>
-          )}
-
-          {currentGraph && (
-            <Tag color="blue">
-              {t('entityTopology:graph.currentGraph')}: {currentGraph.name}
-            </Tag>
-          )}
-        </Space>
       </div>
 
       {/* 底部主要内容区域 - 80%高度 */}

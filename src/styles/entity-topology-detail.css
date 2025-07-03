@@ -26,7 +26,14 @@
   color: var(--primary-color);
 }
 
-/* 顶部基础信息区域 - 20%高度 */
+/* 顶部基础信息区域 - 充满父容器宽度 */
+.entity-topology-detail .topology-header-full-width {
+  width: 100%;
+  min-height: 140px;
+  padding: 8px 24px 16px 24px;
+  background: var(--layout-body-background);
+}
+
 .entity-topology-detail .topology-header {
   height: 20%;
   min-height: 200px;
@@ -49,6 +56,16 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  margin-right: 24px;
+}
+
+.entity-topology-detail .header-right {
+  flex-shrink: 0;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: 12px;
 }
 
