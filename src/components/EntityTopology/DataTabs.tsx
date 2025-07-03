@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs, Table, Button, Space, Typography } from 'antd';
 import { DatabaseOutlined, LinkOutlined, NodeIndexOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 
@@ -41,10 +42,12 @@ const DataTabs: React.FC<DataTabsProps> = ({
   onAddDependency,
   onAgentsClick
 }) => {
+  const { t } = useTranslation(['entityTopology', 'common']);
+
   // 实体列表列定义
   const entityColumns = [
     {
-      title: '名称',
+      title: t('dataTabs.entityColumns.name'),
       dataIndex: 'name',
       key: 'name',
       width: '50%',
@@ -56,14 +59,14 @@ const DataTabs: React.FC<DataTabsProps> = ({
       )
     },
     {
-      title: '类型',
+      title: t('dataTabs.entityColumns.type'),
       dataIndex: 'type',
       key: 'type',
       width: '30%',
       render: (type: string) => <span>{type}</span>
     },
     {
-      title: '操作',
+      title: t('dataTabs.entityColumns.actions'),
       key: 'actions',
       width: '20%',
       render: (_, record: Entity) => (
@@ -73,7 +76,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
             size="small"
             icon={<DatabaseOutlined />}
             onClick={() => onAgentsClick(record)}
-            title="查看Agents"
+            title={t('dataTabs.entityActions.viewAgents')}
           />
           <Button
             type="text"
@@ -81,7 +84,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
             danger
             icon={<DeleteOutlined />}
             onClick={() => onDeleteEntity(record)}
-            title="删除实体"
+            title={t('dataTabs.entityActions.deleteEntity')}
           />
         </Space>
       )
@@ -91,7 +94,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
   // 依赖关系列定义
   const dependencyColumns = [
     {
-      title: '源实体',
+      title: t('dataTabs.dependencyColumns.source'),
       dataIndex: 'source',
       key: 'source',
       width: '40%',
@@ -108,7 +111,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       }
     },
     {
-      title: '目标实体',
+      title: t('dataTabs.dependencyColumns.target'),
       dataIndex: 'target',
       key: 'target',
       width: '40%',
@@ -125,7 +128,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       }
     },
     {
-      title: '操作',
+      title: t('dataTabs.dependencyColumns.actions'),
       key: 'actions',
       width: '20%',
       render: (_, record: Dependency) => (
@@ -135,7 +138,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
           danger
           icon={<DeleteOutlined />}
           onClick={() => onDeleteDependency(record)}
-          title="删除依赖关系"
+          title={t('dataTabs.dependencyActions.deleteDependency')}
         />
       )
     }
@@ -152,14 +155,14 @@ const DataTabs: React.FC<DataTabsProps> = ({
             label: (
               <Space>
                 <DatabaseOutlined />
-                实体清单 ({entities.length})
+                {t('dataTabs.tabs.entities', { count: entities.length })}
               </Space>
             ),
             children: (
               <div>
                 <div style={{ marginBottom: 16, textAlign: 'right' }}>
                   <Button type="primary" size="small" icon={<PlusOutlined />} onClick={onAddEntity}>
-                    选择实体
+                    {t('dataTabs.actions.selectEntities')}
                   </Button>
                 </div>
                 <Table
@@ -178,14 +181,14 @@ const DataTabs: React.FC<DataTabsProps> = ({
             label: (
               <Space>
                 <LinkOutlined />
-                依赖关系 ({dependencies.length})
+                {t('dataTabs.tabs.dependencies', { count: dependencies.length })}
               </Space>
             ),
             children: (
               <div>
                 <div style={{ marginBottom: 16, textAlign: 'right' }}>
                   <Button type="primary" size="small" icon={<PlusOutlined />} onClick={onAddDependency}>
-                    添加关系
+                    {t('dataTabs.actions.addRelationship')}
                   </Button>
                 </div>
                 <Table

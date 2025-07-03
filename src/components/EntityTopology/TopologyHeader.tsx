@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Tag, Space, Row, Col, Statistic, Button } from 'antd';
 import { NodeIndexOutlined, LinkOutlined, HeartOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
@@ -26,6 +27,8 @@ interface TopologyHeaderProps {
 }
 
 const TopologyHeader: React.FC<TopologyHeaderProps> = ({ topologyData, onRefresh }) => {
+  const { t } = useTranslation(['entityTopology', 'common']);
+
   const handleExport = () => {
     // TODO: 实现导出功能
   };
@@ -56,21 +59,34 @@ const TopologyHeader: React.FC<TopologyHeaderProps> = ({ topologyData, onRefresh
         <div className="header-right">
           <Row gutter={16}>
             <Col span={6}>
-              <Statistic title="节点数" value={topologyData.stats.nodeCount} prefix={<NodeIndexOutlined />} />
+              <Statistic
+                title={t('header.stats.nodeCount')}
+                value={topologyData.stats.nodeCount}
+                prefix={<NodeIndexOutlined />}
+              />
             </Col>
             <Col span={6}>
-              <Statistic title="连接数" value={topologyData.stats.linkCount} prefix={<LinkOutlined />} />
+              <Statistic
+                title={t('header.stats.linkCount')}
+                value={topologyData.stats.linkCount}
+                prefix={<LinkOutlined />}
+              />
             </Col>
             <Col span={6}>
-              <Statistic title="健康度" value={topologyData.stats.healthScore} suffix="%" prefix={<HeartOutlined />} />
+              <Statistic
+                title={t('header.stats.healthScore')}
+                value={topologyData.stats.healthScore}
+                suffix="%"
+                prefix={<HeartOutlined />}
+              />
             </Col>
             <Col span={6}>
               <Space direction="vertical">
                 <Button icon={<ReloadOutlined />} onClick={onRefresh}>
-                  刷新
+                  {t('header.actions.refresh')}
                 </Button>
                 <Button icon={<DownloadOutlined />} onClick={handleExport}>
-                  导出
+                  {t('header.actions.export')}
                 </Button>
               </Space>
             </Col>

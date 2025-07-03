@@ -199,6 +199,44 @@
         "production": "生产环境",
         "microservice": "微服务"
       }
+    },
+    "header": {
+      "stats": {
+        "nodeCount": "节点数",
+        "linkCount": "连接数",
+        "healthScore": "健康度"
+      },
+      "actions": {
+        "refresh": "刷新",
+        "export": "导出"
+      }
+    },
+    "dataTabs": {
+      "tabs": {
+        "entities": "实体清单 ({{count}})",
+        "dependencies": "依赖关系 ({{count}})"
+      },
+      "entityColumns": {
+        "name": "名称",
+        "type": "类型",
+        "actions": "操作"
+      },
+      "dependencyColumns": {
+        "source": "源实体",
+        "target": "目标实体",
+        "actions": "操作"
+      },
+      "entityActions": {
+        "viewAgents": "查看Agents",
+        "deleteEntity": "删除实体"
+      },
+      "dependencyActions": {
+        "deleteDependency": "删除依赖关系"
+      },
+      "actions": {
+        "selectEntities": "选择实体",
+        "addRelationship": "添加关系"
+      }
     }
   }
 }

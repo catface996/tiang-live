@@ -199,6 +199,44 @@
         "production": "Production",
         "microservice": "Microservice"
       }
+    },
+    "header": {
+      "stats": {
+        "nodeCount": "Nodes",
+        "linkCount": "Links",
+        "healthScore": "Health"
+      },
+      "actions": {
+        "refresh": "Refresh",
+        "export": "Export"
+      }
+    },
+    "dataTabs": {
+      "tabs": {
+        "entities": "Entities ({{count}})",
+        "dependencies": "Dependencies ({{count}})"
+      },
+      "entityColumns": {
+        "name": "Name",
+        "type": "Type",
+        "actions": "Actions"
+      },
+      "dependencyColumns": {
+        "source": "Source Entity",
+        "target": "Target Entity",
+        "actions": "Actions"
+      },
+      "entityActions": {
+        "viewAgents": "View Agents",
+        "deleteEntity": "Delete Entity"
+      },
+      "dependencyActions": {
+        "deleteDependency": "Delete Dependency"
+      },
+      "actions": {
+        "selectEntities": "Select Entities",
+        "addRelationship": "Add Relationship"
+      }
     }
   }
 }
