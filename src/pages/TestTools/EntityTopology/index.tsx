@@ -59,7 +59,7 @@ const EntityTopology: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [labelsFilter, setLabelsFilter] = useState<string>('all');
   const [topologies, setTopologies] = useState<Topology[]>([]);
 
   // 创建拓扑图相关状态
@@ -323,15 +323,28 @@ const EntityTopology: React.FC = () => {
     createForm.resetFields();
   };
 
+  // 获取所有可用的labels
+  const getAllAvailableLabels = (): string[] => {
+    const allLabels = topologies.reduce((labels: string[], topology) => {
+      topology.tags.forEach(tag => {
+        if (!labels.includes(tag)) {
+          labels.push(tag);
+        }
+      });
+      return labels;
+    }, []);
+    return allLabels.sort();
+  };
+
   // 过滤拓扑数据
   const filteredTopologies = topologies.filter(topology => {
     const matchesSearch =
       topology.name.toLowerCase().includes(searchText.toLowerCase()) ||
       topology.description.toLowerCase().includes(searchText.toLowerCase());
     const matchesStatus = statusFilter === 'all' || topology.status === statusFilter;
-    const matchesType = typeFilter === 'all' || topology.type === typeFilter;
+    const matchesLabels = labelsFilter === 'all' || topology.tags.includes(labelsFilter);
 
-    return matchesSearch && matchesStatus && matchesType;
+    return matchesSearch && matchesStatus && matchesLabels;
   });
 
   const handleView = (topology: Topology) => {
@@ -443,16 +456,17 @@ const EntityTopology: React.FC = () => {
                 <Option value="error">{t('entityTopology:status.error')}</Option>
               </Select>
               <Select
-                value={typeFilter}
-                onChange={setTypeFilter}
+                value={labelsFilter}
+                onChange={setLabelsFilter}
                 className="filter-select"
-                placeholder={t('entityTopology:search.typeFilter')}
+                placeholder={t('entityTopology:search.labelsFilter')}
               >
-                <Option value="all">{t('entityTopology:filters.allTypes')}</Option>
-                <Option value="network">{t('entityTopology:types.network')}</Option>
-                <Option value="application">{t('entityTopology:types.application')}</Option>
-                <Option value="database">{t('entityTopology:types.database')}</Option>
-                <Option value="system">{t('entityTopology:types.system')}</Option>
+                <Option value="all">{t('entityTopology:filters.allLabels')}</Option>
+                {getAllAvailableLabels().map(label => (
+                  <Option key={label} value={label}>
+                    {label}
+                  </Option>
+                ))}
               </Select>
               <Button icon={<ReloadOutlined />} onClick={() => loadTopologies()} title={t('common:refresh')} />
             </Space>
