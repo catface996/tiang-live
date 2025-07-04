@@ -40,7 +40,7 @@ import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
 import { entityApi } from '../../services/entityApi';
-import { enumApi, EnumItem } from '../../services/enumApi';
+import enumApi, { type EnumItem } from '../../services/enumApi';
 import '../../styles/entity-management.css';
 
 const { Title, Paragraph } = Typography;
