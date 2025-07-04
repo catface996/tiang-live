@@ -531,21 +531,14 @@ const EntityForm: React.FC = () => {
     console.log('🔧 当前模式:', mode);
     console.log('📝 实体名称:', values.name);
 
-    const confirmTitle = mode === 'create' ? t('entities:form.confirmCreate') : t('entities:form.confirmUpdate');
-    const confirmContent =
-      mode === 'create'
-        ? t('entities:form.confirmCreateContent', { name: values.name || '未命名实体' })
-        : t('entities:form.confirmUpdateContent', { name: values.name || '未命名实体' });
+    // 简化测试：直接使用固定文本的Modal
+    console.log('🚀 即将显示确认对话框...');
 
-    console.log('📋 确认对话框标题:', confirmTitle);
-    console.log('📋 确认对话框内容:', confirmContent);
-
-    // 显示确认对话框
     Modal.confirm({
-      title: confirmTitle,
-      content: confirmContent,
-      okText: t('common:confirm'),
-      cancelText: t('common:cancel'),
+      title: '确认创建实体',
+      content: `确认创建实体 "${values.name || '未命名实体'}" 吗？`,
+      okText: '确认',
+      cancelText: '取消',
       onOk: async () => {
         console.log('✅ 用户确认提交，调用performSubmit');
         await performSubmit(values);
@@ -555,7 +548,7 @@ const EntityForm: React.FC = () => {
       }
     });
 
-    console.log('📋 确认对话框已显示');
+    console.log('📋 Modal.confirm已调用');
   };
 
   const performSubmit = async (values: any) => {
@@ -966,9 +959,24 @@ const EntityForm: React.FC = () => {
                       console.log('📋 当前步骤:', currentStep);
                       console.log('📊 步骤总数:', steps.length);
 
+                      // 测试：手动设置一些表单数据
+                      form.setFieldsValue({
+                        name: '测试实体',
+                        type: 'USER',
+                        description: '这是一个测试实体',
+                        entityStatus: 'ACTIVE'
+                      });
+
+                      console.log('🧪 手动设置表单数据后...');
+
                       // 直接从form实例获取所有字段值
                       const allValues = form.getFieldsValue();
                       console.log('📋 从form实例获取的所有值:', allValues);
+
+                      // 获取具体字段值
+                      const name = form.getFieldValue('name');
+                      const type = form.getFieldValue('type');
+                      console.log('📝 具体字段值 - name:', name, 'type:', type);
 
                       form
                         .validateFields()
