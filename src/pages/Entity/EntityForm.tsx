@@ -529,14 +529,21 @@ const EntityForm: React.FC = () => {
     console.log('🎯 handleSubmit被调用!');
     console.log('📋 接收到的values:', values);
     console.log('🔧 当前模式:', mode);
+    console.log('📝 实体名称:', values.name);
+
+    const confirmTitle = mode === 'create' ? t('entities:form.confirmCreate') : t('entities:form.confirmUpdate');
+    const confirmContent =
+      mode === 'create'
+        ? t('entities:form.confirmCreateContent', { name: values.name || '未命名实体' })
+        : t('entities:form.confirmUpdateContent', { name: values.name || '未命名实体' });
+
+    console.log('📋 确认对话框标题:', confirmTitle);
+    console.log('📋 确认对话框内容:', confirmContent);
 
     // 显示确认对话框
     Modal.confirm({
-      title: mode === 'create' ? t('entities:form.confirmCreate') : t('entities:form.confirmUpdate'),
-      content:
-        mode === 'create'
-          ? t('entities:form.confirmCreateContent', { name: values.name })
-          : t('entities:form.confirmUpdateContent', { name: values.name }),
+      title: confirmTitle,
+      content: confirmContent,
       okText: t('common:confirm'),
       cancelText: t('common:cancel'),
       onOk: async () => {
@@ -547,6 +554,8 @@ const EntityForm: React.FC = () => {
         console.log('❌ 用户取消提交');
       }
     });
+
+    console.log('📋 确认对话框已显示');
   };
 
   const performSubmit = async (values: any) => {
@@ -956,11 +965,22 @@ const EntityForm: React.FC = () => {
                       console.log('🎯 创建实体按钮被点击!');
                       console.log('📋 当前步骤:', currentStep);
                       console.log('📊 步骤总数:', steps.length);
+
+                      // 直接从form实例获取所有字段值
+                      const allValues = form.getFieldsValue();
+                      console.log('📋 从form实例获取的所有值:', allValues);
+
                       form
                         .validateFields()
                         .then(values => {
-                          console.log('✅ 表单验证通过，调用handleSubmit');
-                          handleSubmit(values);
+                          console.log('✅ 表单验证通过，validateFields返回的values:', values);
+                          console.log('📋 使用form.getFieldsValue()获取的值:', form.getFieldsValue());
+
+                          // 使用form.getFieldsValue()获取完整数据，而不是依赖validateFields的返回值
+                          const formData = form.getFieldsValue();
+                          console.log('🚀 即将提交的表单数据:', formData);
+
+                          handleSubmit(formData);
                         })
                         .catch(errorInfo => {
                           console.log('❌ 表单验证失败:', errorInfo);
