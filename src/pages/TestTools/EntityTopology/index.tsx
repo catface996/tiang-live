@@ -204,15 +204,13 @@ const EntityTopology: React.FC = () => {
         console.log('✅ 成功加载拓扑图列表:', topologyList);
       } else {
         console.warn('⚠️ API返回数据格式异常:', response);
-        // 如果API调用失败，回退到mock数据
-        setTopologies(mockTopologies);
-        message.warning(t('entityTopology:messages.loadFromMock'));
+        setTopologies([]); // 设置为空数组，不使用mock数据
+        message.error(t('entityTopology:messages.loadFailed'));
       }
     } catch (error) {
       console.error('❌ 加载拓扑图列表失败:', error);
+      setTopologies([]); // 设置为空数组，不使用mock数据
       message.error(t('entityTopology:messages.loadFailed'));
-      // 出错时回退到mock数据，确保页面可用
-      setTopologies(mockTopologies);
     } finally {
       setLoading(false);
     }
