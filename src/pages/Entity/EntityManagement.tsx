@@ -101,12 +101,6 @@ const EntityManagement: React.FC = () => {
     loadEnumData();
   }, []); // 移除t依赖，避免重复触发
 
-  // 监听枚举状态变化
-  useEffect(() => {
-    console.log('🔄 EntityTypes状态变化:', entityTypes);
-    console.log('🔄 EntityStatuses状态变化:', entityStatuses);
-  }, [entityTypes, entityStatuses]);
-
   // 加载枚举数据
   const loadEnumData = async () => {
     setEnumLoading(true);
@@ -391,28 +385,6 @@ const EntityManagement: React.FC = () => {
             </StatsCard>
           </Col>
         </Row>
-
-        {/* 调试信息 - 开发环境显示 */}
-        {process.env.NODE_ENV === 'development' && (
-          <div
-            style={{
-              marginBottom: 16,
-              padding: 12,
-              backgroundColor: '#f6f6f6',
-              borderRadius: 4,
-              fontSize: '12px'
-            }}
-          >
-            <div>
-              <strong>🔍 调试信息:</strong>
-            </div>
-            <div>枚举加载状态: {enumLoading ? '加载中...' : '已完成'}</div>
-            <div>实体类型数量: {entityTypes.length}</div>
-            <div>实体状态数量: {entityStatuses.length}</div>
-            <div>实体类型: {entityTypes.map(t => `${t.value}(${t.label})`).join(', ')}</div>
-            <div>实体状态: {entityStatuses.map(s => `${s.value}(${s.label})`).join(', ')}</div>
-          </div>
-        )}
 
         {/* 分类标签 */}
         <div style={{ marginBottom: 16 }}>
