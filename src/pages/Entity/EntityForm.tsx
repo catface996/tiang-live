@@ -37,6 +37,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../store';
 import { entityApi, EntityStatus } from '../../services/entityApi';
+import enumApi, { type EnumItem } from '../../services/enumApi';
 import styled from 'styled-components';
 
 const { Title } = Typography;
@@ -415,6 +416,9 @@ const EntityForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedIcon, setSelectedIcon] = useState('ApiOutlined');
+  const [entityTypes, setEntityTypes] = useState<EnumItem[]>([]);
+  const [entityStatuses, setEntityStatuses] = useState<EnumItem[]>([]);
+  const [enumLoading, setEnumLoading] = useState(false);
 
   const mode = id ? 'edit' : 'create';
 
@@ -430,7 +434,39 @@ const EntityForm: React.FC = () => {
     { key: 'TagsOutlined', icon: <TagsOutlined /> }
   ];
 
-  // 实体类型选项
+  // 加载枚举数据
+  const loadEnumData = async () => {
+    setEnumLoading(true);
+    try {
+      const response = await enumApi.getEntityEnums();
+
+      if (response?.success && Array.isArray(response.data)) {
+        // 查找并设置EntityType
+        const entityTypeEnum = response.data.find(item => item.typeName === 'EntityType');
+        if (entityTypeEnum?.items) {
+          setEntityTypes(entityTypeEnum.items);
+        }
+
+        // 查找并设置EntityStatus
+        const entityStatusEnum = response.data.find(item => item.typeName === 'EntityStatus');
+        if (entityStatusEnum?.items) {
+          setEntityStatuses(entityStatusEnum.items);
+        }
+      }
+    } catch (error) {
+      console.error('加载枚举数据失败:', error);
+      message.error('加载枚举数据失败');
+    } finally {
+      setEnumLoading(false);
+    }
+  };
+
+  // 组件挂载时加载枚举数据
+  useEffect(() => {
+    loadEnumData();
+  }, []);
+
+  // 实体类型选项 - 保留作为备用，优先使用从后端获取的数据
   const entityTypes = [
     { value: 'microservice', label: t('entities:types.microservice'), icon: <ApiOutlined /> },
     { value: 'database', label: t('entities:types.database'), icon: <DatabaseOutlined /> },
@@ -596,15 +632,38 @@ const EntityForm: React.FC = () => {
               label={t('entities:form.entityType')}
               rules={[{ required: true, message: t('entities:form.entityTypeRequired') }]}
             >
-              <Select placeholder={t('entities:form.entityTypeRequired')}>
-                {entityTypes.map(type => (
-                  <Option key={type.value} value={type.value}>
-                    <Space>
-                      {type.icon}
-                      {type.label}
-                    </Space>
-                  </Option>
-                ))}
+              <Select placeholder={t('entities:form.entityTypeRequired')} loading={enumLoading}>
+                {/* 优先使用从后端获取的枚举数据 */}
+                {entityTypes.length > 0
+                  ? entityTypes.map(type => (
+                      <Option key={type.value} value={type.value}>
+                        <Space>
+                          <ApiOutlined />
+                          {type.label}
+                        </Space>
+                      </Option>
+                    ))
+                  : /* 备用的mock数据 */
+                    [
+                      { value: 'microservice', label: t('entities:types.microservice'), icon: <ApiOutlined /> },
+                      { value: 'database', label: t('entities:types.database'), icon: <DatabaseOutlined /> },
+                      { value: 'table', label: t('entities:types.table'), icon: <TableOutlined /> },
+                      { value: 'api', label: t('entities:types.api'), icon: <CloudServerOutlined /> },
+                      { value: 'middleware', label: t('entities:types.middleware'), icon: <DeploymentUnitOutlined /> },
+                      {
+                        value: 'businessSystem',
+                        label: t('entities:types.businessSystem'),
+                        icon: <AppstoreOutlined />
+                      },
+                      { value: 'configuration', label: t('entities:types.configuration'), icon: <SettingOutlined /> }
+                    ].map(type => (
+                      <Option key={type.value} value={type.value}>
+                        <Space>
+                          {type.icon}
+                          {type.label}
+                        </Space>
+                      </Option>
+                    ))}
               </Select>
             </Form.Item>
           </Col>
@@ -727,7 +786,25 @@ const EntityForm: React.FC = () => {
                 </p>
                 <p>
                   <strong>{t('entities:form.entityType')}：</strong>
-                  {entityTypes.find(t => t.value === form.getFieldValue('type'))?.label}
+                  {(() => {
+                    const selectedType = form.getFieldValue('type');
+                    // 优先从后端枚举数据中查找
+                    const backendType = entityTypes.find(t => t.value === selectedType);
+                    if (backendType) {
+                      return backendType.label;
+                    }
+                    // 备用：从mock数据中查找
+                    const mockTypes = [
+                      { value: 'microservice', label: t('entities:types.microservice') },
+                      { value: 'database', label: t('entities:types.database') },
+                      { value: 'table', label: t('entities:types.table') },
+                      { value: 'api', label: t('entities:types.api') },
+                      { value: 'middleware', label: t('entities:types.middleware') },
+                      { value: 'businessSystem', label: t('entities:types.businessSystem') },
+                      { value: 'configuration', label: t('entities:types.configuration') }
+                    ];
+                    return mockTypes.find(t => t.value === selectedType)?.label || selectedType;
+                  })()}
                 </p>
                 <p>
                   <strong>{t('entities:form.belongsToPlane')}：</strong>
