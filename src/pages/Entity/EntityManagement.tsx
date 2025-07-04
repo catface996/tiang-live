@@ -136,8 +136,8 @@ const EntityManagement: React.FC = () => {
             });
           });
 
-          // 查找EntityType
-          const entityTypeEnum = response.data.find(item => item.type === 'EntityType');
+          // 查找EntityType - 使用正确的字段名 typeName
+          const entityTypeEnum = response.data.find(item => item.typeName === 'EntityType');
           if (entityTypeEnum && entityTypeEnum.items) {
             console.log('✅ 找到EntityType枚举，设置到状态');
             console.log('📂 EntityType原始items:', entityTypeEnum.items);
@@ -152,8 +152,8 @@ const EntityManagement: React.FC = () => {
             setEntityTypes([]);
           }
 
-          // 查找EntityStatus
-          const entityStatusEnum = response.data.find(item => item.type === 'EntityStatus');
+          // 查找EntityStatus - 使用正确的字段名 typeName
+          const entityStatusEnum = response.data.find(item => item.typeName === 'EntityStatus');
           if (entityStatusEnum && entityStatusEnum.items) {
             console.log('✅ 找到EntityStatus枚举，设置到状态');
             console.log('📊 EntityStatus原始items:', entityStatusEnum.items);
