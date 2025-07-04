@@ -105,7 +105,6 @@ const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, onClick, 
 
       {/* 显示标签 */}
       <div style={{ marginTop: 12 }}>
-        {console.log('🏷️ DefaultEntityCard - 实体标签:', entity.tags)}
         {entity.tags && entity.tags.length > 0 ? (
           entity.tags.map((tag: string, index: number) => (
             <Tag key={index} size="small" style={{ marginBottom: 4 }}>
