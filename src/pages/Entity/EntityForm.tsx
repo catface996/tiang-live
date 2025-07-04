@@ -506,7 +506,7 @@ const EntityForm: React.FC = () => {
         description: t('entities:form.descriptionPlaceholder'),
         icon: 'ApiOutlined',
         tags: [t('common:coreService'), t('common:userManagement')],
-        status: 'active',
+        entityStatus: 'ACTIVE',
         version: '1.2.0',
         port: 8080,
         healthCheckUrl: '/health',
@@ -552,7 +552,7 @@ const EntityForm: React.FC = () => {
         description: values.description || '',
         type: values.type,
         planeId: values.planeId || 1, // 默认平面ID，实际应该从表单获取
-        status: values.status === 'active' ? EntityStatus.ACTIVE : EntityStatus.INACTIVE,
+        status: values.entityStatus === 'ACTIVE' ? EntityStatus.ACTIVE : EntityStatus.INACTIVE,
         labels: values.tags || [],
         properties: {
           icon: selectedIcon,
@@ -671,11 +671,23 @@ const EntityForm: React.FC = () => {
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item name="status" label={t('common:status')} initialValue="active">
-              <Select>
-                <Option value="active">{t('common:active')}</Option>
-                <Option value="inactive">{t('common:inactive')}</Option>
-                <Option value="deprecated">{t('common:deprecated')}</Option>
+            <Form.Item name="entityStatus" label={t('common:status')} initialValue="ACTIVE">
+              <Select loading={enumLoading}>
+                {/* 优先使用从后端获取的枚举数据 */}
+                {entityStatuses.length > 0 ? (
+                  entityStatuses.map(status => (
+                    <Option key={status.value} value={status.value}>
+                      {status.label}
+                    </Option>
+                  ))
+                ) : (
+                  /* 备用的mock数据 */
+                  <>
+                    <Option value="ACTIVE">{t('common:active')}</Option>
+                    <Option value="INACTIVE">{t('common:inactive')}</Option>
+                    <Option value="DEPRECATED">{t('common:deprecated')}</Option>
+                  </>
+                )}
               </Select>
             </Form.Item>
           </Col>
@@ -791,7 +803,7 @@ const EntityForm: React.FC = () => {
                 </p>
                 <p>
                   <strong>{t('common:status')}：</strong>
-                  {form.getFieldValue('status')}
+                  {form.getFieldValue('entityStatus')}
                 </p>
                 <p>
                   <strong>{t('common:description')}：</strong>
@@ -872,7 +884,7 @@ const EntityForm: React.FC = () => {
           form={form}
           layout="vertical"
           initialValues={{
-            status: 'active'
+            entityStatus: 'ACTIVE'
           }}
         >
           {currentStep === 0 && renderBasicInfo()}
