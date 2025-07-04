@@ -15,7 +15,8 @@ import {
   Steps,
   Alert,
   Tabs,
-  Breadcrumb
+  Breadcrumb,
+  Modal
 } from 'antd';
 import {
   SaveOutlined,
@@ -35,6 +36,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../store';
+import { entityApi, EntityStatus } from '../../services/entityApi';
 import styled from 'styled-components';
 
 const { Title } = Typography;
@@ -44,7 +46,7 @@ const { TextArea } = Input;
 // Styled Components for perfect dark theme support
 const PageContainer = styled.div<{ $isDark: boolean }>`
   min-height: 100vh;
-  background-color: ${props => props.$isDark ? '#000000' : '#f5f5f5'};
+  background-color: ${props => (props.$isDark ? '#000000' : '#f5f5f5')};
   padding: 24px;
 `;
 
@@ -57,49 +59,46 @@ const ContentWrapper = styled.div<{ $isDark: boolean }>`
 const StyledCard = styled(Card)<{ $isDark: boolean }>`
   margin-bottom: 24px;
   border-radius: 12px;
-  background-color: ${props => props.$isDark ? '#1e1e1e' : '#ffffff'};
-  border: ${props => props.$isDark ? '1px solid #2a2a2a' : '1px solid #e8e8e8'};
+  background-color: ${props => (props.$isDark ? '#1e1e1e' : '#ffffff')};
+  border: ${props => (props.$isDark ? '1px solid #2a2a2a' : '1px solid #e8e8e8')};
   overflow: hidden;
-  
+
   &:hover {
-    box-shadow: ${props => props.$isDark 
-    ? '0 2px 12px rgba(0, 0, 0, 0.3)' 
-    : '0 2px 12px rgba(0, 0, 0, 0.06)'
-};
+    box-shadow: ${props => (props.$isDark ? '0 2px 12px rgba(0, 0, 0, 0.3)' : '0 2px 12px rgba(0, 0, 0, 0.06)')};
   }
-  
+
   .ant-card-head {
-    background-color: ${props => props.$isDark ? '#232323' : '#fafafa'};
-    border-bottom: ${props => props.$isDark ? '1px solid #2a2a2a' : '1px solid #f0f0f0'};
+    background-color: ${props => (props.$isDark ? '#232323' : '#fafafa')};
+    border-bottom: ${props => (props.$isDark ? '1px solid #2a2a2a' : '1px solid #f0f0f0')};
     padding: 16px 24px;
   }
-  
+
   .ant-card-head-title {
-    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+    color: ${props => (props.$isDark ? '#ffffff' : '#1a1a1a')};
     font-weight: 600;
     font-size: 16px;
   }
-  
+
   .ant-card-extra {
-    color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+    color: ${props => (props.$isDark ? '#4a9eff' : '#1890ff')};
   }
-  
+
   .ant-card-body {
-    background-color: ${props => props.$isDark ? '#1e1e1e' : '#ffffff'};
+    background-color: ${props => (props.$isDark ? '#1e1e1e' : '#ffffff')};
     padding: 24px;
   }
 `;
 
 const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
   margin-bottom: 24px;
-  
+
   /* 强制所有面包屑项目垂直居中对齐 */
   .ant-breadcrumb {
     display: flex;
     align-items: center;
     line-height: 1;
   }
-  
+
   .ant-breadcrumb ol {
     display: flex;
     align-items: center;
@@ -107,38 +106,38 @@ const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
     padding: 0;
     list-style: none;
   }
-  
+
   .ant-breadcrumb li {
     display: flex;
     align-items: center;
     height: 32px;
     line-height: 32px;
   }
-  
+
   .ant-breadcrumb-link {
-    color: ${props => props.$isDark ? '#e0e0e0' : '#666666'};
+    color: ${props => (props.$isDark ? '#e0e0e0' : '#666666')};
     display: flex;
     align-items: center;
     height: 32px;
     line-height: 32px;
-    
+
     &:hover {
-      color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+      color: ${props => (props.$isDark ? '#4a9eff' : '#1890ff')};
     }
   }
-  
+
   .ant-breadcrumb-separator {
-    color: ${props => props.$isDark ? '#a0a0a0' : '#999999'};
+    color: ${props => (props.$isDark ? '#a0a0a0' : '#999999')};
     display: flex;
     align-items: center;
     height: 32px;
     line-height: 32px;
     margin: 0 8px;
   }
-  
+
   /* Button组件样式 - 确保与其他元素高度一致 */
   .ant-btn {
-    color: ${props => props.$isDark ? '#e0e0e0' : '#666666'};
+    color: ${props => (props.$isDark ? '#e0e0e0' : '#666666')};
     border: none;
     background: transparent;
     padding: 0 8px;
@@ -148,14 +147,15 @@ const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
     display: flex;
     align-items: center;
     gap: 6px;
-    
-    &:hover, &:focus {
-      color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
-      background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.1)' : 'rgba(24, 144, 255, 0.06)'};
+
+    &:hover,
+    &:focus {
+      color: ${props => (props.$isDark ? '#4a9eff' : '#1890ff')};
+      background-color: ${props => (props.$isDark ? 'rgba(74, 158, 255, 0.1)' : 'rgba(24, 144, 255, 0.06)')};
       border-color: transparent;
       box-shadow: none;
     }
-    
+
     /* Button内部元素对齐 */
     .anticon {
       display: flex;
@@ -163,14 +163,14 @@ const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
       font-size: 14px;
       line-height: 1;
     }
-    
+
     span {
       display: flex;
       align-items: center;
       line-height: 1;
     }
   }
-  
+
   /* Space组件样式 - 确保与Button高度一致 */
   .ant-space {
     display: flex;
@@ -179,14 +179,14 @@ const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
     height: 32px;
     line-height: 32px;
   }
-  
+
   .ant-space-item {
     display: flex;
     align-items: center;
     height: 32px;
     line-height: 32px;
   }
-  
+
   /* 图标统一样式 */
   .anticon {
     display: flex;
@@ -195,7 +195,7 @@ const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
     line-height: 1;
     height: 14px;
   }
-  
+
   /* 文字统一样式 */
   span:not(.anticon) {
     display: flex;
@@ -207,53 +207,53 @@ const StyledBreadcrumb = styled(Breadcrumb)<{ $isDark: boolean }>`
 
 const StyledTitle = styled(Title)<{ $isDark: boolean }>`
   &.ant-typography {
-    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'} !important;
+    color: ${props => (props.$isDark ? '#ffffff' : '#1a1a1a')} !important;
     margin-bottom: 32px !important;
     font-weight: 700 !important;
     font-size: 28px !important;
     line-height: 1.2 !important;
   }
-  
+
   .anticon {
-    color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+    color: ${props => (props.$isDark ? '#4a9eff' : '#1890ff')};
     margin-right: 12px;
   }
 `;
 
 const StyledSteps = styled(Steps)<{ $isDark: boolean }>`
   .ant-steps-item-title {
-    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'} !important;
+    color: ${props => (props.$isDark ? '#ffffff' : '#1a1a1a')} !important;
     font-weight: 600 !important;
   }
-  
+
   .ant-steps-item-description {
-    color: ${props => props.$isDark ? '#a0a0a0' : '#666666'} !important;
+    color: ${props => (props.$isDark ? '#a0a0a0' : '#666666')} !important;
   }
-  
+
   .ant-steps-item-wait {
     .ant-steps-item-icon {
-      background-color: ${props => props.$isDark ? '#2a2a2a' : '#f5f5f5'};
-      border-color: ${props => props.$isDark ? '#3a3a3a' : '#d9d9d9'};
+      background-color: ${props => (props.$isDark ? '#2a2a2a' : '#f5f5f5')};
+      border-color: ${props => (props.$isDark ? '#3a3a3a' : '#d9d9d9')};
     }
-    
+
     .ant-steps-icon {
-      color: ${props => props.$isDark ? '#6a6a6a' : '#999999'};
+      color: ${props => (props.$isDark ? '#6a6a6a' : '#999999')};
     }
   }
-  
+
   .ant-steps-item-process {
     .ant-steps-item-icon {
       background-color: #4a9eff;
       border-color: #4a9eff;
     }
   }
-  
+
   .ant-steps-item-finish {
     .ant-steps-item-icon {
-      background-color: ${props => props.$isDark ? '#1e4d3a' : '#f6ffed'};
+      background-color: ${props => (props.$isDark ? '#1e4d3a' : '#f6ffed')};
       border-color: #52c41a;
     }
-    
+
     .ant-steps-icon {
       color: #52c41a;
     }
@@ -265,12 +265,12 @@ const ActionButtons = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-top: 8px;
-  
+
   .left-buttons {
     display: flex;
     gap: 12px;
   }
-  
+
   .right-buttons {
     display: flex;
     gap: 12px;
@@ -282,41 +282,37 @@ const IconSelector = styled.div<{ $isDark: boolean }>`
   grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
   gap: 12px;
   margin-top: 16px;
-  
+
   .icon-option {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 64px;
     height: 64px;
-    border: 2px solid ${props => props.$isDark ? '#2a2a2a' : '#e8e8e8'};
+    border: 2px solid ${props => (props.$isDark ? '#2a2a2a' : '#e8e8e8')};
     border-radius: 12px;
     cursor: pointer;
-    background-color: ${props => props.$isDark ? '#232323' : '#fafafa'};
+    background-color: ${props => (props.$isDark ? '#232323' : '#fafafa')};
     position: relative;
-    
+
     &:hover {
-      border-color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
-      background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.1)' : 'rgba(24, 144, 255, 0.06)'};
+      border-color: ${props => (props.$isDark ? '#4a9eff' : '#1890ff')};
+      background-color: ${props => (props.$isDark ? 'rgba(74, 158, 255, 0.1)' : 'rgba(24, 144, 255, 0.06)')};
       transform: translateY(-2px);
-      box-shadow: ${props => props.$isDark 
-    ? '0 4px 12px rgba(74, 158, 255, 0.2)' 
-    : '0 4px 12px rgba(24, 144, 255, 0.15)'
-};
+      box-shadow: ${props =>
+        props.$isDark ? '0 4px 12px rgba(74, 158, 255, 0.2)' : '0 4px 12px rgba(24, 144, 255, 0.15)'};
     }
-    
+
     &.selected {
       border-color: #4a9eff;
-      background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.15)' : 'rgba(24, 144, 255, 0.08)'};
-      box-shadow: ${props => props.$isDark 
-    ? '0 0 0 3px rgba(74, 158, 255, 0.2)' 
-    : '0 0 0 3px rgba(24, 144, 255, 0.1)'
-};
+      background-color: ${props => (props.$isDark ? 'rgba(74, 158, 255, 0.15)' : 'rgba(24, 144, 255, 0.08)')};
+      box-shadow: ${props =>
+        props.$isDark ? '0 0 0 3px rgba(74, 158, 255, 0.2)' : '0 0 0 3px rgba(24, 144, 255, 0.1)'};
     }
-    
+
     .anticon {
       font-size: 28px;
-      color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+      color: ${props => (props.$isDark ? '#ffffff' : '#1a1a1a')};
     }
   }
 `;
@@ -326,67 +322,67 @@ const TagContainer = styled.div<{ $isDark: boolean }>`
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
-  
+
   .ant-tag {
-    background-color: ${props => props.$isDark ? '#232323' : '#f5f5f5'};
-    border: ${props => props.$isDark ? '1px solid #3a3a3a' : '1px solid #d9d9d9'};
-    color: ${props => props.$isDark ? '#e0e0e0' : '#333333'};
+    background-color: ${props => (props.$isDark ? '#232323' : '#f5f5f5')};
+    border: ${props => (props.$isDark ? '1px solid #3a3a3a' : '1px solid #d9d9d9')};
+    color: ${props => (props.$isDark ? '#e0e0e0' : '#333333')};
     border-radius: 6px;
     padding: 4px 12px;
     font-size: 13px;
-    
+
     &:hover {
-      background-color: ${props => props.$isDark ? '#2a2a2a' : '#e6f7ff'};
-      border-color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+      background-color: ${props => (props.$isDark ? '#2a2a2a' : '#e6f7ff')};
+      border-color: ${props => (props.$isDark ? '#4a9eff' : '#1890ff')};
     }
   }
 `;
 
 const StyledAlert = styled(Alert)<{ $isDark: boolean }>`
   &.ant-alert {
-    background-color: ${props => props.$isDark ? 'rgba(74, 158, 255, 0.1)' : '#e6f7ff'};
-    border: ${props => props.$isDark ? '1px solid rgba(74, 158, 255, 0.3)' : '1px solid #91d5ff'};
+    background-color: ${props => (props.$isDark ? 'rgba(74, 158, 255, 0.1)' : '#e6f7ff')};
+    border: ${props => (props.$isDark ? '1px solid rgba(74, 158, 255, 0.3)' : '1px solid #91d5ff')};
     border-radius: 8px;
     margin-bottom: 24px;
   }
-  
+
   .ant-alert-message {
-    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+    color: ${props => (props.$isDark ? '#ffffff' : '#1a1a1a')};
     font-weight: 500;
   }
-  
+
   .ant-alert-description {
-    color: ${props => props.$isDark ? '#e0e0e0' : '#666666'};
+    color: ${props => (props.$isDark ? '#e0e0e0' : '#666666')};
   }
-  
+
   .ant-alert-icon {
-    color: ${props => props.$isDark ? '#4a9eff' : '#1890ff'};
+    color: ${props => (props.$isDark ? '#4a9eff' : '#1890ff')};
   }
 `;
 
 const FormSection = styled.div<{ $isDark: boolean }>`
   .ant-form-item-label > label {
-    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
+    color: ${props => (props.$isDark ? '#ffffff' : '#1a1a1a')};
     font-weight: 500;
     font-size: 14px;
   }
-  
+
   .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
     color: #ff4d4f;
   }
-  
+
   .ant-input,
   .ant-input-number,
   .ant-select-selector,
   .ant-input-affix-wrapper {
-    background-color: ${props => props.$isDark ? '#232323' : '#ffffff'};
-    border-color: ${props => props.$isDark ? '#3a3a3a' : '#d9d9d9'};
-    color: ${props => props.$isDark ? '#ffffff' : '#1a1a1a'};
-    
+    background-color: ${props => (props.$isDark ? '#232323' : '#ffffff')};
+    border-color: ${props => (props.$isDark ? '#3a3a3a' : '#d9d9d9')};
+    color: ${props => (props.$isDark ? '#ffffff' : '#1a1a1a')};
+
     &:hover {
-      border-color: ${props => props.$isDark ? '#4a9eff' : '#40a9ff'};
+      border-color: ${props => (props.$isDark ? '#4a9eff' : '#40a9ff')};
     }
-    
+
     &:focus,
     &.ant-input-focused,
     &.ant-select-focused .ant-select-selector {
@@ -394,16 +390,16 @@ const FormSection = styled.div<{ $isDark: boolean }>`
       box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
     }
   }
-  
+
   .ant-input::placeholder,
   .ant-input-number-input::placeholder {
-    color: ${props => props.$isDark ? '#6a6a6a' : '#bfbfbf'};
+    color: ${props => (props.$isDark ? '#6a6a6a' : '#bfbfbf')};
   }
-  
+
   .ant-select-arrow {
-    color: ${props => props.$isDark ? '#a0a0a0' : '#999999'};
+    color: ${props => (props.$isDark ? '#a0a0a0' : '#999999')};
   }
-  
+
   .ant-form-item-explain-error {
     color: #ff7875;
   }
@@ -413,7 +409,7 @@ const EntityForm: React.FC = () => {
   const { t } = useTranslation(['entities', 'common']);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { currentTheme } = useAppSelector((state) => state.theme);
+  const { currentTheme } = useAppSelector(state => state.theme);
   const isDark = currentTheme === 'dark';
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -465,7 +461,7 @@ const EntityForm: React.FC = () => {
     try {
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       // 模拟数据
       const mockData = {
         name: t('entities:form.entityName'),
@@ -496,21 +492,63 @@ const EntityForm: React.FC = () => {
   };
 
   const handleSubmit = async (values: any) => {
+    // 显示确认对话框
+    Modal.confirm({
+      title: mode === 'create' ? t('entities:form.confirmCreate') : t('entities:form.confirmUpdate'),
+      content:
+        mode === 'create'
+          ? t('entities:form.confirmCreateContent', { name: values.name })
+          : t('entities:form.confirmUpdateContent', { name: values.name }),
+      okText: t('common:confirm'),
+      cancelText: t('common:cancel'),
+      onOk: async () => {
+        await performSubmit(values);
+      }
+    });
+  };
+
+  const performSubmit = async (values: any) => {
     setLoading(true);
     try {
       const submitData = {
-        ...values,
-        icon: selectedIcon
+        id: mode === 'edit' ? Number(id) : undefined,
+        name: values.name,
+        description: values.description || '',
+        type: values.type,
+        planeId: values.planeId || 1, // 默认平面ID，实际应该从表单获取
+        status: values.status === 'active' ? EntityStatus.ACTIVE : EntityStatus.INACTIVE,
+        labels: values.tags || [],
+        properties: {
+          icon: selectedIcon,
+          category: values.category,
+          priority: values.priority,
+          ...values.properties
+        },
+        metadata: {
+          icon: selectedIcon,
+          step: currentStep,
+          formData: values
+        }
       };
 
-      console.log('提交数据:', submitData);
-      
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      message.success(mode === 'create' ? t('entities:form.createSuccess') : t('entities:form.updateSuccess'));
-      navigate('/entities');
+      console.log('🚀 提交实体数据:', submitData);
+
+      // 调用真实的API
+      const response =
+        mode === 'create' ? await entityApi.createEntity(submitData) : await entityApi.updateEntity(submitData);
+
+      if (response.success) {
+        console.log('✅ 实体保存成功:', response.data);
+        message.success(mode === 'create' ? t('entities:form.createSuccess') : t('entities:form.updateSuccess'));
+        navigate('/entities');
+      } else {
+        console.error('❌ 实体保存失败:', response);
+        message.error(
+          response.message || (mode === 'create' ? t('entities:form.createFailed') : t('entities:form.updateFailed'))
+        );
+      }
     } catch (error) {
+      console.error('❌ 实体保存异常:', error);
       message.error(mode === 'create' ? t('entities:form.createFailed') : t('entities:form.updateFailed'));
     } finally {
       setLoading(false);
@@ -586,11 +624,7 @@ const EntityForm: React.FC = () => {
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item
-              name="status"
-              label={t('common:status')}
-              initialValue="active"
-            >
+            <Form.Item name="status" label={t('common:status')} initialValue="active">
               <Select>
                 <Option value="active">{t('common:active')}</Option>
                 <Option value="inactive">{t('common:inactive')}</Option>
@@ -607,10 +641,7 @@ const EntityForm: React.FC = () => {
                 { max: 500, message: t('entities:form.descriptionMaxLength') }
               ]}
             >
-              <TextArea 
-                rows={4} 
-                placeholder={t('entities:form.descriptionPlaceholder')}
-              />
+              <TextArea rows={4} placeholder={t('entities:form.descriptionPlaceholder')} />
             </Form.Item>
           </Col>
           <Col xs={24}>
@@ -638,44 +669,28 @@ const EntityForm: React.FC = () => {
       <FormSection $isDark={isDark}>
         <Row gutter={24}>
           <Col xs={24} md={12}>
-            <Form.Item
-              name="version"
-              label={t('entities:form.version')}
-            >
+            <Form.Item name="version" label={t('entities:form.version')}>
               <Input placeholder={t('entities:form.versionPlaceholder')} />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item
-              name="port"
-              label={t('entities:form.port')}
-            >
-              <InputNumber 
-                placeholder={t('entities:form.portPlaceholder')} 
-                min={1} 
-                max={65535} 
+            <Form.Item name="port" label={t('entities:form.port')}>
+              <InputNumber
+                placeholder={t('entities:form.portPlaceholder')}
+                min={1}
+                max={65535}
                 style={{ width: '100%' }}
               />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item
-              name="healthCheckUrl"
-              label={t('entities:form.healthCheckUrl')}
-            >
+            <Form.Item name="healthCheckUrl" label={t('entities:form.healthCheckUrl')}>
               <Input placeholder={t('entities:form.healthCheckUrlPlaceholder')} />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item
-              name="tags"
-              label={t('entities:form.tags')}
-            >
-              <Select
-                mode="tags"
-                placeholder={t('entities:form.tagsPlaceholder')}
-                style={{ width: '100%' }}
-              >
+            <Form.Item name="tags" label={t('entities:form.tags')}>
+              <Select mode="tags" placeholder={t('entities:form.tagsPlaceholder')} style={{ width: '100%' }}>
                 <Option value={t('common:coreService')}>{t('common:coreService')}</Option>
                 <Option value={t('common:basicService')}>{t('common:basicService')}</Option>
                 <Option value={t('common:businessService')}>{t('common:businessService')}</Option>
@@ -683,15 +698,8 @@ const EntityForm: React.FC = () => {
             </Form.Item>
           </Col>
           <Col xs={24}>
-            <Form.Item
-              name="dependencies"
-              label={t('entities:form.dependencies')}
-            >
-              <Select
-                mode="tags"
-                placeholder={t('entities:form.dependenciesPlaceholder')}
-                style={{ width: '100%' }}
-              >
+            <Form.Item name="dependencies" label={t('entities:form.dependencies')}>
+              <Select mode="tags" placeholder={t('entities:form.dependenciesPlaceholder')} style={{ width: '100%' }}>
                 <Option value={t('common:database')}>{t('common:database')}</Option>
                 <Option value={t('common:redisCache')}>{t('common:redisCache')}</Option>
                 <Option value={t('common:messageQueue')}>{t('common:messageQueue')}</Option>
@@ -705,12 +713,7 @@ const EntityForm: React.FC = () => {
 
   const renderConfirmInfo = () => (
     <StyledCard $isDark={isDark} title={t('entities:form.confirmSubmit')} extra={<CheckOutlined />}>
-      <StyledAlert
-        $isDark={isDark}
-        message={t('entities:form.confirmInfoMessage')}
-        type="info"
-        showIcon
-      />
+      <StyledAlert $isDark={isDark} message={t('entities:form.confirmInfoMessage')} type="info" showIcon />
       <Tabs
         items={[
           {
@@ -718,11 +721,26 @@ const EntityForm: React.FC = () => {
             label: t('entities:form.basicInfo'),
             children: (
               <div style={{ padding: '16px 0' }}>
-                <p><strong>{t('entities:form.entityName')}：</strong>{form.getFieldValue('name')}</p>
-                <p><strong>{t('entities:form.entityType')}：</strong>{entityTypes.find(t => t.value === form.getFieldValue('type'))?.label}</p>
-                <p><strong>{t('entities:form.belongsToPlane')}：</strong>{planeOptions.find(p => p.value === form.getFieldValue('plane'))?.label}</p>
-                <p><strong>{t('common:status')}：</strong>{form.getFieldValue('status')}</p>
-                <p><strong>{t('common:description')}：</strong>{form.getFieldValue('description')}</p>
+                <p>
+                  <strong>{t('entities:form.entityName')}：</strong>
+                  {form.getFieldValue('name')}
+                </p>
+                <p>
+                  <strong>{t('entities:form.entityType')}：</strong>
+                  {entityTypes.find(t => t.value === form.getFieldValue('type'))?.label}
+                </p>
+                <p>
+                  <strong>{t('entities:form.belongsToPlane')}：</strong>
+                  {planeOptions.find(p => p.value === form.getFieldValue('plane'))?.label}
+                </p>
+                <p>
+                  <strong>{t('common:status')}：</strong>
+                  {form.getFieldValue('status')}
+                </p>
+                <p>
+                  <strong>{t('common:description')}：</strong>
+                  {form.getFieldValue('description')}
+                </p>
               </div>
             )
           },
@@ -731,17 +749,29 @@ const EntityForm: React.FC = () => {
             label: t('entities:form.configInfo'),
             children: (
               <div style={{ padding: '16px 0' }}>
-                <p><strong>{t('entities:form.version')}：</strong>{form.getFieldValue('version') || t('entities:form.notSet')}</p>
-                <p><strong>{t('entities:form.port')}：</strong>{form.getFieldValue('port') || t('entities:form.notSet')}</p>
-                <p><strong>{t('entities:form.healthCheckUrl')}：</strong>{form.getFieldValue('healthCheckUrl') || t('entities:form.notSet')}</p>
-                <p><strong>{t('entities:form.tags')}：</strong>
+                <p>
+                  <strong>{t('entities:form.version')}：</strong>
+                  {form.getFieldValue('version') || t('entities:form.notSet')}
+                </p>
+                <p>
+                  <strong>{t('entities:form.port')}：</strong>
+                  {form.getFieldValue('port') || t('entities:form.notSet')}
+                </p>
+                <p>
+                  <strong>{t('entities:form.healthCheckUrl')}：</strong>
+                  {form.getFieldValue('healthCheckUrl') || t('entities:form.notSet')}
+                </p>
+                <p>
+                  <strong>{t('entities:form.tags')}：</strong>
                   <TagContainer $isDark={isDark}>
-                    {form.getFieldValue('tags')?.map((tag: string) => (
-                      <Tag key={tag}>{tag}</Tag>
-                    )) || t('entities:form.none')}
+                    {form.getFieldValue('tags')?.map((tag: string) => <Tag key={tag}>{tag}</Tag>) ||
+                      t('entities:form.none')}
                   </TagContainer>
                 </p>
-                <p><strong>{t('entities:form.dependencies')}：</strong>{form.getFieldValue('dependencies')?.join(', ') || t('entities:form.none')}</p>
+                <p>
+                  <strong>{t('entities:form.dependencies')}：</strong>
+                  {form.getFieldValue('dependencies')?.join(', ') || t('entities:form.none')}
+                </p>
               </div>
             )
           }
@@ -756,11 +786,7 @@ const EntityForm: React.FC = () => {
         {/* 面包屑导航 */}
         <StyledBreadcrumb $isDark={isDark}>
           <Breadcrumb.Item>
-            <Button 
-              type="text" 
-              icon={<HomeOutlined />}
-              onClick={() => navigate('/entities')}
-            >
+            <Button type="text" icon={<HomeOutlined />} onClick={() => navigate('/entities')}>
               {t('menu:entities')}
             </Button>
           </Breadcrumb.Item>
@@ -782,18 +808,13 @@ const EntityForm: React.FC = () => {
 
         {/* 步骤条 */}
         <StyledCard $isDark={isDark}>
-          <StyledSteps
-            $isDark={isDark}
-            current={currentStep}
-            items={steps}
-          />
+          <StyledSteps $isDark={isDark} current={currentStep} items={steps} />
         </StyledCard>
 
         {/* 表单内容 */}
         <Form
           form={form}
           layout="vertical"
-          onFinish={handleSubmit}
           initialValues={{
             status: 'active'
           }}
@@ -807,28 +828,31 @@ const EntityForm: React.FC = () => {
             <ActionButtons>
               <div className="left-buttons">
                 {currentStep > 0 && (
-                  <Button onClick={() => setCurrentStep(currentStep - 1)}>
-                    {t('entities:form.previousStep')}
-                  </Button>
+                  <Button onClick={() => setCurrentStep(currentStep - 1)}>{t('entities:form.previousStep')}</Button>
                 )}
               </div>
               <div className="right-buttons">
-                <Button onClick={handleBack}>
-                  {t('common:cancel')}
-                </Button>
+                <Button onClick={handleBack}>{t('common:cancel')}</Button>
                 {currentStep < steps.length - 1 ? (
-                  <Button 
-                    type="primary" 
-                    onClick={() => setCurrentStep(currentStep + 1)}
-                  >
+                  <Button type="primary" onClick={() => setCurrentStep(currentStep + 1)}>
                     {t('entities:form.nextStep')}
                   </Button>
                 ) : (
-                  <Button 
-                    type="primary" 
-                    htmlType="submit" 
+                  <Button
+                    type="primary"
                     loading={loading}
                     icon={<SaveOutlined />}
+                    onClick={() => {
+                      form
+                        .validateFields()
+                        .then(values => {
+                          handleSubmit(values);
+                        })
+                        .catch(errorInfo => {
+                          console.log('表单验证失败:', errorInfo);
+                          message.error(t('entities:form.validationFailed'));
+                        });
+                    }}
                   >
                     {mode === 'create' ? t('entities:form.createEntity') : t('entities:form.updateEntity')}
                   </Button>
