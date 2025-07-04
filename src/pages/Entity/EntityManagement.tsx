@@ -40,6 +40,7 @@ import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
 import { entityApi } from '../../services/entityApi';
+import { enumApi, EnumItem } from '../../services/enumApi';
 import '../../styles/entity-management.css';
 
 const { Title, Paragraph } = Typography;
@@ -90,11 +91,56 @@ const EntityManagement: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [entities, setEntities] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [entityTypes, setEntityTypes] = useState<EnumItem[]>([]);
+  const [entityStatuses, setEntityStatuses] = useState<EnumItem[]>([]);
+  const [enumLoading, setEnumLoading] = useState(false);
 
   useEffect(() => {
     setPageTitle(t('entities:title'));
     loadEntities();
+    loadEnumData();
   }, [t]);
+
+  // 加载枚举数据
+  const loadEnumData = async () => {
+    setEnumLoading(true);
+    try {
+      console.log('🚀 开始加载枚举数据');
+
+      // 批量获取实体相关枚举
+      const response = await enumApi.getEntityEnums();
+
+      if (response.success && response.data) {
+        console.log('✅ 成功获取枚举数据:', response.data);
+
+        // 分别设置实体类型和状态枚举
+        const entityTypeEnum = response.data.find(item => item.type === 'EntityType');
+        const entityStatusEnum = response.data.find(item => item.type === 'EntityStatus');
+
+        if (entityTypeEnum) {
+          setEntityTypes(entityTypeEnum.items);
+          console.log('📂 实体类型枚举:', entityTypeEnum.items);
+        }
+
+        if (entityStatusEnum) {
+          setEntityStatuses(entityStatusEnum.items);
+          console.log('📊 实体状态枚举:', entityStatusEnum.items);
+        }
+      } else {
+        console.warn('⚠️ 枚举API返回数据格式异常:', response);
+        // 设置默认值
+        setEntityTypes([]);
+        setEntityStatuses([]);
+      }
+    } catch (error) {
+      console.error('❌ 加载枚举数据失败:', error);
+      // 设置默认值
+      setEntityTypes([]);
+      setEntityStatuses([]);
+    } finally {
+      setEnumLoading(false);
+    }
+  };
 
   // 加载实体列表数据
   const loadEntities = async () => {
@@ -375,27 +421,30 @@ const EntityManagement: React.FC = () => {
                 onChange={setFilterType}
                 style={{ width: 120 }}
                 placeholder={t('entities:typeFilter')}
+                loading={enumLoading}
               >
                 <Option value="all">{t('entities:allTypes')}</Option>
-                <Option value="report">{t('entities:types.report')}</Option>
-                <Option value="business_link">{t('entities:types.businessLink')}</Option>
-                <Option value="business_system">{t('entities:types.businessSystem')}</Option>
-                <Option value="api">{t('entities:types.api')}</Option>
-                <Option value="database">{t('entities:types.database')}</Option>
-                <Option value="table">{t('entities:types.table')}</Option>
-                <Option value="middleware">{t('entities:types.middleware')}</Option>
-                <Option value="microservice">{t('entities:types.microservice')}</Option>
-                <Option value="scheduled_job">{t('entities:types.scheduledJob')}</Option>
-                <Option value="configuration">{t('entities:types.configuration')}</Option>
+                {entityTypes.map(type => (
+                  <Option key={type.value} value={type.value}>
+                    {type.label}
+                  </Option>
+                ))}
               </Select>
             </Col>
             <Col>
-              <Select value={filterStatus} onChange={setFilterStatus} style={{ width: 100 }} placeholder="状态">
+              <Select
+                value={filterStatus}
+                onChange={setFilterStatus}
+                style={{ width: 100 }}
+                placeholder="状态"
+                loading={enumLoading}
+              >
                 <Option value="all">所有状态</Option>
-                <Option value="active">活跃</Option>
-                <Option value="running">运行中</Option>
-                <Option value="inactive">停用</Option>
-                <Option value="warning">告警</Option>
+                {entityStatuses.map(status => (
+                  <Option key={status.value} value={status.value}>
+                    {status.label}
+                  </Option>
+                ))}
               </Select>
             </Col>
           </Row>
