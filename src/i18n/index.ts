@@ -195,12 +195,7 @@ i18n
     contextSeparator: '_',
 
     // 缺失键处理
-    saveMissing: import.meta.env.DEV,
-    missingKeyHandler: (lng, ns, key) => {
-      if (import.meta.env.DEV) {
-        console.warn(`Missing translation key: ${key} for language: ${lng}`);
-      }
-    }
+    saveMissing: import.meta.env.DEV
   });
 
 export default i18n;
