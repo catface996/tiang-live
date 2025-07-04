@@ -192,8 +192,9 @@ export const graphApi = {
 
   /**
    * 根据ID获取图详情
+   * @param id 图ID，支持字符串或数字类型，避免大整数精度丢失
    */
-  async getGraphById(id: number): Promise<ApiResponse<Graph>> {
+  async getGraphById(id: string | number): Promise<ApiResponse<Graph>> {
     return graphApiClient.get(`/${id}`);
   },
 

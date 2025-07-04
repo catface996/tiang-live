@@ -325,7 +325,8 @@ const EntityTopologyDetail: React.FC = () => {
       console.log('🚀 开始加载拓扑图详情, ID:', id);
 
       // 调用真实的API接口获取图详情
-      const response = await graphApi.getGraphById(Number(id));
+      // 注意：不使用Number(id)转换，避免大整数精度丢失
+      const response = await graphApi.getGraphById(id);
 
       if (response.success && response.data) {
         const graph = response.data;
