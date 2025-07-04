@@ -95,96 +95,81 @@ const EntityManagement: React.FC = () => {
   const [entityStatuses, setEntityStatuses] = useState<EnumItem[]>([]);
   const [enumLoading, setEnumLoading] = useState(false);
 
-  // 测试单独获取枚举数据
-  const testEnumData = async () => {
-    try {
-      console.log('🧪 测试单独获取EntityType枚举');
-      const typeResponse = await enumApi.getEntityTypes();
-      console.log('🧪 EntityType响应:', JSON.stringify(typeResponse, null, 2));
-
-      console.log('🧪 测试单独获取EntityStatus枚举');
-      const statusResponse = await enumApi.getEntityStatuses();
-      console.log('🧪 EntityStatus响应:', JSON.stringify(statusResponse, null, 2));
-
-      console.log('🧪 测试批量获取枚举');
-      const batchResponse = await enumApi.getEntityEnums();
-      console.log('🧪 批量响应:', JSON.stringify(batchResponse, null, 2));
-    } catch (error) {
-      console.error('🧪 测试失败:', error);
-    }
-  };
-
   useEffect(() => {
     setPageTitle(t('entities:title'));
     loadEntities();
     loadEnumData();
-
-    // 添加测试调用
-    setTimeout(() => {
-      testEnumData();
-    }, 2000);
   }, []); // 移除t依赖，避免重复触发
 
   // 加载枚举数据
   const loadEnumData = async () => {
     setEnumLoading(true);
     try {
-      console.log('🚀 开始加载枚举数据');
+      console.log('🚀 开始加载枚举数据 - 使用batch接口');
 
       // 批量获取实体相关枚举
       const response = await enumApi.getEntityEnums();
 
-      console.log('📡 枚举API响应:', response);
+      console.log('📡 Batch API完整响应:', JSON.stringify(response, null, 2));
 
-      if (response.success && response.data) {
-        console.log('✅ 成功获取枚举数据:', response.data);
-        console.log('📊 枚举数据类型:', typeof response.data);
-        console.log('📊 枚举数据长度:', response.data.length);
+      if (response && response.success && response.data) {
+        console.log('✅ Batch接口调用成功');
+        console.log('📊 返回的枚举数据:', response.data);
+        console.log('📊 数据类型:', typeof response.data);
+        console.log('📊 是否为数组:', Array.isArray(response.data));
 
-        // 分别设置实体类型和状态枚举
-        const entityTypeEnum = response.data.find(item => item.type === 'EntityType');
-        const entityStatusEnum = response.data.find(item => item.type === 'EntityStatus');
+        if (Array.isArray(response.data)) {
+          console.log('📊 枚举数组长度:', response.data.length);
 
-        console.log('🔍 查找EntityType结果:', entityTypeEnum);
-        console.log('🔍 查找EntityStatus结果:', entityStatusEnum);
+          // 遍历每个枚举项
+          response.data.forEach((enumItem, index) => {
+            console.log(`📋 枚举项 ${index}:`, {
+              type: enumItem.type,
+              itemsCount: enumItem.items ? enumItem.items.length : 0,
+              items: enumItem.items
+            });
+          });
 
-        if (entityTypeEnum && entityTypeEnum.items) {
-          setEntityTypes(entityTypeEnum.items);
-          console.log('📂 设置实体类型枚举:', entityTypeEnum.items);
-          console.log('📂 实体类型枚举数量:', entityTypeEnum.items.length);
+          // 查找EntityType
+          const entityTypeEnum = response.data.find(item => item.type === 'EntityType');
+          if (entityTypeEnum && entityTypeEnum.items) {
+            console.log('✅ 找到EntityType枚举，设置到状态');
+            setEntityTypes(entityTypeEnum.items);
+          } else {
+            console.warn('⚠️ 未找到EntityType枚举');
+            setEntityTypes([]);
+          }
+
+          // 查找EntityStatus
+          const entityStatusEnum = response.data.find(item => item.type === 'EntityStatus');
+          if (entityStatusEnum && entityStatusEnum.items) {
+            console.log('✅ 找到EntityStatus枚举，设置到状态');
+            setEntityStatuses(entityStatusEnum.items);
+          } else {
+            console.warn('⚠️ 未找到EntityStatus枚举');
+            setEntityStatuses([]);
+          }
         } else {
-          console.warn('⚠️ 未找到EntityType枚举或items为空');
+          console.error('❌ 返回的data不是数组格式');
           setEntityTypes([]);
-        }
-
-        if (entityStatusEnum && entityStatusEnum.items) {
-          setEntityStatuses(entityStatusEnum.items);
-          console.log('📊 设置实体状态枚举:', entityStatusEnum.items);
-          console.log('📊 实体状态枚举数量:', entityStatusEnum.items.length);
-        } else {
-          console.warn('⚠️ 未找到EntityStatus枚举或items为空');
           setEntityStatuses([]);
         }
-
-        // 验证状态设置
-        setTimeout(() => {
-          console.log('🔄 验证状态设置结果:');
-          console.log('📂 当前entityTypes状态:', entityTypes);
-          console.log('📊 当前entityStatuses状态:', entityStatuses);
-        }, 100);
       } else {
-        console.warn('⚠️ 枚举API返回数据格式异常:', response);
-        // 设置默认值
+        console.error('❌ Batch API调用失败或返回格式异常:', {
+          hasResponse: !!response,
+          success: response?.success,
+          hasData: !!response?.data
+        });
         setEntityTypes([]);
         setEntityStatuses([]);
       }
     } catch (error) {
-      console.error('❌ 加载枚举数据失败:', error);
-      // 设置默认值
+      console.error('❌ 加载枚举数据异常:', error);
       setEntityTypes([]);
       setEntityStatuses([]);
     } finally {
       setEnumLoading(false);
+      console.log('🏁 枚举数据加载完成');
     }
   };
 
