@@ -97,7 +97,7 @@ const BaseEntityCard: React.FC<BaseEntityCardProps> = ({ entity, onClick, onEdit
           <div>
             <div style={{ fontWeight: 'bold' }}>{entity.name}</div>
             <Text type="secondary" style={{ fontSize: '12px' }}>
-              {entity.category || entity.type || '未知类型'}
+              {entity.type || '未知类型'}
             </Text>
           </div>
         </Space>
