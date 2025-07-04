@@ -10,7 +10,6 @@ import {
   Space,
   Typography,
   Tag,
-  InputNumber,
   message,
   Steps,
   Alert,
@@ -31,7 +30,9 @@ import {
   TableOutlined,
   CloudServerOutlined,
   DeploymentUnitOutlined,
-  HomeOutlined
+  HomeOutlined,
+  PlusOutlined,
+  MinusCircleOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -507,15 +508,12 @@ const EntityForm: React.FC = () => {
         icon: 'ApiOutlined',
         tags: [t('common:coreService'), t('common:userManagement')],
         entityStatus: 'ACTIVE',
-        version: '1.2.0',
-        port: 8080,
-        healthCheckUrl: '/health',
-        dependencies: [t('common:database'), t('common:redisCache')],
-        attributes: {
-          language: 'Java',
-          framework: 'Spring Boot',
-          database: 'MySQL'
-        }
+        properties: [
+          { key: 'version', value: '1.2.0' },
+          { key: 'port', value: '8080' },
+          { key: 'framework', value: 'Spring Boot' },
+          { key: 'language', value: 'Java' }
+        ]
       };
 
       form.setFieldsValue(mockData);
@@ -558,7 +556,13 @@ const EntityForm: React.FC = () => {
           icon: selectedIcon,
           category: values.category,
           priority: values.priority,
-          ...values.properties
+          // 将Properties数组转换为对象
+          ...(values.properties || []).reduce((acc: any, prop: { key: string; value: string }) => {
+            if (prop.key && prop.value) {
+              acc[prop.key] = prop.value;
+            }
+            return acc;
+          }, {})
         },
         metadata: {
           icon: selectedIcon,
@@ -704,6 +708,15 @@ const EntityForm: React.FC = () => {
             </Form.Item>
           </Col>
           <Col xs={24}>
+            <Form.Item name="tags" label={t('entities:form.tags')}>
+              <Select mode="tags" placeholder={t('entities:form.tagsPlaceholder')} style={{ width: '100%' }}>
+                <Option value={t('common:coreService')}>{t('common:coreService')}</Option>
+                <Option value={t('common:basicService')}>{t('common:basicService')}</Option>
+                <Option value={t('common:businessService')}>{t('common:businessService')}</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24}>
             <Form.Item label={t('entities:form.iconSelection')}>
               <IconSelector $isDark={isDark}>
                 {iconOptions.map(option => (
@@ -726,46 +739,48 @@ const EntityForm: React.FC = () => {
   const renderConfigInfo = () => (
     <StyledCard $isDark={isDark} title={t('entities:form.configInfo')} extra={<SettingOutlined />}>
       <FormSection $isDark={isDark}>
-        <Row gutter={24}>
-          <Col xs={24} md={12}>
-            <Form.Item name="version" label={t('entities:form.version')}>
-              <Input placeholder={t('entities:form.versionPlaceholder')} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item name="port" label={t('entities:form.port')}>
-              <InputNumber
-                placeholder={t('entities:form.portPlaceholder')}
-                min={1}
-                max={65535}
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item name="healthCheckUrl" label={t('entities:form.healthCheckUrl')}>
-              <Input placeholder={t('entities:form.healthCheckUrlPlaceholder')} />
-            </Form.Item>
-          </Col>
-          <Col xs={24} md={12}>
-            <Form.Item name="tags" label={t('entities:form.tags')}>
-              <Select mode="tags" placeholder={t('entities:form.tagsPlaceholder')} style={{ width: '100%' }}>
-                <Option value={t('common:coreService')}>{t('common:coreService')}</Option>
-                <Option value={t('common:basicService')}>{t('common:basicService')}</Option>
-                <Option value={t('common:businessService')}>{t('common:businessService')}</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col xs={24}>
-            <Form.Item name="dependencies" label={t('entities:form.dependencies')}>
-              <Select mode="tags" placeholder={t('entities:form.dependenciesPlaceholder')} style={{ width: '100%' }}>
-                <Option value={t('common:database')}>{t('common:database')}</Option>
-                <Option value={t('common:redisCache')}>{t('common:redisCache')}</Option>
-                <Option value={t('common:messageQueue')}>{t('common:messageQueue')}</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
+        <Form.List name="properties">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Row key={key} gutter={16} style={{ marginBottom: 16 }}>
+                  <Col xs={24} md={10}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'key']}
+                      rules={[{ required: true, message: '请输入属性名' }]}
+                    >
+                      <Input placeholder="属性名 (如: version, port)" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'value']}
+                      rules={[{ required: true, message: '请输入属性值' }]}
+                    >
+                      <Input placeholder="属性值 (如: 1.0.0, 8080)" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={2}>
+                    <Button
+                      type="text"
+                      danger
+                      icon={<MinusCircleOutlined />}
+                      onClick={() => remove(name)}
+                      style={{ marginTop: 4 }}
+                    />
+                  </Col>
+                </Row>
+              ))}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                  添加属性
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
       </FormSection>
     </StyledCard>
   );
@@ -806,6 +821,13 @@ const EntityForm: React.FC = () => {
                   {form.getFieldValue('entityStatus')}
                 </p>
                 <p>
+                  <strong>{t('entities:form.tags')}：</strong>
+                  <TagContainer $isDark={isDark}>
+                    {form.getFieldValue('tags')?.map((tag: string) => <Tag key={tag}>{tag}</Tag>) ||
+                      t('entities:form.none')}
+                  </TagContainer>
+                </p>
+                <p>
                   <strong>{t('common:description')}：</strong>
                   {form.getFieldValue('description')}
                 </p>
@@ -817,29 +839,22 @@ const EntityForm: React.FC = () => {
             label: t('entities:form.configInfo'),
             children: (
               <div style={{ padding: '16px 0' }}>
-                <p>
-                  <strong>{t('entities:form.version')}：</strong>
-                  {form.getFieldValue('version') || t('entities:form.notSet')}
-                </p>
-                <p>
-                  <strong>{t('entities:form.port')}：</strong>
-                  {form.getFieldValue('port') || t('entities:form.notSet')}
-                </p>
-                <p>
-                  <strong>{t('entities:form.healthCheckUrl')}：</strong>
-                  {form.getFieldValue('healthCheckUrl') || t('entities:form.notSet')}
-                </p>
-                <p>
-                  <strong>{t('entities:form.tags')}：</strong>
-                  <TagContainer $isDark={isDark}>
-                    {form.getFieldValue('tags')?.map((tag: string) => <Tag key={tag}>{tag}</Tag>) ||
-                      t('entities:form.none')}
-                  </TagContainer>
-                </p>
-                <p>
-                  <strong>{t('entities:form.dependencies')}：</strong>
-                  {form.getFieldValue('dependencies')?.join(', ') || t('entities:form.none')}
-                </p>
+                <strong>属性配置：</strong>
+                {(() => {
+                  const properties = form.getFieldValue('properties') || [];
+                  if (properties.length === 0) {
+                    return <p style={{ color: '#999', marginTop: 8 }}>暂无配置属性</p>;
+                  }
+                  return (
+                    <div style={{ marginTop: 8 }}>
+                      {properties.map((prop: { key: string; value: string }, index: number) => (
+                        <p key={index} style={{ margin: '4px 0', paddingLeft: 16 }}>
+                          <strong>{prop.key}:</strong> {prop.value}
+                        </p>
+                      ))}
+                    </div>
+                  );
+                })()}
               </div>
             )
           }
