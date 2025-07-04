@@ -101,6 +101,12 @@ const EntityManagement: React.FC = () => {
     loadEnumData();
   }, []); // 移除t依赖，避免重复触发
 
+  // 监听枚举状态变化
+  useEffect(() => {
+    console.log('🔄 EntityTypes状态变化:', entityTypes);
+    console.log('🔄 EntityStatuses状态变化:', entityStatuses);
+  }, [entityTypes, entityStatuses]);
+
   // 加载枚举数据
   const loadEnumData = async () => {
     setEnumLoading(true);
@@ -489,18 +495,11 @@ const EntityManagement: React.FC = () => {
                 loading={enumLoading}
               >
                 <Option value="all">{t('entities:allTypes')}</Option>
-                {(() => {
-                  console.log('🎨 渲染实体类型下拉框，entityTypes:', entityTypes);
-                  console.log('🎨 entityTypes长度:', entityTypes.length);
-                  return entityTypes.map(type => {
-                    console.log('🎨 渲染类型选项:', type);
-                    return (
-                      <Option key={type.value} value={type.value}>
-                        {type.label}
-                      </Option>
-                    );
-                  });
-                })()}
+                {entityTypes.map(type => (
+                  <Option key={type.value} value={type.value}>
+                    {type.label}
+                  </Option>
+                ))}
               </Select>
             </Col>
             <Col>
@@ -512,18 +511,11 @@ const EntityManagement: React.FC = () => {
                 loading={enumLoading}
               >
                 <Option value="all">所有状态</Option>
-                {(() => {
-                  console.log('🎨 渲染实体状态下拉框，entityStatuses:', entityStatuses);
-                  console.log('🎨 entityStatuses长度:', entityStatuses.length);
-                  return entityStatuses.map(status => {
-                    console.log('🎨 渲染状态选项:', status);
-                    return (
-                      <Option key={status.value} value={status.value}>
-                        {status.label}
-                      </Option>
-                    );
-                  });
-                })()}
+                {entityStatuses.map(status => (
+                  <Option key={status.value} value={status.value}>
+                    {status.label}
+                  </Option>
+                ))}
               </Select>
             </Col>
           </Row>
