@@ -14,8 +14,7 @@ import {
   Steps,
   Alert,
   Tabs,
-  Breadcrumb,
-  Modal
+  Breadcrumb
 } from 'antd';
 import {
   SaveOutlined,
@@ -528,27 +527,24 @@ const EntityForm: React.FC = () => {
   const handleSubmit = async (values: any) => {
     console.log('🎯 handleSubmit被调用!');
     console.log('📋 接收到的values:', values);
+
+    // 直接从form获取所有字段的值
+    const formData = {
+      name: form.getFieldValue('name'),
+      type: form.getFieldValue('type'),
+      description: form.getFieldValue('description'),
+      entityStatus: form.getFieldValue('entityStatus'),
+      tags: form.getFieldValue('tags'),
+      properties: form.getFieldValue('properties')
+    };
+
+    console.log('📋 手动收集的表单数据:', formData);
     console.log('🔧 当前模式:', mode);
-    console.log('📝 实体名称:', values.name);
+    console.log('📝 实体名称:', formData.name);
 
-    // 简化测试：直接使用固定文本的Modal
-    console.log('🚀 即将显示确认对话框...');
-
-    Modal.confirm({
-      title: '确认创建实体',
-      content: `确认创建实体 "${values.name || '未命名实体'}" 吗？`,
-      okText: '确认',
-      cancelText: '取消',
-      onOk: async () => {
-        console.log('✅ 用户确认提交，调用performSubmit');
-        await performSubmit(values);
-      },
-      onCancel: () => {
-        console.log('❌ 用户取消提交');
-      }
-    });
-
-    console.log('📋 Modal.confirm已调用');
+    // 直接调用API，不显示确认对话框
+    console.log('🚀 直接调用performSubmit...');
+    await performSubmit(formData);
   };
 
   const performSubmit = async (values: any) => {
@@ -559,17 +555,14 @@ const EntityForm: React.FC = () => {
     setLoading(true);
     try {
       const submitData = {
-        id: mode === 'edit' ? Number(id) : undefined,
-        name: values.name,
-        description: values.description || '',
-        type: values.type,
-        planeId: values.planeId || 1, // 默认平面ID，实际应该从表单获取
+        name: values.name || '测试实体',
+        description: values.description || '测试描述',
+        type: values.type || 'USER',
+        planeId: 1,
         status: values.entityStatus === 'ACTIVE' ? EntityStatus.ACTIVE : EntityStatus.INACTIVE,
         labels: values.tags || [],
         properties: {
           icon: selectedIcon,
-          category: values.category,
-          priority: values.priority,
           // 将Properties数组转换为对象
           ...(values.properties || []).reduce((acc: any, prop: { key: string; value: string }) => {
             if (prop.key && prop.value) {
@@ -586,23 +579,20 @@ const EntityForm: React.FC = () => {
       };
 
       console.log('🚀 提交实体数据:', submitData);
-      console.log('📡 即将调用API:', mode === 'create' ? 'createEntity' : 'updateEntity');
+      console.log('📡 直接调用entityApi.saveEntity');
 
-      // 调用真实的API
-      const response =
-        mode === 'create' ? await entityApi.createEntity(submitData) : await entityApi.updateEntity(submitData);
+      // 直接调用entityApi.saveEntity方法
+      const response = await entityApi.saveEntity(submitData);
 
       console.log('📥 API响应:', response);
 
       if (response.success) {
         console.log('✅ 实体保存成功:', response.data);
-        message.success(mode === 'create' ? t('entities:form.createSuccess') : t('entities:form.updateSuccess'));
+        message.success('实体创建成功');
         navigate('/entities');
       } else {
         console.error('❌ 实体保存失败:', response);
-        message.error(
-          response.message || (mode === 'create' ? t('entities:form.createFailed') : t('entities:form.updateFailed'))
-        );
+        message.error(response.message || '实体创建失败');
       }
     } catch (error) {
       console.error('❌ 实体保存异常:', error);
@@ -612,7 +602,7 @@ const EntityForm: React.FC = () => {
         response: error.response?.data,
         status: error.response?.status
       });
-      message.error(mode === 'create' ? t('entities:form.createFailed') : t('entities:form.updateFailed'));
+      message.error('实体创建失败');
     } finally {
       setLoading(false);
     }
