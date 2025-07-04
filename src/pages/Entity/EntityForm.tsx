@@ -526,6 +526,10 @@ const EntityForm: React.FC = () => {
   };
 
   const handleSubmit = async (values: any) => {
+    console.log('🎯 handleSubmit被调用!');
+    console.log('📋 接收到的values:', values);
+    console.log('🔧 当前模式:', mode);
+
     // 显示确认对话框
     Modal.confirm({
       title: mode === 'create' ? t('entities:form.confirmCreate') : t('entities:form.confirmUpdate'),
@@ -536,7 +540,11 @@ const EntityForm: React.FC = () => {
       okText: t('common:confirm'),
       cancelText: t('common:cancel'),
       onOk: async () => {
+        console.log('✅ 用户确认提交，调用performSubmit');
         await performSubmit(values);
+      },
+      onCancel: () => {
+        console.log('❌ 用户取消提交');
       }
     });
   };
@@ -929,6 +937,12 @@ const EntityForm: React.FC = () => {
               </div>
               <div className="right-buttons">
                 <Button onClick={handleBack}>{t('common:cancel')}</Button>
+                {/* 调试信息 */}
+                {console.log('🔍 调试信息:', {
+                  currentStep,
+                  stepsLength: steps.length,
+                  isLastStep: currentStep >= steps.length - 1
+                })}
                 {currentStep < steps.length - 1 ? (
                   <Button type="primary" onClick={() => setCurrentStep(currentStep + 1)}>
                     {t('entities:form.nextStep')}
@@ -939,13 +953,17 @@ const EntityForm: React.FC = () => {
                     loading={loading}
                     icon={<SaveOutlined />}
                     onClick={() => {
+                      console.log('🎯 创建实体按钮被点击!');
+                      console.log('📋 当前步骤:', currentStep);
+                      console.log('📊 步骤总数:', steps.length);
                       form
                         .validateFields()
                         .then(values => {
+                          console.log('✅ 表单验证通过，调用handleSubmit');
                           handleSubmit(values);
                         })
                         .catch(errorInfo => {
-                          console.log('表单验证失败:', errorInfo);
+                          console.log('❌ 表单验证失败:', errorInfo);
                           message.error(t('entities:form.validationFailed'));
                         });
                     }}
