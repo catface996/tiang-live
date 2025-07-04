@@ -115,13 +115,15 @@ const EntityManagement: React.FC = () => {
         // 将后端数据转换为前端组件期望的格式
         const transformedEntities = response.data.map(entity => {
           console.log('🔄 转换前的实体数据:', entity);
+          console.log('📊 Properties:', entity.properties);
+          console.log('📋 Metadata:', entity.metadata);
 
           const transformed = {
             ...entity,
             // 字段映射：将后端字段映射到前端组件期望的字段
             tags: entity.labels || [], // labels -> tags
             category: entity.type, // type作为category显示
-            owner: entity.properties?.owner || entity.createdBy || '未知', // 从properties或createdBy获取负责人
+            owner: entity.properties?.owner || entity.metadata?.owner || entity.createdBy || '未知', // 从properties、metadata或createdBy获取负责人
             // 保持原有字段
             id: entity.id,
             name: entity.name,
@@ -138,6 +140,7 @@ const EntityManagement: React.FC = () => {
           console.log('🔄 转换后的实体数据:', transformed);
           console.log('🏷️ 标签数据:', transformed.tags);
           console.log('📂 分类数据:', transformed.category);
+          console.log('👤 负责人数据:', transformed.owner);
 
           return transformed;
         });
