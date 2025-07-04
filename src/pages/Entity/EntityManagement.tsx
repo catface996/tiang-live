@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Card, 
-  Tabs, 
-  Space, 
-  Button, 
-  Row, 
-  Col, 
+import {
+  Typography,
+  Card,
+  Tabs,
+  Space,
+  Button,
+  Row,
+  Col,
   Statistic,
   Badge,
   Tag,
@@ -14,12 +14,13 @@ import {
   Select,
   Modal,
   Descriptions,
-  Empty
+  Empty,
+  Spin
 } from 'antd';
-import { 
-  NodeIndexOutlined, 
-  ShareAltOutlined, 
-  PlusOutlined, 
+import {
+  NodeIndexOutlined,
+  ShareAltOutlined,
+  PlusOutlined,
   ReloadOutlined,
   SettingOutlined,
   ExportOutlined,
@@ -38,7 +39,7 @@ import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
-import entitiesData from '../../data/entitiesMock.json';
+import { entityApi } from '../../services/entityApi';
 import '../../styles/entity-management.css';
 
 const { Title, Paragraph } = Typography;
@@ -88,11 +89,41 @@ const EntityManagement: React.FC = () => {
   const [selectedEntity, setSelectedEntity] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [entities, setEntities] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setPageTitle(t('entities:title'));
-    setEntities(entitiesData.entities);
+    loadEntities();
   }, [t]);
+
+  // 加载实体列表数据
+  const loadEntities = async () => {
+    setLoading(true);
+    try {
+      console.log('🚀 开始加载实体列表');
+
+      // 调用真实的API接口获取实体列表
+      const response = await entityApi.listEntities({
+        page: 1,
+        size: 100 // 加载足够多的数据用于展示
+      });
+
+      if (response.success && response.data) {
+        console.log('✅ 成功获取实体列表:', response.data);
+        setEntities(response.data);
+      } else {
+        console.warn('⚠️ API返回数据格式异常:', response);
+        setEntities([]);
+        // 这里可以添加错误提示
+      }
+    } catch (error) {
+      console.error('❌ 加载实体列表失败:', error);
+      setEntities([]);
+      // 这里可以添加错误提示
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 处理创建实体
   const handleCreateEntity = () => {
@@ -141,10 +172,11 @@ const EntityManagement: React.FC = () => {
 
     // Filter by search text
     if (searchText) {
-      filtered = filtered.filter(entity => 
-        entity.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        entity.description.toLowerCase().includes(searchText.toLowerCase()) ||
-        entity.tags?.some((tag: string) => tag.toLowerCase().includes(searchText.toLowerCase()))
+      filtered = filtered.filter(
+        entity =>
+          entity.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          entity.description.toLowerCase().includes(searchText.toLowerCase()) ||
+          entity.tags?.some((tag: string) => tag.toLowerCase().includes(searchText.toLowerCase()))
       );
     }
 
@@ -169,16 +201,14 @@ const EntityManagement: React.FC = () => {
       <TabContent>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
-            <Title level={3} style={{ margin: 0 }}>{t('entities:title')}</Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
-              {t('entities:subtitle')}
-            </Paragraph>
+            <Title level={3} style={{ margin: 0 }}>
+              {t('entities:title')}
+            </Title>
+            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>{t('entities:subtitle')}</Paragraph>
           </div>
           <Space>
-            <Button icon={<ExportOutlined />}>
-              {t('common:export')}
-            </Button>
-            <Button icon={<ReloadOutlined />}>
+            <Button icon={<ExportOutlined />}>{t('common:export')}</Button>
+            <Button icon={<ReloadOutlined />} onClick={loadEntities} loading={loading}>
               {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateEntity}>
@@ -234,16 +264,10 @@ const EntityManagement: React.FC = () => {
         {/* 分类标签 */}
         <div style={{ marginBottom: 16 }}>
           <Space wrap>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'all'}
-              onChange={() => setSelectedCategory('all')}
-            >
+            <Tag.CheckableTag checked={selectedCategory === 'all'} onChange={() => setSelectedCategory('all')}>
               全部 ({stats.total})
             </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'report'}
-              onChange={() => setSelectedCategory('report')}
-            >
+            <Tag.CheckableTag checked={selectedCategory === 'report'} onChange={() => setSelectedCategory('report')}>
               📊 {t('entities:types.report')} ({typeStats.report || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
@@ -258,10 +282,7 @@ const EntityManagement: React.FC = () => {
             >
               🏢 {t('entities:types.businessSystem')} ({typeStats.business_system || 0})
             </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'api'}
-              onChange={() => setSelectedCategory('api')}
-            >
+            <Tag.CheckableTag checked={selectedCategory === 'api'} onChange={() => setSelectedCategory('api')}>
               🔌 {t('entities:types.api')} ({typeStats.api || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
@@ -270,10 +291,7 @@ const EntityManagement: React.FC = () => {
             >
               💾 {t('entities:types.database')} ({typeStats.database || 0})
             </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'table'}
-              onChange={() => setSelectedCategory('table')}
-            >
+            <Tag.CheckableTag checked={selectedCategory === 'table'} onChange={() => setSelectedCategory('table')}>
               📋 {t('entities:types.table')} ({typeStats.table || 0})
             </Tag.CheckableTag>
             <Tag.CheckableTag
@@ -310,7 +328,7 @@ const EntityManagement: React.FC = () => {
               <Search
                 placeholder={t('entities:searchPlaceholder')}
                 value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={e => setSearchText(e.target.value)}
                 style={{ width: '100%' }}
                 allowClear
               />
@@ -336,12 +354,7 @@ const EntityManagement: React.FC = () => {
               </Select>
             </Col>
             <Col>
-              <Select
-                value={filterStatus}
-                onChange={setFilterStatus}
-                style={{ width: 100 }}
-                placeholder="状态"
-              >
+              <Select value={filterStatus} onChange={setFilterStatus} style={{ width: 100 }} placeholder="状态">
                 <Option value="all">所有状态</Option>
                 <Option value="active">活跃</Option>
                 <Option value="running">运行中</Option>
@@ -353,23 +366,17 @@ const EntityManagement: React.FC = () => {
         </FilterBar>
 
         {/* Entity Cards Grid */}
-        {filteredEntities.length > 0 ? (
-          <EntityGrid>
-            {filteredEntities.map((entity) => (
-              <EntityCard
-                key={entity.id}
-                entity={entity}
-                onClick={handleEntityClick}
-                onEdit={handleEditEntity}
-              />
-            ))}
-          </EntityGrid>
-        ) : (
-          <Empty 
-            description={t('entities:noEntitiesFound')}
-            style={{ margin: '60px 0' }}
-          />
-        )}
+        <Spin spinning={loading}>
+          {filteredEntities.length > 0 ? (
+            <EntityGrid>
+              {filteredEntities.map(entity => (
+                <EntityCard key={entity.id} entity={entity} onClick={handleEntityClick} onEdit={handleEditEntity} />
+              ))}
+            </EntityGrid>
+          ) : (
+            <Empty description={t('entities:noEntitiesFound')} style={{ margin: '60px 0' }} />
+          )}
+        </Spin>
       </TabContent>
     );
   };
@@ -400,50 +407,44 @@ const EntityManagement: React.FC = () => {
           </Descriptions.Item>
           <Descriptions.Item label={t('entities:category')}>{selectedEntity.category}</Descriptions.Item>
           <Descriptions.Item label="状态">
-            <Badge 
-              status={selectedEntity.status === 'active' || selectedEntity.status === 'running' ? 'success' : 'error'} 
-              text={selectedEntity.status} 
+            <Badge
+              status={selectedEntity.status === 'active' || selectedEntity.status === 'running' ? 'success' : 'error'}
+              text={selectedEntity.status}
             />
           </Descriptions.Item>
           <Descriptions.Item label="描述">{selectedEntity.description}</Descriptions.Item>
           <Descriptions.Item label="负责人">{selectedEntity.owner}</Descriptions.Item>
-          
-          {selectedEntity.version && (
-            <Descriptions.Item label="版本">{selectedEntity.version}</Descriptions.Item>
-          )}
-          
+
+          {selectedEntity.version && <Descriptions.Item label="版本">{selectedEntity.version}</Descriptions.Item>}
+
           {selectedEntity.technology && (
             <Descriptions.Item label="技术栈">{selectedEntity.technology}</Descriptions.Item>
           )}
-          
-          {selectedEntity.instances && (
-            <Descriptions.Item label="实例数">{selectedEntity.instances}</Descriptions.Item>
-          )}
-          
+
+          {selectedEntity.instances && <Descriptions.Item label="实例数">{selectedEntity.instances}</Descriptions.Item>}
+
           {selectedEntity.method && (
             <Descriptions.Item label="请求方法">
-              <Tag color={selectedEntity.method === 'GET' ? 'green' : 'blue'}>
-                {selectedEntity.method}
-              </Tag>
+              <Tag color={selectedEntity.method === 'GET' ? 'green' : 'blue'}>{selectedEntity.method}</Tag>
             </Descriptions.Item>
           )}
-          
+
           {selectedEntity.path && (
             <Descriptions.Item label={t('entities:apiPath')}>
               <code>{selectedEntity.path}</code>
             </Descriptions.Item>
           )}
-          
+
           {selectedEntity.database && (
             <Descriptions.Item label={t('entities:belongsToDatabase')}>{selectedEntity.database}</Descriptions.Item>
           )}
-          
+
           {selectedEntity.tableName && (
             <Descriptions.Item label={t('entities:tableName')}>
               <code>{selectedEntity.tableName}</code>
             </Descriptions.Item>
           )}
-          
+
           <Descriptions.Item label="标签">
             <Space>
               {selectedEntity.tags?.map((tag: string, index: number) => (
@@ -459,10 +460,7 @@ const EntityManagement: React.FC = () => {
             <Row gutter={16}>
               {Object.entries(selectedEntity.metrics).map(([key, value]) => (
                 <Col span={8} key={key}>
-                  <Statistic
-                    title={key}
-                    value={value as string | number}
-                  />
+                  <Statistic title={key} value={value as string | number} />
                 </Col>
               ))}
             </Row>
@@ -489,19 +487,15 @@ const EntityManagement: React.FC = () => {
     <TabContent>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ margin: 0 }}>{t('entities:relationshipGraph')}</Title>
-          <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
-            {t('entities:relationshipGraphDesc')}
-          </Paragraph>
+          <Title level={3} style={{ margin: 0 }}>
+            {t('entities:relationshipGraph')}
+          </Title>
+          <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>{t('entities:relationshipGraphDesc')}</Paragraph>
         </div>
         <Space>
-          <Button icon={<ExportOutlined />}>
-            {t('entities:exportGraph')}
-          </Button>
-          <Button icon={<SettingOutlined />}>
-            {t('entities:graphSettings')}
-          </Button>
-          <Button icon={<ReloadOutlined />}>
+          <Button icon={<ExportOutlined />}>{t('entities:exportGraph')}</Button>
+          <Button icon={<SettingOutlined />}>{t('entities:graphSettings')}</Button>
+          <Button icon={<ReloadOutlined />} onClick={loadEntities} loading={loading}>
             {t('entities:refreshGraph')}
           </Button>
         </Space>
@@ -566,39 +560,32 @@ const EntityManagement: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               {t('entities:title')}
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {t('entities:description')}
-            </Paragraph>
+            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>{t('entities:description')}</Paragraph>
           </div>
         </div>
       </PageHeader>
 
       <Card>
-        <Tabs 
-          activeKey={activeTab} 
-          onChange={handleTabChange}
-          size="large"
-          tabBarStyle={{ marginBottom: 24 }}
-        >
-          <Tabs.TabPane 
+        <Tabs activeKey={activeTab} onChange={handleTabChange} size="large" tabBarStyle={{ marginBottom: 24 }}>
+          <Tabs.TabPane
             tab={
               <Space>
                 <NodeIndexOutlined />
                 {t('entities:title')}
               </Space>
-            } 
+            }
             key="entities"
           >
             {renderEntityManagement()}
           </Tabs.TabPane>
-          
-          <Tabs.TabPane 
+
+          <Tabs.TabPane
             tab={
               <Space>
                 <ShareAltOutlined />
                 {t('entities:relationshipGraph')}
               </Space>
-            } 
+            }
             key="relationships"
           >
             {renderRelationshipGraph()}
