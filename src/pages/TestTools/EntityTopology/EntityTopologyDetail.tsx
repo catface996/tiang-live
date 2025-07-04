@@ -8,9 +8,9 @@ import '../../../styles/entity-topology-detail.css';
 import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
 import DataTabs from '../../../components/EntityTopology/DataTabs';
 import EntityD3RelationshipGraph from '../../../components/EntityTopology/EntityD3RelationshipGraph';
-import availableEntitiesData from '../../../data/availableEntitiesMock.json';
 import availableAgentsData from '../../../data/availableAgentsMock.json';
 import { graphApi, GraphStatus, type Graph, type SaveGraphRequest } from '../../../services/graphApi';
+import { entityApi } from '../../../services/entityApi';
 
 // Agent类型定义
 interface Agent {
@@ -294,6 +294,7 @@ const EntityTopologyDetail: React.FC = () => {
   const [dependencyToDelete, setDependencyToDelete] = useState<Dependency | null>(null);
   const [selectEntityModalVisible, setSelectEntityModalVisible] = useState(false);
   const [availableEntities, setAvailableEntities] = useState<Entity[]>([]);
+  const [entitiesLoading, setEntitiesLoading] = useState(false);
   const [selectedEntityIds, setSelectedEntityIds] = useState<string[]>([]);
   const [addDependencyModalVisible, setAddDependencyModalVisible] = useState(false);
   const [sourceEntityId, setSourceEntityId] = useState<string>('');
@@ -902,15 +903,53 @@ const EntityTopologyDetail: React.FC = () => {
     setTargetEntityId(temp);
   };
 
-  // 处理新增实体
-  const handleAddEntity = () => {
-    // 获取可用的实体列表（排除已经在拓扑中的实体）
-    const currentEntityIds = topologyData?.entities.map(e => e.id) || [];
-    const available = availableEntitiesData.entities.filter(entity => !currentEntityIds.includes(entity.id));
+  // 从API获取实体列表
+  const fetchAvailableEntities = async () => {
+    console.log('🔍 开始获取可用实体列表...');
+    setEntitiesLoading(true);
+    try {
+      // 调用entityApi获取实体列表
+      const response = await entityApi.listEntities({
+        page: 1,
+        size: 1000 // 获取大量实体，可以根据需要调整
+      });
 
-    setAvailableEntities(available);
+      console.log('📥 API响应:', response);
+
+      if (response.success && response.data) {
+        console.log('✅ 成功获取实体列表:', response.data.length, '个实体');
+
+        // 获取当前拓扑中已存在的实体ID
+        const currentEntityIds = topologyData?.entities.map(e => e.id) || [];
+        console.log('🔍 当前拓扑中的实体ID:', currentEntityIds);
+
+        // 过滤掉已经在拓扑中的实体
+        const availableEntitiesList = response.data.filter(entity => !currentEntityIds.includes(entity.id));
+
+        console.log('📋 可用实体列表:', availableEntitiesList.length, '个实体');
+        setAvailableEntities(availableEntitiesList);
+      } else {
+        console.error('❌ 获取实体列表失败:', response);
+        message.error('获取实体列表失败: ' + (response.message || '未知错误'));
+        setAvailableEntities([]);
+      }
+    } catch (error) {
+      console.error('❌ 获取实体列表异常:', error);
+      message.error('获取实体列表失败: ' + (error.message || '网络错误'));
+      setAvailableEntities([]);
+    } finally {
+      setEntitiesLoading(false);
+    }
+  };
+
+  // 处理新增实体
+  const handleAddEntity = async () => {
+    console.log('🎯 点击新增实体按钮');
     setSelectedEntityIds([]);
     setSelectEntityModalVisible(true);
+
+    // 获取可用的实体列表
+    await fetchAvailableEntities();
   };
 
   // 确认添加选中的实体
@@ -1138,12 +1177,12 @@ const EntityTopologyDetail: React.FC = () => {
         okText={t('detail.modals.selectEntity.confirmText', { count: selectedEntityIds.length })}
         cancelText={t('detail.modals.selectEntity.cancelText')}
         width={800}
-        okButtonProps={{ disabled: selectedEntityIds.length === 0 }}
+        okButtonProps={{ disabled: entitiesLoading || selectedEntityIds.length === 0 }}
       >
         <SelectionHint>
           <p>
-            {t('detail.modals.selectEntity.description')}
-            {availableEntities.length > 0 && (
+            {entitiesLoading ? '正在从服务器获取实体列表，请稍候...' : t('detail.modals.selectEntity.description')}
+            {!entitiesLoading && availableEntities.length > 0 && (
               <>
                 {' '}
                 {t('detail.modals.selectEntity.stats', {
@@ -1154,7 +1193,7 @@ const EntityTopologyDetail: React.FC = () => {
             )}
           </p>
         </SelectionHint>
-        {availableEntities.length > 0 && (
+        {!entitiesLoading && availableEntities.length > 0 && (
           <div style={{ marginBottom: 16 }}>
             <Space>
               <Button
@@ -1170,7 +1209,12 @@ const EntityTopologyDetail: React.FC = () => {
             </Space>
           </div>
         )}
-        {availableEntities.length === 0 ? (
+        {entitiesLoading ? (
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            <Spin size="large" />
+            <p style={{ marginTop: '16px', color: '#666' }}>正在加载实体列表...</p>
+          </div>
+        ) : availableEntities.length === 0 ? (
           <Empty description={t('detail.modals.selectEntity.noEntities')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
         ) : (
           <Table
