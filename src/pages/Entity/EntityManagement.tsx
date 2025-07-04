@@ -110,22 +110,44 @@ const EntityManagement: React.FC = () => {
       // 批量获取实体相关枚举
       const response = await enumApi.getEntityEnums();
 
+      console.log('📡 枚举API响应:', response);
+
       if (response.success && response.data) {
         console.log('✅ 成功获取枚举数据:', response.data);
+        console.log('📊 枚举数据类型:', typeof response.data);
+        console.log('📊 枚举数据长度:', response.data.length);
 
         // 分别设置实体类型和状态枚举
         const entityTypeEnum = response.data.find(item => item.type === 'EntityType');
         const entityStatusEnum = response.data.find(item => item.type === 'EntityStatus');
 
-        if (entityTypeEnum) {
+        console.log('🔍 查找EntityType结果:', entityTypeEnum);
+        console.log('🔍 查找EntityStatus结果:', entityStatusEnum);
+
+        if (entityTypeEnum && entityTypeEnum.items) {
           setEntityTypes(entityTypeEnum.items);
-          console.log('📂 实体类型枚举:', entityTypeEnum.items);
+          console.log('📂 设置实体类型枚举:', entityTypeEnum.items);
+          console.log('📂 实体类型枚举数量:', entityTypeEnum.items.length);
+        } else {
+          console.warn('⚠️ 未找到EntityType枚举或items为空');
+          setEntityTypes([]);
         }
 
-        if (entityStatusEnum) {
+        if (entityStatusEnum && entityStatusEnum.items) {
           setEntityStatuses(entityStatusEnum.items);
-          console.log('📊 实体状态枚举:', entityStatusEnum.items);
+          console.log('📊 设置实体状态枚举:', entityStatusEnum.items);
+          console.log('📊 实体状态枚举数量:', entityStatusEnum.items.length);
+        } else {
+          console.warn('⚠️ 未找到EntityStatus枚举或items为空');
+          setEntityStatuses([]);
         }
+
+        // 验证状态设置
+        setTimeout(() => {
+          console.log('🔄 验证状态设置结果:');
+          console.log('📂 当前entityTypes状态:', entityTypes);
+          console.log('📊 当前entityStatuses状态:', entityStatuses);
+        }, 100);
       } else {
         console.warn('⚠️ 枚举API返回数据格式异常:', response);
         // 设置默认值
@@ -343,6 +365,28 @@ const EntityManagement: React.FC = () => {
           </Col>
         </Row>
 
+        {/* 调试信息 - 开发环境显示 */}
+        {process.env.NODE_ENV === 'development' && (
+          <div
+            style={{
+              marginBottom: 16,
+              padding: 12,
+              backgroundColor: '#f6f6f6',
+              borderRadius: 4,
+              fontSize: '12px'
+            }}
+          >
+            <div>
+              <strong>🔍 调试信息:</strong>
+            </div>
+            <div>枚举加载状态: {enumLoading ? '加载中...' : '已完成'}</div>
+            <div>实体类型数量: {entityTypes.length}</div>
+            <div>实体状态数量: {entityStatuses.length}</div>
+            <div>实体类型: {entityTypes.map(t => `${t.value}(${t.label})`).join(', ')}</div>
+            <div>实体状态: {entityStatuses.map(s => `${s.value}(${s.label})`).join(', ')}</div>
+          </div>
+        )}
+
         {/* 分类标签 */}
         <div style={{ marginBottom: 16 }}>
           <Space wrap>
@@ -424,11 +468,18 @@ const EntityManagement: React.FC = () => {
                 loading={enumLoading}
               >
                 <Option value="all">{t('entities:allTypes')}</Option>
-                {entityTypes.map(type => (
-                  <Option key={type.value} value={type.value}>
-                    {type.label}
-                  </Option>
-                ))}
+                {(() => {
+                  console.log('🎨 渲染实体类型下拉框，entityTypes:', entityTypes);
+                  console.log('🎨 entityTypes长度:', entityTypes.length);
+                  return entityTypes.map(type => {
+                    console.log('🎨 渲染类型选项:', type);
+                    return (
+                      <Option key={type.value} value={type.value}>
+                        {type.label}
+                      </Option>
+                    );
+                  });
+                })()}
               </Select>
             </Col>
             <Col>
@@ -440,11 +491,18 @@ const EntityManagement: React.FC = () => {
                 loading={enumLoading}
               >
                 <Option value="all">所有状态</Option>
-                {entityStatuses.map(status => (
-                  <Option key={status.value} value={status.value}>
-                    {status.label}
-                  </Option>
-                ))}
+                {(() => {
+                  console.log('🎨 渲染实体状态下拉框，entityStatuses:', entityStatuses);
+                  console.log('🎨 entityStatuses长度:', entityStatuses.length);
+                  return entityStatuses.map(status => {
+                    console.log('🎨 渲染状态选项:', status);
+                    return (
+                      <Option key={status.value} value={status.value}>
+                        {status.label}
+                      </Option>
+                    );
+                  });
+                })()}
               </Select>
             </Col>
           </Row>
