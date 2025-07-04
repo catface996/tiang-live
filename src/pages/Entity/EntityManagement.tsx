@@ -95,10 +95,34 @@ const EntityManagement: React.FC = () => {
   const [entityStatuses, setEntityStatuses] = useState<EnumItem[]>([]);
   const [enumLoading, setEnumLoading] = useState(false);
 
+  // 测试单独获取枚举数据
+  const testEnumData = async () => {
+    try {
+      console.log('🧪 测试单独获取EntityType枚举');
+      const typeResponse = await enumApi.getEntityTypes();
+      console.log('🧪 EntityType响应:', JSON.stringify(typeResponse, null, 2));
+
+      console.log('🧪 测试单独获取EntityStatus枚举');
+      const statusResponse = await enumApi.getEntityStatuses();
+      console.log('🧪 EntityStatus响应:', JSON.stringify(statusResponse, null, 2));
+
+      console.log('🧪 测试批量获取枚举');
+      const batchResponse = await enumApi.getEntityEnums();
+      console.log('🧪 批量响应:', JSON.stringify(batchResponse, null, 2));
+    } catch (error) {
+      console.error('🧪 测试失败:', error);
+    }
+  };
+
   useEffect(() => {
     setPageTitle(t('entities:title'));
     loadEntities();
     loadEnumData();
+
+    // 添加测试调用
+    setTimeout(() => {
+      testEnumData();
+    }, 2000);
   }, []); // 移除t依赖，避免重复触发
 
   // 加载枚举数据
