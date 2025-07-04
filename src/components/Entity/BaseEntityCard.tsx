@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, Badge, Space, Typography, Button } from 'antd';
-import { 
-  FileTextOutlined, 
-  LinkOutlined, 
+import {
+  FileTextOutlined,
+  LinkOutlined,
   AppstoreOutlined,
   ApiOutlined,
   DatabaseOutlined,
@@ -28,17 +28,17 @@ interface BaseEntityCardProps {
 const StyledCard = styled(Card)`
   margin-bottom: 16px;
   border-radius: 8px;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  
+
   .ant-card-head {
     border-bottom: 1px solid var(--border-color);
     padding: 12px 16px;
   }
-  
+
   .ant-card-body {
     padding: 16px;
   }
@@ -56,13 +56,7 @@ const EntityIcon = styled.div`
   margin-right: 8px;
 `;
 
-const BaseEntityCard: React.FC<BaseEntityCardProps> = ({ 
-  entity, 
-  onClick, 
-  onEdit, 
-  children, 
-  extraActions 
-}) => {
+const BaseEntityCard: React.FC<BaseEntityCardProps> = ({ entity, onClick, onEdit, children, extraActions }) => {
   const getEntityIcon = (type: string) => {
     const iconMap = {
       report: { icon: <FileTextOutlined />, color: '#1890ff' },
@@ -99,12 +93,12 @@ const BaseEntityCard: React.FC<BaseEntityCardProps> = ({
       style={{ cursor: 'pointer' }}
       title={
         <Space>
-          <EntityIcon style={{ backgroundColor: iconConfig.color }}>
-            {iconConfig.icon}
-          </EntityIcon>
+          <EntityIcon style={{ backgroundColor: iconConfig.color }}>{iconConfig.icon}</EntityIcon>
           <div>
             <div style={{ fontWeight: 'bold' }}>{entity.name}</div>
-            <Text type="secondary" style={{ fontSize: '12px' }}>{entity.category}</Text>
+            <Text type="secondary" style={{ fontSize: '12px' }}>
+              {entity.category || entity.type || '未知类型'}
+            </Text>
           </div>
         </Space>
       }
@@ -114,17 +108,14 @@ const BaseEntityCard: React.FC<BaseEntityCardProps> = ({
             type="text"
             size="small"
             icon={<EditOutlined />}
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               onEdit?.(entity);
             }}
             style={{ color: '#1890ff' }}
           />
           {extraActions}
-          <Badge 
-            status={getStatusColor(entity.status) as any} 
-            text={entity.status}
-          />
+          <Badge status={getStatusColor(entity.status) as any} text={entity.status} />
         </Space>
       }
     >

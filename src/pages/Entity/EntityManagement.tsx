@@ -110,29 +110,41 @@ const EntityManagement: React.FC = () => {
 
       if (response.success && response.data) {
         console.log('✅ 成功获取实体列表:', response.data);
+        console.log('📊 原始数据示例:', response.data[0]);
 
         // 将后端数据转换为前端组件期望的格式
-        const transformedEntities = response.data.map(entity => ({
-          ...entity,
-          // 字段映射：将后端字段映射到前端组件期望的字段
-          tags: entity.labels || [], // labels -> tags
-          category: entity.type, // type作为category显示
-          owner: entity.properties?.owner || entity.createdBy || '未知', // 从properties或createdBy获取负责人
-          // 保持原有字段
-          id: entity.id,
-          name: entity.name,
-          description: entity.description || '暂无描述',
-          type: entity.type,
-          status: entity.status?.toLowerCase() || 'active', // 转换为小写
-          planeId: entity.planeId,
-          properties: entity.properties || {},
-          metadata: entity.metadata || {},
-          createdAt: entity.createdAt,
-          updatedAt: entity.updatedAt
-        }));
+        const transformedEntities = response.data.map(entity => {
+          console.log('🔄 转换前的实体数据:', entity);
+
+          const transformed = {
+            ...entity,
+            // 字段映射：将后端字段映射到前端组件期望的字段
+            tags: entity.labels || [], // labels -> tags
+            category: entity.type, // type作为category显示
+            owner: entity.properties?.owner || entity.createdBy || '未知', // 从properties或createdBy获取负责人
+            // 保持原有字段
+            id: entity.id,
+            name: entity.name,
+            description: entity.description || '暂无描述',
+            type: entity.type,
+            status: entity.status?.toLowerCase() || 'active', // 转换为小写
+            planeId: entity.planeId,
+            properties: entity.properties || {},
+            metadata: entity.metadata || {},
+            createdAt: entity.createdAt,
+            updatedAt: entity.updatedAt
+          };
+
+          console.log('🔄 转换后的实体数据:', transformed);
+          console.log('🏷️ 标签数据:', transformed.tags);
+          console.log('📂 分类数据:', transformed.category);
+
+          return transformed;
+        });
 
         setEntities(transformedEntities);
-        console.log('🔄 数据转换完成:', transformedEntities);
+        console.log('🔄 数据转换完成，总数:', transformedEntities.length);
+        console.log('📋 转换后的完整数据:', transformedEntities);
       } else {
         console.warn('⚠️ API返回数据格式异常:', response);
         setEntities([]);
