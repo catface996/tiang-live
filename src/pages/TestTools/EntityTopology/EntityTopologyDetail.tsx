@@ -8,7 +8,6 @@ import '../../../styles/entity-topology-detail.css';
 import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
 import DataTabs from '../../../components/EntityTopology/DataTabs';
 import EntityD3RelationshipGraph from '../../../components/EntityTopology/EntityD3RelationshipGraph';
-import entityTopologyData from '../../../data/entityTopologyMock.json';
 import availableEntitiesData from '../../../data/availableEntitiesMock.json';
 import availableAgentsData from '../../../data/availableAgentsMock.json';
 import { graphApi, GraphStatus, type Graph, type SaveGraphRequest } from '../../../services/graphApi';
@@ -314,95 +313,74 @@ const EntityTopologyDetail: React.FC = () => {
   const [graphForm] = Form.useForm();
   const [graphLoading, setGraphLoading] = useState(false);
 
-  // 模拟数据加载
+  // 加载拓扑图详情数据
   const loadTopologyDetail = useCallback(async () => {
+    if (!id) {
+      message.error(t('detail.messages.invalidId'));
+      return;
+    }
+
     setLoading(true);
     try {
-      // 转换为原有的Entity和Dependency格式（用于DataTabs组件）
-      const entities: Entity[] = entityTopologyData.nodes.map(node => ({
-        id: node.id,
-        name: node.name,
-        type: node.type,
-        status: node.status as 'active' | 'inactive' | 'warning' | 'error',
-        properties: {
-          level: node.level,
-          plane: node.plane,
-          description: node.description,
-          ...Object.fromEntries(
-            Object.entries(node).filter(
-              ([key]) => !['id', 'name', 'type', 'level', 'plane', 'description', 'status'].includes(key)
-            )
-          )
-        },
-        connections: 0 // 将在下面计算
-      }));
+      console.log('🚀 开始加载拓扑图详情, ID:', id);
 
-      // 计算每个实体的连接数
-      entities.forEach(entity => {
-        entity.connections = entityTopologyData.links.filter(
-          link => link.source === entity.id || link.target === entity.id
-        ).length;
-      });
+      // 调用真实的API接口获取图详情
+      const response = await graphApi.getGraphById(Number(id));
 
-      const dependencies: Dependency[] = entityTopologyData.links.map((link, index) => ({
-        id: `dep-${index + 1}`,
-        source: link.source,
-        target: link.target,
-        type: link.type as 'depends_on' | 'provides_to' | 'connects_to',
-        strength: link.strength,
-        description:
-          entityTopologyData.metadata.relationTypes.find((rt: any) => rt.type === link.type)?.description ||
-          link.type.replace('_', ' ')
-      }));
+      if (response.success && response.data) {
+        const graph = response.data;
+        console.log('✅ 成功获取图详情:', graph);
 
-      const mockData: TopologyData = {
-        id: id || '1',
-        name: t('detail.mockData.name', { defaultValue: 'Enterprise Application Topology' }),
-        description: t('detail.mockData.description', {
-          defaultValue:
-            'Enterprise core application system topology diagram showing dependencies between frontend applications, business services, middleware and infrastructure.'
-        }),
-        type: 'application',
-        status: 'active',
-        plane: t('detail.mockData.plane', { defaultValue: 'Application Plane' }),
-        tags: [
-          t('detail.mockData.tags.core', { defaultValue: 'Core' }),
-          t('detail.mockData.tags.production', { defaultValue: 'Production' }),
-          t('detail.mockData.tags.microservice', { defaultValue: 'Microservice' })
-        ],
-        stats: {
-          nodeCount: entities.length,
-          linkCount: dependencies.length,
-          healthScore: 98,
-          lastUpdated: '2024-07-02 09:00:00'
-        },
-        entities,
-        dependencies
-      };
+        // 将Graph数据转换为TopologyData格式
+        const topologyData: TopologyData = {
+          id: graph.id?.toString() || id,
+          name: graph.name,
+          description: graph.description || '',
+          type: (graph.metadata?.type as string) || 'network',
+          status: mapGraphStatusToTopologyStatus(graph.status),
+          plane: (graph.metadata?.plane as string) || 'default',
+          tags: graph.labels || [],
+          stats: {
+            nodeCount: graph.entityCount || 0,
+            linkCount: graph.relationCount || 0,
+            healthScore: (graph.metadata?.healthScore as number) || 95,
+            lastUpdated: graph.updatedAt || graph.createdAt || new Date().toISOString()
+          },
+          entities: [], // 实体数据需要从其他接口获取，暂时为空
+          dependencies: [] // 依赖关系数据需要从其他接口获取，暂时为空
+        };
 
-      setTopologyData(mockData);
+        setTopologyData(topologyData);
+        setCurrentGraph(graph);
 
-      // 初始化Agent数据
-      setAvailableAgents(availableAgentsData.agents);
-
-      // 初始化一些示例绑定关系（实际项目中应该从后端获取）
-      const sampleBindings: EntityAgentBinding[] = [
-        {
-          id: 'binding-sample-1',
-          entityId: 'web-app-1',
-          agentId: 'monitoring-agent-1',
-          bindingType: 'monitoring',
-          createdAt: new Date().toISOString()
-        }
-      ];
-      setEntityAgentBindings(sampleBindings);
+        console.log('✅ 拓扑图详情加载完成:', topologyData);
+      } else {
+        console.error('❌ API返回数据格式异常:', response);
+        message.error(t('detail.messages.loadFailed'));
+      }
     } catch (error) {
-      console.error('Failed to load topology detail:', error);
-      message.error(t('messages.loadFailed'));
+      console.error('❌ 加载拓扑图详情失败:', error);
+      message.error(t('detail.messages.loadFailed'));
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, t]);
+
+  // 辅助函数：将Graph状态映射为Topology状态
+  const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
+    switch (graphStatus) {
+      case GraphStatus.ACTIVE:
+        return 'active';
+      case GraphStatus.INACTIVE:
+        return 'inactive';
+      case GraphStatus.PROCESSING:
+        return 'warning';
+      case GraphStatus.ARCHIVED:
+        return 'error';
+      default:
+        return 'active';
+    }
+  };
 
   useEffect(() => {
     loadTopologyDetail();
