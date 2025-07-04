@@ -542,6 +542,10 @@ const EntityForm: React.FC = () => {
   };
 
   const performSubmit = async (values: any) => {
+    console.log('🎯 开始提交实体数据...');
+    console.log('📋 表单数据:', values);
+    console.log('🔧 当前模式:', mode);
+
     setLoading(true);
     try {
       const submitData = {
@@ -572,10 +576,13 @@ const EntityForm: React.FC = () => {
       };
 
       console.log('🚀 提交实体数据:', submitData);
+      console.log('📡 即将调用API:', mode === 'create' ? 'createEntity' : 'updateEntity');
 
       // 调用真实的API
       const response =
         mode === 'create' ? await entityApi.createEntity(submitData) : await entityApi.updateEntity(submitData);
+
+      console.log('📥 API响应:', response);
 
       if (response.success) {
         console.log('✅ 实体保存成功:', response.data);
@@ -589,6 +596,12 @@ const EntityForm: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ 实体保存异常:', error);
+      console.error('❌ 错误详情:', {
+        message: error.message,
+        stack: error.stack,
+        response: error.response?.data,
+        status: error.response?.status
+      });
       message.error(mode === 'create' ? t('entities:form.createFailed') : t('entities:form.updateFailed'));
     } finally {
       setLoading(false);
