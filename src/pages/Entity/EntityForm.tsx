@@ -467,7 +467,7 @@ const EntityForm: React.FC = () => {
   }, []);
 
   // 实体类型选项 - 保留作为备用，优先使用从后端获取的数据
-  const entityTypes = [
+  const mockEntityTypes = [
     { value: 'microservice', label: t('entities:types.microservice'), icon: <ApiOutlined /> },
     { value: 'database', label: t('entities:types.database'), icon: <DatabaseOutlined /> },
     { value: 'table', label: t('entities:types.table'), icon: <TableOutlined /> },
@@ -644,19 +644,7 @@ const EntityForm: React.FC = () => {
                       </Option>
                     ))
                   : /* 备用的mock数据 */
-                    [
-                      { value: 'microservice', label: t('entities:types.microservice'), icon: <ApiOutlined /> },
-                      { value: 'database', label: t('entities:types.database'), icon: <DatabaseOutlined /> },
-                      { value: 'table', label: t('entities:types.table'), icon: <TableOutlined /> },
-                      { value: 'api', label: t('entities:types.api'), icon: <CloudServerOutlined /> },
-                      { value: 'middleware', label: t('entities:types.middleware'), icon: <DeploymentUnitOutlined /> },
-                      {
-                        value: 'businessSystem',
-                        label: t('entities:types.businessSystem'),
-                        icon: <AppstoreOutlined />
-                      },
-                      { value: 'configuration', label: t('entities:types.configuration'), icon: <SettingOutlined /> }
-                    ].map(type => (
+                    mockEntityTypes.map(type => (
                       <Option key={type.value} value={type.value}>
                         <Space>
                           {type.icon}
@@ -794,16 +782,7 @@ const EntityForm: React.FC = () => {
                       return backendType.label;
                     }
                     // 备用：从mock数据中查找
-                    const mockTypes = [
-                      { value: 'microservice', label: t('entities:types.microservice') },
-                      { value: 'database', label: t('entities:types.database') },
-                      { value: 'table', label: t('entities:types.table') },
-                      { value: 'api', label: t('entities:types.api') },
-                      { value: 'middleware', label: t('entities:types.middleware') },
-                      { value: 'businessSystem', label: t('entities:types.businessSystem') },
-                      { value: 'configuration', label: t('entities:types.configuration') }
-                    ];
-                    return mockTypes.find(t => t.value === selectedType)?.label || selectedType;
+                    return mockEntityTypes.find(t => t.value === selectedType)?.label || selectedType;
                   })()}
                 </p>
                 <p>
