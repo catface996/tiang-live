@@ -55,6 +55,7 @@
     "entityNameMaxLength": "Entity name cannot exceed 50 characters",
     "entityType": "Entity Type",
     "entityTypeRequired": "Please select entity type",
+    "entityStatus": "Entity Status",
     "description": "Description",
     "descriptionPlaceholder": "Enter entity description",
     "descriptionRequired": "Please enter entity description",

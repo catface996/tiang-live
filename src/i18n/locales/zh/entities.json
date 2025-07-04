@@ -55,6 +55,7 @@
     "entityNameMaxLength": "实体名称不能超过50个字符",
     "entityType": "实体类型",
     "entityTypeRequired": "请选择实体类型",
+    "entityStatus": "实体状态",
     "description": "描述",
     "descriptionPlaceholder": "请输入实体描述",
     "descriptionRequired": "请输入实体描述",

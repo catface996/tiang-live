@@ -671,7 +671,7 @@ const EntityForm: React.FC = () => {
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
-            <Form.Item name="entityStatus" label={t('common:status')} initialValue="ACTIVE">
+            <Form.Item name="entityStatus" label={t('entities:entityStatus')} initialValue="ACTIVE">
               <Select loading={enumLoading}>
                 {/* 优先使用从后端获取的枚举数据 */}
                 {entityStatuses.length > 0 ? (
@@ -802,7 +802,7 @@ const EntityForm: React.FC = () => {
                   {planeOptions.find(p => p.value === form.getFieldValue('plane'))?.label}
                 </p>
                 <p>
-                  <strong>{t('common:status')}：</strong>
+                  <strong>{t('entities:entityStatus')}：</strong>
                   {form.getFieldValue('entityStatus')}
                 </p>
                 <p>
