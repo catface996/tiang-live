@@ -528,21 +528,38 @@ const EntityForm: React.FC = () => {
     console.log('🎯 handleSubmit被调用!');
     console.log('📋 接收到的values:', values);
 
-    // 直接从form获取所有字段的值
+    // 从form获取所有字段的值，包括用户实际输入的数据
     const formData = {
       name: form.getFieldValue('name'),
       type: form.getFieldValue('type'),
       description: form.getFieldValue('description'),
       entityStatus: form.getFieldValue('entityStatus'),
       tags: form.getFieldValue('tags'),
-      properties: form.getFieldValue('properties')
+      properties: form.getFieldValue('properties'),
+      planeId: form.getFieldValue('planeId') // 添加平面ID
     };
 
     console.log('📋 手动收集的表单数据:', formData);
     console.log('🔧 当前模式:', mode);
     console.log('📝 实体名称:', formData.name);
+    console.log('📝 实体描述:', formData.description);
+    console.log('📝 实体类型:', formData.type);
 
-    // 直接调用API，不显示确认对话框
+    // 验证必填字段
+    if (!formData.name) {
+      message.error('请输入实体名称');
+      return;
+    }
+    if (!formData.type) {
+      message.error('请选择实体类型');
+      return;
+    }
+    if (!formData.description) {
+      message.error('请输入实体描述');
+      return;
+    }
+
+    // 直接调用API
     console.log('🚀 直接调用performSubmit...');
     await performSubmit(formData);
   };
@@ -555,12 +572,12 @@ const EntityForm: React.FC = () => {
     setLoading(true);
     try {
       const submitData = {
-        name: values.name || '测试实体',
-        description: values.description || '测试描述',
-        type: values.type || 'USER',
-        planeId: 1,
+        name: values.name, // 直接使用用户输入，不提供默认值
+        description: values.description, // 直接使用用户输入
+        type: values.type, // 直接使用用户选择
+        planeId: values.planeId || 1, // 平面ID，如果没有选择则使用默认值1
         status: values.entityStatus === 'ACTIVE' ? EntityStatus.ACTIVE : EntityStatus.INACTIVE,
-        labels: values.tags || [],
+        labels: values.tags || [], // 标签数组
         properties: {
           icon: selectedIcon,
           // 将Properties数组转换为对象
@@ -574,9 +591,20 @@ const EntityForm: React.FC = () => {
         metadata: {
           icon: selectedIcon,
           step: currentStep,
+          createdAt: new Date().toISOString(),
           formData: values
         }
       };
+
+      console.log('🚀 最终提交数据:', submitData);
+      console.log('📡 调用entityApi.saveEntity');
+      console.log('📝 确认提交的字段:');
+      console.log('   - name:', submitData.name);
+      console.log('   - description:', submitData.description);
+      console.log('   - type:', submitData.type);
+      console.log('   - planeId:', submitData.planeId);
+      console.log('   - status:', submitData.status);
+      console.log('   - labels:', submitData.labels);
 
       console.log('🚀 提交实体数据:', submitData);
       console.log('📡 直接调用entityApi.saveEntity');
@@ -588,7 +616,7 @@ const EntityForm: React.FC = () => {
 
       if (response.success) {
         console.log('✅ 实体保存成功:', response.data);
-        message.success('实体创建成功');
+        message.success(`实体 "${submitData.name}" 创建成功`);
         navigate('/entities');
       } else {
         console.error('❌ 实体保存失败:', response);
@@ -949,16 +977,6 @@ const EntityForm: React.FC = () => {
                       console.log('📋 当前步骤:', currentStep);
                       console.log('📊 步骤总数:', steps.length);
 
-                      // 测试：手动设置一些表单数据
-                      form.setFieldsValue({
-                        name: '测试实体',
-                        type: 'USER',
-                        description: '这是一个测试实体',
-                        entityStatus: 'ACTIVE'
-                      });
-
-                      console.log('🧪 手动设置表单数据后...');
-
                       // 直接从form实例获取所有字段值
                       const allValues = form.getFieldsValue();
                       console.log('📋 从form实例获取的所有值:', allValues);
@@ -966,7 +984,11 @@ const EntityForm: React.FC = () => {
                       // 获取具体字段值
                       const name = form.getFieldValue('name');
                       const type = form.getFieldValue('type');
-                      console.log('📝 具体字段值 - name:', name, 'type:', type);
+                      const description = form.getFieldValue('description');
+                      console.log('📝 具体字段值:');
+                      console.log('   - name:', name);
+                      console.log('   - type:', type);
+                      console.log('   - description:', description);
 
                       form
                         .validateFields()
@@ -974,7 +996,7 @@ const EntityForm: React.FC = () => {
                           console.log('✅ 表单验证通过，validateFields返回的values:', values);
                           console.log('📋 使用form.getFieldsValue()获取的值:', form.getFieldsValue());
 
-                          // 使用form.getFieldsValue()获取完整数据，而不是依赖validateFields的返回值
+                          // 使用form.getFieldsValue()获取完整数据
                           const formData = form.getFieldsValue();
                           console.log('🚀 即将提交的表单数据:', formData);
 
