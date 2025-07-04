@@ -61,6 +61,15 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+// 分页结果类型
+export interface PageResult<T> {
+  records: T[];
+  total: number;
+  page: number;
+  size: number;
+  pages: number;
+}
+
 // 创建专门的图API客户端，直接指向后端的/api/graph路径
 const graphApiClient = axios.create({
   baseURL: '/api/graph',
@@ -168,9 +177,9 @@ export const graphApi = {
   },
 
   /**
-   * 查询图列表
+   * 查询图列表（支持分页）
    */
-  async listGraphs(request: QueryGraphRequest = {}): Promise<ApiResponse<Graph[]>> {
+  async listGraphs(request: QueryGraphRequest = {}): Promise<ApiResponse<PageResult<Graph>>> {
     return graphApiClient.post('/list', request);
   },
 
@@ -205,22 +214,30 @@ export const graphApi = {
   /**
    * 根据所有者ID查询图列表
    */
-  async getGraphsByOwner(ownerId: number): Promise<ApiResponse<Graph[]>> {
-    return this.listGraphs({ ownerId });
+  async getGraphsByOwner(
+    ownerId: number,
+    page: number = 1,
+    size: number = 10
+  ): Promise<ApiResponse<PageResult<Graph>>> {
+    return this.listGraphs({ ownerId, page, size });
   },
 
   /**
    * 根据状态查询图列表
    */
-  async getGraphsByStatus(status: GraphStatus): Promise<ApiResponse<Graph[]>> {
-    return this.listGraphs({ status });
+  async getGraphsByStatus(
+    status: GraphStatus,
+    page: number = 1,
+    size: number = 10
+  ): Promise<ApiResponse<PageResult<Graph>>> {
+    return this.listGraphs({ status, page, size });
   },
 
   /**
    * 搜索图（按名称模糊查询）
    */
-  async searchGraphs(name: string): Promise<ApiResponse<Graph[]>> {
-    return this.listGraphs({ name });
+  async searchGraphs(name: string, page: number = 1, size: number = 10): Promise<ApiResponse<PageResult<Graph>>> {
+    return this.listGraphs({ name, page, size });
   }
 };
 

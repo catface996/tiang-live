@@ -178,12 +178,14 @@ const EntityTopology: React.FC = () => {
       const response = await graphApi.listGraphs({
         // 可以添加查询条件，比如只查询当前用户的图
         ownerId: 1, // 假设当前用户ID为1，实际应该从用户上下文获取
-        status: GraphStatus.ACTIVE // 只查询活跃状态的图
+        status: GraphStatus.ACTIVE, // 只查询活跃状态的图
+        page: 1, // 第一页
+        size: 50 // 每页50条，足够显示大部分情况
       });
 
-      if (response.success && response.data) {
+      if (response.success && response.data && response.data.records) {
         // 将API返回的Graph数据转换为Topology格式
-        const topologyList = response.data.map(graph => ({
+        const topologyList = response.data.records.map(graph => ({
           id: graph.id?.toString() || '',
           name: graph.name,
           type: 'network' as const, // 默认类型，可以根据graph.metadata中的信息确定
@@ -201,7 +203,12 @@ const EntityTopology: React.FC = () => {
         }));
 
         setTopologies(topologyList);
-        console.log('✅ 成功加载拓扑图列表:', topologyList);
+        console.log('✅ 成功加载拓扑图列表:', {
+          total: response.data.total,
+          page: response.data.page,
+          size: response.data.size,
+          records: topologyList.length
+        });
       } else {
         console.warn('⚠️ API返回数据格式异常:', response);
         setTopologies([]); // 设置为空数组，不使用mock数据

@@ -396,17 +396,21 @@ const EntityTopologyDetail: React.FC = () => {
       setGraphLoading(true);
       const response = await graphApi.listGraphs({
         ownerId: 1, // 假设当前用户ID为1，实际应该从用户上下文获取
-        status: GraphStatus.ACTIVE
+        status: GraphStatus.ACTIVE,
+        page: 1,
+        size: 100 // 加载更多图用于选择
       });
 
-      if (response.success) {
-        setAvailableGraphs(response.data);
+      if (response.success && response.data && response.data.records) {
+        setAvailableGraphs(response.data.records);
       } else {
         message.error(t('entityTopology:graph.loadError'));
+        setAvailableGraphs([]);
       }
     } catch (error) {
       console.error('Failed to load graphs:', error);
       message.error(t('entityTopology:graph.loadError'));
+      setAvailableGraphs([]);
     } finally {
       setGraphLoading(false);
     }
