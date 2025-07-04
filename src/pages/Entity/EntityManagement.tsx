@@ -99,7 +99,7 @@ const EntityManagement: React.FC = () => {
     setPageTitle(t('entities:title'));
     loadEntities();
     loadEnumData();
-  }, [t]);
+  }, []); // 移除t依赖，避免重复触发
 
   // 加载枚举数据
   const loadEnumData = async () => {
