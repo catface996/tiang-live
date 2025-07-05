@@ -320,27 +320,27 @@ const EntityTopologyDetail: React.FC = () => {
   const [graphForm] = Form.useForm();
   const [graphLoading, setGraphLoading] = useState(false);
 
-  // 辅助函数：将Graph状态映射为Topology状态
-  const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
-    switch (graphStatus) {
-      case GraphStatus.ACTIVE:
-        return 'active';
-      case GraphStatus.INACTIVE:
-        return 'inactive';
-      case GraphStatus.PROCESSING:
-        return 'warning';
-      case GraphStatus.ARCHIVED:
-        return 'error';
-      default:
-        return 'active';
-    }
-  };
-
   useEffect(() => {
+    // 辅助函数：将Graph状态映射为Topology状态
+    const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
+      switch (graphStatus) {
+        case GraphStatus.ACTIVE:
+          return 'active';
+        case GraphStatus.INACTIVE:
+          return 'inactive';
+        case GraphStatus.PROCESSING:
+          return 'warning';
+        case GraphStatus.ARCHIVED:
+          return 'error';
+        default:
+          return 'active';
+      }
+    };
+
     // 直接在useEffect中定义加载函数，避免依赖外部函数
     const loadData = async () => {
       if (!id) {
-        message.error(t('detail.messages.invalidId'));
+        console.error('❌ No ID provided for topology detail');
         return;
       }
 
@@ -380,11 +380,11 @@ const EntityTopologyDetail: React.FC = () => {
           console.log('✅ 拓扑图详情加载完成:', topologyData);
         } else {
           console.error('❌ API返回数据格式异常:', response);
-          message.error(t('detail.messages.loadFailed'));
+          message.error('加载拓扑图详情失败');
         }
       } catch (error) {
         console.error('❌ 加载拓扑图详情失败:', error);
-        message.error(t('detail.messages.loadFailed'));
+        message.error('加载拓扑图详情失败');
       } finally {
         setLoading(false);
       }
@@ -419,12 +419,12 @@ const EntityTopologyDetail: React.FC = () => {
       if (response.success && response.data && response.data.records) {
         setAvailableGraphs(response.data.records);
       } else {
-        message.error(t('entityTopology:graph.loadError'));
+        message.error('加载图列表失败');
         setAvailableGraphs([]);
       }
     } catch (error) {
       console.error('Failed to load graphs:', error);
-      message.error(t('entityTopology:graph.loadError'));
+      message.error('加载图列表失败');
       setAvailableGraphs([]);
     } finally {
       setGraphLoading(false);
