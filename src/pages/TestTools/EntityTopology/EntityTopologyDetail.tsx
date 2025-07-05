@@ -320,60 +320,6 @@ const EntityTopologyDetail: React.FC = () => {
   const [graphForm] = Form.useForm();
   const [graphLoading, setGraphLoading] = useState(false);
 
-  // 加载拓扑图详情数据
-  const loadTopologyDetail = useCallback(async () => {
-    if (!id) {
-      message.error(t('detail.messages.invalidId'));
-      return;
-    }
-
-    setLoading(true);
-    try {
-      console.log('🚀 开始加载拓扑图详情, ID:', id);
-
-      // 调用真实的API接口获取图详情
-      // 注意：不使用Number(id)转换，避免大整数精度丢失
-      const response = await graphApi.getGraphById(id);
-
-      if (response.success && response.data) {
-        const graph = response.data;
-        console.log('✅ 成功获取图详情:', graph);
-
-        // 将Graph数据转换为TopologyData格式
-        const topologyData: TopologyData = {
-          id: graph.id?.toString() || id,
-          name: graph.name,
-          description: graph.description || '',
-          type: (graph.metadata?.type as string) || 'network',
-          status: mapGraphStatusToTopologyStatus(graph.status),
-          plane: (graph.metadata?.plane as string) || 'default',
-          tags: graph.labels || [],
-          stats: {
-            nodeCount: graph.entityCount || 0,
-            linkCount: graph.relationCount || 0,
-            healthScore: (graph.metadata?.healthScore as number) || 95,
-            lastUpdated: graph.updatedAt || graph.createdAt || new Date().toISOString()
-          },
-          entities: [], // 实体数据需要从其他接口获取，暂时为空
-          dependencies: [] // 依赖关系数据需要从其他接口获取，暂时为空
-        };
-
-        setTopologyData(topologyData);
-        setCurrentGraph(graph);
-
-        console.log('✅ 拓扑图详情加载完成:', topologyData);
-      } else {
-        console.error('❌ API返回数据格式异常:', response);
-        message.error(t('detail.messages.loadFailed'));
-      }
-    } catch (error) {
-      console.error('❌ 加载拓扑图详情失败:', error);
-      message.error(t('detail.messages.loadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }, [id]); // 移除t依赖，避免重复调用
-
   // 辅助函数：将Graph状态映射为Topology状态
   const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
     switch (graphStatus) {
@@ -391,8 +337,69 @@ const EntityTopologyDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    loadTopologyDetail();
-  }, [loadTopologyDetail]);
+    // 直接在useEffect中定义加载函数，避免依赖外部函数
+    const loadData = async () => {
+      if (!id) {
+        message.error(t('detail.messages.invalidId'));
+        return;
+      }
+
+      setLoading(true);
+      try {
+        console.log('🚀 开始加载拓扑图详情, ID:', id);
+
+        // 调用真实的API接口获取图详情
+        const response = await graphApi.getGraphById(id);
+
+        if (response.success && response.data) {
+          const graph = response.data;
+          console.log('✅ 成功获取图详情:', graph);
+
+          // 将Graph数据转换为TopologyData格式
+          const topologyData: TopologyData = {
+            id: graph.id?.toString() || id,
+            name: graph.name,
+            description: graph.description || '',
+            type: (graph.metadata?.type as string) || 'network',
+            status: mapGraphStatusToTopologyStatus(graph.status),
+            plane: (graph.metadata?.plane as string) || 'default',
+            tags: graph.labels || [],
+            stats: {
+              nodeCount: graph.entityCount || 0,
+              linkCount: graph.relationCount || 0,
+              healthScore: (graph.metadata?.healthScore as number) || 95,
+              lastUpdated: graph.updatedAt || graph.createdAt || new Date().toISOString()
+            },
+            entities: [], // 实体数据需要从其他接口获取，暂时为空
+            dependencies: [] // 依赖关系数据需要从其他接口获取，暂时为空
+          };
+
+          setTopologyData(topologyData);
+          setCurrentGraph(graph);
+
+          console.log('✅ 拓扑图详情加载完成:', topologyData);
+        } else {
+          console.error('❌ API返回数据格式异常:', response);
+          message.error(t('detail.messages.loadFailed'));
+        }
+      } catch (error) {
+        console.error('❌ 加载拓扑图详情失败:', error);
+        message.error(t('detail.messages.loadFailed'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [id]); // 只依赖id，避免函数依赖导致的无限循环
+
+  // 简单的刷新函数
+  const handleRefresh = useCallback(() => {
+    // 通过更新一个状态来触发重新加载
+    setLoading(true);
+    // 这里可以添加刷新逻辑，或者简单地重新加载页面
+    window.location.reload();
+  }, []);
 
   // 图操作相关函数
 
@@ -1133,7 +1140,7 @@ const EntityTopologyDetail: React.FC = () => {
           marginBottom: '16px'
         }}
       >
-        <TopologyHeader topologyData={topologyData} onRefresh={loadTopologyDetail} />
+        <TopologyHeader topologyData={topologyData} onRefresh={handleRefresh} />
       </div>
 
       {/* 底部主要内容区域 - 80%高度 */}
