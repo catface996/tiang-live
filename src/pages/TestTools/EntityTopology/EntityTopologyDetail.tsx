@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Space, 
-  Spin, 
-  Empty, 
-  Breadcrumb, 
-  message, 
-  Form, 
-  Card, 
-  Typography, 
-  Row, 
-  Col, 
-  Statistic, 
+import {
+  Space,
+  Spin,
+  Empty,
+  Breadcrumb,
+  message,
+  Form,
+  Card,
+  Typography,
+  Row,
+  Col,
+  Statistic,
   Button,
-  Tag,
-  Divider
+  Tag
 } from 'antd';
-import { 
-  NodeIndexOutlined, 
-  HomeOutlined, 
-  ToolOutlined, 
-  ReloadOutlined, 
-  SaveOutlined, 
+import {
+  NodeIndexOutlined,
+  HomeOutlined,
+  ToolOutlined,
+  ReloadOutlined,
+  SaveOutlined,
   FolderOpenOutlined,
   DatabaseOutlined,
   LinkOutlined,
@@ -39,12 +38,7 @@ import { graphApi, GraphStatus, type Graph } from '../../../services/graphApi';
 import { entityApi } from '../../../services/entityApi';
 
 // 导入统一的类型定义
-import type {
-  Entity,
-  Dependency,
-  TopologyData,
-  PaginationInfo
-} from '../../../types/entityTopology';
+import type { Entity, Dependency, TopologyData, PaginationInfo } from '../../../types/entityTopology';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -90,17 +84,6 @@ const RightPanel = styled.div`
 const StatsCard = styled(Card)`
   .ant-card-body {
     padding: 16px;
-  }
-`;
-
-// 图形容器样式
-const GraphContainer = styled(Card)`
-  flex: 1;
-  .ant-card-body {
-    padding: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
   }
 `;
 
@@ -163,7 +146,9 @@ const EntityTopologyDetail: React.FC = () => {
           console.log('✅ 成功获取图详情:', graph);
 
           // 辅助函数：将Graph状态映射为Topology状态
-          const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
+          const mapGraphStatusToTopologyStatus = (
+            graphStatus?: GraphStatus
+          ): 'active' | 'inactive' | 'warning' | 'error' => {
             switch (graphStatus) {
               case GraphStatus.ACTIVE:
                 return 'active';
@@ -250,9 +235,10 @@ const EntityTopologyDetail: React.FC = () => {
       }
     });
 
-    const messageText = relatedDependencies.length > 0
-      ? `成功删除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
-      : `成功删除实体 ${entityToDelete.name}`;
+    const messageText =
+      relatedDependencies.length > 0
+        ? `成功删除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
+        : `成功删除实体 ${entityToDelete.name}`;
 
     message.success(messageText);
     setDeleteModalVisible(false);
@@ -284,8 +270,10 @@ const EntityTopologyDetail: React.FC = () => {
       }
     });
 
-    const sourceName = topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
-    const targetName = topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
+    const sourceName =
+      topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
+    const targetName =
+      topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
 
     message.success(`成功删除依赖关系: ${sourceName} → ${targetName}`);
     setDeleteDependencyModalVisible(false);
@@ -308,7 +296,7 @@ const EntityTopologyDetail: React.FC = () => {
 
   const fetchAvailableEntities = async (page: number = 1, pageSize: number = 10) => {
     console.log(`🔍 开始获取可用实体列表... 页码: ${page}, 每页: ${pageSize}`);
-    
+
     if (!currentGraph?.id) {
       console.warn('⚠️ 当前图ID不存在，无法获取可用实体');
       setAvailableEntities([]);
@@ -361,7 +349,7 @@ const EntityTopologyDetail: React.FC = () => {
 
     try {
       const graphId = currentGraph.id.toString();
-      
+
       console.log('🚀 开始添加实体到图:', {
         graphId,
         entityIds: selectedEntityIds
@@ -374,7 +362,7 @@ const EntityTopologyDetail: React.FC = () => {
 
       if (response.success) {
         console.log('✅ 实体添加到图成功');
-        
+
         const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
         const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
 
@@ -447,7 +435,7 @@ const EntityTopologyDetail: React.FC = () => {
     }
 
     const existingDependency = topologyData.dependencies.find(
-      dep => dep.source === sourceEntityId && dep.target === targetEntityId && dep.type === relationshipType as any
+      dep => dep.source === sourceEntityId && dep.target === targetEntityId && dep.type === (relationshipType as any)
     );
 
     if (existingDependency) {
@@ -558,9 +546,7 @@ const EntityTopologyDetail: React.FC = () => {
             </Paragraph>
             <div style={{ marginTop: 12 }}>
               <Space>
-                <Tag color={topologyData.status === 'active' ? 'green' : 'orange'}>
-                  {topologyData.status}
-                </Tag>
+                <Tag color={topologyData.status === 'active' ? 'green' : 'orange'}>{topologyData.status}</Tag>
                 <Text type="secondary">类型: {topologyData.type}</Text>
                 <Text type="secondary">平面: {topologyData.plane}</Text>
               </Space>
@@ -570,12 +556,8 @@ const EntityTopologyDetail: React.FC = () => {
             <Button icon={<ReloadOutlined />} onClick={handleRefresh}>
               刷新
             </Button>
-            <Button icon={<SaveOutlined />}>
-              保存
-            </Button>
-            <Button icon={<FolderOpenOutlined />}>
-              加载
-            </Button>
+            <Button icon={<SaveOutlined />}>保存</Button>
+            <Button icon={<FolderOpenOutlined />}>加载</Button>
           </Space>
         </div>
 
@@ -583,38 +565,22 @@ const EntityTopologyDetail: React.FC = () => {
         <Row gutter={16} style={{ marginTop: 24 }}>
           <Col span={6}>
             <StatsCard>
-              <Statistic
-                title="实体数量"
-                value={topologyData.stats.nodeCount}
-                prefix={<DatabaseOutlined />}
-              />
+              <Statistic title="实体数量" value={topologyData.stats.nodeCount} prefix={<DatabaseOutlined />} />
             </StatsCard>
           </Col>
           <Col span={6}>
             <StatsCard>
-              <Statistic
-                title="关系数量"
-                value={topologyData.stats.linkCount}
-                prefix={<LinkOutlined />}
-              />
+              <Statistic title="关系数量" value={topologyData.stats.linkCount} prefix={<LinkOutlined />} />
             </StatsCard>
           </Col>
           <Col span={6}>
             <StatsCard>
-              <Statistic
-                title="健康度"
-                value={topologyData.stats.healthScore}
-                suffix="%"
-                prefix={<HeartOutlined />}
-              />
+              <Statistic title="健康度" value={topologyData.stats.healthScore} suffix="%" prefix={<HeartOutlined />} />
             </StatsCard>
           </Col>
           <Col span={6}>
             <StatsCard>
-              <Statistic
-                title="最后更新"
-                value={new Date(topologyData.stats.lastUpdated).toLocaleDateString()}
-              />
+              <Statistic title="最后更新" value={new Date(topologyData.stats.lastUpdated).toLocaleDateString()} />
             </StatsCard>
           </Col>
         </Row>
@@ -639,14 +605,7 @@ const EntityTopologyDetail: React.FC = () => {
 
         {/* 右侧面板 - 拓扑图 */}
         <RightPanel>
-          <GraphContainer title="拓扑关系图">
-            <div style={{ flex: 1, padding: 16 }}>
-              <EntityD3RelationshipGraph 
-                entities={topologyData.entities} 
-                dependencies={topologyData.dependencies} 
-              />
-            </div>
-          </GraphContainer>
+          <EntityD3RelationshipGraph entities={topologyData.entities} dependencies={topologyData.dependencies} />
         </RightPanel>
       </MainContent>
 
