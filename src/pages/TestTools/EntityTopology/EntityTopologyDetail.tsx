@@ -296,6 +296,12 @@ const EntityTopologyDetail: React.FC = () => {
   const [availableEntities, setAvailableEntities] = useState<Entity[]>([]);
   const [entitiesLoading, setEntitiesLoading] = useState(false);
   const [selectedEntityIds, setSelectedEntityIds] = useState<string[]>([]);
+  // 分页相关状态
+  const [entitiesPagination, setEntitiesPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0
+  });
   const [addDependencyModalVisible, setAddDependencyModalVisible] = useState(false);
   const [sourceEntityId, setSourceEntityId] = useState<string>('');
   const [targetEntityId, setTargetEntityId] = useState<string>('');
@@ -903,15 +909,15 @@ const EntityTopologyDetail: React.FC = () => {
     setTargetEntityId(temp);
   };
 
-  // 从API获取实体列表
-  const fetchAvailableEntities = async () => {
-    console.log('🔍 开始获取可用实体列表...');
+  // 从API获取实体列表（支持分页）
+  const fetchAvailableEntities = async (page: number = 1, pageSize: number = 10) => {
+    console.log(`🔍 开始获取可用实体列表... 页码: ${page}, 每页: ${pageSize}`);
     setEntitiesLoading(true);
     try {
       // 调用entityApi获取实体列表
       const response = await entityApi.listEntities({
-        page: 1,
-        size: 1000 // 获取大量实体，可以根据需要调整
+        page: page,
+        size: pageSize
       });
 
       console.log('📥 API响应:', response);
@@ -928,15 +934,30 @@ const EntityTopologyDetail: React.FC = () => {
 
         console.log('📋 可用实体列表:', availableEntitiesList.length, '个实体');
         setAvailableEntities(availableEntitiesList);
+
+        // 更新分页信息
+        setEntitiesPagination({
+          current: page,
+          pageSize: pageSize,
+          total: response.total || response.data.length // 使用API返回的总数或当前数据长度
+        });
+
+        console.log('📊 分页信息:', {
+          current: page,
+          pageSize: pageSize,
+          total: response.total || response.data.length
+        });
       } else {
         console.error('❌ 获取实体列表失败:', response);
         message.error('获取实体列表失败: ' + (response.message || '未知错误'));
         setAvailableEntities([]);
+        setEntitiesPagination(prev => ({ ...prev, total: 0 }));
       }
     } catch (error) {
       console.error('❌ 获取实体列表异常:', error);
       message.error('获取实体列表失败: ' + (error.message || '网络错误'));
       setAvailableEntities([]);
+      setEntitiesPagination(prev => ({ ...prev, total: 0 }));
     } finally {
       setEntitiesLoading(false);
     }
@@ -948,8 +969,11 @@ const EntityTopologyDetail: React.FC = () => {
     setSelectedEntityIds([]);
     setSelectEntityModalVisible(true);
 
-    // 获取可用的实体列表
-    await fetchAvailableEntities();
+    // 重置分页到第一页
+    setEntitiesPagination(prev => ({ ...prev, current: 1 }));
+
+    // 获取可用的实体列表（第一页）
+    await fetchAvailableEntities(1, entitiesPagination.pageSize);
   };
 
   // 确认添加选中的实体
@@ -982,6 +1006,9 @@ const EntityTopologyDetail: React.FC = () => {
   const cancelAddEntities = () => {
     setSelectEntityModalVisible(false);
     setSelectedEntityIds([]);
+    // 重置分页状态
+    setEntitiesPagination(prev => ({ ...prev, current: 1 }));
+    setAvailableEntities([]);
   };
 
   // 处理实体选择变化
@@ -998,6 +1025,18 @@ const EntityTopologyDetail: React.FC = () => {
   // 取消全选
   const clearAllSelection = () => {
     setSelectedEntityIds([]);
+  };
+
+  // 处理分页变化
+  const handleEntitiesPaginationChange = async (page: number, pageSize?: number) => {
+    console.log(`📄 分页变化: 页码 ${page}, 每页 ${pageSize || entitiesPagination.pageSize}`);
+    const newPageSize = pageSize || entitiesPagination.pageSize;
+
+    // 清空当前选择（因为切换页面后，之前选择的实体不在当前页）
+    setSelectedEntityIds([]);
+
+    // 获取新页面的数据
+    await fetchAvailableEntities(page, newPageSize);
   };
 
   if (loading) {
@@ -1182,13 +1221,14 @@ const EntityTopologyDetail: React.FC = () => {
         <SelectionHint>
           <p>
             {entitiesLoading ? '正在从服务器获取实体列表，请稍候...' : t('detail.modals.selectEntity.description')}
-            {!entitiesLoading && availableEntities.length > 0 && (
+            {!entitiesLoading && entitiesPagination.total > 0 && (
               <>
                 {' '}
                 {t('detail.modals.selectEntity.stats', {
-                  total: availableEntities.length,
+                  total: entitiesPagination.total,
                   selected: selectedEntityIds.length
                 })}
+                {` (第 ${entitiesPagination.current} 页，共 ${Math.ceil(entitiesPagination.total / entitiesPagination.pageSize)} 页)`}
               </>
             )}
           </p>
@@ -1270,15 +1310,21 @@ const EntityTopologyDetail: React.FC = () => {
             rowKey="id"
             size="small"
             pagination={{
-              pageSize: 8,
-              showSizeChanger: false,
+              current: entitiesPagination.current,
+              pageSize: entitiesPagination.pageSize,
+              total: entitiesPagination.total,
+              showSizeChanger: true,
               showQuickJumper: true,
               showTotal: (total, range) =>
                 t('detail.modals.selectEntity.pagination.total', {
                   start: range[0],
                   end: range[1],
                   total
-                })
+                }),
+              onChange: handleEntitiesPaginationChange,
+              onShowSizeChange: handleEntitiesPaginationChange,
+              pageSizeOptions: ['10', '20', '50', '100'],
+              disabled: entitiesLoading
             }}
           />
         )}
