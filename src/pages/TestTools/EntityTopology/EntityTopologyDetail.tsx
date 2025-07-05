@@ -1057,8 +1057,6 @@ const EntityTopologyDetail: React.FC = () => {
   // 取消全选
   const clearAllSelection = () => {
     setSelectedEntityIds([]);
-  };
-
   // 处理分页变化
   const handleEntitiesPaginationChange = async (page: number, pageSize?: number) => {
     console.log(`📄 分页变化: 页码 ${page}, 每页 ${pageSize || entitiesPagination.pageSize}`);
@@ -1783,5 +1781,6 @@ const EntityTopologyDetail: React.FC = () => {
       </Modal>
     </div>
   );
+};
 
 export default EntityTopologyDetail;
