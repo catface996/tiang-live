@@ -177,7 +177,8 @@ entityApiClient.interceptors.response.use(
 /**
  * 实体操作API服务类
  */
-export // 添加实体到图的请求类型
+
+// 添加实体到图的请求类型
 export interface AddToGraphRequest {
   graphId: string;
   entityIds: string[];
