@@ -14,43 +14,14 @@ import GraphOperationModals from '../../../components/EntityTopology/GraphOperat
 import { graphApi, GraphStatus, type Graph } from '../../../services/graphApi';
 import { entityApi } from '../../../services/entityApi';
 
-// 基础类型定义
-interface Entity {
-  id: string;
-  name: string;
-  type: string;
-  status: string;
-  description: string;
-  connections: number;
-}
-
-interface Dependency {
-  id: string;
-  source: string;
-  target: string;
-  type: 'depends_on' | 'provides_to' | 'connects_to';
-  description: string;
-  strength: number;
-}
-
-interface TopologyData {
-  id: string;
-  name: string;
-  description: string;
-  type: string;
-  status: 'active' | 'inactive' | 'warning' | 'error';
-  plane: string;
-  tags: string[];
-  stats: {
-    nodeCount: number;
-    linkCount: number;
-    healthScore: number;
-    lastUpdated: string;
-  };
-  entities: Entity[];
-  dependencies: Dependency[];
-  graphData?: any;
-}
+// 导入统一的类型定义
+import type {
+  Entity,
+  Dependency,
+  TopologyData,
+  PaginationInfo,
+  DEPENDENCY_TYPE
+} from '../../../types/entityTopology';
 
 const EntityTopologyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -74,7 +45,8 @@ const EntityTopologyDetail: React.FC = () => {
   const [availableEntities, setAvailableEntities] = useState<Entity[]>([]);
   const [selectedEntityIds, setSelectedEntityIds] = useState<string[]>([]);
   const [entitiesLoading, setEntitiesLoading] = useState(false);
-  const [entitiesPagination, setEntitiesPagination] = useState({
+  // 分页状态使用统一类型
+  const [entitiesPagination, setEntitiesPagination] = useState<PaginationInfo>({
     current: 1,
     pageSize: 10,
     total: 0
@@ -294,7 +266,6 @@ const EntityTopologyDetail: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ 获取实体列表失败:', error);
-      message.error('获取实体列表失败: ' + (error.message || '网络错误'));
       setAvailableEntities([]);
       setEntitiesPagination(prev => ({ ...prev, total: 0 }));
     } finally {
@@ -346,7 +317,6 @@ const EntityTopologyDetail: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ 添加实体到图异常:', error);
-      message.error('添加实体失败: ' + (error.message || '网络错误'));
     }
   };
 

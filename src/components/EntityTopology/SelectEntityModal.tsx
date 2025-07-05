@@ -2,32 +2,8 @@ import React from 'react';
 import { Modal, Table, Tag, Button, Space, Empty, Pagination } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-interface Entity {
-  id: string;
-  name: string;
-  type: string;
-  status: string;
-  description: string;
-  connections: number;
-}
-
-interface SelectEntityModalProps {
-  visible: boolean;
-  entities: Entity[];
-  selectedEntityIds: string[];
-  loading: boolean;
-  pagination: {
-    current: number;
-    pageSize: number;
-    total: number;
-  };
-  onConfirm: () => void;
-  onCancel: () => void;
-  onSelectionChange: (selectedIds: string[]) => void;
-  onSelectAll: () => void;
-  onClearAll: () => void;
-  onPaginationChange: (page: number, pageSize?: number) => void;
-}
+// 导入统一的类型定义
+import type { Entity, SelectEntityModalProps } from '../../types/entityTopology';
 
 const SelectEntityModal: React.FC<SelectEntityModalProps> = ({
   visible,

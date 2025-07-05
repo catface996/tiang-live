@@ -3,28 +3,10 @@ import { Typography, Tag, Space, Row, Col, Statistic } from 'antd';
 import { NodeIndexOutlined, LinkOutlined, HeartOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
+// 导入统一的类型定义
+import type { TopologyHeaderProps } from '../../types/entityTopology';
+
 const { Title, Text } = Typography;
-
-interface TopologyData {
-  id: string;
-  name: string;
-  description: string;
-  type: string;
-  status: string;
-  plane: string;
-  tags: string[];
-  stats: {
-    nodeCount: number;
-    linkCount: number;
-    healthScore: number;
-    lastUpdated: string;
-  };
-}
-
-interface TopologyHeaderProps {
-  topologyData: TopologyData;
-  onRefresh: () => void;
-}
 
 const TopologyHeader: React.FC<TopologyHeaderProps> = ({ topologyData, onRefresh }) => {
   const { t } = useTranslation(['entityTopology', 'common']);

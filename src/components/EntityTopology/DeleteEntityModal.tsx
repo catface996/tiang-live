@@ -4,39 +4,15 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+// 导入统一的类型定义
+import type { Entity, Dependency, DeleteEntityModalProps } from '../../types/entityTopology';
+
 const { Text } = Typography;
 
 const WarningText = styled(Text)`
   color: var(--color-warning);
   font-weight: 500;
 `;
-
-interface Entity {
-  id: string;
-  name: string;
-  type: string;
-  status: string;
-  description: string;
-  connections: number;
-}
-
-interface Dependency {
-  id: string;
-  source: string;
-  target: string;
-  type: string;
-  description: string;
-  strength: number;
-}
-
-interface DeleteEntityModalProps {
-  visible: boolean;
-  entity: Entity | null;
-  dependencies: Dependency[];
-  onConfirm: () => void;
-  onCancel: () => void;
-  loading?: boolean;
-}
 
 const DeleteEntityModal: React.FC<DeleteEntityModalProps> = ({
   visible,

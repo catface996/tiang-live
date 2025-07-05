@@ -4,6 +4,9 @@ import { SwapOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+// 导入统一的类型定义
+import type { Entity, Dependency, AddDependencyModalProps } from '../../types/entityTopology';
+
 const { Option } = Select;
 
 const RelationshipDisplay = styled.div`
@@ -26,39 +29,6 @@ const RelationshipDisplay = styled.div`
     color: var(--color-primary);
   }
 `;
-
-interface Entity {
-  id: string;
-  name: string;
-  type: string;
-  status: string;
-  description: string;
-  connections: number;
-}
-
-interface Dependency {
-  id: string;
-  source: string;
-  target: string;
-  type: string;
-  description: string;
-  strength: number;
-}
-
-interface AddDependencyModalProps {
-  visible: boolean;
-  entities: Entity[];
-  dependencies: Dependency[];
-  sourceEntityId: string;
-  targetEntityId: string;
-  relationshipType: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-  onSourceChange: (value: string) => void;
-  onTargetChange: (value: string) => void;
-  onRelationshipTypeChange: (value: string) => void;
-  onSwapEntities: () => void;
-}
 
 const AddDependencyModal: React.FC<AddDependencyModalProps> = ({
   visible,

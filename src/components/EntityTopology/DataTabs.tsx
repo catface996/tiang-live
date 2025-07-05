@@ -3,35 +3,10 @@ import { Tabs, Table, Button, Space, Typography } from 'antd';
 import { DatabaseOutlined, LinkOutlined, NodeIndexOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
+// 导入统一的类型定义
+import type { Entity, Dependency, DataTabsProps } from '../../types/entityTopology';
+
 const { Text } = Typography;
-
-interface Entity {
-  id: string;
-  name: string;
-  type: string;
-  status: 'active' | 'inactive' | 'warning' | 'error';
-  properties: Record<string, any>;
-  connections: number;
-}
-
-interface Dependency {
-  id: string;
-  source: string;
-  target: string;
-  type: 'depends_on' | 'provides_to' | 'connects_to';
-  strength: number;
-  description?: string;
-}
-
-interface DataTabsProps {
-  entities: Entity[];
-  dependencies: Dependency[];
-  onDeleteEntity: (entity: Entity) => void;
-  onDeleteDependency: (dependency: Dependency) => void;
-  onAddEntity: () => void;
-  onAddDependency: () => void;
-  onAgentsClick: (entity: Entity) => void;
-}
 
 const DataTabs: React.FC<DataTabsProps> = ({
   entities,
