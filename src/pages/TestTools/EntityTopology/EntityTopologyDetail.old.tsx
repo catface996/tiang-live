@@ -1,34 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Space, 
-  Spin, 
-  Empty, 
-  Breadcrumb, 
-  message, 
-  Form, 
-  Card, 
-  Typography, 
-  Row, 
-  Col, 
-  Statistic, 
-  Button,
-  Tag,
-  Divider
-} from 'antd';
-import { 
-  NodeIndexOutlined, 
-  HomeOutlined, 
-  ToolOutlined, 
-  ReloadOutlined, 
-  SaveOutlined, 
-  FolderOpenOutlined,
-  DatabaseOutlined,
-  LinkOutlined,
-  HeartOutlined
-} from '@ant-design/icons';
+import { Space, Spin, Empty, Breadcrumb, message, Form } from 'antd';
+import { NodeIndexOutlined, HomeOutlined, ToolOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import '../../../styles/entity-topology-detail.css';
+import TopologyHeader from '../../../components/EntityTopology/TopologyHeader';
 import DataTabs from '../../../components/EntityTopology/DataTabs';
 import EntityD3RelationshipGraph from '../../../components/EntityTopology/EntityD3RelationshipGraph';
 import DeleteEntityModal from '../../../components/EntityTopology/DeleteEntityModal';
@@ -39,70 +15,7 @@ import { graphApi, GraphStatus, type Graph } from '../../../services/graphApi';
 import { entityApi } from '../../../services/entityApi';
 
 // 导入统一的类型定义
-import type {
-  Entity,
-  Dependency,
-  TopologyData,
-  PaginationInfo
-} from '../../../types/entityTopology';
-
-const { Title, Paragraph, Text } = Typography;
-
-// 页面容器样式
-const PageContainer = styled.div`
-  padding: 24px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--layout-body-background);
-`;
-
-// 页面头部样式
-const PageHeader = styled.div`
-  margin-bottom: 24px;
-`;
-
-// 主要内容区域样式
-const MainContent = styled.div`
-  flex: 1;
-  display: flex;
-  gap: 24px;
-  overflow: hidden;
-`;
-
-// 左侧面板样式
-const LeftPanel = styled.div`
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`;
-
-// 右侧面板样式
-const RightPanel = styled.div`
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`;
-
-// 统计卡片样式
-const StatsCard = styled(Card)`
-  .ant-card-body {
-    padding: 16px;
-  }
-`;
-
-// 图形容器样式
-const GraphContainer = styled(Card)`
-  flex: 1;
-  .ant-card-body {
-    padding: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-`;
+import type { Entity, Dependency, TopologyData, PaginationInfo, DEPENDENCY_TYPE } from '../../../types/entityTopology';
 
 const EntityTopologyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -126,6 +39,7 @@ const EntityTopologyDetail: React.FC = () => {
   const [availableEntities, setAvailableEntities] = useState<Entity[]>([]);
   const [selectedEntityIds, setSelectedEntityIds] = useState<string[]>([]);
   const [entitiesLoading, setEntitiesLoading] = useState(false);
+  // 分页状态使用统一类型
   const [entitiesPagination, setEntitiesPagination] = useState<PaginationInfo>({
     current: 1,
     pageSize: 10,
@@ -163,7 +77,9 @@ const EntityTopologyDetail: React.FC = () => {
           console.log('✅ 成功获取图详情:', graph);
 
           // 辅助函数：将Graph状态映射为Topology状态
-          const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
+          const mapGraphStatusToTopologyStatus = (
+            graphStatus?: GraphStatus
+          ): 'active' | 'inactive' | 'warning' | 'error' => {
             switch (graphStatus) {
               case GraphStatus.ACTIVE:
                 return 'active';
@@ -250,9 +166,10 @@ const EntityTopologyDetail: React.FC = () => {
       }
     });
 
-    const messageText = relatedDependencies.length > 0
-      ? `成功删除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
-      : `成功删除实体 ${entityToDelete.name}`;
+    const messageText =
+      relatedDependencies.length > 0
+        ? `成功删除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
+        : `成功删除实体 ${entityToDelete.name}`;
 
     message.success(messageText);
     setDeleteModalVisible(false);
@@ -284,8 +201,10 @@ const EntityTopologyDetail: React.FC = () => {
       }
     });
 
-    const sourceName = topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
-    const targetName = topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
+    const sourceName =
+      topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
+    const targetName =
+      topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
 
     message.success(`成功删除依赖关系: ${sourceName} → ${targetName}`);
     setDeleteDependencyModalVisible(false);
@@ -308,7 +227,7 @@ const EntityTopologyDetail: React.FC = () => {
 
   const fetchAvailableEntities = async (page: number = 1, pageSize: number = 10) => {
     console.log(`🔍 开始获取可用实体列表... 页码: ${page}, 每页: ${pageSize}`);
-    
+
     if (!currentGraph?.id) {
       console.warn('⚠️ 当前图ID不存在，无法获取可用实体');
       setAvailableEntities([]);
@@ -345,7 +264,6 @@ const EntityTopologyDetail: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ 获取实体列表失败:', error);
-      message.error('获取实体列表失败: ' + (error.message || '网络错误'));
       setAvailableEntities([]);
       setEntitiesPagination(prev => ({ ...prev, total: 0 }));
     } finally {
@@ -361,7 +279,7 @@ const EntityTopologyDetail: React.FC = () => {
 
     try {
       const graphId = currentGraph.id.toString();
-      
+
       console.log('🚀 开始添加实体到图:', {
         graphId,
         entityIds: selectedEntityIds
@@ -374,7 +292,7 @@ const EntityTopologyDetail: React.FC = () => {
 
       if (response.success) {
         console.log('✅ 实体添加到图成功');
-        
+
         const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
         const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
 
@@ -397,7 +315,6 @@ const EntityTopologyDetail: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ 添加实体到图异常:', error);
-      message.error('添加实体失败: ' + (error.message || '网络错误'));
     }
   };
 
@@ -447,7 +364,10 @@ const EntityTopologyDetail: React.FC = () => {
     }
 
     const existingDependency = topologyData.dependencies.find(
-      dep => dep.source === sourceEntityId && dep.target === targetEntityId && dep.type === relationshipType as any
+      dep =>
+        dep.source === sourceEntityId &&
+        dep.target === targetEntityId &&
+        dep.type === (relationshipType as DEPENDENCY_TYPE)
     );
 
     if (existingDependency) {
@@ -459,7 +379,7 @@ const EntityTopologyDetail: React.FC = () => {
       id: `dep_${Date.now()}`,
       source: sourceEntityId,
       target: targetEntityId,
-      type: relationshipType as any,
+      type: relationshipType as DEPENDENCY_TYPE,
       description: `${relationshipType} relationship`,
       strength: 1
     };
@@ -494,161 +414,103 @@ const EntityTopologyDetail: React.FC = () => {
 
   // 图操作相关函数（简化版本 - 当前未完全实现）
   const handleSaveGraph = async (values: Record<string, unknown>) => {
+    // 简化的保存图逻辑
     console.log('保存图:', values);
   };
 
   const handleLoadGraph = async (graphId: number) => {
+    // 简化的加载图逻辑 - 当前未实现
     console.log('加载图:', graphId);
   };
 
   const handleDeleteGraph = async (graphId: number) => {
+    // 简化的删除图逻辑 - 当前未实现
     console.log('删除图:', graphId);
   };
 
   // 渲染加载状态
   if (loading) {
     return (
-      <PageContainer>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <Spin size="large" />
-        </div>
-      </PageContainer>
+      <div className="entity-topology-detail-loading">
+        <Spin size="large" />
+      </div>
     );
   }
 
   // 渲染空状态
   if (!topologyData) {
     return (
-      <PageContainer>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <Empty description="未找到拓扑图数据" />
-        </div>
-      </PageContainer>
+      <div className="entity-topology-detail-empty">
+        <Empty description="未找到拓扑图数据" />
+      </div>
     );
   }
 
   return (
-    <PageContainer>
+    <div className="entity-topology-detail">
       {/* 面包屑导航 */}
-      <Breadcrumb style={{ marginBottom: 16 }}>
-        <Breadcrumb.Item href="/">
-          <HomeOutlined />
-          <span>首页</span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item href="/test-tools">
-          <ToolOutlined />
-          <span>测试工具</span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item href="/test-tools/entity-topology">
-          <NodeIndexOutlined />
-          <span>实体拓扑</span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>{topologyData.name}</Breadcrumb.Item>
-      </Breadcrumb>
+      <div style={{ marginBottom: '16px' }}>
+        <Breadcrumb
+          items={[
+            {
+              href: '/',
+              title: (
+                <Space>
+                  <HomeOutlined />
+                  <span>首页</span>
+                </Space>
+              )
+            },
+            {
+              href: '/test-tools',
+              title: (
+                <Space>
+                  <ToolOutlined />
+                  <span>测试工具</span>
+                </Space>
+              )
+            },
+            {
+              href: '/test-tools/entity-topology',
+              title: (
+                <Space>
+                  <NodeIndexOutlined />
+                  <span>实体拓扑</span>
+                </Space>
+              )
+            },
+            {
+              title: topologyData.name
+            }
+          ]}
+        />
+      </div>
 
-      {/* 页面头部 */}
-      <PageHeader>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <Title level={2} style={{ margin: 0 }}>
-              {topologyData.name}
-            </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
-              {topologyData.description || '实体拓扑图详情'}
-            </Paragraph>
-            <div style={{ marginTop: 12 }}>
-              <Space>
-                <Tag color={topologyData.status === 'active' ? 'green' : 'orange'}>
-                  {topologyData.status}
-                </Tag>
-                <Text type="secondary">类型: {topologyData.type}</Text>
-                <Text type="secondary">平面: {topologyData.plane}</Text>
-              </Space>
-            </div>
-          </div>
-          <Space>
-            <Button icon={<ReloadOutlined />} onClick={handleRefresh}>
-              刷新
-            </Button>
-            <Button icon={<SaveOutlined />}>
-              保存
-            </Button>
-            <Button icon={<FolderOpenOutlined />}>
-              加载
-            </Button>
-          </Space>
-        </div>
-
-        {/* 统计信息 */}
-        <Row gutter={16} style={{ marginTop: 24 }}>
-          <Col span={6}>
-            <StatsCard>
-              <Statistic
-                title="实体数量"
-                value={topologyData.stats.nodeCount}
-                prefix={<DatabaseOutlined />}
-              />
-            </StatsCard>
-          </Col>
-          <Col span={6}>
-            <StatsCard>
-              <Statistic
-                title="关系数量"
-                value={topologyData.stats.linkCount}
-                prefix={<LinkOutlined />}
-              />
-            </StatsCard>
-          </Col>
-          <Col span={6}>
-            <StatsCard>
-              <Statistic
-                title="健康度"
-                value={topologyData.stats.healthScore}
-                suffix="%"
-                prefix={<HeartOutlined />}
-              />
-            </StatsCard>
-          </Col>
-          <Col span={6}>
-            <StatsCard>
-              <Statistic
-                title="最后更新"
-                value={new Date(topologyData.stats.lastUpdated).toLocaleDateString()}
-              />
-            </StatsCard>
-          </Col>
-        </Row>
-      </PageHeader>
+      {/* 顶部标题区域 */}
+      <div style={{ marginBottom: '16px' }}>
+        <TopologyHeader topologyData={topologyData} onRefresh={handleRefresh} />
+      </div>
 
       {/* 主要内容区域 */}
-      <MainContent>
-        {/* 左侧面板 - 数据管理 */}
-        <LeftPanel>
-          <Card title="数据管理" style={{ height: '100%' }}>
-            <DataTabs
-              entities={topologyData.entities}
-              dependencies={topologyData.dependencies}
-              onDeleteEntity={handleDeleteEntity}
-              onDeleteDependency={handleDeleteDependency}
-              onAddEntity={handleAddEntity}
-              onAddDependency={handleAddDependency}
-              onAgentsClick={() => {}} // 简化版本暂不实现
-            />
-          </Card>
-        </LeftPanel>
+      <div style={{ display: 'flex', height: 'calc(100vh - 200px)', gap: '16px' }}>
+        {/* 右侧数据区域 */}
+        <div style={{ width: '400px' }}>
+          <DataTabs
+            entities={topologyData.entities}
+            dependencies={topologyData.dependencies}
+            onDeleteEntity={handleDeleteEntity}
+            onDeleteDependency={handleDeleteDependency}
+            onAddEntity={handleAddEntity}
+            onAddDependency={handleAddDependency}
+            onAgentsClick={() => {}} // 简化版本暂不实现
+          />
+        </div>
 
-        {/* 右侧面板 - 拓扑图 */}
-        <RightPanel>
-          <GraphContainer title="拓扑关系图">
-            <div style={{ flex: 1, padding: 16 }}>
-              <EntityD3RelationshipGraph 
-                entities={topologyData.entities} 
-                dependencies={topologyData.dependencies} 
-              />
-            </div>
-          </GraphContainer>
-        </RightPanel>
-      </MainContent>
+        {/* 左侧图形区域 */}
+        <div style={{ flex: 1, minHeight: '500px' }}>
+          <EntityD3RelationshipGraph entities={topologyData.entities} dependencies={topologyData.dependencies} />
+        </div>
+      </div>
 
       {/* 删除实体Modal */}
       <DeleteEntityModal
@@ -705,7 +567,7 @@ const EntityTopologyDetail: React.FC = () => {
         onDeleteGraph={handleDeleteGraph}
         loadLoading={graphLoading}
       />
-    </PageContainer>
+    </div>
   );
 };
 
