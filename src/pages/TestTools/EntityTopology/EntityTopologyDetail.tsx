@@ -372,7 +372,7 @@ const EntityTopologyDetail: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [id, t]);
+  }, [id]); // 移除t依赖，避免重复调用
 
   // 辅助函数：将Graph状态映射为Topology状态
   const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
@@ -422,7 +422,7 @@ const EntityTopologyDetail: React.FC = () => {
     } finally {
       setGraphLoading(false);
     }
-  }, [t]);
+  }, []); // 移除t依赖，避免重复调用
 
   /**
    * 保存当前拓扑为图

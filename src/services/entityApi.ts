@@ -177,7 +177,29 @@ entityApiClient.interceptors.response.use(
 /**
  * 实体操作API服务类
  */
-export // 实体统计响应类型定义
+export // 分页响应类型
+interface PageResponse<T> {
+  content: T[]; // 数据列表
+  totalElements: number; // 总记录数
+  totalPages: number; // 总页数
+  page: number; // 当前页码
+  size: number; // 每页大小
+  first: boolean; // 是否第一页
+  last: boolean; // 是否最后一页
+}
+
+// 根据图查询实体的请求类型
+export interface QueryEntitiesByGraphRequest {
+  graphId: string;
+  mode: 'IN' | 'NOT_IN'; // IN: 查询在图中的实体, NOT_IN: 查询不在图中的实体
+  name?: string; // 实体名称，支持模糊匹配
+  type?: string; // 实体类型
+  status?: string; // 实体状态
+  page?: number; // 页码，默认1
+  size?: number; // 每页大小，默认10
+}
+
+// 实体统计响应类型定义
 interface EntityStatisticsResponse {
   overallStats: {
     totalCount: number;
@@ -239,6 +261,61 @@ const entityApi = {
       console.error('❌ 获取实体统计失败:', error);
       throw error;
     }
+  },
+
+  /**
+   * 根据图ID查询实体列表
+   */
+  async listEntitiesByGraph(request: QueryEntitiesByGraphRequest): Promise<ApiResponse<PageResponse<Entity>>> {
+    console.log('🚀 调用根据图查询实体接口:', request);
+    try {
+      const response = await entityApiClient.post('/list-by-graph', request);
+      console.log('📊 根据图查询实体接口响应:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ 根据图查询实体失败:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 查询在指定图中的实体
+   */
+  async getEntitiesInGraph(
+    graphId: string,
+    options: {
+      name?: string;
+      type?: string;
+      status?: string;
+      page?: number;
+      size?: number;
+    } = {}
+  ): Promise<ApiResponse<PageResponse<Entity>>> {
+    return this.listEntitiesByGraph({
+      graphId,
+      mode: 'IN',
+      ...options
+    });
+  },
+
+  /**
+   * 查询不在指定图中的实体
+   */
+  async getEntitiesNotInGraph(
+    graphId: string,
+    options: {
+      name?: string;
+      type?: string;
+      status?: string;
+      page?: number;
+      size?: number;
+    } = {}
+  ): Promise<ApiResponse<PageResponse<Entity>>> {
+    return this.listEntitiesByGraph({
+      graphId,
+      mode: 'NOT_IN',
+      ...options
+    });
   },
 
   /**
