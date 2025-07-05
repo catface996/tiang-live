@@ -177,7 +177,27 @@ entityApiClient.interceptors.response.use(
 /**
  * 实体操作API服务类
  */
-export const entityApi = {
+export // 实体统计响应类型定义
+interface EntityStatisticsResponse {
+  overallStats: {
+    totalCount: number;
+    activeCount: number;
+    warningCount: number;
+    errorCount: number;
+    inactiveCount: number;
+  };
+  typeStats: Array<{
+    type: string;
+    typeName: string;
+    count: number;
+    activeCount: number;
+    warningCount: number;
+    errorCount: number;
+    inactiveCount: number;
+  }>;
+}
+
+const entityApi = {
   /**
    * 保存实体（创建或更新）
    */
@@ -204,6 +224,21 @@ export const entityApi = {
    */
   async listEntities(request: QueryEntityRequest = {}): Promise<ApiResponse<Entity[]>> {
     return entityApiClient.post('/list', request);
+  },
+
+  /**
+   * 获取实体统计信息
+   */
+  async getEntityStatistics(): Promise<ApiResponse<EntityStatisticsResponse>> {
+    console.log('🚀 调用实体统计接口');
+    try {
+      const response = await entityApiClient.get('/statistics');
+      console.log('📊 实体统计接口响应:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ 获取实体统计失败:', error);
+      throw error;
+    }
   },
 
   /**

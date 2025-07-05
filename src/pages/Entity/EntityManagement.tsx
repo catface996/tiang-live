@@ -39,7 +39,7 @@ import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
-import { entityApi } from '../../services/entityApi';
+import { entityApi, type EntityStatisticsResponse } from '../../services/entityApi';
 import enumApi, { type EnumItem } from '../../services/enumApi';
 import '../../styles/entity-management.css';
 
@@ -94,12 +94,41 @@ const EntityManagement: React.FC = () => {
   const [entityTypes, setEntityTypes] = useState<EnumItem[]>([]);
   const [entityStatuses, setEntityStatuses] = useState<EnumItem[]>([]);
   const [enumLoading, setEnumLoading] = useState(false);
+  const [statistics, setStatistics] = useState<EntityStatisticsResponse | null>(null);
+  const [statisticsLoading, setStatisticsLoading] = useState(false);
 
   useEffect(() => {
     setPageTitle(t('entities:title'));
     loadEntities();
     loadEnumData();
-  }, []); // 移除t依赖，避免重复触发
+    loadStatistics(); // 加载统计数据
+  }, [t]); // 添加必要的依赖
+
+  // 加载统计数据
+  const loadStatistics = async () => {
+    console.log('🚀 开始加载实体统计数据');
+    setStatisticsLoading(true);
+    try {
+      const response = await entityApi.getEntityStatistics();
+      console.log('📊 统计数据API响应:', response);
+
+      if (response && response.success && response.data) {
+        console.log('✅ 统计数据加载成功:', response.data);
+        setStatistics(response.data);
+      } else {
+        console.error('❌ 统计数据加载失败:', response);
+        message.error('加载统计数据失败: ' + (response?.message || '未知错误'));
+        setStatistics(null);
+      }
+    } catch (error) {
+      console.error('❌ 统计数据加载异常:', error);
+      message.error('加载统计数据失败: ' + (error.message || '网络错误'));
+      setStatistics(null);
+    } finally {
+      setStatisticsLoading(false);
+      console.log('🏁 统计数据加载完成');
+    }
+  };
 
   // 加载枚举数据
   const loadEnumData = async () => {
@@ -264,22 +293,55 @@ const EntityManagement: React.FC = () => {
     setActiveTab(key);
   };
 
+  // 刷新所有数据
+  const handleRefreshAll = async () => {
+    console.log('🔄 刷新所有数据');
+    await Promise.all([loadEntities(), loadStatistics()]);
+  };
+
   const handleEntityClick = (entity: any) => {
     setSelectedEntity(entity);
     setModalVisible(true);
   };
 
   const getEntityStats = () => {
+    // 优先使用API返回的统计数据
+    if (statistics && statistics.overallStats) {
+      console.log('✅ 使用API统计数据:', statistics.overallStats);
+      return {
+        total: statistics.overallStats.totalCount,
+        active: statistics.overallStats.activeCount,
+        inactive: statistics.overallStats.inactiveCount,
+        warning: statistics.overallStats.warningCount,
+        error: statistics.overallStats.errorCount
+      };
+    }
+
+    // 如果API数据不可用，回退到本地计算（兼容性处理）
+    console.log('⚠️ API统计数据不可用，使用本地计算');
     const stats = {
       total: entities.length,
       active: entities.filter(e => e.status === 'active' || e.status === 'running').length,
       inactive: entities.filter(e => e.status === 'inactive').length,
-      warning: entities.filter(e => e.status === 'warning').length
+      warning: entities.filter(e => e.status === 'warning').length,
+      error: entities.filter(e => e.status === 'error' || e.status === 'failed').length
     };
     return stats;
   };
 
   const getEntityTypeStats = () => {
+    // 优先使用API返回的类型统计数据
+    if (statistics && statistics.typeStats && statistics.typeStats.length > 0) {
+      console.log('✅ 使用API类型统计数据:', statistics.typeStats);
+      const typeStats: { [key: string]: number } = {};
+      statistics.typeStats.forEach(typeStat => {
+        typeStats[typeStat.type] = typeStat.count;
+      });
+      return typeStats;
+    }
+
+    // 如果API数据不可用，回退到本地计算（兼容性处理）
+    console.log('⚠️ API类型统计数据不可用，使用本地计算');
     const typeStats: { [key: string]: number } = {};
     entities.forEach(entity => {
       typeStats[entity.type] = (typeStats[entity.type] || 0) + 1;
@@ -333,7 +395,7 @@ const EntityManagement: React.FC = () => {
           </div>
           <Space>
             <Button icon={<ExportOutlined />}>{t('common:export')}</Button>
-            <Button icon={<ReloadOutlined />} onClick={loadEntities} loading={loading}>
+            <Button icon={<ReloadOutlined />} onClick={handleRefreshAll} loading={loading || statisticsLoading}>
               {t('common:refresh')}
             </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateEntity}>
@@ -351,6 +413,7 @@ const EntityManagement: React.FC = () => {
                 value={stats.total}
                 suffix={t('common:unit.count')}
                 prefix={<DatabaseOutlined />}
+                loading={statisticsLoading}
               />
             </StatsCard>
           </Col>
@@ -361,6 +424,7 @@ const EntityManagement: React.FC = () => {
                 value={stats.active}
                 suffix={t('common:unit.count')}
                 prefix={<AppstoreOutlined />}
+                loading={statisticsLoading}
               />
             </StatsCard>
           </Col>
@@ -371,6 +435,7 @@ const EntityManagement: React.FC = () => {
                 value={stats.warning}
                 suffix={t('common:unit.count')}
                 prefix={<ExclamationCircleOutlined />}
+                loading={statisticsLoading}
               />
             </StatsCard>
           </Col>
@@ -378,9 +443,10 @@ const EntityManagement: React.FC = () => {
             <StatsCard className="entity-stats-error">
               <Statistic
                 title={t('entities:stats.errorEntities')}
-                value={stats.inactive}
+                value={stats.error || stats.inactive}
                 suffix={t('common:unit.count')}
                 prefix={<CloseCircleOutlined />}
+                loading={statisticsLoading}
               />
             </StatsCard>
           </Col>
