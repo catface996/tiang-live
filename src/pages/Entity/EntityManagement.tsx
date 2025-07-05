@@ -330,9 +330,9 @@ const EntityManagement: React.FC = () => {
   };
 
   const getEntityTypeStats = () => {
-    // 优先使用API返回的类型统计数据
+    // 这个函数现在主要用于兼容性，实际的类型统计直接使用statistics.typeStats
     if (statistics && statistics.typeStats && statistics.typeStats.length > 0) {
-      console.log('✅ 使用API类型统计数据:', statistics.typeStats);
+      console.log('✅ API类型统计数据可用');
       const typeStats: { [key: string]: number } = {};
       statistics.typeStats.forEach(typeStat => {
         typeStats[typeStat.type] = typeStat.count;
@@ -382,6 +382,7 @@ const EntityManagement: React.FC = () => {
 
   const renderEntityManagement = () => {
     const stats = getEntityStats();
+    const typeStats = getEntityTypeStats(); // 在函数内部获取类型统计
     const filteredEntities = getFilteredEntities();
 
     return (
@@ -458,57 +459,29 @@ const EntityManagement: React.FC = () => {
             <Tag.CheckableTag checked={selectedCategory === 'all'} onChange={() => setSelectedCategory('all')}>
               全部 ({stats.total})
             </Tag.CheckableTag>
-            <Tag.CheckableTag checked={selectedCategory === 'report'} onChange={() => setSelectedCategory('report')}>
-              📊 {t('entities:types.report')} ({typeStats.report || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'business_link'}
-              onChange={() => setSelectedCategory('business_link')}
-            >
-              🔗 {t('entities:types.businessLink')} ({typeStats.business_link || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'business_system'}
-              onChange={() => setSelectedCategory('business_system')}
-            >
-              🏢 {t('entities:types.businessSystem')} ({typeStats.business_system || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag checked={selectedCategory === 'api'} onChange={() => setSelectedCategory('api')}>
-              🔌 {t('entities:types.api')} ({typeStats.api || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'database'}
-              onChange={() => setSelectedCategory('database')}
-            >
-              💾 {t('entities:types.database')} ({typeStats.database || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag checked={selectedCategory === 'table'} onChange={() => setSelectedCategory('table')}>
-              📋 {t('entities:types.table')} ({typeStats.table || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'middleware'}
-              onChange={() => setSelectedCategory('middleware')}
-            >
-              ☁️ {t('entities:types.middleware')} ({typeStats.middleware || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'microservice'}
-              onChange={() => setSelectedCategory('microservice')}
-            >
-              🔧 {t('entities:types.microservice')} ({typeStats.microservice || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'scheduled_job'}
-              onChange={() => setSelectedCategory('scheduled_job')}
-            >
-              ⏰ {t('entities:types.scheduledJob')} ({typeStats.scheduled_job || 0})
-            </Tag.CheckableTag>
-            <Tag.CheckableTag
-              checked={selectedCategory === 'configuration'}
-              onChange={() => setSelectedCategory('configuration')}
-            >
-              ⚙️ 配置 ({typeStats.configuration || 0})
-            </Tag.CheckableTag>
+            {/* 动态渲染后端返回的实体类型 */}
+            {statistics &&
+              statistics.typeStats &&
+              statistics.typeStats.map(typeStat => {
+                // 使用枚举值转换类型显示名称
+                const typeEnum = entityTypes.find(item => item.value === typeStat.type);
+                const typeLabel = typeEnum ? typeEnum.label : typeStat.type;
+
+                console.log(`🏷️ 渲染类型标签: ${typeStat.type} -> ${typeLabel} (${typeStat.count})`);
+
+                return (
+                  <Tag.CheckableTag
+                    key={typeStat.type}
+                    checked={selectedCategory === typeStat.type}
+                    onChange={() => {
+                      console.log(`🎯 选择类型分类: ${typeStat.type}`);
+                      setSelectedCategory(typeStat.type);
+                    }}
+                  >
+                    {typeLabel} ({typeStat.count})
+                  </Tag.CheckableTag>
+                );
+              })}
           </Space>
         </div>
 
@@ -749,8 +722,6 @@ const EntityManagement: React.FC = () => {
       <D3RelationshipGraph />
     </TabContent>
   );
-
-  const typeStats = getEntityTypeStats();
 
   return (
     <PageContainer className="entity-management-page">
