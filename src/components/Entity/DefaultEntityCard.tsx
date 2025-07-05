@@ -26,7 +26,23 @@ const MetricItem = styled.div`
 `;
 
 const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, entityTypes, onClick, onEdit }) => {
-  // 渲染属性信息
+  // 根据实体类型获取关键属性字段
+  const getKeyPropertiesForType = (entityType: string) => {
+    const keyPropertiesMap: { [key: string]: string[] } = {
+      USER: ['email', 'department', 'role', 'phone'],
+      SYSTEM: ['version', 'environment', 'status', 'url'],
+      API: ['method', 'endpoint', 'version', 'protocol'],
+      DATABASE: ['type', 'version', 'host', 'port'],
+      TABLE: ['database', 'schema', 'rows', 'size'],
+      MIDDLEWARE: ['type', 'version', 'port', 'cluster'],
+      MICROSERVICE: ['port', 'version', 'framework', 'replicas'],
+      SCHEDULED_JOB: ['schedule', 'nextRun', 'status', 'duration'],
+      CONFIGURATION: ['environment', 'version', 'format', 'source']
+    };
+    return keyPropertiesMap[entityType] || ['version', 'environment', 'status', 'type'];
+  };
+
+  // 智能渲染属性信息
   const renderProperties = () => {
     if (!entity.properties || Object.keys(entity.properties).length === 0) {
       return (
@@ -36,44 +52,76 @@ const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, entityTyp
       );
     }
 
+    // 获取当前实体类型的关键属性
+    const keyProperties = getKeyPropertiesForType(entity.type);
+    const allProperties = Object.entries(entity.properties);
+
+    // 优先显示关键属性
+    const prioritizedProperties = [];
+
+    // 先添加关键属性
+    keyProperties.forEach(key => {
+      const found = allProperties.find(([propKey]) => propKey.toLowerCase() === key.toLowerCase());
+      if (found) {
+        prioritizedProperties.push(found);
+      }
+    });
+
+    // 再添加其他属性（排除已添加的关键属性）
+    const remainingProperties = allProperties.filter(
+      ([key]) => !keyProperties.some(keyProp => keyProp.toLowerCase() === key.toLowerCase())
+    );
+
+    const displayProperties = [...prioritizedProperties, ...remainingProperties].slice(0, 4);
+
     return (
       <div style={{ marginTop: 8 }}>
-        {Object.entries(entity.properties)
-          .slice(0, 3)
-          .map(([key, value]) => (
-            <MetricItem key={key}>
-              <Text type="secondary">{key}:</Text>
-              <Text>{String(value)}</Text>
-            </MetricItem>
-          ))}
-        {Object.keys(entity.properties).length > 3 && (
+        {displayProperties.map(([key, value]) => (
+          <MetricItem key={key}>
+            <Text type="secondary">{key}:</Text>
+            <Text ellipsis={{ tooltip: String(value) }} style={{ maxWidth: '120px' }}>
+              {String(value)}
+            </Text>
+          </MetricItem>
+        ))}
+        {allProperties.length > 4 && (
           <Text type="secondary" style={{ fontSize: '11px' }}>
-            +{Object.keys(entity.properties).length - 3} 更多属性
+            +{allProperties.length - 4} 更多属性
           </Text>
         )}
       </div>
     );
   };
 
-  // 渲染元数据信息
+  // 智能渲染元数据信息
   const renderMetadata = () => {
     if (!entity.metadata || Object.keys(entity.metadata).length === 0) {
       return null;
     }
 
-    const importantMetadata = ['version', 'environment', 'owner', 'team', 'department'];
-    const displayMetadata = Object.entries(entity.metadata).filter(([key]) =>
-      importantMetadata.includes(key.toLowerCase())
-    );
+    // 重要的元数据字段（按优先级排序）
+    const importantMetadata = ['owner', 'team', 'department', 'version', 'environment', 'createdBy', 'updatedBy'];
+    const allMetadata = Object.entries(entity.metadata);
 
-    if (displayMetadata.length === 0) return null;
+    // 优先显示重要元数据
+    const prioritizedMetadata = [];
+    importantMetadata.forEach(key => {
+      const found = allMetadata.find(([metaKey]) => metaKey.toLowerCase() === key.toLowerCase());
+      if (found) {
+        prioritizedMetadata.push(found);
+      }
+    });
+
+    if (prioritizedMetadata.length === 0) return null;
 
     return (
       <div style={{ marginTop: 8 }}>
-        {displayMetadata.slice(0, 2).map(([key, value]) => (
+        {prioritizedMetadata.slice(0, 2).map(([key, value]) => (
           <MetricItem key={key}>
             <Text type="secondary">{key}:</Text>
-            <Text>{String(value)}</Text>
+            <Text ellipsis={{ tooltip: String(value) }} style={{ maxWidth: '120px' }}>
+              {String(value)}
+            </Text>
           </MetricItem>
         ))}
       </div>
@@ -108,11 +156,31 @@ const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, entityTyp
       {/* 显示标签 */}
       <div style={{ marginTop: 12 }}>
         {entity.tags && entity.tags.length > 0 ? (
-          entity.tags.map((tag: string, index: number) => (
-            <Tag key={index} size="small" style={{ marginBottom: 4 }}>
-              {tag}
-            </Tag>
-          ))
+          <div>
+            {entity.tags.slice(0, 3).map((tag: string, index: number) => (
+              <Tag key={index} size="small" style={{ marginBottom: 4, marginRight: 4 }}>
+                {tag}
+              </Tag>
+            ))}
+            {entity.tags.length > 3 && (
+              <Tag size="small" style={{ marginBottom: 4 }}>
+                +{entity.tags.length - 3}
+              </Tag>
+            )}
+          </div>
+        ) : entity.labels && entity.labels.length > 0 ? (
+          <div>
+            {entity.labels.slice(0, 3).map((label: string, index: number) => (
+              <Tag key={index} size="small" color="blue" style={{ marginBottom: 4, marginRight: 4 }}>
+                {label}
+              </Tag>
+            ))}
+            {entity.labels.length > 3 && (
+              <Tag size="small" color="blue" style={{ marginBottom: 4 }}>
+                +{entity.labels.length - 3}
+              </Tag>
+            )}
+          </div>
         ) : (
           <Text type="secondary" style={{ fontSize: '12px' }}>
             暂无标签
