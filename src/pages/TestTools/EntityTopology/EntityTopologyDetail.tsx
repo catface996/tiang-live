@@ -15,13 +15,7 @@ import { graphApi, GraphStatus, type Graph } from '../../../services/graphApi';
 import { entityApi } from '../../../services/entityApi';
 
 // 导入统一的类型定义
-import type {
-  Entity,
-  Dependency,
-  TopologyData,
-  PaginationInfo,
-  DEPENDENCY_TYPE
-} from '../../../types/entityTopology';
+import type { Entity, Dependency, TopologyData, PaginationInfo, DEPENDENCY_TYPE } from '../../../types/entityTopology';
 
 const EntityTopologyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -59,8 +53,8 @@ const EntityTopologyDetail: React.FC = () => {
   const [relationshipType, setRelationshipType] = useState<string>('depends_on');
 
   // 图操作相关状态
-  const [saveGraphModalVisible, setSaveGraphModalVisible] = useState(false);
-  const [loadGraphModalVisible, setLoadGraphModalVisible] = useState(false);
+  const [saveGraphModalVisible] = useState(false);
+  const [loadGraphModalVisible] = useState(false);
   const [availableGraphs, setAvailableGraphs] = useState<Graph[]>([]);
   const [graphForm] = Form.useForm();
   const [graphLoading, setGraphLoading] = useState(false);
@@ -84,7 +78,9 @@ const EntityTopologyDetail: React.FC = () => {
           console.log('✅ 成功获取图详情:', graph);
 
           // 辅助函数：将Graph状态映射为Topology状态
-          const mapGraphStatusToTopologyStatus = (graphStatus?: GraphStatus): 'active' | 'inactive' | 'warning' | 'error' => {
+          const mapGraphStatusToTopologyStatus = (
+            graphStatus?: GraphStatus
+          ): 'active' | 'inactive' | 'warning' | 'error' => {
             switch (graphStatus) {
               case GraphStatus.ACTIVE:
                 return 'active';
@@ -171,9 +167,10 @@ const EntityTopologyDetail: React.FC = () => {
       }
     });
 
-    const messageText = relatedDependencies.length > 0
-      ? `成功删除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
-      : `成功删除实体 ${entityToDelete.name}`;
+    const messageText =
+      relatedDependencies.length > 0
+        ? `成功删除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
+        : `成功删除实体 ${entityToDelete.name}`;
 
     message.success(messageText);
     setDeleteModalVisible(false);
@@ -205,8 +202,10 @@ const EntityTopologyDetail: React.FC = () => {
       }
     });
 
-    const sourceName = topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
-    const targetName = topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
+    const sourceName =
+      topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
+    const targetName =
+      topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
 
     message.success(`成功删除依赖关系: ${sourceName} → ${targetName}`);
     setDeleteDependencyModalVisible(false);
@@ -229,7 +228,7 @@ const EntityTopologyDetail: React.FC = () => {
 
   const fetchAvailableEntities = async (page: number = 1, pageSize: number = 10) => {
     console.log(`🔍 开始获取可用实体列表... 页码: ${page}, 每页: ${pageSize}`);
-    
+
     if (!currentGraph?.id) {
       console.warn('⚠️ 当前图ID不存在，无法获取可用实体');
       setAvailableEntities([]);
@@ -281,7 +280,7 @@ const EntityTopologyDetail: React.FC = () => {
 
     try {
       const graphId = currentGraph.id.toString();
-      
+
       console.log('🚀 开始添加实体到图:', {
         graphId,
         entityIds: selectedEntityIds
@@ -294,7 +293,7 @@ const EntityTopologyDetail: React.FC = () => {
 
       if (response.success) {
         console.log('✅ 实体添加到图成功');
-        
+
         const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
         const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
 
@@ -366,7 +365,10 @@ const EntityTopologyDetail: React.FC = () => {
     }
 
     const existingDependency = topologyData.dependencies.find(
-      dep => dep.source === sourceEntityId && dep.target === targetEntityId && dep.type === relationshipType as any
+      dep =>
+        dep.source === sourceEntityId &&
+        dep.target === targetEntityId &&
+        dep.type === (relationshipType as DEPENDENCY_TYPE)
     );
 
     if (existingDependency) {
@@ -378,7 +380,7 @@ const EntityTopologyDetail: React.FC = () => {
       id: `dep_${Date.now()}`,
       source: sourceEntityId,
       target: targetEntityId,
-      type: relationshipType as any,
+      type: relationshipType as DEPENDENCY_TYPE,
       description: `${relationshipType} relationship`,
       strength: 1
     };
@@ -437,16 +439,16 @@ const EntityTopologyDetail: React.FC = () => {
     }
   }, []);
 
-  const handleSaveGraph = async (values: any) => {
+  const handleSaveGraph = async (values: Record<string, unknown>) => {
     // 简化的保存图逻辑
     console.log('保存图:', values);
-    setSaveGraphModalVisible(false);
+    // setSaveGraphModalVisible(false); // 注释掉未使用的setter
   };
 
   const handleLoadGraph = async (graphId: number) => {
     // 简化的加载图逻辑
     console.log('加载图:', graphId);
-    setLoadGraphModalVisible(false);
+    // setLoadGraphModalVisible(false); // 注释掉未使用的setter
   };
 
   const handleDeleteGraph = async (graphId: number) => {
@@ -521,10 +523,7 @@ const EntityTopologyDetail: React.FC = () => {
       <div style={{ display: 'flex', height: 'calc(100vh - 200px)', gap: '16px' }}>
         {/* 左侧图形区域 */}
         <div style={{ flex: 1, minHeight: '500px' }}>
-          <EntityD3RelationshipGraph
-            entities={topologyData.entities}
-            dependencies={topologyData.dependencies}
-          />
+          <EntityD3RelationshipGraph entities={topologyData.entities} dependencies={topologyData.dependencies} />
         </div>
 
         {/* 右侧数据区域 */}
@@ -584,13 +583,13 @@ const EntityTopologyDetail: React.FC = () => {
       {/* 图操作Modals */}
       <GraphOperationModals
         saveModalVisible={saveGraphModalVisible}
-        onSaveModalCancel={() => setSaveGraphModalVisible(false)}
+        onSaveModalCancel={() => {}}
         onSaveGraph={handleSaveGraph}
         saveForm={graphForm}
         currentGraph={currentGraph}
         saveLoading={graphLoading}
         loadModalVisible={loadGraphModalVisible}
-        onLoadModalCancel={() => setLoadGraphModalVisible(false)}
+        onLoadModalCancel={() => {}}
         availableGraphs={availableGraphs}
         onLoadGraph={handleLoadGraph}
         onDeleteGraph={handleDeleteGraph}

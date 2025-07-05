@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Table, Tag, Button, Popconfirm } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { GraphStatus, type Graph } from '../../../services/graphApi';
+import { GraphStatus, type Graph } from '../../services/graphApi';
 
 interface GraphOperationModalsProps {
   // 保存图相关
@@ -45,9 +45,7 @@ const GraphOperationModals: React.FC<GraphOperationModalsProps> = ({
       render: (name: string, record: Graph) => (
         <div>
           <div style={{ fontWeight: 500 }}>{name}</div>
-          {record.description && (
-            <div style={{ fontSize: '12px', color: '#666' }}>{record.description}</div>
-          )}
+          {record.description && <div style={{ fontSize: '12px', color: '#666' }}>{record.description}</div>}
         </div>
       )
     },
@@ -82,7 +80,7 @@ const GraphOperationModals: React.FC<GraphOperationModalsProps> = ({
       title: t('entityTopology:graph.createdAt'),
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (date: string) => date ? new Date(date).toLocaleDateString() : '-'
+      render: (date: string) => (date ? new Date(date).toLocaleDateString() : '-')
     },
     {
       title: t('common:actions'),
@@ -123,11 +121,7 @@ const GraphOperationModals: React.FC<GraphOperationModalsProps> = ({
         footer={null}
         width={600}
       >
-        <Form
-          form={saveForm}
-          layout="vertical"
-          onFinish={onSaveGraph}
-        >
+        <Form form={saveForm} layout="vertical" onFinish={onSaveGraph}>
           <Form.Item
             name="name"
             label={t('entityTopology:graph.name')}
