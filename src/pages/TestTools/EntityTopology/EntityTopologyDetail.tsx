@@ -54,10 +54,9 @@ const EntityTopologyDetail: React.FC = () => {
 
   // 图操作相关状态
   const [saveGraphModalVisible] = useState(false);
-  const [loadGraphModalVisible] = useState(false);
-  const [availableGraphs, setAvailableGraphs] = useState<Graph[]>([]);
+  const [availableGraphs] = useState<Graph[]>([]);
   const [graphForm] = Form.useForm();
-  const [graphLoading, setGraphLoading] = useState(false);
+  const [graphLoading] = useState(false);
 
   // 加载拓扑图详情数据
   useEffect(() => {
@@ -413,46 +412,19 @@ const EntityTopologyDetail: React.FC = () => {
     setTargetEntityId(temp);
   };
 
-  // 图操作相关函数（简化版本）
-  const loadAvailableGraphs = useCallback(async () => {
-    try {
-      setGraphLoading(true);
-      const response = await graphApi.listGraphs({
-        ownerId: 1,
-        status: GraphStatus.ACTIVE,
-        page: 1,
-        size: 100
-      });
-
-      if (response.success && response.data && response.data.records) {
-        setAvailableGraphs(response.data.records);
-      } else {
-        message.error('加载图列表失败');
-        setAvailableGraphs([]);
-      }
-    } catch (error) {
-      console.error('Failed to load graphs:', error);
-      message.error('加载图列表失败');
-      setAvailableGraphs([]);
-    } finally {
-      setGraphLoading(false);
-    }
-  }, []);
-
+  // 图操作相关函数（简化版本 - 当前未完全实现）
   const handleSaveGraph = async (values: Record<string, unknown>) => {
     // 简化的保存图逻辑
     console.log('保存图:', values);
-    // setSaveGraphModalVisible(false); // 注释掉未使用的setter
   };
 
   const handleLoadGraph = async (graphId: number) => {
-    // 简化的加载图逻辑
+    // 简化的加载图逻辑 - 当前未实现
     console.log('加载图:', graphId);
-    // setLoadGraphModalVisible(false); // 注释掉未使用的setter
   };
 
   const handleDeleteGraph = async (graphId: number) => {
-    // 简化的删除图逻辑
+    // 简化的删除图逻辑 - 当前未实现
     console.log('删除图:', graphId);
   };
 
@@ -521,11 +493,6 @@ const EntityTopologyDetail: React.FC = () => {
 
       {/* 主要内容区域 */}
       <div style={{ display: 'flex', height: 'calc(100vh - 200px)', gap: '16px' }}>
-        {/* 左侧图形区域 */}
-        <div style={{ flex: 1, minHeight: '500px' }}>
-          <EntityD3RelationshipGraph entities={topologyData.entities} dependencies={topologyData.dependencies} />
-        </div>
-
         {/* 右侧数据区域 */}
         <div style={{ width: '400px' }}>
           <DataTabs
@@ -537,6 +504,11 @@ const EntityTopologyDetail: React.FC = () => {
             onAddDependency={handleAddDependency}
             onAgentsClick={() => {}} // 简化版本暂不实现
           />
+        </div>
+
+        {/* 左侧图形区域 */}
+        <div style={{ flex: 1, minHeight: '500px' }}>
+          <EntityD3RelationshipGraph entities={topologyData.entities} dependencies={topologyData.dependencies} />
         </div>
       </div>
 
@@ -580,7 +552,7 @@ const EntityTopologyDetail: React.FC = () => {
         onSwapEntities={swapSourceAndTarget}
       />
 
-      {/* 图操作Modals */}
+      {/* 图操作Modals - 当前简化版本，功能未完全实现 */}
       <GraphOperationModals
         saveModalVisible={saveGraphModalVisible}
         onSaveModalCancel={() => {}}
@@ -588,7 +560,7 @@ const EntityTopologyDetail: React.FC = () => {
         saveForm={graphForm}
         currentGraph={currentGraph}
         saveLoading={graphLoading}
-        loadModalVisible={loadGraphModalVisible}
+        loadModalVisible={false}
         onLoadModalCancel={() => {}}
         availableGraphs={availableGraphs}
         onLoadGraph={handleLoadGraph}
