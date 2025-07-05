@@ -15,5 +15,3 @@ const EntityCard: React.FC<EntityCardProps> = ({ entity, entityTypes, onClick, o
 };
 
 export default EntityCard;
-
-export default EntityCard;
