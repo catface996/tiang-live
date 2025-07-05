@@ -177,7 +177,19 @@ entityApiClient.interceptors.response.use(
 /**
  * 实体操作API服务类
  */
-export // 分页响应类型
+export // 添加实体到图的请求类型
+export interface AddToGraphRequest {
+  graphId: string;
+  entityIds: string[];
+}
+
+// 从图中移除实体的请求类型
+export interface RemoveFromGraphRequest {
+  graphId: string;
+  entityIds: string[];
+}
+
+// 分页响应类型
 interface PageResponse<T> {
   content: T[]; // 数据列表
   totalElements: number; // 总记录数
@@ -316,6 +328,36 @@ const entityApi = {
       mode: 'NOT_IN',
       ...options
     });
+  },
+
+  /**
+   * 将实体添加到图中
+   */
+  async addToGraph(request: AddToGraphRequest): Promise<ApiResponse<void>> {
+    console.log('🚀 调用添加实体到图接口:', request);
+    try {
+      const response = await entityApiClient.post('/add-to-graph', request);
+      console.log('✅ 添加实体到图成功:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ 添加实体到图失败:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * 从图中移除实体
+   */
+  async removeFromGraph(request: RemoveFromGraphRequest): Promise<ApiResponse<void>> {
+    console.log('🚀 调用从图中移除实体接口:', request);
+    try {
+      const response = await entityApiClient.post('/remove-from-graph', request);
+      console.log('✅ 从图中移除实体成功:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ 从图中移除实体失败:', error);
+      throw error;
+    }
   },
 
   /**

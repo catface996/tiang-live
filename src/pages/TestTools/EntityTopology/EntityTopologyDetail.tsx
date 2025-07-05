@@ -912,10 +912,21 @@ const EntityTopologyDetail: React.FC = () => {
   // 从API获取实体列表（支持分页）
   const fetchAvailableEntities = async (page: number = 1, pageSize: number = 10) => {
     console.log(`🔍 开始获取可用实体列表... 页码: ${page}, 每页: ${pageSize}`);
+    
+    if (!currentGraph?.id) {
+      console.warn('⚠️ 当前图ID不存在，无法获取可用实体');
+      setAvailableEntities([]);
+      setEntitiesPagination(prev => ({ ...prev, total: 0 }));
+      return;
+    }
+
     setEntitiesLoading(true);
     try {
-      // 调用entityApi获取实体列表
-      const response = await entityApi.listEntities({
+      // 将graphId转换为字符串类型
+      const graphId = currentGraph.id.toString();
+      
+      // 调用entityApi获取不在当前图中的实体列表
+      const response = await entityApi.getEntitiesNotInGraph(graphId, {
         page: page,
         size: pageSize
       });
@@ -923,38 +934,24 @@ const EntityTopologyDetail: React.FC = () => {
       console.log('📥 API响应:', response);
 
       if (response.success && response.data) {
-        console.log('✅ 成功获取实体列表:', response.data.length, '个实体');
+        const { content, totalElements, totalPages } = response.data;
+        console.log('✅ 成功获取可用实体列表:', content.length, '个实体，总计:', totalElements);
 
-        // 获取当前拓扑中已存在的实体ID
-        const currentEntityIds = topologyData?.entities.map(e => e.id) || [];
-        console.log('🔍 当前拓扑中的实体ID:', currentEntityIds);
-
-        // 过滤掉已经在拓扑中的实体
-        const availableEntitiesList = response.data.filter(entity => !currentEntityIds.includes(entity.id));
-
-        console.log('📋 可用实体列表:', availableEntitiesList.length, '个实体');
-        setAvailableEntities(availableEntitiesList);
-
-        // 更新分页信息
+        setAvailableEntities(content);
         setEntitiesPagination({
           current: page,
           pageSize: pageSize,
-          total: response.total || response.data.length // 使用API返回的总数或当前数据长度
-        });
-
-        console.log('📊 分页信息:', {
-          current: page,
-          pageSize: pageSize,
-          total: response.total || response.data.length
+          total: totalElements,
+          totalPages: totalPages
         });
       } else {
-        console.error('❌ 获取实体列表失败:', response);
+        console.error('❌ API返回数据格式异常:', response);
         message.error('获取实体列表失败: ' + (response.message || '未知错误'));
         setAvailableEntities([]);
         setEntitiesPagination(prev => ({ ...prev, total: 0 }));
       }
     } catch (error) {
-      console.error('❌ 获取实体列表异常:', error);
+      console.error('❌ 获取实体列表失败:', error);
       message.error('获取实体列表失败: ' + (error.message || '网络错误'));
       setAvailableEntities([]);
       setEntitiesPagination(prev => ({ ...prev, total: 0 }));
@@ -977,27 +974,62 @@ const EntityTopologyDetail: React.FC = () => {
   };
 
   // 确认添加选中的实体
-  const confirmAddEntities = () => {
-    if (!topologyData || selectedEntityIds.length === 0) return;
+  const confirmAddEntities = async () => {
+    if (!topologyData || selectedEntityIds.length === 0 || !currentGraph?.id) {
+      message.warning('请选择要添加的实体');
+      return;
+    }
 
-    // 获取选中的实体
-    const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
+    try {
+      // 将graphId转换为字符串类型
+      const graphId = currentGraph.id.toString();
+      
+      console.log('🚀 开始添加实体到图:', {
+        graphId,
+        entityIds: selectedEntityIds
+      });
 
-    // 添加到拓扑数据中
-    const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
+      // 调用后端接口将实体添加到图中
+      const response = await entityApi.addToGraph({
+        graphId,
+        entityIds: selectedEntityIds
+      });
 
-    setTopologyData({
-      ...topologyData,
-      entities: updatedEntities,
-      stats: {
-        ...topologyData.stats,
-        nodeCount: updatedEntities.length
+      if (response.success) {
+        console.log('✅ 实体添加到图成功');
+        
+        // 获取选中的实体
+        const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
+
+        // 更新前端拓扑数据
+        const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
+
+        setTopologyData({
+          ...topologyData,
+          entities: updatedEntities,
+          stats: {
+            ...topologyData.stats,
+            nodeCount: updatedEntities.length
+          }
+        });
+
+        message.success(t('detail.messages.addEntitiesSuccess', { count: entitiesToAdd.length }));
+
+        // 关闭Modal并重置选择
+        setSelectEntityModalVisible(false);
+        setSelectedEntityIds([]);
+        
+        // 重新加载可用实体列表（因为这些实体现在已经在图中了）
+        await fetchAvailableEntities(1, entitiesPagination.pageSize);
+      } else {
+        console.error('❌ 添加实体到图失败:', response.message);
+        message.error('添加实体失败: ' + (response.message || '未知错误'));
       }
-    });
-
-    message.success(t('detail.messages.addEntitiesSuccess', { count: entitiesToAdd.length }));
-
-    // 关闭Modal
+    } catch (error) {
+      console.error('❌ 添加实体到图异常:', error);
+      message.error('添加实体失败: ' + (error.message || '网络错误'));
+    }
+  };
     setSelectEntityModalVisible(false);
     setSelectedEntityIds([]);
   };
@@ -1751,6 +1783,5 @@ const EntityTopologyDetail: React.FC = () => {
       </Modal>
     </div>
   );
-};
 
 export default EntityTopologyDetail;
