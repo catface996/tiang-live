@@ -498,7 +498,13 @@ const EntityManagement: React.FC = () => {
           {filteredEntities.length > 0 ? (
             <EntityGrid>
               {filteredEntities.map(entity => (
-                <EntityCard key={entity.id} entity={entity} onClick={handleEntityClick} onEdit={handleEditEntity} />
+                <EntityCard
+                  key={entity.id}
+                  entity={entity}
+                  entityTypes={entityTypes}
+                  onClick={handleEntityClick}
+                  onEdit={handleEditEntity}
+                />
               ))}
             </EntityGrid>
           ) : (

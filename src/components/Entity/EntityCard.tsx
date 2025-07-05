@@ -6,34 +6,36 @@ import ApiEntityCard from './ApiEntityCard';
 import DatabaseEntityCard from './DatabaseEntityCard';
 import TableEntityCard from './TableEntityCard';
 import DefaultEntityCard from './DefaultEntityCard';
+import type { EnumItem } from '../../services/enumApi';
 
 interface EntityCardProps {
   entity: any;
+  entityTypes?: EnumItem[];
   onClick?: (entity: any) => void;
   onEdit?: (entity: any) => void;
 }
 
-const EntityCard: React.FC<EntityCardProps> = ({ entity, onClick, onEdit }) => {
+const EntityCard: React.FC<EntityCardProps> = ({ entity, entityTypes, onClick, onEdit }) => {
   const renderCard = () => {
     switch (entity.type) {
       case 'report':
-        return <ReportEntityCard entity={entity} onClick={onClick} onEdit={onEdit} />;
+        return <ReportEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit} />;
       case 'business_link':
-        return <BusinessLinkEntityCard entity={entity} onClick={onClick} onEdit={onEdit} />;
+        return <BusinessLinkEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit} />;
       case 'business_system':
-        return <BusinessSystemEntityCard entity={entity} onClick={onClick} onEdit={onEdit} />;
+        return <BusinessSystemEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit} />;
       case 'api':
-        return <ApiEntityCard entity={entity} onClick={onClick} onEdit={onEdit} />;
+        return <ApiEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit} />;
       case 'database':
-        return <DatabaseEntityCard entity={entity} onClick={onClick} onEdit={onEdit} />;
+        return <DatabaseEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit} />;
       case 'table':
-        return <TableEntityCard entity={entity} onClick={onClick} onEdit={onEdit} />;
+        return <TableEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit} />;
       case 'middleware':
       case 'microservice':
       case 'scheduled_job':
       case 'configuration':
       default:
-        return <DefaultEntityCard entity={entity} onClick={onClick} onEdit={onEdit} />;
+        return <DefaultEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit} />;
     }
   };
 

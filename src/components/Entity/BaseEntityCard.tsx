@@ -14,11 +14,13 @@ import {
   EditOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import type { EnumItem } from '../../services/enumApi';
 
 const { Text } = Typography;
 
 interface BaseEntityCardProps {
   entity: any;
+  entityTypes?: EnumItem[];
   onClick?: (entity: any) => void;
   onEdit?: (entity: any) => void;
   children: React.ReactNode;
@@ -56,7 +58,31 @@ const EntityIcon = styled.div`
   margin-right: 8px;
 `;
 
-const BaseEntityCard: React.FC<BaseEntityCardProps> = ({ entity, onClick, onEdit, children, extraActions }) => {
+const BaseEntityCard: React.FC<BaseEntityCardProps> = ({
+  entity,
+  entityTypes,
+  onClick,
+  onEdit,
+  children,
+  extraActions
+}) => {
+  // 实体类型转换函数
+  const getEntityTypeLabel = (typeValue: string) => {
+    if (!entityTypes || entityTypes.length === 0) {
+      console.log('🔍 BaseEntityCard - 枚举数据为空，使用原始值:', typeValue);
+      return typeValue || '未知类型';
+    }
+
+    const typeEnum = entityTypes.find(item => item.value === typeValue);
+    if (typeEnum) {
+      console.log('✅ BaseEntityCard - 找到类型转换:', typeValue, '->', typeEnum.label);
+      return typeEnum.label;
+    } else {
+      console.log('⚠️ BaseEntityCard - 未找到类型转换，使用原始值:', typeValue);
+      return typeValue || '未知类型';
+    }
+  };
+
   const getEntityIcon = (type: string) => {
     const iconMap = {
       report: { icon: <FileTextOutlined />, color: '#1890ff' },
@@ -97,7 +123,7 @@ const BaseEntityCard: React.FC<BaseEntityCardProps> = ({ entity, onClick, onEdit
           <div>
             <div style={{ fontWeight: 'bold' }}>{entity.name}</div>
             <Text type="secondary" style={{ fontSize: '12px' }}>
-              {entity.type || '未知类型'}
+              {getEntityTypeLabel(entity.type)}
             </Text>
           </div>
         </Space>

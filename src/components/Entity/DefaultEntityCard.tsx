@@ -2,12 +2,14 @@ import React from 'react';
 import { Typography, Tag, Collapse } from 'antd';
 import styled from 'styled-components';
 import BaseEntityCard from './BaseEntityCard';
+import type { EnumItem } from '../../services/enumApi';
 
 const { Text, Paragraph } = Typography;
 const { Panel } = Collapse;
 
 interface DefaultEntityCardProps {
   entity: any;
+  entityTypes?: EnumItem[];
   onClick?: (entity: any) => void;
   onEdit?: (entity: any) => void;
 }
@@ -23,7 +25,7 @@ const MetricItem = styled.div`
   }
 `;
 
-const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, onClick, onEdit }) => {
+const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, entityTypes, onClick, onEdit }) => {
   // 渲染属性信息
   const renderProperties = () => {
     if (!entity.properties || Object.keys(entity.properties).length === 0) {
@@ -79,7 +81,7 @@ const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, onClick, 
   };
 
   return (
-    <BaseEntityCard entity={entity} onClick={onClick} onEdit={onEdit}>
+    <BaseEntityCard entity={entity} entityTypes={entityTypes} onClick={onClick} onEdit={onEdit}>
       <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 12 }}>
         {entity.description}
       </Paragraph>
