@@ -310,3 +310,4 @@ const entityApi = {
 };
 
 export default entityApi;
+export { entityApi };
