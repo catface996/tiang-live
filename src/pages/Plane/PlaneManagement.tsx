@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Typography, Button, Space, message, Modal, Form, Input, Select } from 'antd';
+import { Card, Row, Col, Typography, Button, Space, message, Modal, Form, Input, Select, Spin } from 'antd';
 import { PlusOutlined, ReloadOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -58,39 +58,23 @@ const PlaneManagement: React.FC = () => {
     try {
       const planes = await PlaneApi.listPlanes();
       setPlaneList(planes);
-      // 同时更新Redux状态，将API返回的数据转换为应用所需格式
-      const formattedPlanes = planes.map(plane => ({
-        id: plane.id,
-        name: plane.name,
-        displayName: plane.name,
-        description: plane.description || '',
-        level: plane.level ? parseInt(plane.level.substring(1)) : 1, // 从API获取级别，例如"L3"转为数字3
-        dependencies: [],
-        entityHealth: {
-          healthy: plane.entities?.filter(e => e.status === 'ACTIVE')?.length || 0,
-          warning: plane.entities?.filter(e => e.status === 'WARNING')?.length || 0,
-          error: plane.entities?.filter(e => e.status === 'ERROR')?.length || 0,
-          total: plane.entityCount || 0
-        },
-        config: {
-          icon: '📋',
-          color: '#1890ff',
-          theme: 'default',
-          maxInstances: 10,
-          autoScaling: false,
-          monitoring: { enabled: true, alertThreshold: 80 },
-          security: { accessControl: true, encryption: false },
-          healthThresholds: { warningThreshold: 0.2, errorThreshold: 0.1 }
-        },
-        status: plane.status,
-        createdAt: plane.createdAt,
-        updatedAt: plane.updatedAt
-      }));
-      dispatch(setDefinitions(formattedPlanes));
+      // 数据转换和依赖关系计算在loadPlaneData中统一处理
     } catch (error) {
       console.error('Failed to fetch planes:', error);
       message.error(t('planes:errors.planeDefinitionLoadFailed'));
     }
+  };
+  
+  // 映射API状态到平面状态
+  const mapApiStatusToPlaneStatus = (apiStatus: string): 'ACTIVE' | 'WARNING' | 'ERROR' | 'MAINTENANCE' => {
+    const statusMap: Record<string, 'ACTIVE' | 'WARNING' | 'ERROR' | 'MAINTENANCE'> = {
+      'ACTIVE': 'ACTIVE',
+      'INACTIVE': 'MAINTENANCE',
+      'ARCHIVED': 'MAINTENANCE',
+      'WARNING': 'WARNING',
+      'ERROR': 'ERROR'
+    };
+    return statusMap[apiStatus] || 'ACTIVE';
   };
 
   const loadPlaneData = async () => {
@@ -101,24 +85,99 @@ const PlaneManagement: React.FC = () => {
       dispatch(setLoading({ type: 'metrics', loading: true }));
 
       // 获取平面列表数据
-      const planes = await PlaneApi.listPlanes();
+      const apiPlanes = await PlaneApi.listPlanes();
       
-      // 根据平面类型和元数据计算依赖关系
-      const relationships = calculateRelationships(planes);
+      // 转换API数据为PlaneDefinition格式
+      const formattedPlanes = apiPlanes.map(plane => {
+        const totalEntities = plane.entityCount || 0;
+        const healthyEntities = plane.entities?.filter(e => e.status === 'ACTIVE')?.length || 0;
+        const warningEntities = plane.entities?.filter(e => e.status === 'WARNING')?.length || 0;
+        const errorEntities = plane.entities?.filter(e => e.status === 'ERROR')?.length || 0;
+        
+        const getPlaneTypeIcon = (type: string): string => {
+          const iconMap: Record<string, string> = {
+            'BUSINESS': '💼',
+            'TECHNICAL': '⚙️',
+            'KNOWLEDGE': '📚',
+            'WORKFLOW': '🔄'
+          };
+          return iconMap[type] || '📋';
+        };
+        
+        const getPlaneTypeColor = (type: string): string => {
+          const colorMap: Record<string, string> = {
+            'BUSINESS': '#1890ff',
+            'TECHNICAL': '#52c41a',
+            'KNOWLEDGE': '#722ed1',
+            'WORKFLOW': '#fa8c16'
+          };
+          return colorMap[type] || '#1890ff';
+        };
+        
+        return {
+          id: plane.id,
+          name: plane.name,
+          displayName: plane.name,
+          description: plane.description || '',
+          level: plane.level ? parseInt(plane.level.substring(1)) : 1,
+          dependencies: plane.dependencies ? plane.dependencies.map(dep => dep.id) : [], // 使用API返回的依赖ID
+          entityHealth: {
+            healthy: healthyEntities,
+            warning: warningEntities,
+            error: errorEntities,
+            total: totalEntities
+          },
+          config: {
+            icon: getPlaneTypeIcon(plane.type),
+            color: getPlaneTypeColor(plane.type),
+            theme: 'default',
+            maxInstances: 10,
+            autoScaling: false,
+            monitoring: { enabled: true, alertThreshold: 80 },
+            security: { accessControl: true, encryption: false },
+            healthThresholds: { warningThreshold: 0.2, errorThreshold: 0.1 }
+          },
+          status: mapApiStatusToPlaneStatus(plane.status),
+          createdAt: plane.createdAt,
+          updatedAt: plane.updatedAt
+        };
+      });
       
-      // 更新拓扑数据
+      // 计算依赖关系
+      const relationships = calculateRelationships(apiPlanes);
+      
+      // 分析依赖复杂度
+      const complexity = analyzeDependencyComplexity(formattedPlanes, relationships);
+      
+      // 更新Redux状态
+      dispatch(setDefinitions(formattedPlanes));
+      
+      // 更新拓扑数据，包含复杂度分析
       const topology = {
-        relationships: relationships
+        relationships: relationships,
+        complexity: complexity
       };
       dispatch(setTopology(topology));
       
       // 计算指标数据
-      const metrics = calculateMetrics(planes);
+      const metrics = calculateMetrics(apiPlanes);
       dispatch(setMetrics(metrics));
+
+      // 输出调试信息
+      console.log('平面拓扑关系计算完成:', {
+        planesCount: formattedPlanes.length,
+        relationshipsCount: relationships.length,
+        complexity: complexity,
+        planes: formattedPlanes,
+        relationships: relationships
+      });
 
     } catch (error) {
       message.error(t('planes:errors.loadDataFailed'));
       console.error('Failed to load plane data:', error);
+      dispatch(setError({ type: 'definitions', error: error.message }));
+      dispatch(setError({ type: 'topology', error: error.message }));
+      dispatch(setError({ type: 'metrics', error: error.message }));
     } finally {
       dispatch(setLoading({ type: 'definitions', loading: false }));
       dispatch(setLoading({ type: 'topology', loading: false }));
@@ -126,82 +185,30 @@ const PlaneManagement: React.FC = () => {
     }
   };
   
-  // 计算平面之间的依赖关系
+  // 根据API返回的依赖关系构建关系数据
   const calculateRelationships = (planes: PlaneResponse[]) => {
     const relationships = [];
     
-    // 根据平面类型创建依赖关系
-    // 规则：
-    // 1. BUSINESS 平面依赖于 TECHNICAL 平面
-    // 2. TECHNICAL 平面依赖于 KNOWLEDGE 平面
-    // 3. WORKFLOW 平面可能依赖于任何其他平面
-    
-    const businessPlanes = planes.filter(p => p.type === 'BUSINESS');
-    const technicalPlanes = planes.filter(p => p.type === 'TECHNICAL');
-    const knowledgePlanes = planes.filter(p => p.type === 'KNOWLEDGE');
-    const workflowPlanes = planes.filter(p => p.type === 'WORKFLOW');
-    
-    // 创建 BUSINESS -> TECHNICAL 依赖
-    businessPlanes.forEach(business => {
-      // 为每个业务平面随机选择1-2个技术平面作为依赖
-      const techDependencies = technicalPlanes
-        .sort(() => 0.5 - Math.random()) // 随机排序
-        .slice(0, Math.min(2, technicalPlanes.length)); // 取前1-2个
-      
-      techDependencies.forEach(tech => {
-        relationships.push({
-          sourceId: business.id,
-          targetId: tech.id,
-          type: 'DEPENDS_ON',
-          strength: 'STRONG',
-          metadata: {
-            description: `${business.name} 依赖于 ${tech.name}`
-          }
+    // 遍历每个平面，根据其dependencies字段构建关系
+    planes.forEach(plane => {
+      if (plane.dependencies && plane.dependencies.length > 0) {
+        plane.dependencies.forEach(dependency => {
+          relationships.push({
+            id: `${plane.id}-depends-${dependency.id}`,
+            sourceId: plane.id,
+            targetId: dependency.id,
+            type: 'DEPENDS_ON',
+            properties: {
+              strength: 'MEDIUM',
+              description: `${plane.name} 依赖于 ${dependency.name}`,
+              weight: 0.6
+            }
+          });
         });
-      });
+      }
     });
     
-    // 创建 TECHNICAL -> KNOWLEDGE 依赖
-    technicalPlanes.forEach(tech => {
-      // 为每个技术平面随机选择1-3个知识平面作为依赖
-      const knowledgeDependencies = knowledgePlanes
-        .sort(() => 0.5 - Math.random()) // 随机排序
-        .slice(0, Math.min(3, knowledgePlanes.length)); // 取前1-3个
-      
-      knowledgeDependencies.forEach(knowledge => {
-        relationships.push({
-          sourceId: tech.id,
-          targetId: knowledge.id,
-          type: 'DEPENDS_ON',
-          strength: 'MEDIUM',
-          metadata: {
-            description: `${tech.name} 依赖于 ${knowledge.name}`
-          }
-        });
-      });
-    });
-    
-    // 创建 WORKFLOW 依赖
-    workflowPlanes.forEach(workflow => {
-      // 工作流平面可能依赖于任何其他平面
-      const allOtherPlanes = planes.filter(p => p.id !== workflow.id);
-      const dependencies = allOtherPlanes
-        .sort(() => 0.5 - Math.random()) // 随机排序
-        .slice(0, Math.min(2, allOtherPlanes.length)); // 取前1-2个
-      
-      dependencies.forEach(dep => {
-        relationships.push({
-          sourceId: workflow.id,
-          targetId: dep.id,
-          type: 'ORCHESTRATES',
-          strength: 'WEAK',
-          metadata: {
-            description: `${workflow.name} 编排 ${dep.name}`
-          }
-        });
-      });
-    });
-    
+    console.log('从API数据构建的依赖关系:', relationships);
     return relationships;
   };
   
@@ -265,9 +272,85 @@ const PlaneManagement: React.FC = () => {
     });
   };
 
-  const handleRefresh = () => {
-    fetchPlanes();
-    loadPlaneData();
+  // 分析依赖复杂度
+  const analyzeDependencyComplexity = (planes: any[], relationships: any[]) => {
+    const analysis = {
+      totalPlanes: planes.length,
+      totalRelationships: relationships.length,
+      averageDependencies: 0,
+      maxDependencies: 0,
+      complexityScore: 0,
+      riskLevel: 'LOW' as 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL',
+      recommendations: [] as string[]
+    };
+    
+    if (planes.length === 0) return analysis;
+    
+    // 计算每个平面的依赖数量
+    const dependencyCounts = planes.map(plane => {
+      const outgoing = relationships.filter(r => r.sourceId === plane.id).length;
+      const incoming = relationships.filter(r => r.targetId === plane.id).length;
+      return { planeId: plane.id, planeName: plane.name, outgoing, incoming, total: outgoing + incoming };
+    });
+    
+    analysis.averageDependencies = dependencyCounts.reduce((sum, item) => sum + item.total, 0) / planes.length;
+    analysis.maxDependencies = Math.max(...dependencyCounts.map(item => item.total));
+    
+    // 计算复杂度分数 (0-100)
+    const densityScore = planes.length > 1 ? (relationships.length / (planes.length * (planes.length - 1))) * 100 : 0;
+    const levelVariance = calculateLevelVariance(planes);
+    analysis.complexityScore = Math.min(100, densityScore * 50 + levelVariance * 10);
+    
+    // 确定风险级别和建议
+    if (analysis.complexityScore < 20) {
+      analysis.riskLevel = 'LOW';
+      analysis.recommendations.push('依赖关系简单，系统稳定性良好');
+    } else if (analysis.complexityScore < 50) {
+      analysis.riskLevel = 'MEDIUM';
+      analysis.recommendations.push('依赖关系适中，建议定期检查关键依赖');
+      analysis.recommendations.push('考虑优化高依赖度的平面');
+    } else if (analysis.complexityScore < 80) {
+      analysis.riskLevel = 'HIGH';
+      analysis.recommendations.push('依赖关系复杂，需要重点关注');
+      analysis.recommendations.push('建议简化依赖链，减少耦合度');
+      analysis.recommendations.push('加强监控和告警机制');
+    } else {
+      analysis.riskLevel = 'CRITICAL';
+      analysis.recommendations.push('依赖关系过于复杂，存在高风险');
+      analysis.recommendations.push('紧急需要重构依赖架构');
+      analysis.recommendations.push('建立依赖隔离和降级机制');
+    }
+    
+    // 找出高依赖度的平面
+    const highDependencyPlanes = dependencyCounts.filter(item => item.total > analysis.averageDependencies * 1.5);
+    if (highDependencyPlanes.length > 0) {
+      analysis.recommendations.push(`高依赖度平面: ${highDependencyPlanes.map(p => p.planeName).join(', ')}`);
+    }
+    
+    return analysis;
+  };
+
+  // 计算层级方差
+  const calculateLevelVariance = (planes: any[]): number => {
+    const levels = planes.map(p => p.level || 1);
+    const mean = levels.reduce((sum, level) => sum + level, 0) / levels.length;
+    const variance = levels.reduce((sum, level) => sum + Math.pow(level - mean, 2), 0) / levels.length;
+    return Math.sqrt(variance);
+  };
+
+  // 更新平面依赖关系字段
+  const updatePlaneDependencies = (planes: any[], relationships: any[]) => {
+    return planes.map(plane => ({
+      ...plane,
+      dependencies: relationships
+        .filter(rel => rel.sourceId === plane.id)
+        .map(rel => rel.targetId)
+    }));
+  };
+
+  const handleRefresh = async () => {
+    await fetchPlanes();
+    await loadPlaneData();
   };
 
   // 处理平面操作
@@ -507,6 +590,65 @@ const PlaneManagement: React.FC = () => {
         planes={planes}
         relationships={topology?.relationships || []}
       />
+
+      {/* 依赖复杂度分析结果 */}
+      {topology?.complexity && (
+        <Card 
+          title="依赖复杂度分析" 
+          style={{ marginTop: 24 }}
+          extra={
+            <span style={{ 
+              color: topology.complexity.riskLevel === 'LOW' ? '#52c41a' : 
+                     topology.complexity.riskLevel === 'MEDIUM' ? '#faad14' :
+                     topology.complexity.riskLevel === 'HIGH' ? '#fa8c16' : '#ff4d4f'
+            }}>
+              风险级别: {topology.complexity.riskLevel}
+            </span>
+          }
+        >
+          <Row gutter={[16, 16]}>
+            <Col xs={24} md={12}>
+              <div>
+                <p><strong>总平面数:</strong> {topology.complexity.totalPlanes}</p>
+                <p><strong>总依赖关系数:</strong> {topology.complexity.totalRelationships}</p>
+                <p><strong>平均依赖数:</strong> {topology.complexity.averageDependencies.toFixed(2)}</p>
+                <p><strong>最大依赖数:</strong> {topology.complexity.maxDependencies}</p>
+                <p><strong>复杂度分数:</strong> {topology.complexity.complexityScore.toFixed(1)}/100</p>
+              </div>
+            </Col>
+            <Col xs={24} md={12}>
+              <div>
+                <p><strong>优化建议:</strong></p>
+                <ul>
+                  {topology.complexity.recommendations.map((rec, index) => (
+                    <li key={index}>{rec}</li>
+                  ))}
+                </ul>
+              </div>
+            </Col>
+          </Row>
+        </Card>
+      )}
+
+      {/* 调试信息 - 开发环境显示 */}
+      {process.env.NODE_ENV === 'development' && (
+        <Card title="调试信息" style={{ marginTop: 24 }}>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} md={12}>
+              <Title level={5}>平面数据格式:</Title>
+              <pre style={{ fontSize: '12px', maxHeight: '300px', overflow: 'auto' }}>
+                {JSON.stringify(planes.slice(0, 2), null, 2)}
+              </pre>
+            </Col>
+            <Col xs={24} md={12}>
+              <Title level={5}>依赖关系数据格式:</Title>
+              <pre style={{ fontSize: '12px', maxHeight: '300px', overflow: 'auto' }}>
+                {JSON.stringify(topology?.relationships?.slice(0, 5) || [], null, 2)}
+              </pre>
+            </Col>
+          </Row>
+        </Card>
+      )}
 
       {/* 操作说明 */}
       <Card title={t('planes:operations.title')} style={{ marginTop: 24 }}>

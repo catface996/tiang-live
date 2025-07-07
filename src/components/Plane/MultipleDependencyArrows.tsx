@@ -88,9 +88,9 @@ const MultipleDependencyArrows: React.FC<MultipleDependencyArrowsProps> = ({
   relationships,
   animated = true
 }) => {
-  // 获取当前平面的所有依赖关系
+  // 获取当前平面的所有依赖关系（当前平面作为源，依赖其他平面）
   const currentDependencies = relationships.filter(rel => 
-    currentPlane.dependencies.includes(rel.sourceId) && rel.targetId === currentPlane.id
+    rel.sourceId === currentPlane.id
   );
 
   if (currentDependencies.length === 0) {
@@ -119,17 +119,17 @@ const MultipleDependencyArrows: React.FC<MultipleDependencyArrowsProps> = ({
       
       <DependencyInfo>
         {sortedDependencies.map((relationship) => {
-          const sourcePlane = allPlanes.find(p => p.id === relationship.sourceId);
+          const targetPlane = allPlanes.find(p => p.id === relationship.targetId);
           const strength = getRelationshipStrength(relationship);
           const description = getRelationshipDescription(relationship);
           
           return (
             <Tooltip 
               key={relationship.id}
-              title={`${sourcePlane?.displayName} → ${currentPlane.displayName}: ${description}`}
+              title={`${currentPlane.displayName} → ${targetPlane?.displayName}: ${description}`}
             >
-              <DependencyTag $planeId={relationship.sourceId} $strength={strength}>
-                {sourcePlane?.displayName || relationship.sourceId}
+              <DependencyTag $planeId={relationship.targetId} $strength={strength}>
+                {targetPlane?.displayName || relationship.targetId}
               </DependencyTag>
             </Tooltip>
           );
