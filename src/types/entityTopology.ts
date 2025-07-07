@@ -229,6 +229,7 @@ export interface SelectEntityModalProps {
   onSelectAll: () => void;
   onClearAll: () => void;
   onPaginationChange: (page: number, pageSize?: number) => void;
+  getEntityTypeLabel?: (typeValue: string) => string;
 }
 
 /**

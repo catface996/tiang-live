@@ -70,9 +70,9 @@ export interface PageResult<T> {
   pages: number;
 }
 
-// 创建专门的图API客户端，直接指向后端的/api/graph路径
+// 创建专门的图API客户端，指向后端服务器的/api/graph路径
 const graphApiClient = axios.create({
-  baseURL: '/api/graph',
+  baseURL: 'http://localhost:8080/api/graph',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'

@@ -113,7 +113,7 @@
         "title": "Select Entities",
         "description": "Select entities from the available list to add to the topology diagram.",
         "stats": "Total {total} available entities, {selected} selected.",
-        "confirmText": "Confirm Add ({count})",
+        "confirmText": "Confirm Add",
         "cancelText": "Cancel",
         "selectAll": "Select All",
         "clearAll": "Clear All",

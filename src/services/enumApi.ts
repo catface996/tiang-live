@@ -26,9 +26,9 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-// 创建专门的枚举API客户端，直接指向后端的/api/enum路径
+// 创建专门的枚举API客户端，指向后端服务器的/api/enum路径
 const enumApiClient = axios.create({
-  baseURL: '/api/enum',
+  baseURL: 'http://localhost:8080/api/enum',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'

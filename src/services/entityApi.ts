@@ -79,9 +79,9 @@ export interface PageResult<T> {
   pages: number;
 }
 
-// 创建专门的实体API客户端，直接指向后端的/api/entity路径
+// 创建专门的实体API客户端，指向后端服务器的/api/entity路径
 const entityApiClient = axios.create({
-  baseURL: '/api/entity',
+  baseURL: 'http://localhost:8080/api/entity',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'

@@ -36,6 +36,7 @@ import AddDependencyModal from '../../../components/EntityTopology/AddDependency
 import GraphOperationModals from '../../../components/EntityTopology/GraphOperationModals';
 import { graphApi, GraphStatus, type Graph } from '../../../services/graphApi';
 import { entityApi } from '../../../services/entityApi';
+import { enumApi, type EnumItem } from '../../../services/enumApi';
 
 // 导入统一的类型定义
 import type { Entity, Dependency, TopologyData, PaginationInfo } from '../../../types/entityTopology';
@@ -127,6 +128,54 @@ const EntityTopologyDetail: React.FC = () => {
   const [graphForm] = Form.useForm();
   const [graphLoading] = useState(false);
 
+  // 实体类型枚举相关状态
+  const [entityTypeEnums, setEntityTypeEnums] = useState<EnumItem[]>([]);
+  const [entityTypeMap, setEntityTypeMap] = useState<Map<string, string>>(new Map());
+
+  // 映射后端状态到前端状态
+  const mapBackendStatusToFrontend = (backendStatus: string): 'active' | 'inactive' | 'warning' | 'error' => {
+    const statusMap: Record<string, 'active' | 'inactive' | 'warning' | 'error'> = {
+      'ACTIVE': 'active',
+      'INACTIVE': 'inactive', 
+      'WARNING': 'warning',
+      'ERROR': 'error',
+      'PROCESSING': 'warning',
+      'ARCHIVED': 'inactive'
+    };
+    return statusMap[backendStatus] || 'active';
+  };
+
+  // 加载实体类型枚举
+  const loadEntityTypeEnums = async () => {
+    try {
+      console.log('🔍 开始加载实体类型枚举...');
+      const response = await enumApi.getEntityTypes();
+      
+      if (response.success && response.data) {
+        console.log('✅ 成功加载实体类型枚举:', response.data);
+        setEntityTypeEnums(response.data);
+        
+        // 创建类型映射 Map<value, label>
+        const typeMap = new Map<string, string>();
+        response.data.forEach(item => {
+          typeMap.set(item.value, item.label);
+        });
+        setEntityTypeMap(typeMap);
+        
+        console.log('📋 实体类型映射表:', Object.fromEntries(typeMap));
+      } else {
+        console.error('❌ 加载实体类型枚举失败:', response.message);
+      }
+    } catch (error) {
+      console.error('❌ 加载实体类型枚举异常:', error);
+    }
+  };
+
+  // 根据类型值获取类型标签
+  const getEntityTypeLabel = (typeValue: string): string => {
+    return entityTypeMap.get(typeValue) || typeValue;
+  };
+
   // 加载拓扑图详情数据
   useEffect(() => {
     const loadData = async () => {
@@ -139,10 +188,14 @@ const EntityTopologyDetail: React.FC = () => {
       try {
         console.log('🚀 开始加载拓扑图详情, ID:', id);
 
-        const response = await graphApi.getGraphById(id);
+        // 并行加载图详情和实体类型枚举
+        const [graphResponse] = await Promise.all([
+          graphApi.getGraphById(id),
+          loadEntityTypeEnums()
+        ]);
 
-        if (response.success && response.data) {
-          const graph = response.data;
+        if (graphResponse.success && graphResponse.data) {
+          const graph = graphResponse.data;
           console.log('✅ 成功获取图详情:', graph);
 
           // 辅助函数：将Graph状态映射为Topology状态
@@ -186,7 +239,7 @@ const EntityTopologyDetail: React.FC = () => {
 
           console.log('✅ 拓扑图详情加载完成:', topologyData);
         } else {
-          console.error('❌ API返回数据格式异常:', response);
+          console.error('❌ API返回数据格式异常:', graphResponse);
           message.error('加载拓扑图详情失败');
         }
       } catch (error) {
@@ -288,6 +341,13 @@ const EntityTopologyDetail: React.FC = () => {
   // 添加实体相关函数
   const handleAddEntity = async () => {
     console.log('🎯 点击新增实体按钮');
+    console.log('📊 当前图状态:', {
+      graphId: currentGraph?.id,
+      graphName: currentGraph?.name,
+      currentEntitiesCount: topologyData?.entities?.length || 0,
+      topologyDataExists: !!topologyData
+    });
+    
     setSelectedEntityIds([]);
     setSelectEntityModalVisible(true);
     setEntitiesPagination(prev => ({ ...prev, current: 1 }));
@@ -304,21 +364,75 @@ const EntityTopologyDetail: React.FC = () => {
       return;
     }
 
+    const graphId = currentGraph.id.toString();
+    console.log(`📊 当前图信息:`, {
+      graphId,
+      graphName: currentGraph.name,
+      currentEntitiesInGraph: topologyData?.entities?.length || 0,
+      currentEntitiesIds: topologyData?.entities?.map(e => e.id) || []
+    });
+
     setEntitiesLoading(true);
     try {
-      const graphId = currentGraph.id.toString();
-      const response = await entityApi.getEntitiesNotInGraph(graphId, {
+      const requestParams = {
         page: page,
         size: pageSize
+      };
+      
+      console.log(`🚀 调用API获取不在图中的实体:`, {
+        graphId,
+        requestParams,
+        apiEndpoint: '/list-by-graph',
+        mode: 'NOT_IN'
       });
+
+      const response = await entityApi.getEntitiesNotInGraph(graphId, requestParams);
 
       console.log('📥 API响应:', response);
 
       if (response.success && response.data) {
-        const { content, totalElements, totalPages } = response.data;
-        console.log('✅ 成功获取可用实体列表:', content.length, '个实体，总计:', totalElements);
+        // 适配后端实际的响应格式
+        const responseData = response.data;
+        const rawEntities = responseData.data || responseData.content || [];
+        const totalElements = parseInt(responseData.total || responseData.totalElements || '0');
+        const totalPages = responseData.totalPages || 1;
+        
+        // 转换后端实体格式为前端期望的格式
+        const transformedEntities = rawEntities.map((entity: any) => ({
+          id: entity.id?.toString() || '',
+          name: entity.name || '',
+          type: entity.type || '',
+          status: mapBackendStatusToFrontend(entity.status),
+          description: entity.description || '',
+          properties: entity.properties || {},
+          connections: 0, // 暂时设为0，后续可以根据需要计算
+          // 保留原始数据以备后用
+          _raw: entity
+        }));
+        
+        console.log('✅ 成功获取可用实体列表:', {
+          availableEntitiesCount: transformedEntities.length,
+          totalAvailableEntities: totalElements,
+          totalPages,
+          currentPage: page,
+          pageSize,
+          sampleEntities: transformedEntities.slice(0, 3).map(e => ({ id: e.id, name: e.name, type: e.type })),
+          rawResponseData: responseData
+        });
 
-        setAvailableEntities(content);
+        // 验证返回的实体确实不在当前图中
+        const currentEntityIds = new Set(topologyData?.entities?.map(e => e.id) || []);
+        const conflictEntities = transformedEntities.filter(entity => currentEntityIds.has(entity.id));
+        
+        if (conflictEntities.length > 0) {
+          console.warn('⚠️ 发现冲突: 以下实体已在当前图中，但API仍然返回了它们:', 
+            conflictEntities.map(e => ({ id: e.id, name: e.name }))
+          );
+        } else {
+          console.log('✅ 验证通过: 所有返回的实体都不在当前图中');
+        }
+
+        setAvailableEntities(transformedEntities);
         setEntitiesPagination({
           current: page,
           pageSize: pageSize,
@@ -378,6 +492,8 @@ const EntityTopologyDetail: React.FC = () => {
         message.success(`成功添加 ${entitiesToAdd.length} 个实体`);
         setSelectEntityModalVisible(false);
         setSelectedEntityIds([]);
+        
+        // 重新获取可用实体列表，因为刚添加的实体应该不再显示
         await fetchAvailableEntities(1, entitiesPagination.pageSize);
       } else {
         console.error('❌ 添加实体到图失败:', response.message);
@@ -631,6 +747,7 @@ const EntityTopologyDetail: React.FC = () => {
         onSelectAll={selectAllEntities}
         onClearAll={clearAllSelection}
         onPaginationChange={handleEntitiesPaginationChange}
+        getEntityTypeLabel={getEntityTypeLabel}
       />
 
       {/* 添加依赖关系Modal */}

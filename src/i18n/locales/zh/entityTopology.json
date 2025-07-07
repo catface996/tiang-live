@@ -113,7 +113,7 @@
         "title": "选择实体",
         "description": "从下列可用实体中选择要添加到拓扑图的实体。",
         "stats": "共有 {total} 个可用实体，已选择 {selected} 个。",
-        "confirmText": "确定添加 ({count})",
+        "confirmText": "确定添加",
         "cancelText": "取消",
         "selectAll": "全选",
         "clearAll": "清空",

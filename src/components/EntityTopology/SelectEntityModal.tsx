@@ -16,7 +16,8 @@ const SelectEntityModal: React.FC<SelectEntityModalProps> = ({
   onSelectionChange,
   onSelectAll,
   onClearAll,
-  onPaginationChange
+  onPaginationChange,
+  getEntityTypeLabel
 }) => {
   const { t } = useTranslation(['entityTopology', 'common']);
 
@@ -25,18 +26,18 @@ const SelectEntityModal: React.FC<SelectEntityModalProps> = ({
       title: t('detail.modals.selectEntity.columns.name'),
       dataIndex: 'name',
       key: 'name',
-      render: (name: string, record: Entity) => (
-        <div>
-          <div style={{ fontWeight: 500 }}>{name}</div>
-          <div style={{ fontSize: '12px', color: '#666' }}>ID: {record.id}</div>
-        </div>
+      render: (name: string) => (
+        <div style={{ fontWeight: 500 }}>{name}</div>
       )
     },
     {
       title: t('detail.modals.selectEntity.columns.type'),
       dataIndex: 'type',
       key: 'type',
-      render: (type: string) => <Tag color="blue">{type}</Tag>
+      render: (type: string) => {
+        const typeLabel = getEntityTypeLabel ? getEntityTypeLabel(type) : type;
+        return <Tag color="blue">{typeLabel}</Tag>;
+      }
     },
     {
       title: t('detail.modals.selectEntity.columns.status'),
@@ -52,16 +53,6 @@ const SelectEntityModal: React.FC<SelectEntityModalProps> = ({
         const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
         return <Tag color={config.color}>{config.text}</Tag>;
       }
-    },
-    {
-      title: t('detail.modals.selectEntity.columns.description'),
-      dataIndex: 'description',
-      key: 'description',
-      render: (description: string) => (
-        <span style={{ color: '#666' }}>
-          {description || t('detail.modals.selectEntity.columns.noDescription')}
-        </span>
-      )
     }
   ];
 
@@ -81,15 +72,6 @@ const SelectEntityModal: React.FC<SelectEntityModalProps> = ({
           {loading ? '正在从服务器获取实体列表，请稍候...' : t('detail.modals.selectEntity.description')}
         </p>
 
-        <div style={{ marginBottom: 16, padding: 12, backgroundColor: '#f5f5f5', borderRadius: 6 }}>
-          <span>
-            {t('detail.modals.selectEntity.stats', {
-              total: pagination.total,
-              selected: selectedEntityIds.length
-            })}
-          </span>
-        </div>
-
         <div style={{ marginBottom: 16 }}>
           <Space>
             <Button
@@ -106,7 +88,7 @@ const SelectEntityModal: React.FC<SelectEntityModalProps> = ({
         </div>
 
         {entities.length === 0 && !loading ? (
-          <Empty description={t('detail.modals.selectEntity.noEntities')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          <Empty description="暂无可用实体" image={Empty.PRESENTED_IMAGE_SIMPLE} />
         ) : (
           <Table
             columns={columns}
@@ -132,11 +114,7 @@ const SelectEntityModal: React.FC<SelectEntityModalProps> = ({
               showSizeChanger
               showQuickJumper
               showTotal={(total, range) =>
-                t('detail.modals.selectEntity.pagination.total', {
-                  start: range[0],
-                  end: range[1],
-                  total
-                })
+                `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
               }
             />
           </div>
