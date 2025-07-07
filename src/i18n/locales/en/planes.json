@@ -38,7 +38,9 @@
     "loadDataFailed": "Failed to load plane data",
     "planeDefinitionLoadFailed": "Failed to load plane definitions",
     "topologyLoadFailed": "Failed to load topology structure",
-    "metricsLoadFailed": "Failed to load metrics data"
+    "metricsLoadFailed": "Failed to load metrics data",
+    "planeDetailLoadFailed": "Failed to load plane details",
+    "planeNotFound": "Plane not found"
   },
   "operations": {
     "title": "Operation Instructions",
@@ -181,6 +183,44 @@
     }
   },
   "form": {
-    "basicInfo": "Basic Information"
+    "basicInfo": "Basic Information",
+    "name": "Name",
+    "namePlaceholder": "Please enter name",
+    "nameRequired": "Name is required",
+    "description": "Description",
+    "descriptionPlaceholder": "Please enter description",
+    "type": "Type",
+    "typePlaceholder": "Please select type",
+    "typeRequired": "Type is required",
+    "status": "Status",
+    "statusPlaceholder": "Please select status",
+    "level": "Level",
+    "levelPlaceholder": "Please select level",
+    "owner": "Owner",
+    "ownerPlaceholder": "Please enter owner",
+    "ownerRequired": "Owner is required",
+    "entityCount": "Entity Count",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At"
+  },
+  "create": {
+    "title": "Create Plane",
+    "success": "Plane created successfully",
+    "error": "Failed to create plane"
+  },
+  "edit": {
+    "title": "Edit Plane",
+    "success": "Plane updated successfully",
+    "error": "Failed to update plane"
+  },
+  "delete": {
+    "confirmTitle": "Confirm Delete",
+    "confirmContent": "Are you sure you want to delete plane {name}? This action cannot be undone.",
+    "success": "Plane deleted successfully",
+    "error": "Failed to delete plane"
+  },
+  "list": {
+    "title": "Plane List",
+    "empty": "No plane data available"
   }
 }
