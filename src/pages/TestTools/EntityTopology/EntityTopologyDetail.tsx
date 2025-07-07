@@ -132,6 +132,16 @@ const EntityTopologyDetail: React.FC = () => {
   const [entityTypeEnums, setEntityTypeEnums] = useState<EnumItem[]>([]);
   const [entityTypeMap, setEntityTypeMap] = useState<Map<string, string>>(new Map());
 
+  // 实体清单分页状态
+  const [entityListPagination, setEntityListPagination] = useState({
+    current: 1,
+    pageSize: 20,
+    total: 0,
+    showSizeChanger: true,
+    showQuickJumper: true
+  });
+  const [allEntitiesInGraph, setAllEntitiesInGraph] = useState<Entity[]>([]);
+
   // 映射后端状态到前端状态
   const mapBackendStatusToFrontend = (backendStatus: string): 'active' | 'inactive' | 'warning' | 'error' => {
     const statusMap: Record<string, 'active' | 'inactive' | 'warning' | 'error'> = {
@@ -143,6 +153,107 @@ const EntityTopologyDetail: React.FC = () => {
       'ARCHIVED': 'inactive'
     };
     return statusMap[backendStatus] || 'active';
+  };
+
+  // 加载图中的实体列表
+  const loadEntitiesInGraph = async (graphId: string, currentTopologyData?: TopologyData) => {
+    try {
+      console.log('🔍 开始加载图中的实体列表, 图ID:', graphId);
+
+      let allEntities: any[] = [];
+      let currentPage = 1;
+      const pageSize = 100; // 后端限制最大100
+      let hasMore = true;
+
+      // 分页获取所有实体
+      while (hasMore) {
+        console.log(`📄 正在加载第 ${currentPage} 页实体...`);
+        
+        const response = await entityApi.getEntitiesInGraph(graphId, {
+          page: currentPage,
+          size: pageSize
+        });
+
+        if (response.success && response.data) {
+          const responseData = response.data;
+          const pageEntities = responseData.data || responseData.content || [];
+          
+          allEntities = [...allEntities, ...pageEntities];
+          
+          // 检查是否还有更多页
+          const total = parseInt(responseData.total || responseData.totalElements || '0');
+          const totalPages = responseData.totalPages || Math.ceil(total / pageSize);
+          hasMore = currentPage < totalPages;
+          
+          console.log(`✅ 第 ${currentPage} 页加载完成:`, {
+            pageEntities: pageEntities.length,
+            totalSoFar: allEntities.length,
+            total,
+            totalPages,
+            hasMore
+          });
+          
+          currentPage++;
+        } else {
+          console.error('❌ 加载图中实体失败:', response.message);
+          message.error('加载图中实体失败: ' + (response.message || '未知错误'));
+          break;
+        }
+      }
+
+      if (allEntities.length > 0) {
+        // 转换后端实体格式为前端期望的格式
+        const transformedEntities = allEntities.map((entity: any) => ({
+          id: entity.id?.toString() || '',
+          name: entity.name || '',
+          type: entity.type || '',
+          status: mapBackendStatusToFrontend(entity.status),
+          description: entity.description || '',
+          properties: entity.properties || {},
+          connections: 0, // 暂时设为0，后续可以根据需要计算
+          // 保留原始数据以备后用
+          _raw: entity
+        }));
+
+        console.log('✅ 成功加载图中实体列表:', {
+          graphId,
+          totalPages: currentPage - 1,
+          entitiesCount: transformedEntities.length,
+          sampleEntities: transformedEntities.slice(0, 3).map(e => ({ id: e.id, name: e.name, type: e.type }))
+        });
+
+        // 保存所有实体数据
+        setAllEntitiesInGraph(transformedEntities);
+        
+        // 更新分页信息
+        setEntityListPagination(prev => ({
+          ...prev,
+          total: transformedEntities.length,
+          current: 1 // 重置到第一页
+        }));
+
+        // 更新拓扑数据中的实体列表（用于图形显示）
+        const dataToUpdate = currentTopologyData || topologyData;
+        if (dataToUpdate) {
+          const updatedTopologyData = {
+            ...dataToUpdate,
+            entities: transformedEntities,
+            stats: {
+              ...dataToUpdate.stats,
+              nodeCount: transformedEntities.length
+            }
+          };
+          setTopologyData(updatedTopologyData);
+          return transformedEntities;
+        }
+      } else {
+        console.log('ℹ️ 图中暂无实体');
+      }
+    } catch (error) {
+      console.error('❌ 加载图中实体异常:', error);
+      message.error('加载图中实体失败: ' + (error.message || '网络错误'));
+    }
+    return [];
   };
 
   // 加载实体类型枚举
@@ -230,7 +341,7 @@ const EntityTopologyDetail: React.FC = () => {
               healthScore: (graph.metadata?.healthScore as number) || 95,
               lastUpdated: graph.updatedAt || graph.createdAt || new Date().toISOString()
             },
-            entities: [],
+            entities: [], // 初始为空，后续通过API加载
             dependencies: []
           };
 
@@ -238,6 +349,9 @@ const EntityTopologyDetail: React.FC = () => {
           setCurrentGraph(graph);
 
           console.log('✅ 拓扑图详情加载完成:', topologyData);
+
+          // 加载图中的实体列表
+          await loadEntitiesInGraph(graph.id.toString(), topologyData);
         } else {
           console.error('❌ API返回数据格式异常:', graphResponse);
           message.error('加载拓扑图详情失败');
@@ -276,6 +390,22 @@ const EntityTopologyDetail: React.FC = () => {
     const updatedDependencies = topologyData.dependencies.filter(
       dep => dep.source !== entityToDelete.id && dep.target !== entityToDelete.id
     );
+
+    // 更新所有实体数据（用于分页）
+    const updatedAllEntities = allEntitiesInGraph.filter(e => e.id !== entityToDelete.id);
+    setAllEntitiesInGraph(updatedAllEntities);
+
+    // 更新分页信息
+    const newTotal = updatedAllEntities.length;
+    const { current, pageSize } = entityListPagination;
+    const maxPage = Math.ceil(newTotal / pageSize) || 1;
+    const newCurrent = current > maxPage ? maxPage : current;
+
+    setEntityListPagination(prev => ({
+      ...prev,
+      total: newTotal,
+      current: newCurrent
+    }));
 
     setTopologyData({
       ...topologyData,
@@ -480,6 +610,16 @@ const EntityTopologyDetail: React.FC = () => {
         const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
         const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
 
+        // 更新所有实体数据（用于分页）
+        const updatedAllEntities = [...allEntitiesInGraph, ...entitiesToAdd];
+        setAllEntitiesInGraph(updatedAllEntities);
+
+        // 更新分页信息
+        setEntityListPagination(prev => ({
+          ...prev,
+          total: updatedAllEntities.length
+        }));
+
         setTopologyData({
           ...topologyData,
           entities: updatedEntities,
@@ -522,6 +662,26 @@ const EntityTopologyDetail: React.FC = () => {
 
   const clearAllSelection = () => {
     setSelectedEntityIds([]);
+  };
+
+  // 处理实体清单分页变化
+  const handleEntityListPaginationChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || entityListPagination.pageSize;
+    console.log('📄 实体清单分页变化:', { page, pageSize: newPageSize });
+    
+    setEntityListPagination(prev => ({
+      ...prev,
+      current: page,
+      pageSize: newPageSize
+    }));
+  };
+
+  // 获取当前页的实体数据
+  const getCurrentPageEntities = (): Entity[] => {
+    const { current, pageSize } = entityListPagination;
+    const startIndex = (current - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return allEntitiesInGraph.slice(startIndex, endIndex);
   };
 
   const handleEntitiesPaginationChange = async (page: number, pageSize?: number) => {
@@ -708,13 +868,16 @@ const EntityTopologyDetail: React.FC = () => {
         <LeftPanel>
           <Card title="数据管理" style={{ height: '100%' }}>
             <DataTabs
-              entities={topologyData.entities}
+              entities={getCurrentPageEntities()}
               dependencies={topologyData.dependencies}
               onDeleteEntity={handleDeleteEntity}
               onDeleteDependency={handleDeleteDependency}
               onAddEntity={handleAddEntity}
               onAddDependency={handleAddDependency}
               onAgentsClick={() => {}} // 简化版本暂不实现
+              getEntityTypeLabel={getEntityTypeLabel}
+              entityPagination={entityListPagination}
+              onEntityPaginationChange={handleEntityListPaginationChange}
             />
           </Card>
         </LeftPanel>

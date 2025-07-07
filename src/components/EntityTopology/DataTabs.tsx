@@ -15,7 +15,10 @@ const DataTabs: React.FC<DataTabsProps> = ({
   onDeleteDependency,
   onAddEntity,
   onAddDependency,
-  onAgentsClick
+  onAgentsClick,
+  getEntityTypeLabel,
+  entityPagination,
+  onEntityPaginationChange
 }) => {
   const { t } = useTranslation(['entityTopology', 'common']);
 
@@ -38,7 +41,10 @@ const DataTabs: React.FC<DataTabsProps> = ({
       dataIndex: 'type',
       key: 'type',
       width: '30%',
-      render: (type: string) => <span>{type}</span>
+      render: (type: string) => {
+        const typeLabel = getEntityTypeLabel ? getEntityTypeLabel(type) : type;
+        return <span>{typeLabel}</span>;
+      }
     },
     {
       title: t('detail.dataTabs.entityColumns.actions'),
@@ -145,8 +151,19 @@ const DataTabs: React.FC<DataTabsProps> = ({
                   dataSource={entities}
                   rowKey="id"
                   size="small"
-                  pagination={false}
-                  scroll={{ y: 'calc(100vh - 420px)' }}
+                  pagination={entityPagination ? {
+                    current: entityPagination.current,
+                    pageSize: entityPagination.pageSize,
+                    total: entityPagination.total,
+                    showSizeChanger: entityPagination.showSizeChanger !== false,
+                    showQuickJumper: entityPagination.showQuickJumper !== false,
+                    showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
+                    onChange: onEntityPaginationChange,
+                    onShowSizeChange: onEntityPaginationChange,
+                    pageSizeOptions: ['10', '20', '50', '100'],
+                    size: 'small'
+                  } : false}
+                  scroll={{ y: entityPagination ? 'calc(100vh - 480px)' : 'calc(100vh - 420px)' }}
                 />
               </div>
             )
