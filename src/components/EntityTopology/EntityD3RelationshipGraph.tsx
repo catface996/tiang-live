@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
 import { Card, Spin, Alert, Space, Tag, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -52,9 +52,9 @@ interface GraphData {
   metadata: any;
 }
 
-const GraphContainer = styled.div`
+const GraphContainer = styled.div<{ $height: number }>`
   width: 100%;
-  height: 800px;
+  height: ${props => props.$height}px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   position: relative;
@@ -156,25 +156,98 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
     return sizes[level as keyof typeof sizes] || 14;
   };
 
+  // 动态计算图形容器高度
+  const calculateOptimalHeight = (entities: Entity[], planes: Plane[]): number => {
+    const entityCount = entities.length;
+    const planeCount = planes.length;
+    
+    // 基础高度
+    const baseHeight = 400;
+    
+    // 根据平面数量计算高度（每个平面至少需要200px）
+    const planeHeight = Math.max(planeCount * 200, 400);
+    
+    // 根据实体数量调整高度
+    let entityAdjustment = 0;
+    if (entityCount <= 5) {
+      entityAdjustment = 0;
+    } else if (entityCount <= 10) {
+      entityAdjustment = 100;
+    } else if (entityCount <= 20) {
+      entityAdjustment = 200;
+    } else {
+      entityAdjustment = Math.min(entityCount * 15, 500); // 最多增加500px
+    }
+    
+    // 计算最终高度，设置合理的最小值和最大值
+    const finalHeight = Math.max(
+      Math.min(planeHeight + entityAdjustment, 1200), // 最大1200px
+      baseHeight // 最小400px
+    );
+    
+    console.log('📏 动态计算图形高度:', {
+      entityCount,
+      planeCount,
+      planeHeight,
+      entityAdjustment,
+      finalHeight
+    });
+    
+    return finalHeight;
+  };
+
+  // 计算当前的最优高度
+  const optimalHeight = useMemo(() => {
+    if (!graphData || !graphData.nodes || !graphData.planes) {
+      return 600; // 默认高度
+    }
+    return calculateOptimalHeight(entities, graphData.planes);
+  }, [entities, graphData?.planes]);
+
   // Calculate plane bounding boxes
   const calculatePlaneBounds = (plane: Plane, nodes: Node[], width: number, height: number) => {
     const planeNodes = nodes.filter(node => node.plane === plane.id);
     if (planeNodes.length === 0) return null;
 
-    // 动态计算平面高度，基于实际平面数量
+    // 动态计算平面高度，基于实际平面数量和实体分布
     const totalPlanes = graphData?.planes.length || 1;
-    const levelHeight = height / totalPlanes;
-    
-    // 找到当前平面在排序后数组中的索引位置（降序排列）
     const sortedPlanes = graphData?.planes || [];
     const planeIndex = sortedPlanes.findIndex(p => p.id === plane.id);
-    const baseY = planeIndex * levelHeight + 50;
+    
+    // 计算每个平面应该占用的高度比例
+    const planeEntityCounts = sortedPlanes.map(p => 
+      nodes.filter(n => n.plane === p.id).length
+    );
+    const totalEntities = planeEntityCounts.reduce((sum, count) => sum + count, 0);
+    
+    // 基础高度分配（确保每个平面至少有最小高度）
+    const minPlaneHeight = 150;
+    const availableHeight = height - 100; // 留出边距
+    const baseHeightPerPlane = Math.max(availableHeight / totalPlanes, minPlaneHeight);
+    
+    // 根据实体数量调整高度分配
+    let adjustedHeight = baseHeightPerPlane;
+    if (totalEntities > 0) {
+      const entityRatio = planeNodes.length / totalEntities;
+      const extraHeight = Math.max(0, availableHeight - (totalPlanes * minPlaneHeight));
+      adjustedHeight = minPlaneHeight + (extraHeight * entityRatio);
+    }
+    
+    // 计算Y位置（累积高度）
+    let baseY = 50; // 顶部边距
+    for (let i = 0; i < planeIndex; i++) {
+      const prevPlaneNodes = nodes.filter(n => n.plane === sortedPlanes[i].id);
+      const prevEntityRatio = totalEntities > 0 ? prevPlaneNodes.length / totalEntities : 1 / totalPlanes;
+      const prevExtraHeight = Math.max(0, availableHeight - (totalPlanes * minPlaneHeight));
+      const prevHeight = minPlaneHeight + (prevExtraHeight * prevEntityRatio);
+      baseY += prevHeight;
+    }
 
     return {
       x: 50,
       y: baseY,
       width: width - 100,
-      height: levelHeight - 20,
+      height: adjustedHeight - 10, // 平面间留小间距
       rx: 12,
       ry: 12
     };
@@ -1042,7 +1115,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
       }
       style={{ marginBottom: 24 }}
     >
-      <GraphContainer ref={containerRef}>
+      <GraphContainer ref={containerRef} $height={optimalHeight}>
         <svg ref={svgRef}></svg>
 
         {/* 控制面板 */}
