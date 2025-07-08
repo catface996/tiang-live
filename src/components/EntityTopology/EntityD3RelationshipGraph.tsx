@@ -103,9 +103,9 @@ const LegendHeader = styled.div`
   }
 `;
 
-const LegendContent = styled.div<{ collapsed: boolean }>`
-  padding: ${props => (props.collapsed ? '0' : '12px')};
-  max-height: ${props => (props.collapsed ? '0' : '400px')};
+const LegendContent = styled.div<{ $collapsed: boolean }>`
+  padding: ${props => (props.$collapsed ? '0' : '12px')};
+  max-height: ${props => (props.$collapsed ? '0' : '400px')};
   overflow: hidden;
   transition: all 0.3s ease;
 `;
@@ -1105,7 +1105,7 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
             {legendCollapsed ? <DownOutlined /> : <UpOutlined />}
           </LegendHeader>
 
-          <LegendContent collapsed={legendCollapsed}>
+          <LegendContent $collapsed={legendCollapsed}>
             {/* Plane Legend */}
             <div style={{ marginBottom: 12 }}>
               <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>平面:</div>
