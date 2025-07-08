@@ -40,6 +40,7 @@ export interface Dependency {
   type: 'depends_on' | 'provides_to' | 'connects_to';
   strength: number;
   description?: string;
+  _raw?: any; // 保存原始后端数据
 }
 
 // ==================== D3图形组件类型 ====================
@@ -272,6 +273,7 @@ export interface AddDependencyModalProps {
   onTargetChange: (value: string) => void;
   onRelationshipTypeChange: (value: string) => void;
   onSwapEntities: () => void;
+  loading?: boolean;
 }
 
 /**

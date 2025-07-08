@@ -42,7 +42,8 @@ const AddDependencyModal: React.FC<AddDependencyModalProps> = ({
   onSourceChange,
   onTargetChange,
   onRelationshipTypeChange,
-  onSwapEntities
+  onSwapEntities,
+  loading = false
 }) => {
   const { t } = useTranslation(['entityTopology', 'common']);
 
@@ -64,7 +65,8 @@ const AddDependencyModal: React.FC<AddDependencyModalProps> = ({
       onCancel={onCancel}
       okText={t('detail.modals.addDependency.confirmText')}
       cancelText={t('detail.modals.addDependency.cancelText')}
-      okButtonProps={{ disabled: !canConfirm }}
+      okButtonProps={{ disabled: !canConfirm, loading }}
+      cancelButtonProps={{ disabled: loading }}
       width={600}
     >
       <div>

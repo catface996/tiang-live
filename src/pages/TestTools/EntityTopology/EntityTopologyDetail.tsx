@@ -124,6 +124,7 @@ const EntityTopologyDetail: React.FC = () => {
   const [sourceEntityId, setSourceEntityId] = useState<string>('');
   const [targetEntityId, setTargetEntityId] = useState<string>('');
   const [relationshipType, setRelationshipType] = useState<string>('depends_on');
+  const [addDependencyLoading, setAddDependencyLoading] = useState(false);
 
   // 图操作相关状态
   const [saveGraphModalVisible] = useState(false);
@@ -1034,8 +1035,8 @@ const EntityTopologyDetail: React.FC = () => {
     setAddDependencyModalVisible(true);
   };
 
-  const confirmAddDependency = () => {
-    if (!topologyData || !sourceEntityId || !targetEntityId) {
+  const confirmAddDependency = async () => {
+    if (!topologyData || !sourceEntityId || !targetEntityId || !currentGraph?.id) {
       message.error('请选择源实体和目标实体');
       return;
     }
@@ -1054,41 +1055,94 @@ const EntityTopologyDetail: React.FC = () => {
       return;
     }
 
-    const newDependency: Dependency = {
-      id: `dep_${Date.now()}`,
-      source: sourceEntityId,
-      target: targetEntityId,
-      type: relationshipType as any,
-      description: `${relationshipType} relationship`,
-      strength: 1
-    };
+    setAddDependencyLoading(true);
 
-    const updatedDependencies = [...topologyData.dependencies, newDependency];
-    const updatedAllDependencies = [...allDependenciesInGraph, newDependency];
+    try {
+      console.log('💾 开始创建依赖关系:', {
+        graphId: currentGraph.id.toString(),
+        sourceEntityId,
+        targetEntityId,
+        relationshipType
+      });
 
-    setTopologyData({
-      ...topologyData,
-      dependencies: updatedDependencies,
-      stats: {
-        ...topologyData.stats,
-        linkCount: updatedDependencies.length
+      // 调用后端API创建关系
+      const response = await relationApi.saveRelation({
+        name: `${relationshipType}_relation`,
+        description: `${relationshipType} relationship`,
+        type: relationshipType,
+        graphId: currentGraph.id.toString(),
+        sourceEntityId,
+        targetEntityId,
+        direction: 'UNIDIRECTIONAL',
+        weight: 1.0,
+        status: 'ACTIVE'
+      });
+
+      if (response.success && response.data) {
+        console.log('✅ 依赖关系创建成功:', response.data);
+
+        // 将后端返回的数据转换为前端格式
+        const newDependency: Dependency = {
+          id: response.data.id,
+          source: response.data.sourceEntityId,
+          target: response.data.targetEntityId,
+          type: response.data.type as any,
+          description: response.data.description || `${response.data.type} relationship`,
+          strength: response.data.weight || 1,
+          // 保留原始数据以备后用
+          _raw: response.data
+        };
+
+        const updatedDependencies = [...topologyData.dependencies, newDependency];
+        const updatedAllDependencies = [...allDependenciesInGraph, newDependency];
+
+        setTopologyData({
+          ...topologyData,
+          dependencies: updatedDependencies,
+          stats: {
+            ...topologyData.stats,
+            linkCount: updatedDependencies.length
+          }
+        });
+
+        // 更新所有依赖关系数据
+        setAllDependenciesInGraph(updatedAllDependencies);
+        
+        // 更新分页信息
+        setDependencyListPagination(prev => ({
+          ...prev,
+          total: updatedAllDependencies.length
+        }));
+
+        const sourceName = topologyData.entities.find(e => e.id === sourceEntityId)?.name || sourceEntityId;
+        const targetName = topologyData.entities.find(e => e.id === targetEntityId)?.name || targetEntityId;
+
+        message.success(`成功添加依赖关系: ${sourceName} → ${targetName}`);
+        setAddDependencyModalVisible(false);
+        
+        // 重置表单状态
+        setSourceEntityId('');
+        setTargetEntityId('');
+        setRelationshipType('depends_on');
+      } else {
+        console.error('❌ 创建依赖关系失败:', response.message);
+        message.error('创建依赖关系失败: ' + (response.message || '未知错误'));
       }
-    });
-
-    // 更新所有依赖关系数据
-    setAllDependenciesInGraph(updatedAllDependencies);
-    
-    // 更新分页信息
-    setDependencyListPagination(prev => ({
-      ...prev,
-      total: updatedAllDependencies.length
-    }));
-
-    const sourceName = topologyData.entities.find(e => e.id === sourceEntityId)?.name || sourceEntityId;
-    const targetName = topologyData.entities.find(e => e.id === targetEntityId)?.name || targetEntityId;
-
-    message.success(`成功添加依赖关系: ${sourceName} → ${targetName}`);
-    setAddDependencyModalVisible(false);
+    } catch (error) {
+      console.error('❌ 创建依赖关系异常:', {
+        error,
+        errorMessage: error?.message,
+        params: {
+          graphId: currentGraph.id.toString(),
+          sourceEntityId,
+          targetEntityId,
+          relationshipType
+        }
+      });
+      message.error('创建依赖关系失败: ' + (error?.message || '网络错误'));
+    } finally {
+      setAddDependencyLoading(false);
+    }
   };
 
   const cancelAddDependency = () => {
@@ -1321,6 +1375,7 @@ const EntityTopologyDetail: React.FC = () => {
         onTargetChange={setTargetEntityId}
         onRelationshipTypeChange={setRelationshipType}
         onSwapEntities={swapSourceAndTarget}
+        loading={addDependencyLoading}
       />
 
       {/* 图操作Modals - 当前简化版本，功能未完全实现 */}

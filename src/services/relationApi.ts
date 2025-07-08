@@ -30,6 +30,49 @@ export interface Relation {
 }
 
 /**
+ * 创建关系参数接口
+ */
+export interface SaveRelationParams {
+  id?: string; // 更新时必填，创建时可选
+  name: string;
+  description?: string;
+  type: string;
+  graphId: string;
+  sourceEntityId: string;
+  targetEntityId: string;
+  direction?: 'UNIDIRECTIONAL' | 'BIDIRECTIONAL';
+  weight?: number;
+  status?: 'ACTIVE' | 'INACTIVE' | 'PENDING' | 'BROKEN';
+  properties?: Record<string, any>;
+  metadata?: Record<string, any>;
+}
+
+/**
+ * 创建关系响应接口
+ */
+export interface SaveRelationResponse {
+  success: boolean;
+  code: string;
+  message: string;
+  data: {
+    id: string;
+    name: string;
+    description?: string;
+    type: string;
+    status: string;
+    sourceEntityId: string;
+    targetEntityId: string;
+    direction: string;
+    weight: number;
+    properties?: Record<string, any>;
+    metadata?: Record<string, any>;
+    graphId: string;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+}
+
+/**
  * 删除关系参数接口
  */
 export interface DeleteRelationParams {
@@ -116,6 +159,60 @@ export const relationApi = {
       
       // 重新抛出一个更清晰的错误
       const errorMessage = error?.response?.data?.message || error?.message || '网络请求失败';
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * 创建关系
+   */
+  async saveRelation(params: SaveRelationParams): Promise<SaveRelationResponse> {
+    try {
+      console.log('💾 调用创建关系API:', params);
+      
+      // 使用POST方法创建关系
+      const response = await apiClient.postFullResponse('/relation/save', {
+        id: params.id,
+        name: params.name,
+        description: params.description,
+        type: params.type,
+        graphId: params.graphId,
+        sourceEntityId: params.sourceEntityId,
+        targetEntityId: params.targetEntityId,
+        direction: params.direction || 'UNIDIRECTIONAL',
+        weight: params.weight || 1.0,
+        status: params.status || 'ACTIVE',
+        properties: params.properties,
+        metadata: params.metadata
+      });
+
+      console.log('✅ 创建关系API原始响应:', {
+        success: response?.success,
+        code: response?.code,
+        message: response?.message,
+        relationId: response?.data?.id,
+        fullResponse: response
+      });
+
+      // 检查业务逻辑成功状态
+      if (!response || response.success !== true) {
+        const errorMsg = response?.message || response?.code || '创建关系失败';
+        console.error('❌ 创建关系业务逻辑失败:', errorMsg);
+        throw new Error(errorMsg);
+      }
+
+      return response as SaveRelationResponse;
+    } catch (error) {
+      console.error('❌ 创建关系API调用失败:', {
+        error,
+        message: error?.message,
+        response: error?.response?.data,
+        status: error?.response?.status,
+        params
+      });
+      
+      // 重新抛出一个更清晰的错误
+      const errorMessage = error?.response?.data?.message || error?.message || '创建关系网络请求失败';
       throw new Error(errorMessage);
     }
   },
