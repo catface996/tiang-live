@@ -379,53 +379,85 @@ const EntityTopologyDetail: React.FC = () => {
     setDeleteModalVisible(true);
   };
 
-  const confirmDeleteEntity = () => {
-    if (!topologyData || !entityToDelete) return;
+  const confirmDeleteEntity = async () => {
+    if (!topologyData || !entityToDelete || !currentGraph?.id) return;
 
-    const relatedDependencies = topologyData.dependencies.filter(
-      dep => dep.source === entityToDelete.id || dep.target === entityToDelete.id
-    );
+    try {
+      const graphId = currentGraph.id.toString();
+      
+      console.log('🗑️ 开始从图中移除实体:', {
+        graphId,
+        entityId: entityToDelete.id,
+        entityName: entityToDelete.name
+      });
 
-    const updatedEntities = topologyData.entities.filter(e => e.id !== entityToDelete.id);
-    const updatedDependencies = topologyData.dependencies.filter(
-      dep => dep.source !== entityToDelete.id && dep.target !== entityToDelete.id
-    );
+      // 调用后端API移除实体
+      const response = await entityApi.removeFromGraph({
+        graphId,
+        entityIds: [entityToDelete.id]
+      });
 
-    // 更新所有实体数据（用于分页）
-    const updatedAllEntities = allEntitiesInGraph.filter(e => e.id !== entityToDelete.id);
-    setAllEntitiesInGraph(updatedAllEntities);
+      if (response.success) {
+        console.log('✅ 实体从图中移除成功');
 
-    // 更新分页信息
-    const newTotal = updatedAllEntities.length;
-    const { current, pageSize } = entityListPagination;
-    const maxPage = Math.ceil(newTotal / pageSize) || 1;
-    const newCurrent = current > maxPage ? maxPage : current;
+        const relatedDependencies = topologyData.dependencies.filter(
+          dep => dep.source === entityToDelete.id || dep.target === entityToDelete.id
+        );
 
-    setEntityListPagination(prev => ({
-      ...prev,
-      total: newTotal,
-      current: newCurrent
-    }));
+        const updatedEntities = topologyData.entities.filter(e => e.id !== entityToDelete.id);
+        const updatedDependencies = topologyData.dependencies.filter(
+          dep => dep.source !== entityToDelete.id && dep.target !== entityToDelete.id
+        );
 
-    setTopologyData({
-      ...topologyData,
-      entities: updatedEntities,
-      dependencies: updatedDependencies,
-      stats: {
-        ...topologyData.stats,
-        nodeCount: updatedEntities.length,
-        linkCount: updatedDependencies.length
+        // 更新所有实体数据（用于分页）
+        const updatedAllEntities = allEntitiesInGraph.filter(e => e.id !== entityToDelete.id);
+        setAllEntitiesInGraph(updatedAllEntities);
+
+        // 更新分页信息
+        const newTotal = updatedAllEntities.length;
+        const { current, pageSize } = entityListPagination;
+        const maxPage = Math.ceil(newTotal / pageSize) || 1;
+        const newCurrent = current > maxPage ? maxPage : current;
+
+        setEntityListPagination(prev => ({
+          ...prev,
+          total: newTotal,
+          current: newCurrent
+        }));
+
+        setTopologyData({
+          ...topologyData,
+          entities: updatedEntities,
+          dependencies: updatedDependencies,
+          stats: {
+            ...topologyData.stats,
+            nodeCount: updatedEntities.length,
+            linkCount: updatedDependencies.length
+          }
+        });
+
+        const messageText =
+          relatedDependencies.length > 0
+            ? `成功从图中移除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
+            : `成功从图中移除实体 ${entityToDelete.name}`;
+
+        message.success(messageText);
+        
+        // 重新获取可用实体列表，因为刚移除的实体现在应该可以选择
+        if (selectEntityModalVisible) {
+          await fetchAvailableEntities(1, entitiesPagination.pageSize);
+        }
+      } else {
+        console.error('❌ 从图中移除实体失败:', response.message);
+        message.error('移除实体失败: ' + (response.message || '未知错误'));
       }
-    });
-
-    const messageText =
-      relatedDependencies.length > 0
-        ? `成功删除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
-        : `成功删除实体 ${entityToDelete.name}`;
-
-    message.success(messageText);
-    setDeleteModalVisible(false);
-    setEntityToDelete(null);
+    } catch (error) {
+      console.error('❌ 从图中移除实体异常:', error);
+      message.error('移除实体失败: ' + (error.message || '网络错误'));
+    } finally {
+      setDeleteModalVisible(false);
+      setEntityToDelete(null);
+    }
   };
 
   const cancelDeleteEntity = () => {
