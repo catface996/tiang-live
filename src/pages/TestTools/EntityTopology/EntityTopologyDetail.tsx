@@ -36,6 +36,7 @@ import AddDependencyModal from '../../../components/EntityTopology/AddDependency
 import GraphOperationModals from '../../../components/EntityTopology/GraphOperationModals';
 import { graphApi, GraphStatus, type Graph } from '../../../services/graphApi';
 import { entityApi } from '../../../services/entityApi';
+import { relationApi, type Relation } from '../../../services/relationApi';
 import { enumApi, type EnumItem } from '../../../services/enumApi';
 
 // 导入统一的类型定义
@@ -307,6 +308,97 @@ const EntityTopologyDetail: React.FC = () => {
     return entityTypeMap.get(typeValue) || typeValue;
   };
 
+  // 加载图中的依赖关系
+  const loadRelationsInGraph = async (graphId: string) => {
+    try {
+      console.log('🔗 开始加载图中的依赖关系...', { graphId });
+      
+      let allRelations: Relation[] = [];
+      let currentPage = 1;
+      let hasMore = true;
+      const pageSize = 50; // 每页50条关系
+
+      while (hasMore) {
+        console.log(`📄 加载第 ${currentPage} 页依赖关系...`);
+        
+        const response = await relationApi.listRelationsByGraph({
+          graphId,
+          page: currentPage,
+          size: pageSize
+        });
+
+        if (response.success && response.data?.data) {
+          const pageRelations = response.data.data;
+          allRelations = [...allRelations, ...pageRelations];
+          
+          // 检查是否还有更多页
+          const total = parseInt(response.data.total || '0');
+          const totalPages = response.data.totalPages || Math.ceil(total / pageSize);
+          hasMore = currentPage < totalPages;
+          
+          console.log(`✅ 第 ${currentPage} 页依赖关系加载完成:`, {
+            pageRelations: pageRelations.length,
+            totalSoFar: allRelations.length,
+            total,
+            totalPages,
+            hasMore
+          });
+          
+          currentPage++;
+        } else {
+          console.error('❌ 加载图中依赖关系失败:', response.message);
+          message.error('加载图中依赖关系失败: ' + (response.message || '未知错误'));
+          break;
+        }
+      }
+
+      if (allRelations.length > 0) {
+        // 转换关系数据格式为前端期望的格式
+        const transformedRelations = allRelations.map((relation: Relation) => ({
+          id: relation.id,
+          source: relation.sourceEntityId,
+          target: relation.targetEntityId,
+          type: relation.type as 'depends_on' | 'provides_to' | 'connects_to',
+          strength: 0.5, // 默认强度
+          description: relation.description || `${relation.type} 关系`
+        }));
+
+        console.log('✅ 成功加载图中依赖关系列表:', {
+          graphId,
+          relationCount: transformedRelations.length,
+          sampleRelations: transformedRelations.slice(0, 3).map(r => ({ 
+            id: r.id, 
+            source: r.source, 
+            target: r.target, 
+            type: r.type 
+          }))
+        });
+
+        // 更新拓扑数据中的依赖关系
+        setTopologyData(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            dependencies: transformedRelations,
+            stats: {
+              ...prev.stats,
+              linkCount: transformedRelations.length
+            }
+          };
+        });
+
+        return transformedRelations;
+      } else {
+        console.log('📝 图中暂无依赖关系');
+        return [];
+      }
+    } catch (error) {
+      console.error('❌ 加载图中依赖关系异常:', error);
+      message.error('加载图中依赖关系失败: ' + (error.message || '网络错误'));
+      return [];
+    }
+  };
+
   // 加载拓扑图详情数据
   useEffect(() => {
     const loadData = async () => {
@@ -370,8 +462,11 @@ const EntityTopologyDetail: React.FC = () => {
 
           console.log('✅ 拓扑图详情加载完成:', topologyData);
 
-          // 加载图中的实体列表
-          await loadEntitiesInGraph(graph.id.toString(), topologyData);
+          // 并行加载图中的实体列表和依赖关系
+          await Promise.all([
+            loadEntitiesInGraph(graph.id.toString(), topologyData),
+            loadRelationsInGraph(graph.id.toString())
+          ]);
         } else {
           console.error('❌ API返回数据格式异常:', graphResponse);
           message.error('加载拓扑图详情失败');
