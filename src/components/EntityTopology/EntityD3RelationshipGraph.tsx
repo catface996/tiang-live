@@ -8,8 +8,6 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
   UndoOutlined,
-  UpOutlined,
-  DownOutlined,
   ExperimentOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -76,40 +74,6 @@ const ControlPanel = styled.div`
   box-shadow: var(--card-shadow);
 `;
 
-const LegendContainer = styled.div`
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  z-index: 10;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: var(--card-shadow);
-  max-width: 300px;
-  transition: all 0.3s ease;
-`;
-
-const LegendHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  border-bottom: 1px solid var(--border-color);
-  cursor: pointer;
-  user-select: none;
-
-  &:hover {
-    background-color: var(--hover-bg);
-  }
-`;
-
-const LegendContent = styled.div<{ $collapsed: boolean }>`
-  padding: ${props => (props.$collapsed ? '0' : '12px')};
-  max-height: ${props => (props.$collapsed ? '0' : '400px')};
-  overflow: hidden;
-  transition: all 0.3s ease;
-`;
-
 const TooltipContainer = styled.div`
   position: absolute;
   background: var(--card-bg);
@@ -143,7 +107,6 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; content: any } | null>(null);
-  const [legendCollapsed, setLegendCollapsed] = useState(true); // 默认折叠
 
   // 颜色映射
   const getNodeColor = (type: string, level: number) => {
@@ -1097,109 +1060,6 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
             <Button size="small" icon={<ReloadOutlined />} onClick={handleRefresh} title="刷新图表" />
           </Space>
         </ControlPanel>
-
-        {/* Legend */}
-        <LegendContainer>
-          <LegendHeader onClick={() => setLegendCollapsed(!legendCollapsed)}>
-            <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{t('detail.graph.legend.title')}</div>
-            {legendCollapsed ? <DownOutlined /> : <UpOutlined />}
-          </LegendHeader>
-
-          <LegendContent $collapsed={legendCollapsed}>
-            {/* Plane Legend */}
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>平面:</div>
-              {graphData?.planes.map((plane: Plane) => (
-                <div key={plane.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                  <div
-                    style={{
-                      width: 16,
-                      height: 12,
-                      backgroundColor: plane.color,
-                      border: `1px solid ${plane.borderColor}`,
-                      borderRadius: 2,
-                      marginRight: 6
-                    }}
-                  />
-                  <span style={{ fontSize: '11px' }}>{plane.name}</span>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>
-                {t('detail.graph.legend.nodeTypes')}:
-              </div>
-              {/* Agent节点类型 */}
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                <div
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: '50%',
-                    backgroundColor: '#722ed1',
-                    marginRight: 6,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '8px'
-                  }}
-                >
-                  🤖
-                </div>
-                <span style={{ fontSize: '11px' }}>AI Agent</span>
-              </div>
-              {/* 其他节点类型 */}
-              {graphData?.metadata.levels.map((level: any) => (
-                <div key={level.level} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                  <div
-                    style={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: '50%',
-                      backgroundColor: level.color,
-                      marginRight: 6
-                    }}
-                  />
-                  <span style={{ fontSize: '11px' }}>{level.name}</span>
-                </div>
-              ))}
-            </div>
-            <div>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>
-                {t('detail.graph.legend.relationshipTypes')}:
-              </div>
-              {/* Agent管理关系 */}
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                <div
-                  style={{
-                    width: 16,
-                    height: 2,
-                    backgroundColor: '#722ed1',
-                    marginRight: 6,
-                    borderTop: '2px dashed #722ed1',
-                    backgroundColor: 'transparent'
-                  }}
-                />
-                <span style={{ fontSize: '11px' }}>Agent管理</span>
-              </div>
-              {/* 其他关系类型 */}
-              {graphData?.metadata.relationTypes.map((relType: any) => (
-                <div key={relType.type} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                  <div
-                    style={{
-                      width: 16,
-                      height: 2,
-                      backgroundColor: relType.color,
-                      marginRight: 6
-                    }}
-                  />
-                  <span style={{ fontSize: '11px' }}>{relType.description}</span>
-                </div>
-              ))}
-            </div>
-          </LegendContent>
-        </LegendContainer>
 
         {/* 工具提示 */}
         {tooltip && (
