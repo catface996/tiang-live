@@ -33,7 +33,7 @@ import type {
 class ApiClient {
   private client: AxiosInstance;
 
-  constructor(baseURL: string = 'http://localhost:8080/api') {
+  constructor(baseURL: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api') {
     this.client = axios.create({
       baseURL,
       timeout: 30000,
@@ -55,6 +55,8 @@ class ApiClient {
         config.headers['X-Request-ID'] = `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
         console.log(`🚀 API请求: ${config.method?.toUpperCase()} ${config.url}`, {
+          baseURL: this.client.defaults.baseURL,
+          fullURL: `${this.client.defaults.baseURL}${config.url}`,
           headers: config.headers,
           data: config.data
         });

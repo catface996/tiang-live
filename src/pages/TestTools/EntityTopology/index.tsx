@@ -513,7 +513,7 @@ const EntityTopology: React.FC = () => {
         onOk={() => createForm.submit()}
         confirmLoading={createLoading}
         width={600}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form form={createForm} layout="vertical" onFinish={handleCreateSubmit}>
           <Form.Item

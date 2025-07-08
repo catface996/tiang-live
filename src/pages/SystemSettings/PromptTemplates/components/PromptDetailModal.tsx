@@ -189,7 +189,7 @@ const PromptDetailModal: React.FC<PromptDetailModalProps> = ({
       footer={null}
       width={1000}
       style={{ top: 20 }}
-      destroyOnClose
+      destroyOnHidden
     >
       {selectedPrompt && (
         <div>

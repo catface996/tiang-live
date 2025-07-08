@@ -2,11 +2,79 @@ import React from 'react';
 import { Tabs, Table, Button, Space, Typography, Tag } from 'antd';
 import { DatabaseOutlined, LinkOutlined, NodeIndexOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 // 导入统一的类型定义
 import type { Entity, Dependency, DataTabsProps } from '../../types/entityTopology';
 
 const { Text } = Typography;
+
+// 样式组件
+const TabsContainer = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  .ant-tabs {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    .ant-tabs-content-holder {
+      flex: 1;
+      overflow: hidden;
+      
+      .ant-tabs-tabpane {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+`;
+
+const TabContent = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  .tab-header {
+    flex-shrink: 0;
+    margin-bottom: 16px;
+  }
+  
+  .tab-table-container {
+    flex: 1;
+    overflow: hidden;
+    
+    .ant-table-wrapper {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      
+      .ant-table {
+        flex: 1;
+        
+        .ant-table-container {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          
+          .ant-table-body {
+            flex: 1;
+            overflow: auto;
+          }
+        }
+      }
+      
+      .ant-table-pagination {
+        flex-shrink: 0;
+        margin: 16px 0 0 0;
+        padding: 0;
+      }
+    }
+  }
+`;
 
 const DataTabs: React.FC<DataTabsProps> = ({
   entities,
@@ -198,10 +266,13 @@ const DataTabs: React.FC<DataTabsProps> = ({
                     showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
                     onChange: onEntityPaginationChange,
                     onShowSizeChange: onEntityPaginationChange,
-                    pageSizeOptions: ['10', '20', '50', '100'],
+                    pageSizeOptions: ['5', '10', '15'],
                     size: 'small'
                   } : false}
-                  scroll={{ y: entityPagination ? 'calc(100vh - 480px)' : 'calc(100vh - 420px)' }}
+                  scroll={{ 
+                    y: 350, // 设置表格内容区域高度为350px
+                    x: 'max-content' 
+                  }}
                 />
               </div>
             )
@@ -237,10 +308,13 @@ const DataTabs: React.FC<DataTabsProps> = ({
                     showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
                     onChange: onDependencyPaginationChange,
                     onShowSizeChange: onDependencyPaginationChange,
-                    pageSizeOptions: ['10', '20', '50', '100'],
+                    pageSizeOptions: ['5', '10', '15'],
                     size: 'small'
                   } : false}
-                  scroll={{ y: dependencyPagination ? 'calc(100vh - 480px)' : 'calc(100vh - 420px)' }}
+                  scroll={{ 
+                    y: 350, // 设置表格内容区域高度为350px
+                    x: 'max-content' 
+                  }}
                 />
               </div>
             )

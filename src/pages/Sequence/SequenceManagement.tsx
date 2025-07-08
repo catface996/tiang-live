@@ -553,7 +553,7 @@ const SequenceManagement: React.FC = () => {
         width={1200}
         style={{ top: 20 }}
         className="theme-modal"
-        destroyOnClose
+        destroyOnHidden
       >
         {selectedSequence && (
           <SequenceDetail sequence={selectedSequence} />
@@ -567,7 +567,7 @@ const SequenceManagement: React.FC = () => {
         onCancel={handleFormCancel}
         footer={null}
         width={800}
-        destroyOnClose
+        destroyOnHidden
         className="theme-modal"
       >
         <SequenceForm

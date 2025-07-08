@@ -139,7 +139,7 @@ const EntityTopologyDetail: React.FC = () => {
   // 实体清单分页状态
   const [entityListPagination, setEntityListPagination] = useState({
     current: 1,
-    pageSize: 20,
+    pageSize: 5,
     total: 0,
     showSizeChanger: true,
     showQuickJumper: true
@@ -149,7 +149,7 @@ const EntityTopologyDetail: React.FC = () => {
   // 依赖关系分页状态
   const [dependencyListPagination, setDependencyListPagination] = useState({
     current: 1,
-    pageSize: 20,
+    pageSize: 5,
     total: 0,
     showSizeChanger: true,
     showQuickJumper: true

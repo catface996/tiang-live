@@ -1,5 +1,6 @@
-import React from 'react';
-import { Modal, Form, Input, Select, Row, Col, Switch, Alert } from 'antd';
+import React, { useEffect } from 'react';
+import { Modal, Form, Input, Select, Row, Col, Switch, Alert, Tag, Space } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../../store';
@@ -33,8 +34,10 @@ interface PromptTemplate {
   id: string;
   name: string;
   category: string;
+  categoryCode?: string;
   description: string;
   content: string;
+  type: string;
   variables: string[];
   tags: string[];
   language: string;
@@ -63,47 +66,130 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({ visible, editingPromp
   const { currentTheme } = useAppSelector(state => state.theme);
   const isDark = currentTheme === 'dark';
 
+  // 当编辑模板时，设置表单初始值
+  useEffect(() => {
+    if (visible && editingPrompt) {
+      form.setFieldsValue({
+        name: editingPrompt.name,
+        category: editingPrompt.category,
+        description: editingPrompt.description,
+        content: editingPrompt.content,
+        type: editingPrompt.type || 'USER_PROMPT',
+        tags: editingPrompt.tags || [],
+        variables: editingPrompt.variables || [],
+        language: editingPrompt.language || 'zh-CN',
+        difficulty: editingPrompt.difficulty || 'intermediate',
+        isPublic: editingPrompt.isPublic || false
+      });
+    } else if (visible && !editingPrompt) {
+      // 创建新模板时的默认值
+      form.setFieldsValue({
+        type: 'USER_PROMPT',
+        language: 'zh-CN',
+        difficulty: 'intermediate',
+        isPublic: false,
+        tags: [],
+        variables: []
+      });
+    }
+  }, [visible, editingPrompt, form]);
+
+  // 从内容中提取变量
+  const extractVariablesFromContent = (content: string): string[] => {
+    if (!content) return [];
+    const matches = content.match(/\{([^}]+)\}/g);
+    if (!matches) return [];
+    return [...new Set(matches.map(match => match.slice(1, -1)))];
+  };
+
+  // 当内容改变时，自动更新变量
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const content = e.target.value;
+    const extractedVariables = extractVariablesFromContent(content);
+    const currentVariables = form.getFieldValue('variables') || [];
+    
+    // 合并现有变量和提取的变量，去重
+    const allVariables = [...new Set([...currentVariables, ...extractedVariables])];
+    
+    form.setFieldValue('variables', allVariables);
+  };
+
   return (
     <Modal
       title={editingPrompt ? t('prompts:editTemplate') : t('prompts:createTemplate')}
       open={visible}
       onOk={onOk}
       onCancel={onCancel}
-      width={800}
-      destroyOnClose
+      width={900}
+      destroyOnHidden
+      okText={editingPrompt ? '更新' : '创建'}
+      cancelText="取消"
     >
       <Form
         form={form}
         layout="vertical"
         initialValues={{
+          type: 'USER_PROMPT',
           language: 'zh-CN',
           difficulty: 'intermediate',
-          isPublic: false
+          isPublic: false,
+          tags: [],
+          variables: []
         }}
       >
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
               name="name"
-              label={t('prompts:form.templateName')}
-              rules={[{ required: true, message: t('prompts:form.templateNameRequired') }]}
+              label="模板名称"
+              rules={[{ required: true, message: '请输入模板名称' }]}
             >
-              <Input placeholder={t('prompts:form.templateNamePlaceholder')} />
+              <Input placeholder="请输入模板名称" />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              name="category"
-              label={t('prompts:form.category')}
-              rules={[{ required: true, message: t('prompts:form.categoryRequired') }]}
+              name="type"
+              label="模板类型"
+              rules={[{ required: true, message: '请选择模板类型' }]}
             >
-              <Select placeholder={t('prompts:form.categoryPlaceholder')}>
-                <Option value="开发工具">{t('prompts:categories.devTools')}</Option>
-                <Option value="运维工具">{t('prompts:categories.opsTools')}</Option>
-                <Option value="产品管理">{t('prompts:categories.productManagement')}</Option>
-                <Option value="文档工具">{t('prompts:categories.docTools')}</Option>
-                <Option value="客服助手">{t('prompts:categories.customerService')}</Option>
-                <Option value="数据分析">{t('prompts:categories.dataAnalysis')}</Option>
+              <Select placeholder="请选择模板类型">
+                <Option value="USER_PROMPT">用户提示词</Option>
+                <Option value="SYSTEM_PROMPT">系统提示词</Option>
+                <Option value="ASSISTANT_PROMPT">助手提示词</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="category"
+              label="分类"
+              rules={[{ required: true, message: '请选择分类' }]}
+            >
+              <Select placeholder="请选择分类">
+                <Option value="编程">编程</Option>
+                <Option value="商务">商务</Option>
+                <Option value="摘要">摘要</Option>
+                <Option value="数据分析">数据分析</Option>
+                <Option value="文档工具">文档工具</Option>
+                <Option value="通用">通用</Option>
+                <Option value="其他">其他</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="difficulty"
+              label="难度等级"
+              rules={[{ required: true, message: '请选择难度等级' }]}
+            >
+              <Select placeholder="请选择难度等级">
+                <Option value="beginner">初级</Option>
+                <Option value="intermediate">中级</Option>
+                <Option value="advanced">高级</Option>
               </Select>
             </Form.Item>
           </Col>
@@ -111,28 +197,64 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({ visible, editingPromp
 
         <Form.Item
           name="description"
-          label={t('prompts:form.description')}
-          rules={[{ required: true, message: t('prompts:form.descriptionRequired') }]}
+          label="描述"
+          rules={[{ required: true, message: '请输入描述' }]}
         >
-          <TextArea rows={2} placeholder={t('prompts:form.descriptionPlaceholder')} />
+          <TextArea rows={2} placeholder="请输入模板描述" />
         </Form.Item>
 
         <Form.Item
           name="content"
-          label={t('prompts:form.content')}
-          rules={[{ required: true, message: t('prompts:form.contentRequired') }]}
+          label="提示词内容"
+          rules={[{ required: true, message: '请输入提示词内容' }]}
         >
-          <TextArea rows={8} placeholder={t('prompts:form.contentPlaceholder')} />
+          <TextArea 
+            rows={10} 
+            placeholder="请输入提示词内容，可以使用 {变量名} 来定义变量"
+            showCount
+            onChange={handleContentChange}
+          />
         </Form.Item>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="tags"
+              label="标签"
+            >
+              <Select
+                mode="tags"
+                placeholder="请输入标签，按回车添加"
+                style={{ width: '100%' }}
+                tokenSeparators={[',']}
+              >
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="variables"
+              label="变量"
+            >
+              <Select
+                mode="tags"
+                placeholder="请输入变量名，按回车添加"
+                style={{ width: '100%' }}
+                tokenSeparators={[',']}
+              >
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Row gutter={16}>
           <Col span={8}>
             <Form.Item
               name="language"
-              label={t('prompts:form.language')}
-              rules={[{ required: true, message: t('prompts:form.languageRequired') }]}
+              label="语言"
+              rules={[{ required: true, message: '请选择语言' }]}
             >
-              <Select placeholder={t('prompts:form.languagePlaceholder')}>
+              <Select placeholder="请选择语言">
                 <Option value="zh-CN">中文</Option>
                 <Option value="en-US">English</Option>
                 <Option value="ja-JP">日本語</Option>
@@ -140,20 +262,7 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({ visible, editingPromp
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item
-              name="difficulty"
-              label={t('prompts:form.difficulty')}
-              rules={[{ required: true, message: t('prompts:form.difficultyRequired') }]}
-            >
-              <Select placeholder={t('prompts:search.difficulty')}>
-                <Option value="beginner">{t('prompts:difficulty.beginner')}</Option>
-                <Option value="intermediate">{t('prompts:difficulty.intermediate')}</Option>
-                <Option value="advanced">{t('prompts:difficulty.advanced')}</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item name="isPublic" label={t('prompts:detail.isPublic')} valuePropName="checked">
+            <Form.Item name="isPublic" label="公开模板" valuePropName="checked">
               <Switch />
             </Form.Item>
           </Col>
@@ -161,8 +270,15 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({ visible, editingPromp
 
         <StyledAlert
           $isDark={isDark}
-          message={t('prompts:form.variableTip')}
-          description={t('prompts:form.variableTipDescription')}
+          message="变量使用提示"
+          description={
+            <div>
+              <p>• 在提示词内容中使用 <code>{'{变量名}'}</code> 来定义变量，例如：<code>{'{用户输入}'}</code>、<code>{'{文档内容}'}</code> 等</p>
+              <p>• 系统会自动从内容中提取变量并添加到变量列表中</p>
+              <p>• 你也可以手动在变量字段中添加或删除变量</p>
+              <p>• 这些变量可以在使用模板时动态替换为实际内容</p>
+            </div>
+          }
           type="info"
           showIcon
         />

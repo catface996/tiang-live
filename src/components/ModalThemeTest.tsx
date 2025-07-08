@@ -47,7 +47,7 @@ const ModalThemeTest: React.FC = () => {
         footer={null}
         width={800}
         className="theme-modal"
-        destroyOnClose
+        destroyOnHidden
       >
         <div>
           <Typography.Title level={4}>描述列表测试</Typography.Title>

@@ -399,7 +399,7 @@ const MonitoringDataSourceConfig: React.FC<MonitoringDataSourceConfigProps> = ({
       okText={t('common:save')}
       cancelText={t('common:cancel')}
       width={1000}
-      destroyOnClose
+      destroyOnHidden
     >
       <Row gutter={0} style={{ height: '500px' }}>
         {/* 左侧边栏 */}
