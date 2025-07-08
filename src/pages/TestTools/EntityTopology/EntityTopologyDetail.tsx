@@ -634,50 +634,23 @@ const EntityTopologyDetail: React.FC = () => {
       if (response.success) {
         console.log('✅ 实体从图中移除成功');
 
-        const relatedDependencies = topologyData.dependencies.filter(
-          dep => dep.source === entityToDelete.id || dep.target === entityToDelete.id
-        );
+        // 重新加载实体清单和依赖关系，确保数据一致性
+        console.log('🔄 重新加载实体清单和依赖关系...');
+        
+        // 第一步：重新加载实体列表
+        const updatedEntities = await loadEntitiesInGraph(graphId, topologyData);
+        
+        // 第二步：重新加载依赖关系
+        await loadRelationsInGraph(graphId);
 
-        const updatedEntities = topologyData.entities.filter(e => e.id !== entityToDelete.id);
-        const updatedDependencies = topologyData.dependencies.filter(
-          dep => dep.source !== entityToDelete.id && dep.target !== entityToDelete.id
-        );
-
-        // 更新所有实体数据（用于分页）
-        const updatedAllEntities = allEntitiesInGraph.filter(e => e.id !== entityToDelete.id);
-        setAllEntitiesInGraph(updatedAllEntities);
-
-        // 更新分页信息
-        const newTotal = updatedAllEntities.length;
-        const { current, pageSize } = entityListPagination;
-        const maxPage = Math.ceil(newTotal / pageSize) || 1;
-        const newCurrent = current > maxPage ? maxPage : current;
-
-        setEntityListPagination(prev => ({
-          ...prev,
-          total: newTotal,
-          current: newCurrent
-        }));
-
-        setTopologyData({
-          ...topologyData,
-          entities: updatedEntities,
-          dependencies: updatedDependencies,
-          stats: {
-            ...topologyData.stats,
-            nodeCount: updatedEntities.length,
-            linkCount: updatedDependencies.length
-          }
+        console.log('✅ 实体清单和依赖关系重新加载完成:', {
+          entitiesCount: updatedEntities?.length || 0,
+          deletedEntity: entityToDelete.name
         });
 
-        const messageText =
-          relatedDependencies.length > 0
-            ? `成功从图中移除实体 ${entityToDelete.name} 及其 ${relatedDependencies.length} 个相关依赖关系`
-            : `成功从图中移除实体 ${entityToDelete.name}`;
-
-        message.success(messageText);
+        message.success(`成功从图中移除实体 ${entityToDelete.name}，数据已刷新`);
         
-        // 重新获取可用实体列表，因为刚移除的实体现在应该可以选择
+        // 如果选择实体Modal是打开的，重新获取可用实体列表
         if (selectEntityModalVisible) {
           await fetchAvailableEntities(1, entitiesPagination.pageSize);
         }
@@ -923,29 +896,30 @@ const EntityTopologyDetail: React.FC = () => {
       if (response.success) {
         console.log('✅ 实体添加到图成功');
 
-        const entitiesToAdd = availableEntities.filter(entity => selectedEntityIds.includes(entity.id));
-        const updatedEntities = [...topologyData.entities, ...entitiesToAdd];
+        // 重新加载图中的实体列表，以获取后端计算的正确平面信息
+        console.log('🔄 重新加载实体列表以获取正确的平面信息...');
+        const updatedEntities = await loadEntitiesInGraph(graphId, topologyData);
 
-        // 更新所有实体数据（用于分页）
-        const updatedAllEntities = [...allEntitiesInGraph, ...entitiesToAdd];
-        setAllEntitiesInGraph(updatedAllEntities);
+        if (updatedEntities && updatedEntities.length > 0) {
+          console.log('✅ 实体列表重新加载完成，平面信息已更新:', {
+            totalEntities: updatedEntities.length,
+            entitiesWithPlane: updatedEntities.filter(e => e.plane).length,
+            planeDistribution: updatedEntities.reduce((acc, entity) => {
+              if (entity.plane) {
+                const planeKey = `${entity.plane.name} (${entity.plane.level})`;
+                acc[planeKey] = (acc[planeKey] || 0) + 1;
+              } else {
+                acc['无平面'] = (acc['无平面'] || 0) + 1;
+              }
+              return acc;
+            }, {} as Record<string, number>)
+          });
 
-        // 更新分页信息
-        setEntityListPagination(prev => ({
-          ...prev,
-          total: updatedAllEntities.length
-        }));
+          message.success(`成功添加 ${selectedEntityIds.length} 个实体，平面信息已更新`);
+        } else {
+          message.success(`成功添加 ${selectedEntityIds.length} 个实体`);
+        }
 
-        setTopologyData({
-          ...topologyData,
-          entities: updatedEntities,
-          stats: {
-            ...topologyData.stats,
-            nodeCount: updatedEntities.length
-          }
-        });
-
-        message.success(`成功添加 ${entitiesToAdd.length} 个实体`);
         setSelectEntityModalVisible(false);
         setSelectedEntityIds([]);
         
