@@ -64,15 +64,33 @@ export const relationApi = {
         size: params.size || 50
       });
 
-      console.log('✅ 关系查询API响应:', {
-        success: response.data.success,
-        relationCount: response.data.data?.data?.length || 0,
-        total: response.data.data?.total
+      console.log('✅ 关系查询API原始响应:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: response.data,
+        success: response.data?.success,
+        relationCount: response.data?.data?.data?.length || 0,
+        total: response.data?.data?.total
       });
+
+      // 检查响应状态
+      if (response.status !== 200) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      // 检查业务逻辑成功状态
+      if (!response.data || response.data.success !== true) {
+        throw new Error(response.data?.message || '业务逻辑处理失败');
+      }
 
       return response.data;
     } catch (error) {
-      console.error('❌ 关系查询API调用失败:', error);
+      console.error('❌ 关系查询API调用失败:', {
+        error,
+        message: error?.message,
+        response: error?.response?.data,
+        status: error?.response?.status
+      });
       throw error;
     }
   }

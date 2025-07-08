@@ -364,8 +364,14 @@ const EntityTopologyDetail: React.FC = () => {
           
           currentPage++;
         } else {
-          console.error('❌ 加载图中依赖关系失败:', response.message);
-          message.error('加载图中依赖关系失败: ' + (response.message || '未知错误'));
+          console.error('❌ 加载图中依赖关系失败:', {
+            success: response.success,
+            message: response.message,
+            code: response.code,
+            data: response.data,
+            fullResponse: response
+          });
+          message.error('加载图中依赖关系失败: ' + (response.message || response.code || '未知错误'));
           break;
         }
       }
@@ -397,7 +403,8 @@ const EntityTopologyDetail: React.FC = () => {
         // 更新拓扑数据中的依赖关系
         setTopologyData(prev => {
           if (!prev) return prev;
-          return {
+          
+          const updatedData = {
             ...prev,
             dependencies: transformedRelations,
             stats: {
@@ -405,6 +412,14 @@ const EntityTopologyDetail: React.FC = () => {
               linkCount: transformedRelations.length
             }
           };
+          
+          console.log('🔄 更新拓扑数据中的依赖关系:', {
+            previousDependencies: prev.dependencies.length,
+            newDependencies: transformedRelations.length,
+            updatedStats: updatedData.stats
+          });
+          
+          return updatedData;
         });
 
         return transformedRelations;
@@ -413,8 +428,13 @@ const EntityTopologyDetail: React.FC = () => {
         return [];
       }
     } catch (error) {
-      console.error('❌ 加载图中依赖关系异常:', error);
-      message.error('加载图中依赖关系失败: ' + (error.message || '网络错误'));
+      console.error('❌ 加载图中依赖关系异常:', {
+        error,
+        errorMessage: error?.message,
+        errorStack: error?.stack,
+        graphId
+      });
+      message.error('加载图中依赖关系失败: ' + (error?.message || '网络错误'));
       return [];
     }
   };
@@ -1056,7 +1076,14 @@ const EntityTopologyDetail: React.FC = () => {
           <Card title="数据管理" style={{ height: '100%' }}>
             <DataTabs
               entities={getCurrentPageEntities()}
-              dependencies={topologyData.dependencies}
+              dependencies={(() => {
+                console.log('📊 传递给DataTabs的依赖关系数据:', {
+                  dependenciesCount: topologyData.dependencies.length,
+                  sampleDependencies: topologyData.dependencies.slice(0, 2),
+                  allDependencies: topologyData.dependencies
+                });
+                return topologyData.dependencies;
+              })()}
               onDeleteEntity={handleDeleteEntity}
               onDeleteDependency={handleDeleteDependency}
               onAddEntity={handleAddEntity}
