@@ -227,6 +227,18 @@ export interface DeleteEntityModalProps {
 }
 
 /**
+ * 删除依赖关系Modal的Props
+ */
+export interface DeleteDependencyModalProps {
+  visible: boolean;
+  dependency: Dependency | null;
+  entities: Entity[];
+  onConfirm: () => void;
+  onCancel: () => void;
+  loading?: boolean;
+}
+
+/**
  * 选择实体Modal的Props
  */
 export interface SelectEntityModalProps {

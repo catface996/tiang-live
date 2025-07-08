@@ -31,6 +31,7 @@ import styled from 'styled-components';
 import DataTabs from '../../../components/EntityTopology/DataTabs';
 import EntityD3RelationshipGraph from '../../../components/EntityTopology/EntityD3RelationshipGraph';
 import DeleteEntityModal from '../../../components/EntityTopology/DeleteEntityModal';
+import DeleteDependencyModal from '../../../components/EntityTopology/DeleteDependencyModal';
 import SelectEntityModal from '../../../components/EntityTopology/SelectEntityModal';
 import AddDependencyModal from '../../../components/EntityTopology/AddDependencyModal';
 import GraphOperationModals from '../../../components/EntityTopology/GraphOperationModals';
@@ -703,44 +704,78 @@ const EntityTopologyDetail: React.FC = () => {
     setDeleteDependencyModalVisible(true);
   };
 
-  const confirmDeleteDependency = () => {
-    if (!topologyData || !dependencyToDelete) return;
+  const confirmDeleteDependency = async () => {
+    if (!topologyData || !dependencyToDelete || !currentGraph?.id) return;
 
-    const updatedDependencies = topologyData.dependencies.filter(dep => dep.id !== dependencyToDelete.id);
-    const updatedAllDependencies = allDependenciesInGraph.filter(dep => dep.id !== dependencyToDelete.id);
+    try {
+      console.log('🗑️ 开始删除依赖关系:', {
+        relationId: dependencyToDelete.id,
+        graphId: currentGraph.id.toString(),
+        source: dependencyToDelete.source,
+        target: dependencyToDelete.target,
+        type: dependencyToDelete.type
+      });
 
-    setTopologyData({
-      ...topologyData,
-      dependencies: updatedDependencies,
-      stats: {
-        ...topologyData.stats,
-        linkCount: updatedDependencies.length
+      // 调用后端API删除关系
+      const response = await relationApi.deleteRelation({
+        relationId: dependencyToDelete.id,
+        graphId: currentGraph.id.toString(),
+        sourceEntityId: dependencyToDelete.source,
+        targetEntityId: dependencyToDelete.target,
+        relationType: dependencyToDelete.type
+      });
+
+      if (response.success) {
+        console.log('✅ 依赖关系删除成功');
+
+        // 更新本地状态
+        const updatedDependencies = topologyData.dependencies.filter(dep => dep.id !== dependencyToDelete.id);
+        const updatedAllDependencies = allDependenciesInGraph.filter(dep => dep.id !== dependencyToDelete.id);
+
+        setTopologyData({
+          ...topologyData,
+          dependencies: updatedDependencies,
+          stats: {
+            ...topologyData.stats,
+            linkCount: updatedDependencies.length
+          }
+        });
+
+        // 更新所有依赖关系数据
+        setAllDependenciesInGraph(updatedAllDependencies);
+        
+        // 更新分页信息
+        const newTotal = updatedAllDependencies.length;
+        const { current, pageSize } = dependencyListPagination;
+        const maxPage = Math.ceil(newTotal / pageSize) || 1;
+        const newCurrent = current > maxPage ? maxPage : current;
+
+        setDependencyListPagination(prev => ({
+          ...prev,
+          total: newTotal,
+          current: newCurrent
+        }));
+
+        const sourceName =
+          topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
+        const targetName =
+          topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
+
+        message.success(`成功删除依赖关系: ${sourceName} → ${targetName}`);
+        setDeleteDependencyModalVisible(false);
+        setDependencyToDelete(null);
+      } else {
+        console.error('❌ 删除依赖关系失败:', response.message);
+        message.error('删除依赖关系失败: ' + (response.message || '未知错误'));
       }
-    });
-
-    // 更新所有依赖关系数据
-    setAllDependenciesInGraph(updatedAllDependencies);
-    
-    // 更新分页信息
-    const newTotal = updatedAllDependencies.length;
-    const { current, pageSize } = dependencyListPagination;
-    const maxPage = Math.ceil(newTotal / pageSize) || 1;
-    const newCurrent = current > maxPage ? maxPage : current;
-
-    setDependencyListPagination(prev => ({
-      ...prev,
-      total: newTotal,
-      current: newCurrent
-    }));
-
-    const sourceName =
-      topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
-    const targetName =
-      topologyData.entities.find(e => e.id === dependencyToDelete.target)?.name || dependencyToDelete.target;
-
-    message.success(`成功删除依赖关系: ${sourceName} → ${targetName}`);
-    setDeleteDependencyModalVisible(false);
-    setDependencyToDelete(null);
+    } catch (error) {
+      console.error('❌ 删除依赖关系异常:', {
+        error,
+        errorMessage: error?.message,
+        relationId: dependencyToDelete.id
+      });
+      message.error('删除依赖关系失败: ' + (error?.message || '网络错误'));
+    }
   };
 
   const cancelDeleteDependency = () => {
@@ -1245,6 +1280,15 @@ const EntityTopologyDetail: React.FC = () => {
         dependencies={topologyData.dependencies}
         onConfirm={confirmDeleteEntity}
         onCancel={cancelDeleteEntity}
+      />
+
+      {/* 删除依赖关系Modal */}
+      <DeleteDependencyModal
+        visible={deleteDependencyModalVisible}
+        dependency={dependencyToDelete}
+        entities={topologyData.entities}
+        onConfirm={confirmDeleteDependency}
+        onCancel={cancelDeleteDependency}
       />
 
       {/* 选择实体Modal */}

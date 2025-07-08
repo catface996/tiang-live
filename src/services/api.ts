@@ -128,6 +128,11 @@ class ApiClient {
     return this.request<T>({ method: 'DELETE', url });
   }
 
+  // DELETE请求 - 返回完整响应
+  async deleteFullResponse<T>(url: string): Promise<T> {
+    return this.requestFullResponse<T>({ method: 'DELETE', url });
+  }
+
   // PATCH请求
   async patch<T>(url: string, data?: any): Promise<T> {
     return this.request<T>({ method: 'PATCH', url, data });

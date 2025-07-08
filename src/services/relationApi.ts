@@ -30,8 +30,26 @@ export interface Relation {
 }
 
 /**
- * 关系查询响应接口
+ * 删除关系参数接口
  */
+export interface DeleteRelationParams {
+  relationId: string;
+  graphId?: string;
+  sourceEntityId?: string;
+  targetEntityId?: string;
+  relationName?: string;
+  relationType?: string;
+}
+
+/**
+ * 删除关系响应接口
+ */
+export interface DeleteRelationResponse {
+  success: boolean;
+  code: string;
+  message: string;
+  data?: any;
+}
 export interface ListRelationsByGraphResponse {
   success: boolean;
   code: string;
@@ -98,6 +116,54 @@ export const relationApi = {
       
       // 重新抛出一个更清晰的错误
       const errorMessage = error?.response?.data?.message || error?.message || '网络请求失败';
+      throw new Error(errorMessage);
+    }
+  },
+
+  /**
+   * 删除关系
+   */
+  async deleteRelation(params: DeleteRelationParams): Promise<DeleteRelationResponse> {
+    try {
+      console.log('🗑️ 调用删除关系API:', params);
+      
+      // 使用POST方法删除关系，符合后端API设计
+      const response = await apiClient.postFullResponse('/relation/delete', {
+        relationId: params.relationId,
+        graphId: params.graphId,
+        sourceEntityId: params.sourceEntityId,
+        targetEntityId: params.targetEntityId,
+        relationName: params.relationName,
+        relationType: params.relationType
+      });
+
+      console.log('✅ 删除关系API原始响应:', {
+        success: response?.success,
+        code: response?.code,
+        message: response?.message,
+        relationId: params.relationId,
+        fullResponse: response
+      });
+
+      // 检查业务逻辑成功状态
+      if (!response || response.success !== true) {
+        const errorMsg = response?.message || response?.code || '删除关系失败';
+        console.error('❌ 删除关系业务逻辑失败:', errorMsg);
+        throw new Error(errorMsg);
+      }
+
+      return response as DeleteRelationResponse;
+    } catch (error) {
+      console.error('❌ 删除关系API调用失败:', {
+        error,
+        message: error?.message,
+        response: error?.response?.data,
+        status: error?.response?.status,
+        relationId: params.relationId
+      });
+      
+      // 重新抛出一个更清晰的错误
+      const errorMessage = error?.response?.data?.message || error?.message || '删除关系网络请求失败';
       throw new Error(errorMessage);
     }
   }
