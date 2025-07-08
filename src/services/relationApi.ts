@@ -14,11 +14,17 @@ export interface ListRelationsByGraphParams {
  */
 export interface Relation {
   id: string;
+  name: string;
+  description?: string;
+  type: string;
+  status: string;
   sourceEntityId: string;
   targetEntityId: string;
-  type: string;
-  description?: string;
+  direction: 'UNIDIRECTIONAL' | 'BIDIRECTIONAL';
+  weight: number;
   properties?: Record<string, unknown>;
+  metadata?: Record<string, unknown> | null;
+  graphId: string;
   createdAt?: string;
   updatedAt?: string;
 }

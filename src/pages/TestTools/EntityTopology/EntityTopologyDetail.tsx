@@ -308,6 +308,24 @@ const EntityTopologyDetail: React.FC = () => {
     return entityTypeMap.get(typeValue) || typeValue;
   };
 
+  // 映射后端关系类型到前端期望的类型
+  const mapRelationType = (backendType: string): 'depends_on' | 'provides_to' | 'connects_to' => {
+    switch (backendType.toUpperCase()) {
+      case 'DEPENDENCY':
+      case 'DEPENDS_ON':
+      case 'ASSOCIATION':
+        return 'depends_on';
+      case 'INTEGRATION':
+      case 'INTEGRATES_WITH':
+        return 'connects_to';
+      case 'PROVIDES':
+      case 'PROVIDES_TO':
+        return 'provides_to';
+      default:
+        return 'connects_to'; // 默认为连接关系
+    }
+  };
+
   // 加载图中的依赖关系
   const loadRelationsInGraph = async (graphId: string) => {
     try {
@@ -358,9 +376,11 @@ const EntityTopologyDetail: React.FC = () => {
           id: relation.id,
           source: relation.sourceEntityId,
           target: relation.targetEntityId,
-          type: relation.type as 'depends_on' | 'provides_to' | 'connects_to',
-          strength: 0.5, // 默认强度
-          description: relation.description || `${relation.type} 关系`
+          type: mapRelationType(relation.type),
+          strength: relation.weight || 0.5, // 使用实际权重值
+          description: relation.description || `${relation.name} - ${relation.type}`,
+          // 保留原始数据以备后用
+          _raw: relation
         }));
 
         console.log('✅ 成功加载图中依赖关系列表:', {

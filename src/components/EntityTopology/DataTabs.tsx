@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Table, Button, Space, Typography } from 'antd';
+import { Tabs, Table, Button, Space, Typography, Tag } from 'antd';
 import { DatabaseOutlined, LinkOutlined, NodeIndexOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
@@ -78,7 +78,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       title: t('detail.dataTabs.dependencyColumns.source'),
       dataIndex: 'source',
       key: 'source',
-      width: '40%',
+      width: '25%',
       render: (source: string) => {
         const entity = entities.find(e => e.id === source);
         return entity ? (
@@ -95,7 +95,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       title: t('detail.dataTabs.dependencyColumns.target'),
       dataIndex: 'target',
       key: 'target',
-      width: '40%',
+      width: '25%',
       render: (target: string) => {
         const entity = entities.find(e => e.id === target);
         return entity ? (
@@ -109,9 +109,43 @@ const DataTabs: React.FC<DataTabsProps> = ({
       }
     },
     {
+      title: '关系类型',
+      dataIndex: 'type',
+      key: 'type',
+      width: '15%',
+      render: (type: string) => {
+        const typeColors = {
+          'depends_on': 'blue',
+          'provides_to': 'green',
+          'connects_to': 'orange'
+        };
+        const typeLabels = {
+          'depends_on': '依赖于',
+          'provides_to': '提供给',
+          'connects_to': '连接到'
+        };
+        return (
+          <Tag color={typeColors[type] || 'default'}>
+            {typeLabels[type] || type}
+          </Tag>
+        );
+      }
+    },
+    {
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description',
+      width: '25%',
+      render: (description: string) => (
+        <Text ellipsis={{ tooltip: description }} style={{ maxWidth: 200 }}>
+          {description}
+        </Text>
+      )
+    },
+    {
       title: t('detail.dataTabs.dependencyColumns.actions'),
       key: 'actions',
-      width: '20%',
+      width: '10%',
       render: (_, record: Dependency) => (
         <Button
           type="text"
