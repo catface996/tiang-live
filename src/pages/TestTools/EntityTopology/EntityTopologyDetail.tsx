@@ -846,21 +846,41 @@ const EntityTopologyDetail: React.FC = () => {
   return (
     <PageContainer>
       {/* 面包屑导航 */}
-      <Breadcrumb style={{ marginBottom: 16 }}>
-        <Breadcrumb.Item href="/">
-          <HomeOutlined />
-          <span>首页</span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item href="/test-tools">
-          <ToolOutlined />
-          <span>测试工具</span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item href="/test-tools/entity-topology">
-          <NodeIndexOutlined />
-          <span>实体拓扑</span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>{topologyData.name}</Breadcrumb.Item>
-      </Breadcrumb>
+      <Breadcrumb 
+        style={{ marginBottom: 16 }}
+        items={[
+          {
+            href: '/',
+            title: (
+              <>
+                <HomeOutlined />
+                <span>首页</span>
+              </>
+            )
+          },
+          {
+            href: '/test-tools',
+            title: (
+              <>
+                <ToolOutlined />
+                <span>测试工具</span>
+              </>
+            )
+          },
+          {
+            href: '/test-tools/entity-topology',
+            title: (
+              <>
+                <NodeIndexOutlined />
+                <span>实体拓扑</span>
+              </>
+            )
+          },
+          {
+            title: topologyData.name
+          }
+        ]}
+      />
 
       {/* 页面头部 */}
       <PageHeader>
