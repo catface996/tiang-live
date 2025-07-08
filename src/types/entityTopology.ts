@@ -282,7 +282,7 @@ export interface DataTabsProps {
   onAddDependency: () => void;
   onAgentsClick: (entity: Entity) => void;
   getEntityTypeLabel?: (typeValue: string) => string;
-  // 分页相关属性
+  // 实体分页相关属性
   entityPagination?: {
     current: number;
     pageSize: number;
@@ -291,6 +291,15 @@ export interface DataTabsProps {
     showQuickJumper?: boolean;
   };
   onEntityPaginationChange?: (page: number, pageSize?: number) => void;
+  // 依赖关系分页相关属性
+  dependencyPagination?: {
+    current: number;
+    pageSize: number;
+    total: number;
+    showSizeChanger?: boolean;
+    showQuickJumper?: boolean;
+  };
+  onDependencyPaginationChange?: (page: number, pageSize?: number) => void;
 }
 
 /**

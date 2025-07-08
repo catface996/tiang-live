@@ -18,7 +18,9 @@ const DataTabs: React.FC<DataTabsProps> = ({
   onAgentsClick,
   getEntityTypeLabel,
   entityPagination,
-  onEntityPaginationChange
+  onEntityPaginationChange,
+  dependencyPagination,
+  onDependencyPaginationChange
 }) => {
   const { t } = useTranslation(['entityTopology', 'common']);
 
@@ -26,6 +28,8 @@ const DataTabs: React.FC<DataTabsProps> = ({
   console.log('🔍 DataTabs组件接收到的数据:', {
     entitiesCount: entities?.length || 0,
     dependenciesCount: dependencies?.length || 0,
+    entityPagination,
+    dependencyPagination,
     sampleDependencies: dependencies?.slice(0, 3),
     entities: entities?.slice(0, 2),
     dependencies: dependencies?.slice(0, 2)
@@ -168,7 +172,9 @@ const DataTabs: React.FC<DataTabsProps> = ({
             label: (
               <Space>
                 <DatabaseOutlined />
-                {t('detail.dataTabs.tabs.entities', { count: entities.length })}
+                {t('detail.dataTabs.tabs.entities', { 
+                  count: entityPagination?.total || entities.length 
+                })}
               </Space>
             ),
             children: (
@@ -205,7 +211,9 @@ const DataTabs: React.FC<DataTabsProps> = ({
             label: (
               <Space>
                 <LinkOutlined />
-                {t('detail.dataTabs.tabs.dependencies', { count: dependencies.length })}
+                {t('detail.dataTabs.tabs.dependencies', { 
+                  count: dependencyPagination?.total || dependencies.length 
+                })}
               </Space>
             ),
             children: (
@@ -220,8 +228,19 @@ const DataTabs: React.FC<DataTabsProps> = ({
                   dataSource={dependencies}
                   rowKey="id"
                   size="small"
-                  pagination={false}
-                  scroll={{ y: 'calc(100vh - 420px)' }}
+                  pagination={dependencyPagination ? {
+                    current: dependencyPagination.current,
+                    pageSize: dependencyPagination.pageSize,
+                    total: dependencyPagination.total,
+                    showSizeChanger: dependencyPagination.showSizeChanger !== false,
+                    showQuickJumper: dependencyPagination.showQuickJumper !== false,
+                    showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
+                    onChange: onDependencyPaginationChange,
+                    onShowSizeChange: onDependencyPaginationChange,
+                    pageSizeOptions: ['10', '20', '50', '100'],
+                    size: 'small'
+                  } : false}
+                  scroll={{ y: dependencyPagination ? 'calc(100vh - 480px)' : 'calc(100vh - 420px)' }}
                 />
               </div>
             )

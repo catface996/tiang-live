@@ -144,6 +144,16 @@ const EntityTopologyDetail: React.FC = () => {
   });
   const [allEntitiesInGraph, setAllEntitiesInGraph] = useState<Entity[]>([]);
 
+  // 依赖关系分页状态
+  const [dependencyListPagination, setDependencyListPagination] = useState({
+    current: 1,
+    pageSize: 20,
+    total: 0,
+    showSizeChanger: true,
+    showQuickJumper: true
+  });
+  const [allDependenciesInGraph, setAllDependenciesInGraph] = useState<Dependency[]>([]);
+
   // 映射后端状态到前端状态
   const mapBackendStatusToFrontend = (backendStatus: string): 'active' | 'inactive' | 'warning' | 'error' => {
     const statusMap: Record<string, 'active' | 'inactive' | 'warning' | 'error'> = {
@@ -431,6 +441,16 @@ const EntityTopologyDetail: React.FC = () => {
           return updatedData;
         });
 
+        // 存储所有依赖关系数据用于分页
+        setAllDependenciesInGraph(transformedRelations);
+        
+        // 更新分页信息
+        setDependencyListPagination(prev => ({
+          ...prev,
+          total: transformedRelations.length,
+          current: 1 // 重置到第一页
+        }));
+
         return transformedRelations;
       } else {
         console.log('📝 图中暂无依赖关系');
@@ -446,6 +466,15 @@ const EntityTopologyDetail: React.FC = () => {
             }
           };
         });
+        
+        // 清空依赖关系数据和分页信息
+        setAllDependenciesInGraph([]);
+        setDependencyListPagination(prev => ({
+          ...prev,
+          total: 0,
+          current: 1
+        }));
+        
         return [];
       }
     } catch (error) {
@@ -469,6 +498,15 @@ const EntityTopologyDetail: React.FC = () => {
           }
         };
       });
+      
+      // 清空依赖关系数据和分页信息
+      setAllDependenciesInGraph([]);
+      setDependencyListPagination(prev => ({
+        ...prev,
+        total: 0,
+        current: 1
+      }));
+      
       return [];
     }
   };
@@ -669,6 +707,7 @@ const EntityTopologyDetail: React.FC = () => {
     if (!topologyData || !dependencyToDelete) return;
 
     const updatedDependencies = topologyData.dependencies.filter(dep => dep.id !== dependencyToDelete.id);
+    const updatedAllDependencies = allDependenciesInGraph.filter(dep => dep.id !== dependencyToDelete.id);
 
     setTopologyData({
       ...topologyData,
@@ -678,6 +717,21 @@ const EntityTopologyDetail: React.FC = () => {
         linkCount: updatedDependencies.length
       }
     });
+
+    // 更新所有依赖关系数据
+    setAllDependenciesInGraph(updatedAllDependencies);
+    
+    // 更新分页信息
+    const newTotal = updatedAllDependencies.length;
+    const { current, pageSize } = dependencyListPagination;
+    const maxPage = Math.ceil(newTotal / pageSize) || 1;
+    const newCurrent = current > maxPage ? maxPage : current;
+
+    setDependencyListPagination(prev => ({
+      ...prev,
+      total: newTotal,
+      current: newCurrent
+    }));
 
     const sourceName =
       topologyData.entities.find(e => e.id === dependencyToDelete.source)?.name || dependencyToDelete.source;
@@ -910,6 +964,26 @@ const EntityTopologyDetail: React.FC = () => {
     return allEntitiesInGraph.slice(startIndex, endIndex);
   };
 
+  // 处理依赖关系分页变化
+  const handleDependencyListPaginationChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || dependencyListPagination.pageSize;
+    console.log('📄 依赖关系分页变化:', { page, pageSize: newPageSize });
+    
+    setDependencyListPagination(prev => ({
+      ...prev,
+      current: page,
+      pageSize: newPageSize
+    }));
+  };
+
+  // 获取当前页的依赖关系数据
+  const getCurrentPageDependencies = (): Dependency[] => {
+    const { current, pageSize } = dependencyListPagination;
+    const startIndex = (current - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return allDependenciesInGraph.slice(startIndex, endIndex);
+  };
+
   const handleEntitiesPaginationChange = async (page: number, pageSize?: number) => {
     console.log(`📄 分页变化: 页码 ${page}, 每页 ${pageSize || entitiesPagination.pageSize}`);
     const newPageSize = pageSize || entitiesPagination.pageSize;
@@ -955,6 +1029,7 @@ const EntityTopologyDetail: React.FC = () => {
     };
 
     const updatedDependencies = [...topologyData.dependencies, newDependency];
+    const updatedAllDependencies = [...allDependenciesInGraph, newDependency];
 
     setTopologyData({
       ...topologyData,
@@ -964,6 +1039,15 @@ const EntityTopologyDetail: React.FC = () => {
         linkCount: updatedDependencies.length
       }
     });
+
+    // 更新所有依赖关系数据
+    setAllDependenciesInGraph(updatedAllDependencies);
+    
+    // 更新分页信息
+    setDependencyListPagination(prev => ({
+      ...prev,
+      total: updatedAllDependencies.length
+    }));
 
     const sourceName = topologyData.entities.find(e => e.id === sourceEntityId)?.name || sourceEntityId;
     const targetName = topologyData.entities.find(e => e.id === targetEntityId)?.name || targetEntityId;
@@ -1116,14 +1200,13 @@ const EntityTopologyDetail: React.FC = () => {
             <DataTabs
               entities={getCurrentPageEntities()}
               dependencies={(() => {
-                const deps = topologyData.dependencies || [];
+                const deps = getCurrentPageDependencies();
                 console.log('📊 传递给DataTabs的依赖关系数据:', {
-                  dependenciesCount: deps.length,
+                  currentPageDependenciesCount: deps.length,
+                  totalDependenciesCount: allDependenciesInGraph.length,
+                  currentPage: dependencyListPagination.current,
+                  pageSize: dependencyListPagination.pageSize,
                   sampleDependencies: deps.slice(0, 2),
-                  topologyDataKeys: Object.keys(topologyData),
-                  topologyDataStats: topologyData.stats,
-                  topologyDataId: topologyData.id,
-                  // 详细检查每个依赖关系对象
                   dependenciesDetails: deps.map(d => ({
                     id: d.id,
                     source: d.source,
@@ -1132,29 +1215,6 @@ const EntityTopologyDetail: React.FC = () => {
                     hasAllFields: !!(d.id && d.source && d.target && d.type)
                   }))
                 });
-                
-                // 验证每个依赖关系的数据结构
-                if (deps.length > 0) {
-                  console.log('🔍 依赖关系数据结构验证:', {
-                    firstDependency: deps[0],
-                    hasRequiredFields: deps.every(d => d.id && d.source && d.target && d.type),
-                    fieldTypes: deps[0] ? {
-                      id: typeof deps[0].id,
-                      source: typeof deps[0].source,
-                      target: typeof deps[0].target,
-                      type: typeof deps[0].type,
-                      description: typeof deps[0].description
-                    } : null
-                  });
-                } else {
-                  console.log('⚠️ 依赖关系数组为空，检查topologyData状态:', {
-                    topologyDataExists: !!topologyData,
-                    topologyDataId: topologyData?.id,
-                    dependenciesProperty: topologyData?.dependencies,
-                    dependenciesType: typeof topologyData?.dependencies,
-                    dependenciesIsArray: Array.isArray(topologyData?.dependencies)
-                  });
-                }
                 
                 return deps;
               })()}
@@ -1166,6 +1226,8 @@ const EntityTopologyDetail: React.FC = () => {
               getEntityTypeLabel={getEntityTypeLabel}
               entityPagination={entityListPagination}
               onEntityPaginationChange={handleEntityListPaginationChange}
+              dependencyPagination={dependencyListPagination}
+              onDependencyPaginationChange={handleDependencyListPaginationChange}
             />
           </Card>
         </LeftPanel>
