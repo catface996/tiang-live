@@ -22,6 +22,15 @@ const DataTabs: React.FC<DataTabsProps> = ({
 }) => {
   const { t } = useTranslation(['entityTopology', 'common']);
 
+  // 添加调试信息
+  console.log('🔍 DataTabs组件接收到的数据:', {
+    entitiesCount: entities?.length || 0,
+    dependenciesCount: dependencies?.length || 0,
+    sampleDependencies: dependencies?.slice(0, 3),
+    entities: entities?.slice(0, 2),
+    dependencies: dependencies?.slice(0, 2)
+  });
+
   // 实体列表列定义
   const entityColumns = [
     {
@@ -78,7 +87,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       title: t('detail.dataTabs.dependencyColumns.source'),
       dataIndex: 'source',
       key: 'source',
-      width: '25%',
+      width: '35%',
       render: (source: string) => {
         const entity = entities.find(e => e.id === source);
         return entity ? (
@@ -95,7 +104,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       title: t('detail.dataTabs.dependencyColumns.target'),
       dataIndex: 'target',
       key: 'target',
-      width: '25%',
+      width: '35%',
       render: (target: string) => {
         const entity = entities.find(e => e.id === target);
         return entity ? (
@@ -112,7 +121,7 @@ const DataTabs: React.FC<DataTabsProps> = ({
       title: '关系类型',
       dataIndex: 'type',
       key: 'type',
-      width: '15%',
+      width: '20%',
       render: (type: string) => {
         const typeColors = {
           'depends_on': 'blue',
@@ -130,17 +139,6 @@ const DataTabs: React.FC<DataTabsProps> = ({
           </Tag>
         );
       }
-    },
-    {
-      title: '描述',
-      dataIndex: 'description',
-      key: 'description',
-      width: '25%',
-      render: (description: string) => (
-        <Text ellipsis={{ tooltip: description }} style={{ maxWidth: 200 }}>
-          {description}
-        </Text>
-      )
     },
     {
       title: t('detail.dataTabs.dependencyColumns.actions'),

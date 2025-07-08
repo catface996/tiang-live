@@ -4,7 +4,6 @@ import {
   Spin,
   Empty,
   Breadcrumb,
-  message,
   Form,
   Card,
   Typography,
@@ -12,7 +11,8 @@ import {
   Col,
   Statistic,
   Button,
-  Tag
+  Tag,
+  App
 } from 'antd';
 import {
   NodeIndexOutlined,
@@ -92,6 +92,7 @@ const StatsCard = styled(Card)`
 const EntityTopologyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation(['entityTopology', 'common']);
+  const { message } = App.useApp(); // 使用App提供的message hook
 
   // 基础状态
   const [loading, setLoading] = useState(true);
@@ -400,9 +401,12 @@ const EntityTopologyDetail: React.FC = () => {
           }))
         });
 
-        // 更新拓扑数据中的依赖关系
+        // 更新拓扑数据中的依赖关系 - 使用函数式更新确保状态正确
         setTopologyData(prev => {
-          if (!prev) return prev;
+          if (!prev) {
+            console.warn('⚠️ topologyData为空，无法更新依赖关系');
+            return prev;
+          }
           
           const updatedData = {
             ...prev,
@@ -416,7 +420,12 @@ const EntityTopologyDetail: React.FC = () => {
           console.log('🔄 更新拓扑数据中的依赖关系:', {
             previousDependencies: prev.dependencies.length,
             newDependencies: transformedRelations.length,
-            updatedStats: updatedData.stats
+            updatedStats: updatedData.stats,
+            updatedDataPreview: {
+              id: updatedData.id,
+              dependenciesCount: updatedData.dependencies.length,
+              statsLinkCount: updatedData.stats.linkCount
+            }
           });
           
           return updatedData;
@@ -425,6 +434,18 @@ const EntityTopologyDetail: React.FC = () => {
         return transformedRelations;
       } else {
         console.log('📝 图中暂无依赖关系');
+        // 即使没有依赖关系，也要更新状态确保组件重新渲染
+        setTopologyData(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            dependencies: [],
+            stats: {
+              ...prev.stats,
+              linkCount: 0
+            }
+          };
+        });
         return [];
       }
     } catch (error) {
@@ -435,6 +456,19 @@ const EntityTopologyDetail: React.FC = () => {
         graphId
       });
       message.error('加载图中依赖关系失败: ' + (error?.message || '网络错误'));
+      
+      // 错误情况下也要更新状态
+      setTopologyData(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          dependencies: [],
+          stats: {
+            ...prev.stats,
+            linkCount: 0
+          }
+        };
+      });
       return [];
     }
   };
@@ -502,11 +536,16 @@ const EntityTopologyDetail: React.FC = () => {
 
           console.log('✅ 拓扑图详情加载完成:', topologyData);
 
-          // 并行加载图中的实体列表和依赖关系
-          await Promise.all([
-            loadEntitiesInGraph(graph.id.toString(), topologyData),
-            loadRelationsInGraph(graph.id.toString())
-          ]);
+          // 先加载图中的实体列表，再加载依赖关系，确保数据加载顺序
+          console.log('🔄 开始按顺序加载实体和依赖关系数据...');
+          
+          // 第一步：加载实体列表
+          await loadEntitiesInGraph(graph.id.toString(), topologyData);
+          
+          // 第二步：加载依赖关系（在实体加载完成后）
+          await loadRelationsInGraph(graph.id.toString());
+          
+          console.log('✅ 所有数据加载完成');
         } else {
           console.error('❌ API返回数据格式异常:', graphResponse);
           message.error('加载拓扑图详情失败');
@@ -1077,12 +1116,47 @@ const EntityTopologyDetail: React.FC = () => {
             <DataTabs
               entities={getCurrentPageEntities()}
               dependencies={(() => {
+                const deps = topologyData.dependencies || [];
                 console.log('📊 传递给DataTabs的依赖关系数据:', {
-                  dependenciesCount: topologyData.dependencies.length,
-                  sampleDependencies: topologyData.dependencies.slice(0, 2),
-                  allDependencies: topologyData.dependencies
+                  dependenciesCount: deps.length,
+                  sampleDependencies: deps.slice(0, 2),
+                  topologyDataKeys: Object.keys(topologyData),
+                  topologyDataStats: topologyData.stats,
+                  topologyDataId: topologyData.id,
+                  // 详细检查每个依赖关系对象
+                  dependenciesDetails: deps.map(d => ({
+                    id: d.id,
+                    source: d.source,
+                    target: d.target,
+                    type: d.type,
+                    hasAllFields: !!(d.id && d.source && d.target && d.type)
+                  }))
                 });
-                return topologyData.dependencies;
+                
+                // 验证每个依赖关系的数据结构
+                if (deps.length > 0) {
+                  console.log('🔍 依赖关系数据结构验证:', {
+                    firstDependency: deps[0],
+                    hasRequiredFields: deps.every(d => d.id && d.source && d.target && d.type),
+                    fieldTypes: deps[0] ? {
+                      id: typeof deps[0].id,
+                      source: typeof deps[0].source,
+                      target: typeof deps[0].target,
+                      type: typeof deps[0].type,
+                      description: typeof deps[0].description
+                    } : null
+                  });
+                } else {
+                  console.log('⚠️ 依赖关系数组为空，检查topologyData状态:', {
+                    topologyDataExists: !!topologyData,
+                    topologyDataId: topologyData?.id,
+                    dependenciesProperty: topologyData?.dependencies,
+                    dependenciesType: typeof topologyData?.dependencies,
+                    dependenciesIsArray: Array.isArray(topologyData?.dependencies)
+                  });
+                }
+                
+                return deps;
               })()}
               onDeleteEntity={handleDeleteEntity}
               onDeleteDependency={handleDeleteDependency}

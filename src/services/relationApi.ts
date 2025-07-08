@@ -58,32 +58,36 @@ export const relationApi = {
     try {
       console.log('🔗 调用关系查询API:', params);
       
-      const response = await apiClient.post('/relation/list-by-graph', {
+      // 使用postFullResponse获取完整的API响应
+      const response = await apiClient.postFullResponse('/relation/list-by-graph', {
         graphId: params.graphId,
         page: params.page || 1,
         size: params.size || 50
       });
 
       console.log('✅ 关系查询API原始响应:', {
-        status: response.status,
-        statusText: response.statusText,
-        data: response.data,
-        success: response.data?.success,
-        relationCount: response.data?.data?.data?.length || 0,
-        total: response.data?.data?.total
+        success: response?.success,
+        code: response?.code,
+        message: response?.message,
+        relationCount: response?.data?.data?.length || 0,
+        total: response?.data?.total,
+        fullResponse: response
       });
 
-      // 检查响应状态
-      if (response.status !== 200) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
       // 检查业务逻辑成功状态
-      if (!response.data || response.data.success !== true) {
-        throw new Error(response.data?.message || '业务逻辑处理失败');
+      if (!response || response.success !== true) {
+        const errorMsg = response?.message || response?.code || '业务逻辑处理失败';
+        console.error('❌ 业务逻辑失败:', errorMsg);
+        throw new Error(errorMsg);
       }
 
-      return response.data;
+      // 验证数据结构
+      if (!response.data || !Array.isArray(response.data.data)) {
+        console.error('❌ 数据结构异常:', response.data);
+        throw new Error('返回数据结构异常');
+      }
+
+      return response as ListRelationsByGraphResponse;
     } catch (error) {
       console.error('❌ 关系查询API调用失败:', {
         error,
@@ -91,7 +95,10 @@ export const relationApi = {
         response: error?.response?.data,
         status: error?.response?.status
       });
-      throw error;
+      
+      // 重新抛出一个更清晰的错误
+      const errorMessage = error?.response?.data?.message || error?.message || '网络请求失败';
+      throw new Error(errorMessage);
     }
   }
 };

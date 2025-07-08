@@ -97,6 +97,12 @@ class ApiClient {
     return response.data.data;
   }
 
+  // 获取完整响应的请求方法
+  private async requestFullResponse<T>(config: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    const response = await this.client.request<ApiResponse<T>>(config);
+    return response.data;
+  }
+
   // GET请求
   async get<T>(url: string, params?: any): Promise<T> {
     return this.request<T>({ method: 'GET', url, params });
@@ -105,6 +111,11 @@ class ApiClient {
   // POST请求
   async post<T>(url: string, data?: any): Promise<T> {
     return this.request<T>({ method: 'POST', url, data });
+  }
+
+  // POST请求 - 返回完整响应
+  async postFullResponse<T>(url: string, data?: any): Promise<ApiResponse<T>> {
+    return this.requestFullResponse<T>({ method: 'POST', url, data });
   }
 
   // PUT请求

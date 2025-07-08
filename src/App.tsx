@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App as AntdApp } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import enUS from 'antd/locale/en_US';
 import { ThemeProvider } from 'styled-components';
@@ -72,12 +72,14 @@ const AppContent: React.FC = () => {
   return (
     <ErrorBoundary>
       <ConfigProvider locale={antdLocale} theme={themeConfig.antd}>
-        <ThemeProvider theme={themeConfig.styled}>
-          <GlobalStyles />
-          <Router basename={basename}>
-            <AppRoutes />
-          </Router>
-        </ThemeProvider>
+        <AntdApp>
+          <ThemeProvider theme={themeConfig.styled}>
+            <GlobalStyles />
+            <Router basename={basename}>
+              <AppRoutes />
+            </Router>
+          </ThemeProvider>
+        </AntdApp>
       </ConfigProvider>
     </ErrorBoundary>
   );
