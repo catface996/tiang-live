@@ -1,4 +1,4 @@
-import { api } from './api';
+import { apiClient } from './api';
 
 /**
  * 关系查询参数接口
@@ -52,7 +52,7 @@ export const relationApi = {
     try {
       console.log('🔗 调用关系查询API:', params);
       
-      const response = await api.post('/relation/list-by-graph', {
+      const response = await apiClient.post('/relation/list-by-graph', {
         graphId: params.graphId,
         page: params.page || 1,
         size: params.size || 50
