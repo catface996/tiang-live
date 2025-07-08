@@ -198,9 +198,13 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
     const planeNodes = nodes.filter(node => node.plane === plane.id);
     if (planeNodes.length === 0) return null;
 
-    // Calculate approximate position based on plane level - now 3 planes
-    const levelHeight = height / 3;
-    const planeIndex = plane.level - 1;
+    // 动态计算平面高度，基于实际平面数量
+    const totalPlanes = graphData?.planes.length || 1;
+    const levelHeight = height / totalPlanes;
+    
+    // 找到当前平面在排序后数组中的索引位置（降序排列）
+    const sortedPlanes = graphData?.planes || [];
+    const planeIndex = sortedPlanes.findIndex(p => p.id === plane.id);
     const baseY = planeIndex * levelHeight + 50;
 
     return {
@@ -531,54 +535,12 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
 
   // 转换外部数据为图表数据格式
   const convertToGraphData = (entities: Entity[], dependencies: Dependency[]): GraphData => {
-    // 定义平面数据
-    const planes: Plane[] = [
-      {
-        id: 'business_plane',
-        name: '业务应用平面',
-        level: 1,
-        color: '#e6f7ff',
-        borderColor: '#1890ff',
-        description: '业务系统和应用服务层',
-        bounds: { minLevel: 1, maxLevel: 2 }
-      },
-      {
-        id: 'middleware_plane',
-        name: '中间件平面',
-        level: 2,
-        color: '#f9f0ff',
-        borderColor: '#722ed1',
-        description: '中间件和基础服务层',
-        bounds: { minLevel: 3, maxLevel: 3 }
-      },
-      {
-        id: 'infrastructure_plane',
-        name: '基础设施平面',
-        level: 3,
-        color: '#f0f8f8',
-        borderColor: '#5F9EA0',
-        description: '基础设施和资源层',
-        bounds: { minLevel: 4, maxLevel: 5 }
-      }
-    ];
-
-    // 转换实体为节点
+    // 首先转换实体数据，直接使用实体的平面信息
     const nodes: Node[] = entities.map(entity => {
-      // 根据实体类型确定层级和平面
-      let level = 2;
-      let plane = 'business_plane';
-
-      if (entity.type.includes('cache') || entity.type.includes('message') || entity.type.includes('monitoring')) {
-        level = 3;
-        plane = 'middleware_plane';
-      } else if (
-        entity.type.includes('database') ||
-        entity.type.includes('container') ||
-        entity.type.includes('cluster')
-      ) {
-        level = 4;
-        plane = 'infrastructure_plane';
-      }
+      // 直接使用实体的平面信息
+      const plane = entity.plane?.id || 'default_plane';
+      // 将平面level从字符串转换为数字（L1->1, L2->2, L3->3, L4->4）
+      const level = entity.plane?.level ? parseInt(entity.plane.level.replace('L', '')) : 1;
 
       return {
         id: entity.id,
@@ -586,11 +548,68 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
         type: entity.type,
         level,
         plane,
-        description: (entity.properties.description as string) || `${entity.name} - ${entity.type}`,
+        description: entity.description || `${entity.name} - ${entity.type}`,
         status: entity.status,
         ...entity.properties
       };
     });
+
+    // 根据实体统计实际使用的平面
+    const usedPlaneMap = new Map<string, Plane>();
+    entities.forEach(entity => {
+      if (entity.plane) {
+        usedPlaneMap.set(entity.plane.id, entity.plane);
+      }
+    });
+
+    console.log('📊 实体平面统计详情:', {
+      totalEntities: entities.length,
+      entitiesWithPlane: entities.filter(e => e.plane).length,
+      entitiesWithoutPlane: entities.filter(e => !e.plane).length,
+      entityPlaneDetails: entities.map(entity => ({
+        entityId: entity.id,
+        entityName: entity.name,
+        entityType: entity.type,
+        hasPlane: !!entity.plane,
+        planeId: entity.plane?.id || 'N/A',
+        planeName: entity.plane?.name || 'N/A',
+        planeLevel: entity.plane?.level || 'N/A',
+        planeType: entity.plane?.type || 'N/A'
+      })),
+      uniquePlanes: Array.from(usedPlaneMap.values()).map(plane => ({
+        id: plane.id,
+        name: plane.name,
+        level: plane.level,
+        type: plane.type,
+        entityCount: entities.filter(e => e.plane?.id === plane.id).length
+      }))
+    });
+
+    // 转换为图表需要的平面格式，并按level降序排序
+    const planes: Plane[] = Array.from(usedPlaneMap.values())
+      .map(plane => ({
+        id: plane.id,
+        name: plane.name,
+        level: parseInt(plane.level.replace('L', '')), // 转换L1->1, L2->2等
+        color: getPlaneColor(plane.level),
+        borderColor: getPlaneBorderColor(plane.level),
+        description: `${plane.name} (${plane.type})`,
+        bounds: { minLevel: 1, maxLevel: 5 }
+      }))
+      .sort((a, b) => b.level - a.level); // 按层级降序排序 (L4->L3->L2->L1)
+
+    // 如果没有实体，至少显示一个默认平面
+    if (planes.length === 0) {
+      planes.push({
+        id: 'default_plane',
+        name: '默认平面',
+        level: 1,
+        color: '#e6f7ff',
+        borderColor: '#1890ff',
+        description: '默认平面',
+        bounds: { minLevel: 1, maxLevel: 1 }
+      });
+    }
 
     // 转换依赖关系为链接
     const links: Link[] = dependencies.map(dep => ({
@@ -600,23 +619,87 @@ const EntityD3RelationshipGraph: React.FC<EntityD3RelationshipGraphProps> = ({
       strength: dep.strength
     }));
 
-    // 元数据定义
+    // 根据实际数据动态生成元数据
     const metadata = {
-      levels: [
-        { level: 1, name: '前端应用层', color: '#1890ff' },
-        { level: 2, name: '业务服务层', color: '#52c41a' },
-        { level: 3, name: '中间件层', color: '#722ed1' },
-        { level: 4, name: '数据存储层', color: '#faad14' },
-        { level: 5, name: '基础设施层', color: '#5F9EA0' }
-      ],
-      relationTypes: [
-        { type: 'depends_on', description: '依赖于', color: '#1890ff', strokeWidth: 2 },
-        { type: 'provides_to', description: '提供给', color: '#52c41a', strokeWidth: 2 },
-        { type: 'connects_to', description: '连接到', color: '#faad14', strokeWidth: 2 }
-      ]
+      // 根据实际平面生成层级信息
+      levels: planes.map(plane => ({
+        level: plane.level,
+        name: plane.name,
+        color: plane.borderColor
+      })),
+      // 根据实际依赖关系生成关系类型信息
+      relationTypes: Array.from(new Set(dependencies.map(dep => dep.type))).map(type => ({
+        type,
+        description: getRelationTypeDescription(type),
+        color: getRelationTypeColor(type),
+        strokeWidth: 2
+      })),
+      planesUsed: planes.length,
+      totalNodes: nodes.length,
+      totalLinks: links.length
     };
 
+    console.log('🎯 根据实体平面信息动态生成图数据:', {
+      totalEntities: entities.length,
+      usedPlanes: planes.map(p => ({ id: p.id, name: p.name, level: p.level })),
+      planesSortOrder: planes.map((p, index) => ({ 
+        index, 
+        level: p.level, 
+        name: p.name,
+        displayOrder: `第${index + 1}个显示` 
+      })),
+      nodesPerPlane: planes.map(plane => ({
+        plane: plane.name,
+        count: nodes.filter(n => n.plane === plane.id).length
+      })),
+      relationTypes: metadata.relationTypes.map(rt => rt.type)
+    });
+
     return { planes, nodes, links, metadata };
+  };
+
+  // 获取关系类型描述
+  const getRelationTypeDescription = (type: string): string => {
+    switch (type) {
+      case 'depends_on': return '依赖于';
+      case 'provides_to': return '提供给';
+      case 'connects_to': return '连接到';
+      default: return type;
+    }
+  };
+
+  // 获取关系类型颜色
+  const getRelationTypeColor = (type: string): string => {
+    switch (type) {
+      case 'depends_on': return '#1890ff';
+      case 'provides_to': return '#52c41a';
+      case 'connects_to': return '#faad14';
+      default: return '#666666';
+    }
+  };
+
+  // 根据平面层级获取颜色
+  const getPlaneColor = (level: string): string => {
+    switch (level) {
+      case 'L1': return '#e6f7ff';
+      case 'L2': return '#f9f0ff';
+      case 'L3': return '#f0f8f8';
+      case 'L4': return '#fff7e6';
+      case 'L5': return '#f6ffed';
+      default: return '#e6f7ff';
+    }
+  };
+
+  // 根据平面层级获取边框颜色
+  const getPlaneBorderColor = (level: string): string => {
+    switch (level) {
+      case 'L1': return '#1890ff';
+      case 'L2': return '#722ed1';
+      case 'L3': return '#5F9EA0';
+      case 'L4': return '#faad14';
+      case 'L5': return '#52c41a';
+      default: return '#1890ff';
+    }
   };
 
   // 加载数据

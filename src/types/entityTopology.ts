@@ -6,6 +6,16 @@
 // ==================== 基础实体类型 ====================
 
 /**
+ * 平面信息接口
+ */
+export interface Plane {
+  id: string;
+  name: string;
+  level: string;
+  type: string;
+}
+
+/**
  * 实体接口 - 用于业务逻辑和API交互
  */
 export interface Entity {
@@ -16,6 +26,8 @@ export interface Entity {
   description?: string;
   properties?: Record<string, unknown>;
   connections: number;
+  // 平面信息
+  plane?: Plane;
 }
 
 /**

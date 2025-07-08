@@ -211,6 +211,13 @@ const EntityTopologyDetail: React.FC = () => {
           description: entity.description || '',
           properties: entity.properties || {},
           connections: 0, // 暂时设为0，后续可以根据需要计算
+          // 映射平面信息
+          plane: entity.plane ? {
+            id: entity.plane.id,
+            name: entity.plane.name,
+            level: entity.plane.level,
+            type: entity.plane.type
+          } : undefined,
           // 保留原始数据以备后用
           _raw: entity
         }));
@@ -219,7 +226,20 @@ const EntityTopologyDetail: React.FC = () => {
           graphId,
           totalPages: currentPage - 1,
           entitiesCount: transformedEntities.length,
-          sampleEntities: transformedEntities.slice(0, 3).map(e => ({ id: e.id, name: e.name, type: e.type }))
+          sampleEntities: transformedEntities.slice(0, 3).map(e => ({ 
+            id: e.id, 
+            name: e.name, 
+            type: e.type,
+            hasPlane: !!e.plane,
+            planeName: e.plane?.name,
+            planeLevel: e.plane?.level
+          })),
+          // 调试：检查原始数据中的plane信息
+          rawSamplePlanes: allEntities.slice(0, 3).map(e => ({
+            entityName: e.name,
+            hasPlaneInRaw: !!e.plane,
+            rawPlane: e.plane
+          }))
         });
 
         // 保存所有实体数据
