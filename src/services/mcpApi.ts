@@ -71,15 +71,13 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
-// 通用分页响应类型（适配后端PageResponse）
+// 通用分页响应类型（适配后端实际返回格式）
 export interface PageResponse<T> {
-  content: T[];           // 数据内容
+  data: T[];              // 实际数据在data字段中
   page: number;           // 当前页码
   size: number;           // 每页大小
-  total: number;          // 总记录数
+  total: string | number; // 总记录数（可能是字符串）
   totalPages: number;     // 总页数
-  first: boolean;         // 是否第一页
-  last: boolean;          // 是否最后一页
   hasNext: boolean;       // 是否有下一页
   hasPrevious: boolean;   // 是否有上一页
 }

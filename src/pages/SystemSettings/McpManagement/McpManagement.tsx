@@ -154,13 +154,13 @@ const McpManagement: React.FC = () => {
       const response = await mcpApi.getServers(params);
       
       if (response.success) {
-        // 适配新的PageResponse结构
+        // 适配实际的数据结构
         const pageData = response.data;
-        setMcpData(pageData.content);  // 数据在content字段中
+        setMcpData(pageData.data);  // 数据在data字段中，不是content
         setPagination({
           page: pageData.page,
           size: pageData.size,
-          total: pageData.total,
+          total: typeof pageData.total === 'string' ? parseInt(pageData.total) : pageData.total,
           totalPages: pageData.totalPages
         });
       } else {
