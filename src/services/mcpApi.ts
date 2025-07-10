@@ -71,15 +71,21 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
-// 分页响应类型
-export interface PagedResponse<T> extends ApiResponse<T[]> {
-  pagination: {
-    page: number;
-    size: number;
-    total: number;
-    totalPages: number;
-  };
+// 通用分页响应类型（适配后端PageResponse）
+export interface PageResponse<T> {
+  content: T[];           // 数据内容
+  page: number;           // 当前页码
+  size: number;           // 每页大小
+  total: number;          // 总记录数
+  totalPages: number;     // 总页数
+  first: boolean;         // 是否第一页
+  last: boolean;          // 是否最后一页
+  hasNext: boolean;       // 是否有下一页
+  hasPrevious: boolean;   // 是否有上一页
 }
+
+// 分页响应类型
+export interface PagedResponse<T> extends ApiResponse<PageResponse<T>> {}
 
 // 获取服务器列表请求参数
 export interface GetMcpServersRequest {
@@ -87,7 +93,7 @@ export interface GetMcpServersRequest {
   type?: string;
   status?: string;
   page?: number;
-  pageSize?: number;
+  size?: number;  // 参数名从pageSize改为size
 }
 
 // 保存服务器请求参数

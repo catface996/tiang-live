@@ -145,7 +145,7 @@ const McpManagement: React.FC = () => {
       setLoading(true);
       const params = {
         page,
-        pageSize: pagination.size,
+        size: pagination.size,  // 参数名从pageSize改为size
         search: searchText || undefined,
         type: filterType !== 'all' ? filterType : undefined,
         status: filterStatus !== 'all' ? filterStatus : undefined
@@ -154,8 +154,15 @@ const McpManagement: React.FC = () => {
       const response = await mcpApi.getServers(params);
       
       if (response.success) {
-        setMcpData(response.data);
-        setPagination(response.pagination);
+        // 适配新的PageResponse结构
+        const pageData = response.data;
+        setMcpData(pageData.content);  // 数据在content字段中
+        setPagination({
+          page: pageData.page,
+          size: pageData.size,
+          total: pageData.total,
+          totalPages: pageData.totalPages
+        });
       } else {
         message.error(response.message || '获取MCP服务器列表失败');
         setMcpData([]);
