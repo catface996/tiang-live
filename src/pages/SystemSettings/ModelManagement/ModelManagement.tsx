@@ -13,7 +13,8 @@ import {
   Tabs,
   Descriptions,
   Tooltip,
-  message
+  message,
+  App
 } from 'antd';
 import {
   SettingOutlined,
@@ -36,7 +37,8 @@ import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 import ModelFormModal from './components/ModelFormModal';
-import ModelApi, { ModelResponse, ModelStatsResponse } from '../../../services/modelApi';
+import ModelApi from '../../../services/modelApi';
+import type { ModelResponse, ModelStatsResponse } from '../../../services/modelApi';
 import '../../../styles/model-management.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -130,6 +132,8 @@ const FilterBar = styled.div`
 
 const ModelManagement: React.FC = () => {
   const { t } = useTranslation(['models', 'common']);
+  const { modal } = App.useApp();
+  
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -281,20 +285,28 @@ const ModelManagement: React.FC = () => {
   };
 
   const handleDeleteModel = (modelId: string) => {
-    Modal.confirm({
+    console.log('删除模型被调用，模型ID:', modelId);
+    modal.confirm({
       title: t('models:delete.confirmTitle'),
       content: t('models:delete.confirmContent'),
       okText: t('common:delete'),
       okType: 'danger',
       cancelText: t('common:cancel'),
       onOk: async () => {
+        console.log('用户确认删除，开始调用API');
         try {
+          console.log('调用 ModelApi.deleteModel，参数:', modelId);
           await ModelApi.deleteModel(modelId);
+          console.log('删除API调用成功');
           message.success(t('models:alerts.deleteSuccess'));
           await loadModelData(); // 重新加载数据
         } catch (error: any) {
+          console.error('删除模型失败:', error);
           message.error(`${t('models:alerts.deleteError')}: ${error.message}`);
         }
+      },
+      onCancel: () => {
+        console.log('用户取消删除');
       }
     });
   };
@@ -405,12 +417,12 @@ const ModelManagement: React.FC = () => {
 
             <div style={{ marginBottom: 12 }}>
               <Space wrap>
-                {model.capabilities.slice(0, 3).map(cap => (
+                {(model.capabilities || []).slice(0, 3).map(cap => (
                   <Tag key={cap} size="small">
                     {cap}
                   </Tag>
                 ))}
-                {model.capabilities.length > 3 && <Tag size="small">+{model.capabilities.length - 3}</Tag>}
+                {(model.capabilities?.length || 0) > 3 && <Tag size="small">+{(model.capabilities?.length || 0) - 3}</Tag>}
               </Space>
             </div>
 
@@ -437,6 +449,7 @@ const ModelManagement: React.FC = () => {
                     size="small"
                     onClick={e => {
                       e.stopPropagation();
+                      e.preventDefault();
                       handleViewModel(model);
                     }}
                   />
@@ -448,6 +461,7 @@ const ModelManagement: React.FC = () => {
                     size="small"
                     onClick={e => {
                       e.stopPropagation();
+                      e.preventDefault();
                       handleEditModel(model);
                     }}
                   />
@@ -459,6 +473,7 @@ const ModelManagement: React.FC = () => {
                     size="small"
                     onClick={e => {
                       e.stopPropagation();
+                      e.preventDefault();
                       handleTestModel(model.id);
                     }}
                   />
@@ -694,13 +709,13 @@ const ModelManagement: React.FC = () => {
                     <Card title={t('models:detail.limits')} size="small">
                       <Descriptions column={1} size="small">
                         <Descriptions.Item label={t('models:detail.requestsPerMinute')}>
-                          {selectedModel.limits.requestsPerMinute}
+                          {selectedModel.limits?.requestsPerMinute || 0}
                         </Descriptions.Item>
                         <Descriptions.Item label={t('models:detail.tokensPerMinute')}>
-                          {selectedModel.limits.tokensPerMinute}
+                          {selectedModel.limits?.tokensPerMinute || 0}
                         </Descriptions.Item>
                         <Descriptions.Item label={t('models:detail.dailyLimit')}>
-                          {selectedModel.limits.dailyLimit}
+                          {selectedModel.limits?.dailyLimit || 0}
                         </Descriptions.Item>
                       </Descriptions>
                     </Card>
@@ -710,7 +725,7 @@ const ModelManagement: React.FC = () => {
 
               <Tabs.TabPane tab={t('models:detail.capabilities')} key="capabilities">
                 <Row gutter={16}>
-                  {selectedModel.capabilities.map(capability => (
+                  {(selectedModel?.capabilities || []).map(capability => (
                     <Col xs={24} sm={12} lg={8} key={capability}>
                       <Card size="small" style={{ marginBottom: 16 }}>
                         <div style={{ textAlign: 'center' }}>
@@ -727,13 +742,13 @@ const ModelManagement: React.FC = () => {
                 <Card title={t('models:detail.pricingDetails')} size="small">
                   <Descriptions column={2} size="small">
                     <Descriptions.Item label={t('models:detail.inputTokenPrice')}>
-                      ${selectedModel.pricing.inputTokens} / 1K tokens
+                      ${selectedModel.pricing?.inputTokens || 0} / 1K tokens
                     </Descriptions.Item>
                     <Descriptions.Item label={t('models:detail.outputTokenPrice')}>
-                      ${selectedModel.pricing.outputTokens} / 1K tokens
+                      ${selectedModel.pricing?.outputTokens || 0} / 1K tokens
                     </Descriptions.Item>
                     <Descriptions.Item label={t('models:detail.currency')}>
-                      {selectedModel.pricing.currency}
+                      {selectedModel.pricing?.currency || 'USD'}
                     </Descriptions.Item>
                   </Descriptions>
                 </Card>

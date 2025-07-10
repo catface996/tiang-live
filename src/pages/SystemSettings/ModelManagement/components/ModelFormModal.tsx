@@ -3,7 +3,7 @@ import { Modal, Form, Input, Select, Row, Col, InputNumber, Slider, Alert } from
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../../store';
-import { ModelResponse } from '../../../../services/modelApi';
+import type { ModelResponse } from '../../../../services/modelApi';
 
 const { Option } = Select;
 const { TextArea } = Input;

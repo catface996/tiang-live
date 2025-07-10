@@ -5,6 +5,9 @@
 
 import axios from 'axios';
 
+// 后端API基础URL
+const BASE_URL = 'http://localhost:8080';
+
 // 定义请求和响应类型
 export interface SaveModelRequest {
   id?: string;
@@ -134,9 +137,6 @@ export interface ApiResult<T> {
   message: string;
   data: T;
 }
-
-// 后端API基础URL
-const BASE_URL = 'http://localhost:8080';
 
 /**
  * 获取模型列表
@@ -312,3 +312,6 @@ export const ModelApi = {
 
 // 默认导出
 export default ModelApi;
+
+// 确保类型导出
+export type { ModelResponse, SaveModelRequest, ModelListResponse, ModelStatsResponse, ModelTestRequest, ModelTestResponse, ApiResult };
