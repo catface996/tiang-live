@@ -83,13 +83,11 @@ export interface PagedResponse<T> extends ApiResponse<T[]> {
 
 // 获取服务器列表请求参数
 export interface GetMcpServersRequest {
-  page?: number;
-  size?: number;
   search?: string;
   type?: string;
   status?: string;
-  sortBy?: string;
-  sortOrder?: string;
+  page?: number;
+  pageSize?: number;
 }
 
 // 保存服务器请求参数
@@ -115,7 +113,7 @@ export interface SaveMcpServerRequest {
 
 // 创建专门的MCP API客户端
 const mcpApiClient = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/mcp',
+  baseURL: 'http://localhost:8080/api/mcp',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'
@@ -154,7 +152,7 @@ export const mcpApi = {
    * 获取MCP服务器列表
    */
   async getServers(params: GetMcpServersRequest = {}): Promise<PagedResponse<McpServer>> {
-    const response = await mcpApiClient.get('/servers', { params });
+    const response = await mcpApiClient.get('/list', { params });
     return response.data;
   },
 
@@ -162,7 +160,7 @@ export const mcpApi = {
    * 获取单个MCP服务器详情
    */
   async getServer(id: string): Promise<ApiResponse<McpServer>> {
-    const response = await mcpApiClient.get(`/servers/${id}`);
+    const response = await mcpApiClient.get(`/detail/${id}`);
     return response.data;
   },
 
@@ -170,7 +168,7 @@ export const mcpApi = {
    * 保存MCP服务器（创建/更新）
    */
   async saveServer(data: SaveMcpServerRequest): Promise<ApiResponse<McpServer>> {
-    const response = await mcpApiClient.post('/servers/save', data);
+    const response = await mcpApiClient.post('/save', data);
     return response.data;
   },
 
@@ -178,44 +176,85 @@ export const mcpApi = {
    * 删除MCP服务器
    */
   async deleteServer(id: string): Promise<ApiResponse<void>> {
-    const response = await mcpApiClient.delete(`/servers/${id}`);
+    const response = await mcpApiClient.delete(`/delete/${id}`);
     return response.data;
   },
 
   /**
-   * 批量删除MCP服务器
+   * 获取MCP统计信息
+   */
+  async getStatistics(): Promise<ApiResponse<McpStatistics>> {
+    const response = await mcpApiClient.get('/stats/overview');
+    return response.data;
+  },
+
+  // 以下方法暂时保留，但会返回模拟数据或错误，因为后端接口已移除
+  
+  /**
+   * 批量删除MCP服务器（暂不支持）
    */
   async batchDeleteServers(ids: string[]): Promise<ApiResponse<{ deletedCount: number; failedIds: string[] }>> {
-    const response = await mcpApiClient.delete('/servers/batch', { data: { ids } });
-    return response.data;
+    // 后端接口已移除，使用单个删除的方式实现
+    const results = await Promise.allSettled(
+      ids.map(id => this.deleteServer(id))
+    );
+    
+    const deletedCount = results.filter(r => r.status === 'fulfilled').length;
+    const failedIds = ids.filter((_, index) => results[index].status === 'rejected');
+    
+    return {
+      success: true,
+      code: 'SUCCESS',
+      message: '批量删除完成',
+      data: { deletedCount, failedIds },
+      timestamp: new Date().toISOString()
+    };
   },
 
   /**
-   * 启动MCP服务器
+   * 启动MCP服务器（暂不支持）
    */
   async startServer(id: string): Promise<ApiResponse<{ id: string; status: string; message: string }>> {
-    const response = await mcpApiClient.post(`/servers/${id}/start`);
-    return response.data;
+    console.warn('启动服务器功能暂不支持，后端接口已移除');
+    return {
+      success: false,
+      code: 'NOT_SUPPORTED',
+      message: '启动服务器功能暂不支持',
+      data: { id, status: 'unknown', message: '功能暂不可用' },
+      timestamp: new Date().toISOString()
+    };
   },
 
   /**
-   * 停止MCP服务器
+   * 停止MCP服务器（暂不支持）
    */
   async stopServer(id: string): Promise<ApiResponse<{ id: string; status: string; message: string }>> {
-    const response = await mcpApiClient.post(`/servers/${id}/stop`);
-    return response.data;
+    console.warn('停止服务器功能暂不支持，后端接口已移除');
+    return {
+      success: false,
+      code: 'NOT_SUPPORTED',
+      message: '停止服务器功能暂不支持',
+      data: { id, status: 'unknown', message: '功能暂不可用' },
+      timestamp: new Date().toISOString()
+    };
   },
 
   /**
-   * 重启MCP服务器
+   * 重启MCP服务器（暂不支持）
    */
   async restartServer(id: string): Promise<ApiResponse<{ id: string; status: string; message: string }>> {
-    const response = await mcpApiClient.post(`/servers/${id}/restart`);
-    return response.data;
+    console.warn('重启服务器功能暂不支持，后端接口已移除');
+    return {
+      success: false,
+      code: 'NOT_SUPPORTED',
+      message: '重启服务器功能暂不支持',
+      data: { id, status: 'unknown', message: '功能暂不可用' },
+      timestamp: new Date().toISOString()
+    };
   },
 
   /**
-   * 健康检查
+   * 健康检查（暂不支持）
    */
   async healthCheck(id: string): Promise<ApiResponse<{
     id: string;
@@ -225,23 +264,25 @@ export const mcpApi = {
     lastCheck: string;
     details: { [key: string]: string };
   }>> {
-    const response = await mcpApiClient.get(`/servers/${id}/health`);
-    return response.data;
+    console.warn('健康检查功能暂不支持，后端接口已移除');
+    return {
+      success: false,
+      code: 'NOT_SUPPORTED',
+      message: '健康检查功能暂不支持',
+      data: {
+        id,
+        status: 'unknown',
+        healthy: false,
+        responseTime: 0,
+        lastCheck: new Date().toISOString(),
+        details: { message: '功能暂不可用' }
+      },
+      timestamp: new Date().toISOString()
+    };
   },
 
   /**
-   * 获取MCP统计信息
-   */
-  async getStatistics(params: {
-    timeRange?: string;
-    includeMetrics?: boolean;
-  } = {}): Promise<ApiResponse<McpStatistics>> {
-    const response = await mcpApiClient.get('/statistics', { params });
-    return response.data;
-  },
-
-  /**
-   * 获取MCP服务器指标历史
+   * 获取MCP服务器指标历史（暂不支持）
    */
   async getServerMetrics(id: string, params: {
     timeRange?: string;
@@ -260,12 +301,23 @@ export const mcpApi = {
       memoryUsage: number;
     }>;
   }>> {
-    const response = await mcpApiClient.get(`/servers/${id}/metrics`, { params });
-    return response.data;
+    console.warn('获取服务器指标功能暂不支持，后端接口已移除');
+    return {
+      success: false,
+      code: 'NOT_SUPPORTED',
+      message: '获取服务器指标功能暂不支持',
+      data: {
+        serverId: id,
+        timeRange: params.timeRange || '24h',
+        interval: params.interval || '1h',
+        metrics: []
+      },
+      timestamp: new Date().toISOString()
+    };
   },
 
   /**
-   * 获取MCP服务器配置模板
+   * 获取MCP服务器配置模板（暂不支持）
    */
   async getConfigTemplates(type?: string): Promise<ApiResponse<Array<{
     type: string;
@@ -278,13 +330,18 @@ export const mcpApi = {
       healthCheck: { [key: string]: any };
     };
   }>>> {
-    const params = type ? { type } : {};
-    const response = await mcpApiClient.get('/config-templates', { params });
-    return response.data;
+    console.warn('获取配置模板功能暂不支持，后端接口已移除');
+    return {
+      success: false,
+      code: 'NOT_SUPPORTED',
+      message: '获取配置模板功能暂不支持',
+      data: [],
+      timestamp: new Date().toISOString()
+    };
   },
 
   /**
-   * 验证MCP服务器配置
+   * 验证MCP服务器配置（暂不支持）
    */
   async validateConfig(data: SaveMcpServerRequest): Promise<ApiResponse<{
     valid: boolean;
@@ -292,8 +349,19 @@ export const mcpApi = {
     errors: string[];
     suggestions: string[];
   }>> {
-    const response = await mcpApiClient.post('/servers/validate-config', data);
-    return response.data;
+    console.warn('验证配置功能暂不支持，后端接口已移除');
+    return {
+      success: false,
+      code: 'NOT_SUPPORTED',
+      message: '验证配置功能暂不支持',
+      data: {
+        valid: false,
+        warnings: [],
+        errors: ['功能暂不可用'],
+        suggestions: []
+      },
+      timestamp: new Date().toISOString()
+    };
   }
 };
 

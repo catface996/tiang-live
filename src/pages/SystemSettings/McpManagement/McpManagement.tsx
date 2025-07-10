@@ -220,12 +220,10 @@ const McpManagement: React.FC = () => {
       setLoading(true);
       const params = {
         page,
-        size: pagination.size,
+        pageSize: pagination.size,
         search: searchText || undefined,
         type: filterType !== 'all' ? filterType : undefined,
-        status: filterStatus !== 'all' ? filterStatus : undefined,
-        sortBy: 'createdAt',
-        sortOrder: 'desc'
+        status: filterStatus !== 'all' ? filterStatus : undefined
       };
 
       const response = await mcpApi.getServers(params);
@@ -250,10 +248,7 @@ const McpManagement: React.FC = () => {
   const loadStatsData = async () => {
     try {
       setStatisticsLoading(true);
-      const response = await mcpApi.getStatistics({
-        timeRange: 'all',
-        includeMetrics: true
-      });
+      const response = await mcpApi.getStatistics();
       
       if (response.success) {
         setStatsData(response.data);
@@ -315,11 +310,11 @@ const McpManagement: React.FC = () => {
         // 延迟刷新数据以获取最新状态
         setTimeout(() => loadMcpData(pagination.page), 2000);
       } else {
-        message.error(response.message || '启动服务器失败');
+        message.warning(response.message || '启动服务器功能暂不支持');
       }
     } catch (error) {
       console.error('Failed to start server:', error);
-      message.error('启动服务器失败');
+      message.warning('启动服务器功能暂不支持');
     }
   };
 
@@ -335,11 +330,11 @@ const McpManagement: React.FC = () => {
         // 延迟刷新数据以获取最新状态
         setTimeout(() => loadMcpData(pagination.page), 2000);
       } else {
-        message.error(response.message || '停止服务器失败');
+        message.warning(response.message || '停止服务器功能暂不支持');
       }
     } catch (error) {
       console.error('Failed to stop server:', error);
-      message.error('停止服务器失败');
+      message.warning('停止服务器功能暂不支持');
     }
   };
 
@@ -355,11 +350,11 @@ const McpManagement: React.FC = () => {
         // 延迟刷新数据以获取最新状态
         setTimeout(() => loadMcpData(pagination.page), 3000);
       } else {
-        message.error(response.message || '重启服务器失败');
+        message.warning(response.message || '重启服务器功能暂不支持');
       }
     } catch (error) {
       console.error('Failed to restart server:', error);
-      message.error('重启服务器失败');
+      message.warning('重启服务器功能暂不支持');
     }
   };
 
@@ -399,11 +394,11 @@ const McpManagement: React.FC = () => {
           message.warning(`${server.name} 健康检查异常`);
         }
       } else {
-        message.error(response.message || '健康检查失败');
+        message.warning(response.message || '健康检查功能暂不支持');
       }
     } catch (error) {
       console.error('Failed to perform health check:', error);
-      message.error('健康检查失败');
+      message.warning('健康检查功能暂不支持');
     }
   };
 
