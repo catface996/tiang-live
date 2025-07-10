@@ -11,7 +11,9 @@ import {
   Tag,
   Input,
   Select,
-  Spin
+  Spin,
+  Tooltip,
+  message
 } from 'antd';
 import {
   ShareAltOutlined,
@@ -21,12 +23,17 @@ import {
   ApiOutlined,
   DatabaseOutlined,
   LinkOutlined,
-  NodeIndexOutlined
+  NodeIndexOutlined,
+  FullscreenOutlined,
+  ZoomInOutlined,
+  ZoomOutOutlined,
+  FilterOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
+import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import { entityApi, type EntityStatisticsResponse } from '../../services/entityApi';
 import '../../styles/entity-management.css';
 
@@ -36,6 +43,9 @@ const { Option } = Select;
 
 const PageContainer = styled.div`
   padding: 24px;
+  background-color: var(--bg-layout);
+  color: var(--text-primary);
+  min-height: calc(100vh - 64px);
 `;
 
 const PageHeader = styled.div`
@@ -43,13 +53,149 @@ const PageHeader = styled.div`
 `;
 
 const StatsCard = styled(Card)`
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  
   .ant-card-body {
     padding: 16px;
   }
+  
+  .ant-statistic {
+    .ant-statistic-title {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .ant-statistic-content {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+  }
+  
+  &.topology-stats-primary {
+    .ant-statistic-content {
+      color: #1890ff;
+    }
+  }
+  
+  &.topology-stats-success {
+    .ant-statistic-content {
+      color: #52c41a;
+    }
+  }
+  
+  &.topology-stats-warning {
+    .ant-statistic-content {
+      color: #faad14;
+    }
+  }
+  
+  &.topology-stats-purple {
+    .ant-statistic-content {
+      color: #722ed1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .ant-card-body {
+      padding: 12px;
+    }
+    
+    .ant-statistic {
+      .ant-statistic-title {
+        font-size: 11px;
+      }
+      
+      .ant-statistic-content {
+        font-size: 16px;
+      }
+    }
+  }
 `;
 
-const TabContent = styled.div`
-  min-height: 400px;
+const GraphContainer = styled(Card)`
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  
+  .ant-card-body {
+    padding: 0;
+    position: relative;
+    min-height: 600px;
+  }
+  
+  .graph-toolbar {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .graph-legend {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+  }
+  
+  @media (max-width: 768px) {
+    .ant-card-body {
+      min-height: 400px;
+    }
+    
+    .graph-toolbar {
+      top: 8px;
+      right: 8px;
+      padding: 4px;
+    }
+    
+    .graph-legend {
+      bottom: 8px;
+      left: 8px;
+      padding: 8px;
+      max-width: 250px;
+    }
+  }
+`;
+
+const LegendContainer = styled.div`
+  .legend-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
 `;
 
 const RelationshipTopology: React.FC = () => {
@@ -58,6 +204,10 @@ const RelationshipTopology: React.FC = () => {
   // 状态管理
   const [loading, setLoading] = useState(false);
   const [statistics, setStatistics] = useState<EntityStatisticsResponse | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterLevel, setFilterLevel] = useState('all');
 
   useEffect(() => {
     setPageTitle(t('entities:relationshipGraph'));
@@ -72,6 +222,7 @@ const RelationshipTopology: React.FC = () => {
       setStatistics(stats);
     } catch (error) {
       console.error('加载统计数据失败:', error);
+      message.error(t('entities:loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -81,6 +232,26 @@ const RelationshipTopology: React.FC = () => {
     loadStatistics();
   };
 
+  const handleExport = () => {
+    message.info(t('entities:exportGraph'));
+  };
+
+  const handleSettings = () => {
+    message.info(t('entities:graphSettings'));
+  };
+
+  const handleFullscreen = () => {
+    message.info('全屏模式');
+  };
+
+  const handleZoomIn = () => {
+    message.info('放大');
+  };
+
+  const handleZoomOut = () => {
+    message.info('缩小');
+  };
+
   return (
     <PageContainer className="relationship-topology-page">
       <PageHeader>
@@ -88,7 +259,7 @@ const RelationshipTopology: React.FC = () => {
           <div>
             <Title level={2} style={{ margin: 0 }}>
               <Space>
-                <ShareAltOutlined />
+                <ShareAltOutlined className="text-primary" />
                 {t('entities:relationshipGraph')}
               </Space>
             </Title>
@@ -97,148 +268,168 @@ const RelationshipTopology: React.FC = () => {
             </Paragraph>
           </div>
           <Space>
-            <Button icon={<ExportOutlined />}>
+            <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={loading}>
+              {t('common:refresh')}
+            </Button>
+            <Button icon={<ExportOutlined />} onClick={handleExport}>
               {t('entities:exportGraph')}
             </Button>
-            <Button icon={<SettingOutlined />}>
+            <Button icon={<SettingOutlined />} onClick={handleSettings}>
               {t('entities:graphSettings')}
-            </Button>
-            <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={loading}>
-              {t('entities:refreshGraph')}
             </Button>
           </Space>
         </div>
       </PageHeader>
 
-      <Card>
-        <TabContent>
-          {/* 统计信息 */}
-          <Row gutter={16} style={{ marginBottom: 24 }}>
-            <Col xs={24} sm={12} md={6}>
-              <StatsCard className="entity-stats-primary">
-                <Statistic
-                  title={t('entities:stats.totalEntities')}
-                  value={statistics?.totalEntities || 0}
-                  suffix={t('common:unit.count')}
-                  prefix={<NodeIndexOutlined />}
-                />
-              </StatsCard>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <StatsCard className="entity-stats-success">
-                <Statistic
-                  title={t('entities:stats.totalRelationships')}
-                  value={statistics?.totalRelationships || 0}
-                  suffix={t('common:unit.count')}
-                  prefix={<LinkOutlined />}
-                />
-              </StatsCard>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <StatsCard className="entity-stats-warning">
-                <Statistic
-                  title={t('entities:stats.entityTypes')}
-                  value={statistics?.entityTypes || 0}
-                  suffix={t('common:unitType')}
-                  prefix={<DatabaseOutlined />}
-                />
-              </StatsCard>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <StatsCard className="entity-stats-purple">
-                <Statistic
-                  title={t('entities:stats.connectedSystems')}
-                  value={5}
-                  suffix={t('common:unit.count')}
-                  prefix={<ApiOutlined />}
-                />
-              </StatsCard>
-            </Col>
-          </Row>
+      {/* 统计信息 */}
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <StatsCard className="topology-stats-primary">
+            <Statistic
+              title={t('entities:stats.totalEntities')}
+              value={statistics?.totalEntities || 0}
+              suffix={t('common:unit.count')}
+              prefix={<NodeIndexOutlined />}
+            />
+          </StatsCard>
+        </Col>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <StatsCard className="topology-stats-success">
+            <Statistic
+              title={t('entities:stats.totalRelationships')}
+              value={statistics?.totalRelationships || 0}
+              suffix={t('common:unit.count')}
+              prefix={<LinkOutlined />}
+            />
+          </StatsCard>
+        </Col>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <StatsCard className="topology-stats-warning">
+            <Statistic
+              title={t('entities:stats.entityTypes')}
+              value={statistics?.entityTypes || 0}
+              suffix={t('common:unitType')}
+              prefix={<DatabaseOutlined />}
+            />
+          </StatsCard>
+        </Col>
+        <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+          <StatsCard className="topology-stats-purple">
+            <Statistic
+              title={t('entities:stats.connectedSystems')}
+              value={5}
+              suffix={t('common:unit.count')}
+              prefix={<ApiOutlined />}
+            />
+          </StatsCard>
+        </Col>
+      </Row>
 
-          {/* 筛选和搜索 */}
-          <Row gutter={16} style={{ marginBottom: 24 }}>
-            <Col xs={24} sm={12} md={8}>
-              <Search
-                placeholder={t('entities:searchPlaceholder')}
-                allowClear
-                style={{ width: '100%' }}
-              />
-            </Col>
-            <Col xs={24} sm={12} md={4}>
-              <Select
-                placeholder={t('entities:filterByType')}
-                allowClear
-                style={{ width: '100%' }}
-              >
-                <Option value="database">{t('entities:types.database')}</Option>
-                <Option value="api">{t('entities:types.api')}</Option>
-                <Option value="service">{t('entities:types.service')}</Option>
-                <Option value="queue">{t('entities:types.queue')}</Option>
-              </Select>
-            </Col>
-            <Col xs={24} sm={12} md={4}>
-              <Select
-                placeholder={t('entities:filterByStatus')}
-                allowClear
-                style={{ width: '100%' }}
-              >
-                <Option value="active">{t('entities:status.active')}</Option>
-                <Option value="inactive">{t('entities:status.inactive')}</Option>
-                <Option value="deprecated">{t('entities:status.deprecated')}</Option>
-              </Select>
-            </Col>
-            <Col xs={24} sm={12} md={4}>
-              <Select
-                placeholder={t('entities:filterByLevel')}
-                allowClear
-                style={{ width: '100%' }}
-              >
-                <Option value="core">{t('entities:levels.core')}</Option>
-                <Option value="basic">{t('entities:levels.basic')}</Option>
-                <Option value="business">{t('entities:levels.business')}</Option>
-              </Select>
-            </Col>
-          </Row>
+      {/* 筛选栏 */}
+      <SearchFilterBar
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchPlaceholder={t('entities:searchPlaceholder')}
+        filters={[
+          {
+            key: 'type',
+            value: filterType,
+            onChange: setFilterType,
+            placeholder: t('entities:filterByType'),
+            width: 120,
+            options: [
+              { label: t('common:all'), value: 'all' },
+              { label: t('entities:types.database'), value: 'database' },
+              { label: t('entities:types.api'), value: 'api' },
+              { label: t('entities:types.service'), value: 'service' },
+              { label: t('entities:types.queue'), value: 'queue' }
+            ]
+          },
+          {
+            key: 'status',
+            value: filterStatus,
+            onChange: setFilterStatus,
+            placeholder: t('entities:filterByStatus'),
+            width: 120,
+            options: [
+              { label: t('common:all'), value: 'all' },
+              { label: t('entities:status.active'), value: 'active' },
+              { label: t('entities:status.inactive'), value: 'inactive' },
+              { label: t('entities:status.deprecated'), value: 'deprecated' }
+            ]
+          },
+          {
+            key: 'level',
+            value: filterLevel,
+            onChange: setFilterLevel,
+            placeholder: t('entities:filterByLevel'),
+            width: 120,
+            options: [
+              { label: t('common:all'), value: 'all' },
+              { label: t('entities:levels.core'), value: 'core' },
+              { label: t('entities:levels.basic'), value: 'basic' },
+              { label: t('entities:levels.business'), value: 'business' }
+            ]
+          }
+        ]}
+        onRefresh={handleRefresh}
+      />
+
+      {/* 关系图谱 */}
+      <GraphContainer>
+        <Spin spinning={loading}>
+          {/* 图谱工具栏 */}
+          <div className="graph-toolbar">
+            <Space>
+              <Tooltip title="放大">
+                <Button type="text" icon={<ZoomInOutlined />} size="small" onClick={handleZoomIn} />
+              </Tooltip>
+              <Tooltip title="缩小">
+                <Button type="text" icon={<ZoomOutOutlined />} size="small" onClick={handleZoomOut} />
+              </Tooltip>
+              <Tooltip title="全屏">
+                <Button type="text" icon={<FullscreenOutlined />} size="small" onClick={handleFullscreen} />
+              </Tooltip>
+            </Space>
+          </div>
 
           {/* 图例说明 */}
-          <Card size="small" style={{ marginBottom: 24 }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-              <Space>
-                <Badge color="#1890ff" />
-                <span>{t('entities:legend.coreService')}</span>
-              </Space>
-              <Space>
-                <Badge color="#52c41a" />
-                <span>{t('entities:legend.basicService')}</span>
-              </Space>
-              <Space>
-                <Badge color="#faad14" />
-                <span>{t('entities:legend.businessService')}</span>
-              </Space>
-              <Space>
-                <Badge color="#f5222d" />
-                <span>{t('entities:legend.database')}</span>
-              </Space>
-              <Space>
-                <Badge color="#722ed1" />
-                <span>{t('entities:legend.messageQueue')}</span>
-              </Space>
-              <Space>
-                <Badge color="#13c2c2" />
-                <span>{t('entities:legend.cache')}</span>
-              </Space>
-            </div>
-          </Card>
+          <div className="graph-legend">
+            <LegendContainer>
+              <div className="legend-title">图例说明</div>
+              <div className="legend-items">
+                <div className="legend-item">
+                  <Badge color="#1890ff" />
+                  <span>{t('entities:legend.coreService')}</span>
+                </div>
+                <div className="legend-item">
+                  <Badge color="#52c41a" />
+                  <span>{t('entities:legend.basicService')}</span>
+                </div>
+                <div className="legend-item">
+                  <Badge color="#faad14" />
+                  <span>{t('entities:legend.businessService')}</span>
+                </div>
+                <div className="legend-item">
+                  <Badge color="#f5222d" />
+                  <span>{t('entities:legend.database')}</span>
+                </div>
+                <div className="legend-item">
+                  <Badge color="#722ed1" />
+                  <span>{t('entities:legend.messageQueue')}</span>
+                </div>
+                <div className="legend-item">
+                  <Badge color="#13c2c2" />
+                  <span>{t('entities:legend.cache')}</span>
+                </div>
+              </div>
+            </LegendContainer>
+          </div>
 
           {/* D3.js 关系图 */}
-          <Card>
-            <Spin spinning={loading}>
-              <D3RelationshipGraph />
-            </Spin>
-          </Card>
-        </TabContent>
-      </Card>
+          <D3RelationshipGraph />
+        </Spin>
+      </GraphContainer>
     </PageContainer>
   );
 };
