@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Card,
-  Tabs,
   Space,
   Button,
   Row,
@@ -19,7 +18,6 @@ import {
 } from 'antd';
 import {
   NodeIndexOutlined,
-  ShareAltOutlined,
   PlusOutlined,
   ReloadOutlined,
   SettingOutlined,
@@ -38,7 +36,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { setPageTitle } from '../../utils';
 import EntityCard from '../../components/Entity/EntityCard';
-import D3RelationshipGraph from '../../components/Relation/D3RelationshipGraph';
 import { entityApi, type EntityStatisticsResponse } from '../../services/entityApi';
 import enumApi, { type EnumItem } from '../../services/enumApi';
 import '../../styles/entity-management.css';
@@ -82,7 +79,6 @@ const EntityGrid = styled.div`
 const EntityManagement: React.FC = () => {
   const { t } = useTranslation(['entities', 'common']);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('entities');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -287,10 +283,6 @@ const EntityManagement: React.FC = () => {
   // 处理编辑实体
   const handleEditEntity = (entity: any) => {
     navigate(`/entities/edit/${entity.id}`);
-  };
-
-  const handleTabChange = (key: string) => {
-    setActiveTab(key);
   };
 
   // 刷新所有数据
@@ -656,73 +648,6 @@ const EntityManagement: React.FC = () => {
     );
   };
 
-  const renderRelationshipGraph = () => (
-    <TabContent>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
-        <div>
-          <Title level={3} style={{ margin: 0 }}>
-            {t('entities:relationshipGraph')}
-          </Title>
-          <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>{t('entities:relationshipGraphDesc')}</Paragraph>
-        </div>
-        <Space>
-          <Button icon={<ExportOutlined />}>{t('entities:exportGraph')}</Button>
-          <Button icon={<SettingOutlined />}>{t('entities:graphSettings')}</Button>
-          <Button icon={<ReloadOutlined />} onClick={loadEntities} loading={loading}>
-            {t('entities:refreshGraph')}
-          </Button>
-        </Space>
-      </div>
-
-      {/* 统计信息 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-primary">
-            <Statistic
-              title={t('entities:stats.totalRelations')}
-              value={25}
-              suffix={t('common:unitRelation')}
-              prefix={<LinkOutlined />}
-            />
-          </StatsCard>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-success">
-            <Statistic
-              title={t('entities:stats.relationTypes')}
-              value={5}
-              suffix={t('common:unitType')}
-              prefix={<TableOutlined />}
-            />
-          </StatsCard>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-warning">
-            <Statistic
-              title={t('entities:stats.graphNodes')}
-              value={21}
-              suffix={t('common:unit.count')}
-              prefix={<NodeIndexOutlined />}
-            />
-          </StatsCard>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard className="entity-stats-purple">
-            <Statistic
-              title={t('entities:stats.connectedSystems')}
-              value={5}
-              suffix={t('common:unit.count')}
-              prefix={<ApiOutlined />}
-            />
-          </StatsCard>
-        </Col>
-      </Row>
-
-      {/* D3.js Relationship Graph */}
-      <D3RelationshipGraph />
-    </TabContent>
-  );
-
   return (
     <PageContainer className="entity-management-page">
       <PageHeader>
@@ -737,31 +662,7 @@ const EntityManagement: React.FC = () => {
       </PageHeader>
 
       <Card>
-        <Tabs activeKey={activeTab} onChange={handleTabChange} size="large" tabBarStyle={{ marginBottom: 24 }}>
-          <Tabs.TabPane
-            tab={
-              <Space>
-                <NodeIndexOutlined />
-                {t('entities:title')}
-              </Space>
-            }
-            key="entities"
-          >
-            {renderEntityManagement()}
-          </Tabs.TabPane>
-
-          <Tabs.TabPane
-            tab={
-              <Space>
-                <ShareAltOutlined />
-                {t('entities:relationshipGraph')}
-              </Space>
-            }
-            key="relationships"
-          >
-            {renderRelationshipGraph()}
-          </Tabs.TabPane>
-        </Tabs>
+        {renderEntityManagement()}
       </Card>
 
       {renderEntityDetail()}
