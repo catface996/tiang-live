@@ -22,6 +22,7 @@ import zhSolutions from './locales/zh/solutions.json';
 import zhTags from './locales/zh/tags.json';
 import zhPrompts from './locales/zh/prompts.json';
 import zhEntityScan from './locales/zh/entityScan.json';
+import zhMcp from './locales/zh/mcp.json';
 import zhTheme from './locales/zh/theme.json';
 // 页面级语言包
 import zhTaskCollectionRunDetail from './locales/zh/taskCollectionRunDetail.json';
@@ -49,6 +50,7 @@ import enSolutions from './locales/en/solutions.json';
 import enTags from './locales/en/tags.json';
 import enPrompts from './locales/en/prompts.json';
 import enEntityScan from './locales/en/entityScan.json';
+import enMcp from './locales/en/mcp.json';
 import enTheme from './locales/en/theme.json';
 // 页面级语言包
 import enTaskCollectionRunDetail from './locales/en/taskCollectionRunDetail.json';
@@ -78,6 +80,7 @@ const resources = {
     tags: zhTags,
     prompts: zhPrompts,
     entityScan: zhEntityScan,
+    mcp: zhMcp,
     theme: zhTheme,
     // 页面级语言包
     taskCollectionRunDetail: zhTaskCollectionRunDetail,
@@ -105,6 +108,7 @@ const resources = {
     tags: enTags,
     prompts: enPrompts,
     entityScan: enEntityScan,
+    mcp: enMcp,
     theme: enTheme,
     // 页面级语言包
     taskCollectionRunDetail: enTaskCollectionRunDetail,
@@ -177,6 +181,7 @@ i18n
       'tags',
       'prompts',
       'entityScan',
+      'mcp',
       'theme',
       // 页面级命名空间
       'taskCollectionRunDetail',
