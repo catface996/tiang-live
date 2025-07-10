@@ -379,13 +379,7 @@ const EntityManagement: React.FC = () => {
 
     return (
       <TabContent>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
-          <div>
-            <Title level={3} style={{ margin: 0 }}>
-              {t('entities:title')}
-            </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>{t('entities:subtitle')}</Paragraph>
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 24 }}>
           <Space>
             <Button icon={<ExportOutlined />}>{t('common:export')}</Button>
             <Button icon={<ReloadOutlined />} onClick={handleRefreshAll} loading={loading || statisticsLoading}>
@@ -661,9 +655,7 @@ const EntityManagement: React.FC = () => {
         </div>
       </PageHeader>
 
-      <Card>
-        {renderEntityManagement()}
-      </Card>
+      {renderEntityManagement()}
 
       {renderEntityDetail()}
     </PageContainer>
