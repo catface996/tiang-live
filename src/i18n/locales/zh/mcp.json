@@ -49,6 +49,14 @@
     "errors": "错误数"
   },
   
+  "units": {
+    "ms": "毫秒",
+    "seconds": "秒",
+    "minutes": "分钟",
+    "hours": "小时",
+    "days": "天"
+  },
+  
   "delete": {
     "confirmTitle": "确认删除服务器",
     "confirmContent": "删除后将无法恢复，确定要删除这个MCP服务器吗？"

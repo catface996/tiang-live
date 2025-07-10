@@ -49,6 +49,14 @@
     "errors": "Errors"
   },
   
+  "units": {
+    "ms": "ms",
+    "seconds": "seconds",
+    "minutes": "minutes",
+    "hours": "hours",
+    "days": "days"
+  },
+  
   "delete": {
     "confirmTitle": "Confirm Delete Server",
     "confirmContent": "This action cannot be undone. Are you sure you want to delete this MCP server?"

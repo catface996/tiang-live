@@ -330,7 +330,7 @@ const McpManagement: React.FC = () => {
             <Statistic
               title={t('mcp:stats.avgResponseTime')}
               value={statsData?.avgResponseTime || 0}
-              suffix="ms"
+              suffix={t('mcp:units.ms')}
               prefix={<MonitorOutlined />}
             />
           </StatsCard>
@@ -438,7 +438,7 @@ const McpManagement: React.FC = () => {
                   </Col>
                   <Col span={12}>
                     <Text type="secondary" style={{ fontSize: 11 }}>
-                      {t('mcp:metrics.avgTime')}: {server.metrics?.avgResponseTime || 0}ms
+                      {t('mcp:metrics.avgTime')}: {server.metrics?.avgResponseTime || 0}{t('mcp:units.ms')}
                     </Text>
                   </Col>
                 </Row>
