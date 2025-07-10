@@ -61,60 +61,22 @@ const StatsCard = styled(Card)`
     padding: 16px;
   }
   
-  .ant-statistic {
-    .ant-statistic-title {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .ant-statistic-content {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
+  &:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
   }
   
-  &.topology-stats-primary {
-    .ant-statistic-content {
-      color: #1890ff;
-    }
+  .ant-statistic-title {
+    color: var(--text-secondary);
   }
   
-  &.topology-stats-success {
-    .ant-statistic-content {
-      color: #52c41a;
-    }
-  }
-  
-  &.topology-stats-warning {
-    .ant-statistic-content {
-      color: #faad14;
-    }
-  }
-  
-  &.topology-stats-purple {
-    .ant-statistic-content {
-      color: #722ed1;
-    }
+  .ant-statistic-content {
+    color: var(--text-primary);
   }
   
   @media (max-width: 768px) {
     .ant-card-body {
       padding: 12px;
-    }
-    
-    .ant-statistic {
-      .ant-statistic-title {
-        font-size: 11px;
-      }
-      
-      .ant-statistic-content {
-        font-size: 18px;
-      }
     }
   }
 `;

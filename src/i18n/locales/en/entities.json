@@ -28,7 +28,9 @@
     "warningEntities": "Warning Entities",
     "errorEntities": "Error Entities",
     "totalRelations": "Total Relations",
+    "totalRelationships": "Total Relationships",
     "relationTypes": "Relation Types",
+    "entityTypes": "Entity Types",
     "graphNodes": "Graph Nodes",
     "connectedSystems": "Connected Systems"
   },

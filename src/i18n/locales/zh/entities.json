@@ -28,7 +28,9 @@
     "warningEntities": "警告实体",
     "errorEntities": "错误实体",
     "totalRelations": "总关系数",
+    "totalRelationships": "总关系数",
     "relationTypes": "关系类型",
+    "entityTypes": "实体类型数",
     "graphNodes": "图谱节点",
     "connectedSystems": "关联系统"
   },
