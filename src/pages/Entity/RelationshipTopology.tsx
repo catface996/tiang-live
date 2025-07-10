@@ -113,7 +113,7 @@ const StatsCard = styled(Card)`
       }
       
       .ant-statistic-content {
-        font-size: 16px;
+        font-size: 18px;
       }
     }
   }
@@ -196,6 +196,16 @@ const LegendContainer = styled.div`
     font-size: 11px;
     color: var(--text-secondary);
   }
+  
+  @media (max-width: 768px) {
+    .legend-title {
+      font-size: 11px;
+    }
+    
+    .legend-item {
+      font-size: 10px;
+    }
+  }
 `;
 
 const RelationshipTopology: React.FC = () => {
@@ -241,15 +251,15 @@ const RelationshipTopology: React.FC = () => {
   };
 
   const handleFullscreen = () => {
-    message.info('全屏模式');
+    message.info(t('entities:fullscreen'));
   };
 
   const handleZoomIn = () => {
-    message.info('放大');
+    message.info(t('entities:zoomIn'));
   };
 
   const handleZoomOut = () => {
-    message.info('缩小');
+    message.info(t('entities:zoomOut'));
   };
 
   return (
@@ -381,13 +391,13 @@ const RelationshipTopology: React.FC = () => {
           {/* 图谱工具栏 */}
           <div className="graph-toolbar">
             <Space>
-              <Tooltip title="放大">
+              <Tooltip title={t('entities:zoomIn')}>
                 <Button type="text" icon={<ZoomInOutlined />} size="small" onClick={handleZoomIn} />
               </Tooltip>
-              <Tooltip title="缩小">
+              <Tooltip title={t('entities:zoomOut')}>
                 <Button type="text" icon={<ZoomOutOutlined />} size="small" onClick={handleZoomOut} />
               </Tooltip>
-              <Tooltip title="全屏">
+              <Tooltip title={t('entities:fullscreen')}>
                 <Button type="text" icon={<FullscreenOutlined />} size="small" onClick={handleFullscreen} />
               </Tooltip>
             </Space>
@@ -396,7 +406,7 @@ const RelationshipTopology: React.FC = () => {
           {/* 图例说明 */}
           <div className="graph-legend">
             <LegendContainer>
-              <div className="legend-title">图例说明</div>
+              <div className="legend-title">{t('entities:legendTitle')}</div>
               <div className="legend-items">
                 <div className="legend-item">
                   <Badge color="#1890ff" />
