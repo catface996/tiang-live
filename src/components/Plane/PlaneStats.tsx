@@ -15,31 +15,48 @@ const { Title } = Typography;
 interface PlaneStatsProps {
   planes: PlaneDefinition[];
   metrics?: PlaneMetrics[];
+  statsData?: any; // 真实统计数据
   loading?: boolean;
 }
 
 const PlaneStats: React.FC<PlaneStatsProps> = ({ 
   planes, 
   metrics = [], 
+  statsData,
   loading = false 
 }) => {
   const { t } = useTranslation(['planes', 'common']);
   
-  // 计算统计数据
-  const totalPlanes = planes.length;
-  const activePlanes = planes.filter(plane => plane.status === 'ACTIVE').length;
-  const warningPlanes = planes.filter(plane => plane.status === 'WARNING').length;
-  const errorPlanes = planes.filter(plane => plane.status === 'ERROR').length;
+  // 如果有真实统计数据，优先使用
+  let totalPlanes, activePlanes, warningPlanes, errorPlanes;
+  let totalEntities, totalHealthyEntities, totalWarningEntities, totalErrorEntities;
   
-  const totalInstances = metrics.reduce((sum, metric) => sum + metric.instanceCount, 0);
-  
-  // 计算实体健康状态统计
-  const totalHealthyEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.healthy, 0);
-  const totalWarningEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.warning, 0);
-  const totalErrorEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.error, 0);
-  const totalEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.total, 0);
+  if (statsData) {
+    // 使用真实统计数据
+    totalPlanes = statsData.planeStats.totalPlanes;
+    activePlanes = statsData.planeStats.activePlanes;
+    warningPlanes = statsData.planeStats.warningPlanes;
+    errorPlanes = statsData.planeStats.errorPlanes;
+    
+    totalEntities = statsData.entityStats.totalEntities;
+    totalHealthyEntities = statsData.entityStats.healthyEntities;
+    totalWarningEntities = statsData.entityStats.warningEntities;
+    totalErrorEntities = statsData.entityStats.errorEntities;
+  } else {
+    // 使用计算的统计数据（兜底）
+    totalPlanes = planes.length;
+    activePlanes = planes.filter(plane => plane.status === 'ACTIVE').length;
+    warningPlanes = planes.filter(plane => plane.status === 'WARNING').length;
+    errorPlanes = planes.filter(plane => plane.status === 'ERROR').length;
+    
+    // 计算实体健康状态统计
+    totalHealthyEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.healthy, 0);
+    totalWarningEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.warning, 0);
+    totalErrorEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.error, 0);
+    totalEntities = planes.reduce((sum, plane) => sum + plane.entityHealth.total, 0);
+  }
 
-  const statsData = [
+  const displayData = [
     {
       title: t('planes:stats.totalPlanes'),
       value: totalPlanes,
@@ -65,8 +82,8 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
       className: 'plane-stats-error'
     },
     {
-      title: t('planes:stats.totalInstances'),
-      value: totalInstances,
+      title: t('planes:stats.totalEntities'),
+      value: totalEntities,
       icon: <NodeIndexOutlined />,
       className: 'plane-stats-purple'
     },
@@ -92,7 +109,7 @@ const PlaneStats: React.FC<PlaneStatsProps> = ({
 
   return (
     <Row gutter={[16, 16]} style={{ marginBottom: 32 }}>
-      {statsData.map((stat, index) => (
+      {displayData.map((stat, index) => (
         <Col xs={24} sm={12} md={6} lg={3} key={index}>
           <Card loading={loading} className={stat.className}>
             <Statistic

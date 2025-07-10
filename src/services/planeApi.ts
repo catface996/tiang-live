@@ -46,6 +46,24 @@ export interface ApiResult<T> {
   data: T;
 }
 
+// 平面统计数据类型
+export interface PlaneStatsData {
+  planeStats: {
+    totalPlanes: number;
+    activePlanes: number;
+    warningPlanes: number;
+    errorPlanes: number;
+    maintenancePlanes: number;
+  };
+  entityStats: {
+    totalEntities: number;
+    healthyEntities: number;
+    warningEntities: number;
+    errorEntities: number;
+  };
+  timestamp: string;
+}
+
 // 后端API基础URL
 const BASE_URL = 'http://localhost:8080';
 
@@ -106,12 +124,27 @@ const deletePlane = async (id: string): Promise<void> => {
   }
 };
 
+/**
+ * 获取平面统计数据
+ * @returns 统计数据
+ */
+const getStatsOverview = async (): Promise<PlaneStatsData> => {
+  try {
+    const response = await axios.get<ApiResult<PlaneStatsData>>(`${BASE_URL}/api/plane/stats/overview`);
+    return response.data.data;
+  } catch (error) {
+    console.error('获取平面统计数据失败:', error);
+    throw error;
+  }
+};
+
 // 导出所有API函数
 export const PlaneApi = {
   listPlanes,
   getPlaneDetail,
   savePlane,
-  deletePlane
+  deletePlane,
+  getStatsOverview
 };
 
 // 默认导出

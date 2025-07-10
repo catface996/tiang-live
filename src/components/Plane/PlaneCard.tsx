@@ -155,14 +155,6 @@ const PlaneCard: React.FC<PlaneCardProps> = ({ plane, onAction, className }) => 
               {t('planes:card.labels.dependencies')}: {plane.dependencies.length} {t('planes:card.labels.planesCount')}
               {plane.dependencies.length > 1 && <span className="multiple-dependency-warning"> ({t('planes:card.labels.multipleDependency')})</span>}
             </Text>
-            <div className="dependency-list">
-              {plane.dependencies.map((depId, index) => (
-                <span key={depId} className="dependency-item">
-                  {depId}
-                  {index < plane.dependencies.length - 1 && ', '}
-                </span>
-              ))}
-            </div>
           </div>
         )}
       </StatsContainer>

@@ -41,6 +41,7 @@ const PlaneManagement: React.FC = () => {
   
   // 新增状态
   const [planeList, setPlaneList] = useState<PlaneResponse[]>([]);
+  const [statsData, setStatsData] = useState<any>(null); // 添加统计数据状态
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingPlane, setEditingPlane] = useState<SavePlaneRequest | null>(null);
   const [form] = Form.useForm();
@@ -51,6 +52,8 @@ const PlaneManagement: React.FC = () => {
     loadPlaneData();
     // 加载真实平面数据
     fetchPlanes();
+    // 加载统计数据
+    fetchStatsData();
   }, [t]);
 
   // 从API获取平面列表
@@ -62,6 +65,17 @@ const PlaneManagement: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch planes:', error);
       message.error(t('planes:errors.planeDefinitionLoadFailed'));
+    }
+  };
+
+  // 获取统计数据
+  const fetchStatsData = async () => {
+    try {
+      const stats = await PlaneApi.getStatsOverview();
+      setStatsData(stats);
+    } catch (error) {
+      console.error('Failed to fetch stats:', error);
+      message.error('获取统计数据失败');
     }
   };
   
@@ -350,6 +364,7 @@ const PlaneManagement: React.FC = () => {
 
   const handleRefresh = async () => {
     await fetchPlanes();
+    await fetchStatsData();
     await loadPlaneData();
   };
 
@@ -574,6 +589,7 @@ const PlaneManagement: React.FC = () => {
       <PlaneStats 
         planes={planes}
         metrics={metrics}
+        statsData={statsData}
         loading={loading.definitions || loading.metrics}
       />
 
@@ -625,26 +641,6 @@ const PlaneManagement: React.FC = () => {
                   ))}
                 </ul>
               </div>
-            </Col>
-          </Row>
-        </Card>
-      )}
-
-      {/* 调试信息 - 开发环境显示 */}
-      {process.env.NODE_ENV === 'development' && (
-        <Card title="调试信息" style={{ marginTop: 24 }}>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={12}>
-              <Title level={5}>平面数据格式:</Title>
-              <pre style={{ fontSize: '12px', maxHeight: '300px', overflow: 'auto' }}>
-                {JSON.stringify(planes.slice(0, 2), null, 2)}
-              </pre>
-            </Col>
-            <Col xs={24} md={12}>
-              <Title level={5}>依赖关系数据格式:</Title>
-              <pre style={{ fontSize: '12px', maxHeight: '300px', overflow: 'auto' }}>
-                {JSON.stringify(topology?.relationships?.slice(0, 5) || [], null, 2)}
-              </pre>
             </Col>
           </Row>
         </Card>
