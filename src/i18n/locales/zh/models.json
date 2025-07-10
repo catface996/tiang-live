@@ -5,6 +5,7 @@
   "createModel": "添加模型配置",
   "editModel": "编辑模型配置",
   "viewDetails": "查看详情",
+  "test": "测试",
   "searchPlaceholder": "搜索模型名称、提供商...",
   "filterByProvider": "按提供商筛选",
   "filterByType": "按类型筛选",
@@ -12,6 +13,18 @@
   "totalFound": "找到 {{count}} 个模型",
   "deleteConfirm": "确定要删除这个模型配置吗？",
   "testConnection": "测试连接",
+  "delete": {
+    "confirmTitle": "确认删除",
+    "confirmContent": "确定要删除这个模型配置吗？删除后无法恢复。"
+  },
+  "errors": {
+    "loadFailed": "加载模型数据失败",
+    "statsFailed": "加载统计数据失败",
+    "loadDetailFailed": "获取模型详情失败",
+    "saveFailed": "保存模型失败",
+    "deleteFailed": "删除模型失败",
+    "testFailed": "测试模型失败"
+  },
   "stats": {
     "totalModels": "总模型数",
     "activeModels": "活跃模型",
@@ -101,9 +114,14 @@
   },
   "alerts": {
     "createSuccess": "模型配置创建成功",
+    "createError": "模型配置创建失败",
     "updateSuccess": "模型配置更新成功",
+    "updateError": "模型配置更新失败",
     "deleteSuccess": "模型配置删除成功",
-    "testSuccess": "连接测试成功"
+    "deleteError": "模型配置删除失败",
+    "testSuccess": "连接测试成功",
+    "testError": "连接测试失败",
+    "testFailed": "模型测试失败"
   },
   "mockData": {
     "systemAdmin": "系统管理员",

@@ -28,14 +28,15 @@ import {
   MonitorOutlined,
   RobotOutlined,
   ExperimentOutlined,
-  DatabaseOutlined
+  DatabaseOutlined,
+  DeleteOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 import ModelFormModal from './components/ModelFormModal';
-import modelsData from '../../../data/models.json';
+import ModelApi, { ModelResponse, ModelStatsResponse } from '../../../services/modelApi';
 import '../../../styles/model-management.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -127,63 +128,83 @@ const FilterBar = styled.div`
   margin-bottom: 16px;
 `;
 
-interface ModelConfig {
-  id: string;
-  name: string;
-  provider: string;
-  modelType: 'llm' | 'embedding' | 'image' | 'audio';
-  version: string;
-  apiEndpoint: string;
-  apiKey: string;
-  maxTokens: number;
-  temperature: number;
-  topP: number;
-  frequencyPenalty: number;
-  presencePenalty: number;
-  status: 'active' | 'inactive' | 'testing';
-  description: string;
-  capabilities: string[];
-  pricing: {
-    inputTokens: number;
-    outputTokens: number;
-    currency: string;
-  };
-  limits: {
-    requestsPerMinute: number;
-    tokensPerMinute: number;
-    dailyLimit: number;
-  };
-  createdBy: string;
-  createdAt: string;
-  lastModified: string;
-  lastUsed: string;
-  usageCount: number;
-}
-
 const ModelManagement: React.FC = () => {
   const { t } = useTranslation(['models', 'common']);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
-  const [editingModel, setEditingModel] = useState<ModelConfig | null>(null);
-  const [selectedModel, setSelectedModel] = useState<ModelConfig | null>(null);
+  const [editingModel, setEditingModel] = useState<ModelResponse | null>(null);
+  const [selectedModel, setSelectedModel] = useState<ModelResponse | null>(null);
   const [searchText, setSearchText] = useState('');
   const [filterProvider, setFilterProvider] = useState('all');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [form] = Form.useForm();
+  
+  // 真实数据状态
+  const [modelData, setModelData] = useState<ModelResponse[]>([]);
+  const [statsData, setStatsData] = useState<ModelStatsResponse | null>(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 20,
+    total: 0,
+    totalPages: 0
+  });
 
   useEffect(() => {
     setPageTitle(t('models:title'));
+    loadModelData();
+    loadStatsData();
   }, [t]);
 
-  // 从JSON文件获取模型数据
-  const modelData: ModelConfig[] = modelsData.models.map(model => ({
-    ...model,
-    description: t(model.description.replace('models.', 'models:')),
-    capabilities: model.capabilities.map(cap => t(cap.replace('models.', 'models:'))),
-    createdBy: t(model.createdBy.replace('models.', 'models:'))
-  }));
+  // 加载模型数据
+  const loadModelData = async () => {
+    try {
+      setLoading(true);
+      const response = await ModelApi.getModelList({
+        search: searchText || undefined,
+        provider: filterProvider !== 'all' ? filterProvider : undefined,
+        modelType: filterType !== 'all' ? filterType : undefined,
+        status: filterStatus !== 'all' ? filterStatus : undefined,
+        page: pagination.page,
+        pageSize: pagination.pageSize
+      });
+      
+      setModelData(response.models);
+      setPagination(response.pagination);
+    } catch (error) {
+      console.error('加载模型数据失败:', error);
+      message.error(t('models:errors.loadFailed'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 加载统计数据
+  const loadStatsData = async () => {
+    try {
+      const stats = await ModelApi.getModelStats();
+      setStatsData(stats);
+    } catch (error) {
+      console.error('加载统计数据失败:', error);
+      message.error(t('models:errors.statsFailed'));
+    }
+  };
+
+  // 刷新数据
+  const handleRefresh = async () => {
+    await Promise.all([loadModelData(), loadStatsData()]);
+  };
+
+  // 搜索和筛选变化时重新加载数据
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPagination(prev => ({ ...prev, page: 1 }));
+      loadModelData();
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [searchText, filterProvider, filterType, filterStatus]);
 
   const providerMap = {
     OpenAI: { color: 'green', icon: <ExperimentOutlined /> },
@@ -215,46 +236,115 @@ const ModelManagement: React.FC = () => {
     setModalVisible(true);
   };
 
-  const handleEditModel = (model: ModelConfig) => {
-    setEditingModel(model);
-    form.setFieldsValue({
-      name: model.name,
-      provider: model.provider,
-      modelType: model.modelType,
-      version: model.version,
-      apiEndpoint: model.apiEndpoint,
-      maxTokens: model.maxTokens,
-      temperature: model.temperature,
-      description: model.description
-    });
-    setModalVisible(true);
+  const handleEditModel = async (model: ModelResponse) => {
+    try {
+      // 获取完整的模型详情
+      const fullModel = await ModelApi.getModelDetail(model.id);
+      setEditingModel(fullModel);
+      
+      // 设置表单值
+      form.setFieldsValue({
+        name: fullModel.name,
+        provider: fullModel.provider,
+        modelType: fullModel.modelType,
+        version: fullModel.version,
+        apiEndpoint: fullModel.apiEndpoint,
+        apiKey: fullModel.apiKey,
+        maxTokens: fullModel.maxTokens,
+        temperature: fullModel.temperature,
+        topP: fullModel.topP,
+        frequencyPenalty: fullModel.frequencyPenalty,
+        presencePenalty: fullModel.presencePenalty,
+        status: fullModel.status,
+        description: fullModel.description,
+        capabilities: fullModel.capabilities,
+        pricing: fullModel.pricing,
+        limits: fullModel.limits
+      });
+      setModalVisible(true);
+    } catch (error) {
+      console.error('获取模型详情失败:', error);
+      message.error(t('models:errors.loadDetailFailed'));
+    }
   };
 
-  const handleViewModel = (model: ModelConfig) => {
-    setSelectedModel(model);
-    setDetailModalVisible(true);
+  const handleViewModel = async (model: ModelResponse) => {
+    try {
+      // 获取完整的模型详情
+      const fullModel = await ModelApi.getModelDetail(model.id);
+      setSelectedModel(fullModel);
+      setDetailModalVisible(true);
+    } catch (error) {
+      console.error('获取模型详情失败:', error);
+      message.error(t('models:errors.loadDetailFailed'));
+    }
   };
 
   const handleDeleteModel = (modelId: string) => {
-    message.success(t('models:alerts.deleteSuccess'));
+    Modal.confirm({
+      title: t('models:delete.confirmTitle'),
+      content: t('models:delete.confirmContent'),
+      okText: t('common:delete'),
+      okType: 'danger',
+      cancelText: t('common:cancel'),
+      onOk: async () => {
+        try {
+          await ModelApi.deleteModel(modelId);
+          message.success(t('models:alerts.deleteSuccess'));
+          await loadModelData(); // 重新加载数据
+        } catch (error: any) {
+          message.error(`${t('models:alerts.deleteError')}: ${error.message}`);
+        }
+      }
+    });
   };
 
-  const handleTestModel = (modelId: string) => {
-    message.success(t('models:alerts.testSuccess'));
+  const handleTestModel = async (modelId: string) => {
+    try {
+      setLoading(true);
+      const testResult = await ModelApi.testModel(modelId, {
+        testType: 'connection',
+        testPrompt: 'Hello, how are you?'
+      });
+      
+      if (testResult.status === 'success') {
+        message.success(t('models:alerts.testSuccess'));
+      } else {
+        message.error(t('models:alerts.testFailed'));
+      }
+    } catch (error: any) {
+      message.error(`${t('models:alerts.testError')}: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
-      if (editingModel) {
-        message.success(t('models:alerts.updateSuccess'));
-      } else {
+      setLoading(true);
+      
+      const modelData = {
+        ...values,
+        id: editingModel?.id // 如果是编辑，则包含ID
+      };
+      
+      const result = await ModelApi.saveModel(modelData);
+      
+      if (result.operation === 'create') {
         message.success(t('models:alerts.createSuccess'));
+      } else {
+        message.success(t('models:alerts.updateSuccess'));
       }
+      
       setModalVisible(false);
       form.resetFields();
-    } catch (error) {
-      console.error('表单验证失败:', error);
+      await loadModelData(); // 重新加载数据
+    } catch (error: any) {
+      console.error('保存模型失败:', error);
+      message.error(`${editingModel ? t('models:alerts.updateError') : t('models:alerts.createError')}: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -333,7 +423,7 @@ const ModelManagement: React.FC = () => {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span>{t('models:stats.lastUsed')}:</span>
-                <span>{model.lastUsed}</span>
+                <span>{new Date(model.lastUsed).toLocaleDateString()}</span>
               </div>
             </div>
 
@@ -362,6 +452,29 @@ const ModelManagement: React.FC = () => {
                     }}
                   />
                 </Tooltip>
+                <Tooltip title={t('models:test')}>
+                  <Button
+                    type="text"
+                    icon={<ThunderboltOutlined />}
+                    size="small"
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleTestModel(model.id);
+                    }}
+                  />
+                </Tooltip>
+                <Tooltip title={t('common:delete')}>
+                  <Button
+                    type="text"
+                    icon={<DeleteOutlined />}
+                    size="small"
+                    danger
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleDeleteModel(model.id);
+                    }}
+                  />
+                </Tooltip>
               </Space>
             </div>
           </ModelCard>
@@ -370,9 +483,12 @@ const ModelManagement: React.FC = () => {
     });
   };
 
-  const activeModels = modelData.filter(model => model.status === 'active').length;
-  const totalUsage = modelData.reduce((sum, model) => sum + model.usageCount, 0);
-  const avgTemperature = modelData.reduce((sum, model) => sum + model.temperature, 0) / modelData.length;
+  // 计算统计数据
+  const activeModels = statsData?.modelStats.activeModels || 0;
+  const totalUsage = statsData?.usageStats.totalRequests || 0;
+  const avgTemperature = modelData.length > 0 
+    ? modelData.reduce((sum, model) => sum + (model.temperature || 0), 0) / modelData.length 
+    : 0;
 
   return (
     <PageContainer className="model-management-page">
@@ -386,7 +502,9 @@ const ModelManagement: React.FC = () => {
             </Space>
           </Title>
           <Space>
-            <Button icon={<ReloadOutlined />}>{t('common:refresh')}</Button>
+            <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={loading}>
+              {t('common:refresh')}
+            </Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateModel}>
               {t('models:addModel')}
             </Button>
@@ -403,7 +521,7 @@ const ModelManagement: React.FC = () => {
           <StatsCard className="model-stats-primary">
             <Statistic
               title={t('models:stats.totalModels')}
-              value={modelData.length}
+              value={statsData?.modelStats.totalModels || modelData.length}
               suffix={t('models:stats.unit')}
               prefix={<ExperimentOutlined />}
             />
@@ -483,7 +601,7 @@ const ModelManagement: React.FC = () => {
             ]
           }
         ]}
-        onRefresh={() => window.location.reload()}
+        onRefresh={handleRefresh}
       />
 
       {/* 模型卡片列表 */}

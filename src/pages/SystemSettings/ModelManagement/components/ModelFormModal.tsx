@@ -3,6 +3,7 @@ import { Modal, Form, Input, Select, Row, Col, InputNumber, Slider, Alert } from
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../../store';
+import { ModelResponse } from '../../../../services/modelApi';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -29,42 +30,9 @@ const StyledAlert = styled(Alert)<{ $isDark: boolean }>`
   }
 `;
 
-interface ModelConfig {
-  id: string;
-  name: string;
-  provider: string;
-  modelType: 'llm' | 'embedding' | 'image' | 'audio';
-  version: string;
-  apiEndpoint: string;
-  apiKey: string;
-  maxTokens: number;
-  temperature: number;
-  topP: number;
-  frequencyPenalty: number;
-  presencePenalty: number;
-  status: 'active' | 'inactive' | 'testing';
-  description: string;
-  capabilities: string[];
-  pricing: {
-    inputTokens: number;
-    outputTokens: number;
-    currency: string;
-  };
-  limits: {
-    requestsPerMinute: number;
-    tokensPerMinute: number;
-    dailyLimit: number;
-  };
-  createdBy: string;
-  createdAt: string;
-  lastModified: string;
-  lastUsed: string;
-  usageCount: number;
-}
-
 interface ModelFormModalProps {
   visible: boolean;
-  editingModel: ModelConfig | null;
+  editingModel: ModelResponse | null;
   form: any;
   onOk: () => void;
   onCancel: () => void;
