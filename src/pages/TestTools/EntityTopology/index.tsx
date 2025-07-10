@@ -523,22 +523,13 @@ const EntityTopology: React.FC = () => {
             </Select>
           </Col>
           
-          {/* 操作按钮 */}
+          {/* 刷新按钮 */}
           <Col>
-            <Space>
-              <Button 
-                icon={<ReloadOutlined />} 
-                onClick={() => loadTopologies()} 
-                title={t('common:refresh')} 
-              />
-              <Button 
-                type="primary" 
-                icon={<PlusOutlined />} 
-                onClick={handleCreateTopology}
-              >
-                {t('entityTopology:actions.createTopology')}
-              </Button>
-            </Space>
+            <Button 
+              icon={<ReloadOutlined />} 
+              onClick={() => loadTopologies()} 
+              title={t('common:refresh')} 
+            />
           </Col>
         </Row>
       </Card>

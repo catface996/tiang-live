@@ -40,12 +40,12 @@
 }
 
 .stats-card .ant-card-body {
-  padding: 16px;
+  padding: 20px;  /* 与MCP管理页面保持一致 */
 }
 
 .stats-card .ant-statistic-title {
   color: var(--text-color-secondary);
-  font-size: 12px;
+  /* 移除font-size: 12px，使用默认大小 */
 }
 
 .stats-card .ant-statistic-content {
