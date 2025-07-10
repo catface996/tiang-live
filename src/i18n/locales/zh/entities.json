@@ -13,6 +13,9 @@
   "graphSettings": "图谱设置",
   "searchPlaceholder": "搜索实体名称、类型...",
   "typeFilter": "类型筛选",
+  "filterByType": "按类型筛选",
+  "filterByStatus": "按状态筛选", 
+  "filterByLevel": "按级别筛选",
   "allTypes": "所有类型",
   "noEntitiesFound": "未找到相关实体",
   "stats": {
@@ -35,7 +38,19 @@
     "middleware": "中间件",
     "report": "报表",
     "scheduledJob": "定时任务",
-    "table": "数据表"
+    "table": "数据表",
+    "service": "服务",
+    "queue": "队列"
+  },
+  "status": {
+    "active": "活跃",
+    "inactive": "非活跃", 
+    "deprecated": "已弃用"
+  },
+  "levels": {
+    "core": "核心",
+    "basic": "基础",
+    "business": "业务"
   },
   "entityId": "实体ID",
   "entityName": "实体名称",
@@ -92,5 +107,13 @@
     "updateSuccess": "实体更新成功",
     "updateFailed": "实体更新失败",
     "loadFailed": "加载实体信息失败"
+  },
+  "legend": {
+    "coreService": "核心服务",
+    "basicService": "基础服务", 
+    "businessService": "业务服务",
+    "database": "数据库",
+    "messageQueue": "消息队列",
+    "cache": "缓存"
   }
 }

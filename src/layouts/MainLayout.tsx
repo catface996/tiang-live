@@ -102,9 +102,23 @@ const MainLayout: React.FC = () => {
       label: t('menu:planes')
     },
     {
-      key: '/entities',
+      key: 'entity-relationships',
       icon: <NodeIndexOutlined />,
-      label: t('menu:entities')
+      label: t('menu:entityRelationships'),
+      children: [
+        {
+          key: '/entities',
+          label: t('menu:entityManagement')
+        },
+        {
+          key: '/entity-relationships/topology',
+          label: t('menu:relationshipTopology')
+        },
+        {
+          key: '/entity-relationships/scan',
+          label: t('menu:entityScan')
+        }
+      ]
     },
     {
       key: '/sequences',
@@ -177,10 +191,6 @@ const MainLayout: React.FC = () => {
         {
           key: '/system-settings/tag-management',
           label: t('menu:tagManagement')
-        },
-        {
-          key: '/system-settings/entity-scan',
-          label: t('menu:entityScan')
         },
         {
           key: '/system-settings/mcp-management',

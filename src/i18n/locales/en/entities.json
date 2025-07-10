@@ -13,6 +13,9 @@
   "graphSettings": "Graph Settings",
   "searchPlaceholder": "Search entity name, type...",
   "typeFilter": "Type Filter",
+  "filterByType": "Filter by Type",
+  "filterByStatus": "Filter by Status",
+  "filterByLevel": "Filter by Level",
   "allTypes": "All Types",
   "noEntitiesFound": "No entities found",
   "stats": {
@@ -35,7 +38,19 @@
     "middleware": "Middleware",
     "report": "Report",
     "scheduledJob": "Scheduled Job",
-    "table": "Data Table"
+    "table": "Data Table",
+    "service": "Service",
+    "queue": "Queue"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "deprecated": "Deprecated"
+  },
+  "levels": {
+    "core": "Core",
+    "basic": "Basic", 
+    "business": "Business"
   },
   "entityId": "Entity ID",
   "entityName": "Entity Name",
@@ -92,5 +107,13 @@
     "updateSuccess": "Entity updated successfully",
     "updateFailed": "Failed to update entity",
     "loadFailed": "Failed to load entity information"
+  },
+  "legend": {
+    "coreService": "Core Service",
+    "basicService": "Basic Service",
+    "businessService": "Business Service", 
+    "database": "Database",
+    "messageQueue": "Message Queue",
+    "cache": "Cache"
   }
 }

@@ -7,6 +7,7 @@ import MainLayout from '../layouts/MainLayout';
 const Dashboard = React.lazy(() => import('../pages/Dashboard'));
 const PlaneManagement = React.lazy(() => import('../pages/Plane'));
 const EntityManagement = React.lazy(() => import('../pages/Entity'));
+const RelationshipTopology = React.lazy(() => import('../pages/Entity/RelationshipTopology'));
 const SequenceManagement = React.lazy(() => import('../pages/Sequence'));
 const IndustrySolutionManagement = React.lazy(() => import('../pages/IndustrySolution'));
 const TaskCollectionManagement = React.lazy(() => import('../pages/TaskCollection'));
@@ -262,7 +263,31 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
+          path="entity-relationships/topology"
+          element={
+            <Suspense fallback={<PageLoading />}>
+              <RelationshipTopology />
+            </Suspense>
+          }
+        />
+        <Route
+          path="entity-relationships/scan"
+          element={
+            <Suspense fallback={<PageLoading />}>
+              <EntityScan />
+            </Suspense>
+          }
+        />
+        <Route
           path="system-settings/entity-scan/:dataSourceId"
+          element={
+            <Suspense fallback={<PageLoading />}>
+              <ScanDetail />
+            </Suspense>
+          }
+        />
+        <Route
+          path="entity-relationships/scan/:dataSourceId"
           element={
             <Suspense fallback={<PageLoading />}>
               <ScanDetail />
