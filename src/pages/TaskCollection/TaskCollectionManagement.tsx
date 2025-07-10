@@ -67,7 +67,6 @@ const StatsCard = styled(Card)`
   
   .ant-statistic {
     .ant-statistic-title {
-      font-size: 12px;
       color: #666;
       margin-bottom: 8px;
       white-space: nowrap;
@@ -87,10 +86,6 @@ const StatsCard = styled(Card)`
     }
     
     .ant-statistic {
-      .ant-statistic-title {
-        font-size: 11px;
-      }
-      
       .ant-statistic-content {
         font-size: 18px;
       }
@@ -178,7 +173,6 @@ const TaskCard = styled(Card)`
     
     .ant-statistic {
       .ant-statistic-title {
-        font-size: 11px;
         color: #666;
         margin-bottom: 4px;
         line-height: 1.2;
@@ -265,10 +259,6 @@ const TaskCard = styled(Card)`
     
     .card-stats {
       .ant-statistic {
-        .ant-statistic-title {
-          font-size: 10px;
-        }
-        
         .ant-statistic-content {
           font-size: 16px;
         }

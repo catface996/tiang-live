@@ -55,7 +55,6 @@ const StatsCard = styled(Card)`
   
   .ant-statistic {
     .ant-statistic-title {
-      font-size: 12px;
       color: #666;
       margin-bottom: 8px;
       white-space: nowrap;
