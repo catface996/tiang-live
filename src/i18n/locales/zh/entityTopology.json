@@ -10,11 +10,13 @@
   "search": {
     "placeholder": "搜索拓扑名称或描述...",
     "statusFilter": "状态筛选",
-    "typeFilter": "类型筛选"
+    "typeFilter": "类型筛选",
+    "labelsFilter": "标签筛选"
   },
   "filters": {
     "allStatus": "全部状态",
-    "allTypes": "全部类型"
+    "allTypes": "全部类型",
+    "allLabels": "全部标签"
   },
   "status": {
     "active": "活跃",

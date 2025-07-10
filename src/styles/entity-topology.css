@@ -43,9 +43,8 @@
   padding: 20px;  /* 与MCP管理页面保持一致 */
 }
 
-.stats-card .ant-statistic-title {
-  color: var(--text-color-secondary);
-  /* 移除font-size: 12px，使用默认大小 */
+.stats-card .ant-statistic .ant-statistic-title {
+  font-size: 14px;  /* 设置为标准字体大小，与其他页面一致 */
 }
 
 .stats-card .ant-statistic-content {
