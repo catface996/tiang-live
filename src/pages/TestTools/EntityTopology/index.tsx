@@ -13,7 +13,8 @@ import {
   Typography,
   Statistic,
   Modal,
-  Form
+  Form,
+  Pagination
 } from 'antd';
 import {
   PlusOutlined,
@@ -21,7 +22,8 @@ import {
   NodeIndexOutlined,
   LinkOutlined,
   HeartOutlined,
-  DatabaseOutlined
+  DatabaseOutlined,
+  SearchOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -61,6 +63,13 @@ const EntityTopology: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [labelsFilter, setLabelsFilter] = useState<string>('all');
   const [topologies, setTopologies] = useState<Topology[]>([]);
+
+  // 分页状态管理
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0
+  });
 
   // 创建拓扑图相关状态
   const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -347,10 +356,40 @@ const EntityTopology: React.FC = () => {
       topology.name.toLowerCase().includes(searchText.toLowerCase()) ||
       topology.description.toLowerCase().includes(searchText.toLowerCase());
     const matchesStatus = statusFilter === 'all' || topology.status === statusFilter;
-    const matchesLabels = labelsFilter === 'all' || topology.tags.includes(labelsFilter);
+    const matchesLabels = labelsFilter === 'all' || topology.tags?.includes(labelsFilter);
 
     return matchesSearch && matchesStatus && matchesLabels;
   });
+
+  // 分页处理
+  const startIndex = (pagination.current - 1) * pagination.pageSize;
+  const endIndex = startIndex + pagination.pageSize;
+  const paginatedTopologies = filteredTopologies.slice(startIndex, endIndex);
+
+  // 更新分页总数
+  useEffect(() => {
+    setPagination(prev => ({
+      ...prev,
+      total: filteredTopologies.length
+    }));
+  }, [filteredTopologies.length]);
+
+  // 分页处理函数
+  const handlePageChange = (page: number, pageSize?: number) => {
+    setPagination(prev => ({
+      ...prev,
+      current: page,
+      pageSize: pageSize || prev.pageSize
+    }));
+  };
+
+  const handlePageSizeChange = (current: number, size: number) => {
+    setPagination(prev => ({
+      ...prev,
+      current: 1,  // 改变页面大小时重置到第一页
+      pageSize: size
+    }));
+  };
 
   const handleView = (topology: Topology) => {
     navigate(`/test-tools/entity-topology/${topology.id}`);
@@ -439,41 +478,66 @@ const EntityTopology: React.FC = () => {
       {/* 搜索和过滤器 */}
       <Card className="filter-card">
         <Row gutter={[16, 16]} align="middle">
-          <Col xs={24} sm={16} md={18}>
-            <Space wrap size={[8, 8]} className="filter-controls">
-              <Search
-                placeholder={t('entityTopology:search.placeholder')}
-                allowClear
-                className="search-input"
-                onSearch={setSearchText}
-                onChange={e => setSearchText(e.target.value)}
+          {/* 搜索框 - 使用flex auto自适应宽度 */}
+          <Col flex="auto">
+            <Search
+              placeholder={t('entityTopology:search.placeholder')}
+              value={searchText}
+              allowClear
+              onSearch={setSearchText}
+              onChange={e => setSearchText(e.target.value)}
+              style={{ width: '100%' }}
+              enterButton={<SearchOutlined />}
+            />
+          </Col>
+          
+          {/* 过滤器 */}
+          <Col>
+            <Select
+              value={statusFilter}
+              onChange={setStatusFilter}
+              style={{ width: 120 }}
+              placeholder={t('entityTopology:search.statusFilter')}
+            >
+              <Option value="all">{t('entityTopology:filters.allStatus')}</Option>
+              <Option value="active">{t('entityTopology:status.active')}</Option>
+              <Option value="inactive">{t('entityTopology:status.inactive')}</Option>
+              <Option value="warning">{t('entityTopology:status.warning')}</Option>
+              <Option value="error">{t('entityTopology:status.error')}</Option>
+            </Select>
+          </Col>
+          
+          <Col>
+            <Select
+              value={labelsFilter}
+              onChange={setLabelsFilter}
+              style={{ width: 120 }}
+              placeholder={t('entityTopology:search.labelsFilter')}
+            >
+              <Option value="all">{t('entityTopology:filters.allLabels')}</Option>
+              {getAllAvailableLabels().map(label => (
+                <Option key={label} value={label}>
+                  {label}
+                </Option>
+              ))}
+            </Select>
+          </Col>
+          
+          {/* 操作按钮 */}
+          <Col>
+            <Space>
+              <Button 
+                icon={<ReloadOutlined />} 
+                onClick={() => loadTopologies()} 
+                title={t('common:refresh')} 
               />
-              <Select
-                value={statusFilter}
-                onChange={setStatusFilter}
-                className="filter-select"
-                placeholder={t('entityTopology:search.statusFilter')}
+              <Button 
+                type="primary" 
+                icon={<PlusOutlined />} 
+                onClick={handleCreateTopology}
               >
-                <Option value="all">{t('entityTopology:filters.allStatus')}</Option>
-                <Option value="active">{t('entityTopology:status.active')}</Option>
-                <Option value="inactive">{t('entityTopology:status.inactive')}</Option>
-                <Option value="warning">{t('entityTopology:status.warning')}</Option>
-                <Option value="error">{t('entityTopology:status.error')}</Option>
-              </Select>
-              <Select
-                value={labelsFilter}
-                onChange={setLabelsFilter}
-                className="filter-select"
-                placeholder={t('entityTopology:search.labelsFilter')}
-              >
-                <Option value="all">{t('entityTopology:filters.allLabels')}</Option>
-                {getAllAvailableLabels().map(label => (
-                  <Option key={label} value={label}>
-                    {label}
-                  </Option>
-                ))}
-              </Select>
-              <Button icon={<ReloadOutlined />} onClick={() => loadTopologies()} title={t('common:refresh')} />
+                {t('entityTopology:actions.createTopology')}
+              </Button>
             </Space>
           </Col>
         </Row>
@@ -487,20 +551,47 @@ const EntityTopology: React.FC = () => {
               <Empty description={t('entityTopology:empty.description')} className="empty-state" />
             </Card>
           ) : (
-            <Row gutter={[24, 24]}>
-              {filteredTopologies.map(topology => (
-                <Col xs={24} sm={12} lg={8} xl={6} key={topology.id}>
-                  <TopologyCard
-                    topology={topology}
-                    onView={handleView}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onRefresh={handleRefresh}
-                    onClick={handleView}
+            <>
+              <Row gutter={[24, 24]}>
+                {paginatedTopologies.map(topology => (
+                  <Col xs={24} sm={12} lg={8} xl={6} key={topology.id}>
+                    <TopologyCard
+                      topology={topology}
+                      onView={handleView}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      onRefresh={handleRefresh}
+                      onClick={handleView}
+                    />
+                  </Col>
+                ))}
+              </Row>
+
+              {/* 分页组件 */}
+              {filteredTopologies.length > 0 && (
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  marginTop: '32px',
+                  padding: '16px 0'
+                }}>
+                  <Pagination
+                    current={pagination.current}
+                    total={pagination.total}
+                    pageSize={pagination.pageSize}
+                    showSizeChanger
+                    showQuickJumper
+                    showTotal={(total, range) => 
+                      `${range[0]}-${range[1]} / ${total} ${t('entityTopology:pagination.items')}`
+                    }
+                    pageSizeOptions={['10', '20', '50', '100']}
+                    onChange={handlePageChange}
+                    onShowSizeChange={handlePageSizeChange}
+                    size="default"
                   />
-                </Col>
-              ))}
-            </Row>
+                </div>
+              )}
+            </>
           )}
         </Spin>
       </div>

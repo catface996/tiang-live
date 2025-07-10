@@ -49,6 +49,9 @@
     "title": "暂无拓扑数据",
     "description": "请调整搜索条件或创建新的拓扑"
   },
+  "pagination": {
+    "items": "项"
+  },
   "messages": {
     "loadFailed": "加载拓扑数据失败",
     "loadSuccess": "拓扑数据加载成功",
