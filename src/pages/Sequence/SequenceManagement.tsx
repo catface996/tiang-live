@@ -447,7 +447,7 @@ const SequenceManagement: React.FC = () => {
                 {t('sequences:title')}
               </Space>
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
               {t('sequences:description')}
             </Paragraph>
           </div>

@@ -611,7 +611,7 @@ const InspectionTasks: React.FC = () => {
                 {t('tasks:inspection.title')}
               </Space>
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
               {t('tasks:inspection.subtitle')}
             </Paragraph>
           </div>

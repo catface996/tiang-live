@@ -1210,7 +1210,7 @@ const EntityTopologyDetail: React.FC = () => {
             <Title level={2} style={{ margin: 0 }}>
               {topologyData.name}
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
               {topologyData.description || '实体拓扑图详情'}
             </Paragraph>
             <div style={{ marginTop: 12 }}>

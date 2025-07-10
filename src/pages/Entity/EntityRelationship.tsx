@@ -444,7 +444,7 @@ const EntityRelationship: React.FC = () => {
                 }}
               />
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
               统一管理系统中的实体对象和它们之间的关系，提供完整的实体生命周期管理和关系可视化分析。
             </Paragraph>
           </div>

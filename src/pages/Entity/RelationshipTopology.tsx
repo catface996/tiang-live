@@ -146,7 +146,7 @@ const RelationshipTopology: React.FC = () => {
                 {t('entities:relationshipGraph')}
               </Space>
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>
+            <Paragraph style={{ marginTop: 8, marginBottom: 0 }}>
               {t('entities:relationshipGraphDesc')}
             </Paragraph>
           </div>

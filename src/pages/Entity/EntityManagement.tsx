@@ -649,7 +649,7 @@ const EntityManagement: React.FC = () => {
             </Button>
           </Space>
         </div>
-        <Paragraph style={{ marginTop: 0, marginBottom: 0, fontSize: 16 }}>
+        <Paragraph style={{ marginTop: 0, marginBottom: 0 }}>
           {t('entities:description')}
         </Paragraph>
       </PageHeader>
