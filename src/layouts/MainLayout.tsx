@@ -189,12 +189,12 @@ const MainLayout: React.FC = () => {
           label: t('menu:promptTemplates')
         },
         {
-          key: '/system-settings/tag-management',
-          label: t('menu:tagManagement')
-        },
-        {
           key: '/system-settings/mcp-management',
           label: t('menu:mcpManagement')
+        },
+        {
+          key: '/system-settings/tag-management',
+          label: t('menu:tagManagement')
         }
       ]
     }
