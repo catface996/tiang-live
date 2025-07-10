@@ -16,7 +16,8 @@ import {
   message,
   App,
   Empty,
-  Spin
+  Spin,
+  Pagination
 } from 'antd';
 import {
   SettingOutlined,
@@ -128,7 +129,7 @@ const McpManagement: React.FC = () => {
   const [statsData, setStatsData] = useState<McpStatistics | null>(null);
   const [pagination, setPagination] = useState({
     page: 1,
-    size: 20,
+    size: 10,  // 默认分页大小改为10
     total: 0,
     totalPages: 0
   });
@@ -168,7 +169,7 @@ const McpManagement: React.FC = () => {
         setMcpData([]);
         setPagination({
           page: 1,
-          size: 20,
+          size: 10,  // 默认分页大小改为10
           total: 0,
           totalPages: 0
         });
@@ -179,7 +180,7 @@ const McpManagement: React.FC = () => {
       setMcpData([]);
       setPagination({
         page: 1,
-        size: 20,
+        size: 10,  // 默认分页大小改为10
         total: 0,
         totalPages: 0
       });
@@ -324,6 +325,26 @@ const McpManagement: React.FC = () => {
       console.error('Failed to perform health check:', error);
       message.warning('健康检查功能暂不支持');
     }
+  };
+
+  // 分页处理函数
+  const handlePageChange = (page: number, pageSize?: number) => {
+    const newSize = pageSize || pagination.size;
+    setPagination(prev => ({
+      ...prev,
+      page,
+      size: newSize
+    }));
+    loadMcpData(page);
+  };
+
+  const handlePageSizeChange = (current: number, size: number) => {
+    setPagination(prev => ({
+      ...prev,
+      page: 1,  // 改变页面大小时重置到第一页
+      size
+    }));
+    loadMcpData(1);
   };
 
   const handleCreateServer = () => {
@@ -783,6 +804,31 @@ const McpManagement: React.FC = () => {
           </div>
         )}
       </Spin>
+
+      {/* 分页组件 */}
+      {Array.isArray(mcpData) && mcpData.length > 0 && (
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          marginTop: '24px',
+          padding: '16px 0'
+        }}>
+          <Pagination
+            current={pagination.page}
+            total={pagination.total}
+            pageSize={pagination.size}
+            showSizeChanger
+            showQuickJumper
+            showTotal={(total, range) => 
+              `${range[0]}-${range[1]} / ${total} ${t('mcp:stats.unit')}`
+            }
+            pageSizeOptions={['10', '20', '50', '100']}
+            onChange={handlePageChange}
+            onShowSizeChange={handlePageSizeChange}
+            size="default"
+          />
+        </div>
+      )}
 
       {/* 服务器详情Modal */}
       {renderServerDetail()}
