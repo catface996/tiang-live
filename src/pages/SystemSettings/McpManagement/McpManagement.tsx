@@ -14,7 +14,9 @@ import {
   Descriptions,
   Tooltip,
   message,
-  App
+  App,
+  Empty,
+  Spin
 } from 'antd';
 import {
   SettingOutlined,
@@ -137,83 +139,6 @@ const McpManagement: React.FC = () => {
     loadStatsData();
   }, [t]);
 
-  // Mock数据降级方法
-  const loadMockData = () => {
-    const mockData: McpServer[] = [
-      {
-        id: '1',
-        name: 'Database MCP Server',
-        description: '数据库连接和查询服务',
-        type: 'database',
-        status: 'running',
-        version: '1.2.0',
-        endpoint: 'http://localhost:3001',
-        port: 3001,
-        capabilities: ['mysql', 'postgresql', 'mongodb', 'query', 'transaction'],
-        config: {
-          maxConnections: 100,
-          timeout: 30000,
-          ssl: true
-        },
-        healthCheck: {
-          enabled: true,
-          interval: 30,
-          timeout: 5,
-          retries: 3
-        },
-        metrics: {
-          uptime: 86400,
-          requestCount: 1250,
-          errorCount: 5,
-          avgResponseTime: 120,
-          lastHeartbeat: new Date().toISOString()
-        },
-        createdAt: '2024-07-01T10:00:00Z',
-        updatedAt: new Date().toISOString(),
-        createdBy: 'admin'
-      },
-      {
-        id: '2',
-        name: 'File System MCP Server',
-        description: '文件系统操作服务',
-        type: 'file',
-        status: 'running',
-        version: '1.1.0',
-        endpoint: 'http://localhost:3002',
-        port: 3002,
-        capabilities: ['read', 'write', 'list', 'delete', 'upload'],
-        config: {
-          maxConnections: 50,
-          timeout: 15000,
-          ssl: false
-        },
-        healthCheck: {
-          enabled: true,
-          interval: 60,
-          timeout: 10,
-          retries: 2
-        },
-        metrics: {
-          uptime: 72000,
-          requestCount: 850,
-          errorCount: 2,
-          avgResponseTime: 95,
-          lastHeartbeat: new Date().toISOString()
-        },
-        createdAt: '2024-07-02T14:30:00Z',
-        updatedAt: new Date().toISOString(),
-        createdBy: 'admin'
-      }
-    ];
-    setMcpData(mockData);
-    setPagination({
-      page: 1,
-      size: 20,
-      total: mockData.length,
-      totalPages: 1
-    });
-  };
-
   // 加载MCP服务器数据
   const loadMcpData = async (page = 1) => {
     try {
@@ -233,12 +158,24 @@ const McpManagement: React.FC = () => {
         setPagination(response.pagination);
       } else {
         message.error(response.message || '获取MCP服务器列表失败');
+        setMcpData([]);
+        setPagination({
+          page: 1,
+          size: 20,
+          total: 0,
+          totalPages: 0
+        });
       }
     } catch (error) {
       console.error('Failed to load MCP data:', error);
       message.error('获取MCP服务器列表失败');
-      // 使用Mock数据作为降级
-      loadMockData();
+      setMcpData([]);
+      setPagination({
+        page: 1,
+        size: 20,
+        total: 0,
+        totalPages: 0
+      });
     } finally {
       setLoading(false);
     }
@@ -254,31 +191,11 @@ const McpManagement: React.FC = () => {
         setStatsData(response.data);
       } else {
         message.error(response.message || '获取统计信息失败');
+        setStatsData(null);
       }
     } catch (error) {
       console.error('Failed to load stats data:', error);
-      // 使用当前数据计算基础统计
-      if (mcpData.length > 0) {
-        const mockStats: McpStatistics = {
-          totalServers: mcpData.length,
-          runningServers: mcpData.filter(s => s.status === 'running').length,
-          stoppedServers: mcpData.filter(s => s.status === 'stopped').length,
-          errorServers: mcpData.filter(s => s.status === 'error').length,
-          totalRequests: mcpData.reduce((sum, s) => sum + s.metrics.requestCount, 0),
-          totalErrors: mcpData.reduce((sum, s) => sum + s.metrics.errorCount, 0),
-          avgResponseTime: mcpData.length > 0 ? 
-            mcpData.reduce((sum, s) => sum + s.metrics.avgResponseTime, 0) / mcpData.length : 0,
-          serversByType: mcpData.reduce((acc, s) => {
-            acc[s.type] = (acc[s.type] || 0) + 1;
-            return acc;
-          }, {} as { [key: string]: number }),
-          recentActivity: {
-            last24h: { requests: 0, errors: 0, newServers: 0 },
-            last7d: { requests: 0, errors: 0, newServers: 0 }
-          }
-        };
-        setStatsData(mockStats);
-      }
+      setStatsData(null);
     } finally {
       setStatisticsLoading(false);
     }
@@ -681,137 +598,184 @@ const McpManagement: React.FC = () => {
       />
 
       {/* MCP服务器卡片列表 */}
-      <Row gutter={[16, 16]}>
-        {Array.isArray(mcpData) && mcpData.map(server => (
-          <Col xs={24} sm={24} md={12} lg={8} xl={8} key={server.id}>
-            <McpCard
-              title={
-                <div className="card-title">
-                  <div className="title-left">
-                    <Space>
-                      {getTypeIcon(server.type)}
-                      <span>{server.name}</span>
+      <Spin spinning={loading}>
+        {Array.isArray(mcpData) && mcpData.length > 0 ? (
+          <Row gutter={[16, 16]}>
+            {mcpData.map(server => (
+              <Col xs={24} sm={24} md={12} lg={8} xl={8} key={server.id}>
+                <McpCard
+                  title={
+                    <div className="card-title">
+                      <div className="title-left">
+                        <Space>
+                          {getTypeIcon(server.type)}
+                          <span>{server.name}</span>
+                        </Space>
+                      </div>
+                      <div className="title-right">
+                        <Tag color={getStatusColor(server.status)}>
+                          {t(`mcp:status.${server.status}`)}
+                        </Tag>
+                      </div>
+                    </div>
+                  }
+                  onClick={() => handleViewServer(server)}
+                >
+                  <div>
+                    <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 12 }}>
+                      {server.description}
+                    </Paragraph>
+                    
+                    <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                      <div>
+                        <Text type="secondary">{t('mcp:fields.endpoint')}: </Text>
+                        <Text code>{server.endpoint}:{server.port}</Text>
+                      </div>
+                      <div>
+                        <Text type="secondary">{t('mcp:fields.version')}: </Text>
+                        <Tag color="blue">{server.version}</Tag>
+                      </div>
+                      <div>
+                        <Text type="secondary">{t('mcp:fields.capabilities')}: </Text>
+                        <Space wrap>
+                          {server.capabilities.slice(0, 3).map(cap => (
+                            <Tag key={cap} size="small">{cap}</Tag>
+                          ))}
+                          {server.capabilities.length > 3 && (
+                            <Tag size="small">+{server.capabilities.length - 3}</Tag>
+                          )}
+                        </Space>
+                      </div>
                     </Space>
+
+                    <div className="card-actions">
+                      <Space>
+                        <Tooltip title={t('mcp:actions.view')}>
+                          <Button 
+                            size="small" 
+                            icon={<EyeOutlined />} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewServer(server);
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title={t('mcp:actions.edit')}>
+                          <Button 
+                            size="small" 
+                            icon={<EditOutlined />} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditServer(server);
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title={t('mcp:actions.healthCheck')}>
+                          <Button 
+                            size="small" 
+                            icon={<CheckCircleOutlined />} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleHealthCheck(server);
+                            }}
+                          />
+                        </Tooltip>
+                        {server.status === 'running' ? (
+                          <Tooltip title={t('mcp:actions.stop')}>
+                            <Button 
+                              size="small" 
+                              icon={<PauseCircleOutlined />} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStopServer(server);
+                              }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip title={t('mcp:actions.start')}>
+                            <Button 
+                              size="small" 
+                              icon={<PlayCircleOutlined />} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStartServer(server);
+                              }}
+                            />
+                          </Tooltip>
+                        )}
+                        <Tooltip title={t('mcp:actions.restart')}>
+                          <Button 
+                            size="small" 
+                            icon={<SyncOutlined />} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRestartServer(server);
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title={t('mcp:actions.delete')}>
+                          <Button 
+                            size="small" 
+                            icon={<DeleteOutlined />} 
+                            danger
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteServer(server);
+                            }}
+                          />
+                        </Tooltip>
+                      </Space>
+                    </div>
                   </div>
-                  <div className="title-right">
-                    <Tag color={getStatusColor(server.status)}>
-                      {t(`mcp:status.${server.status}`)}
-                    </Tag>
+                </McpCard>
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            minHeight: '400px',
+            background: 'var(--bg-container)',
+            borderRadius: '8px',
+            border: '1px solid var(--border-light)'
+          }}>
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={
+                <div>
+                  <Text type="secondary" style={{ fontSize: '16px' }}>
+                    {searchText || filterType !== 'all' || filterStatus !== 'all' 
+                      ? t('mcp:empty.noResults') 
+                      : t('mcp:empty.noServers')
+                    }
+                  </Text>
+                  <div style={{ marginTop: '12px' }}>
+                    <Text type="secondary" style={{ fontSize: '14px' }}>
+                      {searchText || filterType !== 'all' || filterStatus !== 'all'
+                        ? t('mcp:empty.tryDifferentFilters')
+                        : t('mcp:empty.createFirstServer')
+                      }
+                    </Text>
                   </div>
                 </div>
               }
-              onClick={() => handleViewServer(server)}
             >
-              <div>
-                <Paragraph ellipsis={{ rows: 2 }} style={{ marginBottom: 12 }}>
-                  {server.description}
-                </Paragraph>
-                
-                <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                  <div>
-                    <Text type="secondary">{t('mcp:fields.endpoint')}: </Text>
-                    <Text code>{server.endpoint}:{server.port}</Text>
-                  </div>
-                  <div>
-                    <Text type="secondary">{t('mcp:fields.version')}: </Text>
-                    <Tag color="blue">{server.version}</Tag>
-                  </div>
-                  <div>
-                    <Text type="secondary">{t('mcp:fields.capabilities')}: </Text>
-                    <Space wrap>
-                      {server.capabilities.slice(0, 3).map(cap => (
-                        <Tag key={cap} size="small">{cap}</Tag>
-                      ))}
-                      {server.capabilities.length > 3 && (
-                        <Tag size="small">+{server.capabilities.length - 3}</Tag>
-                      )}
-                    </Space>
-                  </div>
-                </Space>
-
-                <div className="card-actions">
-                  <Space>
-                    <Tooltip title={t('mcp:actions.view')}>
-                      <Button 
-                        size="small" 
-                        icon={<EyeOutlined />} 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewServer(server);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={t('mcp:actions.edit')}>
-                      <Button 
-                        size="small" 
-                        icon={<EditOutlined />} 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditServer(server);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={t('mcp:actions.healthCheck')}>
-                      <Button 
-                        size="small" 
-                        icon={<CheckCircleOutlined />} 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleHealthCheck(server);
-                        }}
-                      />
-                    </Tooltip>
-                    {server.status === 'running' ? (
-                      <Tooltip title={t('mcp:actions.stop')}>
-                        <Button 
-                          size="small" 
-                          icon={<PauseCircleOutlined />} 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleStopServer(server);
-                          }}
-                        />
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title={t('mcp:actions.start')}>
-                        <Button 
-                          size="small" 
-                          icon={<PlayCircleOutlined />} 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleStartServer(server);
-                          }}
-                        />
-                      </Tooltip>
-                    )}
-                    <Tooltip title={t('mcp:actions.restart')}>
-                      <Button 
-                        size="small" 
-                        icon={<SyncOutlined />} 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRestartServer(server);
-                        }}
-                      />
-                    </Tooltip>
-                    <Tooltip title={t('mcp:actions.delete')}>
-                      <Button 
-                        size="small" 
-                        icon={<DeleteOutlined />} 
-                        danger
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteServer(server);
-                        }}
-                      />
-                    </Tooltip>
-                  </Space>
-                </div>
-              </div>
-            </McpCard>
-          </Col>
-        ))}
-      </Row>
+              {(!searchText && filterType === 'all' && filterStatus === 'all') && (
+                <Button 
+                  type="primary" 
+                  icon={<PlusOutlined />} 
+                  onClick={handleCreateServer}
+                  size="large"
+                >
+                  {t('mcp:createServer')}
+                </Button>
+              )}
+            </Empty>
+          </div>
+        )}
+      </Spin>
 
       {/* 服务器详情Modal */}
       {renderServerDetail()}

@@ -1,6 +1,7 @@
 {
   "title": "MCP服务器管理",
   "subtitle": "管理和监控Model Context Protocol服务器实例",
+  "description": "管理和监控Model Context Protocol服务器实例，支持多种类型的服务器配置和状态管理",
   "createServer": "创建服务器",
   "viewDetails": "查看详情",
   "start": "启动",
@@ -42,11 +43,49 @@
     "stopping": "停止中"
   },
   
+  "fields": {
+    "name": "服务器名称",
+    "type": "服务器类型",
+    "status": "运行状态",
+    "version": "版本",
+    "endpoint": "服务端点",
+    "port": "端口",
+    "description": "描述",
+    "capabilities": "支持能力"
+  },
+  
+  "actions": {
+    "view": "查看详情",
+    "edit": "编辑",
+    "start": "启动",
+    "stop": "停止",
+    "restart": "重启",
+    "delete": "删除",
+    "healthCheck": "健康检查"
+  },
+  
+  "tabs": {
+    "basicInfo": "基本信息",
+    "metrics": "运行指标",
+    "config": "配置信息"
+  },
+  
   "metrics": {
     "requests": "请求数",
     "avgTime": "平均时间",
     "uptime": "运行时间",
-    "errors": "错误数"
+    "errors": "错误数",
+    "requestCount": "请求总数",
+    "errorCount": "错误总数",
+    "avgResponseTime": "平均响应时间"
+  },
+  
+  "config": {
+    "healthCheck": "健康检查",
+    "interval": "检查间隔",
+    "timeout": "超时时间",
+    "retries": "重试次数",
+    "other": "其他配置"
   },
   
   "units": {
@@ -54,8 +93,25 @@
     "seconds": "秒",
     "minutes": "分钟",
     "hours": "小时",
-    "days": "天"
+    "days": "天",
+    "requests": "次请求",
+    "errors": "个错误"
   },
+  
+  "empty": {
+    "noServers": "暂无MCP服务器",
+    "noResults": "没有找到匹配的服务器",
+    "createFirstServer": "创建您的第一个MCP服务器来开始使用",
+    "tryDifferentFilters": "尝试调整搜索条件或筛选器"
+  },
+  
+  "deleteConfirm": {
+    "title": "确认删除服务器",
+    "content": "删除后将无法恢复，确定要删除服务器 {{name}} 吗？"
+  },
+  
+  "deleteSuccess": "服务器删除成功",
+  "deleteFailed": "服务器删除失败",
   
   "delete": {
     "confirmTitle": "确认删除服务器",
