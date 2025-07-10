@@ -10,7 +10,6 @@ import {
   Input,
   Select,
   Spin,
-  Tooltip,
   message
 } from 'antd';
 import {
@@ -22,9 +21,6 @@ import {
   DatabaseOutlined,
   LinkOutlined,
   NodeIndexOutlined,
-  FullscreenOutlined,
-  ZoomInOutlined,
-  ZoomOutOutlined,
   FilterOutlined
 } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -90,27 +86,9 @@ const GraphContainer = styled(Card)`
     min-height: 600px;
   }
   
-  .graph-toolbar {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    border-radius: 8px;
-    padding: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
   @media (max-width: 768px) {
     .ant-card-body {
       min-height: 400px;
-    }
-    
-    .graph-toolbar {
-      top: 8px;
-      right: 8px;
-      padding: 4px;
     }
   }
 `;
@@ -155,18 +133,6 @@ const RelationshipTopology: React.FC = () => {
 
   const handleSettings = () => {
     message.info(t('entities:graphSettings'));
-  };
-
-  const handleFullscreen = () => {
-    message.info(t('entities:fullscreen'));
-  };
-
-  const handleZoomIn = () => {
-    message.info(t('entities:zoomIn'));
-  };
-
-  const handleZoomOut = () => {
-    message.info(t('entities:zoomOut'));
   };
 
   return (
@@ -295,21 +261,6 @@ const RelationshipTopology: React.FC = () => {
       {/* 关系图谱 */}
       <GraphContainer>
         <Spin spinning={loading}>
-          {/* 图谱工具栏 */}
-          <div className="graph-toolbar">
-            <Space>
-              <Tooltip title={t('entities:zoomIn')}>
-                <Button type="text" icon={<ZoomInOutlined />} size="small" onClick={handleZoomIn} />
-              </Tooltip>
-              <Tooltip title={t('entities:zoomOut')}>
-                <Button type="text" icon={<ZoomOutOutlined />} size="small" onClick={handleZoomOut} />
-              </Tooltip>
-              <Tooltip title={t('entities:fullscreen')}>
-                <Button type="text" icon={<FullscreenOutlined />} size="small" onClick={handleFullscreen} />
-              </Tooltip>
-            </Space>
-          </div>
-
           {/* D3.js 关系图 */}
           <D3RelationshipGraph />
         </Spin>
