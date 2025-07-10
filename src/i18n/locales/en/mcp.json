@@ -1,0 +1,69 @@
+{
+  "title": "MCP Server Management",
+  "subtitle": "Manage and monitor Model Context Protocol server instances",
+  "createServer": "Create Server",
+  "viewDetails": "View Details",
+  "start": "Start",
+  "stop": "Stop",
+  "operationInProgress": "Operation in progress...",
+  
+  "stats": {
+    "totalServers": "Total Servers",
+    "runningServers": "Running",
+    "totalRequests": "Total Requests",
+    "avgResponseTime": "Avg Response Time",
+    "unit": "",
+    "requestUnit": ""
+  },
+  
+  "search": {
+    "placeholder": "Search server name, type or description..."
+  },
+  
+  "filters": {
+    "type": "Type",
+    "status": "Status"
+  },
+  
+  "types": {
+    "database": "Database",
+    "file": "File System",
+    "api": "API Interface",
+    "email": "Email Service",
+    "scheduler": "Scheduler",
+    "custom": "Custom"
+  },
+  
+  "status": {
+    "running": "Running",
+    "stopped": "Stopped",
+    "error": "Error",
+    "starting": "Starting",
+    "stopping": "Stopping"
+  },
+  
+  "metrics": {
+    "requests": "Requests",
+    "avgTime": "Avg Time",
+    "uptime": "Uptime",
+    "errors": "Errors"
+  },
+  
+  "delete": {
+    "confirmTitle": "Confirm Delete Server",
+    "confirmContent": "This action cannot be undone. Are you sure you want to delete this MCP server?"
+  },
+  
+  "alerts": {
+    "deleteSuccess": "Server deleted successfully",
+    "deleteError": "Failed to delete server",
+    "startSuccess": "Server started successfully",
+    "startError": "Failed to start server",
+    "stopSuccess": "Server stopped successfully",
+    "stopError": "Failed to stop server"
+  },
+  
+  "errors": {
+    "loadDataFailed": "Failed to load server data"
+  }
+}

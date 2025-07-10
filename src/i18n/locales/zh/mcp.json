@@ -1,0 +1,69 @@
+{
+  "title": "MCP服务器管理",
+  "subtitle": "管理和监控Model Context Protocol服务器实例",
+  "createServer": "创建服务器",
+  "viewDetails": "查看详情",
+  "start": "启动",
+  "stop": "停止",
+  "operationInProgress": "操作正在进行中...",
+  
+  "stats": {
+    "totalServers": "总服务器数",
+    "runningServers": "运行中",
+    "totalRequests": "总请求数",
+    "avgResponseTime": "平均响应时间",
+    "unit": "个",
+    "requestUnit": "次"
+  },
+  
+  "search": {
+    "placeholder": "搜索服务器名称、类型或描述..."
+  },
+  
+  "filters": {
+    "type": "类型",
+    "status": "状态"
+  },
+  
+  "types": {
+    "database": "数据库",
+    "file": "文件系统",
+    "api": "API接口",
+    "email": "邮件服务",
+    "scheduler": "调度器",
+    "custom": "自定义"
+  },
+  
+  "status": {
+    "running": "运行中",
+    "stopped": "已停止",
+    "error": "错误",
+    "starting": "启动中",
+    "stopping": "停止中"
+  },
+  
+  "metrics": {
+    "requests": "请求数",
+    "avgTime": "平均时间",
+    "uptime": "运行时间",
+    "errors": "错误数"
+  },
+  
+  "delete": {
+    "confirmTitle": "确认删除服务器",
+    "confirmContent": "删除后将无法恢复，确定要删除这个MCP服务器吗？"
+  },
+  
+  "alerts": {
+    "deleteSuccess": "服务器删除成功",
+    "deleteError": "服务器删除失败",
+    "startSuccess": "服务器启动成功",
+    "startError": "服务器启动失败",
+    "stopSuccess": "服务器停止成功",
+    "stopError": "服务器停止失败"
+  },
+  
+  "errors": {
+    "loadDataFailed": "加载服务器数据失败"
+  }
+}

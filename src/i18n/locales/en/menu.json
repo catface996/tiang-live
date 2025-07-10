@@ -18,5 +18,6 @@
   "promptTemplates": "Prompt Templates",
   "tagManagement": "Tag Management",
   "entityScan": "Entity Scan",
+  "mcpManagement": "MCP Management",
   "aiAssistant": "AI Assistant"
 }

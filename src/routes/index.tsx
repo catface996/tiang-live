@@ -22,6 +22,7 @@ const HookTasks = React.lazy(() => import('../pages/TaskManagement/HookTasks'));
 const ModelManagement = React.lazy(() => import('../pages/SystemSettings/ModelManagement'));
 const PromptTemplates = React.lazy(() => import('../pages/SystemSettings/PromptTemplates'));
 const EntityScan = React.lazy(() => import('../pages/SystemSettings/EntityScan'));
+const McpManagement = React.lazy(() => import('../pages/SystemSettings/McpManagement'));
 const TestTools = React.lazy(() => import('../pages/TestTools'));
 const EntityTopology = React.lazy(() => import('../pages/TestTools/EntityTopology'));
 const EntityTopologyDetail = React.lazy(() => import('../pages/TestTools/EntityTopology/EntityTopologyDetail'));
@@ -265,6 +266,14 @@ const AppRoutes: React.FC = () => {
           element={
             <Suspense fallback={<PageLoading />}>
               <ScanDetail />
+            </Suspense>
+          }
+        />
+        <Route
+          path="system-settings/mcp-management"
+          element={
+            <Suspense fallback={<PageLoading />}>
+              <McpManagement />
             </Suspense>
           }
         />

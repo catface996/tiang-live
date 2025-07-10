@@ -181,6 +181,10 @@ const MainLayout: React.FC = () => {
         {
           key: '/system-settings/entity-scan',
           label: t('menu:entityScan')
+        },
+        {
+          key: '/system-settings/mcp-management',
+          label: t('menu:mcpManagement')
         }
       ]
     }

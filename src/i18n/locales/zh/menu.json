@@ -18,5 +18,6 @@
   "promptTemplates": "提示词模板",
   "tagManagement": "标签管理",
   "entityScan": "实体扫描",
+  "mcpManagement": "MCP管理",
   "aiAssistant": "AI助手"
 }
