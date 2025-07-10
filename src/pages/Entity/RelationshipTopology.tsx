@@ -7,8 +7,6 @@ import {
   Row,
   Col,
   Statistic,
-  Badge,
-  Tag,
   Input,
   Select,
   Spin,
@@ -104,19 +102,6 @@ const GraphContainer = styled(Card)`
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .graph-legend {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    border-radius: 8px;
-    padding: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    max-width: 300px;
-  }
-  
   @media (max-width: 768px) {
     .ant-card-body {
       min-height: 400px;
@@ -126,46 +111,6 @@ const GraphContainer = styled(Card)`
       top: 8px;
       right: 8px;
       padding: 4px;
-    }
-    
-    .graph-legend {
-      bottom: 8px;
-      left: 8px;
-      padding: 8px;
-      max-width: 250px;
-    }
-  }
-`;
-
-const LegendContainer = styled.div`
-  .legend-title {
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--text-primary);
-  }
-  
-  .legend-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    color: var(--text-secondary);
-  }
-  
-  @media (max-width: 768px) {
-    .legend-title {
-      font-size: 11px;
-    }
-    
-    .legend-item {
-      font-size: 10px;
     }
   }
 `;
@@ -363,39 +308,6 @@ const RelationshipTopology: React.FC = () => {
                 <Button type="text" icon={<FullscreenOutlined />} size="small" onClick={handleFullscreen} />
               </Tooltip>
             </Space>
-          </div>
-
-          {/* 图例说明 */}
-          <div className="graph-legend">
-            <LegendContainer>
-              <div className="legend-title">{t('entities:legendTitle')}</div>
-              <div className="legend-items">
-                <div className="legend-item">
-                  <Badge color="#1890ff" />
-                  <span>{t('entities:legend.coreService')}</span>
-                </div>
-                <div className="legend-item">
-                  <Badge color="#52c41a" />
-                  <span>{t('entities:legend.basicService')}</span>
-                </div>
-                <div className="legend-item">
-                  <Badge color="#faad14" />
-                  <span>{t('entities:legend.businessService')}</span>
-                </div>
-                <div className="legend-item">
-                  <Badge color="#f5222d" />
-                  <span>{t('entities:legend.database')}</span>
-                </div>
-                <div className="legend-item">
-                  <Badge color="#722ed1" />
-                  <span>{t('entities:legend.messageQueue')}</span>
-                </div>
-                <div className="legend-item">
-                  <Badge color="#13c2c2" />
-                  <span>{t('entities:legend.cache')}</span>
-                </div>
-              </div>
-            </LegendContainer>
           </div>
 
           {/* D3.js 关系图 */}

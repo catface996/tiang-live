@@ -6,9 +6,7 @@ import {
   ReloadOutlined,
   ZoomInOutlined,
   ZoomOutOutlined,
-  UndoOutlined,
-  UpOutlined,
-  DownOutlined
+  UndoOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -74,40 +72,6 @@ const ControlPanel = styled.div`
   box-shadow: var(--card-shadow);
 `;
 
-const LegendContainer = styled.div`
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  z-index: 10;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: var(--card-shadow);
-  max-width: 300px;
-  transition: all 0.3s ease;
-`;
-
-const LegendHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  border-bottom: 1px solid var(--border-color);
-  cursor: pointer;
-  user-select: none;
-
-  &:hover {
-    background-color: var(--hover-bg);
-  }
-`;
-
-const LegendContent = styled.div<{ collapsed: boolean }>`
-  padding: ${props => (props.collapsed ? '0' : '12px')};
-  max-height: ${props => (props.collapsed ? '0' : '400px')};
-  overflow: hidden;
-  transition: all 0.3s ease;
-`;
-
 const TooltipContainer = styled.div`
   position: absolute;
   background: var(--card-bg);
@@ -131,7 +95,6 @@ const D3RelationshipGraph: React.FC = () => {
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; content: any } | null>(null);
-  const [legendCollapsed, setLegendCollapsed] = useState(true); // 默认折叠
 
   // 颜色映射
   const getNodeColor = (type: string, level: number) => {
@@ -603,74 +566,6 @@ const D3RelationshipGraph: React.FC = () => {
             />
           </Space>
         </ControlPanel>
-
-        {/* Legend */}
-        <LegendContainer>
-          <LegendHeader onClick={() => setLegendCollapsed(!legendCollapsed)}>
-            <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{t('relationships:legend')}</div>
-            {legendCollapsed ? <DownOutlined /> : <UpOutlined />}
-          </LegendHeader>
-
-          <LegendContent collapsed={legendCollapsed}>
-            {/* Plane Legend */}
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>{t('relationships:planes')}:</div>
-              {graphData?.planes.map((plane: Plane) => (
-                <div key={plane.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                  <div
-                    style={{
-                      width: 16,
-                      height: 12,
-                      backgroundColor: plane.color,
-                      border: `1px solid ${plane.borderColor}`,
-                      borderRadius: 2,
-                      marginRight: 6
-                    }}
-                  />
-                  <span style={{ fontSize: '11px' }}>{plane.name}</span>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>
-                {t('relationships:nodeTypes')}:
-              </div>
-              {graphData?.metadata.levels.map((level: any) => (
-                <div key={level.level} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                  <div
-                    style={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: '50%',
-                      backgroundColor: level.color,
-                      marginRight: 6
-                    }}
-                  />
-                  <span style={{ fontSize: '11px' }}>{level.name}</span>
-                </div>
-              ))}
-            </div>
-            <div>
-              <div style={{ marginBottom: 4, fontSize: '12px', fontWeight: 'bold' }}>
-                {t('relationships:relationTypes')}:
-              </div>
-              {graphData?.metadata.relationTypes.map((relType: any) => (
-                <div key={relType.type} style={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                  <div
-                    style={{
-                      width: 16,
-                      height: 2,
-                      backgroundColor: relType.color,
-                      marginRight: 6
-                    }}
-                  />
-                  <span style={{ fontSize: '11px' }}>{relType.description}</span>
-                </div>
-              ))}
-            </div>
-          </LegendContent>
-        </LegendContainer>
 
         {/* 工具提示 */}
         {tooltip && (
