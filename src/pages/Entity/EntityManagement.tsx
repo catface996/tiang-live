@@ -379,18 +379,6 @@ const EntityManagement: React.FC = () => {
 
     return (
       <TabContent>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: 24 }}>
-          <Space>
-            <Button icon={<ExportOutlined />}>{t('common:export')}</Button>
-            <Button icon={<ReloadOutlined />} onClick={handleRefreshAll} loading={loading || statisticsLoading}>
-              {t('common:refresh')}
-            </Button>
-            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateEntity}>
-              {t('entities:createEntity')}
-            </Button>
-          </Space>
-        </div>
-
         {/* 统计信息 */}
         <Row gutter={16} style={{ marginBottom: 24 }}>
           <Col xs={24} sm={12} md={6}>
@@ -645,14 +633,25 @@ const EntityManagement: React.FC = () => {
   return (
     <PageContainer className="entity-management-page">
       <PageHeader>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
           <div>
             <Title level={2} style={{ margin: 0 }}>
               {t('entities:title')}
             </Title>
-            <Paragraph style={{ marginTop: 8, marginBottom: 0, fontSize: 16 }}>{t('entities:description')}</Paragraph>
           </div>
+          <Space>
+            <Button icon={<ExportOutlined />}>{t('common:export')}</Button>
+            <Button icon={<ReloadOutlined />} onClick={handleRefreshAll} loading={loading || statisticsLoading}>
+              {t('common:refresh')}
+            </Button>
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateEntity}>
+              {t('entities:createEntity')}
+            </Button>
+          </Space>
         </div>
+        <Paragraph style={{ marginTop: 0, marginBottom: 0, fontSize: 16 }}>
+          {t('entities:description')}
+        </Paragraph>
       </PageHeader>
 
       {renderEntityManagement()}
