@@ -154,15 +154,20 @@ const AIAgentForm: React.FC = () => {
   return (
     <PageContainer className="ai-agent-form-page">
       {/* 面包屑导航 */}
-      <Breadcrumb className="page-breadcrumb">
-        <Breadcrumb.Item>
-          <HomeOutlined />
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <a onClick={() => navigate('/ai-agents')}>{t('agents:title')}</a>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>{isEdit ? t('agents:form.editTitle') : t('agents:form.createTitle')}</Breadcrumb.Item>
-      </Breadcrumb>
+      <Breadcrumb 
+        className="page-breadcrumb"
+        items={[
+          {
+            title: <HomeOutlined />
+          },
+          {
+            title: <a onClick={() => navigate('/ai-agents')}>{t('agents:title')}</a>
+          },
+          {
+            title: isEdit ? t('agents:form.editTitle') : t('agents:form.createTitle')
+          }
+        ]}
+      />
 
       {/* 页面标题 */}
       <PageHeader>

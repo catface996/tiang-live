@@ -16,11 +16,16 @@ import {
   Row,
   Col,
   Typography,
-  message
+  message,
+  Spin,
+  Pagination
 } from 'antd';
 import { BulbOutlined, ApiOutlined, SettingOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { PromptTemplateApi, type PromptTemplateResponse } from '../../../services/promptTemplateApi';
+import { ModelApi, type ModelResponse } from '../../../services/modelApi';
+import { mcpApi, type McpServer } from '../../../services/mcpApi';
 
 const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
@@ -167,8 +172,177 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [selectedMcpServers, setSelectedMcpServers] = useState<string[]>([]);
   const [promptVariables, setPromptVariables] = useState<{ [key: string]: string }>({});
+  
+  // 提示词模板相关状态
+  const [promptTemplates, setPromptTemplates] = useState<PromptTemplateResponse[]>([]);
+  const [promptTemplatesLoading, setPromptTemplatesLoading] = useState(false);
+  const [templatePagination, setTemplatePagination] = useState({
+    current: 1,
+    pageSize: 5, // 每页显示5个模板
+    total: 0
+  });
+  const [templateSearchText, setTemplateSearchText] = useState('');
+  
+  // 模型相关状态
+  const [availableModels, setAvailableModels] = useState<ModelResponse[]>([]);
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [modelPagination, setModelPagination] = useState({
+    current: 1,
+    pageSize: 5, // 每页显示5个模型
+    total: 0
+  });
+  const [modelSearchText, setModelSearchText] = useState('');
+  
+  // MCP服务器相关状态
+  const [mcpServers, setMcpServers] = useState<McpServer[]>([]);
+  const [mcpServersLoading, setMcpServersLoading] = useState(false);
+  const [mcpPagination, setMcpPagination] = useState({
+    current: 1,
+    pageSize: 5, // 每页显示5个MCP服务器
+    total: 0
+  });
+  const [mcpSearchText, setMcpSearchText] = useState('');
+
+  // 加载MCP服务器列表
+  const loadMcpServers = async (page: number = 1, pageSize: number = 5, searchText: string = '') => {
+    setMcpServersLoading(true);
+    try {
+      const response = await mcpApi.getServers({
+        search: searchText || undefined,
+        // 移除status过滤，查询所有MCP服务器供选择
+        page: page,
+        size: pageSize
+      });
+
+      if (response.success && response.data && response.data.data) {
+        setMcpServers(response.data.data);
+        setMcpPagination({
+          current: page,
+          pageSize: pageSize,
+          total: typeof response.data.total === 'string' ? parseInt(response.data.total) : response.data.total
+        });
+        console.log('✅ 成功加载MCP服务器列表:', response.data.data.length, '个服务器，总计:', response.data.total);
+      } else {
+        console.warn('⚠️ 加载MCP服务器列表失败:', response.message);
+        message.warning('加载MCP服务器列表失败: ' + response.message);
+        setMcpServers([]);
+        setMcpPagination(prev => ({ ...prev, total: 0 }));
+      }
+    } catch (error) {
+      console.error('❌ 加载MCP服务器列表异常:', error);
+      message.error('加载MCP服务器列表失败: ' + (error instanceof Error ? error.message : '未知错误'));
+      setMcpServers([]);
+      setMcpPagination(prev => ({ ...prev, total: 0 }));
+    } finally {
+      setMcpServersLoading(false);
+    }
+  };
+
+  // 处理MCP服务器分页变化
+  const handleMcpPaginationChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || mcpPagination.pageSize;
+    loadMcpServers(page, newPageSize, mcpSearchText);
+  };
+
+  // 处理MCP服务器搜索
+  const handleMcpSearch = (searchText: string) => {
+    setMcpSearchText(searchText);
+    // 搜索时重置到第一页
+    loadMcpServers(1, mcpPagination.pageSize, searchText);
+  };
+
+  // 加载模型列表
+  const loadModels = async (page: number = 1, pageSize: number = 5, searchText: string = '') => {
+    setModelsLoading(true);
+    try {
+      const response = await ModelApi.getModelList({
+        search: searchText || undefined,
+        status: 'active', // 只获取激活状态的模型
+        page: page,
+        pageSize: pageSize
+      });
+
+      if (response && response.models) {
+        setAvailableModels(response.models);
+        setModelPagination({
+          current: page,
+          pageSize: pageSize,
+          total: response.pagination.total || 0
+        });
+        console.log('✅ 成功加载模型列表:', response.models.length, '个模型，总计:', response.pagination.total);
+      } else {
+        console.warn('⚠️ 加载模型列表失败: 响应数据格式异常');
+        message.warning('加载模型列表失败: 响应数据格式异常');
+        setAvailableModels([]);
+        setModelPagination(prev => ({ ...prev, total: 0 }));
+      }
+    } catch (error) {
+      console.error('❌ 加载模型列表异常:', error);
+      message.error('加载模型列表失败: ' + (error instanceof Error ? error.message : '未知错误'));
+      setAvailableModels([]);
+      setModelPagination(prev => ({ ...prev, total: 0 }));
+    } finally {
+      setModelsLoading(false);
+    }
+  };
+
+  // 处理模型分页变化
+  const handleModelPaginationChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || modelPagination.pageSize;
+    loadModels(page, newPageSize, modelSearchText);
+  };
+
+  // 处理模型搜索
+  const handleModelSearch = (searchText: string) => {
+    setModelSearchText(searchText);
+    // 搜索时重置到第一页
+    loadModels(1, modelPagination.pageSize, searchText);
+  };
+
+  // 加载提示词模板列表
+  const loadPromptTemplates = async (page: number = 1, pageSize: number = 5, searchText: string = '') => {
+    setPromptTemplatesLoading(true);
+    try {
+      const response = await PromptTemplateApi.listTemplates({
+        status: 'ACTIVE', // 只获取激活状态的模板
+        name: searchText || undefined, // 如果有搜索文本，则按名称搜索
+        page: page,
+        size: pageSize
+      });
+
+      if (response.success && response.data && response.data.data) {
+        // API返回的数据结构是 response.data.data，不是 response.data.content
+        setPromptTemplates(response.data.data);
+        setTemplatePagination({
+          current: page,
+          pageSize: pageSize,
+          total: parseInt(response.data.total) || 0
+        });
+        console.log('✅ 成功加载提示词模板:', response.data.data.length, '个模板，总计:', response.data.total);
+      } else {
+        console.warn('⚠️ 加载提示词模板失败:', response.message);
+        message.warning('加载提示词模板失败: ' + response.message);
+        setPromptTemplates([]);
+        setTemplatePagination(prev => ({ ...prev, total: 0 }));
+      }
+    } catch (error) {
+      console.error('❌ 加载提示词模板异常:', error);
+      message.error('加载提示词模板失败: ' + (error instanceof Error ? error.message : '未知错误'));
+      setPromptTemplates([]);
+      setTemplatePagination(prev => ({ ...prev, total: 0 }));
+    } finally {
+      setPromptTemplatesLoading(false);
+    }
+  };
 
   useEffect(() => {
+    // 加载提示词模板
+    loadPromptTemplates();
+    // 加载模型列表
+    loadModels();
+    // 加载MCP服务器列表
+    loadMcpServers();
+    
     if (initialData) {
       form.setFieldsValue(initialData);
       setSelectedModel(`${initialData.model.provider}-${initialData.model.modelName}`);
@@ -184,131 +358,17 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
     }
   }, [initialData, form]);
 
-  // 提示词模板数据
-  const promptTemplates = [
-    {
-      id: 'customer-service-template',
-      name: t('agents:form.promptTemplates.customerService.name'),
-      description: t('agents:form.promptTemplates.customerService.description'),
-      content: t('agents:form.promptTemplates.customerService.content'),
-      variables: ['company_name', 'service_hours'],
-      category: t('agents:form.promptTemplates.categories.dialogue')
-    },
-    {
-      id: 'data-analysis-template',
-      name: t('agents:form.promptTemplates.dataAnalysis.name'),
-      description: t('agents:form.promptTemplates.dataAnalysis.description'),
-      content: t('agents:form.promptTemplates.dataAnalysis.content'),
-      variables: [],
-      category: t('agents:form.promptTemplates.categories.analysis')
-    },
-    {
-      id: 'code-review-template',
-      name: t('agents:form.promptTemplates.codeReview.name'),
-      description: t('agents:form.promptTemplates.codeReview.description'),
-      content: t('agents:form.promptTemplates.codeReview.content'),
-      variables: [],
-      category: t('agents:form.promptTemplates.categories.development')
-    },
-    {
-      id: 'monitoring-template',
-      name: t('agents:form.promptTemplates.monitoring.name'),
-      description: t('agents:form.promptTemplates.monitoring.description'),
-      content: t('agents:form.promptTemplates.monitoring.content'),
-      variables: [],
-      category: t('agents:form.promptTemplates.categories.operations')
-    }
-  ];
-
-  // 可用模型数据
-  const availableModels = [
-    {
-      id: 'openai-gpt-4',
-      provider: 'OpenAI',
-      name: 'GPT-4',
-      version: 'gpt-4-0613',
-      description: t('agents:form.models.gpt4.description'),
-      status: 'available',
-      pricing: '$0.03/1K tokens'
-    },
-    {
-      id: 'openai-gpt-3.5-turbo',
-      provider: 'OpenAI',
-      name: 'GPT-3.5 Turbo',
-      version: 'gpt-3.5-turbo-0613',
-      description: t('agents:form.models.gpt35.description'),
-      status: 'available',
-      pricing: '$0.002/1K tokens'
-    },
-    {
-      id: 'anthropic-claude-3',
-      provider: 'Anthropic',
-      name: 'Claude 3',
-      version: 'claude-3-opus-20240229',
-      description: t('agents:form.models.claude3.description'),
-      status: 'available',
-      pricing: '$0.015/1K tokens'
-    },
-    {
-      id: 'local-llama2',
-      provider: t('agents:form.models.localDeployment'),
-      name: 'Llama 2',
-      version: 'llama2-7b-chat',
-      description: t('agents:form.models.llama2.description'),
-      status: 'available',
-      pricing: t('agents:form.models.free')
-    }
-  ];
-
-  // MCP Server数据
-  const mcpServers = [
-    {
-      id: 'database-mcp',
-      name: t('agents:form.mcpServers.database.name'),
-      description: t('agents:form.mcpServers.database.description'),
-      status: 'running',
-      capabilities: ['mysql', 'postgresql', 'mongodb']
-    },
-    {
-      id: 'email-mcp',
-      name: t('agents:form.mcpServers.email.name'),
-      description: t('agents:form.mcpServers.email.description'),
-      status: 'running',
-      capabilities: ['smtp', 'imap', 'templates']
-    },
-    {
-      id: 'file-mcp',
-      name: t('agents:form.mcpServers.file.name'),
-      description: t('agents:form.mcpServers.file.description'),
-      status: 'running',
-      capabilities: ['read', 'write', 'search']
-    },
-    {
-      id: 'api-mcp',
-      name: t('agents:form.mcpServers.api.name'),
-      description: t('agents:form.mcpServers.api.description'),
-      status: 'running',
-      capabilities: ['http', 'rest', 'graphql']
-    },
-    {
-      id: 'scheduler-mcp',
-      name: t('agents:form.mcpServers.scheduler.name'),
-      description: t('agents:form.mcpServers.scheduler.description'),
-      status: 'stopped',
-      capabilities: ['cron', 'interval', 'webhook']
-    }
-  ];
-
   const handleSubmit = async (values: any) => {
     try {
+      const selectedModelData = availableModels.find(m => m.id === selectedModel);
       const formData: AIAgentFormData = {
         ...values,
         id: initialData?.id,
         model: {
           ...values.model,
-          provider: selectedModel.split('-')[0],
-          modelName: selectedModel.split('-')[1],
-          version: availableModels.find(m => m.id === selectedModel)?.version || ''
+          provider: selectedModelData?.provider || '',
+          modelName: selectedModelData?.name || '',
+          version: selectedModelData?.version || ''
         },
         prompts: {
           system:
@@ -327,15 +387,41 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
     }
   };
 
+  // 处理模板分页变化
+  const handleTemplatePaginationChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || templatePagination.pageSize;
+    loadPromptTemplates(page, newPageSize, templateSearchText);
+  };
+
+  // 处理模板搜索
+  const handleTemplateSearch = (searchText: string) => {
+    setTemplateSearchText(searchText);
+    // 搜索时重置到第一页
+    loadPromptTemplates(1, templatePagination.pageSize, searchText);
+  };
+
   const handlePromptTemplateSelect = (templateId: string) => {
     setSelectedPromptTemplate(templateId);
     const template = promptTemplates.find(t => t.id === templateId);
     if (template) {
+      // API返回的variables可能是对象格式或null，需要安全处理
+      const templateVariables = template.variables || {};
       const variables: { [key: string]: string } = {};
-      template.variables.forEach(variable => {
-        variables[variable] = promptVariables[variable] || '';
-      });
+      
+      // 从模板变量对象中提取变量名，并设置默认值
+      if (templateVariables && typeof templateVariables === 'object') {
+        Object.keys(templateVariables).forEach(variable => {
+          const variableConfig = templateVariables[variable];
+          // 如果变量配置是对象，使用其默认值；否则使用空字符串
+          const defaultValue = typeof variableConfig === 'object' && variableConfig.default 
+            ? variableConfig.default 
+            : '';
+          variables[variable] = promptVariables[variable] || defaultValue || '';
+        });
+      }
+      
       setPromptVariables(variables);
+      console.log('🔧 选择模板:', template.name, '变量:', variables);
     }
   };
 
@@ -358,44 +444,95 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
       </Radio.Group>
 
       {selectedPromptType === 'template' ? (
-        <div>
-          <Text strong>{t('agents:form.prompts.selectTemplate')}：</Text>
-          <div style={{ marginTop: 12 }}>
-            {promptTemplates.map(template => (
-              <div
-                key={template.id}
-                className={`prompt-template-item ${selectedPromptTemplate === template.id ? 'selected' : ''}`}
-                onClick={() => handlePromptTemplateSelect(template.id)}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ flex: 1 }}>
-                    <Text strong>{template.name}</Text>
-                    <Tag color="blue" style={{ marginLeft: 8 }}>
-                      {template.category}
-                    </Tag>
-                    <Paragraph style={{ margin: '4px 0', color: '#666' }}>{template.description}</Paragraph>
-                  </div>
-                </div>
-                {selectedPromptTemplate === template.id && template.variables.length > 0 && (
-                  <div className="prompt-variables">
-                    <Text strong>{t('agents:form.prompts.templateVariables')}：</Text>
-                    {template.variables.map(variable => (
-                      <div key={variable} style={{ marginTop: 8 }}>
-                        <Text>{variable}:</Text>
-                        <Input
-                          placeholder={t('agents:form.prompts.enterVariableValue', { variable })}
-                          value={promptVariables[variable] || ''}
-                          onChange={e => handleVariableChange(variable, e.target.value)}
-                          style={{ marginTop: 4 }}
-                        />
+        <Spin spinning={promptTemplatesLoading}>
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <Text strong>{t('agents:form.prompts.selectTemplate')}：</Text>
+              <Input.Search
+                placeholder="搜索模板名称..."
+                value={templateSearchText}
+                onChange={e => setTemplateSearchText(e.target.value)}
+                onSearch={handleTemplateSearch}
+                style={{ width: 200 }}
+                size="small"
+                allowClear
+              />
+            </div>
+            <div style={{ marginTop: 12 }}>
+              {promptTemplates.length === 0 && !promptTemplatesLoading ? (
+                <Alert
+                  message={templateSearchText ? "未找到匹配的提示词模板" : "暂无可用的提示词模板"}
+                  description={templateSearchText ? "请尝试其他搜索关键词，或选择自定义提示词。" : "请联系管理员添加提示词模板，或选择自定义提示词。"}
+                  type="info"
+                  showIcon
+                  style={{ marginBottom: 16 }}
+                />
+              ) : (
+                promptTemplates.map(template => (
+                  <div
+                    key={template.id}
+                    className={`prompt-template-item ${selectedPromptTemplate === template.id ? 'selected' : ''}`}
+                    onClick={() => handlePromptTemplateSelect(template.id)}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{ flex: 1 }}>
+                        <Text strong>{template.name}</Text>
+                        <Tag color="blue" style={{ marginLeft: 8 }}>
+                          {template.categoryName || template.category}
+                        </Tag>
+                        <Paragraph style={{ margin: '4px 0', color: '#666' }}>{template.description}</Paragraph>
                       </div>
-                    ))}
+                    </div>
+                    {selectedPromptTemplate === template.id && template.variables && Object.keys(template.variables).length > 0 && (
+                      <div className="prompt-variables">
+                        <Text strong>{t('agents:form.prompts.templateVariables')}：</Text>
+                        {Object.keys(template.variables).map(variable => (
+                          <div key={variable} style={{ marginTop: 8 }}>
+                            <Text>{variable}:</Text>
+                            <Input
+                              placeholder={t('agents:form.prompts.enterVariableValue', { variable })}
+                              value={promptVariables[variable] || ''}
+                              onChange={e => handleVariableChange(variable, e.target.value)}
+                              style={{ marginTop: 4 }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
+                ))
+              )}
+            </div>
+            
+            {/* 分页组件 */}
+            {templatePagination.total > 0 && (
+              <div style={{ 
+                marginTop: 16, 
+                padding: '12px 16px',
+                background: 'var(--bg-container, #ffffff)',
+                borderRadius: '6px',
+                border: '1px solid var(--border-base, #d9d9d9)',
+                textAlign: 'center'
+              }}>
+                <Pagination
+                  current={templatePagination.current}
+                  pageSize={templatePagination.pageSize}
+                  total={templatePagination.total}
+                  onChange={handleTemplatePaginationChange}
+                  onShowSizeChange={handleTemplatePaginationChange}
+                  showSizeChanger
+                  showQuickJumper={templatePagination.total > 50}
+                  showTotal={(total, range) => 
+                    `第 ${range[0]}-${range[1]} 个，共 ${total} 个模板`
+                  }
+                  pageSizeOptions={['5', '10', '15', '20']}
+                  size="small"
+                  disabled={promptTemplatesLoading}
+                />
               </div>
-            ))}
+            )}
           </div>
-        </div>
+        </Spin>
       ) : (
         <div>
           <Text strong>{t('agents:form.prompts.customPrompt')}：</Text>
@@ -420,33 +557,90 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
 
   const renderModelSelector = () => (
     <ModelSelector>
-      <Text strong>{t('agents:form.models.selectModel')}：</Text>
-      <div style={{ marginTop: 12 }}>
-        {availableModels.map(model => (
-          <div
-            key={model.id}
-            className={`model-item ${selectedModel === model.id ? 'selected' : ''}`}
-            onClick={() => setSelectedModel(model.id)}
-          >
-            <div className="model-info">
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
-                <Text strong>
-                  {model.provider} - {model.name}
-                </Text>
-                <Tag color={model.status === 'available' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                  {model.status === 'available'
-                    ? t('agents:form.models.available')
-                    : t('agents:form.models.unavailable')}
-                </Tag>
-              </div>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {t('agents:form.models.version')}: {model.version} | {t('agents:form.models.pricing')}: {model.pricing}
-              </Text>
-              <Paragraph style={{ margin: '4px 0 0 0', fontSize: 12, color: '#666' }}>{model.description}</Paragraph>
-            </div>
-          </div>
-        ))}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <Text strong>{t('agents:form.models.selectModel')}：</Text>
+        <Input.Search
+          placeholder="搜索模型名称..."
+          value={modelSearchText}
+          onChange={e => setModelSearchText(e.target.value)}
+          onSearch={handleModelSearch}
+          style={{ width: 200 }}
+          size="small"
+          allowClear
+        />
       </div>
+      
+      <Spin spinning={modelsLoading}>
+        <div style={{ marginTop: 12 }}>
+          {availableModels.length === 0 && !modelsLoading ? (
+            <Alert
+              message={modelSearchText ? "未找到匹配的模型" : "暂无可用的模型"}
+              description={modelSearchText ? "请尝试其他搜索关键词。" : "请联系管理员添加模型配置。"}
+              type="info"
+              showIcon
+              style={{ marginBottom: 16 }}
+            />
+          ) : (
+            availableModels.map(model => (
+              <div
+                key={model.id}
+                className={`model-item ${selectedModel === model.id ? 'selected' : ''}`}
+                onClick={() => setSelectedModel(model.id)}
+              >
+                <div className="model-info">
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+                    <Text strong>
+                      {model.provider} - {model.name}
+                    </Text>
+                    <Tag color={model.status === 'active' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
+                      {model.status === 'active' ? '可用' : '不可用'}
+                    </Tag>
+                  </div>
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    版本: {model.version} | 类型: {model.modelType}
+                  </Text>
+                  <Paragraph style={{ margin: '4px 0 0 0', fontSize: 12, color: '#666' }}>
+                    {model.description}
+                  </Paragraph>
+                  {model.pricing && (
+                    <Text type="secondary" style={{ fontSize: 11 }}>
+                      定价: 输入 ${model.pricing.inputTokens}/1K tokens, 输出 ${model.pricing.outputTokens}/1K tokens
+                    </Text>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+        
+        {/* 分页组件 */}
+        {modelPagination.total > 0 && (
+          <div style={{ 
+            marginTop: 16, 
+            padding: '12px 16px',
+            background: 'var(--bg-container, #ffffff)',
+            borderRadius: '6px',
+            border: '1px solid var(--border-base, #d9d9d9)',
+            textAlign: 'center'
+          }}>
+            <Pagination
+              current={modelPagination.current}
+              pageSize={modelPagination.pageSize}
+              total={modelPagination.total}
+              onChange={handleModelPaginationChange}
+              onShowSizeChange={handleModelPaginationChange}
+              showSizeChanger
+              showQuickJumper={modelPagination.total > 50}
+              showTotal={(total, range) => 
+                `第 ${range[0]}-${range[1]} 个，共 ${total} 个模型`
+              }
+              pageSizeOptions={['5', '10', '15', '20']}
+              size="small"
+              disabled={modelsLoading}
+            />
+          </div>
+        )}
+      </Spin>
     </ModelSelector>
   );
 
@@ -460,61 +654,117 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
 
   const renderMcpServerSelector = () => (
     <div>
-      <Text strong>{t('agents:form.mcpServers.selectServers')}：</Text>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <Text strong>{t('agents:form.mcpServers.selectServers')}：</Text>
+        <Input.Search
+          placeholder="搜索MCP服务器..."
+          value={mcpSearchText}
+          onChange={e => setMcpSearchText(e.target.value)}
+          onSearch={handleMcpSearch}
+          style={{ width: 200 }}
+          size="small"
+          allowClear
+        />
+      </div>
       <Paragraph type="secondary" style={{ marginTop: 4 }}>
         {t('agents:form.mcpServers.description')}
       </Paragraph>
-      <div style={{ marginTop: 12 }}>
-        {mcpServers.map(server => (
-          <Card 
-            key={server.id} 
-            size="small" 
-            style={{ 
-              marginBottom: 8,
-              cursor: 'pointer',
-            }} 
-            bodyStyle={{ padding: 12 }}
-            onClick={() => handleMcpServerToggle(server.id)}
-            className={`mcp-server-item ${selectedMcpServers.includes(server.id) ? 'selected' : ''}`}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
-                  <Checkbox
-                    checked={selectedMcpServers.includes(server.id)}
-                    onChange={(e) => {
-                      // 阻止事件冒泡，因为我们已经在Card的onClick中处理了
-                      e.stopPropagation();
-                      handleMcpServerToggle(server.id);
-                    }}
-                    onClick={(e) => {
-                      // 阻止点击复选框时触发Card的onClick
-                      e.stopPropagation();
-                    }}
-                  >
-                    <Text strong>{server.name}</Text>
-                  </Checkbox>
-                  <Tag color={server.status === 'running' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-                    {server.status === 'running'
-                      ? t('agents:form.mcpServers.running')
-                      : t('agents:form.mcpServers.stopped')}
-                  </Tag>
+      
+      <Spin spinning={mcpServersLoading}>
+        <div style={{ marginTop: 12 }}>
+          {mcpServers.length === 0 && !mcpServersLoading ? (
+            <Alert
+              message={mcpSearchText ? "未找到匹配的MCP服务器" : "暂无可用的MCP服务器"}
+              description={mcpSearchText ? "请尝试其他搜索关键词。" : "请联系管理员添加MCP服务器配置。"}
+              type="info"
+              showIcon
+              style={{ marginBottom: 16 }}
+            />
+          ) : (
+            mcpServers.map(server => (
+              <Card 
+                key={server.id} 
+                size="small" 
+                style={{ 
+                  marginBottom: 8,
+                  cursor: 'pointer',
+                }} 
+                bodyStyle={{ padding: 12 }}
+                onClick={() => handleMcpServerToggle(server.id)}
+                className={`mcp-server-item ${selectedMcpServers.includes(server.id) ? 'selected' : ''}`}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+                      <Checkbox
+                        checked={selectedMcpServers.includes(server.id)}
+                        onChange={(e) => {
+                          // 阻止事件冒泡，因为我们已经在Card的onClick中处理了
+                          e.stopPropagation();
+                          handleMcpServerToggle(server.id);
+                        }}
+                        onClick={(e) => {
+                          // 阻止点击复选框时触发Card的onClick
+                          e.stopPropagation();
+                        }}
+                      >
+                        <Text strong>{server.name}</Text>
+                      </Checkbox>
+                      <Tag color={server.status === 'running' ? 'green' : 'red'} style={{ marginLeft: 8 }}>
+                        {server.status === 'running' ? '运行中' : '已停止'}
+                      </Tag>
+                      <Tag color="blue" style={{ marginLeft: 4 }}>
+                        {server.type}
+                      </Tag>
+                    </div>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      {server.description}
+                    </Text>
+                    <div style={{ marginTop: 4 }}>
+                      {server.capabilities.map(capability => (
+                        <Tag key={capability} size="small" style={{ marginRight: 4 }}>
+                          {capability}
+                        </Tag>
+                      ))}
+                    </div>
+                    <Text type="secondary" style={{ fontSize: 11, marginTop: 4 }}>
+                      端点: {server.endpoint}:{server.port} | 版本: {server.version}
+                    </Text>
+                  </div>
                 </div>
-                <Text type="secondary" style={{ fontSize: 12 }}>
-                  {server.description}
-                </Text>
-                <div style={{ marginTop: 4 }}>
-                  {server.capabilities.map(capability => (
-                    <Tag key={capability} size="small" style={{ marginRight: 4 }}>
-                      {capability}
-                    </Tag>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Card>
-        ))}
-      </div>
+              </Card>
+            ))
+          )}
+        </div>
+        
+        {/* 分页组件 */}
+        {mcpPagination.total > 0 && (
+          <div style={{ 
+            marginTop: 16, 
+            padding: '12px 16px',
+            background: 'var(--bg-container, #ffffff)',
+            borderRadius: '6px',
+            border: '1px solid var(--border-base, #d9d9d9)',
+            textAlign: 'center'
+          }}>
+            <Pagination
+              current={mcpPagination.current}
+              pageSize={mcpPagination.pageSize}
+              total={mcpPagination.total}
+              onChange={handleMcpPaginationChange}
+              onShowSizeChange={handleMcpPaginationChange}
+              showSizeChanger
+              showQuickJumper={mcpPagination.total > 50}
+              showTotal={(total, range) => 
+                `第 ${range[0]}-${range[1]} 个，共 ${total} 个MCP服务器`
+              }
+              pageSizeOptions={['5', '10', '15', '20']}
+              size="small"
+              disabled={mcpServersLoading}
+            />
+          </div>
+        )}
+      </Spin>
     </div>
   );
 
