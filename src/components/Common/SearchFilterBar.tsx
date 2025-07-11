@@ -13,6 +13,7 @@ interface FilterOption {
 
 interface SearchFilterBarProps {
   searchValue?: string;
+  searchText?: string; // 兼容旧的属性名
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
   
@@ -29,6 +30,7 @@ interface SearchFilterBarProps {
   // 操作按钮
   showRefresh?: boolean;
   onRefresh?: () => void;
+  refreshLoading?: boolean; // 刷新按钮的加载状态
   
   // 额外的操作按钮
   extraActions?: React.ReactNode;
@@ -126,15 +128,20 @@ const FilterBar = styled.div`
 
 const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
   searchValue = '',
+  searchText, // 兼容旧的属性名
   onSearchChange,
   searchPlaceholder = '搜索...',
   filters = [],
   showRefresh = true,
   onRefresh,
+  refreshLoading = false,
   extraActions,
   className,
   style
 }) => {
+  // 优先使用searchText，如果没有则使用searchValue
+  const currentSearchValue = searchText !== undefined ? searchText : searchValue;
+  
   return (
     <FilterBar className={className} style={style}>
       <Row gutter={16} align="middle">
@@ -142,7 +149,7 @@ const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
         <Col flex="auto">
           <Search
             placeholder={searchPlaceholder}
-            value={searchValue}
+            value={currentSearchValue}
             onChange={(e) => onSearchChange?.(e.target.value)}
             style={{ width: '100%' }}
             allowClear
@@ -175,7 +182,8 @@ const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
               <Button 
                 icon={<ReloadOutlined />} 
                 onClick={onRefresh}
-                title="刷新"
+                loading={refreshLoading}
+                title="重置搜索条件"
               />
             )}
             {extraActions}

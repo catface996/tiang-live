@@ -113,7 +113,52 @@ const McpCard = styled(Card)`
 
 const McpManagement: React.FC = () => {
   const { t } = useTranslation(['mcp', 'common']);
-  const { modal } = App.useApp();
+  const { modal, message } = App.useApp();
+  
+  // 通用错误处理函数
+  const handleApiError = (error: any, defaultMessage: string, operation?: string) => {
+    console.error(`${operation || 'API'} error:`, error);
+    
+    let errorMessage = defaultMessage;
+    
+    // 处理API响应错误
+    if (error.response?.data) {
+      const errorData = error.response.data;
+      if (errorData.message) {
+        errorMessage = errorData.message;
+        
+        // 根据错误代码提供更友好的提示
+        if (errorData.code === 'VALIDATION_ERROR') {
+          if (errorData.message.includes('端点已存在')) {
+            errorMessage = `${errorData.message}\n请检查端点地址是否重复，或选择其他端点。`;
+          } else if (errorData.message.includes('名称已存在')) {
+            errorMessage = `${errorData.message}\n请使用不同的服务器名称。`;
+          }
+        } else if (errorData.code === 'SERVER_IN_USE') {
+          errorMessage = `${errorData.message}\n该服务器正在被其他服务使用，请先停止相关服务。`;
+        } else if (errorData.code === 'PERMISSION_DENIED') {
+          errorMessage = `${errorData.message}\n您没有权限执行此操作。`;
+        }
+      } else if (typeof errorData === 'string') {
+        errorMessage = errorData;
+      }
+    } else if (error.message) {
+      if (error.message.includes('Network Error')) {
+        errorMessage = '网络连接失败，请检查网络连接后重试。';
+      } else if (error.message.includes('timeout')) {
+        errorMessage = '请求超时，请稍后重试。';
+      } else {
+        errorMessage = error.message;
+      }
+    }
+    
+    message.error({
+      content: errorMessage,
+      duration: 6,
+    });
+    
+    return errorMessage;
+  };
   
   // 状态管理
   const [loading, setLoading] = useState(false);
@@ -125,6 +170,7 @@ const McpManagement: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [resetLoading, setResetLoading] = useState(false);
   const [form] = Form.useForm();
   
   // 真实数据状态
@@ -214,7 +260,38 @@ const McpManagement: React.FC = () => {
 
   // 刷新数据
   const handleRefresh = async () => {
-    await Promise.all([loadMcpData(pagination.page), loadStatsData()]);
+    // 重置搜索条件
+    setSearchText('');
+    setFilterType('all');
+    setFilterStatus('all');
+    
+    // 重置分页到第一页
+    const newPagination = { ...pagination, page: 1 };
+    setPagination(newPagination);
+    
+    // 重新加载数据
+    await Promise.all([loadMcpData(1), loadStatsData()]);
+  };
+
+  // 重置搜索条件（专门用于SearchFilterBar的刷新按钮）
+  const handleResetFilters = async () => {
+    setResetLoading(true);
+    try {
+      // 重置搜索条件
+      setSearchText('');
+      setFilterType('all');
+      setFilterStatus('all');
+      
+      // 重置分页到第一页
+      const newPagination = { ...pagination, page: 1 };
+      setPagination(newPagination);
+      
+      // 重新加载数据（会自动触发，因为useEffect监听了搜索条件的变化）
+      // 等待一小段时间确保状态更新完成
+      await new Promise(resolve => setTimeout(resolve, 100));
+    } finally {
+      setResetLoading(false);
+    }
   };
 
   // 搜索和筛选变化时重新加载数据
@@ -301,11 +378,16 @@ const McpManagement: React.FC = () => {
             await loadMcpData(pagination.page);
             await loadStatsData();
           } else {
-            message.error(response.message || t('mcp:deleteFailed'));
+            // 使用通用错误处理函数
+            handleApiError(
+              { response: { data: response } }, 
+              t('mcp:deleteFailed'),
+              'Delete server'
+            );
           }
-        } catch (error) {
-          console.error('Failed to delete server:', error);
-          message.error(t('mcp:deleteFailed'));
+        } catch (error: any) {
+          // 使用通用错误处理函数
+          handleApiError(error, t('mcp:deleteFailed'), 'Delete server');
         }
       }
     });
@@ -370,10 +452,26 @@ const McpManagement: React.FC = () => {
     setDetailModalVisible(true);
   };
 
+  // 检查端点是否已存在
+  const checkEndpointExists = (endpoint: string, currentServerId?: string) => {
+    return mcpData.some(server => 
+      server.endpoint === endpoint && server.id !== currentServerId
+    );
+  };
+
   // 处理表单提交
   const handleFormSubmit = async (values: any) => {
     try {
       setLoading(true);
+      
+      // 前端预检查端点是否重复
+      if (checkEndpointExists(values.endpoint, editingServer?.id)) {
+        message.error({
+          content: `端点地址 ${values.endpoint} 已存在，请使用不同的端点地址。`,
+          duration: 6,
+        });
+        return;
+      }
       
       const serverData: SaveMcpServerRequest = {
         ...values,
@@ -393,11 +491,20 @@ const McpManagement: React.FC = () => {
         await loadMcpData();
         await loadStatsData();
       } else {
-        message.error(response.message || (editingServer ? t('mcp:updateFailed') : t('mcp:createFailed')));
+        // 使用通用错误处理函数
+        handleApiError(
+          { response: { data: response } }, 
+          editingServer ? t('mcp:updateFailed') : t('mcp:createFailed'),
+          editingServer ? 'Update server' : 'Create server'
+        );
       }
-    } catch (error) {
-      console.error('Save server error:', error);
-      message.error(editingServer ? t('mcp:updateFailed') : t('mcp:createFailed'));
+    } catch (error: any) {
+      // 使用通用错误处理函数
+      handleApiError(
+        error, 
+        editingServer ? t('mcp:updateFailed') : t('mcp:createFailed'),
+        editingServer ? 'Update server' : 'Create server'
+      );
     } finally {
       setLoading(false);
     }
@@ -505,7 +612,7 @@ const McpManagement: React.FC = () => {
             {
               key: 'metrics',
               label: t('mcp:tabs.metrics'),
-              children: (
+              children: selectedServer.metrics ? (
                 <Row gutter={16}>
                   <Col span={12}>
                     <Statistic
@@ -536,6 +643,8 @@ const McpManagement: React.FC = () => {
                     />
                   </Col>
                 </Row>
+              ) : (
+                <Empty description={t('common:noData')} />
               )
             },
             {
@@ -544,19 +653,25 @@ const McpManagement: React.FC = () => {
               children: (
                 <Descriptions column={1} bordered>
                   <Descriptions.Item label={t('mcp:config.healthCheck')}>
-                    <Tag color={selectedServer.healthCheck.enabled ? 'green' : 'red'}>
-                      {selectedServer.healthCheck.enabled ? t('common:enabled') : t('common:disabled')}
-                    </Tag>
-                    {selectedServer.healthCheck.enabled && (
-                      <Text type="secondary">
-                        {t('mcp:config.interval')}: {selectedServer.healthCheck.interval}s, 
-                        {t('mcp:config.timeout')}: {selectedServer.healthCheck.timeout}s, 
-                        {t('mcp:config.retries')}: {selectedServer.healthCheck.retries}
-                      </Text>
+                    {selectedServer.healthCheck ? (
+                      <>
+                        <Tag color={selectedServer.healthCheck.enabled ? 'green' : 'red'}>
+                          {selectedServer.healthCheck.enabled ? t('common:enabled') : t('common:disabled')}
+                        </Tag>
+                        {selectedServer.healthCheck.enabled && (
+                          <Text type="secondary">
+                            {t('mcp:config.interval')}: {selectedServer.healthCheck.interval}s, 
+                            {t('mcp:config.timeout')}: {selectedServer.healthCheck.timeout}s, 
+                            {t('mcp:config.retries')}: {selectedServer.healthCheck.retries}
+                          </Text>
+                        )}
+                      </>
+                    ) : (
+                      <Text type="secondary">{t('common:notConfigured')}</Text>
                     )}
                   </Descriptions.Item>
                   <Descriptions.Item label={t('mcp:config.other')}>
-                    <pre>{JSON.stringify(selectedServer.config, null, 2)}</pre>
+                    <pre>{JSON.stringify(selectedServer.config || {}, null, 2)}</pre>
                   </Descriptions.Item>
                 </Descriptions>
               )
@@ -668,7 +783,8 @@ const McpManagement: React.FC = () => {
             ]
           }
         ]}
-        onRefresh={handleRefresh}
+        onRefresh={handleResetFilters}
+        refreshLoading={resetLoading}
       />
 
       {/* MCP服务器卡片列表 */}
@@ -886,7 +1002,7 @@ const McpManagement: React.FC = () => {
         onCancel={handleModalCancel}
         footer={null}
         width={800}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form
           form={form}
@@ -951,10 +1067,24 @@ const McpManagement: React.FC = () => {
                 label={t('mcp:form.endpoint')}
                 rules={[
                   { required: true, message: t('mcp:form.endpointRequired') },
-                  { type: 'url', message: t('mcp:form.endpointInvalid') }
+                  { type: 'url', message: t('mcp:form.endpointInvalid') },
+                  {
+                    validator: async (_, value) => {
+                      if (value && checkEndpointExists(value, editingServer?.id)) {
+                        throw new Error('该端点地址已存在，请使用不同的端点地址');
+                      }
+                    }
+                  }
                 ]}
+                hasFeedback
               >
-                <Input placeholder={t('mcp:form.endpointPlaceholder')} />
+                <Input 
+                  placeholder={t('mcp:form.endpointPlaceholder')} 
+                  onChange={(e) => {
+                    // 触发表单验证
+                    form.validateFields(['endpoint']);
+                  }}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>

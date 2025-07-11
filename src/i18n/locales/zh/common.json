@@ -48,6 +48,9 @@
   "locale": "zh-CN",
   "reset": "重置",
   "all": "全部",
+  "enabled": "已启用",
+  "disabled": "已禁用",
+  "notConfigured": "未配置",
   "status": "状态",
   "progress": "进度",
   "unit": {
