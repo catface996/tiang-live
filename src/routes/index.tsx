@@ -25,7 +25,7 @@ const PromptTemplates = React.lazy(() => import('../pages/SystemSettings/PromptT
 const EntityScan = React.lazy(() => import('../pages/SystemSettings/EntityScan'));
 const McpManagement = React.lazy(() => import('../pages/SystemSettings/McpManagement'));
 const TestTools = React.lazy(() => import('../pages/TestTools'));
-const EntityTopology = React.lazy(() => import('../pages/TestTools/EntityTopology'));
+const EntityTopology = React.lazy(() => import('../pages/TestTools/EntityTopology/EntityTopologyManagement'));
 const EntityTopologyDetail = React.lazy(() => import('../pages/TestTools/EntityTopology/EntityTopologyDetail'));
 
 // 子页面组件

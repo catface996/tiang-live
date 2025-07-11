@@ -27,6 +27,7 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../../store';
 import TopologyCard from './components/TopologyCard';
 import '../../../styles/entity-topology.css';
 import { graphApi, GraphStatus } from '../../../services/graphApi';
@@ -58,17 +59,23 @@ interface Topology {
 const EntityTopology: React.FC = () => {
   const { t } = useTranslation(['entityTopology', 'common']);
   const navigate = useNavigate();
+  const isDark = useAppSelector(state => state.theme.isDark);
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [labelsFilter, setLabelsFilter] = useState<string>('all');
   const [topologies, setTopologies] = useState<Topology[]>([]);
 
   // 分页状态管理
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 0
+  const [pagination, setPagination] = useState(() => {
+    // 从localStorage读取用户的分页偏好
+    const savedPageSize = localStorage.getItem('entity-topology-page-size');
+    return {
+      current: 1,
+      pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 6,
+      total: 0
+    };
   });
 
   // 创建拓扑图相关状态
@@ -374,13 +381,63 @@ const EntityTopology: React.FC = () => {
     }));
   }, [filteredTopologies.length]);
 
+  // 当搜索条件或筛选条件变化时，重置分页到第一页
+  useEffect(() => {
+    setPagination(prev => ({
+      ...prev,
+      current: 1
+    }));
+  }, [searchText, statusFilter, labelsFilter]);
+
+  // 重置所有筛选条件和分页
+  const handleResetFilters = async () => {
+    setResetLoading(true);
+    
+    try {
+      // 重置搜索和筛选条件
+      setSearchText('');
+      setStatusFilter('all');
+      setLabelsFilter('all');
+      
+      // 重置分页到默认状态：第一页，每页6个
+      setPagination(prev => ({
+        ...prev,
+        current: 1,
+        pageSize: 6 // 恢复默认分页大小
+        // total会由useEffect自动更新
+      }));
+
+      // 同时更新localStorage中的分页偏好为默认值
+      localStorage.setItem('entity-topology-page-size', '6');
+
+      // 重新加载数据
+      await loadTopologies();
+      
+      // 模拟一个短暂的延迟，提供更好的用户反馈
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   // 分页处理函数
   const handlePageChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || pagination.pageSize;
+    
     setPagination(prev => ({
       ...prev,
       current: page,
-      pageSize: pageSize || prev.pageSize
+      pageSize: newPageSize
     }));
+
+    // 保存用户的分页偏好
+    if (pageSize && pageSize !== pagination.pageSize) {
+      localStorage.setItem('entity-topology-page-size', pageSize.toString());
+    }
+
+    // 滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handlePageSizeChange = (current: number, size: number) => {
@@ -389,6 +446,12 @@ const EntityTopology: React.FC = () => {
       current: 1,  // 改变页面大小时重置到第一页
       pageSize: size
     }));
+
+    // 保存用户的分页偏好
+    localStorage.setItem('entity-topology-page-size', size.toString());
+
+    // 滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleView = (topology: Topology) => {
@@ -527,8 +590,9 @@ const EntityTopology: React.FC = () => {
           <Col>
             <Button 
               icon={<ReloadOutlined />} 
-              onClick={() => loadTopologies()} 
-              title={t('common:refresh')} 
+              onClick={handleResetFilters}
+              loading={resetLoading}
+              title="重置搜索条件" 
             />
           </Col>
         </Row>
@@ -545,7 +609,7 @@ const EntityTopology: React.FC = () => {
             <>
               <Row gutter={[24, 24]}>
                 {paginatedTopologies.map(topology => (
-                  <Col xs={24} sm={12} lg={8} xl={6} key={topology.id}>
+                  <Col xs={24} sm={24} lg={12} xl={8} key={topology.id}>
                     <TopologyCard
                       topology={topology}
                       onView={handleView}
@@ -559,28 +623,45 @@ const EntityTopology: React.FC = () => {
               </Row>
 
               {/* 分页组件 */}
-              {filteredTopologies.length > 0 && (
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'center', 
-                  marginTop: '32px',
-                  padding: '16px 0'
-                }}>
-                  <Pagination
-                    current={pagination.current}
-                    total={pagination.total}
-                    pageSize={pagination.pageSize}
-                    showSizeChanger
-                    showQuickJumper
-                    showTotal={(total, range) => 
-                      `${range[0]}-${range[1]} / ${total} ${t('entityTopology:pagination.items')}`
-                    }
-                    pageSizeOptions={['10', '20', '50', '100']}
-                    onChange={handlePageChange}
-                    onShowSizeChange={handlePageSizeChange}
-                    size="default"
-                  />
-                </div>
+              {(() => {
+                console.log('🔍 EntityTopology分页调试信息:', {
+                  total: pagination.total,
+                  pageSize: pagination.pageSize,
+                  current: pagination.current,
+                  shouldShow: pagination.total > 0,
+                  topologiesLength: topologies.length,
+                  filteredLength: filteredTopologies.length
+                });
+                return null;
+              })()}
+              {pagination.total > 0 && (
+                <Row justify="center" style={{ marginTop: 32, marginBottom: 24 }}>
+                  <Col>
+                    <Pagination
+                      current={pagination.current}
+                      pageSize={pagination.pageSize}
+                      total={pagination.total}
+                      onChange={handlePageChange}
+                      onShowSizeChange={handlePageSizeChange}
+                      showSizeChanger
+                      showQuickJumper
+                      showTotal={(total, range) => 
+                        `第 ${range[0]}-${range[1]} 条，共 ${total} 个拓扑图`
+                      }
+                      pageSizeOptions={['6', '12', '18', '24']}
+                      size="default"
+                      style={{
+                        padding: '16px 24px',
+                        background: isDark ? '#1f1f1f' : '#fff',
+                        borderRadius: '8px',
+                        border: `1px solid ${isDark ? '#303030' : '#d9d9d9'}`,
+                        boxShadow: isDark 
+                          ? '0 2px 8px rgba(0, 0, 0, 0.3)' 
+                          : '0 2px 8px rgba(0, 0, 0, 0.1)'
+                      }}
+                    />
+                  </Col>
+                </Row>
               )}
             </>
           )}
