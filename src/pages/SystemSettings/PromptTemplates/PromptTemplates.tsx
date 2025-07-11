@@ -544,6 +544,13 @@ API接口：{api_details}
       const response = await PromptTemplateApi.saveTemplate(requestData);
       
       console.log('✅ 保存响应:', response);
+      console.log('🔍 响应检查:', {
+        'response存在': !!response,
+        'response.success': response?.success,
+        'response.success类型': typeof response?.success,
+        'response.message': response?.message,
+        '条件判断': response && response.success
+      });
       
       if (response && response.success) {
         message.success(editingPrompt ? '更新模板成功' : '创建模板成功');
@@ -553,7 +560,10 @@ API接口：{api_details}
         // 重新加载数据
         await loadTemplates(pagination.current, pagination.pageSize);
       } else {
-        message.error(response?.message || '保存模板失败');
+        console.log('🚨 进入错误处理分支');
+        const errorMessage = response?.message || '保存模板失败';
+        console.log('🚨 错误信息:', errorMessage);
+        message.error(errorMessage);
       }
     } catch (error: any) {
       console.error('保存模板失败:', error);
