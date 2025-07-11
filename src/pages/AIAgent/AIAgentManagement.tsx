@@ -16,7 +16,8 @@ import {
   Slider,
   message,
   Descriptions,
-  Timeline
+  Timeline,
+  Pagination
 } from 'antd';
 import {
   RobotOutlined,
@@ -121,11 +122,38 @@ const AIAgentManagement: React.FC = () => {
   const [filterType, setFilterType] = useState('all');
   const [form] = Form.useForm();
   const { currentTheme } = useAppSelector(state => state.theme);
+  
+  // 分页状态
+  const [pagination, setPagination] = useState(() => {
+    // 从localStorage读取用户的分页偏好
+    const savedPageSize = localStorage.getItem('ai-agent-page-size');
+    return {
+      current: 1,
+      pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 6,
+      total: 0
+    };
+  });
+  
+  // 加载状态
+  const [loading, setLoading] = useState(false);
   const isDark = currentTheme === 'dark';
+
+  // 重置分页到第一页（用于搜索和筛选时）
+  const resetPagination = () => {
+    setPagination(prev => ({
+      ...prev,
+      current: 1
+    }));
+  };
 
   useEffect(() => {
     setPageTitle(t('agents:title'));
   }, [t]);
+
+  // 当搜索条件或筛选条件变化时，重置分页到第一页
+  useEffect(() => {
+    resetPagination();
+  }, [searchText, filterStatus, filterType]);
 
   // 模拟AI智能体数据
   const agentData: AIAgent[] = [
@@ -371,6 +399,24 @@ const AIAgentManagement: React.FC = () => {
     }
   ];
 
+  // 计算过滤后的数据总数并更新分页
+  useEffect(() => {
+    const filteredCount = agentData.filter(agent => {
+      const matchesSearch =
+        agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        agent.description.toLowerCase().includes(searchText.toLowerCase());
+      const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
+      const matchesType = filterType === 'all' || agent.type === filterType;
+
+      return matchesSearch && matchesStatus && matchesType;
+    }).length;
+
+    setPagination(prev => ({
+      ...prev,
+      total: filteredCount
+    }));
+  }, [searchText, filterStatus, filterType]);
+
   const agentTypeMap = {
     monitor: { name: t('agents:types.monitor'), color: 'blue', icon: <MonitorOutlined /> },
     analysis: { name: t('agents:types.analysis'), color: 'green', icon: <BarChartOutlined /> },
@@ -432,6 +478,42 @@ const AIAgentManagement: React.FC = () => {
     navigate(`/ai-agents/edit/${agent.id}`);
   };
 
+  // 分页变更处理
+  const handlePaginationChange = (page: number, pageSize?: number) => {
+    setLoading(true);
+    const newPageSize = pageSize || pagination.pageSize;
+    
+    setPagination(prev => ({
+      ...prev,
+      current: page,
+      pageSize: newPageSize
+    }));
+    
+    // 保存用户的分页偏好
+    if (pageSize && pageSize !== pagination.pageSize) {
+      localStorage.setItem('ai-agent-page-size', pageSize.toString());
+    }
+    
+    // 滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // 模拟加载延迟
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
+  };
+
+  // 重置所有筛选条件
+  const handleResetFilters = () => {
+    setSearchText('');
+    setFilterStatus('all');
+    setFilterType('all');
+    setPagination(prev => ({
+      ...prev,
+      current: 1
+    }));
+  };
+
   const handleViewAgent = (agent: AIAgent) => {
     setSelectedAgent(agent);
     setDetailModalVisible(true);
@@ -472,7 +554,12 @@ const AIAgentManagement: React.FC = () => {
       return matchesSearch && matchesStatus && matchesType;
     });
 
-    return filteredAgents.map(agent => (
+    // 分页逻辑
+    const startIndex = (pagination.current - 1) * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    const paginatedAgents = filteredAgents.slice(startIndex, endIndex);
+
+    return paginatedAgents.map(agent => (
       <Col xs={24} sm={24} lg={12} xl={8} key={agent.id}>
         <AgentCard
           agent={
@@ -561,6 +648,7 @@ const AIAgentManagement: React.FC = () => {
         searchValue={searchText}
         onSearchChange={setSearchText}
         searchPlaceholder={t('agents:searchPlaceholder')}
+        onRefresh={handleResetFilters}
         filters={[
           {
             key: 'status',
@@ -593,7 +681,95 @@ const AIAgentManagement: React.FC = () => {
       />
 
       {/* 智能体卡片展示 */}
-      <Row gutter={[16, 16]}>{renderAgentCards()}</Row>
+      <div style={{ minHeight: '400px', position: 'relative' }}>
+        {loading && (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            borderRadius: '8px'
+          }}>
+            <Space direction="vertical" align="center">
+              <div className="loading-spinner" style={{
+                width: '40px',
+                height: '40px',
+                border: `3px solid ${isDark ? '#303030' : '#f0f0f0'}`,
+                borderTop: '3px solid #1890ff',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }} />
+              <Text style={{ color: isDark ? '#fff' : '#666' }}>加载中...</Text>
+            </Space>
+          </div>
+        )}
+        
+        <Row gutter={[16, 16]}>
+          {renderAgentCards()}
+          {/* 空状态处理 */}
+          {!loading && pagination.total === 0 && (
+            <Col span={24}>
+              <Card style={{ textAlign: 'center', padding: '40px 20px' }}>
+                <RobotOutlined style={{ fontSize: 64, color: '#d9d9d9', marginBottom: 16 }} />
+                <Title level={4} style={{ color: '#999' }}>
+                  {searchText || filterStatus !== 'all' || filterType !== 'all' 
+                    ? '没有找到匹配的智能体' 
+                    : '暂无智能体'
+                  }
+                </Title>
+                <Paragraph style={{ color: '#999', marginBottom: 24 }}>
+                  {searchText || filterStatus !== 'all' || filterType !== 'all'
+                    ? '请尝试调整搜索条件或筛选器'
+                    : '点击下方按钮创建您的第一个AI智能体'
+                  }
+                </Paragraph>
+                {(!searchText && filterStatus === 'all' && filterType === 'all') && (
+                  <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
+                    创建智能体
+                  </Button>
+                )}
+              </Card>
+            </Col>
+          )}
+        </Row>
+      </div>
+
+      {/* 分页组件 */}
+      {pagination.total > pagination.pageSize && (
+        <Row justify="center" style={{ marginTop: 32, marginBottom: 24 }}>
+          <Col>
+            <Pagination
+              current={pagination.current}
+              pageSize={pagination.pageSize}
+              total={pagination.total}
+              onChange={handlePaginationChange}
+              onShowSizeChange={handlePaginationChange}
+              showSizeChanger
+              showQuickJumper
+              showTotal={(total, range) => 
+                `第 ${range[0]}-${range[1]} 条，共 ${total} 个智能体`
+              }
+              pageSizeOptions={['6', '12', '18', '24']}
+              size="default"
+              style={{
+                padding: '16px 24px',
+                background: isDark ? '#1f1f1f' : '#fff',
+                borderRadius: '8px',
+                border: `1px solid ${isDark ? '#303030' : '#d9d9d9'}`,
+                boxShadow: isDark 
+                  ? '0 2px 8px rgba(0, 0, 0, 0.3)' 
+                  : '0 2px 8px rgba(0, 0, 0, 0.1)'
+              }}
+            />
+          </Col>
+        </Row>
+      )}
 
       {/* 创建智能体模态框 */}
       <Modal

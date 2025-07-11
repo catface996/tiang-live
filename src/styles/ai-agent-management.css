@@ -1,5 +1,15 @@
 /* AI智能体管理页面专用样式 - 确保彩色元素在主题切换时保持不变 */
 
+/* ========== 加载动画 ========== */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
 /* ========== AI智能体统计卡片样式 - 使用最强优先级 ========== */
 .ai-agent-management-page {
   /* 主色调统计卡片 - 蓝色 (总智能体数) */
