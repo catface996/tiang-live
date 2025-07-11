@@ -209,7 +209,7 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({ visible, editingPromp
           rules={[{ required: true, message: '请输入提示词内容' }]}
         >
           <TextArea 
-            rows={10} 
+            rows={6} 
             placeholder="请输入提示词内容，可以使用 {变量名} 来定义变量"
             showCount
             onChange={handleContentChange}
@@ -268,20 +268,6 @@ const PromptFormModal: React.FC<PromptFormModalProps> = ({ visible, editingPromp
           </Col>
         </Row>
 
-        <StyledAlert
-          $isDark={isDark}
-          message="变量使用提示"
-          description={
-            <div>
-              <p>• 在提示词内容中使用 <code>{'{变量名}'}</code> 来定义变量，例如：<code>{'{用户输入}'}</code>、<code>{'{文档内容}'}</code> 等</p>
-              <p>• 系统会自动从内容中提取变量并添加到变量列表中</p>
-              <p>• 你也可以手动在变量字段中添加或删除变量</p>
-              <p>• 这些变量可以在使用模板时动态替换为实际内容</p>
-            </div>
-          }
-          type="info"
-          showIcon
-        />
       </Form>
     </Modal>
   );
