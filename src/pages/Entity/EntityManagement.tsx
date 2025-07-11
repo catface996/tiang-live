@@ -14,7 +14,8 @@ import {
   Modal,
   Descriptions,
   Empty,
-  Spin
+  Spin,
+  Pagination
 } from 'antd';
 import {
   NodeIndexOutlined,
@@ -70,12 +71,6 @@ const FilterBar = styled.div`
   border: 1px solid var(--border-color);
 `;
 
-const EntityGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 16px;
-`;
-
 const EntityManagement: React.FC = () => {
   const { t } = useTranslation(['entities', 'common']);
   const navigate = useNavigate();
@@ -92,13 +87,68 @@ const EntityManagement: React.FC = () => {
   const [enumLoading, setEnumLoading] = useState(false);
   const [statistics, setStatistics] = useState<EntityStatisticsResponse | null>(null);
   const [statisticsLoading, setStatisticsLoading] = useState(false);
+  
+  // 分页状态
+  const [pagination, setPagination] = useState(() => {
+    // 从localStorage读取用户的分页偏好
+    const savedPageSize = localStorage.getItem('entity-page-size');
+    return {
+      current: 1,
+      pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 12,
+      total: 0
+    };
+  });
+
+  // 重置分页到第一页（用于搜索和筛选时）
+  const resetPagination = () => {
+    setPagination(prev => ({
+      ...prev,
+      current: 1
+    }));
+  };
+
+  // 分页变更处理
+  const handlePaginationChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || pagination.pageSize;
+    
+    setPagination(prev => ({
+      ...prev,
+      current: page,
+      pageSize: newPageSize
+    }));
+    
+    // 保存用户的分页偏好
+    if (pageSize && pageSize !== pagination.pageSize) {
+      localStorage.setItem('entity-page-size', pageSize.toString());
+    }
+    
+    // 滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // 重置所有筛选条件
+  const handleResetFilters = () => {
+    setSearchText('');
+    setFilterType('all');
+    setFilterStatus('all');
+    setSelectedCategory('all');
+    setPagination(prev => ({
+      ...prev,
+      current: 1
+    }));
+  };
 
   useEffect(() => {
     setPageTitle(t('entities:title'));
     loadEntities();
     loadEnumData();
     loadStatistics(); // 加载统计数据
-  }, [t]); // 添加必要的依赖
+  }, [t]);
+
+  // 当搜索条件或筛选条件变化时，重置分页到第一页
+  useEffect(() => {
+    resetPagination();
+  }, [searchText, filterType, filterStatus, selectedCategory]); // 添加必要的依赖
 
   // 加载统计数据
   const loadStatistics = async () => {
@@ -372,10 +422,29 @@ const EntityManagement: React.FC = () => {
     return filtered;
   };
 
+  // 获取分页后的实体数据
+  const getPaginatedEntities = () => {
+    const filtered = getFilteredEntities();
+    
+    // 更新分页总数
+    if (pagination.total !== filtered.length) {
+      setPagination(prev => ({
+        ...prev,
+        total: filtered.length
+      }));
+    }
+
+    // 分页逻辑
+    const startIndex = (pagination.current - 1) * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    return filtered.slice(startIndex, endIndex);
+  };
+
   const renderEntityManagement = () => {
     const stats = getEntityStats();
     const typeStats = getEntityTypeStats(); // 在函数内部获取类型统计
     const filteredEntities = getFilteredEntities();
+    const paginatedEntities = getPaginatedEntities();
 
     return (
       <TabContent>
@@ -503,27 +572,70 @@ const EntityManagement: React.FC = () => {
                 ))}
               </Select>
             </Col>
+            <Col>
+              <Button 
+                icon={<ReloadOutlined />} 
+                onClick={handleResetFilters}
+                title="重置筛选条件"
+              >
+                重置
+              </Button>
+            </Col>
           </Row>
         </FilterBar>
 
         {/* Entity Cards Grid */}
         <Spin spinning={loading}>
-          {filteredEntities.length > 0 ? (
-            <EntityGrid>
-              {filteredEntities.map(entity => (
-                <EntityCard
-                  key={entity.id}
-                  entity={entity}
-                  entityTypes={entityTypes}
-                  onClick={handleEntityClick}
-                  onEdit={handleEditEntity}
-                />
+          {paginatedEntities.length > 0 ? (
+            <Row gutter={[16, 16]}>
+              {paginatedEntities.map(entity => (
+                <Col xs={24} sm={24} lg={12} xl={8} key={entity.id}>
+                  <EntityCard
+                    entity={entity}
+                    entityTypes={entityTypes}
+                    onClick={handleEntityClick}
+                    onEdit={handleEditEntity}
+                  />
+                </Col>
               ))}
-            </EntityGrid>
+            </Row>
           ) : (
-            <Empty description={t('entities:noEntitiesFound')} style={{ margin: '60px 0' }} />
+            <Empty description={
+              filteredEntities.length === 0 
+                ? t('entities:noEntitiesFound') 
+                : '当前页面没有数据'
+            } style={{ margin: '60px 0' }} />
           )}
         </Spin>
+
+        {/* 分页组件 */}
+        {pagination.total > pagination.pageSize && (
+          <Row justify="center" style={{ marginTop: 32, marginBottom: 24 }}>
+            <Col>
+              <Pagination
+                current={pagination.current}
+                pageSize={pagination.pageSize}
+                total={pagination.total}
+                onChange={handlePaginationChange}
+                onShowSizeChange={handlePaginationChange}
+                showSizeChanger
+                showQuickJumper
+                showTotal={(total, range) => 
+                  `第 ${range[0]}-${range[1]} 条，共 ${total} 个实体`
+                }
+                pageSizeOptions={['12', '24', '36', '48']}
+                size="default"
+                style={{
+                  padding: '16px 24px',
+                  background: 'var(--bg-container)',
+                  borderRadius: '8px',
+                  border: '1px solid var(--border-light)',
+                  boxShadow: 'var(--shadow-card)'
+                }}
+              />
+            </Col>
+          </Row>
+        )}
       </TabContent>
     );
   };

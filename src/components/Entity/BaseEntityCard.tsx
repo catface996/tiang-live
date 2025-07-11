@@ -28,21 +28,50 @@ interface BaseEntityCardProps {
 }
 
 const StyledCard = styled(Card)`
-  margin-bottom: 16px;
-  border-radius: 8px;
+  height: 100%;
+  min-height: 380px;
+  margin-bottom: 0;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   }
 
   .ant-card-head {
     border-bottom: 1px solid var(--border-color);
-    padding: 12px 16px;
+    padding: 16px 20px;
+    min-height: 64px;
   }
 
   .ant-card-body {
-    padding: 16px;
+    padding: 20px;
+    height: calc(100% - 64px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ant-card-head-title {
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  /* 响应式调整 */
+  @media (max-width: 768px) {
+    min-height: 320px;
+    
+    .ant-card-head {
+      padding: 12px 16px;
+      min-height: 56px;
+    }
+    
+    .ant-card-body {
+      padding: 16px;
+      height: calc(100% - 56px);
+    }
   }
 `;
 

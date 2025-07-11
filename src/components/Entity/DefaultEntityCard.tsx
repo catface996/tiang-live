@@ -190,16 +190,23 @@ const DefaultEntityCard: React.FC<DefaultEntityCardProps> = ({ entity, entityTyp
 
       {/* 显示创建和更新时间 */}
       {(entity.createdAt || entity.updatedAt) && (
-        <div style={{ marginTop: 8, borderTop: '1px solid #f0f0f0', paddingTop: 8 }}>
+        <div style={{ 
+          marginTop: 8, 
+          borderTop: '1px solid #f0f0f0', 
+          paddingTop: 8,
+          fontSize: '11px', 
+          color: '#999',
+          display: 'flex',
+          justifyContent: entity.createdAt && entity.updatedAt ? 'space-between' : 'flex-start',
+          alignItems: 'center',
+          gap: '12px',
+          flexWrap: 'wrap'
+        }}>
           {entity.createdAt && (
-            <div style={{ fontSize: '11px', color: '#999' }}>
-              创建: {new Date(entity.createdAt).toLocaleDateString()}
-            </div>
+            <span>创建: {new Date(entity.createdAt).toLocaleDateString()}</span>
           )}
           {entity.updatedAt && (
-            <div style={{ fontSize: '11px', color: '#999' }}>
-              更新: {new Date(entity.updatedAt).toLocaleDateString()}
-            </div>
+            <span>更新: {new Date(entity.updatedAt).toLocaleDateString()}</span>
           )}
         </div>
       )}
