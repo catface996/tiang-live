@@ -432,26 +432,60 @@ const getAgentTypeConfig = (t: any) => ({
 // 状态配置
 const getStatusConfig = (status: string, t: any) => {
   const statusMap = {
+    // 后端返回的实际状态
+    active: { 
+      text: t('agents:status.active') || '活跃', 
+      color: '#52c41a', 
+      bgColor: '#f6ffed',
+      icon: <CheckCircleOutlined />
+    },
+    inactive: { 
+      text: t('agents:status.inactive') || '非活跃', 
+      color: '#ff4d4f', 
+      bgColor: '#fff2f0',
+      icon: <ExclamationCircleOutlined />
+    },
+    training: { 
+      text: t('agents:status.training') || '训练中', 
+      color: '#faad14', 
+      bgColor: '#fff7e6',
+      icon: <ClockCircleOutlined />
+    },
+    // 保留原有状态以兼容
     running: { 
-      text: t('agents:status.running'), 
+      text: t('agents:status.running') || '运行中', 
       color: '#52c41a', 
       bgColor: '#f6ffed',
       icon: <CheckCircleOutlined />
     },
     stopped: { 
-      text: t('agents:status.stopped'), 
+      text: t('agents:status.stopped') || '已停止', 
       color: '#ff4d4f', 
       bgColor: '#fff2f0',
       icon: <ExclamationCircleOutlined />
     },
     paused: { 
-      text: t('agents:status.paused'), 
+      text: t('agents:status.paused') || '已暂停', 
       color: '#faad14', 
       bgColor: '#fff7e6',
       icon: <ClockCircleOutlined />
     }
   };
-  return statusMap[status as keyof typeof statusMap];
+  
+  const config = statusMap[status as keyof typeof statusMap];
+  
+  // 如果找不到匹配的状态，返回默认配置
+  if (!config) {
+    console.warn('Unknown agent status:', status);
+    return {
+      text: status || '未知',
+      color: '#8c8c8c',
+      bgColor: '#f5f5f5',
+      icon: <ExclamationCircleOutlined />
+    };
+  }
+  
+  return config;
 };
 
 // 获取头像背景色
