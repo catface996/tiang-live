@@ -39,7 +39,7 @@ import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../utils';
 import { useAppSelector } from '../../store';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
-import { AgentCard, type Agent } from '../../components/AgentCard';
+import { AgentCard, AgentDetail, type Agent } from '../../components/AgentCard';
 import { AIAgentApi, type AIAgentResponse, type AIAgentStatisticsResponse, type QueryAIAgentRequest } from '../../services/aiAgentApi';
 import '../../styles/ai-agent-management.css';
 
