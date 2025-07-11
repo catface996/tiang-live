@@ -330,23 +330,53 @@ const AIAgentManagement: React.FC = () => {
 
   const getStatusTag = (status: string) => {
     const statusMap = {
+      // 后端返回的实际状态
+      active: {
+        color: isDark ? '#52c41a' : 'green',
+        text: t('agents:status.active') || '活跃',
+        bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
+      },
+      inactive: {
+        color: isDark ? '#f5222d' : 'red',
+        text: t('agents:status.inactive') || '非活跃',
+        bgColor: isDark ? 'rgba(245, 34, 45, 0.1)' : undefined
+      },
+      training: {
+        color: isDark ? '#faad14' : 'orange',
+        text: t('agents:status.training') || '训练中',
+        bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
+      },
+      // 保留原有状态以兼容
       running: {
         color: isDark ? '#52c41a' : 'green',
-        text: t('agents:status.running'),
+        text: t('agents:status.running') || '运行中',
         bgColor: isDark ? 'rgba(82, 196, 26, 0.1)' : undefined
       },
       stopped: {
         color: isDark ? '#f5222d' : 'red',
-        text: t('agents:status.stopped'),
+        text: t('agents:status.stopped') || '已停止',
         bgColor: isDark ? 'rgba(245, 34, 45, 0.1)' : undefined
       },
       paused: {
         color: isDark ? '#faad14' : 'orange',
-        text: t('agents:status.paused'),
+        text: t('agents:status.paused') || '已暂停',
         bgColor: isDark ? 'rgba(250, 173, 20, 0.1)' : undefined
       }
     };
+    
     const config = statusMap[status as keyof typeof statusMap];
+    
+    // 如果找不到匹配的状态，返回默认配置
+    if (!config) {
+      console.warn('Unknown agent status in getStatusTag:', status);
+      return (
+        <Tag color="default">
+          <StatusDot status={status} />
+          {status || '未知'}
+        </Tag>
+      );
+    }
+    
     return (
       <Tag
         color={config.color}
