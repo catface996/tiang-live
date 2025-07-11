@@ -494,6 +494,14 @@ const AgentCard: React.FC<AgentCardProps> = ({
   const typeConfig = agentTypeMap[agent.type as keyof typeof agentTypeMap];
   const avatarBgColor = getAvatarBackgroundColor(agent.type, isDark);
 
+  // 添加详细的调试信息
+  console.log('🔍 AgentCard 类型检查:', {
+    'agent.type': agent.type,
+    'agentTypeMap keys': Object.keys(agentTypeMap),
+    'typeConfig': typeConfig,
+    'typeConfig存在': !!typeConfig
+  });
+
   // 添加安全检查，确保 typeConfig 存在
   if (!typeConfig) {
     console.error('Unknown agent type:', agent.type);
