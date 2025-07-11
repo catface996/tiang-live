@@ -180,9 +180,9 @@ const AIAgentManagement: React.FC = () => {
         setAgentData(response.data.data);
         setPagination(prev => ({
           ...prev,
-          total: response.data.total
+          total: typeof response.data.total === 'string' ? parseInt(response.data.total, 10) : response.data.total
         }));
-        console.log('✅ 成功加载智能体列表:', response.data.data.length, '个智能体');
+        console.log('✅ 成功加载智能体列表:', response.data.data.length, '个智能体，总计:', response.data.total);
       } else {
         console.warn('⚠️ 加载智能体列表失败:', response.message);
         message.warning('加载智能体列表失败: ' + response.message);

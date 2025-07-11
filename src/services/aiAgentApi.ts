@@ -144,7 +144,7 @@ export interface PageResponse<T> {
   data: T[];                          // 数据列表
   page: number;                       // 当前页码
   size: number;                       // 每页大小
-  total: number;                      // 总记录数
+  total: number | string;             // 总记录数（后端可能返回字符串）
   totalPages: number;                 // 总页数
   hasNext: boolean;                   // 是否有下一页
   hasPrevious: boolean;               // 是否有上一页
