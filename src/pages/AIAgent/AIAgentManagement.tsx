@@ -120,6 +120,7 @@ const AIAgentManagement: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterType, setFilterType] = useState('all');
+  const [resetLoading, setResetLoading] = useState(false);
   const [form] = Form.useForm();
   const { currentTheme } = useAppSelector(state => state.theme);
   
@@ -411,11 +412,17 @@ const AIAgentManagement: React.FC = () => {
       return matchesSearch && matchesStatus && matchesType;
     }).length;
 
-    setPagination(prev => ({
-      ...prev,
-      total: filteredCount
-    }));
-  }, [searchText, filterStatus, filterType]);
+    // 只有当总数发生变化时才更新状态，避免无限循环
+    setPagination(prev => {
+      if (prev.total !== filteredCount) {
+        return {
+          ...prev,
+          total: filteredCount
+        };
+      }
+      return prev;
+    });
+  }, [searchText, filterStatus, filterType, agentData.length]); // 使用agentData.length而不是整个agentData数组
 
   const agentTypeMap = {
     monitor: { name: t('agents:types.monitor'), color: 'blue', icon: <MonitorOutlined /> },
@@ -504,14 +511,29 @@ const AIAgentManagement: React.FC = () => {
   };
 
   // 重置所有筛选条件
-  const handleResetFilters = () => {
-    setSearchText('');
-    setFilterStatus('all');
-    setFilterType('all');
-    setPagination(prev => ({
-      ...prev,
-      current: 1
-    }));
+  const handleResetFilters = async () => {
+    setResetLoading(true);
+    
+    try {
+      // 重置搜索和筛选条件
+      setSearchText('');
+      setFilterStatus('all');
+      setFilterType('all');
+      
+      // 完全重置分页状态
+      const savedPageSize = localStorage.getItem('ai-agent-page-size');
+      setPagination({
+        current: 1,
+        pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 6,
+        total: agentData.length // 重置为全部数据的总数
+      });
+      
+      // 模拟一个短暂的延迟，提供更好的用户反馈
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+    } finally {
+      setResetLoading(false);
+    }
   };
 
   const handleViewAgent = (agent: AIAgent) => {
@@ -648,7 +670,9 @@ const AIAgentManagement: React.FC = () => {
         searchValue={searchText}
         onSearchChange={setSearchText}
         searchPlaceholder={t('agents:searchPlaceholder')}
+        showRefresh={true}
         onRefresh={handleResetFilters}
+        refreshLoading={resetLoading}
         filters={[
           {
             key: 'status',
@@ -741,7 +765,7 @@ const AIAgentManagement: React.FC = () => {
       </div>
 
       {/* 分页组件 */}
-      {pagination.total > pagination.pageSize && (
+      {pagination.total >= pagination.pageSize && pagination.total > 0 && (
         <Row justify="center" style={{ marginTop: 32, marginBottom: 24 }}>
           <Col>
             <Pagination

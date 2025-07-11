@@ -311,7 +311,7 @@ const FooterText = styled(Text)<{ $isDark: boolean }>`
   }
 `;
 
-const StatusIndicator = styled.span<{ status: string }>`
+const StatusIndicator = styled.span<{ $status: string }>`
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -319,7 +319,7 @@ const StatusIndicator = styled.span<{ status: string }>`
   margin-right: 6px;
   
   ${props => {
-    switch (props.status) {
+    switch (props.$status) {
       case 'running':
         return 'background-color: #52c41a; box-shadow: 0 0 6px #52c41a60;';
       case 'stopped':
@@ -533,7 +533,7 @@ const AgentCard: React.FC<AgentCardProps> = ({
               $borderColor={statusConfig.color}
               $textColor={statusConfig.color}
             >
-              <StatusIndicator status={agent.status} />
+              <StatusIndicator $status={agent.status} />
               {statusConfig.text}
             </StyledTag>
           </TagContainer>
