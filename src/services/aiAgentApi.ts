@@ -224,7 +224,7 @@ export class AIAgentApi {
         fullResponse: response
       });
       
-      return response.data;
+      return response;
     } catch (error) {
       console.error('❌ API请求失败: POST /backend/aiAgent/list', error);
       throw error;
@@ -247,7 +247,7 @@ export class AIAgentApi {
         data: response.data
       });
       
-      return response.data;
+      return response;
     } catch (error) {
       console.error('❌ API请求失败: POST /backend/aiAgent/detail', error);
       throw error;
@@ -270,7 +270,7 @@ export class AIAgentApi {
         data: response.data
       });
       
-      return response.data;
+      return response;
     } catch (error) {
       console.error('❌ API请求失败: POST /backend/aiAgent/save', error);
       throw error;
@@ -293,7 +293,7 @@ export class AIAgentApi {
         data: response.data
       });
       
-      return response.data;
+      return response;
     } catch (error) {
       console.error('❌ API请求失败: POST /backend/aiAgent/delete', error);
       throw error;
@@ -320,7 +320,7 @@ export class AIAgentApi {
         fullResponse: response
       });
       
-      return response.data;
+      return response;
     } catch (error) {
       console.error('❌ API请求失败: POST /backend/aiAgent/overview', error);
       throw error;
