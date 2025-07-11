@@ -26,6 +26,7 @@ import styled from 'styled-components';
 import { PromptTemplateApi, type PromptTemplateResponse } from '../../../services/promptTemplateApi';
 import { ModelApi, type ModelResponse } from '../../../services/modelApi';
 import { mcpApi, type McpServer } from '../../../services/mcpApi';
+import { AIAgentApi, type SaveAIAgentRequest } from '../../../services/aiAgentApi';
 
 const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
@@ -361,29 +362,65 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
   const handleSubmit = async (values: any) => {
     try {
       const selectedModelData = availableModels.find(m => m.id === selectedModel);
-      const formData: AIAgentFormData = {
-        ...values,
+      
+      // 构建API请求数据
+      const requestData: SaveAIAgentRequest = {
         id: initialData?.id,
-        model: {
-          ...values.model,
-          provider: selectedModelData?.provider || '',
-          modelName: selectedModelData?.name || '',
-          version: selectedModelData?.version || ''
-        },
+        name: values.name,
+        description: values.description,
+        type: values.type,
+        status: values.status || 'inactive',
+        modelId: selectedModel,
         prompts: {
-          system:
-            selectedPromptType === 'template'
-              ? promptTemplates.find(t => t.id === selectedPromptTemplate)?.content || ''
-              : customPrompt,
+          system: selectedPromptType === 'template'
+            ? promptTemplates.find(t => t.id === selectedPromptTemplate)?.content || ''
+            : customPrompt,
           templates: selectedPromptType === 'template' ? [selectedPromptTemplate] : [],
           variables: promptVariables
         },
-        mcpServers: selectedMcpServers
+        mcpServers: selectedMcpServers,
+        capabilities: values.capabilities || [],
+        settings: {
+          autoStart: values.autoStart || false,
+          maxConcurrency: values.maxConcurrency || 1,
+          timeout: values.timeout || 30,
+          retryCount: values.retryCount || 3,
+          logLevel: values.logLevel || 'info'
+        },
+        tags: values.tags || []
       };
 
-      await onSubmit(formData);
+      // 调用后端API
+      const response = await AIAgentApi.saveAIAgent(requestData);
+      
+      if (response.success) {
+        message.success(initialData?.id ? '智能体更新成功' : '智能体创建成功');
+        // 调用父组件的回调
+        if (onSubmit) {
+          await onSubmit({
+            ...values,
+            id: response.data.id,
+            model: {
+              provider: selectedModelData?.provider || '',
+              modelName: selectedModelData?.name || '',
+              version: selectedModelData?.version || ''
+            },
+            prompts: {
+              system: selectedPromptType === 'template'
+                ? promptTemplates.find(t => t.id === selectedPromptTemplate)?.content || ''
+                : customPrompt,
+              templates: selectedPromptType === 'template' ? [selectedPromptTemplate] : [],
+              variables: promptVariables
+            },
+            mcpServers: selectedMcpServers
+          });
+        }
+      } else {
+        message.error('保存失败: ' + response.message);
+      }
     } catch (error) {
-      message.error('提交失败，请重试');
+      console.error('保存智能体失败:', error);
+      message.error('保存失败: ' + (error instanceof Error ? error.message : '未知错误'));
     }
   };
 

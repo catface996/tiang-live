@@ -17,7 +17,8 @@ import {
   message,
   Descriptions,
   Timeline,
-  Pagination
+  Pagination,
+  Spin
 } from 'antd';
 import {
   RobotOutlined,
@@ -39,6 +40,7 @@ import { setPageTitle } from '../../utils';
 import { useAppSelector } from '../../store';
 import SearchFilterBar from '../../components/Common/SearchFilterBar';
 import { AgentCard, type Agent } from '../../components/AgentCard';
+import { AIAgentApi, type AIAgentResponse, type AIAgentStatisticsResponse, type QueryAIAgentRequest } from '../../services/aiAgentApi';
 import '../../styles/ai-agent-management.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -116,13 +118,19 @@ const AIAgentManagement: React.FC = () => {
   const { t } = useTranslation(['agents', 'common']);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
-  const [selectedAgent, setSelectedAgent] = useState<AIAgent | null>(null);
+  const [selectedAgent, setSelectedAgent] = useState<AIAgentResponse | null>(null);
   const [searchText, setSearchText] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterType, setFilterType] = useState('all');
   const [resetLoading, setResetLoading] = useState(false);
   const [form] = Form.useForm();
   const { currentTheme } = useAppSelector(state => state.theme);
+  
+  // 数据状态
+  const [agentData, setAgentData] = useState<AIAgentResponse[]>([]);
+  const [statistics, setStatistics] = useState<AIAgentStatisticsResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [statsLoading, setStatsLoading] = useState(false);
   
   // 分页状态
   const [pagination, setPagination] = useState(() => {
@@ -135,8 +143,6 @@ const AIAgentManagement: React.FC = () => {
     };
   });
   
-  // 加载状态
-  const [loading, setLoading] = useState(false);
   const isDark = currentTheme === 'dark';
 
   // 重置分页到第一页（用于搜索和筛选时）
@@ -156,273 +162,135 @@ const AIAgentManagement: React.FC = () => {
     resetPagination();
   }, [searchText, filterStatus, filterType]);
 
-  // 模拟AI智能体数据
-  const agentData: AIAgent[] = [
-    {
-      id: '1',
-      name: '系统监控智能体',
-      type: 'monitor',
-      status: 'running',
-      description: '负责监控系统健康状态，自动检测异常并发送告警',
-      version: 'v2.1.0',
-      cpu: 15.6,
-      memory: 256,
-      tasks: 1247,
-      successRate: 98.5,
-      lastActive: '2024-06-15 14:30:25',
-      createdAt: '2024-05-20',
-      config: {
-        maxConcurrency: 10,
-        timeout: 30,
-        retryCount: 3,
-        autoRestart: true
-      }
-    },
-    {
-      id: '2',
-      name: '日志分析智能体',
-      type: 'analysis',
-      status: 'running',
-      description: '分析系统日志，识别异常模式和潜在问题',
-      version: 'v1.8.2',
-      cpu: 23.4,
-      memory: 512,
-      tasks: 856,
-      successRate: 96.8,
-      lastActive: '2024-06-15 14:28:10',
-      createdAt: '2024-04-15',
-      config: {
-        maxConcurrency: 5,
-        timeout: 60,
-        retryCount: 2,
-        autoRestart: true
-      }
-    },
-    {
-      id: '3',
-      name: '自动化部署智能体',
-      type: 'deployment',
-      status: 'paused',
-      description: '自动化应用部署和配置管理',
-      version: 'v3.0.1',
-      cpu: 8.2,
-      memory: 128,
-      tasks: 342,
-      successRate: 99.2,
-      lastActive: '2024-06-15 12:15:30',
-      createdAt: '2024-06-01',
-      config: {
-        maxConcurrency: 3,
-        timeout: 120,
-        retryCount: 1,
-        autoRestart: false
-      }
-    },
-    {
-      id: '4',
-      name: '性能优化智能体',
-      type: 'optimization',
-      status: 'stopped',
-      description: '分析系统性能瓶颈，提供优化建议',
-      version: 'v1.5.0',
-      cpu: 0,
-      memory: 0,
-      tasks: 128,
-      successRate: 94.7,
-      lastActive: '2024-06-14 18:45:12',
-      createdAt: '2024-03-10',
-      config: {
-        maxConcurrency: 2,
-        timeout: 180,
-        retryCount: 3,
-        autoRestart: false
-      }
-    },
-    {
-      id: '5',
-      name: '安全扫描智能体',
-      type: 'security',
-      status: 'running',
-      description: '执行安全漏洞扫描和威胁检测，保障系统安全',
-      version: 'v2.3.1',
-      cpu: 18.9,
-      memory: 384,
-      tasks: 673,
-      successRate: 97.3,
-      lastActive: '2024-06-15 14:25:45',
-      createdAt: '2024-05-05',
-      config: {
-        maxConcurrency: 8,
-        timeout: 90,
-        retryCount: 2,
-        autoRestart: true
-      }
-    },
-    {
-      id: '6',
-      name: '数据备份智能体',
-      type: 'backup',
-      status: 'running',
-      description: '自动化数据备份和恢复管理，确保数据安全',
-      version: 'v1.9.3',
-      cpu: 12.3,
-      memory: 192,
-      tasks: 445,
-      successRate: 99.8,
-      lastActive: '2024-06-15 14:20:15',
-      createdAt: '2024-04-20',
-      config: {
-        maxConcurrency: 4,
-        timeout: 300,
-        retryCount: 3,
-        autoRestart: true
-      }
-    },
-    {
-      id: '7',
-      name: 'API网关智能体',
-      type: 'gateway',
-      status: 'running',
-      description: '智能API路由和负载均衡，优化请求分发',
-      version: 'v2.0.5',
-      cpu: 31.7,
-      memory: 768,
-      tasks: 2156,
-      successRate: 99.1,
-      lastActive: '2024-06-15 14:32:08',
-      createdAt: '2024-05-15',
-      config: {
-        maxConcurrency: 20,
-        timeout: 15,
-        retryCount: 1,
-        autoRestart: true
-      }
-    },
-    {
-      id: '8',
-      name: '容量规划智能体',
-      type: 'planning',
-      status: 'paused',
-      description: '分析资源使用趋势，提供容量规划建议',
-      version: 'v1.4.2',
-      cpu: 5.8,
-      memory: 96,
-      tasks: 89,
-      successRate: 95.5,
-      lastActive: '2024-06-15 10:45:30',
-      createdAt: '2024-03-25',
-      config: {
-        maxConcurrency: 2,
-        timeout: 240,
-        retryCount: 2,
-        autoRestart: false
-      }
-    },
-    {
-      id: '9',
-      name: '故障诊断智能体',
-      type: 'diagnosis',
-      status: 'running',
-      description: '智能故障诊断和根因分析，快速定位问题',
-      version: 'v2.2.0',
-      cpu: 21.4,
-      memory: 512,
-      tasks: 567,
-      successRate: 96.2,
-      lastActive: '2024-06-15 14:18:55',
-      createdAt: '2024-04-30',
-      config: {
-        maxConcurrency: 6,
-        timeout: 120,
-        retryCount: 3,
-        autoRestart: true
-      }
-    },
-    {
-      id: '10',
-      name: '配置管理智能体',
-      type: 'config',
-      status: 'stopped',
-      description: '自动化配置管理和版本控制，确保配置一致性',
-      version: 'v1.7.1',
-      cpu: 0,
-      memory: 0,
-      tasks: 234,
-      successRate: 98.9,
-      lastActive: '2024-06-14 16:20:12',
-      createdAt: '2024-03-15',
-      config: {
-        maxConcurrency: 3,
-        timeout: 60,
-        retryCount: 2,
-        autoRestart: false
-      }
-    },
-    {
-      id: '11',
-      name: '流量分析智能体',
-      type: 'traffic',
-      status: 'running',
-      description: '实时流量分析和异常检测，优化网络性能',
-      version: 'v1.6.4',
-      cpu: 16.2,
-      memory: 320,
-      tasks: 789,
-      successRate: 97.8,
-      lastActive: '2024-06-15 14:29:33',
-      createdAt: '2024-05-10',
-      config: {
-        maxConcurrency: 12,
-        timeout: 45,
-        retryCount: 2,
-        autoRestart: true
-      }
-    },
-    {
-      id: '12',
-      name: '资源清理智能体',
-      type: 'cleanup',
-      status: 'paused',
-      description: '定期清理无用资源和临时文件，释放存储空间',
-      version: 'v1.3.0',
-      cpu: 3.1,
-      memory: 64,
-      tasks: 156,
-      successRate: 99.4,
-      lastActive: '2024-06-15 08:30:00',
-      createdAt: '2024-02-28',
-      config: {
-        maxConcurrency: 1,
-        timeout: 600,
-        retryCount: 1,
-        autoRestart: false
-      }
-    }
-  ];
+  // 加载智能体列表
+  const loadAgentList = async () => {
+    setLoading(true);
+    try {
+      const params: QueryAIAgentRequest = {
+        page: pagination.current,
+        size: pagination.pageSize,
+        search: searchText || undefined,
+        type: filterType !== 'all' ? filterType as any : undefined,
+        status: filterStatus !== 'all' ? filterStatus as any : undefined,
+      };
 
-  // 计算过滤后的数据总数并更新分页
-  useEffect(() => {
-    const filteredCount = agentData.filter(agent => {
-      const matchesSearch =
-        agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        agent.description.toLowerCase().includes(searchText.toLowerCase());
-      const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
-      const matchesType = filterType === 'all' || agent.type === filterType;
-
-      return matchesSearch && matchesStatus && matchesType;
-    }).length;
-
-    // 只有当总数发生变化时才更新状态，避免无限循环
-    setPagination(prev => {
-      if (prev.total !== filteredCount) {
-        return {
+      const response = await AIAgentApi.getAIAgentList(params);
+      
+      if (response.success && response.data) {
+        setAgentData(response.data.data);
+        setPagination(prev => ({
           ...prev,
-          total: filteredCount
-        };
+          total: response.data.total
+        }));
+        console.log('✅ 成功加载智能体列表:', response.data.data.length, '个智能体');
+      } else {
+        console.warn('⚠️ 加载智能体列表失败:', response.message);
+        message.warning('加载智能体列表失败: ' + response.message);
+        setAgentData([]);
       }
-      return prev;
-    });
-  }, [searchText, filterStatus, filterType, agentData.length]); // 使用agentData.length而不是整个agentData数组
+    } catch (error) {
+      console.error('❌ 加载智能体列表异常:', error);
+      message.error('加载智能体列表失败: ' + (error instanceof Error ? error.message : '未知错误'));
+      setAgentData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 加载统计数据
+  const loadStatistics = async () => {
+    setStatsLoading(true);
+    try {
+      const response = await AIAgentApi.getAIAgentStatistics();
+      
+      if (response.success && response.data) {
+        setStatistics(response.data);
+        console.log('✅ 成功加载统计数据:', response.data);
+      } else {
+        console.warn('⚠️ 加载统计数据失败:', response.message);
+        message.warning('加载统计数据失败: ' + response.message);
+      }
+    } catch (error) {
+      console.error('❌ 加载统计数据异常:', error);
+      message.error('加载统计数据失败: ' + (error instanceof Error ? error.message : '未知错误'));
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
+  // 初始化数据加载
+  useEffect(() => {
+    loadAgentList();
+    loadStatistics();
+  }, [pagination.current, pagination.pageSize, searchText, filterStatus, filterType]);
+
+  // 刷新数据
+  const handleRefresh = async () => {
+    setResetLoading(true);
+    try {
+      await Promise.all([loadAgentList(), loadStatistics()]);
+      message.success('数据刷新成功');
+    } catch (error) {
+      message.error('数据刷新失败');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  // 创建智能体
+  const handleCreateAgent = () => {
+    navigate('/ai-agents/create');
+  };
+
+  // 编辑智能体
+  const handleEditAgent = (agent: AIAgentResponse) => {
+    navigate(`/ai-agents/edit/${agent.id}`);
+  };
+
+  // 分页变更处理
+  const handlePaginationChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || pagination.pageSize;
+    
+    setPagination(prev => ({
+      ...prev,
+      current: page,
+      pageSize: newPageSize
+    }));
+    
+    // 保存用户的分页偏好
+    if (pageSize && pageSize !== pagination.pageSize) {
+      localStorage.setItem('ai-agent-page-size', pageSize.toString());
+    }
+    
+    // 滚动到页面顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // 重置所有筛选条件
+  const handleResetFilters = async () => {
+    setResetLoading(true);
+    
+    try {
+      // 重置搜索和筛选条件
+      setSearchText('');
+      setFilterStatus('all');
+      setFilterType('all');
+      
+      // 完全重置分页状态
+      const savedPageSize = localStorage.getItem('ai-agent-page-size');
+      setPagination({
+        current: 1,
+        pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 6,
+        total: 0 // 将在数据加载后更新
+      });
+      
+      // 模拟一个短暂的延迟，提供更好的用户反馈
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+    } finally {
+      setResetLoading(false);
+    }
+  };
 
   const agentTypeMap = {
     monitor: { name: t('agents:types.monitor'), color: 'blue', icon: <MonitorOutlined /> },
@@ -477,80 +345,59 @@ const AIAgentManagement: React.FC = () => {
     );
   };
 
-  const handleCreateAgent = () => {
-    navigate('/ai-agents/create');
-  };
-
-  const handleEditAgent = (agent: AIAgent) => {
-    navigate(`/ai-agents/edit/${agent.id}`);
-  };
-
-  // 分页变更处理
-  const handlePaginationChange = (page: number, pageSize?: number) => {
-    setLoading(true);
-    const newPageSize = pageSize || pagination.pageSize;
-    
-    setPagination(prev => ({
-      ...prev,
-      current: page,
-      pageSize: newPageSize
-    }));
-    
-    // 保存用户的分页偏好
-    if (pageSize && pageSize !== pagination.pageSize) {
-      localStorage.setItem('ai-agent-page-size', pageSize.toString());
-    }
-    
-    // 滚动到页面顶部
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // 模拟加载延迟
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
-  };
-
-  // 重置所有筛选条件
-  const handleResetFilters = async () => {
-    setResetLoading(true);
-    
-    try {
-      // 重置搜索和筛选条件
-      setSearchText('');
-      setFilterStatus('all');
-      setFilterType('all');
-      
-      // 完全重置分页状态
-      const savedPageSize = localStorage.getItem('ai-agent-page-size');
-      setPagination({
-        current: 1,
-        pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 6,
-        total: agentData.length // 重置为全部数据的总数
-      });
-      
-      // 模拟一个短暂的延迟，提供更好的用户反馈
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-    } finally {
-      setResetLoading(false);
-    }
-  };
-
-  const handleViewAgent = (agent: AIAgent) => {
+  const handleViewAgent = (agent: AIAgentResponse) => {
     setSelectedAgent(agent);
     setDetailModalVisible(true);
   };
 
-  const handleStartAgent = (_agentId: string) => {
-    message.success('智能体启动成功');
+  const handleStartAgent = async (agentId: string) => {
+    try {
+      // 这里可以调用启动智能体的API
+      message.success('智能体启动成功');
+      // 重新加载数据
+      await loadAgentList();
+    } catch (error) {
+      message.error(`启动智能体失败: ${error instanceof Error ? error.message : '未知错误'}`);
+    }
   };
 
-  const handleStopAgent = (_agentId: string) => {
-    message.success('智能体停止成功');
+  const handleStopAgent = async (agentId: string) => {
+    try {
+      // 这里可以调用停止智能体的API
+      message.success('智能体停止成功');
+      // 重新加载数据
+      await loadAgentList();
+    } catch (error) {
+      message.error(`停止智能体失败: ${error instanceof Error ? error.message : '未知错误'}`);
+    }
   };
 
-  const handleDeleteAgent = (_agentId: string) => {
-    message.success('智能体删除成功');
+  const handleDeleteAgent = async (agentId: string) => {
+    const agent = agentData.find(a => a.id === agentId);
+    if (!agent) return;
+
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除智能体 "${agent.name}" 吗？此操作不可恢复。`,
+      okText: '确认删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk: async () => {
+        try {
+          const response = await AIAgentApi.deleteAIAgent({ id: agentId });
+          if (response.success) {
+            message.success(`智能体 "${agent.name}" 删除成功`);
+            // 重新加载数据
+            await loadAgentList();
+            await loadStatistics();
+          } else {
+            message.error(`删除失败: ${response.message}`);
+          }
+        } catch (error) {
+          message.error(`删除智能体失败: ${error instanceof Error ? error.message : '未知错误'}`);
+        }
+      }
+    });
   };
 
   const handleModalOk = async () => {
@@ -559,39 +406,44 @@ const AIAgentManagement: React.FC = () => {
       message.success('智能体创建成功');
       setModalVisible(false);
       form.resetFields();
+      // 重新加载数据
+      await loadAgentList();
+      await loadStatistics();
     } catch (error) {
       console.error('表单验证失败:', error);
     }
   };
 
   const renderAgentCards = () => {
-    // 过滤逻辑
-    const filteredAgents = agentData.filter(agent => {
-      const matchesSearch =
-        agent.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        agent.description.toLowerCase().includes(searchText.toLowerCase());
-      const matchesStatus = filterStatus === 'all' || agent.status === filterStatus;
-      const matchesType = filterType === 'all' || agent.type === filterType;
-
-      return matchesSearch && matchesStatus && matchesType;
-    });
-
-    // 分页逻辑
-    const startIndex = (pagination.current - 1) * pagination.pageSize;
-    const endIndex = startIndex + pagination.pageSize;
-    const paginatedAgents = filteredAgents.slice(startIndex, endIndex);
-
-    return paginatedAgents.map(agent => (
+    // 直接使用从API获取的数据，无需前端筛选和分页
+    return agentData.map(agent => (
       <Col xs={24} sm={24} lg={12} xl={8} key={agent.id}>
         <AgentCard
           agent={
             {
-              ...agent,
+              id: agent.id,
+              name: agent.name,
+              type: agent.type as any,
+              status: agent.status as any,
+              description: agent.description,
+              version: agent.model?.version || 'v1.0.0',
+              cpu: agent.runtime?.cpu || 0,
+              memory: agent.runtime?.memory || 0,
+              tasks: agent.runtime?.tasks || 0,
+              successRate: agent.runtime?.successRate || 0,
+              lastActive: agent.runtime?.lastActive || agent.updatedAt,
+              createdAt: agent.createdAt,
+              config: {
+                maxConcurrency: agent.settings?.maxConcurrency || 1,
+                timeout: agent.settings?.timeout || 30,
+                retryCount: agent.settings?.retryCount || 3,
+                autoRestart: agent.settings?.autoStart || false
+              },
               stats: {
-                tasksCompleted: agent.tasks,
-                successRate: agent.successRate,
+                tasksCompleted: agent.runtime?.tasks || 0,
+                successRate: agent.runtime?.successRate || 0,
                 avgResponseTime: Math.floor(Math.random() * 200) + 100,
-                uptime: '2天3小时'
+                uptime: agent.runtime?.uptime ? `${Math.floor(agent.runtime.uptime / 3600)}小时` : '0小时'
               }
             } as Agent
           }
@@ -605,9 +457,10 @@ const AIAgentManagement: React.FC = () => {
     ));
   };
 
-  const runningAgents = agentData.filter(agent => agent.status === 'running').length;
-  const totalTasks = agentData.reduce((sum, agent) => sum + agent.tasks, 0);
-  const avgSuccessRate = agentData.reduce((sum, agent) => sum + agent.successRate, 0) / agentData.length;
+  // 使用统计数据或从当前数据计算
+  const runningAgents = statistics?.activeAgents || agentData.filter(agent => agent.status === 'active').length;
+  const totalTasks = statistics?.totalTasks || agentData.reduce((sum, agent) => sum + (agent.runtime?.tasks || 0), 0);
+  const avgSuccessRate = statistics?.avgSuccessRate || (agentData.length > 0 ? agentData.reduce((sum, agent) => sum + (agent.runtime?.successRate || 0), 0) / agentData.length : 0);
 
   return (
     <PageContainer $isDark={isDark} className="ai-agent-management-page">
@@ -620,7 +473,13 @@ const AIAgentManagement: React.FC = () => {
           </Space>
         </Title>
         <Space>
-          <Button icon={<ReloadOutlined />}>{t('common:refresh')}</Button>
+          <Button 
+            icon={<ReloadOutlined />} 
+            loading={resetLoading}
+            onClick={handleRefresh}
+          >
+            {t('common:refresh')}
+          </Button>
           <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
             {t('agents:createAgent')}
           </Button>
@@ -638,37 +497,52 @@ const AIAgentManagement: React.FC = () => {
       </Paragraph>
 
       {/* 统计信息 */}
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark} className="agent-stats-primary">
-            <Statistic title={t('agents:stats.totalAgents')} value={agentData.length} prefix={<RobotOutlined />} />
-          </StatsCard>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark} className="agent-stats-success">
-            <Statistic title={t('agents:stats.runningAgents')} value={runningAgents} prefix={<PlayCircleOutlined />} />
-          </StatsCard>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark} className="agent-stats-warning">
-            <Statistic title={t('agents:stats.totalTasks')} value={totalTasks} prefix={<ThunderboltOutlined />} />
-          </StatsCard>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <StatsCard $isDark={isDark} className="agent-stats-purple">
-            <Statistic
-              title={t('agents:stats.avgSuccessRate')}
-              value={avgSuccessRate.toFixed(1)}
-              prefix={<CheckCircleOutlined />}
-            />
-          </StatsCard>
-        </Col>
-      </Row>
+      <Spin spinning={statsLoading}>
+        <Row gutter={16} style={{ marginBottom: 24 }}>
+          <Col xs={24} sm={12} md={6}>
+            <StatsCard $isDark={isDark} className="agent-stats-primary">
+              <Statistic 
+                title={t('agents:stats.totalAgents')} 
+                value={statistics?.totalAgents || agentData.length} 
+                prefix={<RobotOutlined />} 
+              />
+            </StatsCard>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <StatsCard $isDark={isDark} className="agent-stats-success">
+              <Statistic 
+                title={t('agents:stats.runningAgents')} 
+                value={runningAgents} 
+                prefix={<PlayCircleOutlined />} 
+              />
+            </StatsCard>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <StatsCard $isDark={isDark} className="agent-stats-warning">
+              <Statistic 
+                title={t('agents:stats.totalTasks')} 
+                value={totalTasks} 
+                prefix={<ThunderboltOutlined />} 
+              />
+            </StatsCard>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <StatsCard $isDark={isDark} className="agent-stats-purple">
+              <Statistic
+                title={t('agents:stats.avgSuccessRate')}
+                value={avgSuccessRate.toFixed(1)}
+                prefix={<CheckCircleOutlined />}
+                suffix="%"
+              />
+            </StatsCard>
+          </Col>
+        </Row>
+      </Spin>
 
       {/* 搜索和筛选区域 */}
       <SearchFilterBar
         searchValue={searchText}
-        onSearchChange={setSearchText}
+        onSearchChange={handleSearch}
         searchPlaceholder={t('agents:searchPlaceholder')}
         showRefresh={true}
         onRefresh={handleResetFilters}
@@ -682,9 +556,9 @@ const AIAgentManagement: React.FC = () => {
             width: 120,
             options: [
               { value: 'all', label: t('common:all') },
-              { value: 'running', label: t('agents:status.running') },
-              { value: 'paused', label: t('agents:status.paused') },
-              { value: 'stopped', label: t('agents:status.stopped') }
+              { value: 'active', label: '活跃' },
+              { value: 'inactive', label: '非活跃' },
+              { value: 'training', label: '训练中' }
             ]
           },
           {
@@ -695,10 +569,10 @@ const AIAgentManagement: React.FC = () => {
             width: 140,
             options: [
               { value: 'all', label: t('common:all') },
-              ...Object.entries(agentTypeMap).map(([key, config]) => ({
-                value: key,
-                label: config.name
-              }))
+              { value: 'chat', label: '对话型' },
+              { value: 'task', label: '任务型' },
+              { value: 'analysis', label: '分析型' },
+              { value: 'monitoring', label: '监控型' }
             ]
           }
         ]}
@@ -706,40 +580,40 @@ const AIAgentManagement: React.FC = () => {
 
       {/* 智能体卡片展示 */}
       <div style={{ minHeight: '400px', position: 'relative' }}>
-        {loading && (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10,
-            borderRadius: '8px'
-          }}>
-            <Space direction="vertical" align="center">
-              <div className="loading-spinner" style={{
-                width: '40px',
-                height: '40px',
-                border: `3px solid ${isDark ? '#303030' : '#f0f0f0'}`,
-                borderTop: '3px solid #1890ff',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
-              }} />
-              <Text style={{ color: isDark ? '#fff' : '#666' }}>加载中...</Text>
-            </Space>
-          </div>
-        )}
-        
-        <Row gutter={[16, 16]}>
-          {renderAgentCards()}
-          {/* 空状态处理 */}
-          {!loading && pagination.total === 0 && (
-            <Col span={24}>
-              <Card style={{ textAlign: 'center', padding: '40px 20px' }}>
+        <Spin spinning={loading} size="large">
+          <Row gutter={[16, 16]}>
+            {agentData.length === 0 && !loading ? (
+              <Col span={24}>
+                <Card style={{ textAlign: 'center', padding: '40px 20px' }}>
+                  <RobotOutlined style={{ fontSize: '48px', color: '#d9d9d9', marginBottom: '16px' }} />
+                  <Title level={4} type="secondary">
+                    {searchText || filterStatus !== 'all' || filterType !== 'all' 
+                      ? '未找到匹配的智能体' 
+                      : '暂无智能体'
+                    }
+                  </Title>
+                  <Paragraph type="secondary">
+                    {searchText || filterStatus !== 'all' || filterType !== 'all' 
+                      ? '请尝试调整搜索条件或筛选器。' 
+                      : '点击右上角的"创建智能体"按钮开始创建您的第一个AI智能体。'
+                    }
+                  </Paragraph>
+                  {(!searchText && filterStatus === 'all' && filterType === 'all') && (
+                    <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
+                      创建智能体
+                    </Button>
+                  )}
+                </Card>
+              </Col>
+            ) : (
+              renderAgentCards()
+            )}
+          </Row>
+        </Spin>
+      </div>
+
+      {/* 分页组件 */}
+      {pagination.total > 0 && (
                 <RobotOutlined style={{ fontSize: 64, color: '#d9d9d9', marginBottom: 16 }} />
                 <Title level={4} style={{ color: '#999' }}>
                   {searchText || filterStatus !== 'all' || filterType !== 'all' 
@@ -765,7 +639,7 @@ const AIAgentManagement: React.FC = () => {
       </div>
 
       {/* 分页组件 */}
-      {pagination.total >= pagination.pageSize && pagination.total > 0 && (
+      {pagination.total > 0 && (
         <Row justify="center" style={{ marginTop: 32, marginBottom: 24 }}>
           <Col>
             <Pagination
@@ -775,10 +649,16 @@ const AIAgentManagement: React.FC = () => {
               onChange={handlePaginationChange}
               onShowSizeChange={handlePaginationChange}
               showSizeChanger
-              showQuickJumper
+              showQuickJumper={pagination.total > 50}
               showTotal={(total, range) => 
                 `第 ${range[0]}-${range[1]} 条，共 ${total} 个智能体`
               }
+              pageSizeOptions={['6', '12', '18', '24']}
+              disabled={loading}
+            />
+          </Col>
+        </Row>
+      )}
               pageSizeOptions={['6', '12', '18', '24']}
               size="default"
               style={{
