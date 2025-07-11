@@ -63,6 +63,45 @@
     "delete": "删除",
     "healthCheck": "健康检查"
   },
+
+  "form": {
+    "name": "服务器名称",
+    "nameRequired": "请输入服务器名称",
+    "nameMaxLength": "服务器名称不能超过50个字符",
+    "namePlaceholder": "请输入服务器名称",
+    "type": "服务器类型",
+    "typeRequired": "请选择服务器类型",
+    "typePlaceholder": "请选择服务器类型",
+    "description": "描述",
+    "descriptionRequired": "请输入服务器描述",
+    "descriptionMaxLength": "描述不能超过200个字符",
+    "descriptionPlaceholder": "请输入服务器描述",
+    "endpoint": "服务端点",
+    "endpointRequired": "请输入服务端点",
+    "endpointInvalid": "请输入有效的URL地址",
+    "endpointPlaceholder": "请输入服务端点URL",
+    "port": "端口",
+    "portRequired": "请输入端口号",
+    "portInvalid": "端口号必须在1-65535之间",
+    "portPlaceholder": "请输入端口号",
+    "version": "版本",
+    "versionPlaceholder": "请输入版本号",
+    "capabilities": "支持能力",
+    "capabilitiesPlaceholder": "请选择或输入支持的能力"
+  },
+
+  "capabilities": {
+    "read": "读取",
+    "write": "写入",
+    "execute": "执行",
+    "monitor": "监控"
+  },
+
+  "editServer": "编辑服务器",
+  "createSuccess": "服务器创建成功",
+  "createFailed": "服务器创建失败",
+  "updateSuccess": "服务器更新成功",
+  "updateFailed": "服务器更新失败",
   
   "tabs": {
     "basicInfo": "基本信息",

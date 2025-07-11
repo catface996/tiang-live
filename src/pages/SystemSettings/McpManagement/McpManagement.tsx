@@ -17,7 +17,10 @@ import {
   App,
   Empty,
   Spin,
-  Pagination
+  Pagination,
+  Input,
+  InputNumber,
+  Select
 } from 'antd';
 import {
   SettingOutlined,
@@ -42,7 +45,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
-import mcpApi, { type McpServer, type McpStatistics } from '../../../services/mcpApi';
+import mcpApi, { type McpServer, type McpStatistics, type SaveMcpServerRequest } from '../../../services/mcpApi';
 import '../../../styles/mcp-management.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -355,13 +358,56 @@ const McpManagement: React.FC = () => {
 
   const handleEditServer = (server: McpServer) => {
     setEditingServer(server);
-    form.setFieldsValue(server);
+    form.setFieldsValue({
+      ...server,
+      capabilities: server.capabilities || []
+    });
     setModalVisible(true);
   };
 
   const handleViewServer = (server: McpServer) => {
     setSelectedServer(server);
     setDetailModalVisible(true);
+  };
+
+  // 处理表单提交
+  const handleFormSubmit = async (values: any) => {
+    try {
+      setLoading(true);
+      
+      const serverData: SaveMcpServerRequest = {
+        ...values,
+        id: editingServer?.id,
+        capabilities: values.capabilities || [],
+        config: values.config || {}
+      };
+
+      const response = await mcpApi.saveServer(serverData);
+      
+      if (response.success) {
+        message.success(editingServer ? t('mcp:updateSuccess') : t('mcp:createSuccess'));
+        setModalVisible(false);
+        form.resetFields();
+        setEditingServer(null);
+        // 重新加载数据
+        await loadMcpData();
+        await loadStatsData();
+      } else {
+        message.error(response.message || (editingServer ? t('mcp:updateFailed') : t('mcp:createFailed')));
+      }
+    } catch (error) {
+      console.error('Save server error:', error);
+      message.error(editingServer ? t('mcp:updateFailed') : t('mcp:createFailed'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 处理模态框取消
+  const handleModalCancel = () => {
+    setModalVisible(false);
+    form.resetFields();
+    setEditingServer(null);
   };
 
   // 获取状态颜色
@@ -832,6 +878,140 @@ const McpManagement: React.FC = () => {
 
       {/* 服务器详情Modal */}
       {renderServerDetail()}
+
+      {/* 创建/编辑服务器Modal */}
+      <Modal
+        title={editingServer ? t('mcp:editServer') : t('mcp:createServer')}
+        open={modalVisible}
+        onCancel={handleModalCancel}
+        footer={null}
+        width={800}
+        destroyOnClose
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleFormSubmit}
+          initialValues={{
+            type: 'database',
+            port: 8080,
+            capabilities: [],
+            config: {}
+          }}
+        >
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="name"
+                label={t('mcp:form.name')}
+                rules={[
+                  { required: true, message: t('mcp:form.nameRequired') },
+                  { max: 50, message: t('mcp:form.nameMaxLength') }
+                ]}
+              >
+                <Input placeholder={t('mcp:form.namePlaceholder')} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="type"
+                label={t('mcp:form.type')}
+                rules={[{ required: true, message: t('mcp:form.typeRequired') }]}
+              >
+                <Select placeholder={t('mcp:form.typePlaceholder')}>
+                  <Select.Option value="database">{t('mcp:types.database')}</Select.Option>
+                  <Select.Option value="file">{t('mcp:types.file')}</Select.Option>
+                  <Select.Option value="api">{t('mcp:types.api')}</Select.Option>
+                  <Select.Option value="email">{t('mcp:types.email')}</Select.Option>
+                  <Select.Option value="scheduler">{t('mcp:types.scheduler')}</Select.Option>
+                  <Select.Option value="custom">{t('mcp:types.custom')}</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item
+            name="description"
+            label={t('mcp:form.description')}
+            rules={[
+              { required: true, message: t('mcp:form.descriptionRequired') },
+              { max: 200, message: t('mcp:form.descriptionMaxLength') }
+            ]}
+          >
+            <Input.TextArea 
+              rows={3} 
+              placeholder={t('mcp:form.descriptionPlaceholder')} 
+            />
+          </Form.Item>
+
+          <Row gutter={16}>
+            <Col span={16}>
+              <Form.Item
+                name="endpoint"
+                label={t('mcp:form.endpoint')}
+                rules={[
+                  { required: true, message: t('mcp:form.endpointRequired') },
+                  { type: 'url', message: t('mcp:form.endpointInvalid') }
+                ]}
+              >
+                <Input placeholder={t('mcp:form.endpointPlaceholder')} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                name="port"
+                label={t('mcp:form.port')}
+                rules={[
+                  { required: true, message: t('mcp:form.portRequired') },
+                  { type: 'number', min: 1, max: 65535, message: t('mcp:form.portInvalid') }
+                ]}
+              >
+                <InputNumber 
+                  style={{ width: '100%' }} 
+                  placeholder={t('mcp:form.portPlaceholder')}
+                  min={1}
+                  max={65535}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item
+            name="version"
+            label={t('mcp:form.version')}
+          >
+            <Input placeholder={t('mcp:form.versionPlaceholder')} />
+          </Form.Item>
+
+          <Form.Item
+            name="capabilities"
+            label={t('mcp:form.capabilities')}
+          >
+            <Select
+              mode="tags"
+              style={{ width: '100%' }}
+              placeholder={t('mcp:form.capabilitiesPlaceholder')}
+              tokenSeparators={[',']}
+            >
+              <Select.Option value="read">{t('mcp:capabilities.read')}</Select.Option>
+              <Select.Option value="write">{t('mcp:capabilities.write')}</Select.Option>
+              <Select.Option value="execute">{t('mcp:capabilities.execute')}</Select.Option>
+              <Select.Option value="monitor">{t('mcp:capabilities.monitor')}</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
+            <Space>
+              <Button onClick={handleModalCancel}>
+                {t('common:cancel')}
+              </Button>
+              <Button type="primary" htmlType="submit" loading={loading}>
+                {editingServer ? t('common:update') : t('common:create')}
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Modal>
     </PageContainer>
   );
 };
