@@ -25,6 +25,7 @@ import {
   ProjectOutlined,
   MedicineBoxOutlined,
   SettingOutlined,
+  MessageOutlined,
   CarOutlined,
   ClearOutlined,
   CheckCircleOutlined,
@@ -334,38 +335,58 @@ const StatusIndicator = styled.span<{ $status: string }>`
 
 // 智能体类型配置
 const getAgentTypeConfig = (t: any) => ({
-  monitor: { 
-    name: t('agents:types.monitor'), 
+  // 后端返回的实际类型
+  monitoring: { 
+    name: t('agents:types.monitoring') || '监控型', 
     color: '#1890ff', 
     bgColor: '#e6f7ff',
     icon: <MonitorOutlined />
   },
-  analysis: { 
-    name: t('agents:types.analysis'), 
+  chat: { 
+    name: t('agents:types.chat') || '对话型', 
     color: '#52c41a', 
     bgColor: '#f6ffed',
+    icon: <MessageOutlined />
+  },
+  task: { 
+    name: t('agents:types.task') || '任务型', 
+    color: '#722ed1', 
+    bgColor: '#f9f0ff',
+    icon: <SettingOutlined />
+  },
+  analysis: { 
+    name: t('agents:types.analysis') || '分析型', 
+    color: '#fa8c16', 
+    bgColor: '#fff7e6',
     icon: <BarChartOutlined />
   },
+  // 保留原有类型以兼容
+  monitor: { 
+    name: t('agents:types.monitor') || '监控', 
+    color: '#1890ff', 
+    bgColor: '#e6f7ff',
+    icon: <MonitorOutlined />
+  },
   deployment: { 
-    name: t('agents:types.deployment'), 
+    name: t('agents:types.deployment') || '部署型', 
     color: '#722ed1', 
     bgColor: '#f9f0ff',
     icon: <DeploymentUnitOutlined />
   },
   optimization: { 
-    name: t('agents:types.optimization'), 
+    name: t('agents:types.optimization') || '优化型', 
     color: '#fa8c16', 
     bgColor: '#fff7e6',
     icon: <ThunderboltOutlined />
   },
   security: { 
-    name: t('agents:types.security'), 
+    name: t('agents:types.security') || '安全型', 
     color: '#ff4d4f', 
     bgColor: '#fff2f0',
     icon: <SecurityScanOutlined />
   },
   backup: { 
-    name: t('agents:types.backup'), 
+    name: t('agents:types.backup') || '备份型', 
     color: '#13c2c2', 
     bgColor: '#e6fffb',
     icon: <DatabaseOutlined />
