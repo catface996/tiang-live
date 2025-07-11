@@ -176,6 +176,14 @@ const AIAgentManagement: React.FC = () => {
 
       const response = await AIAgentApi.getAIAgentList(params);
       
+      console.log('🔍 响应检查:', {
+        'response.success': response.success,
+        'response.data': response.data,
+        'response.data存在': !!response.data,
+        '条件结果': response.success && response.data,
+        '完整响应': response
+      });
+      
       if (response.success && response.data) {
         setAgentData(response.data.data);
         setPagination(prev => ({
@@ -202,6 +210,14 @@ const AIAgentManagement: React.FC = () => {
     setStatsLoading(true);
     try {
       const response = await AIAgentApi.getAIAgentStatistics();
+      
+      console.log('🔍 统计响应检查:', {
+        'response.success': response.success,
+        'response.data': response.data,
+        'response.data存在': !!response.data,
+        '条件结果': response.success && response.data,
+        '完整响应': response
+      });
       
       if (response.success && response.data) {
         setStatistics(response.data);

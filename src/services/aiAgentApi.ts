@@ -216,8 +216,12 @@ export class AIAgentApi {
       const response = await apiClient.postFullResponse<PageResponse<AIAgentResponse>>('/backend/aiAgent/list', params);
       
       console.log('✅ API响应: POST /backend/aiAgent/list', {
-        status: response.status,
-        data: response.data
+        status: response?.status,
+        success: response?.success,
+        code: response?.code,
+        message: response?.message,
+        data: response?.data,
+        fullResponse: response
       });
       
       return response.data;
@@ -308,8 +312,12 @@ export class AIAgentApi {
       const response = await apiClient.postFullResponse<AIAgentStatisticsResponse>('/backend/aiAgent/overview', params);
       
       console.log('✅ API响应: POST /backend/aiAgent/overview', {
-        status: response.status,
-        data: response.data
+        status: response?.status,
+        success: response?.success,
+        code: response?.code,
+        message: response?.message,
+        data: response?.data,
+        fullResponse: response
       });
       
       return response.data;
