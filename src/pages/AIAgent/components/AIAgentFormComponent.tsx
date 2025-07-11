@@ -418,9 +418,21 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
       } else {
         message.error('保存失败: ' + response.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('保存智能体失败:', error);
-      message.error('保存失败: ' + (error instanceof Error ? error.message : '未知错误'));
+      
+      // 提取后端返回的具体错误信息
+      let errorMessage = '保存失败';
+      
+      if (error?.response?.data?.message) {
+        // 后端返回的具体错误信息
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        // 网络错误或其他错误
+        errorMessage = error.message;
+      }
+      
+      message.error(errorMessage);
     }
   };
 
@@ -825,9 +837,18 @@ const AIAgentFormComponent: React.FC<AIAgentFormComponentProps> = ({ initialData
             <Form.Item
               name="description"
               label={t('agents:form.fields.description')}
-              rules={[{ required: true, message: t('agents:form.validation.descriptionRequired') }]}
+              rules={[
+                { required: true, message: t('agents:form.validation.descriptionRequired') },
+                { min: 10, message: '描述长度不能少于10个字符' },
+                { max: 500, message: '描述长度不能超过500个字符' }
+              ]}
             >
-              <TextArea rows={3} placeholder={t('agents:form.placeholders.description')} />
+              <TextArea 
+                rows={3} 
+                placeholder={t('agents:form.placeholders.description')}
+                showCount
+                maxLength={500}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
