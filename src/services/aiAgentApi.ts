@@ -3,7 +3,7 @@
  * 基于后端 AIAgentController 实现
  */
 
-import { api } from './api';
+import { apiClient } from './api';
 
 // 基础请求类型
 export interface BaseRequest {
@@ -208,13 +208,13 @@ export class AIAgentApi {
    */
   static async getAIAgentList(params: QueryAIAgentRequest): Promise<ApiResult<PageResponse<AIAgentResponse>>> {
     console.log('🚀 API请求: POST /backend/aiAgent/list', {
-      baseURL: api.defaults.baseURL,
-      fullURL: `${api.defaults.baseURL}/backend/aiAgent/list`,
+      baseURL: apiClient.defaults.baseURL,
+      fullURL: `${apiClient.defaults.baseURL}/backend/aiAgent/list`,
       data: params
     });
 
     try {
-      const response = await api.post<ApiResult<PageResponse<AIAgentResponse>>>('/backend/aiAgent/list', params);
+      const response = await apiClient.post<ApiResult<PageResponse<AIAgentResponse>>>('/backend/aiAgent/list', params);
       
       console.log('✅ API响应: POST /backend/aiAgent/list', {
         status: response.status,
@@ -233,13 +233,13 @@ export class AIAgentApi {
    */
   static async getAIAgentDetail(params: GetAIAgentDetailRequest): Promise<ApiResult<AIAgentResponse>> {
     console.log('🚀 API请求: POST /backend/aiAgent/detail', {
-      baseURL: api.defaults.baseURL,
-      fullURL: `${api.defaults.baseURL}/backend/aiAgent/detail`,
+      baseURL: apiClient.defaults.baseURL,
+      fullURL: `${apiClient.defaults.baseURL}/backend/aiAgent/detail`,
       data: params
     });
 
     try {
-      const response = await api.post<ApiResult<AIAgentResponse>>('/backend/aiAgent/detail', params);
+      const response = await apiClient.post<ApiResult<AIAgentResponse>>('/backend/aiAgent/detail', params);
       
       console.log('✅ API响应: POST /backend/aiAgent/detail', {
         status: response.status,
@@ -258,13 +258,13 @@ export class AIAgentApi {
    */
   static async saveAIAgent(params: SaveAIAgentRequest): Promise<ApiResult<AIAgentResponse>> {
     console.log('🚀 API请求: POST /backend/aiAgent/save', {
-      baseURL: api.defaults.baseURL,
-      fullURL: `${api.defaults.baseURL}/backend/aiAgent/save`,
+      baseURL: apiClient.defaults.baseURL,
+      fullURL: `${apiClient.defaults.baseURL}/backend/aiAgent/save`,
       data: params
     });
 
     try {
-      const response = await api.post<ApiResult<AIAgentResponse>>('/backend/aiAgent/save', params);
+      const response = await apiClient.post<ApiResult<AIAgentResponse>>('/backend/aiAgent/save', params);
       
       console.log('✅ API响应: POST /backend/aiAgent/save', {
         status: response.status,
@@ -283,13 +283,13 @@ export class AIAgentApi {
    */
   static async deleteAIAgent(params: DeleteAIAgentRequest): Promise<ApiResult<DeleteAIAgentResponse>> {
     console.log('🚀 API请求: POST /backend/aiAgent/delete', {
-      baseURL: api.defaults.baseURL,
-      fullURL: `${api.defaults.baseURL}/backend/aiAgent/delete`,
+      baseURL: apiClient.defaults.baseURL,
+      fullURL: `${apiClient.defaults.baseURL}/backend/aiAgent/delete`,
       data: params
     });
 
     try {
-      const response = await api.post<ApiResult<DeleteAIAgentResponse>>('/backend/aiAgent/delete', params);
+      const response = await apiClient.post<ApiResult<DeleteAIAgentResponse>>('/backend/aiAgent/delete', params);
       
       console.log('✅ API响应: POST /backend/aiAgent/delete', {
         status: response.status,
@@ -308,13 +308,13 @@ export class AIAgentApi {
    */
   static async getAIAgentStatistics(params: BaseRequest = {}): Promise<ApiResult<AIAgentStatisticsResponse>> {
     console.log('🚀 API请求: POST /backend/aiAgent/overview', {
-      baseURL: api.defaults.baseURL,
-      fullURL: `${api.defaults.baseURL}/backend/aiAgent/overview`,
+      baseURL: apiClient.defaults.baseURL,
+      fullURL: `${apiClient.defaults.baseURL}/backend/aiAgent/overview`,
       data: params
     });
 
     try {
-      const response = await api.post<ApiResult<AIAgentStatisticsResponse>>('/backend/aiAgent/overview', params);
+      const response = await apiClient.post<ApiResult<AIAgentStatisticsResponse>>('/backend/aiAgent/overview', params);
       
       console.log('✅ API响应: POST /backend/aiAgent/overview', {
         status: response.status,

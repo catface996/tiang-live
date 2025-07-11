@@ -242,6 +242,11 @@ const AIAgentManagement: React.FC = () => {
     navigate('/ai-agents/create');
   };
 
+  // 搜索处理
+  const handleSearch = (value: string) => {
+    setSearchText(value);
+  };
+
   // 编辑智能体
   const handleEditAgent = (agent: AIAgentResponse) => {
     navigate(`/ai-agents/edit/${agent.id}`);
@@ -614,32 +619,6 @@ const AIAgentManagement: React.FC = () => {
 
       {/* 分页组件 */}
       {pagination.total > 0 && (
-                <RobotOutlined style={{ fontSize: 64, color: '#d9d9d9', marginBottom: 16 }} />
-                <Title level={4} style={{ color: '#999' }}>
-                  {searchText || filterStatus !== 'all' || filterType !== 'all' 
-                    ? '没有找到匹配的智能体' 
-                    : '暂无智能体'
-                  }
-                </Title>
-                <Paragraph style={{ color: '#999', marginBottom: 24 }}>
-                  {searchText || filterStatus !== 'all' || filterType !== 'all'
-                    ? '请尝试调整搜索条件或筛选器'
-                    : '点击下方按钮创建您的第一个AI智能体'
-                  }
-                </Paragraph>
-                {(!searchText && filterStatus === 'all' && filterType === 'all') && (
-                  <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateAgent}>
-                    创建智能体
-                  </Button>
-                )}
-              </Card>
-            </Col>
-          )}
-        </Row>
-      </div>
-
-      {/* 分页组件 */}
-      {pagination.total > 0 && (
         <Row justify="center" style={{ marginTop: 32, marginBottom: 24 }}>
           <Col>
             <Pagination
@@ -659,21 +638,19 @@ const AIAgentManagement: React.FC = () => {
           </Col>
         </Row>
       )}
-              pageSizeOptions={['6', '12', '18', '24']}
-              size="default"
-              style={{
-                padding: '16px 24px',
-                background: isDark ? '#1f1f1f' : '#fff',
-                borderRadius: '8px',
-                border: `1px solid ${isDark ? '#303030' : '#d9d9d9'}`,
-                boxShadow: isDark 
-                  ? '0 2px 8px rgba(0, 0, 0, 0.3)' 
-                  : '0 2px 8px rgba(0, 0, 0, 0.1)'
-              }}
-            />
-          </Col>
-        </Row>
-      )}
+
+      {/* 智能体详情模态框 */}
+      <Modal
+        title="智能体详情"
+        open={detailModalVisible}
+        onCancel={() => setDetailModalVisible(false)}
+        footer={null}
+        width={800}
+      >
+        {selectedAgent && (
+          <AgentDetail agent={selectedAgent} />
+        )}
+      </Modal>
 
       {/* 创建智能体模态框 */}
       <Modal
