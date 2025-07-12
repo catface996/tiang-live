@@ -185,13 +185,23 @@ const getModelList = async (params?: {
     // 根据实际响应结构处理数据
     // 如果response.data直接是数组，说明后端直接返回了模型列表
     if (Array.isArray(response.data)) {
+      // 后端返回所有数据，需要前端分页
+      const allModels = response.data;
+      const currentPage = requestBody.page || 1;
+      const currentPageSize = requestBody.size || 6;
+      
+      // 计算分页
+      const startIndex = (currentPage - 1) * currentPageSize;
+      const endIndex = startIndex + currentPageSize;
+      const paginatedModels = allModels.slice(startIndex, endIndex);
+      
       return {
-        models: response.data,
+        models: paginatedModels,
         pagination: {
-          page: 1,
-          pageSize: response.data.length,
-          total: response.data.length,
-          totalPages: 1
+          page: currentPage,
+          pageSize: currentPageSize,
+          total: allModels.length,
+          totalPages: Math.ceil(allModels.length / currentPageSize)
         }
       };
     }
