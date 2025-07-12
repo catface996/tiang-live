@@ -135,6 +135,16 @@ export interface ApiResult<T> {
   data: T;
 }
 
+// 后端分页响应格式
+export interface PageResponse<T> {
+  data: T[];
+  page: number;
+  size: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+}
+
 /**
  * 获取模型列表
  * @param params 查询参数
@@ -159,11 +169,30 @@ const getModelList = async (params?: {
       size: params?.pageSize || 10  // 后端使用size字段
     };
 
-    const response = await apiClient.post<ApiResult<ModelListResponse>>(
+    const response = await apiClient.post<ApiResult<PageResponse<ModelResponse>>>(
       '/front/model/list',
       requestBody
     );
-    return response.data.data;
+    
+    console.log('🔍 模型列表API响应结构:', {
+      'response': response,
+      'response.data': response.data,
+      'response.data.data': response.data?.data,
+      'response.data类型': typeof response.data,
+      'response.data的keys': response.data ? Object.keys(response.data) : 'null'
+    });
+    
+    // 转换为前端期望的格式
+    const pageData = response.data.data;
+    return {
+      models: pageData?.data || [],
+      pagination: {
+        page: pageData?.page || 1,
+        pageSize: pageData?.size || 10,
+        total: pageData?.total || 0,
+        totalPages: pageData?.totalPages || 0
+      }
+    };
   } catch (error) {
     console.error('获取模型列表失败:', error);
     throw error;
@@ -263,6 +292,16 @@ const getModelStats = async (): Promise<ModelStatsResponse> => {
       timeRange: '30d'  // 默认30天统计
     };
     const response = await apiClient.post<ApiResult<ModelStatsResponse>>('/front/model/stats', requestBody);
+    
+    console.log('🔍 模型统计API响应结构:', {
+      'response': response,
+      'response.data': response.data,
+      'response.data.data': response.data?.data,
+      'response.data类型': typeof response.data,
+      'response.data的keys': response.data ? Object.keys(response.data) : 'null'
+    });
+    
+    // 直接返回统计数据，后端已经是正确的格式
     return response.data.data;
   } catch (error) {
     console.error('获取模型统计数据失败:', error);
