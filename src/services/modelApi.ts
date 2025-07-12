@@ -3,10 +3,7 @@
  * 集成后端 LLMController 的所有接口
  */
 
-import axios from 'axios';
-
-// 后端API基础URL
-const BASE_URL = 'http://localhost:8080';
+import { apiClient } from './api';
 
 // 定义请求和响应类型
 export interface SaveModelRequest {
@@ -152,16 +149,19 @@ const getModelList = async (params?: {
   pageSize?: number;
 }): Promise<ModelListResponse> => {
   try {
-    const queryParams = new URLSearchParams();
-    if (params?.search) queryParams.append('search', params.search);
-    if (params?.provider) queryParams.append('provider', params.provider);
-    if (params?.modelType) queryParams.append('modelType', params.modelType);
-    if (params?.status) queryParams.append('status', params.status);
-    if (params?.page) queryParams.append('page', params.page.toString());
-    if (params?.pageSize) queryParams.append('pageSize', params.pageSize.toString());
+    // 构建POST请求体
+    const requestBody = {
+      search: params?.search || '',
+      provider: params?.provider || '',
+      modelType: params?.modelType || '',
+      status: params?.status || '',
+      page: params?.page || 1,
+      pageSize: params?.pageSize || 10
+    };
 
-    const response = await axios.get<ApiResult<ModelListResponse>>(
-      `${BASE_URL}/api/model/list?${queryParams.toString()}`
+    const response = await apiClient.post<ApiResult<ModelListResponse>>(
+      '/front/model/list',
+      requestBody
     );
     return response.data.data;
   } catch (error) {
@@ -177,7 +177,11 @@ const getModelList = async (params?: {
  */
 const getModelDetail = async (id: string): Promise<ModelResponse> => {
   try {
-    const response = await axios.get<ApiResult<ModelResponse>>(`${BASE_URL}/api/model/detail/${id}`);
+    const requestBody = { id };
+    const response = await apiClient.post<ApiResult<ModelResponse>>(
+      '/front/model/detail',
+      requestBody
+    );
     return response.data.data;
   } catch (error) {
     console.error(`获取模型详情失败 (ID: ${id}):`, error);
@@ -199,14 +203,14 @@ const saveModel = async (model: SaveModelRequest): Promise<{
   lastModified: string;
 }> => {
   try {
-    const response = await axios.post<ApiResult<{
+    const response = await apiClient.post<ApiResult<{
       id: string;
       name: string;
       status: string;
       operation: 'create' | 'update';
       createdAt: string;
       lastModified: string;
-    }>>(`${BASE_URL}/api/model/save`, model);
+    }>>('/front/model/save', model);
     return response.data.data;
   } catch (error) {
     console.error('保存模型失败:', error);
@@ -220,7 +224,8 @@ const saveModel = async (model: SaveModelRequest): Promise<{
  */
 const deleteModel = async (id: string): Promise<void> => {
   try {
-    await axios.delete<ApiResult<void>>(`${BASE_URL}/api/model/delete/${id}`);
+    const requestBody = { id };
+    await apiClient.post<ApiResult<void>>('/front/model/delete', requestBody);
   } catch (error) {
     console.error(`删除模型失败 (ID: ${id}):`, error);
     throw error;
@@ -235,9 +240,10 @@ const deleteModel = async (id: string): Promise<void> => {
  */
 const testModel = async (id: string, testParams: ModelTestRequest): Promise<ModelTestResponse> => {
   try {
-    const response = await axios.post<ApiResult<ModelTestResponse>>(
-      `${BASE_URL}/api/model/test/${id}`,
-      testParams
+    const requestBody = { id, ...testParams };
+    const response = await apiClient.post<ApiResult<ModelTestResponse>>(
+      '/front/model/test',
+      requestBody
     );
     return response.data.data;
   } catch (error) {
@@ -252,7 +258,7 @@ const testModel = async (id: string, testParams: ModelTestRequest): Promise<Mode
  */
 const getModelStats = async (): Promise<ModelStatsResponse> => {
   try {
-    const response = await axios.get<ApiResult<ModelStatsResponse>>(`${BASE_URL}/api/model/stats/overview`);
+    const response = await apiClient.post<ApiResult<ModelStatsResponse>>('/front/model/stats/overview', {});
     return response.data.data;
   } catch (error) {
     console.error('获取模型统计数据失败:', error);
@@ -279,7 +285,7 @@ const validateModel = async (model: SaveModelRequest): Promise<{
   };
 }> => {
   try {
-    const response = await axios.post<ApiResult<{
+    const response = await apiClient.post<ApiResult<{
       valid: boolean;
       checks: Array<{
         type: string;
@@ -291,7 +297,7 @@ const validateModel = async (model: SaveModelRequest): Promise<{
         outputCost: number;
         currency: string;
       };
-    }>>(`${BASE_URL}/api/model/validate`, model);
+    }>>('/front/model/validate', model);
     return response.data.data;
   } catch (error) {
     console.error('验证模型配置失败:', error);
