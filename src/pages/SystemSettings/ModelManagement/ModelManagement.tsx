@@ -14,7 +14,8 @@ import {
   Descriptions,
   Tooltip,
   message,
-  App
+  App,
+  Pagination
 } from 'antd';
 import {
   SettingOutlined,
@@ -34,6 +35,7 @@ import {
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '../../../store';
 import { setPageTitle } from '../../../utils';
 import SearchFilterBar from '../../../components/Common/SearchFilterBar';
 import ModelFormModal from './components/ModelFormModal';
@@ -133,6 +135,7 @@ const FilterBar = styled.div`
 const ModelManagement: React.FC = () => {
   const { t } = useTranslation(['models', 'common']);
   const { modal } = App.useApp();
+  const isDark = useAppSelector(state => state.theme.isDark);
   
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -148,11 +151,15 @@ const ModelManagement: React.FC = () => {
   // 真实数据状态
   const [modelData, setModelData] = useState<ModelResponse[]>([]);
   const [statsData, setStatsData] = useState<ModelStatsResponse | null>(null);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 20,
-    total: 0,
-    totalPages: 0
+  const [pagination, setPagination] = useState(() => {
+    // 从localStorage读取用户的分页偏好
+    const savedPageSize = localStorage.getItem('model-management-page-size');
+    return {
+      page: 1,
+      pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 20,
+      total: 0,
+      totalPages: 0
+    };
   });
 
   useEffect(() => {
@@ -358,6 +365,39 @@ const ModelManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // 分页处理函数
+  const handlePageChange = (page: number, pageSize?: number) => {
+    const newPageSize = pageSize || pagination.pageSize;
+    
+    setPagination(prev => ({
+      ...prev,
+      page: page,
+      pageSize: newPageSize
+    }));
+    
+    // 保存用户的分页偏好
+    if (pageSize && pageSize !== pagination.pageSize) {
+      localStorage.setItem('model-management-page-size', pageSize.toString());
+    }
+    
+    // 重新加载数据
+    loadModelData();
+  };
+
+  const handlePageSizeChange = (current: number, size: number) => {
+    setPagination(prev => ({
+      ...prev,
+      page: 1,  // 改变页面大小时重置到第一页
+      pageSize: size
+    }));
+    
+    // 保存用户的分页偏好
+    localStorage.setItem('model-management-page-size', size.toString());
+    
+    // 重新加载数据
+    loadModelData();
   };
 
   const renderModelCards = () => {
@@ -621,6 +661,37 @@ const ModelManagement: React.FC = () => {
 
       {/* 模型卡片列表 */}
       <Row gutter={[16, 16]}>{renderModelCards()}</Row>
+
+      {/* 分页组件 */}
+      {pagination.total > 0 && (
+        <Row justify="center" style={{ marginTop: 32, marginBottom: 24 }}>
+          <Col>
+            <Pagination
+              current={pagination.page}
+              pageSize={pagination.pageSize}
+              total={pagination.total}
+              onChange={handlePageChange}
+              onShowSizeChange={handlePageSizeChange}
+              showSizeChanger
+              showQuickJumper
+              showTotal={(total, range) => 
+                `第 ${range[0]}-${range[1]} 条，共 ${total} 个模型`
+              }
+              pageSizeOptions={['10', '20', '30', '50']}
+              size="default"
+              style={{
+                padding: '16px 24px',
+                background: isDark ? '#1f1f1f' : '#fff',
+                borderRadius: '8px',
+                border: `1px solid ${isDark ? '#303030' : '#d9d9d9'}`,
+                boxShadow: isDark 
+                  ? '0 2px 8px rgba(0, 0, 0, 0.3)' 
+                  : '0 2px 8px rgba(0, 0, 0, 0.1)'
+              }}
+            />
+          </Col>
+        </Row>
+      )}
 
       {/* 创建/编辑模型模态框 */}
       <ModelFormModal
