@@ -169,7 +169,7 @@ const getModelList = async (params?: {
       size: params?.pageSize || 10  // 后端使用size字段
     };
 
-    const response = await apiClient.post<ApiResult<PageResponse<ModelResponse>>>(
+    const response = await apiClient.post(
       '/front/model/list',
       requestBody
     );
@@ -182,15 +182,42 @@ const getModelList = async (params?: {
       'response.data的keys': response.data ? Object.keys(response.data) : 'null'
     });
     
-    // 转换为前端期望的格式
-    const pageData = response.data.data;
+    // 根据实际响应结构处理数据
+    // 如果response.data直接是数组，说明后端直接返回了模型列表
+    if (Array.isArray(response.data)) {
+      return {
+        models: response.data,
+        pagination: {
+          page: 1,
+          pageSize: response.data.length,
+          total: response.data.length,
+          totalPages: 1
+        }
+      };
+    }
+    
+    // 如果是标准的ApiResult格式
+    if (response.data?.data) {
+      const pageData = response.data.data;
+      return {
+        models: pageData?.data || pageData || [],
+        pagination: {
+          page: pageData?.page || 1,
+          pageSize: pageData?.size || 10,
+          total: pageData?.total || 0,
+          totalPages: pageData?.totalPages || 0
+        }
+      };
+    }
+    
+    // 兜底处理
     return {
-      models: pageData?.data || [],
+      models: [],
       pagination: {
-        page: pageData?.page || 1,
-        pageSize: pageData?.size || 10,
-        total: pageData?.total || 0,
-        totalPages: pageData?.totalPages || 0
+        page: 1,
+        pageSize: 10,
+        total: 0,
+        totalPages: 0
       }
     };
   } catch (error) {
@@ -291,7 +318,7 @@ const getModelStats = async (): Promise<ModelStatsResponse> => {
     const requestBody = {
       timeRange: '30d'  // 默认30天统计
     };
-    const response = await apiClient.post<ApiResult<ModelStatsResponse>>('/front/model/stats', requestBody);
+    const response = await apiClient.post('/front/model/stats', requestBody);
     
     console.log('🔍 模型统计API响应结构:', {
       'response': response,
@@ -301,8 +328,57 @@ const getModelStats = async (): Promise<ModelStatsResponse> => {
       'response.data的keys': response.data ? Object.keys(response.data) : 'null'
     });
     
-    // 直接返回统计数据，后端已经是正确的格式
-    return response.data.data;
+    // 根据实际响应结构处理数据
+    // 如果response.data是undefined，可能是接口还未实现或返回空
+    if (!response.data) {
+      console.warn('⚠️ 模型统计接口返回空数据，使用默认统计数据');
+      return {
+        modelStats: {
+          totalModels: 0,
+          activeModels: 0,
+          inactiveModels: 0,
+          testingModels: 0
+        },
+        usageStats: {
+          totalRequests: 0,
+          totalTokens: 0,
+          averageResponseTime: 0,
+          errorRate: 0
+        },
+        providerStats: [],
+        typeStats: [],
+        timestamp: new Date().toISOString()
+      };
+    }
+    
+    // 如果是标准的ApiResult格式
+    if (response.data?.data) {
+      return response.data.data;
+    }
+    
+    // 如果response.data直接是统计数据
+    if (response.data?.modelStats || response.data?.usageStats) {
+      return response.data;
+    }
+    
+    // 兜底处理
+    return {
+      modelStats: {
+        totalModels: 0,
+        activeModels: 0,
+        inactiveModels: 0,
+        testingModels: 0
+      },
+      usageStats: {
+        totalRequests: 0,
+        totalTokens: 0,
+        averageResponseTime: 0,
+        errorRate: 0
+      },
+      providerStats: [],
+      typeStats: [],
+      timestamp: new Date().toISOString()
+    };
   } catch (error) {
     console.error('获取模型统计数据失败:', error);
     throw error;
