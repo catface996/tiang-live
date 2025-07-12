@@ -169,16 +169,18 @@ const ModelManagement: React.FC = () => {
   }, [t]);
 
   // 加载模型数据
-  const loadModelData = async () => {
+  const loadModelData = async (customPagination?: { page: number; pageSize: number }) => {
     try {
       setLoading(true);
+      const currentPagination = customPagination || pagination;
+      
       const response = await ModelApi.getModelList({
         search: searchText || undefined,
         provider: filterProvider !== 'all' ? filterProvider : undefined,
         modelType: filterType !== 'all' ? filterType : undefined,
         status: filterStatus !== 'all' ? filterStatus : undefined,
-        page: pagination.page,
-        pageSize: pagination.pageSize
+        page: currentPagination.page,
+        pageSize: currentPagination.pageSize
       });
       
       setModelData(response.models);
@@ -387,11 +389,14 @@ const ModelManagement: React.FC = () => {
   // 分页处理函数
   const handlePageChange = (page: number, pageSize?: number) => {
     const newPageSize = pageSize || pagination.pageSize;
+    const newPagination = {
+      page: page,
+      pageSize: newPageSize
+    };
     
     setPagination(prev => ({
       ...prev,
-      page: page,
-      pageSize: newPageSize
+      ...newPagination
     }));
     
     // 保存用户的分页偏好
@@ -399,22 +404,26 @@ const ModelManagement: React.FC = () => {
       localStorage.setItem('model-management-page-size', pageSize.toString());
     }
     
-    // 重新加载数据
-    loadModelData();
+    // 使用新的分页参数重新加载数据
+    loadModelData(newPagination);
   };
 
   const handlePageSizeChange = (current: number, size: number) => {
-    setPagination(prev => ({
-      ...prev,
+    const newPagination = {
       page: 1,  // 改变页面大小时重置到第一页
       pageSize: size
+    };
+    
+    setPagination(prev => ({
+      ...prev,
+      ...newPagination
     }));
     
     // 保存用户的分页偏好
     localStorage.setItem('model-management-page-size', size.toString());
     
-    // 重新加载数据
-    loadModelData();
+    // 使用新的分页参数重新加载数据
+    loadModelData(newPagination);
   };
 
   const renderModelCards = () => {
