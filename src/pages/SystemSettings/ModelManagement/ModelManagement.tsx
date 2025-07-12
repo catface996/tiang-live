@@ -156,7 +156,7 @@ const ModelManagement: React.FC = () => {
     const savedPageSize = localStorage.getItem('model-management-page-size');
     return {
       page: 1,
-      pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 20,
+      pageSize: savedPageSize ? parseInt(savedPageSize, 10) : 6,
       total: 0,
       totalPages: 0
     };
@@ -204,6 +204,23 @@ const ModelManagement: React.FC = () => {
 
   // 刷新数据
   const handleRefresh = async () => {
+    // 重置搜索条件
+    setSearchText('');
+    setFilterProvider('all');
+    setFilterType('all');
+    setFilterStatus('all');
+    
+    // 重置分页条件到默认状态：第一页，每页6个
+    setPagination(prev => ({
+      ...prev,
+      page: 1,
+      pageSize: 6
+    }));
+    
+    // 清除本地存储的分页偏好，恢复默认设置
+    localStorage.removeItem('model-management-page-size');
+    
+    // 重新加载数据
     await Promise.all([loadModelData(), loadStatsData()]);
   };
 
@@ -677,7 +694,7 @@ const ModelManagement: React.FC = () => {
               showTotal={(total, range) => 
                 `第 ${range[0]}-${range[1]} 条，共 ${total} 个模型`
               }
-              pageSizeOptions={['10', '20', '30', '50']}
+              pageSizeOptions={['6', '12', '18']}
               size="default"
               style={{
                 padding: '16px 24px',
