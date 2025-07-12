@@ -149,14 +149,14 @@ const getModelList = async (params?: {
   pageSize?: number;
 }): Promise<ModelListResponse> => {
   try {
-    // 构建POST请求体
+    // 构建POST请求体，注意后端使用的是size而不是pageSize
     const requestBody = {
       search: params?.search || '',
       provider: params?.provider || '',
       modelType: params?.modelType || '',
       status: params?.status || '',
       page: params?.page || 1,
-      pageSize: params?.pageSize || 10
+      size: params?.pageSize || 10  // 后端使用size字段
     };
 
     const response = await apiClient.post<ApiResult<ModelListResponse>>(
@@ -258,7 +258,11 @@ const testModel = async (id: string, testParams: ModelTestRequest): Promise<Mode
  */
 const getModelStats = async (): Promise<ModelStatsResponse> => {
   try {
-    const response = await apiClient.post<ApiResult<ModelStatsResponse>>('/front/model/stats/overview', {});
+    // 构建请求体，包含timeRange参数
+    const requestBody = {
+      timeRange: '30d'  // 默认30天统计
+    };
+    const response = await apiClient.post<ApiResult<ModelStatsResponse>>('/front/model/stats', requestBody);
     return response.data.data;
   } catch (error) {
     console.error('获取模型统计数据失败:', error);
